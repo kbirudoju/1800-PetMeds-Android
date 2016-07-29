@@ -1,0 +1,56 @@
+#!/bin/bash
+
+IGNORE_STRING=(.classpath .project .settings/ .idea/ *.iml gen/ bin/ libs/ target/ tmp/ *.swp *~ 
+	pom.xml.releaseBackup release.properties build/ .gradle/)
+
+buildGitIgnore()
+{
+	for ignore_file in ${IGNORE_STRING[@]};
+	do
+		echo $ignore_file >> .gitignore
+	done
+}
+
+initGitPush()
+{
+	git add .
+	git commit . -m "initialize project commit"
+
+	git branch --set-upstream-to=origin/master
+	git pull --rebase
+	git push origin HEAD:refs/for/master
+}
+
+setup()
+{
+    rm -rf .git
+
+	git init
+
+	GIT_CONFIG="[remote \"origin\"]\n\turl = ssh://$GIT_USER-goldengekko-com@gerrit.goldengekko.com:29418/$GIT_PROJECT\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n[branch \"master\"]\n\tremote = origin\n\tmerge = refs/heads/master"
+
+	printf "$GIT_CONFIG" >> .git/config
+
+	cd .git/hooks
+	wget http://gerrit.goldengekko.com/tools/hooks/commit-msg --no-check-certificate
+	chmod +x commit-msg
+
+	cd ../..
+
+	buildGitIgnore
+
+	initGitPush	
+}
+
+GIT_USER=""
+GIT_PROJECT=""
+
+if [ "$1" != "" ] && [ "$2" != "" ];
+then
+	GIT_USER="$1"
+    GIT_PROJECT="$2"
+
+    setup
+else
+    printf "setup: missing operand\ncommand: setup [git_user] [git_project]\n"
+fi

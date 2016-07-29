@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="application.name">Template Application</string>
+
+    <string name="label.drawer.open">Open</string>
+    <string name="label.drawer.close">Close</string>
+
+    <string-array name="label_drawer_digits">
+        <item>@string/label.menu.oneparagraph</item>
+        <item>@string/label.menu.twoparagraphs</item>
+        <item>@string/label.menu.threeparagraphs</item>
+        <item>@string/label.menu.fourparagraphs</item>
+        <item>@string/label.menu.fiveparagraphs</item>
+    </string-array>
+
+    <string name="label.menu.oneparagraph">One</string>
+    <string name="label.menu.twoparagraphs">Two</string>
+    <string name="label.menu.threeparagraphs">Three</string>
+    <string name="label.menu.fourparagraphs">Four</string>
+    <string name="label.menu.fiveparagraphs">Five</string>
+
+    <string name="label.action.refresh">Refresh</string>
+
+    <string name="activity_splash">splash</string>
+    <string name="activity_home">home</string>
+    <string name="fragment_lorem">Lorem</string>
+
+    <string name="link_article">link</string>
+    <string name="link_action">click</string>
+
+    <string name="dialog.ok_button">OK</string>
+    <string name="dialog.cancel_button">Cancel</string>
+
+    <string name="permission.storage_rationale">The permission to write into the external storage is needed to save the page content.</string>
+    <string name="label.text_not_ready">Text not ready for saving</string>
+    <string name="label.text_saved">Text saved</string>
+    <string name="label.text_not_saved">An error occurred and the text could not be saved</string>
+
+</resources>

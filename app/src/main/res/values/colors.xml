@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="background.light">#DDD</color>
+    <color name="background.dull">#4F4B48</color>
+    <color name="color.accent">#fb4e23</color>
+
+</resources>

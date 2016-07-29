@@ -1,0 +1,293 @@
+Parallel execution is an incubating feature.
+Incremental java compilation is an incubating feature.
+:app:checkstyle
+:app:findbugs
+FindBugs rule violations were found. See the report at: file:///C:/dev/workspace/GG-GradleTemplate-Android/app/build/reports/findbugs/findbugs.xml
+:app:preBuild UP-TO-DATE
+:app:preDevAlexDebugBuild UP-TO-DATE
+:app:checkDevAlexDebugManifest
+:app:preDevAlexReleaseBuild UP-TO-DATE
+:app:preDevJandroidDebugBuild UP-TO-DATE
+:app:preDevJandroidReleaseBuild UP-TO-DATE
+:app:preProdAlexDebugBuild UP-TO-DATE
+:app:preProdAlexReleaseBuild UP-TO-DATE
+:app:preProdJandroidDebugBuild UP-TO-DATE
+:app:preProdJandroidReleaseBuild UP-TO-DATE
+:app:preStageAlexDebugBuild UP-TO-DATE
+:app:preStageAlexReleaseBuild UP-TO-DATE
+:app:preStageJandroidDebugBuild UP-TO-DATE
+:app:preStageJandroidReleaseBuild UP-TO-DATE
+:app:prepareComAndroidSupportAnimatedVectorDrawable2340Library
+:app:prepareComAndroidSupportAppcompatV72340Library
+:app:prepareComAndroidSupportDesign2340Library
+:app:prepareComAndroidSupportRecyclerviewV72340Library
+:app:prepareComAndroidSupportSupportV42340Library
+:app:prepareComAndroidSupportSupportVectorDrawable2340Library
+:app:prepareComGoogleAndroidGmsPlayServicesAnalytics902Library
+:app:prepareComGoogleAndroidGmsPlayServicesAnalyticsImpl902Library
+:app:prepareComGoogleAndroidGmsPlayServicesBase902Library
+:app:prepareComGoogleAndroidGmsPlayServicesBasement902Library
+:app:prepareComGoogleAndroidGmsPlayServicesTasks902Library
+:app:prepareComGoogleFirebaseFirebaseCommon902Library
+:app:prepareComJakewhartonButterknife810Library
+:app:prepareComJakewhartonHugoHugoRuntime121Library
+:app:prepareComJakewhartonTimberTimber412Library
+:app:prepareDevAlexDebugDependencies
+:app:compileDevAlexDebugAidl
+:app:compileDevAlexDebugRenderscript
+:app:generateDevAlexDebugBuildConfig
+:app:mergeDevAlexDebugShaders
+:app:compileDevAlexDebugShaders
+:app:generateDevAlexDebugAssets
+:app:mergeDevAlexDebugAssets
+:app:generateDevAlexDebugResValues
+:app:generateDevAlexDebugResources
+:app:mergeDevAlexDebugResources
+:app:processDevAlexDebugManifest
+:app:processDevAlexDebugResources
+:app:generateDevAlexDebugSources
+:app:incrementalDevAlexDebugJavaCompilationSafeguard
+:app:compileDevAlexDebugJavaWithJavac
+advice defined in hugo.weaving.internal.Hugo has not been applied [Xlint:adviceDidNotMatch]
+:app:checkDevAlexReleaseManifest
+:app:prepareDevAlexReleaseDependencies
+:app:compileDevAlexReleaseAidl
+:app:compileDevAlexReleaseRenderscript
+:app:generateDevAlexReleaseBuildConfig
+:app:mergeDevAlexReleaseShaders
+:app:compileDevAlexReleaseShaders
+:app:generateDevAlexReleaseAssets
+:app:mergeDevAlexReleaseAssets
+:app:generateDevAlexReleaseResValues
+:app:generateDevAlexReleaseResources
+:app:mergeDevAlexReleaseResources
+:app:processDevAlexReleaseManifest
+:app:processDevAlexReleaseResources
+:app:generateDevAlexReleaseSources
+:app:incrementalDevAlexReleaseJavaCompilationSafeguard
+:app:compileDevAlexReleaseJavaWithJavac
+:app:checkDevJandroidDebugManifest
+:app:prepareDevJandroidDebugDependencies
+:app:compileDevJandroidDebugAidl
+:app:compileDevJandroidDebugRenderscript
+:app:generateDevJandroidDebugBuildConfig
+:app:mergeDevJandroidDebugShaders
+:app:compileDevJandroidDebugShaders
+:app:generateDevJandroidDebugAssets
+:app:mergeDevJandroidDebugAssets
+:app:generateDevJandroidDebugResValues
+:app:generateDevJandroidDebugResources
+:app:mergeDevJandroidDebugResources
+:app:processDevJandroidDebugManifest
+:app:processDevJandroidDebugResources
+:app:generateDevJandroidDebugSources
+:app:incrementalDevJandroidDebugJavaCompilationSafeguard
+:app:compileDevJandroidDebugJavaWithJavac
+advice defined in hugo.weaving.internal.Hugo has not been applied [Xlint:adviceDidNotMatch]
+:app:checkDevJandroidReleaseManifest
+:app:prepareDevJandroidReleaseDependencies
+:app:compileDevJandroidReleaseAidl
+:app:compileDevJandroidReleaseRenderscript
+:app:generateDevJandroidReleaseBuildConfig
+:app:mergeDevJandroidReleaseShaders
+:app:compileDevJandroidReleaseShaders
+:app:generateDevJandroidReleaseAssets
+:app:mergeDevJandroidReleaseAssets
+:app:generateDevJandroidReleaseResValues
+:app:generateDevJandroidReleaseResources
+:app:mergeDevJandroidReleaseResources
+:app:processDevJandroidReleaseManifest
+:app:processDevJandroidReleaseResources
+:app:generateDevJandroidReleaseSources
+:app:incrementalDevJandroidReleaseJavaCompilationSafeguard
+:app:compileDevJandroidReleaseJavaWithJavac
+:app:compileLint
+:app:checkProdAlexDebugManifest
+:app:prepareProdAlexDebugDependencies
+:app:compileProdAlexDebugAidl
+:app:compileProdAlexDebugRenderscript
+:app:generateProdAlexDebugBuildConfig
+:app:mergeProdAlexDebugShaders
+:app:compileProdAlexDebugShaders
+:app:generateProdAlexDebugAssets
+:app:mergeProdAlexDebugAssets
+:app:generateProdAlexDebugResValues
+:app:generateProdAlexDebugResources
+:app:mergeProdAlexDebugResources
+:app:processProdAlexDebugManifest
+:app:processProdAlexDebugResources
+:app:generateProdAlexDebugSources
+:app:incrementalProdAlexDebugJavaCompilationSafeguard
+:app:compileProdAlexDebugJavaWithJavac
+advice defined in hugo.weaving.internal.Hugo has not been applied [Xlint:adviceDidNotMatch]
+:app:checkProdAlexReleaseManifest
+:app:prepareProdAlexReleaseDependencies
+:app:compileProdAlexReleaseAidl
+:app:compileProdAlexReleaseRenderscript
+:app:generateProdAlexReleaseBuildConfig
+:app:mergeProdAlexReleaseShaders
+:app:compileProdAlexReleaseShaders
+:app:generateProdAlexReleaseAssets
+:app:mergeProdAlexReleaseAssets
+:app:generateProdAlexReleaseResValues
+:app:generateProdAlexReleaseResources
+:app:mergeProdAlexReleaseResources
+:app:processProdAlexReleaseManifest
+:app:processProdAlexReleaseResources
+:app:generateProdAlexReleaseSources
+:app:incrementalProdAlexReleaseJavaCompilationSafeguard
+:app:compileProdAlexReleaseJavaWithJavac
+:app:checkProdJandroidDebugManifest
+:app:prepareProdJandroidDebugDependencies
+:app:compileProdJandroidDebugAidl
+:app:compileProdJandroidDebugRenderscript
+:app:generateProdJandroidDebugBuildConfig
+:app:mergeProdJandroidDebugShaders
+:app:compileProdJandroidDebugShaders
+:app:generateProdJandroidDebugAssets
+:app:mergeProdJandroidDebugAssets
+:app:generateProdJandroidDebugResValues
+:app:generateProdJandroidDebugResources
+:app:mergeProdJandroidDebugResources
+:app:processProdJandroidDebugManifest
+:app:processProdJandroidDebugResources
+:app:generateProdJandroidDebugSources
+:app:incrementalProdJandroidDebugJavaCompilationSafeguard
+:app:compileProdJandroidDebugJavaWithJavac
+advice defined in hugo.weaving.internal.Hugo has not been applied [Xlint:adviceDidNotMatch]
+:app:checkProdJandroidReleaseManifest
+:app:prepareProdJandroidReleaseDependencies
+:app:compileProdJandroidReleaseAidl
+:app:compileProdJandroidReleaseRenderscript
+:app:generateProdJandroidReleaseBuildConfig
+:app:mergeProdJandroidReleaseShaders
+:app:compileProdJandroidReleaseShaders
+:app:generateProdJandroidReleaseAssets
+:app:mergeProdJandroidReleaseAssets
+:app:generateProdJandroidReleaseResValues
+:app:generateProdJandroidReleaseResources
+:app:mergeProdJandroidReleaseResources
+:app:processProdJandroidReleaseManifest
+:app:processProdJandroidReleaseResources
+:app:generateProdJandroidReleaseSources
+:app:incrementalProdJandroidReleaseJavaCompilationSafeguard
+:app:compileProdJandroidReleaseJavaWithJavac
+:app:checkStageAlexDebugManifest
+:app:prepareStageAlexDebugDependencies
+:app:compileStageAlexDebugAidl
+:app:compileStageAlexDebugRenderscript
+:app:generateStageAlexDebugBuildConfig
+:app:mergeStageAlexDebugShaders
+:app:compileStageAlexDebugShaders
+:app:generateStageAlexDebugAssets
+:app:mergeStageAlexDebugAssets
+:app:generateStageAlexDebugResValues
+:app:generateStageAlexDebugResources
+:app:mergeStageAlexDebugResources
+:app:processStageAlexDebugManifest
+:app:processStageAlexDebugResources
+:app:generateStageAlexDebugSources
+:app:incrementalStageAlexDebugJavaCompilationSafeguard
+:app:compileStageAlexDebugJavaWithJavac
+advice defined in hugo.weaving.internal.Hugo has not been applied [Xlint:adviceDidNotMatch]
+:app:checkStageAlexReleaseManifest
+:app:prepareStageAlexReleaseDependencies
+:app:compileStageAlexReleaseAidl
+:app:compileStageAlexReleaseRenderscript
+:app:generateStageAlexReleaseBuildConfig
+:app:mergeStageAlexReleaseShaders
+:app:compileStageAlexReleaseShaders
+:app:generateStageAlexReleaseAssets
+:app:mergeStageAlexReleaseAssets
+:app:generateStageAlexReleaseResValues
+:app:generateStageAlexReleaseResources
+:app:mergeStageAlexReleaseResources
+:app:processStageAlexReleaseManifest
+:app:processStageAlexReleaseResources
+:app:generateStageAlexReleaseSources
+:app:incrementalStageAlexReleaseJavaCompilationSafeguard
+:app:compileStageAlexReleaseJavaWithJavac
+:app:checkStageJandroidDebugManifest
+:app:prepareStageJandroidDebugDependencies
+:app:compileStageJandroidDebugAidl
+:app:compileStageJandroidDebugRenderscript
+:app:generateStageJandroidDebugBuildConfig
+:app:mergeStageJandroidDebugShaders
+:app:compileStageJandroidDebugShaders
+:app:generateStageJandroidDebugAssets
+:app:mergeStageJandroidDebugAssets
+:app:generateStageJandroidDebugResValues
+:app:generateStageJandroidDebugResources
+:app:mergeStageJandroidDebugResources
+:app:processStageJandroidDebugManifest
+:app:processStageJandroidDebugResources
+:app:generateStageJandroidDebugSources
+:app:incrementalStageJandroidDebugJavaCompilationSafeguard
+:app:compileStageJandroidDebugJavaWithJavac
+advice defined in hugo.weaving.internal.Hugo has not been applied [Xlint:adviceDidNotMatch]
+:app:checkStageJandroidReleaseManifest
+:app:prepareStageJandroidReleaseDependencies
+:app:compileStageJandroidReleaseAidl
+:app:compileStageJandroidReleaseRenderscript
+:app:generateStageJandroidReleaseBuildConfig
+:app:mergeStageJandroidReleaseShaders
+:app:compileStageJandroidReleaseShaders
+:app:generateStageJandroidReleaseAssets
+:app:mergeStageJandroidReleaseAssets
+:app:generateStageJandroidReleaseResValues
+:app:generateStageJandroidReleaseResources
+:app:mergeStageJandroidReleaseResources
+:app:processStageJandroidReleaseManifest
+:app:processStageJandroidReleaseResources
+:app:generateStageJandroidReleaseSources
+:app:incrementalStageJandroidReleaseJavaCompilationSafeguard
+:app:compileStageJandroidReleaseJavaWithJavac
+:app:lint
+Ran lint on variant devAlexDebug: 19 issues found
+Ran lint on variant devJandroidDebug: 19 issues found
+Ran lint on variant devAlexRelease: 19 issues found
+Ran lint on variant stageAlexRelease: 19 issues found
+Ran lint on variant devJandroidRelease: 19 issues found
+Ran lint on variant prodJandroidRelease: 19 issues found
+Ran lint on variant stageJandroidRelease: 19 issues found
+Ran lint on variant prodAlexRelease: 19 issues found
+Ran lint on variant stageJandroidDebug: 19 issues found
+Ran lint on variant prodAlexDebug: 19 issues found
+Ran lint on variant prodJandroidDebug: 19 issues found
+Ran lint on variant stageAlexDebug: 19 issues found
+Wrote HTML report to file:///C:/dev/workspace/GG-GradleTemplate-Android/app/build/outputs/lint-results-devAlexDebug.html
+Wrote XML report to file:///C:/dev/workspace/GG-GradleTemplate-Android/app/build/outputs/lint-results-devAlexDebug.xml
+:app:pmd
+:app:incrementalDevAlexDebugUnitTestJavaCompilationSafeguard UP-TO-DATE
+:app:preDevAlexDebugUnitTestBuild UP-TO-DATE
+:app:preDevAlexReleaseUnitTestBuild UP-TO-DATE
+:app:preDevJandroidDebugUnitTestBuild UP-TO-DATE
+:app:preDevJandroidReleaseUnitTestBuild UP-TO-DATE
+:app:preProdAlexDebugUnitTestBuild UP-TO-DATE
+:app:preProdAlexReleaseUnitTestBuild UP-TO-DATE
+:app:preProdJandroidDebugUnitTestBuild UP-TO-DATE
+:app:preProdJandroidReleaseUnitTestBuild UP-TO-DATE
+:app:preStageAlexDebugUnitTestBuild UP-TO-DATE
+:app:preStageAlexReleaseUnitTestBuild UP-TO-DATE
+:app:preStageJandroidDebugUnitTestBuild UP-TO-DATE
+:app:preStageJandroidReleaseUnitTestBuild UP-TO-DATE
+:app:prepareComSquareupAssertjAssertjAndroid100Library
+:app:prepareDevAlexDebugUnitTestDependencies
+:app:compileDevAlexDebugUnitTestJavaWithJavac
+:app:processDevAlexDebugJavaRes UP-TO-DATE
+:app:processDevAlexDebugUnitTestJavaRes UP-TO-DATE
+:app:compileDevAlexDebugUnitTestSources
+:app:mockableAndroidJar
+:app:assembleDevAlexDebugUnitTest
+:app:testDevAlexDebugUnitTest
+
+com.dminc.application.HomeActivityUnitTest > myActivityAppearsAsExpectedInitially FAILED
+    org.junit.ComparisonFailure at HomeActivityUnitTest.java:30
+
+com.dminc.application.SplashActivityUnitTest > myActivityHasNoTitle FAILED
+    java.lang.AssertionError at SplashActivityUnitTest.java:33
+:app:testDevAlexDebugUnitTest FAILED
+
+BUILD FAILED
+
+Total time: 3 mins 35.418 secs

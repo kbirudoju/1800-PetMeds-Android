@@ -1,0 +1,294 @@
+// This section tells Gradle where to find everything it needs.
+buildscript {
+    dependencies {
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
+        classpath 'com.github.alexrichards.gradle:ricotta-plugin:1.0.+'
+        //classpath 'com.goldengekko.gradle:testfairy-plugin:1.0.0.0'
+        classpath 'com.goldengekko.gradle:android-release-plugin:1.0.0.2@jar'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+    repositories {
+        mavenLocal()
+        maven { url 'https://nexus.dminc-gtc.com/nexus/content/groups/public/' }
+    }
+}
+
+// This section tells Gradle where to find everything your app needs.
+repositories {
+    //Uncomment if you include Bugsense
+    //maven { url 'http://www.bugsense.com/gradle/' }
+    //Uncomment if you include facebook
+    //maven { url "http://mente.github.io/facebook-api-android-aar" }
+
+}
+
+// Here we're applying the plugins we want to use in the build script. 'android' is the most important.
+apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.hugo'
+apply plugin: 'release-helper-plugin'
+apply plugin: 'com.neenbedankt.android-apt'
+
+apply from: '../checkstyle.gradle'
+apply from: '../pmd.gradle'
+apply from: '../findbugs.gradle'
+//apply plugin: 'ricotta'
+//apply plugin: 'android-quality'
+//apply plugin: 'testfairy'
+
+// Writing a library? Delete what's above and uncomment this.
+//apply plugin: 'android-library'
+releaseHelper {
+    //This can be either Build, Patch, Minor, or Major (defaults to Build if not present)
+    releaseType 'Build'
+    //This message will be used as tag message (there is a default message if not present)
+    //tagDescription 'End of my awesome sprint'
+    //This allows you to chose the remote branch you want to point to (defaults to master if not present)
+    //remoteBranchName 'my-awesome-branch'
+}
+
+// Where to find Ricotta resources.
+//ricotta {
+//    projectName 'TemplateApplication'
+//    host 'ricotta-ost.appspot.com'
+//    translation {
+//        language 'en'
+//        target file('src/main/res/values/ricotta.xml')
+//    }
+//    translation {
+//        language 'es'
+//        target file('src/main/res/values-es/ricotta.xml')
+//    }
+//}
+
+/*testfairyConfig {
+    apiKey 'xxxxxxxxxxx'
+    testersGroups 'tester_group'
+}*/
+
+// Android configuration goes here.
+android {
+    // Choose your platform.
+    compileSdkVersion 23
+    buildToolsVersion '23.0.3'
+
+    // These options apply to all builds.
+    defaultConfig {
+        // These are applied to the manifest, to prevent nasty compat modes, use the latest you can.
+        minSdkVersion 16
+        targetSdkVersion 23
+
+        // Use the project version as the version name, and generate a version code.
+        versionName version
+        versionCode versionCode(version)
+
+        // Limit the apk's languages to ones that we have translations for, Play Services includes loads we don't need.
+        //resConfigs ricotta.resourceConfig
+
+        // You are writing tests, yeah?
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+
+    // Keystore storage and management needs finalising, bt look, we can write code in our build script to manage all that!
+    final File keystore = file('blah.keystore');
+    final File keystorePassword = file('blah.keystore.password');
+    if (keystore.exists() && keystore.canRead()
+            && keystorePassword.exists() && keystorePassword.canRead()) {
+        final String password = keystorePassword.text.trim()
+        signingConfigs {
+            release {
+                storeFile keystore
+                storePassword password
+                keyAlias 'android'
+                keyPassword password
+            }
+        }
+    }
+
+    // Use build types to customise builds to your needs.
+    buildTypes {
+        release {
+          zipAlignEnabled true
+        }
+
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-SNAPSHOT'
+        }
+
+        // Here we're adding a release signing profile, if we found the keystore.
+        if (signingConfigs.hasProperty('release')) {
+            release.signingConfig signingConfigs.release
+            printKeystoreInfos(keystore, keystorePassword)
+        }
+
+        //Rename our apk files to give to include the version number
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                //Apk that will be renamed
+                File file = output.outputFile;
+                output.outputFile = addVersionToApkName(file)
+            }
+        }
+    }
+
+    // Use product flavours to customise builds
+    flavorDimensions 'server'
+
+    productFlavors {
+        // Servers
+        dev {
+            dimension 'server'
+        }
+        stage {
+            dimension 'server'
+        }
+        prod {
+            dimension 'server'
+        }
+    }
+
+    // A lot of 3rd party libraries contain similar stuff.
+    packagingOptions {
+        exclude 'LICENSE.*'
+        exclude 'LICENSE.txt'
+        exclude 'NOTICE.*'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/notice.txt'
+    }
+
+    // One day, we'll change this to true...
+    lintOptions {
+        abortOnError false
+    }
+
+    testBuildType "release"
+}
+
+// Use http://gradleplease.appspot.com/ to find dependency names.
+dependencies {
+
+    // AppCompat
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    // Google Play Services
+    compile 'com.google.android.gms:play-services-base:9.0.2'
+    compile 'com.google.android.gms:play-services-analytics:9.0.2'
+    // Design library
+    compile 'com.android.support:design:23.4.0'
+
+    compile 'com.squareup.okhttp3:okhttp:3.4.0-RC1'
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.0-RC1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.0-RC1'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // Injection stuff
+    compile 'com.google.dagger:dagger:2.5'
+    apt 'com.google.dagger:dagger-compiler:2.5'
+    compile 'com.jakewharton:butterknife:8.1.0'
+    apt 'com.jakewharton:butterknife-compiler:8.1.0'
+
+    // Log
+    compile 'com.jakewharton.timber:timber:4.1.2'
+    //Uncomment if you want to include bugsense
+    //compile "com.splunk.mint:mint:5.0.0"
+    //Uncomment if you want to include facebook
+    //compile('com.facebook:facebook-android-sdk:+@aar') {
+    //transitive = true
+    //exclude group: 'com.google.android', module: 'support-v4'
+    //}
+
+    // Android Instrumentation testing only dependencies
+    androidTestCompile('com.android.support.test:runner:0.4') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    // Set this dependency to use JUnit 4 rules
+    androidTestCompile('com.android.support.test:rules:0.4') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    // Set this dependency to build and run Espresso tests
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    // Set this dependency to build and run UI Automator tests
+    androidTestCompile('com.android.support.test.uiautomator:uiautomator-v18:2.1.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    // Android unit testing only dependencies
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.robolectric:shadows-httpclient:3.0'
+    testCompile 'org.mockito:mockito-core:2.0.81-beta'
+    testCompile ('com.squareup.assertj:assertj-android:1.0.0') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+}
+
+configurations {
+    // to avoid double inclusion of support libraries
+//    all*.exclude group: 'com.android.support', module: 'support-v4'
+    all*.exclude module: 'classworlds'
+    all*.exclude module: 'commons-logging'
+    all*.exclude module: 'httpclient'
+    all*.exclude module: 'maven-artifact'
+    all*.exclude module: 'maven-artifact-manager'
+    all*.exclude module: 'maven-error-diagnostics'
+    all*.exclude module: 'maven-model'
+    all*.exclude module: 'maven-project'
+    all*.exclude module: 'maven-settings'
+    all*.exclude module: 'plexus-container-default'
+    all*.exclude module: 'plexus-interpolation'
+    all*.exclude module: 'plexus-utils'
+    all*.exclude module: 'wagon-file'
+    all*.exclude module: 'wagon-http-lightweight'
+    all*.exclude module: 'wagon-provider-api'
+    all*.exclude module: 'javax.annotation-api'
+}
+
+
+def int versionCode(String versionName) {
+    int versionCode = 0
+    versionName.split('\\.').collect { part ->
+        Integer.parseInt(part, 10)
+    }.eachWithIndex { part, i ->
+        versionCode += part * Math.pow(10, (4 - i - 1) * 2)
+    }
+    return versionCode
+}
+
+/**
+ * This method takes a file in and will replace
+ * the default app name with a name we chose and
+ * will append the version number at the end to
+ * make versions easy to track
+ *
+ * @param file
+ * @return new file name
+ */
+def File addVersionToApkName(File file) {
+    String apkName = file.name.replace(".apk", "-" + version + ".apk")
+    return new File(file.parent, apkName)
+}
+
+/**
+ * This method is used for debugging purposes, it allows you
+ * to get a quick look at the keystore status on Jenkins
+ *
+ * @param keystore
+ * @param keystorePassword
+ * @return
+ */
+def printKeystoreInfos(File keystore, File keystorePassword) {
+    println("keystore exists => " + keystore.exists())
+    println("keystore can read => " + keystore.canRead())
+    println("keystorePassword exists => " + keystorePassword.exists())
+    println("keystorePassword can read => " + keystorePassword.canRead())
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}

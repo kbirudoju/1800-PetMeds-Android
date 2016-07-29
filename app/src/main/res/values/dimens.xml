@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="menu_width">240dp</dimen>
+
+    <dimen name="layout_margin_horizontal">16dp</dimen>
+    <dimen name="layout_margin_vertical">8dp</dimen>
+
+    <dimen name="text_padding">16dp</dimen>
+
+</resources>

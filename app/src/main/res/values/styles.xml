@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="application.theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/background.light</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/background.dull</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated,
+             which is used to tint widgets -->
+        <item name="colorAccent">@color/color.accent</item>
+    </style>
+
+    <style name="application.theme.splash">
+    </style>
+
+    <style name="style"/>
+
+    <style name="style.text.medium" parent="android:TextAppearance.Medium">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="style.text.large" parent="android:TextAppearance.Large">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="style.menu">
+        <item name="android:background">@color/background.light</item>
+        <item name="android:dividerHeight">0px</item>
+        <item name="android:divider">@null</item>
+    </style>
+
+    <style name="style.menu.entry" parent="style.text.medium">
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:padding">@dimen/text_padding</item>
+    </style>
+
+</resources>

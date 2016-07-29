@@ -1,0 +1,38 @@
+/**
+ * Plugin document
+ * http://www.gradle.org/docs/current/dsl/org.gradle.api.plugins.quality.Pmd.html
+ * http://www.gradle.org/docs/current/dsl/org.gradle.api.plugins.quality.PmdExtension.html
+ */
+apply plugin: 'pmd'
+
+check.dependsOn 'pmd'
+
+task pmd(type: Pmd) {
+    ignoreFailures = true
+
+    /* ruleSets resource : http://stackoverflow.com/questions/20710704/gradles-pmd-plugin-what-are-acceptable-arguments */
+    // issues : "unnecessary" seems not support
+    // ruleSets = ["java-android", "java-basic", "java-unusedcode","java-imports"]
+    ruleSets = ["java-basic", "java-braces", "java-strings", "java-android"]
+
+    source "${project.rootDir}/app/src"
+    include '**/*.java'
+
+    reports {
+        xml.enabled = true
+        html.enabled = false
+    }
+
+    doLast {
+        // convert report from xml to html
+        if (file(reports.xml.destination.parent).exists()) {
+            ant.xslt(in: reports.xml.destination,
+                    style: new File('../pmd-report-per-class.xslt'),
+                    out: new File("${reports.xml.destination.parent}", 'pmd.html'))
+        }
+    }
+}
+
+pmd {
+    toolVersion = '5.5.0'
+}
