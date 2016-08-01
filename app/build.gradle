@@ -79,7 +79,7 @@ android {
 
         // Use the project version as the version name, and generate a version code.
         versionName version
-        versionCode versionCode(version)
+        versionCode 1
 
         // Limit the apk's languages to ones that we have translations for, Play Services includes loads we don't need.
         //resConfigs ricotta.resourceConfig
@@ -250,15 +250,6 @@ configurations {
 }
 
 
-def int versionCode(String versionName) {
-    int versionCode = 0
-    versionName.split('\\.').collect { part ->
-        Integer.parseInt(part, 10)
-    }.eachWithIndex { part, i ->
-        versionCode += part * Math.pow(10, (4 - i - 1) * 2)
-    }
-    return versionCode
-}
 
 /**
  * This method takes a file in and will replace

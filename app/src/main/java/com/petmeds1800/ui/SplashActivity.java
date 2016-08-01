@@ -82,6 +82,7 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         public void handleMessage(final Message msg) {
+            
             if (msg.what == MSG_FINISH && mSplashActivity != null) {
                 mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
                 mSplashActivity.finish();
