@@ -36,5 +36,13 @@
     <string name="label.text_not_ready">Text not ready for saving</string>
     <string name="label.text_saved">Text saved</string>
     <string name="label.text_not_saved">An error occurred and the text could not be saved</string>
+    <!--Home Screen-->
+    <string-array name="tab_title">
+            <item>Home</item>
+            <item>Cart</item>
+            <item>Learn</item>
+            <item>Account</item>
+
+    </string-array>
 
 </resources>

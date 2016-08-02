@@ -1,59 +1,49 @@
 package com.petmeds1800.ui;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 
 import com.petmeds1800.R;
-import com.petmeds1800.ui.fragments.LoremFragment;
-import com.petmeds1800.util.PermissionUtils;
+import com.petmeds1800.ui.fragments.AccountFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.HomeFragment;
+import com.petmeds1800.ui.fragments.LearnFragment;
+import com.petmeds1800.ui.support.TabPagerAdapter;
 
-public class HomeActivity extends AbstractMenuActivity {
+import java.util.ArrayList;
+import java.util.List;
 
-    private static final String TEST_STRING_KEY = "TEST_STRING_KEY";
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private String myTestString = "initial_value";
+public class HomeActivity extends AbstractActivity {
 
-    private LoremFragment mCurrentFragment;
+    @BindView(R.id.tablayout)
+    TabLayout mHomeTab;
 
-    public String getMyTestString() {
-        return myTestString;
-    }
+    @BindView(R.id.viewpager_fragments)
+    ViewPager mViewPager;
+
+    List<Fragment> fragmentList;
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Uncomment these lines to start using bugsense
-//        if(!BuildConfig.DEBUG) {
-//            BugSenseHandler.initAndStartSession(HomeActivity.this, getResources().getString(R.string.bugsense_api_key));
-//        }
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
 
-        if (savedInstanceState != null) {
-            myTestString = savedInstanceState.getString(TEST_STRING_KEY, "default");
-        }
+        //initialize fragment list
+        fragmentList=new ArrayList<Fragment>();
+        fragmentList.add(new HomeFragment());
+        fragmentList.add(new CartFragment());
+        fragmentList.add(new LearnFragment());
+        fragmentList.add(new AccountFragment());
+
+
+       mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), fragmentList, getResources().getStringArray(R.array.tab_title)));
+        mHomeTab.setupWithViewPager(mViewPager);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(TEST_STRING_KEY, "saving_state");
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            switch (requestCode) {
-                case PermissionUtils.STORAGE_PERMISSION_REQUEST_CODE:
-                    mCurrentFragment.saveLorem();
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onFragmentSelected(Fragment fragment) {
-        super.onFragmentSelected(fragment);
-        mCurrentFragment = (LoremFragment) fragment;
-    }
 }

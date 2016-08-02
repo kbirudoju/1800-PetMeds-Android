@@ -1,18 +1,10 @@
 package com.petmeds1800.ui.fragments;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.petmeds1800.R;
-
-import butterknife.ButterKnife;
-
-public abstract class AbstractSpinnerFragment extends Fragment {
-
-    private View mSpinnerView;
+public abstract class AbstractFragment extends Fragment {
+//Since we have just started and have no idea on UI part, so commenting below code
+  /*  private View mSpinnerView;
     private ViewGroup mContentView;
 
     @Override
@@ -45,5 +37,5 @@ public abstract class AbstractSpinnerFragment extends Fragment {
 
     public boolean isSpinnerVisible() {
         return mSpinnerView.getVisibility() == View.VISIBLE;
-    }
+    }*/
 }

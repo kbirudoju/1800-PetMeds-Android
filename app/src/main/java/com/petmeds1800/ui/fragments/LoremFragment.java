@@ -1,33 +1,8 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-import com.petmeds1800.TemplateApplication;
-import com.petmeds1800.loader.LoremLoader;
-import com.petmeds1800.loader.SaveLoremLoader;
-import com.petmeds1800.util.PermissionUtils;
+public class LoremFragment extends AbstractFragment {
 
-import android.Manifest;
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.Loader;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class LoremFragment extends AbstractSpinnerFragment {
-
-    private static final String ARG_PARAGRAPHS = "ARG_PARAGRAPHS";
+   /* private static final String ARG_PARAGRAPHS = "ARG_PARAGRAPHS";
 
     @SuppressWarnings("checkstyle:visibilitymodifier")
     @BindView(R.id.view_lorem)
@@ -161,5 +136,5 @@ public class LoremFragment extends AbstractSpinnerFragment {
             }
             Snackbar.make(mLoremView, message, Snackbar.LENGTH_SHORT).show();
         }
-    }
+    }*/
 }
