@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.petmeds1800.R;
-import com.petmeds1800.ui.fragments.AccountFragment;
+import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.HomeFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
@@ -38,11 +38,12 @@ public class HomeActivity extends AbstractActivity {
         fragmentList.add(new HomeFragment());
         fragmentList.add(new CartFragment());
         fragmentList.add(new LearnFragment());
-        fragmentList.add(new AccountFragment());
+        fragmentList.add(new AccountRootFragment());
 
 
-       mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), fragmentList, getResources().getStringArray(R.array.tab_title)));
+        mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), fragmentList, getResources().getStringArray(R.array.tab_title)));
         mHomeTab.setupWithViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(3);
     }
 
 

@@ -7,5 +7,7 @@
     <dimen name="layout_margin_vertical">8dp</dimen>
 
     <dimen name="text_padding">16dp</dimen>
+    <dimen name="dp_50">50dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
 
 </resources>

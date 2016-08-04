@@ -1,13 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:fillViewport="true"
+    >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16"
+        >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ACCOUNT"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_orders"/>
 
+        <TextView
+            android:id="@+id/myOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_my_orders"/>
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_account"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_change_account_settings"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_manage_payment_option"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_manage_address"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_my_pets"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_my_vets"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_set_refill_schedule"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_setting"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_use_fingerprint"
+                android:layout_toLeftOf="@+id/fingerPrintStatus"
+                android:layout_alignParentLeft="true"/>
+            <Switch
+                android:id="@+id/fingerPrintStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/header_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_push_notification"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/notificationStatus"/>
+            <Switch
+                android:id="@+id/notificationStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/push_notification_desc"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/header_notification"
+                android:layout_toLeftOf="@+id/notificationStatus"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_more"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_contact_us"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_signout"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -42,7 +42,29 @@
             <item>Cart</item>
             <item>Learn</item>
             <item>Account</item>
+            </string-array>
+    
+    <!--Account-->
+    <string name="title_orders">ORDERS</string>
+    <string name="title_my_orders">My Orders</string>
+    <string name="title_account">ACCOUNT</string>
+    <string name="title_change_account_settings">Change account setting</string>
+    <string name="title_manage_payment_option">Manage payment information</string>
+    <string name="title_manage_address">Manage addresses</string>
+    <string name="title_my_pets">My pets</string>
+    <string name="title_my_vets">My vets</string>
+    <string name="title_set_refill_schedule">Set your easy refill schedule</string>
+    <string name="title_setting">SETTINGS</string>
+    <string name="title_use_fingerprint">Use fingerprint</string>
+    <string name="title_push_notification">Push Notification</string>
+    <string name="title_more">MORE</string>
+    <string name="title_contact_us">Contact us</string>
+    <string name="title_signout">Sign out</string>
+    <string name="push_notification_desc">Allow notification for order status, vet contact, refill reminder, offer, and product recall</string>
 
-    </string-array>
+<!--Orders-->
+    <string name="order_txt">Order</string>
+    <string name="date_txt">Date</string>
+    <string name="status_txt">Status</string>
 
 </resources>
