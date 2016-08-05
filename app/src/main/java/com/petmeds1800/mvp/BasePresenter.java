@@ -1,0 +1,8 @@
+package com.petmeds1800.mvp;
+
+/**
+ * Created by Digvijay on 8/5/2016.
+ */
+public interface BasePresenter {
+    void start();
+}

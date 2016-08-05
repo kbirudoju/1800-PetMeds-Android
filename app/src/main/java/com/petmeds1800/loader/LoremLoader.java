@@ -1,6 +1,6 @@
 package com.petmeds1800.loader;
 
-import com.petmeds1800.TemplateApplication;
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.ApiService;
 
 import android.os.Bundle;
@@ -19,7 +19,7 @@ public class LoremLoader extends AbstractLoader<String> {
 
     private final int mParagraphs;
 
-    public LoremLoader(final TemplateApplication application, final int paragraphs) {
+    public LoremLoader(final PetMedsApplication application, final int paragraphs) {
         super(application);
         mParagraphs = paragraphs;
         application.component().inject(this);
@@ -37,10 +37,10 @@ public class LoremLoader extends AbstractLoader<String> {
 
     public abstract static class AbstractLoremLoaderCallbacks implements LoaderManager.LoaderCallbacks<String> {
 
-        private final TemplateApplication mApplication;
+        private final PetMedsApplication mApplication;
         private final int mParagraphs;
 
-        protected AbstractLoremLoaderCallbacks(TemplateApplication application, final int paragraphs) {
+        protected AbstractLoremLoaderCallbacks(PetMedsApplication application, final int paragraphs) {
             mApplication = application;
             mParagraphs = paragraphs;
         }

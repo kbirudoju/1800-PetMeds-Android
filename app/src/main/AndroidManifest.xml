@@ -7,7 +7,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:name=".TemplateApplication"
+        android:name=".PetMedsApplication"
         android:allowBackup="true"
         android:label="@string/application.name"
         android:theme="@style/application.theme">
@@ -22,5 +22,6 @@
         </activity>
         <activity android:name=".ui.HomeActivity"/>
 
+        <activity android:name=".ui.LoginActivity"/>
     </application>
 </manifest>

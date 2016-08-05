@@ -1,6 +1,6 @@
 package com.petmeds1800.loader;
 
-import com.petmeds1800.TemplateApplication;
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.util.FileUtils;
 
 import android.os.Bundle;
@@ -18,7 +18,7 @@ public class SaveLoremLoader extends AbstractLoader<Boolean> {
     private final String mFileName;
     private final String mFileContent;
 
-    public SaveLoremLoader(final TemplateApplication application, final String fileName,
+    public SaveLoremLoader(final PetMedsApplication application, final String fileName,
             final String fileContent) {
         super(application);
 
@@ -36,11 +36,11 @@ public class SaveLoremLoader extends AbstractLoader<Boolean> {
     public abstract static class AbstractSaveLoremLoaderCallbacks
             implements LoaderManager.LoaderCallbacks<Boolean> {
 
-        private final TemplateApplication mApplication;
+        private final PetMedsApplication mApplication;
         private final String mFileName;
         private final String mFileContent;
 
-        protected AbstractSaveLoremLoaderCallbacks(final TemplateApplication application,
+        protected AbstractSaveLoremLoaderCallbacks(final PetMedsApplication application,
                 final String fileName, final String fileContent) {
             mApplication = application;
             mFileName = fileName;

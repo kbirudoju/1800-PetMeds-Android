@@ -1,4 +1,4 @@
-package com.petmeds1800.module;
+package com.petmeds1800.dagger.module;
 
 import com.petmeds1800.loader.LoremLoader;
 import com.petmeds1800.loader.SaveLoremLoader;

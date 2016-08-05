@@ -1,4 +1,4 @@
-package com.petmeds1800.module;
+package com.petmeds1800.dagger.module;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;

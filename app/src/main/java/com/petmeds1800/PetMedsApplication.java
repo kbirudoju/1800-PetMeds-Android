@@ -1,16 +1,16 @@
 package com.petmeds1800;
 
-import com.petmeds1800.module.ApiModule;
-import com.petmeds1800.module.AppComponent;
-import com.petmeds1800.module.ApplicationModule;
-import com.petmeds1800.module.DaggerAppComponent;
-import com.petmeds1800.module.RestModule;
+import com.petmeds1800.dagger.module.ApiModule;
+import com.petmeds1800.dagger.module.AppComponent;
+import com.petmeds1800.dagger.module.ApplicationModule;
+import com.petmeds1800.dagger.module.DaggerAppComponent;
+import com.petmeds1800.dagger.module.RestModule;
 
 import android.app.Application;
 
 import timber.log.Timber;
 
-public class TemplateApplication extends Application {
+public class PetMedsApplication extends Application {
 
     private AppComponent mAppComponent;
 

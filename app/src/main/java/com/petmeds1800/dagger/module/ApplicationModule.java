@@ -1,6 +1,6 @@
-package com.petmeds1800.module;
+package com.petmeds1800.dagger.module;
 
-import com.petmeds1800.TemplateApplication;
+import com.petmeds1800.PetMedsApplication;
 
 import android.app.Application;
 
@@ -14,9 +14,9 @@ import dagger.Provides;
  */
 @Module
 public class ApplicationModule {
-    private final TemplateApplication mApp;
+    private final PetMedsApplication mApp;
 
-    public ApplicationModule(TemplateApplication app) {
+    public ApplicationModule(PetMedsApplication app) {
         this.mApp = app;
     }
 

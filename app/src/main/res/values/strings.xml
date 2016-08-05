@@ -67,4 +67,9 @@
     <string name="date_txt">Date</string>
     <string name="status_txt">Status</string>
 
+    <string name="label.email">Email</string>
+    <string name="label.password">Password</string>
+    <string name="label.login">Log In</string>
+    <string name="label.forgot_password">Forgot Password?</string>
+    <string name="label.no_account_sign_up">Don\'t have an account? Sign up.</string>
 </resources>

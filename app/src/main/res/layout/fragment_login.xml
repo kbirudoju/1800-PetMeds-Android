@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/petmeds_brand_logo_image"
+               android:layout_margin="@dimen/xlarge_margin"
+               android:layout_alignParentTop="true"
+               android:layout_centerHorizontal="true"/>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_above="@+id/sign_up_button"
+                  android:layout_below="@+id/petmeds_brand_logo_image"
+                  android:gravity="center">
+
+        <EditText android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/email_text"
+                  android:layout_margin="@dimen/xlarge_margin"
+                  android:hint="@string/label.email"/>
+
+        <EditText android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/password_text"
+                  android:layout_margin="@dimen/xlarge_margin"
+                  android:hint="@string/label.password"/>
+
+        <Button android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/log_in_button"
+                android:layout_margin="@dimen/xlarge_margin"
+                android:text="@string/label.login"
+                android:textAllCaps="false"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/label.forgot_password"/>
+
+    </LinearLayout>
+
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sign_up_button"
+            android:layout_margin="@dimen/xlarge_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/label.no_account_sign_up"
+            android:textAllCaps="false"/>
+
+</RelativeLayout>

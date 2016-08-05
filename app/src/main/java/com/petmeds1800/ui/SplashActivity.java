@@ -1,18 +1,19 @@
 package com.petmeds1800.ui;
 
+import com.petmeds1800.BuildConfig;
+import com.petmeds1800.R;
+import com.petmeds1800.intent.LoginIntent;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 
-import com.petmeds1800.BuildConfig;
-import com.petmeds1800.R;
-import com.petmeds1800.intent.HomeIntent;
-
 public class SplashActivity extends AppCompatActivity {
 
     public static final long DEFAULT_TIMEOUT = 1600;
+
     public static final long DEBUG_TIMEOUT = DEFAULT_TIMEOUT / 2;
 
     private static final String STATE_FINISH_TIME = "STATE_FINISH_TIME";
@@ -82,9 +83,12 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         public void handleMessage(final Message msg) {
-            
+
             if (msg.what == MSG_FINISH && mSplashActivity != null) {
-                mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
+                //Commented code below for testing Login flow 
+//                mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
+
+                mSplashActivity.startActivity(new LoginIntent(mSplashActivity));
                 mSplashActivity.finish();
             }
         }
