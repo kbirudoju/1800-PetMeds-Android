@@ -1,12 +1,11 @@
 package com.petmeds1800.dagger.module;
 
-import com.google.android.gms.analytics.Tracker;
+import android.app.Application;
 
+import com.google.android.gms.analytics.Tracker;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.util.FileUtils;
 import com.petmeds1800.util.PermissionUtils;
-
-import android.app.Application;
 
 import javax.inject.Singleton;
 

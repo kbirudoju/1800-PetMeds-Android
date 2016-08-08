@@ -1,14 +1,14 @@
 package com.petmeds1800.ui;
 
-import com.petmeds1800.BuildConfig;
-import com.petmeds1800.R;
-import com.petmeds1800.intent.LoginIntent;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+
+import com.petmeds1800.BuildConfig;
+import com.petmeds1800.R;
+import com.petmeds1800.intent.LoginIntent;
 
 public class SplashActivity extends AppCompatActivity {
 

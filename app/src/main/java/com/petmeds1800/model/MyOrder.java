@@ -3,7 +3,7 @@ package com.petmeds1800.model;
 import java.io.Serializable;
 
 /**
- * Created by user on 8/4/2016.
+ * Created by pooja on 8/4/2016.
  */
 public class MyOrder implements Serializable{
     private String orderNumber;

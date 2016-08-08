@@ -14,8 +14,11 @@ import com.petmeds1800.model.MyOrder;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
- * Created by user on 8/4/2016.
+ * Created by pooja on 8/4/2016.
  */
 public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -25,15 +28,15 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
     final static int LOADING_VIEW_TYPE = 2;
     View.OnClickListener onClickListener;
 
-    private boolean isFooterEnabled = true;
+    private boolean isFooterEnabled = false;
     private List<MyOrder> myOrder;
 
-
-    public MyOrderAdapter( boolean blankView, View.OnClickListener onClickListener) {
+     public MyOrderAdapter( boolean blankView, View.OnClickListener onClickListener) {
         this.blankView = blankView;
         this.onClickListener = onClickListener;
 
     }
+
 
     public void clearData() {
         if ( myOrder !=null ) {
@@ -72,7 +75,7 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        Log.d("position is",position+">>>>"+myOrder.size());
+        Log.d("position is", position + ">>>>" + myOrder.size());
         if (holder instanceof ProgressViewHolder) {
 
         } else {
@@ -81,6 +84,17 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             orderViewHolder.tv_order_date.setText(myOrder.getOrderDate());
             orderViewHolder.tv_order_number.setText(myOrder.getOrderNumber());
             orderViewHolder.tv_order_status.setText(myOrder.getOrderStatus());
+            //temporary hardcoded value to check layout, it will be changed after API Integration
+            if(myOrder.getOrderStatus().equalsIgnoreCase("Shipping")){
+                orderViewHolder.tv_order_status.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
+                orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.yellow_rounded_button);
+            }else if(myOrder.getOrderStatus().equalsIgnoreCase("Cancelled")){
+                orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.red_rounded_button);
+                orderViewHolder.tv_order_status.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
+
+            }else{
+                orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.green_rounded_button);
+            }
             orderViewHolder.iv_product_img.setImageResource(R.mipmap.ic_launcher);
 
 
@@ -121,29 +135,32 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     public static class MyOrderItemViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.order_number_label)
         TextView tv_order_number;
+        @BindView(R.id.order_status_label)
         TextView tv_order_status;
+        @BindView(R.id.order_date_label)
         TextView tv_order_date;
+        @BindView(R.id.product_image)
         ImageView iv_product_img;
 
 
 
         public MyOrderItemViewHolder(View itemView) {
             super(itemView);
-            tv_order_number = (TextView) itemView.findViewById(R.id.orderNo);
-            tv_order_status = (TextView) itemView.findViewById(R.id.orderstatus);
-            tv_order_date = (TextView) itemView.findViewById(R.id.orderDate);
-            iv_product_img=(ImageView)itemView.findViewById(R.id.productImg);
+            ButterKnife.bind(this, itemView);
+
 
         }
     }
 
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
-        public ProgressBar progressBar;
-
+        @BindView(R.id.progressBar)
+        ProgressBar progressbar;
         public ProgressViewHolder(View v) {
             super(v);
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+            ButterKnife.bind(this, v);
+
         }
     }
 

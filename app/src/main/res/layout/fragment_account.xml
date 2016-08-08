@@ -8,99 +8,159 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/dp_16"
-        android:paddingRight="@dimen/dp_16"
         >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_orders"/>
+            android:text="@string/title_orders"
+            style="@style/label"/>
 
         <TextView
             android:id="@+id/myOrder"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_my_orders"/>
+            android:text="@string/title_my_orders"
+            style="@style/styledefault"
+            android:drawableRight="@drawable/ic_arrow"
+            android:drawableLeft="@drawable/ic_orders"
+            android:drawablePadding="@dimen/dp_12"
 
+            />
+<include
+    layout="@layout/view_separator"></include>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_account"/>
+            android:text="@string/title_account"
+            style="@style/label"/>
 
         <TextView
             android:id="@+id/accountSettings"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_change_account_settings"/>
+            android:text="@string/title_change_account_settings"
+            style="@style/styledefault"
+            android:drawableLeft="@drawable/ic_accountsettings"
+            android:drawablePadding="@dimen/dp_12"
+            android:drawableRight="@drawable/ic_arrow"/>
+        <include
+            layout="@layout/view_separator"></include>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_manage_payment_option"/>
+            android:text="@string/title_manage_payment_option"
+            style="@style/styledefault"
+            android:drawableLeft="@drawable/ic_paymnentinformation"
+            android:drawablePadding="@dimen/dp_12"
+            android:drawableRight="@drawable/ic_arrow"/>
+        <include
+            layout="@layout/view_separator"
+            ></include>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_manage_address"/>
+            android:text="@string/title_manage_address"
+            style="@style/styledefault"
+            android:drawableLeft="@drawable/ic_manageaddress"
+            android:drawablePadding="@dimen/dp_12"
+            android:drawableRight="@drawable/ic_arrow"/>
+        <include
+            layout="@layout/view_separator"></include>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_my_pets"/>
+            android:text="@string/title_my_pets"
+            style="@style/styledefault"
+            android:drawableLeft="@drawable/ic_mypets"
+            android:drawablePadding="@dimen/dp_12"
+            android:drawableRight="@drawable/ic_arrow"/>
+        <include
+            layout="@layout/view_separator"
+            ></include>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_my_vets"/>
+            android:text="@string/title_my_vets"
+            style="@style/styledefault"
+            android:drawableLeft="@drawable/ic_myvets"
+            android:drawablePadding="@dimen/dp_12"
+            android:drawableRight="@drawable/ic_arrow"/>
+        <include
+            layout="@layout/view_separator"></include>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_set_refill_schedule"/>
+            android:text="@string/title_set_refill_schedule"
+            style="@style/styledefault"
+            android:drawableLeft="@drawable/ic_refill"
+            android:drawablePadding="@dimen/dp_12"
+            android:drawableRight="@drawable/ic_arrow"/>
+        <include
+            layout="@layout/view_separator"></include>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_setting"/>
+            android:text="@string/title_setting"
+            style="@style/label"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
+            android:background="@color/white"
+            android:paddingRight="20dp"
+
             >
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/title_use_fingerprint"
                 android:layout_toLeftOf="@+id/fingerPrintStatus"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@style/styledefault"/>
             <Switch
                 android:id="@+id/fingerPrintStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:track="@drawable/switch_selector"
+                android:thumb="@drawable/switch_thumb_selector"
                 android:layout_centerVertical="true" />
         </RelativeLayout>
+        <include
+            layout="@layout/view_separator"></include>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingRight="@dimen/dp_20"
+
             >
             <TextView
                 android:id="@+id/header_notification"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_50"
                 android:text="@string/title_push_notification"
                 android:layout_alignParentLeft="true"
+                android:gravity="center_vertical"
+                style="@style/styledefault"
                 android:layout_toLeftOf="@+id/notificationStatus"/>
             <Switch
                 android:id="@+id/notificationStatus"
+                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true" />
 
             <TextView
@@ -109,25 +169,41 @@
                 android:text="@string/push_notification_desc"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/header_notification"
-                android:layout_toLeftOf="@+id/notificationStatus"/>
+                android:layout_toLeftOf="@+id/notificationStatus"
+                style="@style/paragraph"
+                android:layout_marginBottom="@dimen/dp_13"
+                android:layout_marginTop="@dimen/dp_3"/>
         </RelativeLayout>
+        <include
+            layout="@layout/view_separator"
+            ></include>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_more"
+            style="@style/label"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:text="@string/title_contact_us"
+            style="@style/styledefault"
+            android:drawableLeft="@drawable/ic_contact"
+            android:drawablePadding="@dimen/dp_12"
+            android:drawableRight="@drawable/ic_arrow"/>
+        <include
+            layout="@layout/view_separator"></include>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
-            android:text="@string/title_more"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_50"
-            android:gravity="center_vertical"
-            android:text="@string/title_contact_us"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_50"
-            android:gravity="center_vertical"
-            android:text="@string/title_signout"/>
+            android:text="@string/title_signout"
+            style="@style/styledefault"
+            android:drawableLeft="@drawable/ic_logout"
+            android:drawablePadding="@dimen/dp_12"
+            android:drawableRight="@drawable/ic_arrow"/>
 
     </LinearLayout>
 </ScrollView>

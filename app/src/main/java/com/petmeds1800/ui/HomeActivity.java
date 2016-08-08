@@ -32,19 +32,18 @@ public class HomeActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+            //initialize fragment list
+            fragmentList = new ArrayList<Fragment>();
+            fragmentList.add(new HomeFragment());
+            fragmentList.add(new CartFragment());
+            fragmentList.add(new LearnFragment());
+            fragmentList.add(new AccountRootFragment());
 
-        //initialize fragment list
-        fragmentList=new ArrayList<Fragment>();
-        fragmentList.add(new HomeFragment());
-        fragmentList.add(new CartFragment());
-        fragmentList.add(new LearnFragment());
-        fragmentList.add(new AccountRootFragment());
+            mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), fragmentList, getResources().getStringArray(R.array.tab_title)));
+            mHomeTab.setupWithViewPager(mViewPager);
+            mViewPager.setOffscreenPageLimit(0);
+        }
 
-
-        mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), fragmentList, getResources().getStringArray(R.array.tab_title)));
-        mHomeTab.setupWithViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(3);
-    }
 
 
 }

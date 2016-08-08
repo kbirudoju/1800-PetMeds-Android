@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.HomeActivity"/>
+        <activity android:name=".ui.HomeActivity"
+            android:configChanges="orientation"/>
 
         <activity android:name=".ui.LoginActivity"/>
 

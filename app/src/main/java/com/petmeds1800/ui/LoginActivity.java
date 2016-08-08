@@ -1,14 +1,14 @@
 package com.petmeds1800.ui;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+
 import com.petmeds1800.R;
 import com.petmeds1800.mvp.LoginTask.DaggerLoginComponent;
 import com.petmeds1800.mvp.LoginTask.LoginPresenter;
 import com.petmeds1800.mvp.LoginTask.LoginPresenterModule;
 import com.petmeds1800.ui.fragments.LoginFragment;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
@@ -24,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         setupComponent();
 
     }
@@ -35,4 +34,5 @@ public class LoginActivity extends AppCompatActivity {
                 .loginPresenterModule(new LoginPresenterModule(loginFragment))
                 .build().inject(this);
     }
+
 }

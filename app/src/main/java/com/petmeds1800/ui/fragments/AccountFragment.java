@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by user on 8/2/2016.
+ * Created by pooja on 8/2/2016.
  */
 public class AccountFragment extends AbstractFragment implements View.OnClickListener {
 
