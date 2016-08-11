@@ -32,6 +32,7 @@
             android:text="@string/title_account"/>
 
         <TextView
+            android:id="@+id/accountSettings"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"

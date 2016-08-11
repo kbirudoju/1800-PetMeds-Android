@@ -20,7 +20,6 @@ import dagger.Component;
         UtilsModule.class
 })
 public interface AppComponent extends Injector {
-
     Application app();
 
     Tracker tracker();
@@ -30,4 +29,5 @@ public interface AppComponent extends Injector {
     FileUtils fileUtils();
 
     PetMedsApiService api();
+
 }

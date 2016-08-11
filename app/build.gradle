@@ -107,7 +107,7 @@ android {
     // Use build types to customise builds to your needs.
     buildTypes {
         release {
-          zipAlignEnabled true
+            zipAlignEnabled true
         }
 
         debug {
@@ -166,15 +166,13 @@ android {
     testBuildType "release"
 }
 
+def playServicesVersion = '8.4.0'
+
 // Use http://gradleplease.appspot.com/ to find dependency names.
 dependencies {
 
     // AppCompat
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
     // Google Play Services
-    compile 'com.google.android.gms:play-services-base:9.0.2'
-    compile 'com.google.android.gms:play-services-analytics:9.0.2'
     // Design library
     compile 'com.android.support:design:23.4.0'
 
@@ -184,9 +182,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Injection stuff
-    compile 'com.google.dagger:dagger:2.5'
     apt 'com.google.dagger:dagger-compiler:2.5'
-    compile 'com.jakewharton:butterknife:8.1.0'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
 
     // Rx
@@ -198,7 +194,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
 
     // Log
-    compile 'com.jakewharton.timber:timber:4.1.2'
     //Uncomment if you want to include bugsense
     //compile "com.splunk.mint:mint:5.0.0"
     //Uncomment if you want to include facebook
@@ -229,9 +224,28 @@ dependencies {
     testCompile 'org.robolectric:robolectric:3.0'
     testCompile 'org.robolectric:shadows-httpclient:3.0'
     testCompile 'org.mockito:mockito-core:2.0.81-beta'
-    testCompile ('com.squareup.assertj:assertj-android:1.0.0') {
+    testCompile('com.squareup.assertj:assertj-android:1.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+    compile 'com.android.support:appcompat-v7:24.0.0-beta1'
+    compile 'com.android.support:design:24.0.0-beta1'
+    compile 'com.squareup.okhttp3:okhttp:3.4.0-RC1'
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.0-RC1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.0-RC1'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.dagger:dagger:2.5'
+    compile 'com.jakewharton:butterknife:8.1.0'
+    compile 'com.jakewharton.timber:timber:4.1.2'
+    // Google Play Services
+    compile "com.google.android.gms:play-services-base:${playServicesVersion}"
+    compile "com.google.android.gms:play-services-analytics:${playServicesVersion}"
+    compile "com.google.android.gms:play-services-location:${playServicesVersion}"
+    compile "com.google.android.gms:play-services-gcm:${playServicesVersion}"
+    // Rx
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.0'
 }
 
 configurations {
@@ -254,8 +268,6 @@ configurations {
     all*.exclude module: 'wagon-provider-api'
     all*.exclude module: 'javax.annotation-api'
 }
-
-
 
 /**
  * This method takes a file in and will replace

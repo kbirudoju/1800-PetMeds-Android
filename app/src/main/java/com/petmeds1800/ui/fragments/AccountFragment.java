@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
+import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
 
 import butterknife.BindView;
@@ -21,12 +22,14 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
     @BindView(R.id.myOrder)
     TextView myOrderView;
 
+    @BindView(R.id.accountSettings)
+    TextView mAccountSettings;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
        super.onViewCreated(view, savedInstanceState);
         myOrderView.setOnClickListener(this);
-
+        mAccountSettings.setOnClickListener(this);
 
     }
 
@@ -47,6 +50,10 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
             case R.id.myOrder:
               replaceAndAddToBackStack(new MyOrderFragment());
             break;
+
+            case R.id.accountSettings:
+                replaceAndAddToBackStack(new AccountSettingsFragment());
+                break;
             default:
                 break;
 

@@ -36,6 +36,7 @@
     <string name="label.text_not_ready">Text not ready for saving</string>
     <string name="label.text_saved">Text saved</string>
     <string name="label.text_not_saved">An error occurred and the text could not be saved</string>
+    <string name="prompt_name">Name</string>
     <!--Home Screen-->
     <string-array name="tab_title">
             <item>Home</item>
@@ -72,4 +73,27 @@
     <string name="label.login">Log In</string>
     <string name="label.forgot_password">Forgot Password?</string>
     <string name="label.no_account_sign_up">Don\'t have an account? Sign up.</string>
+
+    <!-- Strings related to account settings screen -->
+    <string name="title_activity_account_settings">Account settings</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_done">Done</string>
+    <string name="accountSettingsNameEmptyError">Name is required</string>
+    <string name="accountSettingsEmailEmptyError">Email is required</string>
+    <string name="accountSettingsEmailInvalidError">Email address must be valid</string>
+    <string name="accountSettingsPasswordEmptyError">Password is required</string>
+    <string name="accountSettingsPasswordInvalidError">Password must be XXX</string>
+    <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
+
+
 </resources>
