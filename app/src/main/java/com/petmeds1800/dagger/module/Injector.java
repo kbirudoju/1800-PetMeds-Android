@@ -1,8 +1,6 @@
 package com.petmeds1800.dagger.module;
 
-import com.petmeds1800.loader.LoremLoader;
-import com.petmeds1800.loader.SaveLoremLoader;
-import com.petmeds1800.ui.fragments.LoremFragment;
+import com.petmeds1800.ui.fragments.LoginFragment;
 
 /**
  * Specifies the injection places. Utility interface, to separate from the {@link AppComponent}.
@@ -11,9 +9,5 @@ import com.petmeds1800.ui.fragments.LoremFragment;
  */
 public interface Injector {
 
-    void inject(LoremLoader loremLoader);
-
-    void inject(SaveLoremLoader saveLoremLoader);
-
-    void inject(LoremFragment loremFragment);
+    void inject(LoginFragment loginFragment);
 }

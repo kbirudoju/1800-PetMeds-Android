@@ -1,6 +1,6 @@
 package com.petmeds1800.dagger.module;
 
-import com.petmeds1800.api.ApiService;
+import com.petmeds1800.api.PetMedsApiService;
 
 import javax.inject.Singleton;
 
@@ -16,7 +16,7 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public ApiService provideApiService(Retrofit retrofit) {
-        return retrofit.create(ApiService.class);
+    public PetMedsApiService provideApiService(Retrofit retrofit) {
+        return retrofit.create(PetMedsApiService.class);
     }
 }

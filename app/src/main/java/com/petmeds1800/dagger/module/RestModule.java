@@ -2,6 +2,7 @@ package com.petmeds1800.dagger.module;
 
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
 
 import android.app.Application;
 
@@ -12,9 +13,10 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-@Module(includes = {ApiModule.class})
+@Module
 public class RestModule {
 
     private final String mEndpoint;
@@ -40,9 +42,16 @@ public class RestModule {
     public Retrofit provideRetrofit(final OkHttpClient client) {
         final Retrofit.Builder builder = new Retrofit.Builder()
                 .client(client)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .baseUrl(mEndpoint);
 
         return builder.build();
+    }
+
+    @Provides
+    @Singleton
+    public PetMedsApiService provideApiService(Retrofit retrofit) {
+        return retrofit.create(PetMedsApiService.class);
     }
 }

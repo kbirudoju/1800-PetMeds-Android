@@ -7,6 +7,15 @@ import javax.inject.Inject;
 /**
  * Created by Digvijay on 8/4/2016.
  */
+
+/**
+ * Listens to user actions from the UI ({@link com.petmeds1800.ui.fragments.LoginFragment}), retrieves the data and
+ * updates the UI as required. <p /> By marking the constructor with {@code @Inject}, Dagger injects the dependencies
+ * required to create an instance of the LoginPresenter (if it fails, it emits a compiler error). It uses {@link
+ * LoginPresenterModule} to do so. <p/> Dagger generated code doesn't require public access to the constructor or class,
+ * and therefore, to ensure the developer doesn't instantiate the class manually bypassing Dagger, it's good practice
+ * minimise the visibility of the class/constructor as much as possible.
+ */
 public class LoginPresenter implements LoginContract.Presenter {
 
     @NonNull
@@ -31,11 +40,9 @@ public class LoginPresenter implements LoginContract.Presenter {
     }
 
     @Override
-    public void validateCredentials(String username, String password) {
+    public boolean validateCredentials(String username, String password) {
 
-        if(mLoginView != null) {
-            doLogin(username, password);
-        }
+        return true;
     }
 
     @Override
@@ -43,7 +50,4 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     }
 
-    private void doLogin(String username, String password) {
-
-    }
 }

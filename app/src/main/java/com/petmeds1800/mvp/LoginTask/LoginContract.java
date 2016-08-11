@@ -23,6 +23,6 @@ public interface LoginContract {
 
     interface Presenter extends BasePresenter {
 
-        void validateCredentials(String username, String password);
+        boolean validateCredentials(String username, String password);
     }
 }

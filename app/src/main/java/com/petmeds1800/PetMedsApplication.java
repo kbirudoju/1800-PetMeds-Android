@@ -1,6 +1,5 @@
 package com.petmeds1800;
 
-import com.petmeds1800.dagger.module.ApiModule;
 import com.petmeds1800.dagger.module.AppComponent;
 import com.petmeds1800.dagger.module.ApplicationModule;
 import com.petmeds1800.dagger.module.DaggerAppComponent;
@@ -12,7 +11,7 @@ import timber.log.Timber;
 
 public class PetMedsApplication extends Application {
 
-    private AppComponent mAppComponent;
+    private static AppComponent mAppComponent;
 
     @Override
     public void onCreate() {
@@ -22,22 +21,19 @@ public class PetMedsApplication extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
-        setAppComponent(createAppComponent());
-    }
-
-    private void setAppComponent(AppComponent appComponent) {
-        mAppComponent = appComponent;
+        mAppComponent = createAppComponent();
     }
 
     protected AppComponent createAppComponent() {
         return DaggerAppComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .restModule(new RestModule(this))
-                .apiModule(new ApiModule())
                 .build();
     }
 
-    public AppComponent component() {
+    public static synchronized AppComponent getAppComponent() {
         return mAppComponent;
     }
+
+
 }
