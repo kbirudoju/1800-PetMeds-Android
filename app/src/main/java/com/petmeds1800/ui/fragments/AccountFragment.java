@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.petmeds1800.R;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
+import com.petmeds1800.ui.payment.SavedCardsListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,15 +23,18 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
     @BindView(R.id.myOrder)
     TextView myOrderView;
 
-    @BindView(R.id.accountSettings)
+    @BindView(R.id.accountSettings_label)
     TextView mAccountSettings;
+
+    @BindView(R.id.managePayment_label)
+    TextView mManagePaymentLabel;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
        super.onViewCreated(view, savedInstanceState);
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
-
+        mManagePaymentLabel.setOnClickListener(this);
     }
 
     @Nullable
@@ -51,9 +55,14 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
               replaceAndAddToBackStack(new MyOrderFragment());
             break;
 
-            case R.id.accountSettings:
+            case R.id.accountSettings_label:
                 replaceAndAddToBackStack(new AccountSettingsFragment());
                 break;
+
+            case R.id.managePayment_label:
+                replaceAndAddToBackStack(new SavedCardsListFragment());
+                break;
+
             default:
                 break;
 

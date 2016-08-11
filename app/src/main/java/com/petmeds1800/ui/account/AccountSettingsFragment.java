@@ -74,7 +74,6 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         DaggerAccountSettingsComponent.builder()
                 .appComponent(PetMedsApplication.getAppComponent())
                 .accountSettingsPresenterModule(new AccountSettingsPresenterModule(this))
-
                 .build()
                 .inject(this);
     }

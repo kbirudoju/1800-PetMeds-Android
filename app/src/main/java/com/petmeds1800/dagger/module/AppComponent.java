@@ -18,7 +18,7 @@ import dagger.Component;
         GoogleAnalyticsModule.class,
         UtilsModule.class
 })
-public interface AppComponent extends Injector {
+public interface AppComponent extends Injector{
     Application app();
 
     Tracker tracker();

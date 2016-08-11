@@ -7,19 +7,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.petmeds1800.ui.account.AccountSettingsFragment">
+    tools:context="com.petmeds1800.ui.payment.AddACardFragment">
 
-    <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/addACard_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -30,48 +22,64 @@
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/nameInputLayout"
+                android:id="@+id/nameOnCardInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/name_edit"
+                    android:id="@+id/nameOnCard_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_name"
+                    android:hint="@string/prompt_nameOnCard"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/emailInputLayout"
+                android:id="@+id/cardNumberLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/email_edit"
+                    android:id="@+id/cardNumber_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
+                    android:hint="@string/prompt_cardNumber"
+                    android:inputType="number"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/passwordInputLayout"
+                android:id="@+id/expirationDateInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/password_edit"
+                    android:id="@+id/expirationDate_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionLabel="@string/action_done"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:hint="@string/prompt_expirationDate"
+                    android:inputType="date" />
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/cvvInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/cvv_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_cvv"
+                    android:inputType="date" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Switch
+                android:id="@+id/defaultPayment_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Default payment method"/>
+
 
         </LinearLayout>
     </ScrollView>

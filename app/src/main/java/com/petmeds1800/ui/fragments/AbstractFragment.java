@@ -21,9 +21,12 @@ public abstract class AbstractFragment extends Fragment {
                 .beginTransaction();
 
         transaction.replace(R.id.fragment_container, fragment);
-
         transaction.commit();
 
+    }
+
+    public void popBackStack(){
+        getFragmentManager().popBackStack();
     }
 
 }

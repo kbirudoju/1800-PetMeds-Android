@@ -28,7 +28,6 @@
             android:configChanges="orientation"/>
 
         <activity android:name=".ui.LoginActivity"/>
-
     </application>
 
 </manifest>

@@ -2,6 +2,8 @@ package com.petmeds1800.dagger.module;
 
 import com.petmeds1800.ui.fragments.LoginFragment;
 
+import com.petmeds1800.ui.fragments.LoginFragment;
+
 /**
  * Specifies the injection places. Utility interface, to separate from the {@link AppComponent}.
  *
@@ -10,4 +12,5 @@ import com.petmeds1800.ui.fragments.LoginFragment;
 public interface Injector {
 
     void inject(LoginFragment loginFragment);
+
 }

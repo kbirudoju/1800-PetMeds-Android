@@ -1,6 +1,7 @@
 package com.petmeds1800.model;
 
 import com.petmeds1800.api.PetMedsApiService;
+
 import com.petmeds1800.dagger.AppScope;
 
 import rx.Observable;
@@ -22,7 +23,6 @@ public class UserModel {
     }
 
     public Observable<String> updateAccountSettings(String username, String password){
-
         return null;
     }
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_16">
+
+    <TextView
+        android:id="@+id/cardType_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VISA"
+        />
+
+    <TextView
+        android:id="@+id/cardNumber_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/cardType_label"
+        android:text="****1234"/>
+
+    <TextView
+        android:layout_below="@id/cardType_label"
+        android:id="@+id/nameOnCard_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name on Card"/>
+
+    <TextView
+        android:id="@+id/cardExpiration_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameOnCard_label"
+        android:text="Expires: Sep 2019"/>
+
+    <TextView
+        android:id="@+id/isCardSetDefault_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardExpiration_label"
+        android:text="default payment method"/>
+
+    <TextView
+        android:id="@+id/dummyLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/common_google_signin_btn_text_light_default"
+        android:layout_below="@id/isCardSetDefault_label"
+        />
+    <Button
+        android:id="@+id/editCard_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dummyLine"
+        android:layout_centerHorizontal="true"
+        android:text="@string/editCard"/>
+
+
+</RelativeLayout>

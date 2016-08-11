@@ -39,7 +39,7 @@
             style="@style/label"/>
 
         <TextView
-            android:id="@+id/accountSettings"
+            android:id="@+id/accountSettings_label"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
@@ -51,6 +51,7 @@
         <include
             layout="@layout/view_separator"></include>
         <TextView
+            android:id="@+id/managePayment_label"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"

@@ -1,9 +1,9 @@
 package com.petmeds1800.ui.account;
 
+import dagger.Provides;
+
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.UserModel;
-
-
 import dagger.Module;
 import dagger.Provides;
 
