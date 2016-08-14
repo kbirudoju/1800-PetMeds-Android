@@ -8,4 +8,7 @@
     android:paddingLeft="@dimen/dp_16"
     android:paddingRight="@dimen/dp_16"
     android:button="@android:color/transparent"
+    android:textColor="@color/filter_text_color"
+    android:focusable="false"
+    android:background="@drawable/filter_background_selector"
     ></CheckedTextView>

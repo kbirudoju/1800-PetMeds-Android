@@ -1,14 +1,14 @@
 package com.petmeds1800.dagger.module;
 
+import android.app.Application;
+import android.content.Context;
+
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
-
-import android.app.Application;
-import android.content.Context;
 
 import javax.inject.Singleton;
 

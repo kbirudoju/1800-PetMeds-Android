@@ -1,12 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -14,6 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.LoginTask.LoginContract;
 
 import javax.inject.Inject;
 
@@ -36,6 +37,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     PetMedsApiService mApiService;
 
     private LoginContract.Presenter mPresenter;
+    public static  String sessionConfirmationNUmber="";
 
     public static LoginFragment newInstance() {
         return new LoginFragment();
@@ -109,8 +111,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                         @Override
                         public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
                             Log.v("sessionToken", sessionConfNumberResponse.getSessionConfirmationNumber());
+                            sessionConfirmationNUmber=sessionConfNumberResponse.getSessionConfirmationNumber();
                             return mApiService
-                                    .login(new LoginRequest("ldolan@dminc.com", "DMIKPath2016",
+                                    .login(new LoginRequest("api-demo@gmail.com", "1800petmeds",
                                             sessionConfNumberResponse.getSessionConfirmationNumber()))
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
@@ -119,6 +122,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                     .subscribe(new Subscriber<String>() {
                         @Override
                         public void onCompleted() {
+                            getActivity().startActivity(new HomeIntent(getActivity()));
 
                         }
 
@@ -133,6 +137,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                             Log.v("login response", s);
                             Toast.makeText(getActivity(), "login response" +
                                     s, Toast.LENGTH_SHORT).show();
+
                         }
                     });
 

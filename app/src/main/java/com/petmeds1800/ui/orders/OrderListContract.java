@@ -1,6 +1,6 @@
 package com.petmeds1800.ui.orders;
 
-import com.petmeds1800.model.MyOrder;
+import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment;
@@ -14,7 +14,7 @@ import java.util.List;
 public interface OrderListContract {
 
     interface View extends BaseView<Presenter> {
-        void updateOrderList( List<MyOrder> orderList);
+        void updateOrderList( List<OrderList> orderList);
         void updateFilterList(ArrayList<ItemSelectionDialogFragment.Item> pickerItems );
         boolean isActive();
 

@@ -1,5 +1,9 @@
 package com.petmeds1800.ui.orders.support;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,8 +13,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
-import com.petmeds1800.model.MyOrder;
+import com.petmeds1800.model.entities.MyOrder;
+import com.petmeds1800.model.entities.OrderList;
 
 import java.util.List;
 
@@ -29,11 +36,13 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
     View.OnClickListener onClickListener;
 
     private boolean isFooterEnabled = false;
-    private List<MyOrder> myOrder;
+    private List<OrderList> myOrder;
+    private Context mContext;
 
-     public MyOrderAdapter( boolean blankView, View.OnClickListener onClickListener) {
+     public MyOrderAdapter( boolean blankView, View.OnClickListener onClickListener,Context context) {
         this.blankView = blankView;
         this.onClickListener = onClickListener;
+         this.mContext=context;
 
     }
 
@@ -46,7 +55,7 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    public void setData(List<MyOrder> myOrder) {
+    public void setData(List<OrderList> myOrder) {
         this.myOrder = myOrder;
         notifyDataSetChanged();
     }
@@ -79,24 +88,34 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof ProgressViewHolder) {
 
         } else {
-            MyOrderItemViewHolder orderViewHolder = (MyOrderItemViewHolder) holder;
-            final MyOrder myOrder = (MyOrder) getItemAt(position);
-            orderViewHolder.tv_order_date.setText(myOrder.getOrderDate());
-            orderViewHolder.tv_order_number.setText(myOrder.getOrderNumber());
-            orderViewHolder.tv_order_status.setText(myOrder.getOrderStatus());
-            //temporary hardcoded value to check layout, it will be changed after API Integration
-            if(myOrder.getOrderStatus().equalsIgnoreCase("Shipping")){
+            final MyOrderItemViewHolder orderViewHolder = (MyOrderItemViewHolder) holder;
+            final OrderList myOrder = (OrderList) getItemAt(position);
+            orderViewHolder.tv_order_date.setText(myOrder.getSubmittedDate());
+            orderViewHolder.tv_order_number.setText(myOrder.getDisplayOrderId());
+            orderViewHolder.tv_order_status.setText(myOrder.getStatus());
+            //temporary hardcoded value to check layout, it will be changed after confirmation from backend
+            if(myOrder.getStatus().equalsIgnoreCase("PROCESSING")){
                 orderViewHolder.tv_order_status.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
                 orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.yellow_rounded_button);
-            }else if(myOrder.getOrderStatus().equalsIgnoreCase("Cancelled")){
+            }else if(myOrder.getStatus().equalsIgnoreCase("Cancelled")){
                 orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.red_rounded_button);
                 orderViewHolder.tv_order_status.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
 
             }else{
                 orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.green_rounded_button);
             }
-            orderViewHolder.iv_product_img.setImageResource(R.mipmap.ic_launcher);
+            //hardcoded the position value as not sure what we have to do in case of multiple CommerceItems
 
+
+   Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
+                }
+            });
 
 
         }
@@ -107,7 +126,7 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return (isFooterEnabled && (myOrder == null || position >= myOrder.size())) ? LOADING_VIEW_TYPE : NORMAL_VIEW_TYPE;
     }
 
-    public MyOrder getItemAt(int position) {
+    public OrderList getItemAt(int position) {
         return myOrder.get(position);
     }
 

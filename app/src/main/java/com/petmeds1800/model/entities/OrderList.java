@@ -1,0 +1,77 @@
+package com.petmeds1800.model.entities;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+/**
+ * Created by pooja on 8/12/2016.
+ */
+public class OrderList implements Serializable{
+    private double total;
+    private String status;
+    private String displayOrderId;
+    private String submittedDate;
+
+    public ArrayList<CommerceItems> getCommerceItems() {
+        return commerceItems;
+    }
+
+    public void setCommerceItems(ArrayList<CommerceItems> commerceItems) {
+        this.commerceItems = commerceItems;
+    }
+
+    private ArrayList<CommerceItems> commerceItems;
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDisplayOrderId() {
+        return displayOrderId;
+    }
+
+    public void setDisplayOrderId(String displayOrderId) {
+        this.displayOrderId = displayOrderId;
+    }
+
+    public String getSubmittedDate() {
+        return submittedDate;
+    }
+
+    public void setSubmittedDate(String submittedDate) {
+        this.submittedDate = submittedDate;
+    }
+
+    public String getShipTo() {
+        return shipTo;
+    }
+
+    public void setShipTo(String shipTo) {
+        this.shipTo = shipTo;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    private String shipTo;
+    private String orderId;
+
+
+}

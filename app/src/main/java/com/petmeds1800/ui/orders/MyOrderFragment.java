@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.dagger.module.DaggerOrderComponent;
 import com.petmeds1800.dagger.module.OrderPresenterModule;
-import com.petmeds1800.model.MyOrder;
+import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment.OnItemSelectedListener;
@@ -45,6 +47,8 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
     @Inject
     OrderListPresenter mOrderPresenter;
 
+    @Inject
+    PetMedsApiService mApiService;
 
     private MyOrderEndlessOnScrollListener orderEndlessOnScrollListener;
 
@@ -53,9 +57,12 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_my_orders,null);
          ButterKnife.bind(this, view);
+        mOrderListAdapter = new MyOrderAdapter(false,this,getActivity());
 
-        mOrderListAdapter = new MyOrderAdapter(false,this);
-        DaggerOrderComponent.builder().orderPresenterModule(new OrderPresenterModule(this)).build().inject(this);
+        DaggerOrderComponent.builder()
+                .appComponent(PetMedsApplication.getAppComponent())
+                .orderPresenterModule(new OrderPresenterModule(this))
+                .build().inject(this);
         setUpOrderList();
         mOrderPresenter.setOrderListData();
         return view;
@@ -65,6 +72,10 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mFilterButton.setOnClickListener(this);
+
+
+
+}
         //uncomment this line after API Integration
 
        /* orderEndlessOnScrollListener = new MyOrderEndlessOnScrollListener(mLinearLayoutManager) {
@@ -73,7 +84,7 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
                 loadData();
             }
         };*/
-    }
+
 
     private void setUpOrderList(){
       mOrderRecyclerView.setAdapter(mOrderListAdapter);
@@ -111,9 +122,11 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
         return isAdded();
     }
 
+
     @Override
-    public void updateOrderList( List<MyOrder> orderList) {
-         mOrderListAdapter.setData(orderList);
+    public void updateOrderList(List<OrderList> orderList) {
+        mOrderListAdapter.setData(orderList);
+
     }
 
     @Override

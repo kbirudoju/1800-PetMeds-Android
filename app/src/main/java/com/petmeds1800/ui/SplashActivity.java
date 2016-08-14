@@ -86,7 +86,7 @@ public class SplashActivity extends AppCompatActivity {
 
             if (msg.what == MSG_FINISH && mSplashActivity != null) {
                 //Commented code below for testing Login flow
-//                mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
+             //mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
 
                 mSplashActivity.startActivity(new LoginIntent(mSplashActivity));
                 mSplashActivity.finish();

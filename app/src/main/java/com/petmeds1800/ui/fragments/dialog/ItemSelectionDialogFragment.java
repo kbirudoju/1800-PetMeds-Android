@@ -189,16 +189,18 @@ public class ItemSelectionDialogFragment extends DialogFragment {
                         R.layout.view_list_item_multiple_choice, itemTitles), null);
 
         AlertDialog alertDialog = builder.create();
-        ListView listView = alertDialog.getListView();
+        final ListView listView = alertDialog.getListView();
         listView.setAdapter(new ArrayAdapter<String>(getActivity(),
                 R.layout.view_list_item_multiple_choice, itemTitles));
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+     //   listView.setSelector(R.drawable.filter_background_selector);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckedTextView checkedTextView = (CheckedTextView) view;
-                //checkedItems[position] = !checkedTextView.isChecked();
+                    view.setSelected(true);
             }
         });
         listView.setDivider(null);
