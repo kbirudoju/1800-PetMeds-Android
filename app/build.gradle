@@ -188,10 +188,18 @@ dependencies {
     // Rx
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+
     // RxJava adapter for retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+
+    //gson
+    compile 'com.google.code.gson:gson:2.4'
+
+    // Persistent cookie
+    compile 'com.github.franmontiel:PersistentCookieJar:v0.9.3'
 
     // Log
     //Uncomment if you want to include bugsense
@@ -243,9 +251,6 @@ dependencies {
     compile "com.google.android.gms:play-services-analytics:${playServicesVersion}"
     compile "com.google.android.gms:play-services-location:${playServicesVersion}"
     compile "com.google.android.gms:play-services-gcm:${playServicesVersion}"
-    // Rx
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
 }
 
 configurations {

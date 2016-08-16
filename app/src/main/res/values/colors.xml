@@ -4,6 +4,7 @@
     <color name="background.light">#DDD</color>
     <color name="background.dull">#4F4B48</color>
     <color name="color.accent">#fb4e23</color>
+
     <color name="petmeds_blue">#0060A9</color>
     <color name="pet_meds_blue_selected">#014273</color>
     <color name="crimson_red">#E31837</color>
@@ -18,8 +19,5 @@
     <color name="dark_grey">#212224</color>
     <color name="light_turbo_yellow">#1af8be15</color>
     <color name="light_medium_green">#2639b549</color>
-
-
-
 
 </resources>

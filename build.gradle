@@ -17,6 +17,7 @@ allprojects {
     repositories {
         mavenLocal()
         maven { url 'https://nexus.dminc-gtc.com/nexus/content/groups/public/' }
+        maven { url 'https://jitpack.io' }
         jcenter()
         mavenCentral()
     }

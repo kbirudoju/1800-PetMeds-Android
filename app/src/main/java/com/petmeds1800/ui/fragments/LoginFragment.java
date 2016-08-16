@@ -3,6 +3,8 @@ package com.petmeds1800.ui.fragments;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.mvp.LoginTask.LoginContract;
 
 import android.os.Bundle;
@@ -11,13 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 //import static com.google.common.base.Preconditions.checkNotNull;
@@ -98,24 +103,44 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
         if (mPresenter.validateCredentials("", "")) {
 
-            mApiService.getSessionConfirmationNumber().subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<String>() {
-                @Override
-                public void onCompleted() {
+            mApiService.getSessionConfirmationNumber()
+                    .subscribeOn(Schedulers.io())
+                    .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
+                        @Override
+                        public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
+                            Log.v("sessionToken", sessionConfNumberResponse.getSessionConfirmationNumber());
+                            return mApiService
+                                    .login(new LoginRequest("ldolan@dminc.com", "DMIKPath2016",
+                                            sessionConfNumberResponse.getSessionConfirmationNumber()))
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeOn(Schedulers.io());
+                        }
+                    })
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
 
-                }
+                        }
 
-                @Override
-                public void onError(Throwable e) {
+                        @Override
+                        public void onError(Throwable e) {
 
-                }
+                        }
 
-                @Override
-                public void onNext(String s) {
-                    Log.v("SessionConfNum", s);
-                }
-            });
+                        @Override
+                        public void onNext(String s) {
+
+                            Log.v("login response", s);
+                            Toast.makeText(getActivity(), "login response" +
+                                    s, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
         }
+    }
+
+    @OnClick(R.id.sign_up_button)
+    public void signUp() {
     }
 
 }

@@ -70,9 +70,10 @@
 
     <string name="label.email">Email</string>
     <string name="label.password">Password</string>
+    <string name="label.skip">"SKIP"</string>
     <string name="label.login">Log In</string>
-    <string name="label.forgot_password">Forgot Password?</string>
-    <string name="label.no_account_sign_up">Don\'t have an account? Sign up.</string>
+    <string name="label.forgot_password">FORGOT PASSWORD?</string>
+    <string name="label.no_account_sign_up">Don\'t have an account? Sign up</string>
 
     <!-- Strings related to account settings screen -->
     <string name="title_activity_account_settings">Account settings</string>

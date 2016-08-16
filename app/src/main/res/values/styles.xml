@@ -13,8 +13,7 @@
         <!-- colorAccent is used as the default value for colorControlActivated,
              which is used to tint widgets -->
         <item name="colorAccent">@color/petmeds_blue</item>
-        <!--Title text size-->
-        <item name="android:textSize">@dimen/sp_20</item>
+
         <!-- Title Text Color -->
         <item name="android:textColorPrimary">@color/white</item>
     </style>
