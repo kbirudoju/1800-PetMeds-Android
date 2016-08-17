@@ -10,13 +10,11 @@ import java.util.List;
  * Created by pooja on 8/2/2016.
  */
 public class TabPagerAdapter  extends FragmentStatePagerAdapter {
-    public String[] pagersTitle;
     List<Fragment> fragmentList;
 
-    public TabPagerAdapter(FragmentManager fm,List<Fragment> fragmentList,String[] pagersTitle) {
+    public TabPagerAdapter(FragmentManager fm,List<Fragment> fragmentList) {
         super(fm);
         this.fragmentList=fragmentList;
-        this.pagersTitle=pagersTitle;
 
     }
 
@@ -27,12 +25,9 @@ public class TabPagerAdapter  extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return pagersTitle.length;
+        return fragmentList.size();
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return pagersTitle[position];
-    }
+
 }
 

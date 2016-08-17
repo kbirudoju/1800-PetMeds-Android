@@ -32,6 +32,10 @@ public abstract class AbstractActivity extends AppCompatActivity {
 
     }
 
+    public void setToolBarTitle(String title){
+        mToolbar.setTitle(title);
+    }
+
 
 
 
