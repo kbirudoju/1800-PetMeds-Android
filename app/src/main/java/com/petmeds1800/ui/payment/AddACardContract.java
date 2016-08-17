@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.payment;
 
 import com.petmeds1800.model.Card;
+import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -22,7 +23,7 @@ public interface AddACardContract{
 
     interface Presenter extends BasePresenter {
 
-        void saveCard(Card card);
+        void saveCard(CardRequest card);
         void isCreditCardNumberValid();
     }
 }

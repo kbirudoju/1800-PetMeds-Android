@@ -16,13 +16,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/cardType_label"
+        android:layout_marginLeft="@dimen/dp_7"
         android:text="****1234"/>
 
     <TextView
-        android:layout_below="@id/cardType_label"
         android:id="@+id/nameOnCard_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/cardType_label"
         android:text="Name on Card"/>
 
     <TextView
@@ -30,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/nameOnCard_label"
-        android:text="Expires: Sep 2019"/>
+        android:text="@string/cardExpirationValue"/>
 
     <TextView
         android:id="@+id/isCardSetDefault_label"

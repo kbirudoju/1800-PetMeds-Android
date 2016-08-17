@@ -50,7 +50,7 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
         android.view.View view = inflater.inflate(R.layout.fragment_saved_cards_list, container, false);
         ButterKnife.bind(this, view);
 
-        mSavedCardsAdapter = new SavedCardsAdapter(false,this);
+        mSavedCardsAdapter = new SavedCardsAdapter(false,this,getContext());
         setupCardsRecyclerView();
         return view;
 

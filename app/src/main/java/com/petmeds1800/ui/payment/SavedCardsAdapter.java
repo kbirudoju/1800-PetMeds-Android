@@ -1,11 +1,11 @@
 package com.petmeds1800.ui.payment;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
  */
 public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private final Context mContext;
     boolean blankView = false;
 
     View.OnClickListener onClickListener;
@@ -28,9 +29,10 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<Card> mCards;
 
 
-    public SavedCardsAdapter(boolean blankView, View.OnClickListener onClickListener) {
+    public SavedCardsAdapter(boolean blankView, View.OnClickListener onClickListener, Context context) {
         this.blankView = blankView;
         this.onClickListener = onClickListener;
+        this.mContext = context;
 
     }
 
@@ -70,12 +72,16 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         Log.d("position is", position + ">>>>" + mCards.size());
 
             CardItemViewHolder orderViewHolder = (CardItemViewHolder) holder;
-            final Card myCard = (Card) getItemAt(position);
-            orderViewHolder.mCardExpirationLabel.setText(myCard.getmExpiryDate());
-            orderViewHolder.mCardTypelabel.setText(myCard.getmCardType());
-            orderViewHolder.mCardNumberLabel.setText(myCard.getmCardNumber());
+            final Card myCard = getItemAt(position);
 
-        if(myCard.ismDefaultPayment()){
+            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue),myCard.getExpirationMonth(),myCard.getExpirationYear());
+
+            orderViewHolder.mCardExpirationLabel.setText(expirationText);
+            orderViewHolder.mCardTypelabel.setText(myCard.getCardType());
+            orderViewHolder.mCardNumberLabel.setText(myCard.getCardNumber());
+            orderViewHolder.mNameOnCardlabel.setText("not available");
+
+        if(myCard.isCardIsDefault()){
             orderViewHolder.mIsCardDefaultLabel.setVisibility(View.VISIBLE);
         }
         else {
@@ -89,11 +95,20 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return mCards.size();
+        if(mCards == null){
+            return 0;
+        }
+        else {
+            return mCards.size();
+        }
+
     }
 
 
     public static class CardItemViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.nameOnCard_label)
+        TextView mNameOnCardlabel;
         @BindView(R.id.cardType_label)
         TextView mCardTypelabel;
         @BindView(R.id.cardNumber_label)

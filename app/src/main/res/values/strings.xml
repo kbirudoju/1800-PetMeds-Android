@@ -103,6 +103,7 @@
     <string name="prompt_expirationDate">Expiration date</string>
     <string name="prompt_cvv">CVV</string>
     <string name="cardSavedInAccount">Payment Method approved!</string>
+    <string name="cardExpirationValue">Expires: %1$s %2$s</string>
 
 
 </resources>

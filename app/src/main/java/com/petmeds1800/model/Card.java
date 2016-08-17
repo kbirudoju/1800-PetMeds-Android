@@ -1,51 +1,78 @@
 package com.petmeds1800.model;
 
 /**
- * Created by Abhinav on 11/8/16.
+ * Created by Abhinav on 11/8/16
  */
 public class Card {
 
-    private String mCardNumber;
-    private String mCardType;
-    private String mExpiryDate;
-    private boolean mDefaultPayment;
+    private String id;
+    private String cardNumber;
+    private String cardType;
+    private String expirationMonth;
+    private String expirationYear;
+    private boolean cardIsDefault;
+    private String cardKey;
 
-    public Card(String mCardNumber, String mCardType, String mExpiryDate, boolean mDefaultPayment) {
-        this.mCardNumber = mCardNumber;
-        this.mCardType = mCardType;
-        this.mExpiryDate = mExpiryDate;
-        this.mDefaultPayment = mDefaultPayment;
+    public Card(String cardNumber, String cardType, String expirationYear, boolean mDefaultPayment) {
+        this.cardNumber = cardNumber;
+        this.cardType = cardType;
+        this.expirationYear = expirationYear;
+        this.cardIsDefault = mDefaultPayment;
     }
 
-    public String getmCardNumber() {
-        return mCardNumber;
+    public String getCardNumber() {
+        return cardNumber;
     }
 
-    public void setmCardNumber(String mCardNumber) {
-        this.mCardNumber = mCardNumber;
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
-    public String getmCardType() {
-        return mCardType;
+    public String getCardType() {
+        return cardType;
     }
 
-    public void setmCardType(String mCardType) {
-        this.mCardType = mCardType;
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
     }
 
-    public String getmExpiryDate() {
-        return mExpiryDate;
+    public String getExpirationYear() {
+        return expirationYear;
     }
 
-    public void setmExpiryDate(String mExpiryDate) {
-        this.mExpiryDate = mExpiryDate;
+    public void setExpirationYear(String expirationYear) {
+        this.expirationYear = expirationYear;
     }
 
-    public boolean ismDefaultPayment() {
-        return mDefaultPayment;
+    public boolean isCardIsDefault() {
+        return cardIsDefault;
     }
 
-    public void setmDefaultPayment(boolean mDefaultPayment) {
-        this.mDefaultPayment = mDefaultPayment;
+    public void setCardIsDefault(boolean cardIsDefault) {
+        this.cardIsDefault = cardIsDefault;
+    }
+
+    public String getExpirationMonth() {
+        return expirationMonth;
+    }
+
+    public void setExpirationMonth(String expirationMonth) {
+        this.expirationMonth = expirationMonth;
+    }
+
+    public String getCardKey() {
+        return cardKey;
+    }
+
+    public void setCardKey(String cardKey) {
+        this.cardKey = cardKey;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

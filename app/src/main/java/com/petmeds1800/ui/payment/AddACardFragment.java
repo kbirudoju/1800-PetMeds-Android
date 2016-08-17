@@ -16,7 +16,9 @@ import android.widget.Switch;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Card;
+import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.LoginFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,7 +82,7 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
             String cvv = mCvvEdit.getText().toString();
             boolean isDefaultPayment = mDefaultPaymentSwitch.isChecked();
 
-            Card card = new Card(nameOnCard, cardNumber, expirationDate, isDefaultPayment);
+            CardRequest card = new CardRequest(cardNumber, expirationDate,expirationDate,String.valueOf(isDefaultPayment), cvv, LoginFragment.sessionConfirmationNUmber);
             mPresenter.saveCard(card);
         }
         return super.onOptionsItemSelected(item);
