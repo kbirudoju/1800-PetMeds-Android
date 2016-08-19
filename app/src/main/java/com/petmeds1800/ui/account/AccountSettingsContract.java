@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.account;
 
 
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.User;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
@@ -37,7 +38,7 @@ public interface AccountSettingsContract {
 
         void findUserData();
 
-        void saveSettings(String name, String username, String password);
+        void saveSettings(UpdateAccountSettingsRequest updateAccountSettingsRequest);
 
     }
 }

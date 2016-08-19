@@ -1,13 +1,15 @@
 package com.petmeds1800.api;
 
-import com.petmeds1800.model.Card;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
+import com.petmeds1800.model.entities.Profile;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.model.entities.Status;
+import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -44,5 +46,13 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/payment/PaymentActor/list")
     Observable<MySavedCard> getSavedCards(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/atg/userprofiling/ProfileActor/summary")
+    Observable<Profile> getAccountSettings(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/atg/userprofiling/ProfileActor/update")
+    Observable<UpdateAccountSettingsResponse> updateAccountSettings(@Body UpdateAccountSettingsRequest updateAccountSettingsRequest);
 
 }

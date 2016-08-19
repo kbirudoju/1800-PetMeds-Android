@@ -13,9 +13,10 @@ import android.widget.EditText;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
-import com.petmeds1800.dagger.component.DaggerAccountSettingsComponent;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.User;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.LoginFragment;
 
 import javax.inject.Inject;
 
@@ -46,12 +47,13 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     AccountSettingsContract.Presenter mPresenter;
     private MenuItem mEditMenuItem;
     private MenuItem mDoneMenuItem;
+    private String mUserId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupComponent();
         setHasOptionsMenu(true);
+        mPresenter = new AccountSettingsPresenter(this);
     }
 
     @Nullable
@@ -68,14 +70,6 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     public void onStart() {
         super.onStart();
         mPresenter.findUserData();
-    }
-
-    private void setupComponent() {
-        DaggerAccountSettingsComponent.builder()
-                .appComponent(PetMedsApplication.getAppComponent())
-                .accountSettingsPresenterModule(new AccountSettingsPresenterModule(this))
-                .build()
-                .inject(this);
     }
 
     @Override
@@ -151,7 +145,13 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
             //following should be executable after validation success
             enableEditTexts(false);
             enableEditAction();
-            mPresenter.saveSettings("Abhinav", "abhinav", "abhinav");
+            mPresenter.saveSettings(new UpdateAccountSettingsRequest(
+                     mNameText.getText().toString()
+                    ,""   //need to confirm from the backend system
+                    ,mEmailText.getText().toString()
+                    ,mUserId
+                    ,mNamePasswordText.getText().toString()
+                    , LoginFragment.sessionConfirmationNUmber));
 
         }
 
@@ -191,9 +191,13 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
     @Override
     public void setUserData(User user) {
-        mNameText.setText(user.getmName());
-        mEmailText.setText(user.getmUsername());
-        mNamePasswordText.setText(user.getmPassword());
+        mNameText.setText(user.getFirstName());
+        mEmailText.setText(user.getEmail());
+        //we will never receive password as part of the response in User model
+        mNamePasswordText.setText("*******");
+        //intialize the userId to use while changing the settings
+        mUserId = user.getUserId();
+
     }
 
     @Override

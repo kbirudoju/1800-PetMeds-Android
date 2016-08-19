@@ -1,14 +1,19 @@
 package com.petmeds1800.ui.account;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.petmeds1800.model.UserModel;
-import com.petmeds1800.model.entities.User;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
+import com.petmeds1800.model.entities.Profile;
+import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
+import com.petmeds1800.ui.fragments.LoginFragment;
 
 import javax.inject.Inject;
 
-import rx.functions.Action0;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Abhinav on 4/8/16.
@@ -16,24 +21,16 @@ import rx.functions.Action0;
 public class AccountSettingsPresenter implements AccountSettingsContract.Presenter {
 
     private static final int PASSWORD_LENGTH = 3;
-    private final UserModel mUserModel;
 
     @NonNull
     private final AccountSettingsContract.View mView;
 
     @Inject
-    AccountSettingsPresenter(UserModel userModel , AccountSettingsContract.View settingsView) {
-        mUserModel = userModel;
-        mView = settingsView;
-    }
+    PetMedsApiService mPetMedsApiService;
 
-    /**
-     * Method injection is used here to safely reference {@code this} after the object is created. For more information,
-     * see Java Concurrency in Practice.
-     */
-    @Inject
-    void setupListener() {
-        mView.setPresenter(this);
+    AccountSettingsPresenter(AccountSettingsContract.View settingsView) {
+        mView = settingsView;
+        PetMedsApplication.getAppComponent().inject(this);
     }
 
     @Override
@@ -55,21 +52,64 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     public void findUserData() {
 
         //test data
-        User user = new User();
-        user.setmName("Abhinav");
-        user.setmUsername("aagarwal@dminc.com");
-        user.setmPassword("dontknow");
+//        User user = new User();
+//        user.setFirstName("Abhinav");
+//        user.setEmail("aagarwal@dminc.com");
+//        user.setPassword("dontknow");
 
-        if(mView.isActive()) {
-            mView.setUserData(user);
-        }
+        mPetMedsApiService.getAccountSettings(LoginFragment.sessionConfirmationNUmber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Profile>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                    }
+
+                    @Override
+                    public void onNext(Profile s) {
+                        if (s != null) {
+                            if (mView.isActive()) {
+                                mView.setUserData(s.getProfile());
+                            }
+                        }
+                    }
+                });
+
     }
 
     @Override
-    public void saveSettings(String name, String username, String password) {
-        if(mView.isActive()){
-            mView.showSuccess();
-        }
+    public void saveSettings(UpdateAccountSettingsRequest updateAccountSettingsRequest) {
+
+        mPetMedsApiService.updateAccountSettings(updateAccountSettingsRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<UpdateAccountSettingsResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                    }
+
+                    @Override
+                    public void onNext(UpdateAccountSettingsResponse s) {
+                        if (s != null) {
+                            if(mView.isActive()){
+                                mView.showSuccess();
+                            }
+                        }
+                    }
+                });
+
     }
 
 
