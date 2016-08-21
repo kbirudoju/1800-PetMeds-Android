@@ -5,51 +5,58 @@
     android:padding="@dimen/dp_16">
 
     <TextView
-        android:id="@+id/cardType_label"
+        android:id="@+id/addressName_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VISA"
+        android:text="Todd Shapiro"
+        />
+
+
+    <TextView
+        android:id="@+id/addressLine1_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressName_label"
+        android:text="232 Marina Ave"
         />
 
     <TextView
-        android:id="@+id/cardNumber_label"
+        android:id="@+id/addressLine2_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/cardType_label"
-        android:layout_marginLeft="@dimen/dp_7"
-        android:text="****1234"/>
-
-    <!--TODO remove this as name on card doesn't exist anymore-->
-    <TextView
-        android:id="@+id/nameOnCard_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cardType_label"
-        android:text="Name on Card"/>
+        android:layout_below="@id/addressLine1_label"
+        android:text="Venice Beach, CA 10290"/>
 
     <TextView
-        android:id="@+id/cardExpiration_label"
+        android:id="@+id/country_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/nameOnCard_label"
-        android:text="@string/cardExpirationValue"/>
+        android:layout_below="@id/addressLine2_label"
+        android:text="United States"/>
 
     <TextView
-        android:id="@+id/isCardSetDefault_label"
+        android:id="@+id/phoneNumber_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cardExpiration_label"
-        android:text="default payment method"/>
+        android:layout_below="@id/country_label"
+        android:text="@string/phoneNumberInAddress"/>
+
+    <TextView
+        android:id="@+id/isAddressSetDefault_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/phoneNumber_label"
+        android:text="@string/defaultShippingAddress"/>
 
     <TextView
         android:id="@+id/dummyLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/common_google_signin_btn_text_light_default"
-        android:layout_below="@id/isCardSetDefault_label"
+        android:layout_below="@id/isAddressSetDefault_label"
         />
     <Button
-        android:id="@+id/editCard_button"
+        android:id="@+id/editAddress_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/dummyLine"

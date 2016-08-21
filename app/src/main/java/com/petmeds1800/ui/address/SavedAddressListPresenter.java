@@ -1,16 +1,14 @@
-package com.petmeds1800.ui.payment;
+package com.petmeds1800.ui.address;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.Card;
+import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.MySavedCard;
-import com.petmeds1800.model.entities.Status;
 import com.petmeds1800.ui.fragments.LoginFragment;
-
-import java.util.ArrayList;
+import com.petmeds1800.ui.payment.SavedCardsListContract;
 
 import javax.inject.Inject;
 
@@ -21,26 +19,26 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Abhinav on 11/8/16.
  */
-public class SavedCardsListPresenter implements SavedCardsListContract.Presenter {
+public class SavedAddressListPresenter implements SavedAddressListContract.Presenter {
 
     @Inject
     PetMedsApiService mPetMedsApiService;
 
-    private SavedCardsListContract.View mView;
+    private SavedAddressListContract.View mView;
 
-    public SavedCardsListPresenter(@NonNull SavedCardsListContract.View view) {
+    public SavedAddressListPresenter(@NonNull SavedAddressListContract.View view) {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
     }
 
     @Override
-    public void getSavedCards() {
+    public void getSavedAddress() {
 
-        mPetMedsApiService.getSavedCards(LoginFragment.sessionConfirmationNUmber)
+        mPetMedsApiService.getSavedAddress(LoginFragment.sessionConfirmationNUmber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<MySavedCard>() {
+                .subscribe(new Subscriber<MySavedAddress>() {
                     @Override
                     public void onCompleted() {
 
@@ -49,21 +47,21 @@ public class SavedCardsListPresenter implements SavedCardsListContract.Presenter
                     @Override
                     public void onError(Throwable e) {
                         //notify about the error.It could be any type of error while getting data from the API
-                        Log.e(SavedCardsListPresenter.class.getName(),e.getMessage());
+                        Log.e(SavedAddressListPresenter.class.getName(),e.getMessage());
                     }
 
                     @Override
-                    public void onNext(MySavedCard s) {
+                    public void onNext(MySavedAddress s) {
                         if(s.getStatus().getCode().equals(API_SUCCESS_CODE)
-                                && s.getCreditCardList() != null && s.getCreditCardList().size() > 0){
+                                && s.getProfileAddresses() != null && s.getProfileAddresses().size() > 0){
 
                             if (mView.isActive()) {
-                                mView.showCardsListView(s.getCreditCardList());
+                                mView.showAddressListView(s.getProfileAddresses());
                             }
                         }
                         else {
                             if (mView.isActive()) {
-                                mView.showNoCardsView();
+                                mView.showNoAddressView();
                             }
                         }
                     }
@@ -73,6 +71,6 @@ public class SavedCardsListPresenter implements SavedCardsListContract.Presenter
 
     @Override
     public void start() {
-        getSavedCards();
+        getSavedAddress();
     }
 }

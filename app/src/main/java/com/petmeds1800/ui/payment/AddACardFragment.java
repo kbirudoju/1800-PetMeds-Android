@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +17,6 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import com.petmeds1800.R;
-import com.petmeds1800.model.Card;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
@@ -29,8 +30,13 @@ import butterknife.ButterKnife;
 public class AddACardFragment extends AbstractFragment implements AddACardContract.View {
 
 
-    @BindView(R.id.nameOnCard_edit)
-    EditText mNameOnCardEdit;
+    @BindView(R.id.cardNumberLayout)
+    TextInputLayout mCardNumberLayout;
+    @BindView(R.id.expirationDateInputLayout)
+    TextInputLayout mExpirationDateInputLayout;
+    @BindView(R.id.cvvInputLayout)
+    TextInputLayout mCvvInputLayout;
+
     @BindView(R.id.cardNumber_edit)
     EditText mCardNumberEdit;
     @BindView(R.id.expirationDate_edit)
@@ -76,11 +82,50 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_done) {
 
-            String nameOnCard = mNameOnCardEdit.getText().toString();
             String cardNumber = mCardNumberEdit.getText().toString();
             String expirationDate = mExpirationDateEdit.getText().toString();
             String cvv = mCvvEdit.getText().toString();
             boolean isDefaultPayment = mDefaultPaymentSwitch.isChecked();
+
+            boolean invalidCreditCardNumber;
+            boolean invalidExpirationDate;
+            boolean invalidCvv;
+
+            ///// Negative flow /////
+            //card number validation
+            if (!mPresenter.isCreditCardNumberValid(mCardNumberEdit.getText().toString())) {
+                mCardNumberLayout.setError(getContext().getString(R.string.invalidCreditCardError));
+                invalidCreditCardNumber = true;
+            } else {
+                mCardNumberLayout.setError(null);
+                //following line would help to keep the view size intact
+                mCardNumberLayout.setErrorEnabled(false);
+                invalidCreditCardNumber = false;
+            }
+
+            //expiration date validation
+            if (!mPresenter.isExpirationDateValid(mExpirationDateEdit.getText().toString())) {
+                mExpirationDateInputLayout.setError(getContext().getString(R.string.invalidExpirationDateError));
+                invalidExpirationDate = true;
+            } else {
+                mExpirationDateInputLayout.setError(null);
+                mExpirationDateInputLayout.setErrorEnabled(false);
+                invalidExpirationDate = false;
+            }
+
+            //cvv validation
+            if (!mPresenter.isCvvValid(mCvvEdit.getText().toString())) {
+                mCvvInputLayout.setError(getContext().getString(R.string.invalidCvvNumberError));
+                invalidCvv = true;
+            } else {
+                mCvvInputLayout.setError(null);
+                mCvvInputLayout.setErrorEnabled(false);
+                invalidCvv = false;
+            }
+            //return if needed
+            if (invalidCreditCardNumber || invalidExpirationDate || invalidCvv) {
+                return false;
+            }
 
             CardRequest card = new CardRequest(cardNumber, expirationDate,expirationDate,String.valueOf(isDefaultPayment), cvv, LoginFragment.sessionConfirmationNUmber);
             mPresenter.saveCard(card);
@@ -104,8 +149,8 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
     }
 
     @Override
-    public void paymentMethodDisapproved() {
-
+    public void paymentMethodDisapproved(String errorMessage) {
+        Snackbar.make(mCardNumberEdit, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -123,4 +168,10 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
             return false;
         }
     });
+
+//    @OnClick(R.id.expirationDate_edit)
+//    void showExpirationDate(){
+//        ExpirationDatePickerFragment expirationDatePickerFragment = new ExpirationDatePickerFragment();
+//        expirationDatePickerFragment.show(getFragmentManager(),"expirationDatePicker");
+//    }
 }

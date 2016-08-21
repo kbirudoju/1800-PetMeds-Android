@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
+import com.petmeds1800.ui.address.SavedAddressListFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 
@@ -29,12 +30,16 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
     @BindView(R.id.managePayment_label)
     TextView mManagePaymentLabel;
 
+    @BindView(R.id.manageAddress_label)
+    TextView mManageAddressLabel;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
        super.onViewCreated(view, savedInstanceState);
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
         mManagePaymentLabel.setOnClickListener(this);
+        mManageAddressLabel.setOnClickListener(this);
     }
 
     @Nullable
@@ -61,6 +66,10 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
 
             case R.id.managePayment_label:
                 replaceAndAddToBackStack(new SavedCardsListFragment());
+                break;
+
+            case R.id.manageAddress_label:
+                replaceAndAddToBackStack(new SavedAddressListFragment());
                 break;
 
             default:

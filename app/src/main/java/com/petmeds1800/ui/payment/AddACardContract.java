@@ -18,12 +18,16 @@ public interface AddACardContract{
 
         void paymentMethodApproved();
 
-        void paymentMethodDisapproved();
+        void paymentMethodDisapproved(String errorMessage);
     }
 
     interface Presenter extends BasePresenter {
 
         void saveCard(CardRequest card);
-        void isCreditCardNumberValid();
+        boolean isCreditCardNumberValid(String creditCardNumber);
+        boolean isExpirationDateValid(String expirationDate);
+        boolean isCvvValid(String cvv);
+        boolean isBillingAddressAvailable();
+
     }
 }

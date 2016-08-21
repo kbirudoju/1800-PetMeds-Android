@@ -1,5 +1,7 @@
 package com.petmeds1800.api;
 
+import com.petmeds1800.model.entities.AddACardResponse;
+import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.LoginRequest;
@@ -41,7 +43,7 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/add")
-    Observable<Status> addPaymentCard(@Body CardRequest cardRequest);
+    Observable<AddACardResponse> addPaymentCard(@Body CardRequest cardRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/payment/PaymentActor/list")
@@ -54,5 +56,9 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/update")
     Observable<UpdateAccountSettingsResponse> updateAccountSettings(@Body UpdateAccountSettingsRequest updateAccountSettingsRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/contact/ContactActor/list")
+    Observable<MySavedAddress> getSavedAddress(@Query("_dynSessConf") String sessionConfirmation);
 
 }

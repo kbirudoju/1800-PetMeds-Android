@@ -149,7 +149,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
                      mNameText.getText().toString()
                     ,""   //need to confirm from the backend system
                     ,mEmailText.getText().toString()
-                    ,mUserId
+                    ,mUserId+"123"  //TODO need to remove additional 123 as userId.Will do once error handling code is verified in the presenter class
                     ,mNamePasswordText.getText().toString()
                     , LoginFragment.sessionConfirmationNUmber));
 

@@ -97,13 +97,20 @@
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
     <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method.Store a payment method for faster checkout.</string>
     <string name="addACreditCardButtonName">Add a Credit Card</string>
-    <string name="editCard">EDIT</string>
+    <string name="edit">EDIT</string>
     <string name="prompt_cardNumber">Card Number</string>
     <string name="prompt_nameOnCard">Name on card</string>
     <string name="prompt_expirationDate">Expiration date</string>
     <string name="prompt_cvv">CVV</string>
     <string name="cardSavedInAccount">Payment Method approved!</string>
     <string name="cardExpirationValue">Expires: %1$s %2$s</string>
+    <string name="invalidCreditCardError">Valid card number is required</string>
+    <string name="invalidExpirationDateError">Valid expiration date is required</string>
+    <string name="invalidCvvNumberError">Valid CVV number is required</string>
+    <string name="noSavedAddressAvailableMessage">You haven\'t stored a address.Store a address for faster checkout</string>
+    <string name="addAddressButtonName">Add a Address</string>
+    <string name="phoneNumberInAddress">Phone: 555-333-222</string>
+    <string name="defaultShippingAddress">default shipping address</string>
 
 
 </resources>
