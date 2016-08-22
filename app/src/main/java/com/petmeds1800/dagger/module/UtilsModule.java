@@ -1,11 +1,10 @@
 package com.petmeds1800.dagger.module;
 
+import com.petmeds1800.dagger.AppScope;
 import com.petmeds1800.util.FileUtils;
 import com.petmeds1800.util.PermissionUtils;
 
 import android.app.Application;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,12 +18,12 @@ public class UtilsModule {
     public UtilsModule() {
     }
 
-    @Provides @Singleton
+    @Provides @AppScope
     PermissionUtils providePermissionsUtils(Application app) {
         return new PermissionUtils(app);
     }
 
-    @Provides @Singleton
+    @Provides @AppScope
     FileUtils provideFileUtils() {
         return new FileUtils();
     }

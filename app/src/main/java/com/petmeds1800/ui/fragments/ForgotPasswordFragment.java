@@ -3,11 +3,9 @@ package com.petmeds1800.ui.fragments;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.ForgotPasswordIntent;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
+import com.petmeds1800.mvp.ForgotPasswordTask.ForgotPasswordContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.os.Bundle;
@@ -17,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -32,12 +31,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-//import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
- * Created by Digvijay on 8/3/2016.
+ * Created by Digvijay on 8/22/2016.
  */
-public class LoginFragment extends AbstractFragment implements LoginContract.View {
+public class ForgotPasswordFragment extends AbstractFragment implements ForgotPasswordContract.View {
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
@@ -48,11 +45,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @BindView(R.id.email_edit)
     EditText mEmailText;
 
-    @BindView(R.id.password_input)
-    TextInputLayout mPasswordInput;
-
-    @BindView(R.id.password_edit)
-    EditText mPasswordText;
+    @BindView(R.id.email_my_password_button)
+    Button mEmailPasswordButton;
 
     @Inject
     PetMedsApiService mApiService;
@@ -60,28 +54,19 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    private LoginContract.Presenter mPresenter;
-
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
-    }
-
-    public LoginFragment() {
-        // Required empty public constructor
-    }
+    private ForgotPasswordContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
-        mPreferencesHelper = new GeneralPreferencesHelper(getActivity());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_login, container, false);
+        final View view = inflater.inflate(R.layout.fragment_forgot_password, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -108,28 +93,15 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     }
 
     @Override
-    public void setPasswordError(String errorString) {
-        mPasswordInput.setError(errorString);
-    }
-
-    @Override
-    public void navigateToHome() {
-        startActivity(new HomeIntent(getActivity()));
-        getActivity().finish();
-    }
-
-    @Override
-    public void setPresenter(LoginContract.Presenter presenter) {
-//        mPresenter = checkNotNull(presenter);
+    public void setPresenter(ForgotPasswordContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
-    @OnClick(R.id.log_in_button)
-    public void login() {
+    @OnClick(R.id.email_my_password_button)
+    public void emailMyPassword() {
 
-        boolean isValidEmail, isValidPassword;
+        boolean isValidEmail;
         String emailText = mEmailText.getText().toString().trim();
-        String passwordText = mPasswordText.getText().toString().trim();
 
         if (emailText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
@@ -138,14 +110,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             isValidEmail = mPresenter.validateEmail(emailText);
         }
 
-        if (passwordText.isEmpty()) {
-            setPasswordError(getString(R.string.accountSettingsPasswordEmptyError));
-            return;
-        } else {
-            isValidPassword = mPresenter.validatePassword(emailText);
-        }
-
-        if (isValidEmail && isValidPassword) {
+        if (isValidEmail) {
 
             showProgress();
             mApiService.getSessionConfirmationNumber()
@@ -166,8 +131,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                             }
 
                             return mApiService
-                                    .login(new LoginRequest(mEmailText.getText().toString(),
-                                            mPasswordText.getText().toString(), sessionConfNumber))
+                                    .forgotPassword(new ForgotPasswordRequest("api-demo@gmail.com", sessionConfNumber))
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
                         }
@@ -192,24 +156,12 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                             Toast.makeText(getActivity(), "login response" +
                                     s, Toast.LENGTH_SHORT).show();
                             hideProgress();
+                            mEmailPasswordButton.setText(getString(R.string.label_email_sent));
                         }
                     });
 
-        } else if (!isValidEmail) {
-            setEmailError(getString(R.string.accountSettingsEmailInvalidError));
         } else {
-            setPasswordError(getString(R.string.accountSettingsEmailInvalidError));
+            setEmailError(getString(R.string.accountSettingsEmailInvalidError));
         }
     }
-
-    @OnClick(R.id.label_skip)
-    public void skipLoginSignUp() {
-        navigateToHome();
-    }
-
-    @OnClick(R.id.label_forgot_password)
-    public void forgotPassword() {
-        startActivity(new ForgotPasswordIntent(getActivity()));
-    }
-
 }

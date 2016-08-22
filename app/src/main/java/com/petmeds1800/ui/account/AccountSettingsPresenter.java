@@ -1,13 +1,13 @@
 package com.petmeds1800.ui.account;
 
-import android.support.annotation.NonNull;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.Profile;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
-import com.petmeds1800.ui.fragments.LoginFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
+import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
@@ -28,6 +28,9 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     @Inject
     PetMedsApiService mPetMedsApiService;
 
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     AccountSettingsPresenter(AccountSettingsContract.View settingsView) {
         mView = settingsView;
         PetMedsApplication.getAppComponent().inject(this);
@@ -35,7 +38,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 
     @Override
     public boolean validateName(String name) {
-        return name.isEmpty()? false : true;
+        return !name.isEmpty();
     }
 
     @Override
@@ -45,7 +48,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 
     @Override
     public boolean validatePassword(String password) {
-        return password.length() >= PASSWORD_LENGTH ? true : false;
+        return password.length() >= PASSWORD_LENGTH;
     }
 
     @Override
@@ -57,7 +60,8 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 //        user.setEmail("aagarwal@dminc.com");
 //        user.setPassword("dontknow");
 
-        mPetMedsApiService.getAccountSettings(LoginFragment.sessionConfirmationNUmber)
+        mPetMedsApiService
+                .getAccountSettings(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Profile>() {
@@ -103,7 +107,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                     @Override
                     public void onNext(UpdateAccountSettingsResponse s) {
                         if (s != null) {
-                            if(mView.isActive()){
+                            if (mView.isActive()) {
                                 mView.showSuccess();
                             }
                         }
@@ -111,7 +115,6 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                 });
 
     }
-
 
 
     @Override

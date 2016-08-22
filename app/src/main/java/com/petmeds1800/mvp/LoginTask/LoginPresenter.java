@@ -18,6 +18,8 @@ import javax.inject.Inject;
  */
 public class LoginPresenter implements LoginContract.Presenter {
 
+    private static final int PASSWORD_LENGTH = 3;
+
     @NonNull
     private final LoginContract.View mLoginView;
 
@@ -26,7 +28,7 @@ public class LoginPresenter implements LoginContract.Presenter {
      * values.
      */
     @Inject
-    LoginPresenter(LoginContract.View loginView) {
+    LoginPresenter(@NonNull LoginContract.View loginView) {
         mLoginView = loginView;
     }
 
@@ -40,9 +42,13 @@ public class LoginPresenter implements LoginContract.Presenter {
     }
 
     @Override
-    public boolean validateCredentials(String username, String password) {
+    public boolean validateEmail(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
 
-        return true;
+    @Override
+    public boolean validatePassword(String password) {
+        return password.length() >= PASSWORD_LENGTH;
     }
 
     @Override

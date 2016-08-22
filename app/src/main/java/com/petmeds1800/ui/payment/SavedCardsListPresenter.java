@@ -1,16 +1,12 @@
 package com.petmeds1800.ui.payment;
 
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.Card;
 import com.petmeds1800.model.entities.MySavedCard;
-import com.petmeds1800.model.entities.Status;
-import com.petmeds1800.ui.fragments.LoginFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
-import java.util.ArrayList;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -26,6 +22,9 @@ public class SavedCardsListPresenter implements SavedCardsListContract.Presenter
     @Inject
     PetMedsApiService mPetMedsApiService;
 
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     private SavedCardsListContract.View mView;
 
     public SavedCardsListPresenter(@NonNull SavedCardsListContract.View view) {
@@ -37,7 +36,8 @@ public class SavedCardsListPresenter implements SavedCardsListContract.Presenter
     @Override
     public void getSavedCards() {
 
-        mPetMedsApiService.getSavedCards(LoginFragment.sessionConfirmationNUmber)
+        mPetMedsApiService
+                .getSavedCards(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<MySavedCard>() {
@@ -49,19 +49,18 @@ public class SavedCardsListPresenter implements SavedCardsListContract.Presenter
                     @Override
                     public void onError(Throwable e) {
                         //notify about the error.It could be any type of error while getting data from the API
-                        Log.e(SavedCardsListPresenter.class.getName(),e.getMessage());
+                        Log.e(SavedCardsListPresenter.class.getName(), e.getMessage());
                     }
 
                     @Override
                     public void onNext(MySavedCard s) {
-                        if(s.getStatus().getCode().equals(API_SUCCESS_CODE)
-                                && s.getCreditCardList() != null && s.getCreditCardList().size() > 0){
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)
+                                && s.getCreditCardList() != null && s.getCreditCardList().size() > 0) {
 
                             if (mView.isActive()) {
                                 mView.showCardsListView(s.getCreditCardList());
                             }
-                        }
-                        else {
+                        } else {
                             if (mView.isActive()) {
                                 mView.showNoCardsView();
                             }

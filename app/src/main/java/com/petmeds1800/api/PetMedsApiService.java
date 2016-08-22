@@ -1,16 +1,16 @@
 package com.petmeds1800.api;
 
 import com.petmeds1800.model.entities.AddACardResponse;
-import com.petmeds1800.model.entities.MySavedAddress;
-import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.MyOrder;
+import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.model.entities.Profile;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.model.entities.Status;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 
 import retrofit2.http.Body;
@@ -34,8 +34,13 @@ public interface PetMedsApiService {
     Observable<String> login(@Body LoginRequest loginRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/atg/userprofiling/ProfileActor/forgotPasswordEmail")
+    Observable<String> forgotPassword(@Body ForgotPasswordRequest forgotPasswordRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("rest/model/atg/userprofiling/ProfileActor/orderHistory")
-    Observable<MyOrder> getOrderList(@Query("_dynSessConf") String sessionConfirmation , @Query("filterId") String filterId);
+    Observable<MyOrder> getOrderList(@Query("_dynSessConf") String sessionConfirmation,
+            @Query("filterId") String filterId);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("rest/model/atg/userprofiling/ProfileActor/orderHistoryFilterlist")
@@ -55,7 +60,8 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/update")
-    Observable<UpdateAccountSettingsResponse> updateAccountSettings(@Body UpdateAccountSettingsRequest updateAccountSettingsRequest);
+    Observable<UpdateAccountSettingsResponse> updateAccountSettings(
+            @Body UpdateAccountSettingsRequest updateAccountSettingsRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/contact/ContactActor/list")

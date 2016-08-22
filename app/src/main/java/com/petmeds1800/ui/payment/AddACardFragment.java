@@ -1,5 +1,10 @@
 package com.petmeds1800.ui.payment;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +21,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Switch;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CardRequest;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.LoginFragment;
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,29 +31,37 @@ import butterknife.ButterKnife;
  */
 public class AddACardFragment extends AbstractFragment implements AddACardContract.View {
 
-
     @BindView(R.id.cardNumberLayout)
     TextInputLayout mCardNumberLayout;
+
     @BindView(R.id.expirationDateInputLayout)
     TextInputLayout mExpirationDateInputLayout;
+
     @BindView(R.id.cvvInputLayout)
     TextInputLayout mCvvInputLayout;
 
     @BindView(R.id.cardNumber_edit)
     EditText mCardNumberEdit;
+
     @BindView(R.id.expirationDate_edit)
     EditText mExpirationDateEdit;
+
     @BindView(R.id.cvv_edit)
     EditText mCvvEdit;
+
     @BindView(R.id.defaultPayment_switch)
     Switch mDefaultPaymentSwitch;
 
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     private AddACardContract.Presenter mPresenter;
+
     private AlertDialog mAlertDialog;
 
     private static final int DISMISS_APPROVAL_DIALOG = 1;
-    private static final long APPROVAL_DIALOG_DURATION = 1000;
 
+    private static final long APPROVAL_DIALOG_DURATION = 1000;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +72,8 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_a_card, container, false);
 
         ButterKnife.bind(this, view);
@@ -127,7 +138,9 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
                 return false;
             }
 
-            CardRequest card = new CardRequest(cardNumber, expirationDate,expirationDate,String.valueOf(isDefaultPayment), cvv, LoginFragment.sessionConfirmationNUmber);
+            CardRequest card = new CardRequest(cardNumber, expirationDate, expirationDate,
+                    String.valueOf(isDefaultPayment), cvv,
+                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.saveCard(card);
         }
         return super.onOptionsItemSelected(item);
@@ -145,7 +158,7 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
         alertDialogBuilder.setMessage(R.string.cardSavedInAccount).setCancelable(false);
         mAlertDialog = alertDialogBuilder.create();
         mAlertDialog.show();
-        mHandler.sendEmptyMessageDelayed(DISMISS_APPROVAL_DIALOG,APPROVAL_DIALOG_DURATION);
+        mHandler.sendEmptyMessageDelayed(DISMISS_APPROVAL_DIALOG, APPROVAL_DIALOG_DURATION);
     }
 
     @Override
@@ -161,7 +174,7 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
     Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            if(msg.what == DISMISS_APPROVAL_DIALOG){
+            if (msg.what == DISMISS_APPROVAL_DIALOG) {
                 mAlertDialog.dismiss();
                 popBackStack();
             }

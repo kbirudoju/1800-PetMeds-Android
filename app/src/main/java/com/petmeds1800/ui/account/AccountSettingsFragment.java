@@ -1,5 +1,11 @@
 package com.petmeds1800.ui.account;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
+import com.petmeds1800.model.entities.User;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -10,13 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
-import com.petmeds1800.model.entities.User;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.LoginFragment;
 
 import javax.inject.Inject;
 
@@ -45,8 +44,14 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
     @Inject
     AccountSettingsContract.Presenter mPresenter;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     private MenuItem mEditMenuItem;
+
     private MenuItem mDoneMenuItem;
+
     private String mUserId;
 
     @Override
@@ -146,12 +151,13 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
             enableEditTexts(false);
             enableEditAction();
             mPresenter.saveSettings(new UpdateAccountSettingsRequest(
-                     mNameText.getText().toString()
-                    ,""   //need to confirm from the backend system
-                    ,mEmailText.getText().toString()
-                    ,mUserId+"123"  //TODO need to remove additional 123 as userId.Will do once error handling code is verified in the presenter class
-                    ,mNamePasswordText.getText().toString()
-                    , LoginFragment.sessionConfirmationNUmber));
+                    mNameText.getText().toString()
+                    , ""   //need to confirm from the backend system
+                    , mEmailText.getText().toString()
+                    , mUserId + "123"
+                    //TODO need to remove additional 123 as userId.Will do once error handling code is verified in the presenter class
+                    , mNamePasswordText.getText().toString()
+                    , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
 
         }
 

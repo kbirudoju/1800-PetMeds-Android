@@ -1,10 +1,10 @@
 package com.petmeds1800.dagger.module;
 
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.dagger.AppScope;
 
 import android.app.Application;
-
-import javax.inject.Singleton;
+import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,8 +20,13 @@ public class ApplicationModule {
         this.mApp = app;
     }
 
-    @Provides @Singleton
+    @Provides @AppScope
     Application provideApplication() {
+        return mApp;
+    }
+
+    @Provides @AppScope
+    Context provideContext(){
         return mApp;
     }
 }

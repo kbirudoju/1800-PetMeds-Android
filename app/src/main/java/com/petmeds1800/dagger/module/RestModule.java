@@ -1,16 +1,8 @@
 package com.petmeds1800.dagger.module;
 
-import android.app.Application;
-import android.content.Context;
-
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.petmeds1800.BuildConfig;
-import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
-
-import javax.inject.Singleton;
+import com.petmeds1800.dagger.AppScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -27,19 +19,14 @@ public class RestModule {
 
     private final String mEndpoint;
 
-    private static Context mContext;
-
-    public RestModule(final Application app) {
-        mEndpoint = app.getString(R.string.server_endpoint);
-        mContext = app;
+    public RestModule(String endpoint) {
+        mEndpoint = endpoint;
     }
 
     @Provides
-    @Singleton
-    public OkHttpClient provideOkHttpClient() {
+    @AppScope
+    public OkHttpClient provideOkHttpClient(CookieJar cookieJar) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        CookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(mContext));
 
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -51,7 +38,7 @@ public class RestModule {
     }
 
     @Provides
-    @Singleton
+    @AppScope
     public Retrofit provideRetrofit(final OkHttpClient client) {
         final Retrofit.Builder builder = new Retrofit.Builder()
                 .client(client)
@@ -64,7 +51,7 @@ public class RestModule {
     }
 
     @Provides
-    @Singleton
+    @AppScope
     public PetMedsApiService provideApiService(Retrofit retrofit) {
         return retrofit.create(PetMedsApiService.class);
     }

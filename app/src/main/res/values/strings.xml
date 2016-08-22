@@ -32,19 +32,21 @@
     <string name="dialog.ok_button">OK</string>
     <string name="dialog.cancel_button">Cancel</string>
 
-    <string name="permission.storage_rationale">The permission to write into the external storage is needed to save the page content.</string>
+    <string name="permission.storage_rationale">The permission to write into the external storage is needed to save the
+        page content.
+    </string>
     <string name="label.text_not_ready">Text not ready for saving</string>
     <string name="label.text_saved">Text saved</string>
     <string name="label.text_not_saved">An error occurred and the text could not be saved</string>
     <string name="prompt_name">Name</string>
     <!--Home Screen-->
     <string-array name="tab_title">
-            <item>Home</item>
-            <item>Cart</item>
-            <item>Learn</item>
-            <item>Account</item>
-            </string-array>
-    
+        <item>Home</item>
+        <item>Cart</item>
+        <item>Learn</item>
+        <item>Account</item>
+    </string-array>
+
     <!--Account-->
     <string name="title_orders">ORDERS</string>
     <string name="title_my_orders">My Orders</string>
@@ -61,19 +63,29 @@
     <string name="title_more">MORE</string>
     <string name="title_contact_us">Contact us</string>
     <string name="title_signout">Sign out</string>
-    <string name="push_notification_desc">Allow notification for order status, vet contact, refill reminder, offer, and product recall</string>
+    <string name="push_notification_desc">Allow notification for order status, vet contact, refill reminder, offer, and
+        product recall
+    </string>
 
-<!--Orders-->
+    <!--Orders-->
     <string name="order_txt">Order</string>
     <string name="date_txt">Date</string>
     <string name="status_txt">Status</string>
 
+    <!--Login-->
     <string name="label.email">Email</string>
     <string name="label.password">Password</string>
     <string name="label.skip">"SKIP"</string>
     <string name="label.login">Log In</string>
     <string name="label.forgot_password">FORGOT PASSWORD?</string>
     <string name="label.no_account_sign_up">Don\'t have an account? Sign up</string>
+
+    <!--Forgot Password-->
+    <string name="label.enter_email_for_temporary_password">Enter your email address and we will send you a new
+        temporary password.
+    </string>
+    <string name="label.email_me_my_password">Email me my password</string>
+    <string name="label.email_sent">Email Sent</string>
 
     <!-- Strings related to account settings screen -->
     <string name="title_activity_account_settings">Account settings</string>
@@ -95,7 +107,9 @@
     <string name="accountSettingsPasswordEmptyError">Password is required</string>
     <string name="accountSettingsPasswordInvalidError">Password must be XXX</string>
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
-    <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method.Store a payment method for faster checkout.</string>
+    <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method.Store a payment method for faster
+        checkout.
+    </string>
     <string name="addACreditCardButtonName">Add a Credit Card</string>
     <string name="edit">EDIT</string>
     <string name="prompt_cardNumber">Card Number</string>

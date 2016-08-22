@@ -1,22 +1,24 @@
 package com.petmeds1800.dagger.module;
 
-import android.app.Application;
-
 import com.google.android.gms.analytics.Tracker;
+
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.dagger.AppScope;
 import com.petmeds1800.util.FileUtils;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.PermissionUtils;
 
-import javax.inject.Singleton;
+import android.app.Application;
 
 import dagger.Component;
 
-@Singleton
+@AppScope
 @Component(modules = {
         ApplicationModule.class,
         RestModule.class,
         GoogleAnalyticsModule.class,
-        UtilsModule.class
+        UtilsModule.class,
+        StorageModule.class
 })
 public interface AppComponent extends Injector{
     Application app();
@@ -28,5 +30,7 @@ public interface AppComponent extends Injector{
     FileUtils fileUtils();
 
     PetMedsApiService api();
+
+    GeneralPreferencesHelper generalPreferencesHelper();
 
 }

@@ -27,7 +27,11 @@
         <activity android:name=".ui.HomeActivity"
             android:configChanges="orientation"/>
 
-        <activity android:name=".ui.LoginActivity"/>
+        <activity android:name=".ui.LoginActivity"
+                  android:configChanges="orientation"/>
+
+        <activity android:name=".ui.ForgotPasswordActivity"
+                  android:configChanges="orientation"/>
     </application>
 
 </manifest>

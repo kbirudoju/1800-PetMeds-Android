@@ -1,11 +1,11 @@
 package com.petmeds1800;
 
-import android.app.Application;
-
 import com.petmeds1800.dagger.module.AppComponent;
 import com.petmeds1800.dagger.module.ApplicationModule;
 import com.petmeds1800.dagger.module.DaggerAppComponent;
 import com.petmeds1800.dagger.module.RestModule;
+
+import android.app.Application;
 
 import timber.log.Timber;
 
@@ -27,7 +27,7 @@ public class PetMedsApplication extends Application {
     protected AppComponent createAppComponent() {
         return DaggerAppComponent.builder()
                 .applicationModule(new ApplicationModule(this))
-                .restModule(new RestModule(this))
+                .restModule(new RestModule(getString(R.string.server_endpoint)))
                 .build();
     }
 

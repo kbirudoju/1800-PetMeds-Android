@@ -6,10 +6,9 @@ import com.google.android.gms.analytics.Tracker;
 
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.R;
+import com.petmeds1800.dagger.AppScope;
 
 import android.app.Application;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -23,7 +22,7 @@ public class GoogleAnalyticsModule {
     public GoogleAnalyticsModule() {
     }
 
-    @Provides @Singleton
+    @Provides @AppScope
     Tracker provideTracker(Application app) {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(app);
         if (BuildConfig.DEBUG) {

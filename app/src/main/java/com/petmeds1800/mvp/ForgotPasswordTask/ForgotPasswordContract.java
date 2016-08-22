@@ -1,12 +1,12 @@
-package com.petmeds1800.mvp.LoginTask;
+package com.petmeds1800.mvp.ForgotPasswordTask;
 
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
 /**
- * Created by Digvijay on 8/5/2016.
+ * Created by Digvijay on 8/19/2016.
  */
-public interface LoginContract {
+public interface ForgotPasswordContract {
 
     interface View extends BaseView<Presenter> {
 
@@ -15,16 +15,10 @@ public interface LoginContract {
         void hideProgress();
 
         void setEmailError(String errorString);
-
-        void setPasswordError(String errorString);
-
-        void navigateToHome();
     }
 
     interface Presenter extends BasePresenter {
 
         boolean validateEmail(String email);
-
-        boolean validatePassword(String password);
     }
 }
