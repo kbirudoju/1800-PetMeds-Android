@@ -9,6 +9,16 @@ public class OrderFilterList implements Serializable{
     private String name;
     private String code;
 
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    private boolean isDefault;
+
     public String getName() {
         return name;
     }

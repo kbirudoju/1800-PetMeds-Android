@@ -72,6 +72,25 @@ public class OrderList implements Serializable{
 
     private String shipTo;
     private String orderId;
+    private ArrayList<ShippingGroup> shippingGroups;
+
+    public ArrayList<PaymentGroup> getPaymentGroups() {
+        return paymentGroups;
+    }
+
+    public void setPaymentGroups(ArrayList<PaymentGroup> paymentGroups) {
+        this.paymentGroups = paymentGroups;
+    }
+
+    public ArrayList<ShippingGroup> getShippingGroups() {
+        return shippingGroups;
+    }
+
+    public void setShippingGroups(ArrayList<ShippingGroup> shippingGroups) {
+        this.shippingGroups = shippingGroups;
+    }
+
+    private ArrayList<PaymentGroup> paymentGroups;
 
 
 }

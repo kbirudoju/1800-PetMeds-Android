@@ -14,13 +14,13 @@ import com.petmeds1800.R;
 import com.petmeds1800.dagger.module.DaggerOrderComponent;
 import com.petmeds1800.dagger.module.OrderPresenterModule;
 import com.petmeds1800.model.entities.OrderList;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment.OnItemSelectedListener;
 import com.petmeds1800.ui.orders.presenter.OrderListPresenter;
 import com.petmeds1800.ui.orders.support.DividerItemDecoration;
 import com.petmeds1800.ui.orders.support.MyOrderAdapter;
-import com.petmeds1800.ui.orders.support.MyOrderEndlessOnScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +46,27 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
     @Inject
     OrderListPresenter mOrderPresenter;
 
+    private List<OrderList> mOrderList;
 
-    private MyOrderEndlessOnScrollListener orderEndlessOnScrollListener;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_my_orders,null);
          ButterKnife.bind(this, view);
-        mOrderListAdapter = new MyOrderAdapter(false,this,getActivity());
+        ((AbstractActivity)getActivity()).setTitle(getActivity().getString(R.string.title_my_orders));
+
+        mOrderListAdapter = new MyOrderAdapter(false, getActivity(), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = mOrderRecyclerView.getChildAdapterPosition(v);
+                OrderList orderDetail= mOrderList.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("orderlist",orderDetail);
+                replaceFragmentWithBundle(new OrderDetailFragment(),bundle);
+            }
+        });
 
         DaggerOrderComponent.builder()
                 .appComponent(PetMedsApplication.getAppComponent())
@@ -71,18 +83,16 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
         mFilterButton.setOnClickListener(this);
 
 }
-        //uncomment this line after API Integration
 
-       /* orderEndlessOnScrollListener = new MyOrderEndlessOnScrollListener(mLinearLayoutManager) {
-            @Override
-            public void onLoadMore(long current_page) {
-                loadData();
-            }
-        };*/
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity)getActivity()).setTitle(getActivity().getString(R.string.title_my_orders));
 
+    }
 
     private void setUpOrderList(){
-      mOrderRecyclerView.setAdapter(mOrderListAdapter);
+        mOrderRecyclerView.setAdapter(mOrderListAdapter);
         mOrderRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         mOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mOrderRecyclerView.setHasFixedSize(true);
@@ -97,9 +107,6 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
         }
     }
 
-    private void loadData(){
-
-    }
 
 
     @Override
@@ -120,6 +127,7 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
 
     @Override
     public void updateOrderList(List<OrderList> orderList) {
+        mOrderList=orderList;
         mOrderListAdapter.setData(orderList);
 
     }

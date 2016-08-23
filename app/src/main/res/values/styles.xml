@@ -98,4 +98,22 @@
         <item name="android:textColor">@color/battleship_grey</item>
     </style>
 
+    <style name="product_label">
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:fontFamily">@string/font_roboto_medium</item>
+    </style>
+    <style name="order_title">
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:fontFamily">@string/font_roboto_regular
+            <item name="android:textColor">@color/grey</item>
+        </item>
+    </style>
+    <style name="order_label">
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:fontFamily">@string/font_roboto_regular
+            <item name="android:textColor">@color/light_grey</item>
+        </item>
+    </style>
+
+
 </resources>

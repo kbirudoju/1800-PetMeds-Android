@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="@dimen/dp_16"
+    android:paddingLeft="@dimen/dp_16"
+    android:layout_marginTop="@dimen/dp_10">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/product_label"
+        android:textColor="@color/black"
+        android:text="@string/shipping_method_txt"/>
+    <TextView
+        android:id="@+id/shipping_method_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/rounded_button_text"
+        android:singleLine="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/product_label"
+        android:textColor="@color/black"
+        android:layout_marginTop="@dimen/dp_23"
+        android:text="@string/shipping_address_txt"/>
+    <TextView
+        android:id="@+id/shipping_address_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/rounded_button_text"
+        android:singleLine="true"
+        />
+
+</LinearLayout>

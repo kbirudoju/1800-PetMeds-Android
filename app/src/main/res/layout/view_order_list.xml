@@ -5,54 +5,77 @@
     android:paddingLeft="@dimen/dp_16"
     android:paddingRight="@dimen/dp_23"
     android:background="@color/white"
+    android:layout_marginBottom="@dimen/dp_20"
     >
-   <!--Commenting below code as we need confirmation whether we have to show border on circle or not-->
-  <!--  <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/product_image"
-        android:layout_width="@dimen/dp_62"
-        android:layout_height="@dimen/dp_62"
-        app:civ_border_width="1dp"
-        app:civ_border_color="#0000FF"/>-->
-    <ImageView
-        android:id="@+id/product_image"
-        android:layout_width="@dimen/dp_62"
-        android:layout_height="@dimen/dp_62"
+    <RelativeLayout
+        android:id="@+id/product_image_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:layout_centerVertical="true">
+        <ImageView
+            android:id="@+id/product_image"
+            android:layout_width="@dimen/dp_62"
+            android:layout_height="@dimen/dp_62"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_1"
+            android:background="@drawable/circular_background"
 
-        />
+
+            />
+        <ImageView
+            android:id="@+id/product_second_image"
+            android:layout_width="@dimen/dp_62"
+            android:layout_height="@dimen/dp_62"
+            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:background="@drawable/circular_background"
+            android:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/product_count_label"
+            android:layout_width="@dimen/dp_33"
+            android:layout_height="@dimen/dp_33"
+            android:layout_marginLeft="@dimen/dp_50"
+            android:layout_marginTop="@dimen/dp_45"
+            android:textSize="@dimen/sp_14"
+            android:gravity="center"
+            android:fontFamily="@string/font_roboto_regular"
+            android:textColor="@color/battleship_grey"
+            android:background="@drawable/circular_background"
+            android:visibility="gone"/>
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_toRightOf="@+id/product_image"
+        android:layout_toRightOf="@+id/product_image_layout"
         android:layout_toLeftOf="@+id/arrow_image"
         android:layout_marginLeft="@dimen/dp_40"
         android:layout_centerVertical="true"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginBottom="@dimen/dp_20">
-            <TextView
-                android:id="@+id/order_number_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="sdgdsgsg"
-                style="@style/list_row"/>
-            <TextView
-                android:id="@+id/order_date_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/list_row"/>
-            <Button
-                android:id="@+id/order_status_label"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_23"
-                android:drawablePadding="@dimen/dp_3"
-                android:maxWidth="@dimen/dp_180"
-                android:singleLine="true"
-                android:drawableLeft="@drawable/ic_status_shipping"
-                style="@style/rounded_button_text"
-                />
+        <TextView
+            android:id="@+id/order_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/list_row"/>
+        <TextView
+            android:id="@+id/order_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/list_row"/>
+        <Button
+            android:id="@+id/order_status_label"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_23"
+            android:drawablePadding="@dimen/dp_3"
+            android:maxWidth="@dimen/dp_180"
+            android:singleLine="true"
+            android:drawableLeft="@drawable/ic_status_shipping"
+            style="@style/rounded_button_text"
+            />
 
     </LinearLayout>
     <ImageView

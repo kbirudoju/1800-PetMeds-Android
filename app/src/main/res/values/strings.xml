@@ -125,6 +125,27 @@
     <string name="addAddressButtonName">Add a Address</string>
     <string name="phoneNumberInAddress">Phone: 555-333-222</string>
     <string name="defaultShippingAddress">default shipping address</string>
+    <!--Order Detail Screen-->
+    <string name="shipping_method_txt">Shipping Method</string>
+    <string name="shipping_address_txt">Shipping Address</string>
+    <string name="payment_method_txt">Payment Method</string>
+    <string name="billing_address_txt">Billing Address</string>
+    <string name="order_no_txt">Order #</string>
+    <string name="order_date_txt">Order date</string>
+    <string name="total_txt">Total</string>
+    <string name="ship_to_txt">Ship to</string>
+    <string name="order_detail_header">ORDER DETAILS</string>
+    <string name="item_header">ITEMS</string>
+    <string name="shipment_header">SHIPMENT</string>
+    <string name="payment_header">PAYMENT</string>
+    <string name="cancel_order_header">Cancel order</string>
+    <string name="reorder_entire">Reorder entire order</string>
+    <string name="write_review_header">Write a Review</string>
+    <string name="reorder_item">Reorder Item</string>
+    <string name="track_shipment">Track Shipment</string>
+    <string name="quantity_txt">"Qty: "</string>
+    <string name="pet_txt">"Pet: "</string>
+    <string name="vet_txt">"Vet: "</string>
 
 
 </resources>

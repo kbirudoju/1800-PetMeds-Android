@@ -39,17 +39,17 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<OrderList> myOrder;
     private Context mContext;
 
-     public MyOrderAdapter( boolean blankView, View.OnClickListener onClickListener,Context context) {
+    public MyOrderAdapter( boolean blankView, Context context,View.OnClickListener onClickListener) {
         this.blankView = blankView;
         this.onClickListener = onClickListener;
-         this.mContext=context;
+        this.mContext=context;
 
     }
 
 
     public void clearData() {
         if ( myOrder !=null ) {
-          myOrder.clear();
+            myOrder.clear();
             notifyDataSetChanged();
         }
     }
@@ -62,8 +62,8 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addData(List<MyOrder> myOrder) {
         //write code to add add which is fetched on load more
-            notifyDataSetChanged();
-        }
+        notifyDataSetChanged();
+    }
 
 
     @Override
@@ -74,6 +74,7 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int resource = R.layout.view_order_list;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new MyOrderItemViewHolder(v);
+            v.setOnClickListener(onClickListener);
         } else {
             int resource = R.layout.view_order_loading;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -106,18 +107,62 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             //hardcoded the position value as not sure what we have to do in case of multiple CommerceItems
 
+if(myOrder.getCommerceItems().size()>0){
+    if(myOrder.getCommerceItems().size()==1){
+        orderViewHolder.productCountlabel.setVisibility(View.GONE);
+        orderViewHolder.productSecondImage.setVisibility(View.GONE);
+        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+    }else if(myOrder.getCommerceItems().size()==2){
+        orderViewHolder.productSecondImage.setVisibility(View.VISIBLE);
+        orderViewHolder.productCountlabel.setVisibility(View.GONE);
+        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
+            }
+        });
 
-   Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
-                }
-            });
+        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(1).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.productSecondImage) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                orderViewHolder.productSecondImage.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+    }else{
+        orderViewHolder.productCountlabel.setVisibility(View.VISIBLE);
+
+        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+        orderViewHolder.productSecondImage.setVisibility(View.GONE);
+        orderViewHolder.productCountlabel.setText("+"+(myOrder.getCommerceItems().size()-1));
+    }
+}
 
 
+
+
+           // ;
         }
     }
 
@@ -162,7 +207,10 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tv_order_date;
         @BindView(R.id.product_image)
         ImageView iv_product_img;
-
+        @BindView(R.id.product_second_image)
+        ImageView productSecondImage;
+        @BindView(R.id.product_count_label)
+        TextView productCountlabel;
 
 
         public MyOrderItemViewHolder(View itemView) {

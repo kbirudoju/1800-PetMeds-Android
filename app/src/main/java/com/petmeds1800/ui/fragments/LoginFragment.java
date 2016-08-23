@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.ForgotPasswordIntent;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -20,6 +10,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.ForgotPasswordIntent;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.LoginTask.LoginContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -168,6 +168,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                             return mApiService
                                     .login(new LoginRequest(mEmailText.getText().toString(),
                                             mPasswordText.getText().toString(), sessionConfNumber))
+
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
                         }
