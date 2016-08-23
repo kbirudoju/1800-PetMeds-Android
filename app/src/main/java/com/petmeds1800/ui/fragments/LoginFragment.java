@@ -193,6 +193,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                             Toast.makeText(getActivity(), "login response" +
                                     s, Toast.LENGTH_SHORT).show();
                             hideProgress();
+
+                            startActivity(new HomeIntent(getContext()));
                         }
                     });
 

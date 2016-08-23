@@ -1,9 +1,11 @@
 package com.petmeds1800.dagger.module;
 
 import com.petmeds1800.ui.account.AccountSettingsPresenter;
+import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
+import com.petmeds1800.ui.payment.AddACardFragment;
 import com.petmeds1800.ui.payment.AddACardPresenter;
 import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 
@@ -25,5 +27,9 @@ public interface Injector {
     void inject(AccountSettingsPresenter accountSettingsPresenter);
 
     void inject(SavedAddressListPresenter savedAddressListPresenter);
+
+    void inject(AddAddressPresenter addAddressPresenter);
+
+    void inject(AddACardFragment addACardFragment);
 
 }

@@ -212,6 +212,11 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     }
 
     @Override
+    public void showError(String error) {
+        Snackbar.make(mNamePasswordText, error, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
     public boolean isActive() {
         return isAdded();
     }

@@ -1,7 +1,10 @@
 package com.petmeds1800.ui.payment;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.ui.address.AddressSelectionListFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
@@ -20,11 +23,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Abhinav on 13/8/16.
@@ -52,6 +57,9 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
     @BindView(R.id.defaultPayment_switch)
     Switch mDefaultPaymentSwitch;
 
+    @BindView(R.id.address_label)
+    TextView mAddressLabel;
+
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
@@ -63,11 +71,14 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
 
     private static final long APPROVAL_DIALOG_DURATION = 1000;
 
+    public static final String FIRST_ARG = "firstArg";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new AddACardPresenter(this);
         setHasOptionsMenu(true);
+        PetMedsApplication.getAppComponent().inject(this);
     }
 
     @Nullable
@@ -75,8 +86,18 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_a_card, container, false);
-
         ButterKnife.bind(this, view);
+
+        //check if address is available
+        Bundle bundle = getArguments();
+        Address address;
+        if(bundle != null){
+            address = (Address) bundle.getSerializable(FIRST_ARG);
+            if(address != null) {
+                displayAddress(address);
+            }
+        }
+
         return view;
     }
 
@@ -181,6 +202,16 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
             return false;
         }
     });
+
+    @OnClick(R.id.addressSelection_label)
+    public void selectAddress(){
+        replaceAndAddToBackStack(new AddressSelectionListFragment() , AddressSelectionListFragment.class.getSimpleName());
+    }
+
+    @Override
+    public void displayAddress(Address address) {
+        mAddressLabel.setText(address.getAddress1() + "," + address.getCity());
+    }
 
 //    @OnClick(R.id.expirationDate_edit)
 //    void showExpirationDate(){

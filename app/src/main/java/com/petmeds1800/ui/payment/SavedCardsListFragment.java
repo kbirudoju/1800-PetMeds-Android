@@ -78,7 +78,7 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_add){
-            replaceAndAddToBackStack(new AddACardFragment());
+            replaceAndAddToBackStack(new AddACardFragment() , AddACardFragment.class.getName());
         }
         return super.onOptionsItemSelected(item);
     }

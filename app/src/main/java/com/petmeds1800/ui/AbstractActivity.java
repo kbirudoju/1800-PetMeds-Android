@@ -1,10 +1,13 @@
 package com.petmeds1800.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.petmeds1800.R;
+import com.petmeds1800.ui.payment.AddACardFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +39,12 @@ public abstract class AbstractActivity extends AppCompatActivity {
         mToolbar.setTitle(title);
     }
 
-
+    public void replaceAndAddToBackStack(Fragment fragment , String tag) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment, tag);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
 
 }

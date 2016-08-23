@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.payment;
 
+import com.petmeds1800.model.Address;
 import com.petmeds1800.model.Card;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.mvp.BasePresenter;
@@ -19,6 +20,8 @@ public interface AddACardContract{
         void paymentMethodApproved();
 
         void paymentMethodDisapproved(String errorMessage);
+
+        void displayAddress(Address address);
     }
 
     interface Presenter extends BasePresenter {
@@ -28,6 +31,15 @@ public interface AddACardContract{
         boolean isExpirationDateValid(String expirationDate);
         boolean isCvvValid(String cvv);
         boolean isBillingAddressAvailable();
+
+    }
+
+    /**
+     * This interface would help AddAddressFragment to contact with AddressSelectionFragment
+     */
+    interface AddressSelectionListener {
+
+        void setAddress(Address address);
 
     }
 }

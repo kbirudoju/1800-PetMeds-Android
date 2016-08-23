@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
+import com.petmeds1800.ui.address.AddressSelectionListFragment;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
@@ -57,19 +58,19 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.myOrder:
-              replaceAndAddToBackStack(new MyOrderFragment());
+              replaceAndAddToBackStack(new MyOrderFragment() , MyOrderFragment.class.getName());
             break;
 
             case R.id.accountSettings_label:
-                replaceAndAddToBackStack(new AccountSettingsFragment());
+                replaceAndAddToBackStack(new AccountSettingsFragment() , AccountSettingsFragment.class.getName());
                 break;
 
             case R.id.managePayment_label:
-                replaceAndAddToBackStack(new SavedCardsListFragment());
+                replaceAndAddToBackStack(new SavedCardsListFragment() , SavedCardsListFragment.class.getName());
                 break;
 
             case R.id.manageAddress_label:
-                replaceAndAddToBackStack(new SavedAddressListFragment());
+                replaceAndAddToBackStack(new AddressSelectionListFragment() , AddressSelectionListFragment.class.getName());
                 break;
 
             default:

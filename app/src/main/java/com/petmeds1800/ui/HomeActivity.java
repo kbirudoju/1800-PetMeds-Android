@@ -3,13 +3,18 @@ package com.petmeds1800.ui;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
 import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.ui.address.AddAddressFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.HomeFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
+import com.petmeds1800.ui.payment.AddACardContract;
+import com.petmeds1800.ui.payment.AddACardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
 
 import java.util.ArrayList;
@@ -18,7 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AbstractActivity {
+public class HomeActivity extends AbstractActivity implements AddACardContract.AddressSelectionListener{
 
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
@@ -72,7 +77,18 @@ public class HomeActivity extends AbstractActivity {
     }
 
 
-
-
-
+    @Override
+    public void setAddress(Address address) {
+        AddACardFragment addCardFragment = (AddACardFragment) getSupportFragmentManager().findFragmentByTag(AddACardFragment.class.getName());
+        if(addCardFragment != null){
+            addCardFragment.displayAddress(address);
+        }
+        else {
+            AddACardFragment newFragment = new AddACardFragment();
+            Bundle args = new Bundle();
+            args.putSerializable(AddACardFragment.FIRST_ARG, address);
+            newFragment.setArguments(args);
+            replaceAndAddToBackStack(newFragment , AddACardFragment.class.getName());
+        }
+    }
 }

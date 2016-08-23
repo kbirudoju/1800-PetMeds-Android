@@ -67,6 +67,21 @@
                 android:layout_height="wrap_content"
                 android:text="Default payment method"/>
 
+            <TextView
+                android:id="@+id/addressSelection_label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:text="@string/selectBillingAddress"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"/>
+
+            <TextView
+                android:id="@+id/address_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/rounded_button_text"
+                android:singleLine="true" />
 
         </LinearLayout>
     </ScrollView>

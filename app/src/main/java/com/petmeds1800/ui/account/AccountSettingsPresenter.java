@@ -106,9 +106,15 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 
                     @Override
                     public void onNext(UpdateAccountSettingsResponse s) {
-                        if (s != null) {
-                            if (mView.isActive()) {
+
+                        if (s.getStatus().equals(API_SUCCESS_CODE)) {
+                            if(mView.isActive()){
                                 mView.showSuccess();
+                            }
+                        }
+                        else{
+                            if(mView.isActive()){
+                                mView.showError(s.getStatus().getErrorMessages().get(0));
                             }
                         }
                     }

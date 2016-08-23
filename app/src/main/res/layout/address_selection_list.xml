@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_16">
+
+
+    <RelativeLayout
+        android:id="@+id/addressContainer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/addressSelection_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/addressName_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Todd Shapiro"
+        />
+
+
+    <TextView
+        android:id="@+id/addressLine1_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressName_label"
+        android:layout_centerHorizontal="true"
+        android:text="232 Marina Ave"
+        />
+
+    <TextView
+        android:id="@+id/addressLine2_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressLine1_label"
+        android:layout_centerHorizontal="true"
+        android:text="Venice Beach, CA 10290"/>
+
+    <TextView
+        android:id="@+id/country_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressLine2_label"
+        android:layout_centerHorizontal="true"
+        android:text="United States"/>
+
+    <TextView
+        android:id="@+id/phoneNumber_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/country_label"
+        android:layout_centerHorizontal="true"
+        android:text="@string/phoneNumberInAddress"/>
+
+    <TextView
+        android:id="@+id/isAddressSetDefault_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/phoneNumber_label"
+        android:layout_centerHorizontal="true"
+        android:text="@string/defaultShippingAddress"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/selectAddress_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addressContainer_layout"
+        android:layout_centerHorizontal="true"
+        android:text="@string/useThisAddress"/>
+
+
+</RelativeLayout>

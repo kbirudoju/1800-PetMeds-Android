@@ -1,6 +1,10 @@
 package com.petmeds1800.api;
 
 import com.petmeds1800.model.entities.AddACardResponse;
+import com.petmeds1800.model.entities.AddAddressResponse;
+import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.model.entities.MySavedAddress;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.LoginRequest;
@@ -67,4 +71,7 @@ public interface PetMedsApiService {
     @GET("/rest/model/1800petmeds/contact/ContactActor/list")
     Observable<MySavedAddress> getSavedAddress(@Query("_dynSessConf") String sessionConfirmation);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/contact/ContactActor/add")
+    Observable<AddAddressResponse> addAddress(@Body AddressRequest addressRequest);
 }

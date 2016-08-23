@@ -8,10 +8,10 @@ import com.petmeds1800.R;
 
 public abstract class AbstractFragment extends Fragment {
 
-    public void replaceAndAddToBackStack(Fragment fragment) {
+    public void replaceAndAddToBackStack(Fragment fragment , String tag) {
         FragmentTransaction trans = getFragmentManager()
                 .beginTransaction();
-        trans.replace(R.id.fragment_container, fragment);
+        trans.replace(R.id.fragment_container, fragment, tag);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.addToBackStack(null);
         trans.commit();
@@ -38,6 +38,10 @@ public abstract class AbstractFragment extends Fragment {
 
     public void popBackStack(){
         getFragmentManager().popBackStack();
+    }
+
+    public void popBackStackImmediate(){
+        getFragmentManager().popBackStackImmediate();
     }
 
 }

@@ -37,7 +37,9 @@
                       android:layout_height="wrap_content"
                       android:id="@+id/email_edit"
                       android:inputType="textEmailAddress"
-                      android:hint="@string/label.email"/>
+                      android:hint="@string/label.email"
+                      android:text="dmipetmeds@gmail.com"/>
+            <!--TODO - remove hardcode email during release it-->
 
         </android.support.design.widget.TextInputLayout>
 
@@ -51,7 +53,9 @@
                       android:layout_marginTop="@dimen/xxxlarge_margin"
                       android:id="@+id/password_edit"
                       android:inputType="textPassword"
-                      android:hint="@string/label.password"/>
+                      android:hint="@string/label.password"
+                android:text="1800petmeds"/>
+            <!--TODO - remove hardcode password during release it-->
 
         </android.support.design.widget.TextInputLayout>
 

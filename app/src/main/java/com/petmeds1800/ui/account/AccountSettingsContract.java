@@ -25,6 +25,8 @@ public interface AccountSettingsContract {
 
         void showSuccess();
 
+        void showError(String error);
+
         boolean isActive();
     }
 

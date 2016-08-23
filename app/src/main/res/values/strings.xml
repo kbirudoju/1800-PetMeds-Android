@@ -125,6 +125,7 @@
     <string name="addAddressButtonName">Add a Address</string>
     <string name="phoneNumberInAddress">Phone: 555-333-222</string>
     <string name="defaultShippingAddress">default shipping address</string>
+
     <!--Order Detail Screen-->
     <string name="shipping_method_txt">Shipping Method</string>
     <string name="shipping_address_txt">Shipping Address</string>
@@ -146,6 +147,20 @@
     <string name="quantity_txt">"Qty: "</string>
     <string name="pet_txt">"Pet: "</string>
     <string name="vet_txt">"Vet: "</string>
+
+    <!--Manage Address-->
+    <string name="useThisAddress">Use this address</string>
+    <string name="prompt_firstName">First Name</string>
+    <string name="prompt_lastName">Last Name</string>
+    <string name="prompt_addressLine1">Address Line 1</string>
+    <string name="prompt_aptOrSuite">Apt/Suite #</string>
+    <string name="prompt_city">City</string>
+    <string name="prompt_stateOrProvinceOrRegion">State / Province / Region</string>
+    <string name="prompt_zipcode">Zipcode</string>
+    <string name="prompt_phoneNumber">Phone Number</string>
+    <string name="prompt_countryName">Country</string>
+    <string name="defaultShippingAddress_switch">Default shipping address</string>
+    <string name="selectBillingAddress">Billing Address</string>
 
 
 </resources>

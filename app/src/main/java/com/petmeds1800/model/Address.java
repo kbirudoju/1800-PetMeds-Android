@@ -1,9 +1,14 @@
 package com.petmeds1800.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by Abhinav on 21/8/16.
  */
-public class Address {
+public class Address implements Serializable{
 
     //TODO need to change it to the boolean after backend correction
     private String isDefaultShippingAddress;
