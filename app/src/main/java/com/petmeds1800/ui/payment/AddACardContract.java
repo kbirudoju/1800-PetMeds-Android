@@ -28,7 +28,7 @@ public interface AddACardContract{
 
         void saveCard(CardRequest card);
         boolean isCreditCardNumberValid(String creditCardNumber);
-        boolean isExpirationDateValid(String expirationDate);
+        boolean isExpirationDateValid(int expirationMonth , int expirationYear);
         boolean isCvvValid(String cvv);
         boolean isBillingAddressAvailable();
 

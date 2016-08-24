@@ -8,6 +8,7 @@
         android:id="@+id/cardType_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/styledefault"
         android:text="VISA"
         />
 
@@ -16,22 +17,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/cardType_label"
-        android:layout_marginLeft="@dimen/dp_7"
+        android:textSize="@dimen/sp_16"
+        android:fontFamily="@string/font_roboto_regular"
+        android:textColor="@color/black"
+        android:background="@color/white"
         android:text="****1234"/>
 
-    <!--TODO remove this as name on card doesn't exist anymore-->
+    <!--TODO remove this after acceptance as name on card doesn't exist anymore-->
     <TextView
         android:id="@+id/nameOnCard_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/cardType_label"
-        android:text="Name on Card"/>
+        android:text="Name on Card"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/cardExpiration_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/nameOnCard_label"
+        style="@style/styledefault"
+        android:layout_marginTop="@dimen/dp_6"
         android:text="@string/cardExpirationValue"/>
 
     <TextView
@@ -39,6 +46,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/cardExpiration_label"
+        android:paddingLeft="@dimen/dp_16"
+        style="@style/formlabel"
+        android:layout_marginTop="@dimen/dp_5"
         android:text="default payment method"/>
 
     <TextView
@@ -47,13 +57,14 @@
         android:layout_height="1dp"
         android:background="@color/common_google_signin_btn_text_light_default"
         android:layout_below="@id/isCardSetDefault_label"
-        />
+        android:layout_marginTop="@dimen/dp_16"/>
     <Button
         android:id="@+id/editCard_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/dummyLine"
         android:layout_centerHorizontal="true"
+        android:background="?android:attr/selectableItemBackground"
         android:text="@string/edit"/>
 
 

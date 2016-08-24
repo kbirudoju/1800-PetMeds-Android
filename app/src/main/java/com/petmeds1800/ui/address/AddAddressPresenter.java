@@ -48,6 +48,7 @@ public class AddAddressPresenter implements AddAddressContract.Presenter {
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AddACard",e.getMessage());
+                        mView.addressAdditionFailed(e.getLocalizedMessage());
                     }
 
                     @Override

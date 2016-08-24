@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
+import com.petmeds1800.ui.address.AddAddressFragment;
 import com.petmeds1800.ui.address.AddressSelectionListFragment;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
@@ -70,7 +71,7 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
                 break;
 
             case R.id.manageAddress_label:
-                replaceAndAddToBackStack(new AddressSelectionListFragment() , AddressSelectionListFragment.class.getName());
+                replaceAndAddToBackStack(new AddAddressFragment(), AddAddressFragment.class.getName());
                 break;
 
             default:

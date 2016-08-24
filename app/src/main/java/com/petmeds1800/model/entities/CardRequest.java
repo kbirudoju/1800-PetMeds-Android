@@ -28,7 +28,7 @@ public class CardRequest {
     @SerializedName("_dynSessConf")
     private String sessionConfNumber;
 
-    public CardRequest(String cardNumber, String exprMonth, String exprYear, String cardIsDefault, String cvv, String sessionConfNumber) {
+    public CardRequest(String cardNumber, String exprMonth, String exprYear, String cardIsDefault, String cvv, String billingAddressId, String sessionConfNumber) {
         this.cardNumber = cardNumber;
         this.exprMonth = exprMonth;
         this.exprYear = exprYear;

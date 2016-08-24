@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.account;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.User;
@@ -42,8 +43,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @BindView(R.id.password_edit)
     EditText mNamePasswordText;
 
-    @Inject
-    AccountSettingsContract.Presenter mPresenter;
+    private AccountSettingsContract.Presenter mPresenter;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
@@ -59,6 +59,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mPresenter = new AccountSettingsPresenter(this);
+        PetMedsApplication.getAppComponent().inject(this);
     }
 
     @Nullable
@@ -152,10 +153,9 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
             enableEditAction();
             mPresenter.saveSettings(new UpdateAccountSettingsRequest(
                     mNameText.getText().toString()
-                    , ""   //need to confirm from the backend system
+                    , ""   //TODO need to confirm from the backend system
                     , mEmailText.getText().toString()
-                    , mUserId + "123"
-                    //TODO need to remove additional 123 as userId.Will do once error handling code is verified in the presenter class
+                    , mUserId
                     , mNamePasswordText.getText().toString()
                     , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
 

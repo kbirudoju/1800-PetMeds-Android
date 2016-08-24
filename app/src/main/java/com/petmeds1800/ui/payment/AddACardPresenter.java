@@ -11,6 +11,8 @@ import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.Status;
 import com.petmeds1800.ui.fragments.LoginFragment;
 
+import java.util.Calendar;
+
 import javax.inject.Inject;
 
 import rx.Subscriber;
@@ -82,8 +84,8 @@ public class AddACardPresenter implements AddACardContract.Presenter {
     }
 
     @Override
-    public boolean isExpirationDateValid(String expirationDate) {
-        if(expirationDate.isEmpty())
+    public boolean isExpirationDateValid(int expirationMonth , int expirationYear) {
+        if(expirationMonth <= 0 && expirationYear <= 0)
          return false;
         else
             return true;

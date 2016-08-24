@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Switch;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
@@ -93,6 +94,7 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
         super.onCreate(savedInstanceState);
         mPresenter = new AddAddressPresenter(this);
         setHasOptionsMenu(true);
+        PetMedsApplication.getAppComponent().inject(this);
     }
 
     @Nullable
@@ -117,50 +119,39 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_done) {
 
-//            String cardNumber = mCardNumberEdit.getText().toString();
-//            String expirationDate = mExpirationDateEdit.getText().toString();
-//            String cvv = mCvvEdit.getText().toString();
-//            boolean isDefaultPayment = mDefaultPaymentSwitch.isChecked();
-//
-//            boolean invalidCreditCardNumber;
-//            boolean invalidExpirationDate;
-//            boolean invalidCvv;
-//
-//            ///// Negative flow /////
-//            //card number validation
-//            if (!mPresenter.isCreditCardNumberValid(mCardNumberEdit.getText().toString())) {
-//                mCardNumberLayout.setError(getContext().getString(R.string.invalidCreditCardError));
-//                invalidCreditCardNumber = true;
-//            } else {
-//                mCardNumberLayout.setError(null);
-//                //following line would help to keep the view size intact
-//                mCardNumberLayout.setErrorEnabled(false);
-//                invalidCreditCardNumber = false;
-//            }
-//
-//            //expiration date validation
-//            if (!mPresenter.isExpirationDateValid(mExpirationDateEdit.getText().toString())) {
-//                mExpirationDateInputLayout.setError(getContext().getString(R.string.invalidExpirationDateError));
-//                invalidExpirationDate = true;
-//            } else {
-//                mExpirationDateInputLayout.setError(null);
-//                mExpirationDateInputLayout.setErrorEnabled(false);
-//                invalidExpirationDate = false;
-//            }
-//
-//            //cvv validation
-//            if (!mPresenter.isCvvValid(mCvvEdit.getText().toString())) {
-//                mCvvInputLayout.setError(getContext().getString(R.string.invalidCvvNumberError));
-//                invalidCvv = true;
-//            } else {
-//                mCvvInputLayout.setError(null);
-//                mCvvInputLayout.setErrorEnabled(false);
-//                invalidCvv = false;
-//            }
-//            //return if needed
-//            if (invalidCreditCardNumber || invalidExpirationDate || invalidCvv) {
-//                return false;
-//            }
+            boolean invalidFirstName;
+            boolean invalidLastName;
+            boolean invalidAddressLine1;
+            boolean invalidAptOrSuiteNumber;
+            boolean invalidCity;
+            boolean invalidStateOrProvinceOrRegion;
+            boolean invalidZipcode;
+            boolean invalidPhoneNumber;
+            boolean invalidCountry;
+
+            //return in-case of any error
+            invalidFirstName = checkAndShowError(mFirstNameEdit , mfirstNameLayout, R.string.errorFirstNameRequired);
+            invalidLastName = checkAndShowError(mLastNameEdit , mLastNameInputLayout , R.string.errorLastNameIsRequired);
+            invalidAddressLine1 = checkAndShowError(mAddressLine1Edit , mAddressLine1InputLayout , R.string.errorAddressLine1Required);
+            invalidAptOrSuiteNumber = checkAndShowError(mAptOrSuiteEdit , mAptOrSuiteInputLayout , R.string.errorAptOrSuiteRequired);
+            invalidCity = checkAndShowError(mCityEdit , mCityInputLayout , R.string.errorCityRequired);
+            invalidStateOrProvinceOrRegion = checkAndShowError(mStateOrProvinceOrRegionEdit , mStateOrProvinceOrRegionInputLayout , R.string.errorStateOrProvinceOrRegionRequired);
+            invalidZipcode = checkAndShowError(mZipCodeEdit , mZipCodeInputLayout , R.string.errorZipCodeRequired);
+            invalidPhoneNumber = checkAndShowError(mPhoneNumberEdit , mPhoneNumberInputLayout , R.string.errorPhoneNumberRequired);
+            invalidCountry = checkAndShowError(mCountryNameEdit , mCountryNameInputLayout , R.string.errorCountryNameRequired);
+
+            if(invalidFirstName ||
+                    invalidLastName ||
+                    invalidAddressLine1 ||
+                    invalidAptOrSuiteNumber ||
+                    invalidStateOrProvinceOrRegion ||
+                    invalidCity ||
+                    invalidAptOrSuiteNumber ||
+                    invalidZipcode ||
+                    invalidPhoneNumber ||
+                    invalidCountry)
+                return false;
+            }
 
             AddressRequest addressRequest = new AddressRequest(
                      String.valueOf(mDefaultBillingAddressSwitch.isChecked())
@@ -177,10 +168,23 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
                     ,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
 
             mPresenter.saveAddress(addressRequest);
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean checkAndShowError(EditText auditEditText , TextInputLayout auditTextInputLayout , int errorStringId) {
+        if (auditEditText.getText().toString().isEmpty()) {
+            auditTextInputLayout.setError(getContext().getString(errorStringId));
+            return true;
+        } else {
+            auditTextInputLayout.setError(null);
+            auditTextInputLayout.setErrorEnabled(false);
+            return false;
+        }
+
+
+    }
     @Override
     public boolean isActive() {
         return isAdded();
@@ -217,9 +221,5 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
         }
     });
 
-//    @OnClick(R.id.expirationDate_edit)
-//    void showExpirationDate(){
-//        ExpirationDatePickerFragment expirationDatePickerFragment = new ExpirationDatePickerFragment();
-//        expirationDatePickerFragment.show(getFragmentManager(),"expirationDatePicker");
-//    }
+
 }

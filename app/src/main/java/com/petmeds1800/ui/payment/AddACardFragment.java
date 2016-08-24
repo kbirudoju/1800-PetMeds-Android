@@ -6,8 +6,10 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.ui.address.AddressSelectionListFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.MonthYearPicker;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -73,6 +75,10 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
 
     public static final String FIRST_ARG = "firstArg";
 
+    private int mSelectedExpirationMonth;
+    private int mSelectedExpirationYear;
+    private Address mAddress;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,13 +94,15 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
         View view = inflater.inflate(R.layout.fragment_add_a_card, container, false);
         ButterKnife.bind(this, view);
 
-        //check if address is available
+        //diasble editing on the expiration date edittext. We will show up a expiration date dialog
+        mExpirationDateEdit.setFocusableInTouchMode(false);
+
+        //check if mAddress is available
         Bundle bundle = getArguments();
-        Address address;
         if(bundle != null){
-            address = (Address) bundle.getSerializable(FIRST_ARG);
-            if(address != null) {
-                displayAddress(address);
+            mAddress = (Address) bundle.getSerializable(FIRST_ARG);
+            if(mAddress != null) {
+                displayAddress(mAddress);
             }
         }
 
@@ -136,7 +144,7 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
             }
 
             //expiration date validation
-            if (!mPresenter.isExpirationDateValid(mExpirationDateEdit.getText().toString())) {
+            if (!mPresenter.isExpirationDateValid(mSelectedExpirationMonth, mSelectedExpirationYear)) {
                 mExpirationDateInputLayout.setError(getContext().getString(R.string.invalidExpirationDateError));
                 invalidExpirationDate = true;
             } else {
@@ -159,9 +167,15 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
                 return false;
             }
 
-            CardRequest card = new CardRequest(cardNumber, expirationDate, expirationDate,
-                    String.valueOf(isDefaultPayment), cvv,
-                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+            CardRequest card = new CardRequest(
+                    cardNumber
+                    , String.valueOf(mSelectedExpirationMonth)
+                    , String.valueOf(mSelectedExpirationYear)
+                    , String.valueOf(isDefaultPayment)
+                    , cvv
+                    , mAddress != null ? mAddress.getAddressId() : ""
+                    , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+
             mPresenter.saveCard(card);
         }
         return super.onOptionsItemSelected(item);
@@ -210,12 +224,25 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
 
     @Override
     public void displayAddress(Address address) {
+        mAddress = address;
         mAddressLabel.setText(address.getAddress1() + "," + address.getCity());
     }
 
-//    @OnClick(R.id.expirationDate_edit)
-//    void showExpirationDate(){
-//        ExpirationDatePickerFragment expirationDatePickerFragment = new ExpirationDatePickerFragment();
-//        expirationDatePickerFragment.show(getFragmentManager(),"expirationDatePicker");
-//    }
+
+    @OnClick(R.id.expirationDate_edit)
+    void showExpirationDate(){
+
+        final MonthYearPicker myp = new MonthYearPicker(getActivity());
+        myp.build(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mExpirationDateEdit.setText(myp.getSelectedMonthShortName() + " " + myp.getSelectedYear());
+                //putting the values in the fields so that we can use them directly avoiding the need to calculate it further
+                mSelectedExpirationMonth = myp.getSelectedMonth();
+                mSelectedExpirationYear = myp.getSelectedYear();
+            }
+        },null);
+
+        myp.show();
+    }
 }

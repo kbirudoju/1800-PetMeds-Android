@@ -8,6 +8,7 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -54,12 +55,6 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     @Override
     public void findUserData() {
 
-        //test data
-//        User user = new User();
-//        user.setFirstName("Abhinav");
-//        user.setEmail("aagarwal@dminc.com");
-//        user.setPassword("dontknow");
-
         mPetMedsApiService
                 .getAccountSettings(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber())
                 .subscribeOn(Schedulers.io())
@@ -77,7 +72,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 
                     @Override
                     public void onNext(Profile s) {
-                        if (s != null) {
+                        if (s != null) { //TODO Need to handle errors.As of now there is no status field in the API response but it should be.
                             if (mView.isActive()) {
                                 mView.setUserData(s.getProfile());
                             }
@@ -102,6 +97,10 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
+                        Log.e("AccountSettings",e.getLocalizedMessage());
+                        if(mView.isActive()){
+                            mView.showError(e.getLocalizedMessage());
+                        }
                     }
 
                     @Override

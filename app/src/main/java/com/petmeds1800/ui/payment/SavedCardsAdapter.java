@@ -27,7 +27,8 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     View.OnClickListener onClickListener;
 
     private List<Card> mCards;
-
+    private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+            "Nov", "Dec" };
 
     public SavedCardsAdapter(boolean blankView, View.OnClickListener onClickListener, Context context) {
         this.blankView = blankView;
@@ -74,12 +75,11 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             CardItemViewHolder orderViewHolder = (CardItemViewHolder) holder;
             final Card myCard = getItemAt(position);
 
-            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue),myCard.getExpirationMonth(),myCard.getExpirationYear());
+            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue) , getShortMonthName(Integer.parseInt(myCard.getExpirationMonth())) , myCard.getExpirationYear());
 
             orderViewHolder.mCardExpirationLabel.setText(expirationText);
             orderViewHolder.mCardTypelabel.setText(myCard.getCardType());
             orderViewHolder.mCardNumberLabel.setText(myCard.getCardNumber());
-            orderViewHolder.mNameOnCardlabel.setText("not available");
 
         if(myCard.isCardIsDefault()){
             orderViewHolder.mIsCardDefaultLabel.setVisibility(View.VISIBLE);
@@ -104,6 +104,13 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
+
+    private String getShortMonthName(int month){
+        if(month < 1 && month > 12)
+            return "ERR";
+
+        return PICKER_DISPLAY_MONTHS_NAMES[month - 1];
+    }
 
     public static class CardItemViewHolder extends RecyclerView.ViewHolder {
 

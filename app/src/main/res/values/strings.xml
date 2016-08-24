@@ -161,6 +161,18 @@
     <string name="prompt_countryName">Country</string>
     <string name="defaultShippingAddress_switch">Default shipping address</string>
     <string name="selectBillingAddress">Billing Address</string>
+    <string name="saveTextOnDialog">SAVE</string>
+    <string name="cancelTextOnDialog">CANCEL</string>
+    <string name="title_expirationDateDialog">Set expiration date</string>
+    <string name="errorFirstNameRequired">First Name is required</string>
+    <string name="errorLastNameIsRequired">Last Name is required</string>
+    <string name="errorAddressLine1Required">Address Line 1 is required</string>
+    <string name="errorAptOrSuiteRequired">Apt/Suite # required</string>
+    <string name="errorCityRequired">City is required</string>
+    <string name="errorStateOrProvinceOrRegionRequired">State/Province/Region is required</string>
+    <string name="errorZipCodeRequired">Zip Code is required</string>
+    <string name="errorPhoneNumberRequired">Phone Number is required</string>
+    <string name="errorCountryNameRequired">Country is required</string>
 
 
 </resources>

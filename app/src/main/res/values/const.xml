@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="loader.lorem" type="id"/>
-    <item name="loader_save_lorem" type="id"/>
+    <item name="expirationMonth" type="id"/>
+    <item name="expirationYear" type="id"/>
 
 </resources>
