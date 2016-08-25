@@ -4,7 +4,7 @@ buildscript {
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.alexrichards.gradle:ricotta-plugin:1.0.+'
         //classpath 'com.goldengekko.gradle:testfairy-plugin:1.0.0.0'
-        classpath 'com.goldengekko.gradle:android-release-plugin:1.0.0.2@jar'
+        classpath 'com.dminc.gradle:android-release-plugin:1.0.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
     repositories {
@@ -25,7 +25,7 @@ repositories {
 // Here we're applying the plugins we want to use in the build script. 'android' is the most important.
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.hugo'
-apply plugin: 'release-helper-plugin'
+apply plugin: 'android-release-plugin'
 apply plugin: 'com.neenbedankt.android-apt'
 
 apply from: '../checkstyle.gradle'
@@ -35,16 +35,11 @@ apply from: '../findbugs.gradle'
 //apply plugin: 'android-quality'
 //apply plugin: 'testfairy'
 
-// Writing a library? Delete what's above and uncomment this.
-//apply plugin: 'android-library'
-releaseHelper {
-    //This can be either Build, Patch, Minor, or Major (defaults to Build if not present)
-    releaseType 'Build'
-    //This message will be used as tag message (there is a default message if not present)
-    //tagDescription 'End of my awesome sprint'
-    //This allows you to chose the remote branch you want to point to (defaults to master if not present)
-    //remoteBranchName 'my-awesome-branch'
-}
+
+//releaseConfig {
+//    propertyFile "app/version.properties"
+//}
+
 
 // Where to find Ricotta resources.
 //ricotta {

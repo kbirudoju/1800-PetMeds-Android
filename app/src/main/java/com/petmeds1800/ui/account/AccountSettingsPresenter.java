@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
  */
 public class AccountSettingsPresenter implements AccountSettingsContract.Presenter {
 
-    private static final int PASSWORD_LENGTH = 3;
+    private static final int PASSWORD_LENGTH = 8;
 
     @NonNull
     private final AccountSettingsContract.View mView;
@@ -49,7 +49,11 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 
     @Override
     public boolean validatePassword(String password) {
-        return password.length() >= PASSWORD_LENGTH;
+
+        if(password.length() == PASSWORD_LENGTH) //TODO - Need to use a regex for validation
+            return true;
+        else
+            return false;
     }
 
     @Override
