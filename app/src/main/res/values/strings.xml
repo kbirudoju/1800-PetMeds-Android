@@ -174,5 +174,33 @@
     <string name="errorPhoneNumberRequired">Phone Number is required</string>
     <string name="errorCountryNameRequired">Country is required</string>
 
+    <!--Add pet-->
+    <string name="hint_pet_name">Pet Name</string>
+    <string name="hint_pet_picture">Pet Picture</string>
+    <string name="hint_owner_name">Owner Name</string>
+    <string name="hint_pet_type">Type of Pet</string>
+    <string name="hint_pet_breed">Type of Breed</string>
+    <string name="hint_pet_gender">Pet Gender</string>
+    <string name="hint_pet_age">Pet Age</string>
+    <string name="male_txt">Male</string>
+    <string name="female_txt">Female</string>
+    <string name="choose_gender_label">CHOOSE A GENDER</string>
+    <string name="hint_weight_lbs_txt">Weight(lbs)</string>
+    <string name="hint_pet_birthday_txt">Your Pet\'s Birthday</string>
+    <string name="hint_medication_allergy_txt">Medication Allergy</string>
+    <string name="hint_current_medication_txt">Current Medications</string>
+    <string name="hint_medical_condition_txt">Medical Condition</string>
+    <string name="add_txt">Add</string>
+    <string name="save_txt">SAVE</string>
+    <string name="choose_range_txt">CHOOSE A RANGE</string>
+    <string-array name="age_range">
+        <item>0-1 years</item>
+        <item>2-3 years</item>
+        <item>4-5 years</item>
+        <item>6-7 years</item>
+        <item>8-9 years</item>
+        <item>10+ years</item>
+    </string-array>
+    <string name="add_pet_txt">Add Pet</string>
 
 </resources>

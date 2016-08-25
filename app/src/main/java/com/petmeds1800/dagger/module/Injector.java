@@ -10,6 +10,7 @@ import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.payment.AddACardFragment;
 import com.petmeds1800.ui.payment.AddACardPresenter;
 import com.petmeds1800.ui.payment.SavedCardsListPresenter;
+import com.petmeds1800.ui.pets.presenter.PetListPresenter;
 
 /**
  * Specifies the injection places. Utility interface, to separate from the {@link AppComponent}.
@@ -37,5 +38,6 @@ public interface Injector {
     void inject(AddAddressFragment addAddressFragment);
 
     void inject(AccountSettingsFragment accountSettingsFragment);
+    void inject(PetListPresenter petsListPresenter);
 
 }

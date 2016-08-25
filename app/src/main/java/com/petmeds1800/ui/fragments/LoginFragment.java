@@ -176,6 +176,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                     .subscribe(new Subscriber<String>() {
                         @Override
                         public void onCompleted() {
+                            getActivity().startActivity(new HomeIntent(getActivity()));
 
                         }
 

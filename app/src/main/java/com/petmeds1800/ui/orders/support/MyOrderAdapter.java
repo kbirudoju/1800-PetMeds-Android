@@ -74,7 +74,7 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int resource = R.layout.view_order_list;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new MyOrderItemViewHolder(v);
-            v.setOnClickListener(onClickListener);
+           v.setOnClickListener(onClickListener);
         } else {
             int resource = R.layout.view_order_loading;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -159,10 +159,6 @@ if(myOrder.getCommerceItems().size()>0){
     }
 }
 
-
-
-
-           // ;
         }
     }
 

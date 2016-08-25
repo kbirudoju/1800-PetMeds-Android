@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    android:layout_height="wrap_content"
+   >
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/dp_181"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/ic_paw_pattern"
+        android:layout_marginLeft="@dimen/dp_4"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/dp_4"
+        >
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginRight="@dimen/dp_23"
-            android:layout_marginLeft="@dimen/dp_23"
-            android:layout_marginBottom="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_33"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_45"
-            android:layout_alignParentBottom="true"
-            style="@style/label"
-            android:background="@color/petmeds_blue"
-            android:textColor="@color/white"
-            android:gravity="center"
-            />
-    </RelativeLayout>
+            android:id="@+id/pet_image"
+            android:layout_width="@dimen/dp_126"
+            android:layout_height="@dimen/dp_126"
+            android:padding="@dimen/dp_1"
+            android:background="@drawable/circular_background"/>
 
+    </LinearLayout>
+    <TextView
+        android:id="@+id/pet_name_label"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        style="@style/label"
+        android:background="@color/petmeds_blue"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/dp_4"
+        android:layout_marginRight="@dimen/dp_4"
+        />
 </LinearLayout>

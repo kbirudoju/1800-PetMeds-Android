@@ -76,6 +76,7 @@
         <include
             layout="@layout/view_separator"></include>
         <TextView
+            android:id="@+id/my_pets_label"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"

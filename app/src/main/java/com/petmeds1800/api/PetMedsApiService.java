@@ -3,8 +3,6 @@ package com.petmeds1800.api;
 import com.petmeds1800.model.entities.AddACardResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddressRequest;
-import com.petmeds1800.model.entities.MySavedAddress;
-import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.LoginRequest;
@@ -12,6 +10,7 @@ import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
+import com.petmeds1800.model.entities.PetList;
 import com.petmeds1800.model.entities.Profile;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
@@ -74,4 +73,9 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/contact/ContactActor/add")
     Observable<AddAddressResponse> addAddress(@Body AddressRequest addressRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/pet/PetActor/list")
+    Observable<PetList> getPetList();
+
 }

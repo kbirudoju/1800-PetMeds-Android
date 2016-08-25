@@ -47,5 +47,12 @@
     <dimen name="dp_45">45dp</dimen>
     <dimen name="dp_6">6dp</dimen>
     <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_172">172dp</dimen>
+    <dimen name="dp_181">181dp</dimen>
+    <dimen name="dp_179">179dp</dimen>
+    <dimen name="dp_160">160dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_126">126dp</dimen>
+    <dimen name="dp_229">229dp</dimen>
 
 </resources>

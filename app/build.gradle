@@ -254,6 +254,9 @@ dependencies {
     compile "com.google.android.gms:play-services-analytics:${playServicesVersion}"
     compile "com.google.android.gms:play-services-location:${playServicesVersion}"
     compile "com.google.android.gms:play-services-gcm:${playServicesVersion}"
+    compile project(':slideDateTimePicker')
+
+
 }
 
 configurations {
