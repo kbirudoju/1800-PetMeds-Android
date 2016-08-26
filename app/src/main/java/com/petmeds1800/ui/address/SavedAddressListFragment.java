@@ -15,11 +15,7 @@ import android.widget.LinearLayout;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
-import com.petmeds1800.model.Card;
 import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.payment.AddACardFragment;
-import com.petmeds1800.ui.payment.SavedCardsListContract;
-import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 
 import java.util.List;
 
@@ -82,6 +78,7 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_add){
+            replaceAndAddToBackStack(AddEditAddressFragment.newInstance(null, AddEditAddressFragment.ADD_ADDRESS_REQUEST) , AddEditAddressFragment.class.getName());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -103,6 +100,11 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
         mNoSavedAddressLinearLayout.setVisibility(View.GONE);
         mSavedAddressRecyclerView.setVisibility(View.VISIBLE);
         mSavedAddressAdapter.setData(addressList);
+    }
+
+    @Override
+    public void startAddressUpdate(Address address) {
+        replaceAndAddToBackStack(AddEditAddressFragment.newInstance(address, AddEditAddressFragment.EDIT_ADDRESS_REQUEST) , AddEditAddressFragment.class.getName());
     }
 
     @Override

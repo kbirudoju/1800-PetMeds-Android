@@ -18,7 +18,6 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.payment.AddACardFragment;
 
 import java.util.List;
 
@@ -94,7 +93,7 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_add){
-            replaceAndAddToBackStack(new AddAddressFragment() , AddAddressFragment.class.getName());
+            replaceAndAddToBackStack(new AddEditAddressFragment() , AddEditAddressFragment.class.getName());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -116,6 +115,11 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
         mNoSavedAddressLinearLayout.setVisibility(View.GONE);
         mSavedAddressRecyclerView.setVisibility(View.VISIBLE);
         mSavedAddressAdapter.setData(addressList);
+    }
+
+    @Override
+    public void startAddressUpdate(Address address) {
+     // no implementation is required here. But implementation is required in SavedAddressListFragment
     }
 
     @Override

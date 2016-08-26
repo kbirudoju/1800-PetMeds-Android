@@ -21,7 +21,10 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 8/24/2016.
  */
-public class AgeRangeDialogFragment extends DialogFragment implements View.OnClickListener{
+public class CommonDialogFragment extends DialogFragment implements View.OnClickListener{
+    public static final String VALUE = "value";
+    public static final String TITLE = "title";
+    public static final String REQUEST_CODE = "requestCode";
     @BindView(R.id.ok_button)
     Button mOkButton;
     @BindView(R.id.cancel_button)
@@ -32,16 +35,19 @@ public class AgeRangeDialogFragment extends DialogFragment implements View.OnCli
     @BindView(R.id.title_label)
     TextView titleLabel;
     String mTitle;
-    private static final String TAG = AgeRangeDialogFragment.class.getSimpleName();
+    private static final String TAG = CommonDialogFragment.class.getSimpleName();
 
     private ValueSelectedListener valueSetListener;
-    public static AgeRangeDialogFragment newInstance(String[] mValue, String title) {
-        AgeRangeDialogFragment f = new AgeRangeDialogFragment();
+    private int mRequestCode;
+
+    public static CommonDialogFragment newInstance(String[] mValue, String title, int requestCode) {
+        CommonDialogFragment f = new CommonDialogFragment();
 
         // Supply value input as an argument.
         Bundle args = new Bundle();
-        args.putStringArray("value",mValue);
-        args.putString("title",title);
+        args.putStringArray(VALUE,mValue);
+        args.putString(TITLE, title);
+        args.putInt(REQUEST_CODE,requestCode);
         f.setArguments(args);
 
         return f;
@@ -50,8 +56,9 @@ public class AgeRangeDialogFragment extends DialogFragment implements View.OnCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mArrStrValue = getArguments().getStringArray("value");
-        mTitle=getArguments().getString("title");
+        mArrStrValue = getArguments().getStringArray(VALUE);
+        mTitle=getArguments().getString(TITLE);
+        mRequestCode = getArguments().getInt(REQUEST_CODE);
     }
 
     @Override
@@ -83,7 +90,7 @@ public class AgeRangeDialogFragment extends DialogFragment implements View.OnCli
                 break;
             case R.id.ok_button:
                 String selected = mArrStrValue[mAgePicker.getValue()];
-                valueSetListener.onValueSelected(selected);
+                valueSetListener.onValueSelected(selected , mRequestCode);
                 dismiss();
                 break;
         }
@@ -110,7 +117,7 @@ public class AgeRangeDialogFragment extends DialogFragment implements View.OnCli
     }
 
     public interface ValueSelectedListener {
-        void onValueSelected(String value);
+        void onValueSelected(String value , int requestCode);
 
     }
 

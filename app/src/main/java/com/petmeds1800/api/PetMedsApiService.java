@@ -1,5 +1,7 @@
 package com.petmeds1800.api;
 
+import com.petmeds1800.model.CountryListResponse;
+import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.entities.AddACardResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddPetRequest;
@@ -83,6 +85,17 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("rest/model/1800petmeds/pet/PetActor/add")
     Observable<AddPetResponse> addPet(@Body AddPetRequest petRequest);
+
+    @GET("/rest/model/atg/userprofiling/ProfileActor/stateList")
+    Observable<StatesListResponse> getUsaStatesList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/atg/userprofiling/ProfileActor/countryList")
+    Observable<CountryListResponse> getCountryList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/contact/ContactActor/update")
+    Observable<AddAddressResponse> updateAddress(@Body AddressRequest addressRequest);
 
 
 }

@@ -6,11 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
-import com.petmeds1800.model.Card;
 
 import java.util.List;
 
@@ -25,14 +25,14 @@ public class SavedAddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final Context mContext;
     boolean blankView = false;
 
-    View.OnClickListener onClickListener;
+    SavedAddressListFragment mSavedAddressListFragment;
 
     private List<Address> mAddresses;
 
 
-    public SavedAddressAdapter(boolean blankView, View.OnClickListener onClickListener, Context context) {
+    public SavedAddressAdapter(boolean blankView, SavedAddressListFragment savedAddressListFragment, Context context) {
         this.blankView = blankView;
-        this.onClickListener = onClickListener;
+        this.mSavedAddressListFragment = savedAddressListFragment;
         this.mContext = context;
 
     }
@@ -83,6 +83,14 @@ public class SavedAddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             orderViewHolder.mCountryLabel.setText(myAddress.getCountry());
             orderViewHolder.mPhoneNumberLabel.setText(myAddress.getPhoneNumber());
 
+            orderViewHolder.mEditAddressButton.setTag(position);
+            orderViewHolder.mEditAddressButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSavedAddressListFragment.startAddressUpdate(getItemAt((Integer) v.getTag()));
+                }
+            });
+
         //TODO need to change this string comparision to a boolean value once backend do the change
         if(myAddress.getIsDefaultBillingAddress().equals("true")){
             orderViewHolder.mIsdefaultShippingAddress.setVisibility(View.VISIBLE);
@@ -122,6 +130,8 @@ public class SavedAddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView mPhoneNumberLabel;
         @BindView(R.id.isAddressSetDefault_label)
         TextView mIsdefaultShippingAddress;
+        @BindView(R.id.editAddress_button)
+        Button mEditAddressButton;
 
         public AddressItemViewHolder(View itemView) {
             super(itemView);

@@ -1,12 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/dp_16"
+    android:paddingRight="@dimen/dp_16"
+    android:background="@color/white"
     tools:context="com.petmeds1800.ui.payment.AddACardFragment">
 
 
@@ -25,119 +27,153 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/firstNameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/firstName_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_firstName"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/lastNameInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/lastName_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_lastName"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/addressLine1InputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/addressLine1_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_addressLine1" />
+                    android:hint="@string/prompt_addressLine1"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/aptOrSuiteInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/aptOrSuit_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_aptOrSuite" />
+                    android:hint="@string/prompt_aptOrSuite"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/cityInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/city_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_city" />
+                    android:hint="@string/prompt_city"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/stateOrProvinceOrRegionInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/stateOrProvinceOrRegion_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_stateOrProvinceOrRegion" />
+                    android:hint="@string/prompt_stateOrProvinceOrRegion"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/zipCodeInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/zipCode_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_zipcode" />
+                    android:hint="@string/prompt_zipcode"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/phoneNumberInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
 
                 <EditText
                     android:id="@+id/phoneNumber_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
-                    android:hint="@string/prompt_phoneNumber" />
+                    android:hint="@string/prompt_phoneNumber"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/countryNameInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/countryName_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_countryName" />
+                    android:hint="@string/prompt_countryName"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <Switch
                 android:id="@+id/defaultBillingAddress_switch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/defaultShippingAddress_switch"/>
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/dp_18"
+                android:paddingLeft="@dimen/dp_4"
+                android:background="@color/white"
+                android:text="@string/defaultShippingAddress_switch"
+                android:textSize="@dimen/sp_16"
+                android:fontFamily="@string/font_roboto_regular"
+                android:textColor="@color/black"/>
 
 
         </LinearLayout>

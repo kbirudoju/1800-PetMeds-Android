@@ -191,6 +191,9 @@
     <string name="errorZipCodeRequired">Zip Code is required</string>
     <string name="errorPhoneNumberRequired">Phone Number is required</string>
     <string name="errorCountryNameRequired">Country is required</string>
+    <string name="choose_city_txt">Choose city</string>
+    <string name="choose_country_txt">Choose country</string>
+
 
     <!--Add pet-->
     <string name="hint_pet_name">Pet Name</string>
@@ -228,7 +231,8 @@
     <string name="error_petage">Pet Age or Birthday is required</string>
     <string name="error_petgender">Pet Gender is required</string>
     <string name="error_petowner">Owner is required</string>
+    <string name="addressSavedInAccount">Address added</string>
+    <string name="addressUpdatedInAccount">Address Updated</string>
     <!--Webview Urls-->
-
 
 </resources>

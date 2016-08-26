@@ -18,6 +18,7 @@ public interface SavedAddressListContract {
         boolean isActive();
         void showNoAddressView();
         void showAddressListView(List<Address> addressList);
+        void startAddressUpdate(Address address);
     }
 
     interface Presenter extends BasePresenter {

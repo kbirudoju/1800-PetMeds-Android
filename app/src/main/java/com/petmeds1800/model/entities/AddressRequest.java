@@ -20,11 +20,11 @@ public class AddressRequest {
     private String phoneNumber;
     //TODO need to change it to the boolean after backend correction
     private String useBillingAddressAsDefault;
-    //TODO need to check if backend has merged it with lastname field
     private String firstName;
-
+    private String addressId;
     @SerializedName("_dynSessConf")
     private String sessionConfNumber;
+
 
     public AddressRequest(String useShippingAddressAsDefault, String lastName, String state, String address1, String address2, String country, String city, String postalCode, String phoneNumber, String useBillingAddressAsDefault, String firstName, String sessionConfNumber) {
         this.useShippingAddressAsDefault = useShippingAddressAsDefault;
@@ -39,5 +39,13 @@ public class AddressRequest {
         this.useBillingAddressAsDefault = useBillingAddressAsDefault;
         this.firstName = firstName;
         this.sessionConfNumber = sessionConfNumber;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 }

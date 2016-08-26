@@ -2,13 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dp_16">
+    android:paddingTop="@dimen/dp_16"
+    android:background="@drawable/rectangular_round_corner_background"
+    android:layout_marginBottom="@dimen/dp_16"
+    android:layout_margin="@dimen/dp_16">
 
     <TextView
         android:id="@+id/cardType_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/styledefault"
+        android:paddingLeft="@dimen/dp_16"
         android:text="VISA"
         />
 
@@ -20,7 +24,6 @@
         android:textSize="@dimen/sp_16"
         android:fontFamily="@string/font_roboto_regular"
         android:textColor="@color/black"
-        android:background="@color/white"
         android:text="****1234"/>
 
     <!--TODO remove this after acceptance as name on card doesn't exist anymore-->
@@ -55,16 +58,17 @@
         android:id="@+id/dummyLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/common_google_signin_btn_text_light_default"
+        android:background="@color/pattern_blue"
         android:layout_below="@id/isCardSetDefault_label"
         android:layout_marginTop="@dimen/dp_16"/>
     <Button
         android:id="@+id/editCard_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_33"
         android:layout_below="@id/dummyLine"
         android:layout_centerHorizontal="true"
         android:background="?android:attr/selectableItemBackground"
+        android:textColor="@color/petmeds_blue"
         android:text="@string/edit"/>
 
 

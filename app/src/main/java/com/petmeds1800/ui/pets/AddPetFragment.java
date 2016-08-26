@@ -31,7 +31,7 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.AgeRangeDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.support.AddPetContract;
@@ -51,7 +51,8 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 8/23/2016.
  */
-public class AddPetFragment extends AbstractFragment implements View.OnClickListener, GenderDialogFragment.GenderSetListener,AgeRangeDialogFragment.ValueSelectedListener,AddPetContract.View {
+public class AddPetFragment extends AbstractFragment implements View.OnClickListener, GenderDialogFragment.GenderSetListener,CommonDialogFragment.ValueSelectedListener,AddPetContract.View {
+    private static final int AGE_REQUEST = 1;
     @BindView(R.id.pet_gender_edit)
     EditText mPetGenderText;
     @BindView(R.id.pet_birthday_edit)
@@ -142,9 +143,9 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
                 break;
             case R.id.pet_age_edit:
                 FragmentManager fragManager = getFragmentManager();
-                AgeRangeDialogFragment ageRangeDialogFragment = AgeRangeDialogFragment.newInstance(getActivity().getResources().getStringArray(R.array.age_range),getActivity().getString(R.string.choose_range_txt));
-                ageRangeDialogFragment.setValueSetListener(this);
-                ageRangeDialogFragment.show(fragManager);
+                CommonDialogFragment commonDialogFragment = CommonDialogFragment.newInstance(getActivity().getResources().getStringArray(R.array.age_range), getActivity().getString(R.string.choose_range_txt), AGE_REQUEST);
+                commonDialogFragment.setValueSetListener(this);
+                commonDialogFragment.show(fragManager);
                 break;
             case R.id.pet_picture_edit:
                 showImageOptions();
@@ -174,8 +175,14 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     };
 
     @Override
-    public void onValueSelected(String value) {
-        mPetAgeText.setText(value);
+    public void onValueSelected(String value , int requestCode) {
+
+        switch (requestCode){
+            case AGE_REQUEST:
+                mPetAgeText.setText(value);
+                break;
+        }
+
     }
 
     private void showImageOptions() {

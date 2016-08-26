@@ -57,7 +57,7 @@
                       android:id="@+id/password_edit"
                       android:inputType="textPassword"
                       android:hint="@string/label.password"
-                      android:text="1800petmeds"/>
+                      android:text="Pn2qN8qA"/>
             <!--TODO - remove hardcode password during release it-->
 
         </android.support.design.widget.TextInputLayout>

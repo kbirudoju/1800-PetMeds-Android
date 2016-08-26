@@ -2,7 +2,7 @@ package com.petmeds1800.ui.fragments;
 
 import com.petmeds1800.R;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
-import com.petmeds1800.ui.address.AddAddressFragment;
+import com.petmeds1800.ui.address.SavedAddressListFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
@@ -72,7 +72,7 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
                 break;
 
             case R.id.manageAddress_label:
-                replaceAndAddToBackStack(new AddAddressFragment(), AddAddressFragment.class.getName());
+                replaceAndAddToBackStack(new SavedAddressListFragment(), SavedAddressListFragment.class.getName());
                 break;
             case R.id.my_pets_label:
                 replaceAndAddToBackStack(new PetListFragment(), PetListFragment.class.getName());

@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,8 +19,10 @@ import android.widget.Switch;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
@@ -30,8 +33,16 @@ import butterknife.ButterKnife;
 /**
  * Created by Abhinav on 13/8/16.
  */
-public class AddAddressFragment extends AbstractFragment implements AddAddressContract.View {
+public class AddEditAddressFragment extends AbstractFragment implements AddEditAddressContract.View , View.OnClickListener, CommonDialogFragment.ValueSelectedListener {
 
+    private static final int USA_STATE_LIST_REQUEST = 1;
+    private static final int COUNTRY_LIST_REQUEST = 2;
+
+    public static final int ADD_ADDRESS_REQUEST = 3;
+    public static final int EDIT_ADDRESS_REQUEST = 4;
+
+    private static final String ADDRESS = "address";
+    private static final String REQUEST_CODE = "requestCode";
 
     @BindView(R.id.firstNameLayout)
     TextInputLayout mfirstNameLayout;
@@ -78,12 +89,30 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    private AddAddressContract.Presenter mPresenter;
+    private AddEditAddressContract.Presenter mPresenter;
     private AlertDialog mAlertDialog;
 
     private static final int DISMISS_APPROVAL_DIALOG = 1;
     private static final long APPROVAL_DIALOG_DURATION = 1000;
+    private String mUsaStateCode;
+    private String mCountryCode;
+    private Address mAddress;
+    private int mRequestCode;
 
+    public static AddEditAddressFragment newInstance(Address updateAddress , int requestCode){
+        if(requestCode == EDIT_ADDRESS_REQUEST){
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ADDRESS, updateAddress);
+            bundle.putInt(REQUEST_CODE, requestCode);
+
+            AddEditAddressFragment addEditAddressFragment = new AddEditAddressFragment();
+            addEditAddressFragment.setArguments(bundle);
+
+            return addEditAddressFragment;
+        }
+
+        return new AddEditAddressFragment();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,7 +127,44 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_address, container, false);
         ButterKnife.bind(this, view);
+        //diasble editing on the state & country edittext. We will show up pickers
+        mStateOrProvinceOrRegionEdit.setFocusableInTouchMode(false);
+        mCountryNameEdit.setFocusableInTouchMode(false);
+
+        //get the arguments and set views for address updation/edit request
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            mRequestCode = bundle.getInt(REQUEST_CODE);
+            if(mRequestCode == EDIT_ADDRESS_REQUEST) {
+                mAddress = (Address) bundle.getSerializable(ADDRESS);
+                populateData(mAddress);
+            }
+        }
+
+
+
         return view;
+    }
+
+    private void populateData(Address address) {
+
+            mFirstNameEdit.setText(address.getFirstName());
+            mLastNameEdit.setText(address.getLastName());
+            mAddressLine1Edit.setText(address.getAddress1());
+            mAptOrSuiteEdit.setText(address.getAddress2());
+            mCityEdit.setText(address.getCity());
+            mStateOrProvinceOrRegionEdit.setText(address.getState());
+            mZipCodeEdit.setText(address.getPostalCode());
+            mPhoneNumberEdit.setText(address.getPhoneNumber());
+            mCountryNameEdit.setText(address.getCountry());
+            mDefaultBillingAddressSwitch.setChecked(Boolean.valueOf(address.getIsDefaultBillingAddress()));
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mStateOrProvinceOrRegionEdit.setOnClickListener(this);
+        mCountryNameEdit.setOnClickListener(this);
     }
 
     @Override
@@ -146,15 +212,36 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
                     invalidPhoneNumber ||
                     invalidCountry)
                 return false;
-            }
+        }
 
+        if(mRequestCode == EDIT_ADDRESS_REQUEST) {
             AddressRequest addressRequest = new AddressRequest(
-                     String.valueOf(mDefaultBillingAddressSwitch.isChecked())
+                    String.valueOf(mDefaultBillingAddressSwitch.isChecked())
                     ,mLastNameEdit.getText().toString()
-                    ,mStateOrProvinceOrRegionEdit.getText().toString()
+                    ,mUsaStateCode == null ? mAddress.getState() : mUsaStateCode //TODO the way usastatecode can be retrived depend upon api.Api should return the state name as well along with state code
                     ,mAddressLine1Edit.getText().toString()
                     ,mAddressLine1Edit.getText().toString()  //TODO we need to check if AddressLine2 should be included in the designs as its available in the API response
-                    ,mCountryNameEdit.getText().toString()
+                    ,mCountryCode == null ? mAddress.getCountry() : mCountryCode
+                    ,mCityEdit.getText().toString()
+                    ,mZipCodeEdit.getText().toString()
+                    ,mPhoneNumberEdit.getText().toString()
+                    ,String.valueOf(mDefaultBillingAddressSwitch.isChecked())
+                    ,mFirstNameEdit.getText().toString()
+                    ,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+
+            //setting addressId is must for the editAddress API call
+            addressRequest.setAddressId(mAddress.getAddressId());
+
+            mPresenter.updateAddress(addressRequest);
+        }
+        else {
+            AddressRequest addressRequest = new AddressRequest(
+                    String.valueOf(mDefaultBillingAddressSwitch.isChecked())
+                    ,mLastNameEdit.getText().toString()
+                    ,mUsaStateCode
+                    ,mAddressLine1Edit.getText().toString()
+                    ,mAddressLine1Edit.getText().toString()  //TODO we need to check if AddressLine2 should be included in the designs as its available in the API response
+                    ,mCountryCode
                     ,mCityEdit.getText().toString()
                     ,mZipCodeEdit.getText().toString()
                     ,mPhoneNumberEdit.getText().toString()
@@ -163,6 +250,8 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
                     ,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
 
             mPresenter.saveAddress(addressRequest);
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -180,6 +269,7 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
 
 
     }
+
     @Override
     public boolean isActive() {
         return isAdded();
@@ -189,7 +279,17 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
     public void addressAdded() {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setMessage(R.string.cardSavedInAccount).setCancelable(false);
+        alertDialogBuilder.setMessage(R.string.addressSavedInAccount).setCancelable(false);
+        mAlertDialog = alertDialogBuilder.create();
+        mAlertDialog.show();
+        mHandler.sendEmptyMessageDelayed(DISMISS_APPROVAL_DIALOG,APPROVAL_DIALOG_DURATION);
+    }
+
+    @Override
+    public void addressUpdated() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setMessage(R.string.addressUpdatedInAccount).setCancelable(false);
         mAlertDialog = alertDialogBuilder.create();
         mAlertDialog.show();
         mHandler.sendEmptyMessageDelayed(DISMISS_APPROVAL_DIALOG,APPROVAL_DIALOG_DURATION);
@@ -201,7 +301,7 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
     }
 
     @Override
-    public void setPresenter(AddAddressContract.Presenter presenter) {
+    public void setPresenter(AddEditAddressContract.Presenter presenter) {
         mPresenter = presenter;
     }
 
@@ -217,4 +317,72 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
     });
 
 
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+
+            case R.id.stateOrProvinceOrRegion_edit:
+                mPresenter.getUsaStatesList();
+                break;
+
+            case R.id.countryName_edit:
+                mPresenter.getCountryList();
+                break;
+
+        }
+    }
+
+
+    @Override
+    public void usaStatesListReceived(String[] usaStateArray) {
+        FragmentManager fragManager = getFragmentManager();
+        //TODO we should rename AgeRangeDialogFragment to a generic name
+        CommonDialogFragment statesDialogFragment = CommonDialogFragment.newInstance(usaStateArray, getActivity().getString(R.string.choose_city_txt), USA_STATE_LIST_REQUEST);
+        statesDialogFragment.setValueSetListener(this);
+        statesDialogFragment.show(fragManager);
+
+    }
+
+    @Override
+    public void countryListReceived(String[] countryArray) {
+        FragmentManager fragManager = getFragmentManager();
+        //TODO we should rename AgeRangeDialogFragment to a generic name
+        CommonDialogFragment statesDialogFragment = CommonDialogFragment.newInstance(countryArray, getActivity().getString(R.string.choose_country_txt), COUNTRY_LIST_REQUEST);
+        statesDialogFragment.setValueSetListener(this);
+        statesDialogFragment.show(fragManager);
+    }
+
+    @Override
+    public void onValueSelected(String value , int requestCode) {
+
+        switch (requestCode) {
+
+            case USA_STATE_LIST_REQUEST:
+                //initialize the usaStateCode so that it can be passed onto the API
+                mUsaStateCode = mPresenter.getUsaStateCode(value);
+                if(mUsaStateCode != null) {
+                    mStateOrProvinceOrRegionEdit.setText(value);
+                }
+                else{
+                    addressAdditionFailed("Cant load States List.Bad Data");
+                }
+                break;
+
+            case COUNTRY_LIST_REQUEST:
+                //initialize the coutryCode so that it can be passed onto the API
+                mCountryCode = mPresenter.getCountryCode(value);
+                if(mCountryCode != null) {
+                    mCountryNameEdit.setText(value);
+                }
+                else{
+                    addressAdditionFailed("Cant get country code.Bad Data");
+                }
+                break;
+
+
+
+        }
+
+    }
 }
