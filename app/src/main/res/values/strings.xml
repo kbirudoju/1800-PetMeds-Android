@@ -220,5 +220,15 @@
         <item>10+ years</item>
     </string-array>
     <string name="add_pet_txt">Add Pet</string>
+    <string name="error_petname">Name is required</string>
+    <string name="error_petweight">Weight is required</string>
+    <string name="error_validweight">Weight must be a valid value</string>
+    <string name="error_petbreed">Breed is required</string>
+    <string name="error_pettype">Type of Pet is required</string>
+    <string name="error_petage">Pet Age or Birthday is required</string>
+    <string name="error_petgender">Pet Gender is required</string>
+    <string name="error_petowner">Owner is required</string>
+    <!--Webview Urls-->
+
 
 </resources>

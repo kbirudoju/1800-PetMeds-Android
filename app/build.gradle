@@ -252,6 +252,7 @@ dependencies {
     compile "com.google.android.gms:play-services-location:${playServicesVersion}"
     compile "com.google.android.gms:play-services-gcm:${playServicesVersion}"
     compile project(':slideDateTimePicker')
+    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
 
 
 }

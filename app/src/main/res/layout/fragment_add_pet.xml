@@ -27,6 +27,9 @@
                     android:singleLine="true"
                     style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/petPictureInputLayout"
                 android:layout_width="match_parent"
@@ -40,8 +43,15 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_pet_picture"
                     android:singleLine="true"
+                    android:focusableInTouchMode="false"
                     style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
+                <ImageView
+                    android:id="@+id/pet_picture_image"
+                    android:layout_width="27dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/ownerNameInputLayout"
                 android:layout_width="match_parent"

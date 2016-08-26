@@ -42,7 +42,6 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
     private Context context;
     private View.OnClickListener listener;
 
-    private boolean isDefaultLayout = false;
 
     public OrderDetailAdapter(Context context, OrderList orderList) {
         super(context);
@@ -50,17 +49,17 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         this.context = context;
     }
 
-    public OrderDetailAdapter(Context context, boolean isDefaultLayout, View.OnClickListener listener) {
+    public OrderDetailAdapter(Context context, OrderList orderList, View.OnClickListener listener) {
         super(context);
-        this.isDefaultLayout = isDefaultLayout;
+        this.orderList = orderList;
         this.context = context;
         this.listener = listener;
     }
 
 
-    public void setIsDefaultLayout(boolean isDefaultLayout) {
+   /* public void setIsDefaultLayout(boolean isDefaultLayout) {
         this.isDefaultLayout = isDefaultLayout;
-    }
+    }*/
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -97,11 +96,12 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                         .inflate(resourceInfoSection, parent, false);
                 viewHolder = new OrderInfoViewHolder(v);
                 break;
-           case VIEW_TYPE_FIXED:
+            case VIEW_TYPE_FIXED:
                 int resourceTopView = R.layout.view_order_detail_webview_row;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resourceTopView, parent, false);
                 viewHolder = new WebViewHolder(v);
+                v.setOnClickListener(listener);
 
                 break;
 
@@ -115,7 +115,7 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         Log.d("position", position + ">>" + viewType);
         switch (viewType) {
             case VIEW_TYPE_HEADER:
-               HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
+                HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
                 OrderDetailHeader header = (OrderDetailHeader) getItemAt(position);
                 headerHolder.headerLabel.setText(header.getHeader());
                 break;
@@ -134,9 +134,20 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                         productHolder.productImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
+                if(commerceItem.getPetName()!=null && !commerceItem.getPetName().isEmpty()){
+                    productHolder.petNameLabel.setText(context.getString(R.string.pet_txt) + commerceItem.getPetName());
 
-                productHolder.petNameLabel.setText(context.getString(R.string.pet_txt) + commerceItem.getPetName());
-                productHolder.vetNameLabel.setText(context.getString(R.string.vet_txt)+commerceItem.getVetName());
+                }else{
+                    productHolder.petNameLabel.setVisibility(View.GONE);
+                }
+
+                if(commerceItem.getVetName()!=null && !commerceItem.getVetName().isEmpty()){
+                    productHolder.vetNameLabel.setText(context.getString(R.string.vet_txt)+commerceItem.getVetName());
+
+                }else{
+                    productHolder.vetNameLabel.setVisibility(View.GONE);
+                }
+
 
                 break;
             case VIEW_TYPE_SHIIPING:
@@ -203,8 +214,8 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
     }
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-      @BindView(R.id.header_label)
-      TextView headerLabel;
+        @BindView(R.id.header_label)
+        TextView headerLabel;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -224,8 +235,8 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-       @BindView(R.id.product_image)
-       ImageView productImage;
+        @BindView(R.id.product_image)
+        ImageView productImage;
         @BindView(R.id.product_price_label)
         TextView priceLabel;
         @BindView(R.id.product_name_label)
@@ -304,11 +315,11 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
 
     @Override
     public int getItemCount() {
-        if (isDefaultLayout) {
+       /* if (isDefaultLayout) {
             return 1;
-        } else {
-            return super.getItemCount();
-        }
+        } else {*/
+        return super.getItemCount();
+        //  }
     }
 }
 

@@ -19,11 +19,7 @@ import android.widget.Switch;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.AddressRequest;
-import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.LoginFragment;
-import com.petmeds1800.ui.payment.AddACardContract;
-import com.petmeds1800.ui.payment.AddACardPresenter;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
@@ -101,7 +97,6 @@ public class AddAddressFragment extends AbstractFragment implements AddAddressCo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_address, container, false);
-
         ButterKnife.bind(this, view);
         return view;
     }

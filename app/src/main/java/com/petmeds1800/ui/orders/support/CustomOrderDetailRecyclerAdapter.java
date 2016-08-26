@@ -22,6 +22,13 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
     private List<Object> mData;
     private boolean mNotifyOnChange;
     private Context context;
+    public static final int CANCEL_ORDER_ROW_ID=0;
+    public static final int REORDER_ENTIRE_ORDER_ROW_ID=1;
+    public static final int REORDER_ITEM_ROW_ID=2;
+    public static final int REVIEW_ROW_ID=3;
+    public static final int TRACK_ROW_ID=4;
+
+
 
     public CustomOrderDetailRecyclerAdapter(Context context) {
         mData = new ArrayList<Object>();
@@ -37,8 +44,8 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
         int commerceItemSize= orderList.getCommerceItems().size();
         mData.add(orderList);
         //Add webview Items
-        mData.add(new WebViewHeader(context.getString(R.string.cancel_order_header)));
-        mData.add(new WebViewHeader(context.getString(R.string.reorder_entire)));
+        mData.add(new WebViewHeader(context.getString(R.string.cancel_order_header),CANCEL_ORDER_ROW_ID));
+        mData.add(new WebViewHeader(context.getString(R.string.reorder_entire),REORDER_ENTIRE_ORDER_ROW_ID));
 
 
         //Add item header
@@ -48,8 +55,8 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
             CommerceItems commerceItem=orderList.getCommerceItems().get(commerceItemCount);
             mData.add(commerceItem);
         }
-        mData.add(new WebViewHeader(context.getString(R.string.reorder_item)));
-        mData.add(new WebViewHeader(context.getString(R.string.write_review_header)));
+        mData.add(new WebViewHeader(context.getString(R.string.reorder_item),REORDER_ITEM_ROW_ID));
+        mData.add(new WebViewHeader(context.getString(R.string.write_review_header),REVIEW_ROW_ID));
 
 
         //Add shipment header
@@ -61,7 +68,7 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
             ShippingGroup shippingGroup=orderList.getShippingGroups().get(shippingItemCount);
             mData.add(shippingGroup);
         }
-        mData.add(new WebViewHeader(context.getString(R.string.track_shipment)));
+        mData.add(new WebViewHeader(context.getString(R.string.track_shipment),TRACK_ROW_ID));
 
         //Add payment header
         mData.add(new OrderDetailHeader(context.getString(R.string.payment_header)));

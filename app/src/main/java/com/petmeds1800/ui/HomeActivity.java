@@ -1,5 +1,10 @@
 package com.petmeds1800.ui;
 
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
@@ -10,11 +15,6 @@ import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddACardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
-
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 
 import java.util.ArrayList;
 import java.util.List;

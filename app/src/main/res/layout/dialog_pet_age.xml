@@ -19,11 +19,12 @@
 
     <com.petmeds1800.ui.pets.support.CustomValuePicker
         android:id="@+id/valuePicker"
-        android:layout_below="@+id/choose_range_label"
-        android:layout_width="@dimen/dp_179"
+        android:layout_below="@+id/title_label"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_160"
         android:layout_centerHorizontal="true"
         android:theme="@style/AppTheme.Picker"
+
         />
 
 

@@ -2,6 +2,8 @@ package com.petmeds1800.api;
 
 import com.petmeds1800.model.entities.AddACardResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
+import com.petmeds1800.model.entities.AddPetRequest;
+import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
@@ -64,7 +66,7 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/update")
     Observable<UpdateAccountSettingsResponse> updateAccountSettings(
-            @Body UpdateAccountSettingsRequest updateAccountSettingsRequest);
+     @Body UpdateAccountSettingsRequest updateAccountSettingsRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/contact/ContactActor/list")
@@ -77,5 +79,10 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/pet/PetActor/list")
     Observable<PetList> getPetList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("rest/model/1800petmeds/pet/PetActor/add")
+    Observable<AddPetResponse> addPet(@Body AddPetRequest petRequest);
+
 
 }
