@@ -8,11 +8,13 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:icon="@mipmap/ic_launcher"
         android:name=".PetMedsApplication"
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/application.name"
         android:theme="@style/application.theme" >
         <activity
@@ -24,14 +26,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.HomeActivity"
-            android:configChanges="orientation"/>
+        <activity
+            android:name=".ui.HomeActivity"
+            android:configChanges="orientation" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:configChanges="orientation" />
+        <activity
+            android:name=".ui.ForgotPasswordActivity"
+            android:configChanges="orientation" />
 
-        <activity android:name=".ui.LoginActivity"
-                  android:configChanges="orientation"/>
-
-        <activity android:name=".ui.ForgotPasswordActivity"
-                  android:configChanges="orientation"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

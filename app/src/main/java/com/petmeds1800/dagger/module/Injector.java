@@ -7,6 +7,7 @@ import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.payment.AddACardFragment;
 import com.petmeds1800.ui.payment.AddACardPresenter;
 import com.petmeds1800.ui.payment.SavedCardsListPresenter;
@@ -23,6 +24,8 @@ public interface Injector {
 
     void inject(ForgotPasswordFragment forgotPasswordFragment);
 
+    void inject(FingerprintAuthenticationDialog fingerprintAuthenticationDialog);
+
     void inject(AddACardPresenter addACardPresenter);
 
     void inject(SavedCardsListPresenter savedCardsListPresenter);
@@ -38,6 +41,7 @@ public interface Injector {
     void inject(AddAddressFragment addAddressFragment);
 
     void inject(AccountSettingsFragment accountSettingsFragment);
+
     void inject(PetListPresenter petsListPresenter);
 
 }

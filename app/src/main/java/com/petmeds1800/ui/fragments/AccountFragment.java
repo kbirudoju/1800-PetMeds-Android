@@ -1,18 +1,18 @@
 package com.petmeds1800.ui.fragments;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.petmeds1800.R;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.address.AddAddressFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +39,7 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-       super.onViewCreated(view, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
         mManagePaymentLabel.setOnClickListener(this);
@@ -50,34 +50,32 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_account,container,false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.bind(this, view);
         return view;
 
     }
 
-
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.myOrder:
-              replaceAndAddToBackStack(new MyOrderFragment() , MyOrderFragment.class.getName());
-            break;
+                replaceAndAddToBackStack(new MyOrderFragment(), MyOrderFragment.class.getName());
+                break;
 
             case R.id.accountSettings_label:
-                replaceAndAddToBackStack(new AccountSettingsFragment() , AccountSettingsFragment.class.getName());
+                replaceAndAddToBackStack(new AccountSettingsFragment(), AccountSettingsFragment.class.getName());
                 break;
 
             case R.id.managePayment_label:
-                replaceAndAddToBackStack(new SavedCardsListFragment() , SavedCardsListFragment.class.getName());
+                replaceAndAddToBackStack(new SavedCardsListFragment(), SavedCardsListFragment.class.getName());
                 break;
 
             case R.id.manageAddress_label:
                 replaceAndAddToBackStack(new AddAddressFragment(), AddAddressFragment.class.getName());
                 break;
-            case R.id. my_pets_label:
-                replaceAndAddToBackStack(new PetListFragment(),PetListFragment.class.getName());
+            case R.id.my_pets_label:
+                replaceAndAddToBackStack(new PetListFragment(), PetListFragment.class.getName());
 
                 break;
             default:
@@ -85,4 +83,5 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
 
         }
     }
+
 }

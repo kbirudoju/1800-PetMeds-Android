@@ -16,6 +16,10 @@ public class GeneralPreferencesHelper {
 
     public static final String SESSION_CONF_RESPONSE = "session_conf_response";
 
+    public static final String LOGIN_EMAIL = "login_email";
+
+    public static final String LOGIN_PASSWORD = "login_password";
+
     private SharedPreferences mPreferences;
 
     public GeneralPreferencesHelper(Context context) {
@@ -32,5 +36,13 @@ public class GeneralPreferencesHelper {
             return new Gson().fromJson(json, SessionConfNumberResponse.class);
         }
         return null;
+    }
+
+    public void setLoginEmail(String email){
+        mPreferences.edit().putString(LOGIN_EMAIL, email).apply();
+    }
+
+    public String getLoginEmail(){
+        return mPreferences.getString(LOGIN_EMAIL, null);
     }
 }

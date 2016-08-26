@@ -22,4 +22,9 @@
     <color name="grey">#de000000</color>
     <color name="light_grey">#595959</color>
 
+    <color name="fingerprint_hint_color">#4e514e</color>
+    <color name="fingerprint_warning_color">#f4511e</color>
+    <color name="fingerprint_success_color">#009688</color>
+    <color name="fingerprint_alert_title_background">#f8fafc</color>
+
 </resources>

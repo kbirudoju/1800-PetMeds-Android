@@ -49,21 +49,21 @@
         <item name="android:padding">@dimen/text_padding</item>
     </style>
 
-<style name="header">
-    <item name="android:textSize">@dimen/sp_20</item>
-    <item name="android:fontFamily">@string/font_roboto_regular</item>
-    <item name="android:textColor">@color/black</item>
-</style>
+    <style name="header">
+        <item name="android:textSize">@dimen/sp_20</item>
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 
     <style name="styledefault">
-    <item name="android:textSize">@dimen/sp_16</item>
-    <item name="android:fontFamily">@string/font_roboto_regular</item>
-    <item name="android:textColor">@color/black</item>
-    <item name="android:paddingLeft">@dimen/dp_16</item>
-    <item name="android:paddingRight">@dimen/dp_16</item>
-    <item name="android:background">@color/white</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:paddingLeft">@dimen/dp_16</item>
+        <item name="android:paddingRight">@dimen/dp_16</item>
+        <item name="android:background">@color/white</item>
 
-</style>
+    </style>
     <style name="list_row">
         <item name="android:textSize">@dimen/sp_16</item>
         <item name="android:fontFamily">@string/font_roboto_regular</item>
@@ -79,14 +79,14 @@
         <item name="android:paddingRight">@dimen/dp_16</item>
     </style>
     <style name="label">
-    <item name="android:textSize">@dimen/sp_14</item>
-    <item name="android:fontFamily">@string/font_roboto_medium</item>
-    <item name="android:textColor">@color/battleship_grey</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:background">@color/pattern_light_blue</item>
-    <item name="android:paddingLeft">@dimen/dp_16</item>
-    <item name="android:paddingRight">@dimen/dp_13</item>
-</style>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:fontFamily">@string/font_roboto_medium</item>
+        <item name="android:textColor">@color/battleship_grey</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@color/pattern_light_blue</item>
+        <item name="android:paddingLeft">@dimen/dp_16</item>
+        <item name="android:paddingRight">@dimen/dp_13</item>
+    </style>
 
     <style name="formlabel">
         <item name="android:textSize">@dimen/sp_12</item>
@@ -97,6 +97,19 @@
         <item name="android:textSize">@dimen/sp_14</item>
         <item name="android:fontFamily">@string/font_roboto_regular</item>
         <item name="android:textColor">@color/battleship_grey</item>
+    </style>
+    
+    <style name="DialogStyleFingerprint" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowTitleStyle">@style/DialogTitleStyleFingerprint</item>
+        <item name="background">@color/white</item>
+        <item name="colorAccent">@color/petmeds_blue</item>
+    </style>
+
+    <style name="DialogTitleStyleFingerprint">
+        <item name="android:background">@color/fingerprint_alert_title_background</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/fingerprint_hint_color</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="product_label">

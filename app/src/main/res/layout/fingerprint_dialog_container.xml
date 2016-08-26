@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/txv_title_dialog_fingerprint"
+              android:padding="17dp"
+              android:background="@color/fingerprint_alert_title_background"
+              android:textSize="@dimen/sp_14"
+              android:textColor="@color/fingerprint_hint_color"
+              android:text="@string/title.fingerprint_login"/>
+
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <include layout="@layout/fingerprint_dialog_content"/>
+
+        <include layout="@layout/fingerprint_dialog_login"
+                 android:visibility="gone"/>
+
+        <include layout="@layout/fingerprint_dialog_forgot_password"
+                 android:visibility="gone"/>
+
+        <ProgressBar android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center"
+                     android:visibility="invisible"
+                     android:id="@+id/progress_bar"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+            android:id="@+id/buttonPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="17dp"
+            android:gravity="bottom"
+            style="?android:attr/buttonBarStyle">
+
+        <Space
+                android:id="@+id/spacer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="invisible"/>
+
+        <TextView
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/petmeds_blue"
+                android:layout_marginRight="18dp"
+                android:text="@string/label.fingerprint_cancel"/>
+
+        <TextView
+                android:id="@+id/second_dialog_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/petmeds_blue"
+                android:textAllCaps="true"
+                android:text="@string/label.use_password"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -77,7 +77,7 @@
     <string name="label.password">Password</string>
     <string name="label.skip">"SKIP"</string>
     <string name="label.login">Log In</string>
-    <string name="label.forgot_password">FORGOT PASSWORD?</string>
+    <string name="label.login_forgot_password">FORGOT PASSWORD?</string>
     <string name="label.no_account_sign_up">Don\'t have an account? Sign up</string>
 
     <!--Forgot Password-->
@@ -86,6 +86,23 @@
     </string>
     <string name="label.email_me_my_password">Email me my password</string>
     <string name="label.email_sent">Email Sent</string>
+
+    <!--Finger Print Dialog-->
+    <string name="title.fingerprint_login">FINGERPRINT LOGIN</string>
+    <string name="title.use_password_to_signin">USE PASSWORD TO SIGN IN</string>
+    <string name="label.use_password">USE PASSWORD</string>
+    <string name="hint.fingerprint">Touch sensor</string>
+    <string name="description.fingerprint">Confirm fingerprint to continue.</string>
+    <string name="label.fingerprint_error">Fingerprint not recognized.\nTry again.</string>
+    <string name="label.fingerprint_recognized">Fingerprint recognized</string>
+    <string name="label.fingerprint_continue">CONTINUE</string>
+    <string name="label.fingerprint_cancel">CANCEL</string>
+    <string name="label.type_password_description">Type your password to continue.</string>
+    <string name="label.fingerprint_forgot_password">FORGOT PASSWORD</string>
+    <string name="description.send_email">An email will be sent to the address below with information to reset your password.</string>
+    <string name="label.send_email">SEND EMAIL</string>
+    <string name="label.enter_password">ENTER PASSWORD</string>
+    <string name="title.enter_account_info">ENTER ACCOUNT INFORMATION</string>
 
     <!-- Strings related to account settings screen -->
     <string name="title_activity_account_settings">Account settings</string>
@@ -121,7 +138,8 @@
     <string name="invalidCreditCardError">Valid card number is required</string>
     <string name="invalidExpirationDateError">Valid expiration date is required</string>
     <string name="invalidCvvNumberError">Valid CVV number is required</string>
-    <string name="noSavedAddressAvailableMessage">You haven\'t stored a address.Store a address for faster checkout</string>
+    <string name="noSavedAddressAvailableMessage">You haven\'t stored a address.Store a address for faster checkout
+    </string>
     <string name="addAddressButtonName">Add a Address</string>
     <string name="phoneNumberInAddress">Phone: 555-333-222</string>
     <string name="defaultShippingAddress">default shipping address</string>

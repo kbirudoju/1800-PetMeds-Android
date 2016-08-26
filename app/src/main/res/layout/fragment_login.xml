@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/label_skip"
-        android:text="@string/label.skip"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/petmeds_blue"
-        android:layout_margin="@dimen/xxlarge_margin"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_skip"
+            android:text="@string/label.skip"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/petmeds_blue"
+            android:layout_margin="@dimen/xxlarge_margin"/>
 
     <ImageView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/petmeds_brand_logo_image"
-        android:layout_margin="@dimen/xlarge_margin"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+               android:layout_height="wrap_content"
+               android:id="@+id/petmeds_brand_logo_image"
+               android:layout_margin="@dimen/xlarge_margin"
+               android:layout_alignParentTop="true"
+               android:layout_centerHorizontal="true"/>
 
     <LinearLayout android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/sign_up_button"
-        android:layout_below="@+id/petmeds_brand_logo_image"
-        android:padding="@dimen/large_margin"
-        android:gravity="center">
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_above="@+id/sign_up_button"
+                  android:layout_below="@+id/petmeds_brand_logo_image"
+                  android:padding="@dimen/large_margin"
+                  android:gravity="center">
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/email_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                android:id="@+id/email_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-           >
+        >
 
             <EditText android:layout_width="match_parent"
                       android:layout_height="wrap_content"
@@ -46,10 +46,10 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/password_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+                android:id="@+id/password_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+        >
 
             <EditText android:layout_width="match_parent"
                       android:layout_height="wrap_content"
@@ -57,43 +57,44 @@
                       android:id="@+id/password_edit"
                       android:inputType="textPassword"
                       android:hint="@string/label.password"
-                android:text="1800petmeds"/>
+                      android:text="1800petmeds"/>
             <!--TODO - remove hardcode password during release it-->
 
         </android.support.design.widget.TextInputLayout>
 
         <Button android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/xxxlarge_margin"
-            android:id="@+id/log_in_button"
-            android:gravity="center"
-            android:text="@string/label.login"
-            android:textColor="@color/white"
-            android:background="@color/petmeds_blue"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xxxlarge_margin"
+                android:id="@+id/log_in_button"
+                android:gravity="center"
+                android:text="@string/label.login"
+                android:textColor="@color/white"
+                android:background="@color/petmeds_blue"/>
 
         <TextView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_forgot_password"
-            android:text="@string/label.forgot_password"
-            android:textColor="@color/petmeds_blue"
-            android:layout_marginTop="@dimen/xxxlarge_margin"/>
+                  android:layout_height="wrap_content"
+                  android:id="@+id/label_forgot_password"
+                  android:text="@string/label.login_forgot_password"
+                  android:textColor="@color/petmeds_blue"
+                  android:layout_marginTop="@dimen/xxxlarge_margin"/>
+
 
     </LinearLayout>
 
     <Button android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sign_up_button"
-        android:layout_alignParentBottom="true"
-        android:text="@string/label.no_account_sign_up"
-        android:textColor="@color/black"
-        android:padding="@dimen/xxxlarge_margin"
-        android:textAllCaps="false"
-        android:background="@color/white"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/sign_up_button"
+            android:layout_alignParentBottom="true"
+            android:text="@string/label.no_account_sign_up"
+            android:textColor="@color/black"
+            android:padding="@dimen/xxxlarge_margin"
+            android:textAllCaps="false"
+            android:background="@color/white"/>
 
     <ProgressBar android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:id="@+id/progress_bar"/>
+                 android:layout_height="wrap_content"
+                 android:layout_centerInParent="true"
+                 android:visibility="invisible"
+                 android:id="@+id/progress_bar"/>
 
 </RelativeLayout>

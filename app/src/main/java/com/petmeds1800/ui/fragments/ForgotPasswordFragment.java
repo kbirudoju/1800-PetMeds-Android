@@ -152,8 +152,8 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                         @Override
                         public void onNext(String s) {
 
-                            Log.v("login response", s);
-                            Toast.makeText(getActivity(), "login response" +
+                            Log.v("response", s);
+                            Toast.makeText(getActivity(), "response" +
                                     s, Toast.LENGTH_SHORT).show();
                             hideProgress();
                             mEmailPasswordButton.setText(getString(R.string.label_email_sent));
