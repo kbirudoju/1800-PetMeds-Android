@@ -124,9 +124,8 @@
     <string name="accountSettingsPasswordEmptyError">Password is required</string>
     <string name="accountSettingsPasswordInvalidError">Password must be XXX</string>
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
-    <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method.Store a payment method for faster
-        checkout.
-    </string>
+    <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method</string>
+    <string name="saveCardForFasterCheckoutMessage">Store a payment method for faster checkout.</string>
     <string name="addACreditCardButtonName">Add a Credit Card</string>
     <string name="edit">EDIT</string>
     <string name="prompt_cardNumber">Card Number</string>
@@ -138,9 +137,9 @@
     <string name="invalidCreditCardError">Valid card number is required</string>
     <string name="invalidExpirationDateError">Valid expiration date is required</string>
     <string name="invalidCvvNumberError">Valid CVV number is required</string>
-    <string name="noSavedAddressAvailableMessage">You haven\'t stored a address.Store a address for faster checkout
-    </string>
-    <string name="addAddressButtonName">Add a Address</string>
+    <string name="noSavedAddressAvailableMessage">You have no addresses</string>
+    <string name="storeAddressFasterCheckoutMessage">Store an address for faster checkout.</string>
+    <string name="addAddressButtonName">Add AN ADDRESS</string>
     <string name="phoneNumberInAddress">Phone: 555-333-222</string>
     <string name="defaultShippingAddress">default shipping address</string>
 

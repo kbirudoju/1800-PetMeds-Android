@@ -4,14 +4,8 @@ import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.Card;
 import com.petmeds1800.model.entities.AddACardResponse;
 import com.petmeds1800.model.entities.CardRequest;
-import com.petmeds1800.model.entities.MyOrder;
-import com.petmeds1800.model.entities.Status;
-import com.petmeds1800.ui.fragments.LoginFragment;
-
-import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -24,8 +18,10 @@ import rx.schedulers.Schedulers;
  */
 public class AddACardPresenter implements AddACardContract.Presenter {
 
-    private static final int CREDIT_CARD_DIGITS = 16;
-    private static final int CVV_DIGITS = 3;
+    private static final int CREDIT_CARD_DIGITS_RULE_1 = 16;
+    private static final int CREDIT_CARD_DIGITS_RULE_2 = 15;
+    private static final int CVV_DIGITS_RULE_1 = 3;
+    private static final int CVV_DIGITS_RULE_2 = 4;
     @Inject
     PetMedsApiService mPetMedsApiService;
 
@@ -77,10 +73,10 @@ public class AddACardPresenter implements AddACardContract.Presenter {
 
     @Override
     public boolean isCreditCardNumberValid(String creditCardNumber) {
-        if(creditCardNumber.isEmpty() || creditCardNumber.length() != CREDIT_CARD_DIGITS){
-            return false;
+        if(creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_1 || creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_2){
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -93,10 +89,10 @@ public class AddACardPresenter implements AddACardContract.Presenter {
 
     @Override
     public boolean isCvvValid(String cvv) {
-        if(cvv.isEmpty() || cvv.length() != CVV_DIGITS){
-            return false;
+        if(cvv.length() == CVV_DIGITS_RULE_1 || cvv.length() == CVV_DIGITS_RULE_2){
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

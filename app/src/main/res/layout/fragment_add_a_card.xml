@@ -2,10 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.petmeds1800.ui.payment.AddACardFragment">
 
@@ -24,7 +22,11 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/cardNumberLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/cardNumber_edit"
@@ -32,54 +34,80 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_cardNumber"
                     android:inputType="number"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:maxLength="16"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/expirationDateInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/expirationDate_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_expirationDate"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/cvvInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                 <EditText
                     android:id="@+id/cvv_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_cvv"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    style="@style/StyledEditText"
+                    android:maxLength="4"/>
             </android.support.design.widget.TextInputLayout>
 
             <Switch
                 android:id="@+id/defaultPayment_switch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/dp_18"
+                style="@style/styledefault"
+                android:background="@color/white"
                 android:text="Default payment method"/>
 
             <TextView
                 android:id="@+id/addressSelection_label"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_3"
+                style="@style/styledefault"
+                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:text="@string/selectBillingAddress"
                 android:drawablePadding="@dimen/dp_12"
                 android:drawableRight="@drawable/ic_arrow"/>
 
+        <!--TODO Full address need to be implemeted-->
             <TextView
                 android:id="@+id/address_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_18"
+                android:paddingRight="@dimen/dp_16"
                 style="@style/rounded_button_text"
                 android:singleLine="true" />
 

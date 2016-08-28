@@ -21,6 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Abhinav on 11/8/16.
@@ -32,6 +33,7 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
 
     @BindView(R.id.savedAddress_recyclerView)
     RecyclerView mSavedAddressRecyclerView;
+
 
     private SavedAddressListContract.Presenter mPresenter;
     private SavedAddressAdapter mSavedAddressAdapter;
@@ -104,13 +106,19 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
 
     @Override
     public void startAddressUpdate(Address address) {
-        replaceAndAddToBackStack(AddEditAddressFragment.newInstance(address, AddEditAddressFragment.EDIT_ADDRESS_REQUEST) , AddEditAddressFragment.class.getName());
+        replaceAndAddToBackStack(AddEditAddressFragment.newInstance(address, AddEditAddressFragment.EDIT_ADDRESS_REQUEST), AddEditAddressFragment.class.getName());
     }
 
     @Override
     public void setPresenter(@NonNull SavedAddressListContract.Presenter presenter) {
         mPresenter = presenter;
     }
+
+    @OnClick(R.id.addAddress_button)
+    void showAddAddressFragment() {
+        replaceAndAddToBackStack(AddEditAddressFragment.newInstance(null, AddEditAddressFragment.ADD_ADDRESS_REQUEST) , AddEditAddressFragment.class.getName());
+    }
+
 
     @Override
     public void onClick(View v) {

@@ -2,12 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dp_16">
+    android:background="@drawable/rectangular_round_corner_background"
+    android:paddingTop="@dimen/dp_16"
+    android:layout_margin="@dimen/dp_16">
 
     <TextView
         android:id="@+id/addressName_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_16"
+        style="@style/styledefault"
         android:text="Todd Shapiro"
         />
 
@@ -17,6 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/addressName_label"
+        style="@style/paragraph"
+        android:layout_marginTop="@dimen/dp_6"
         android:text="232 Marina Ave"
         />
 
@@ -25,6 +31,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/addressLine1_label"
+        style="@style/paragraph"
+        android:layout_marginTop="@dimen/dp_6"
         android:text="Venice Beach, CA 10290"/>
 
     <TextView
@@ -32,6 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/addressLine2_label"
+        style="@style/paragraph"
+        android:layout_marginTop="@dimen/dp_6"
         android:text="United States"/>
 
     <TextView
@@ -39,6 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/country_label"
+        style="@style/paragraph"
+        android:layout_marginTop="@dimen/dp_6"
         android:text="@string/phoneNumberInAddress"/>
 
     <TextView
@@ -46,21 +58,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/phoneNumber_label"
+        android:layout_marginTop="@dimen/dp_5"
+        style="@style/formlabel"
+        android:paddingLeft="@dimen/dp_16"
         android:text="@string/defaultShippingAddress"/>
 
     <TextView
         android:id="@+id/dummyLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/common_google_signin_btn_text_light_default"
+        android:background="@color/pattern_blue"
         android:layout_below="@id/isAddressSetDefault_label"
-        />
+        android:layout_marginTop="@dimen/dp_16"/>
+
     <Button
         android:id="@+id/editAddress_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_33"
         android:layout_below="@id/dummyLine"
         android:layout_centerHorizontal="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:textColor="@color/petmeds_blue"
         android:text="@string/edit"/>
 
 

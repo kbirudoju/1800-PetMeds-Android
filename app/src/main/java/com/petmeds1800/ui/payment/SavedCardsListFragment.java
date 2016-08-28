@@ -21,6 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Abhinav on 11/8/16.
@@ -107,6 +108,10 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
         mPresenter = presenter;
     }
 
+    @OnClick(R.id.addCard_button)
+    void startAddCardFragment() {
+        replaceAndAddToBackStack(new AddACardFragment() , AddACardFragment.class.getName());
+    }
     @Override
     public void onClick(View v) {
 

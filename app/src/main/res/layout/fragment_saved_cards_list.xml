@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:id="@+id/noSavedCards_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical">
@@ -15,19 +15,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_action_refresh" />
+            android:src="@drawable/ic_paymentempty" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_13"
+            style="@style/styledefault"
             android:text="@string/noSavedCardsAvailableMessage"/>
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            style="@style/paragraph"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/storeAddressFasterCheckoutMessage"/>
+
+        <Button
+            android:id="@+id/addCard_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45"
+            style="@style/label"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_42"
+            android:background="@color/petmeds_blue"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
             android:text="@string/addACreditCardButtonName"/>
+
 
     </LinearLayout>
 
