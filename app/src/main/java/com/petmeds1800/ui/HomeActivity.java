@@ -73,7 +73,7 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
                 }
 
                 if (position == 3) {
-                    //TODO: code improvement
+                    //TODO: code improvement, We can create constants for the pages
                     showFingerprintDialog();
                 }
                 setToolBarTitle((getResources().getStringArray(R.array.tab_title)[position]));

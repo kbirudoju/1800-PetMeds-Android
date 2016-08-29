@@ -3,7 +3,7 @@ buildscript {
     dependencies {
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'com.github.alexrichards.gradle:ricotta-plugin:1.0.+'
-        //classpath 'com.goldengekko.gradle:testfairy-plugin:1.0.0.0'
+//        classpath 'com.goldengekko.gradle:testfairy-plugin:1.0.0.0'
         classpath 'com.dminc.gradle:android-release-plugin:1.0.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
@@ -36,9 +36,9 @@ apply from: '../findbugs.gradle'
 //apply plugin: 'testfairy'
 
 
-//releaseConfig {
-//    propertyFile "app/version.properties"
-//}
+releaseConfig {
+    propertyFile "app/version.properties"
+}
 
 
 // Where to find Ricotta resources.
@@ -55,10 +55,10 @@ apply from: '../findbugs.gradle'
 //    }
 //}
 
-/*testfairyConfig {
-    apiKey 'xxxxxxxxxxx'
-    testersGroups 'tester_group'
-}*/
+//testfairyConfig {
+//    apiKey 'xxxxxxxxxxx'
+//    testersGroups 'tester_group'
+//}
 
 // Android configuration goes here.
 android {
@@ -84,8 +84,8 @@ android {
     }
 
     // Keystore storage and management needs finalising, bt look, we can write code in our build script to manage all that!
-    final File keystore = file('blah.keystore');
-    final File keystorePassword = file('blah.keystore.password');
+    final File keystore = file('../1800-PetMeds-Android.keystore');
+    final File keystorePassword = file('../1800-PetMeds-Android.password');
     if (keystore.exists() && keystore.canRead()
             && keystorePassword.exists() && keystorePassword.canRead()) {
         final String password = keystorePassword.text.trim()
@@ -93,7 +93,7 @@ android {
             release {
                 storeFile keystore
                 storePassword password
-                keyAlias 'android'
+                keyAlias '1800-PetMeds-Android'
                 keyPassword password
             }
         }
@@ -213,21 +213,21 @@ dependencies {
     //}
 
     // Android Instrumentation testing only dependencies
-    androidTestCompile('com.android.support.test:runner:0.4') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    // Set this dependency to use JUnit 4 rules
-    androidTestCompile('com.android.support.test:rules:0.4') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    // Set this dependency to build and run Espresso tests
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    // Set this dependency to build and run UI Automator tests
-    androidTestCompile('com.android.support.test.uiautomator:uiautomator-v18:2.1.2') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+//    androidTestCompile('com.android.support.test:runner:0.4') {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    }
+//    // Set this dependency to use JUnit 4 rules
+//    androidTestCompile('com.android.support.test:rules:0.4') {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    }
+//    // Set this dependency to build and run Espresso tests
+//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    }
+//    // Set this dependency to build and run UI Automator tests
+//    androidTestCompile('com.android.support.test.uiautomator:uiautomator-v18:2.1.2') {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    }
 
     // Android unit testing only dependencies
     testCompile 'junit:junit:4.12'

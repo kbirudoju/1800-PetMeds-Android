@@ -1,5 +1,15 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.ForgotPasswordIntent;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.LoginTask.LoginContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -10,16 +20,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.ForgotPasswordIntent;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
-import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -148,54 +148,73 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         if (isValidEmail && isValidPassword) {
 
             showProgress();
-            mApiService.getSessionConfirmationNumber()
+
+            //TODO: remove this temporary hack after backend resolves their problem of cookies
+            mApiService.login(new LoginRequest(mEmailText.getText().toString(),
+                    mPasswordText.getText().toString(), "test_test"))
                     .subscribeOn(Schedulers.io())
-                    .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
-                        @Override
-                        public SessionConfNumberResponse call(Throwable throwable) {
-                            return mPreferencesHelper.getSessionConfirmationResponse();
-                        }
-                    })
-                    .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
-                        @Override
-                        public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
-                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                            Log.v("sessionToken", sessionConfNumber);
-                            if (sessionConfNumber != null) {
-                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                            }
-
-                            return mApiService
-                                    .login(new LoginRequest(mEmailText.getText().toString(),
-                                            mPasswordText.getText().toString(), sessionConfNumber))
-
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io());
-                        }
-                    })
                     .subscribe(new Subscriber<String>() {
                         @Override
                         public void onCompleted() {
-                            getActivity().startActivity(new HomeIntent(getActivity()));
 
                         }
 
                         @Override
                         public void onError(Throwable e) {
+                            mApiService.getSessionConfirmationNumber()
+                                    .subscribeOn(Schedulers.io())
+                                    .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
+                                        @Override
+                                        public SessionConfNumberResponse call(Throwable throwable) {
+                                            return mPreferencesHelper.getSessionConfirmationResponse();
+                                        }
+                                    })
+                                    .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
+                                        @Override
+                                        public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
+                                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
+                                            Log.v("sessionToken", sessionConfNumber);
+                                            if (sessionConfNumber != null) {
+                                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                                            }
 
-                            Log.v("onError", e.getMessage());
-                            hideProgress();
+                                            return mApiService
+                                                    .login(new LoginRequest(mEmailText.getText().toString(),
+                                                            mPasswordText.getText().toString(), sessionConfNumber))
+
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribeOn(Schedulers.io());
+                                        }
+                                    })
+                                    .subscribe(new Subscriber<String>() {
+                                        @Override
+                                        public void onCompleted() {
+                                            getActivity().startActivity(new HomeIntent(getActivity()));
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+
+                                            Log.v("onError", e.getMessage());
+                                            hideProgress();
+                                        }
+
+                                        @Override
+                                        public void onNext(String s) {
+
+                                            Log.v("login response", s);
+                                            Toast.makeText(getActivity(), "login response" +
+                                                    s, Toast.LENGTH_SHORT).show();
+                                            hideProgress();
+
+                                            startActivity(new HomeIntent(getContext()));
+                                        }
+                                    });
                         }
 
                         @Override
                         public void onNext(String s) {
-
-                            Log.v("login response", s);
-                            Toast.makeText(getActivity(), "login response" +
-                                    s, Toast.LENGTH_SHORT).show();
-                            hideProgress();
-
-                           // startActivity(new HomeIntent(getContext()));
                         }
                     });
 

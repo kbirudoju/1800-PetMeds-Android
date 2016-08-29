@@ -97,5 +97,8 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/contact/ContactActor/update")
     Observable<AddAddressResponse> updateAddress(@Body AddressRequest addressRequest);
 
+//    @Headers({"Request-Credential: pmdevrestapi"})
+//    @GET("/rest/model/atg/userprofiling/SecurityStatusActor/status")
+//    String getSecurityStatus();
 
 }
