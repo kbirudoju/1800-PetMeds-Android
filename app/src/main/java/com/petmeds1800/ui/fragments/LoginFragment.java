@@ -161,60 +161,13 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
                         @Override
                         public void onError(Throwable e) {
-                            mApiService.getSessionConfirmationNumber()
-                                    .subscribeOn(Schedulers.io())
-                                    .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
-                                        @Override
-                                        public SessionConfNumberResponse call(Throwable throwable) {
-                                            return mPreferencesHelper.getSessionConfirmationResponse();
-                                        }
-                                    })
-                                    .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
-                                        @Override
-                                        public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
-                                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                                            Log.v("sessionToken", sessionConfNumber);
-                                            if (sessionConfNumber != null) {
-                                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                                            }
-
-                                            return mApiService
-                                                    .login(new LoginRequest(mEmailText.getText().toString(),
-                                                            mPasswordText.getText().toString(), sessionConfNumber))
-
-                                                    .observeOn(AndroidSchedulers.mainThread())
-                                                    .subscribeOn(Schedulers.io());
-                                        }
-                                    })
-                                    .subscribe(new Subscriber<String>() {
-                                        @Override
-                                        public void onCompleted() {
-                                            getActivity().startActivity(new HomeIntent(getActivity()));
-
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-
-                                            Log.v("onError", e.getMessage());
-                                            hideProgress();
-                                        }
-
-                                        @Override
-                                        public void onNext(String s) {
-
-                                            Log.v("login response", s);
-                                            Toast.makeText(getActivity(), "login response" +
-                                                    s, Toast.LENGTH_SHORT).show();
-                                            hideProgress();
-
-                                            startActivity(new HomeIntent(getContext()));
-                                        }
-                                    });
+                            doLogin();
                         }
 
                         @Override
                         public void onNext(String s) {
+//                            Log.v("login status", s);
+//                            doLogin();
                         }
                     });
 
@@ -223,6 +176,57 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         } else {
             setPasswordError(getString(R.string.accountSettingsEmailInvalidError));
         }
+    }
+
+    private void doLogin() {
+        mApiService.getSessionConfirmationNumber()
+                .subscribeOn(Schedulers.io())
+                .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
+                    @Override
+                    public SessionConfNumberResponse call(Throwable throwable) {
+                        return mPreferencesHelper.getSessionConfirmationResponse();
+                    }
+                })
+                .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
+                        String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
+                        Log.v("sessionToken", sessionConfNumber);
+                        if (sessionConfNumber != null) {
+                            mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                        }
+
+                        return mApiService
+                                .login(new LoginRequest(mEmailText.getText().toString(),
+                                        mPasswordText.getText().toString(), sessionConfNumber))
+
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io());
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        Log.v("onError", e.getMessage());
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                        Log.v("login response", s);
+                        Toast.makeText(getActivity(), "login response" +
+                                s, Toast.LENGTH_SHORT).show();
+                        hideProgress();
+                        navigateToHome();
+                    }
+                });
     }
 
     @OnClick(R.id.label_skip)
