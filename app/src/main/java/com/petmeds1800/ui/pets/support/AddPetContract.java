@@ -13,7 +13,9 @@ import com.petmeds1800.mvp.BaseView;
 public interface AddPetContract {
     interface View extends BaseView<Presenter> {
         boolean checkAndShowError(EditText auditEditText , TextInputLayout auditTextInputLayout , int errorStringId);
-
+        boolean isActive();
+        void onSuccess();
+        void onError(String errorMessage);
 
 
     }

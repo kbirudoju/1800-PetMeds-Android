@@ -3,11 +3,13 @@ package com.petmeds1800.ui.orders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -48,14 +50,16 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
 
     private List<OrderList> mOrderList;
 
-
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_my_orders,null);
          ButterKnife.bind(this, view);
-        ((AbstractActivity)getActivity()).setTitle(getActivity().getString(R.string.title_my_orders));
+        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_my_orders));
+        ((AbstractActivity) getActivity()).enableBackButton();
 
         mOrderListAdapter = new MyOrderAdapter(false, getActivity(), new View.OnClickListener() {
             @Override
@@ -84,12 +88,7 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
 
 }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((AbstractActivity)getActivity()).setTitle(getActivity().getString(R.string.title_my_orders));
 
-    }
 
     private void setUpOrderList(){
         mOrderRecyclerView.setAdapter(mOrderListAdapter);
@@ -125,9 +124,20 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
     }
 
 
+
+    @Override
+    public void onError(String errorMessage) {
+        progressBar.setVisibility(View.GONE);
+        Snackbar.make(mOrderRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+
+    }
+
+
     @Override
     public void updateOrderList(List<OrderList> orderList) {
+        progressBar.setVisibility(View.GONE);
         mOrderList=orderList;
+        if(orderList.size()>0)
         mOrderListAdapter.setData(orderList);
 
     }

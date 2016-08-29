@@ -109,8 +109,10 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 if(myOrder.getCommerceItems().size()>0){
     if(myOrder.getCommerceItems().size()==1){
-        orderViewHolder.productCountlabel.setVisibility(View.GONE);
-        orderViewHolder.productSecondImage.setVisibility(View.GONE);
+        orderViewHolder.iv_product_img.setVisibility(View.VISIBLE);
+        orderViewHolder.productCountlabel.setVisibility(View.INVISIBLE);
+        orderViewHolder.productSecondImage.setVisibility(View.INVISIBLE);
+        orderViewHolder.productThirdImage.setVisibility(View.INVISIBLE);
         Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
             @Override
             protected void setResource(Bitmap resource) {
@@ -121,15 +123,17 @@ if(myOrder.getCommerceItems().size()>0){
             }
         });
     }else if(myOrder.getCommerceItems().size()==2){
+        orderViewHolder.productThirdImage.setVisibility(View.VISIBLE);
         orderViewHolder.productSecondImage.setVisibility(View.VISIBLE);
-        orderViewHolder.productCountlabel.setVisibility(View.GONE);
-        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
+        orderViewHolder.iv_product_img.setVisibility(View.INVISIBLE);
+        orderViewHolder.productCountlabel.setVisibility(View.INVISIBLE);
+        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.productThirdImage) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable =
                         RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
                 circularBitmapDrawable.setCircular(true);
-                orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
+                orderViewHolder.productThirdImage.setImageDrawable(circularBitmapDrawable);
             }
         });
 
@@ -154,7 +158,8 @@ if(myOrder.getCommerceItems().size()>0){
                 orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
             }
         });
-        orderViewHolder.productSecondImage.setVisibility(View.GONE);
+        orderViewHolder.productSecondImage.setVisibility(View.INVISIBLE);
+        orderViewHolder.productThirdImage.setVisibility(View.INVISIBLE);
         orderViewHolder.productCountlabel.setText("+"+(myOrder.getCommerceItems().size()-1));
     }
 }
@@ -205,6 +210,8 @@ if(myOrder.getCommerceItems().size()>0){
         ImageView iv_product_img;
         @BindView(R.id.product_second_image)
         ImageView productSecondImage;
+        @BindView(R.id.product_image_three)
+        ImageView productThirdImage;
         @BindView(R.id.product_count_label)
         TextView productCountlabel;
 

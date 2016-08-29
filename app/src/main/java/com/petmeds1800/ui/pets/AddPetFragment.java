@@ -1,14 +1,17 @@
 package com.petmeds1800.ui.pets;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
@@ -18,18 +21,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.AddPetRequest;
-import com.petmeds1800.ui.address.AddAddressPresenter;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
@@ -37,10 +43,12 @@ import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.support.AddPetContract;
 import com.petmeds1800.ui.pets.support.UpdateImageUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -96,12 +104,17 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     @BindView(R.id.birthdayInputLayout)
     TextInputLayout mBirthdayInputLayout;
     private AddPetContract.Presenter mPresenter;
+    long birthdayInMillis;
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_add_pet,container,false);
+        View view = inflater.inflate(R.layout.fragment_add_pet, container, false);
         ButterKnife.bind(this, view);
+        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_add_pet));
+        ((AbstractActivity) getActivity()).enableBackButton();
         return view;
     }
 
@@ -118,8 +131,8 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
         mPetPictureText.setOnClickListener(this);
         updateImageUtil = UpdateImageUtil.getInstance(this);
 
-        //remove this code after api integration
-        medConditionIds=new ArrayList<>();
+        //Todo remove this code after api integration
+        medConditionIds = new ArrayList<>();
         medConditionIds.add(7);
         medConditionIds.add(21);
 
@@ -127,17 +140,17 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.pet_gender_edit:
                 FragmentManager fm = getFragmentManager();
-                GenderDialogFragment dialogFragment = new GenderDialogFragment ();
+                GenderDialogFragment dialogFragment = new GenderDialogFragment();
                 dialogFragment.setGenderSetListener(this);
                 dialogFragment.show(fm);
                 break;
-            case R.id. pet_birthday_edit:
+            case R.id.pet_birthday_edit:
                 new SlideDateTimePicker.Builder(getActivity().getSupportFragmentManager())
-                        .setListener(listener)
-                        .setInitialDate(new Date()).setIndicatorColor(getActivity().getColor(R.color.pattern_blue))
+                        .setListener(listener).setMaxDate(Calendar.getInstance().getTime())
+                        .setInitialDate(new Date()).setIndicatorColor(getActivity().getResources().getColor(R.color.pattern_blue))
                         .build()
                         .show();
                 break;
@@ -146,11 +159,18 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
                 CommonDialogFragment commonDialogFragment = CommonDialogFragment.newInstance(getActivity().getResources().getStringArray(R.array.age_range), getActivity().getString(R.string.choose_range_txt), AGE_REQUEST);
                 commonDialogFragment.setValueSetListener(this);
                 commonDialogFragment.show(fragManager);
+
                 break;
             case R.id.pet_picture_edit:
                 showImageOptions();
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -161,15 +181,14 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     private SlideDateTimeListener listener = new SlideDateTimeListener() {
 
         @Override
-        public void onDateTimeSet(Date date)
-        {
-            mPetBirthdayText.setText(date.toString());
+        public void onDateTimeSet(Date date) {
+            birthdayInMillis = date.getTime();
+            mPetBirthdayText.setText(Utils.changeDateFormat(date.getTime(), "MMM dd, yyyy"));
         }
 
         // Optional cancel listener
         @Override
-        public void onDateTimeCancel()
-        {
+        public void onDateTimeCancel() {
 
         }
     };
@@ -235,8 +254,9 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
         if (resultCode == Activity.RESULT_OK) {
             Uri finalUri = Crop.getOutput(result);
             if (finalUri != null) {
-                // EventBus.getDefault().postSticky(new UpdateImageSelectedEvent(UpdateImageSelectedEvent.IMAGE_SELECTED, finalUri));
-                Glide.with(this).load(finalUri.toString()).asBitmap().centerCrop().into(new BitmapImageViewTarget(mPetImage) {
+
+                Glide.with(this).load(finalUri.toString()).asBitmap() .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
@@ -262,6 +282,8 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_done) {
+            hideSoftKeyBoard();
+
             boolean isValidPetName;
             boolean isValidOwnerName;
             boolean isValidPetType;
@@ -269,7 +291,6 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
             boolean isValidGender;
             boolean isValidWeight;
             boolean isValidAge;
-            boolean isValidBirthday;
 
             isValidPetName = checkAndShowError(mPetNameText, mPetNameInputLayout, R.string.error_petname);
             isValidOwnerName = checkAndShowError(mOwnerNameText, mOwnerNameInputLayout, R.string.error_petowner);
@@ -277,7 +298,7 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
             isValidBreedType = checkAndShowError(mBreedTypeText, mBreedInputLayout, R.string.error_petbreed);
             isValidGender = checkAndShowError(mPetGenderText, mGenderInputLayout, R.string.error_petgender);
             isValidWeight = checkAndShowError(mPetWeight, mWeightInputLayout, R.string.error_validweight);
-            isValidAge = checkAndShowError(mPetAgeText, mAgeInputLayout, R.string.error_petage);
+            isValidAge = checkAndShowError(mPetAgeText, mAgeInputLayout, R.string.error_petage, mPetBirthdayText);
 
             if (isValidPetName ||
                     isValidOwnerName ||
@@ -288,30 +309,30 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
                     isValidAge)
                 return false;
         }
-        //noinspection SimplifiableIfStatement
-
-            AddPetRequest addPetRequest = new AddPetRequest(mPetNameText.getText().toString()
-                    ,mOwnerNameText.getText().toString(),
-                    "petType",
-                    "breedType",
-                    mPetGenderText.getText().toString(),
-                    mPetWeight.getText().toString(),
-                    mPetAgeText.getText().toString(),
-                    mPetBirthdayText.getText().toString(),
-                    "yes",
-                    "dog two allergy info",
-                    "Albon",
-                    "Amoxicillin",
-                    "",
-                    "Antirobe",
-                    medConditionIds,
-                    "dot two other info",
-                    "Cefa-Drops",
-                    "Cephalexin",
-                    "",
-                    "Chlorhexidine",
-                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-            mPresenter.addPetData(addPetRequest);
+        //Todo Remove all hardcoded value after api integration
+        progressBar.setVisibility(View.VISIBLE);
+        AddPetRequest addPetRequest = new AddPetRequest(mPetNameText.getText().toString()
+                , mOwnerNameText.getText().toString(),
+                mPetTypeText.getText().toString().toLowerCase(),
+                mBreedTypeText.getText().toString(),
+                mPetGenderText.getText().toString().toLowerCase(),
+                mPetWeight.getText().toString(),
+                "5",
+                Utils.changeDateFormat(birthdayInMillis, "MM/dd/yyyy"),
+                "yes",
+                "dog two allergy info",
+                "Albon",
+                "Amoxicillin",
+                "",
+                "Antirobe",
+                medConditionIds,
+                "dog two other info",
+                "Cefa-Drops",
+                "Cephalexin",
+                "",
+                "Chlorhexidine",
+                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        mPresenter.addPetData(addPetRequest);
 
 
         return super.onOptionsItemSelected(item);
@@ -330,7 +351,49 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     }
 
     @Override
+    public boolean isActive() {
+        return isAdded();
+    }
+
+    @Override
+    public void onSuccess() {
+        progressBar.setVisibility(View.GONE);
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.remove(this);
+        trans.commit();
+        manager.popBackStack();
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+        progressBar.setVisibility(View.GONE);
+        Snackbar.make(mPetWeight, errorMessage, Snackbar.LENGTH_LONG).show();
+
+    }
+
+    public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId, EditText birthdayText) {
+        if (auditEditText.getText().toString().isEmpty() && birthdayText.getText().toString().isEmpty()) {
+            auditTextInputLayout.setError(getContext().getString(errorStringId));
+            return true;
+        } else {
+            auditTextInputLayout.setError(null);
+            auditTextInputLayout.setErrorEnabled(false);
+            return false;
+        }
+    }
+
+    @Override
     public void setPresenter(AddPetContract.Presenter presenter) {
 
     }
+
+    private void hideSoftKeyBoard() {
+    View view = getActivity().getCurrentFocus();
+    if(view!=null)
+    {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+}
 }

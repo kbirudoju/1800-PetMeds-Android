@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.pets.presenter;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
@@ -45,20 +46,33 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
+                        mView.onError(e.getLocalizedMessage());
 
                     }
 
                     @Override
                     public void onNext(AddPetResponse s) {
-
+                        Log.d("Addpetresponse",s.toString());
+                        if(s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                       if(mView.isActive()){
+                           mView.onSuccess();
+                       }
+                        }else{
+                            if(mView.isActive()){
+                                mView.onError(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
 
                     }
                 });
     }
+
+
 
     @Override
     public void start() {
 
 
     }
+
 }

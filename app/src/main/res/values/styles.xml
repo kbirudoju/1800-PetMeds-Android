@@ -16,6 +16,9 @@
 
         <!-- Title Text Color -->
         <item name="android:textColorPrimary">@color/black</item>
+        <item name="colorControlNormal">@color/white</item>
+
+
 
     </style>
 

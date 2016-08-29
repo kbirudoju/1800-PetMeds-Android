@@ -44,12 +44,22 @@ public class PetListPresenter implements PetListContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.onError(e.getLocalizedMessage());
 
                     }
 
                     @Override
                     public void onNext(PetList list) {
-                      mView.updatePetList(list.getPetList());
+                        if(list.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if(mView.isActive()){
+                                mView.updatePetList(list.getPetList());
+                            }
+                        }else{
+                            if(mView.isActive()){
+                                mView.onError(list.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
                     }
                 });
     }

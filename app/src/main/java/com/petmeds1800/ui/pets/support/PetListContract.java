@@ -12,7 +12,8 @@ import java.util.List;
 public interface PetListContract {
     interface View extends BaseView<Presenter> {
         void updatePetList( List<Pets> petList);
-
+        void onError(String errorMessage);
+        boolean isActive();
     }
 
     interface Presenter extends BasePresenter {

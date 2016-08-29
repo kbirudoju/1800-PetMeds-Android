@@ -66,15 +66,25 @@ public class OrderListPresenter implements OrderListContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        mOrderView.onError(e.getLocalizedMessage());
 
                     }
 
                     @Override
                     public void onNext(MyOrder myOrder) {
                         Log.d("orderlist size", myOrder.getCount() + "");
-                        if (myOrder.getOrderList() != null && myOrder.getOrderList().size() > 0) {
-                            mOrderView.updateOrderList(myOrder.getOrderList());
+                        if(myOrder.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if(mOrderView.isActive()){
+                                if (myOrder.getOrderList() != null) {
+                                    mOrderView.updateOrderList(myOrder.getOrderList());
+                                }
+                            }
+                        }else{
+                            if(mOrderView.isActive()){
+                                mOrderView.onError(myOrder.getStatus().getErrorMessages().get(0));
+                            }
                         }
+
                     }
                 });
     }

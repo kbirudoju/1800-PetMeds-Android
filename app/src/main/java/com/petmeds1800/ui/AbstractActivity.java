@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.petmeds1800.R;
-import com.petmeds1800.ui.payment.AddACardFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +19,6 @@ public abstract class AbstractActivity extends AppCompatActivity {
     Toolbar mToolbar;
     //CHECKSTYLE:ON
 
-    private int mSelectedNavItemIndex;
 
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {
@@ -29,6 +27,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
 
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
+          mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
         }
 
@@ -39,12 +38,18 @@ public abstract class AbstractActivity extends AppCompatActivity {
         mToolbar.setTitle(title);
     }
 
+    public void enableBackButton(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    public void disableBackButton(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+    }
     public void replaceAndAddToBackStack(Fragment fragment , String tag) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment, tag);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
 
 }

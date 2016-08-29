@@ -119,7 +119,8 @@ public class BaseDialogFragment extends DialogFragment {
     }
 
     public void show(FragmentManager manager) {
-        show(manager, getDialogTag());
+       // show(manager, getDialogTag());
+        manager.beginTransaction().add(this,getDialogTag()).commitAllowingStateLoss();
     }
 
     public void setPositiveListener(DialogButtonsListener listener) {

@@ -43,9 +43,10 @@ public class CommonWebviewFragment extends AbstractFragment {
         mUrl=getArguments().getString("url");
         mTitle=getArguments().getString("title");
         if(mTitle!=null && !mTitle.isEmpty()){
-            ((AbstractActivity)getActivity()).setTitle(mTitle);
+            ((AbstractActivity)getActivity()).setToolBarTitle(mTitle);
         }
         setUpWebView(mUrl);
+       // ((AbstractActivity)getActivity()).enableBackButton();
 
     }
 

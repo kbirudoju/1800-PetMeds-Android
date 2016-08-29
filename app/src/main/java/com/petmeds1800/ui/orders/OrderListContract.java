@@ -17,6 +17,7 @@ public interface OrderListContract {
         void updateOrderList( List<OrderList> orderList);
         void updateFilterList(ArrayList<ItemSelectionDialogFragment.Item> pickerItems );
         boolean isActive();
+        void onError(String errorMessage);
 
     }
 

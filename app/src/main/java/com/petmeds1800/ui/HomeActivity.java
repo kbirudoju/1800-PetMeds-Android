@@ -3,7 +3,10 @@ package com.petmeds1800.ui;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.MenuItem;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
@@ -43,6 +46,7 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        Log.d("HomeActivity",">>>>>>>>>>>");
         //initialize fragment list
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new HomeFragment());
@@ -52,9 +56,8 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
         mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), fragmentList));
         mHomeTab.setupWithViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(0);
 
-        ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+      ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -62,15 +65,19 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
             @Override
             public void onPageSelected(int position) {
-                setTitle((getResources().getStringArray(R.array.tab_title)[position]));
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
                     mHomeTab.getTabAt(i).setIcon(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
+                }
+              if(position ==0 || position==1 || position ==2){
+                    removeAllFragment();
                 }
 
                 if (position == 3) {
                     //TODO: code improvement
                     showFingerprintDialog();
                 }
+                setToolBarTitle((getResources().getStringArray(R.array.tab_title)[position]));
+
             }
 
             @Override
@@ -80,9 +87,9 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
         };
 
-        //code to set defult first tab selected
+        //code to set default first tab selected
         mViewPager.addOnPageChangeListener(pageChangeListener);
-        pageChangeListener.onPageSelected(0);
+       pageChangeListener.onPageSelected(0);
     }
 
     @Override
@@ -105,5 +112,19 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
         dialog.setCancelable(false);
         dialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
     }
+   @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
+    public void removeAllFragment(){
+        FragmentManager fm = getSupportFragmentManager();
+        while (getSupportFragmentManager().getBackStackEntryCount() > 0){
+            getSupportFragmentManager().popBackStackImmediate();
+        }
 
+
+    }
 }

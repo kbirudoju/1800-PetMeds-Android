@@ -195,7 +195,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                                     s, Toast.LENGTH_SHORT).show();
                             hideProgress();
 
-                            startActivity(new HomeIntent(getContext()));
+                           // startActivity(new HomeIntent(getContext()));
                         }
                     });
 
