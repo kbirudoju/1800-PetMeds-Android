@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="17dp"
+            android:padding="@dimen/large_margin"
             android:gravity="bottom"
             style="?android:attr/buttonBarStyle">
 
@@ -55,13 +55,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/petmeds_blue"
-                android:layout_marginRight="18dp"
+                android:padding="@dimen/large_margin"
                 android:text="@string/label.fingerprint_cancel"/>
 
         <TextView
                 android:id="@+id/second_dialog_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/large_margin"
                 android:textColor="@color/petmeds_blue"
                 android:textAllCaps="true"
                 android:text="@string/label.use_password"/>
