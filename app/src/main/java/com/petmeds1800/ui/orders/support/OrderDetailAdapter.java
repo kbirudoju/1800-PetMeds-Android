@@ -154,7 +154,13 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                 ShippingViewHolder shippingHolder = (ShippingViewHolder) holder;
                 ShippingGroup shippingDetail=(ShippingGroup)getItemAt(position);
                 shippingHolder.shippingMethodLabel.setText(shippingDetail.getShippingMethod());
-                shippingHolder.shippingAddressLabel.setText(shippingDetail.getAddress1() +"," +shippingDetail.getAddress2());
+                if(shippingDetail.getAddress2()!=null && !shippingDetail.getAddress2().isEmpty()){
+                    shippingHolder.shippingAddressLabel.setText(shippingDetail.getAddress1() +"," +shippingDetail.getAddress2());
+
+                }else{
+                    shippingHolder.shippingAddressLabel.setText(shippingDetail.getAddress1());
+
+                }
 
                 break;
             case VIEW_TYPE_FIXED:
@@ -166,7 +172,14 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
             case VIEW_TYPE_PAYMENT:
                 PaymentViewHolder paymentViewHolder = (PaymentViewHolder) holder;
                 PaymentGroup paymentInfo=(PaymentGroup)getItemAt(position);
-                paymentViewHolder.billingAddressLabel.setText(paymentInfo.getAddress1() + ","+paymentInfo.getAddress2());
+                if(paymentInfo.getAddress2()!=null && !paymentInfo.getAddress2().isEmpty()){
+                    paymentViewHolder.billingAddressLabel.setText(paymentInfo.getAddress1() + ","+paymentInfo.getAddress2());
+
+                }else{
+                    paymentViewHolder.billingAddressLabel.setText(paymentInfo.getAddress1());
+
+                }
+
                 paymentViewHolder.paymentMethodLabel.setText(paymentInfo.getPaymentMethod());
                 break;
             case VIEW_TYPE_INFO:

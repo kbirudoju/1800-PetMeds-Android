@@ -36,6 +36,7 @@ android:orientation="vertical"
         android:text="@string/male_txt"
         android:textColor="@color/text_color_selector"
         android:padding="@dimen/dp_5"
+        android:button="@drawable/radio_button_selector"
         />
 
 
@@ -48,8 +49,9 @@ android:orientation="vertical"
         android:textColor="@color/text_color_selector"
         android:checked="false"
         android:padding="@dimen/dp_5"
+        android:gravity="center"
         android:layout_marginTop="@dimen/dp_33"
-
+        android:button="@drawable/radio_button_selector"
         />
 
 

@@ -78,7 +78,8 @@
     <string name="label.skip">"SKIP"</string>
     <string name="label.login">Log In</string>
     <string name="label.login_forgot_password">FORGOT PASSWORD?</string>
-    <string name="label.no_account_sign_up">Don\'t have an account? Sign up</string>
+    <string name="label.no_account_sign_up">Don\'t have an account?</string>
+    <string name="signup_txt">SIGN UP</string>
 
     <!--Forgot Password-->
     <string name="label.enter_email_for_temporary_password">Enter your email address and we will send you a new
@@ -238,6 +239,7 @@
     <string name="title_add_pet">Add a pet</string>
     <string name="title_pet_profiles">Pet profiles</string>
     <string name="title_track_shipment">Track Shipment</string>
+    <string name="title_forgot_password">Forgot Password</string>
     <!--Webview Urls-->
 
 </resources>

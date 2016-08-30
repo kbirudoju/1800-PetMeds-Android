@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.ForgotPasswordIntent;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -19,7 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.ForgotPasswordIntent;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.LoginTask.LoginContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -166,8 +165,10 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
                         @Override
                         public void onNext(String s) {
-//                            Log.v("login status", s);
-//                            doLogin();
+
+                            Log.v("login response", s);
+
+
                         }
                     });
 
@@ -221,8 +222,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                     public void onNext(String s) {
 
                         Log.v("login response", s);
-                        Toast.makeText(getActivity(), "login response" +
-                                s, Toast.LENGTH_SHORT).show();
+
                         hideProgress();
                         navigateToHome();
                     }

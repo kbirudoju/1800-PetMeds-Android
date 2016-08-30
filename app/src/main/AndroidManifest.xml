@@ -20,10 +20,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/application.name"
-        android:theme="@style/application.theme" >
+        android:theme="@style/application.theme"
+        >
         <activity
             android:name=".ui.SplashActivity"
-            android:theme="@style/application.theme.splash" >
+            android:theme="@style/application.theme.splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,14 +34,18 @@
         </activity>
         <activity
             android:name=".ui.HomeActivity"
-            android:configChanges="orientation" />
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.LoginActivity"
-            android:configChanges="orientation" />
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.ForgotPasswordActivity"
-            android:configChanges="orientation" />
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

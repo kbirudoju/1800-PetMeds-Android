@@ -1,7 +1,6 @@
 package com.petmeds1800.ui.pets;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -282,7 +280,7 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_done) {
-            hideSoftKeyBoard();
+            ((AbstractActivity)getActivity()).hideSoftKeyBoard();
 
             boolean isValidPetName;
             boolean isValidOwnerName;
@@ -388,12 +386,5 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
 
     }
 
-    private void hideSoftKeyBoard() {
-    View view = getActivity().getCurrentFocus();
-    if(view!=null)
-    {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-}
+
 }
