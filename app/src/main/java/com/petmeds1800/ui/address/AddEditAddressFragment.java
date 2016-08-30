@@ -15,12 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
@@ -86,6 +88,10 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
     @BindView(R.id.defaultBillingAddress_switch)
     Switch mDefaultBillingAddressSwitch;
 
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressBar;
+
+
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
@@ -127,9 +133,12 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_address, container, false);
         ButterKnife.bind(this, view);
+
         //diasble editing on the state & country edittext. We will show up pickers
         mStateOrProvinceOrRegionEdit.setFocusableInTouchMode(false);
         mCountryNameEdit.setFocusableInTouchMode(false);
+
+        ((AbstractActivity)getActivity()).enableBackButton();
 
         //get the arguments and set views for address updation/edit request
         Bundle bundle = getArguments();
@@ -138,10 +147,14 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
             if(mRequestCode == EDIT_ADDRESS_REQUEST) {
                 mAddress = (Address) bundle.getSerializable(ADDRESS);
                 populateData(mAddress);
+                ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.editAddressTitle));
             }
+            else {
+                ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
+            }
+        } else {
+            ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
         }
-
-
 
         return view;
     }
@@ -211,12 +224,14 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
                     invalidZipcode ||
                     invalidPhoneNumber ||
                     invalidCountry)
-                return false;
+                return super.onOptionsItemSelected(item);
         }
+
+        mProgressBar.setVisibility(View.VISIBLE);
 
         if(mRequestCode == EDIT_ADDRESS_REQUEST) {
             AddressRequest addressRequest = new AddressRequest(
-                    String.valueOf(mDefaultBillingAddressSwitch.isChecked())
+                    mDefaultBillingAddressSwitch.isChecked()
                     ,mLastNameEdit.getText().toString()
                     ,mUsaStateCode == null ? mAddress.getState() : mUsaStateCode //TODO the way usastatecode can be retrived depend upon api.Api should return the state name as well along with state code
                     ,mAddressLine1Edit.getText().toString()
@@ -225,7 +240,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
                     ,mCityEdit.getText().toString()
                     ,mZipCodeEdit.getText().toString()
                     ,mPhoneNumberEdit.getText().toString()
-                    ,String.valueOf(mDefaultBillingAddressSwitch.isChecked())
+                    ,mDefaultBillingAddressSwitch.isChecked()
                     ,mFirstNameEdit.getText().toString()
                     ,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
 
@@ -236,7 +251,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
         }
         else {
             AddressRequest addressRequest = new AddressRequest(
-                    String.valueOf(mDefaultBillingAddressSwitch.isChecked())
+                    mDefaultBillingAddressSwitch.isChecked()
                     ,mLastNameEdit.getText().toString()
                     ,mUsaStateCode
                     ,mAddressLine1Edit.getText().toString()
@@ -245,7 +260,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
                     ,mCityEdit.getText().toString()
                     ,mZipCodeEdit.getText().toString()
                     ,mPhoneNumberEdit.getText().toString()
-                    ,String.valueOf(mDefaultBillingAddressSwitch.isChecked())
+                    ,mDefaultBillingAddressSwitch.isChecked()
                     ,mFirstNameEdit.getText().toString()
                     ,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
 
@@ -277,7 +292,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
 
     @Override
     public void addressAdded() {
-
+        mProgressBar.setVisibility(View.GONE);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setMessage(R.string.addressSavedInAccount).setCancelable(false);
         mAlertDialog = alertDialogBuilder.create();
@@ -287,7 +302,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
 
     @Override
     public void addressUpdated() {
-
+        mProgressBar.setVisibility(View.GONE);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setMessage(R.string.addressUpdatedInAccount).setCancelable(false);
         mAlertDialog = alertDialogBuilder.create();
@@ -296,7 +311,8 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
     }
 
     @Override
-    public void addressAdditionFailed(String errorMessage) {
+    public void showErrorMessage(String errorMessage) {
+        mProgressBar.setVisibility(View.GONE);
         Snackbar.make(mAddressLine1Edit, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
@@ -365,7 +381,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
                     mStateOrProvinceOrRegionEdit.setText(value);
                 }
                 else{
-                    addressAdditionFailed("Cant load States List.Bad Data");
+                    showErrorMessage("Cant load States List.Bad Data");
                 }
                 break;
 
@@ -376,7 +392,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
                     mCountryNameEdit.setText(value);
                 }
                 else{
-                    addressAdditionFailed("Cant get country code.Bad Data");
+                    showErrorMessage("Cant get country code.Bad Data");
                 }
                 break;
 

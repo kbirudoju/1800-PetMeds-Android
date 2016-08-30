@@ -3,6 +3,7 @@ package com.petmeds1800.ui.payment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,9 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Card;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 
 import java.util.List;
@@ -34,6 +37,9 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
     @BindView(R.id.savedCards_recyclerView)
     RecyclerView mSavedCardsRecyclerView;
 
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressBar;
+
     private SavedCardsListContract.Presenter mPresenter;
     private SavedCardsAdapter mSavedCardsAdapter;
     private MenuItem mAddMenuItem;
@@ -50,7 +56,8 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
     public android.view.View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         android.view.View view = inflater.inflate(R.layout.fragment_saved_cards_list, container, false);
         ButterKnife.bind(this, view);
-
+        ((AbstractActivity)getActivity()).enableBackButton();
+        ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.savedCardsListTitle));
         mSavedCardsAdapter = new SavedCardsAdapter(false,this,getContext());
         setupCardsRecyclerView();
         return view;
@@ -91,6 +98,7 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
 
     @Override
     public void showNoCardsView() {
+        mProgressBar.setVisibility(View.GONE);
         mNoSavedCardsLinearLayout.setVisibility(View.VISIBLE);
         mSavedCardsRecyclerView.setVisibility(View.VISIBLE);
 
@@ -98,9 +106,16 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
 
     @Override
     public void showCardsListView(List<Card> cardsList) {
+        mProgressBar.setVisibility(View.GONE);
         mNoSavedCardsLinearLayout.setVisibility(View.GONE);
         mSavedCardsRecyclerView.setVisibility(View.VISIBLE);
         mSavedCardsAdapter.setData(cardsList);
+    }
+
+    @Override
+    public void showErrorMessage(String errorMessage) {
+        mProgressBar.setVisibility(View.GONE);
+        Snackbar.make(mSavedCardsRecyclerView , errorMessage , Snackbar.LENGTH_LONG).show();
     }
 
     @Override

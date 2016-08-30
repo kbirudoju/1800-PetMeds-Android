@@ -19,6 +19,7 @@ public interface SavedAddressListContract {
         void showNoAddressView();
         void showAddressListView(List<Address> addressList);
         void startAddressUpdate(Address address);
+        void showErrorMessage(String errorMessage);
     }
 
     interface Presenter extends BasePresenter {

@@ -6,9 +6,6 @@ import com.google.gson.annotations.SerializedName;
  * Created by Abhinav on 8/8/16.
  */
 public class UpdateAccountSettingsRequest {
-
-    private String firstName;
-    private String lastName;
     private String pushNotification;
     private String userId;
     private String email;
@@ -17,22 +14,13 @@ public class UpdateAccountSettingsRequest {
     @SerializedName("_dynSessConf")
     private String sessionConfNumber;
 
-    public UpdateAccountSettingsRequest(String firstName, String lastName, String email, String userId, String password, String sessionConfNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public UpdateAccountSettingsRequest(String email, String userId, String password, String sessionConfNumber) {
         this.email = email;
         this.userId = userId;
         this.password = password;
         this.sessionConfNumber = sessionConfNumber;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
 
     public String getEmail() {
         return email;
@@ -48,14 +36,6 @@ public class UpdateAccountSettingsRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getPushNotification() {

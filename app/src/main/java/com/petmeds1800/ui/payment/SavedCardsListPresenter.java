@@ -50,6 +50,9 @@ public class SavedCardsListPresenter implements SavedCardsListContract.Presenter
                     public void onError(Throwable e) {
                         //notify about the error.It could be any type of error while getting data from the API
                         Log.e(SavedCardsListPresenter.class.getName(), e.getMessage());
+                        if (mView.isActive()) {
+                            mView.showErrorMessage(e.getLocalizedMessage());
+                        }
                     }
 
                     @Override

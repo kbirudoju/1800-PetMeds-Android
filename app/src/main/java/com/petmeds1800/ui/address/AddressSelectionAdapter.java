@@ -112,7 +112,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
             });
 
         //TODO need to change this string comparision to a boolean value once backend do the change
-        if(myAddress.getIsDefaultBillingAddress().equals("true")){
+        if(myAddress.getIsDefaultBillingAddress()){
             orderViewHolder.mIsdefaultShippingAddress.setVisibility(View.VISIBLE);
         }
         else {

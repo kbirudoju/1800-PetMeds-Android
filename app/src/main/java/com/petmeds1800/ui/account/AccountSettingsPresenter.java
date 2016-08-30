@@ -72,6 +72,10 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
+                        Log.e("AccountSettings",e.getLocalizedMessage());
+                        if(mView.isActive()){
+                            mView.showError(e.getLocalizedMessage());
+                        }
                     }
 
                     @Override

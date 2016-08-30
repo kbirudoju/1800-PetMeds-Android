@@ -53,7 +53,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AddACard", e.getMessage());
-                        mView.addressAdditionFailed(e.getLocalizedMessage());
+                        mView.showErrorMessage(e.getLocalizedMessage());
                     }
 
                     @Override
@@ -65,7 +65,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         } else {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
-                                mView.addressAdditionFailed(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
                             }
                         }
 
@@ -89,7 +89,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AddACard",e.getMessage());
-                        mView.addressAdditionFailed(e.getLocalizedMessage());
+                        mView.showErrorMessage(e.getLocalizedMessage());
                     }
 
                     @Override
@@ -107,7 +107,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         else{
                             Log.d("AddACard",s.getStatus().getErrorMessages().get(0));
                             if(mView.isActive()){
-                                mView.addressAdditionFailed(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
                             }
                         }
 
@@ -138,7 +138,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AddACard",e.getMessage());
-                        mView.addressAdditionFailed(e.getLocalizedMessage());
+                        mView.showErrorMessage(e.getLocalizedMessage());
                     }
 
                     @Override
@@ -156,7 +156,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         else{
                             Log.d("AddACard",s.getStatus().getErrorMessages().get(0));
                             if(mView.isActive()){
-                                mView.addressAdditionFailed(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
                             }
                         }
 
@@ -188,7 +188,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AddACard", e.getMessage());
-                        mView.addressAdditionFailed(e.getLocalizedMessage());
+                        mView.showErrorMessage(e.getLocalizedMessage());
                     }
 
                     @Override
@@ -200,7 +200,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         } else {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
-                                mView.addressAdditionFailed(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
                             }
                         }
 

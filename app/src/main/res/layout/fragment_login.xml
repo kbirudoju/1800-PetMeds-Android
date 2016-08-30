@@ -55,8 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/StyledEditTextHintLayout"
-            app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-            >
+            app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
             <EditText android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,8 +63,7 @@
                 android:id="@+id/password_edit"
                 android:inputType="textPassword"
                 android:hint="@string/label.password"
-                style="@style/StyledEditText"
-               />
+                style="@style/StyledEditText" />
             <!--TODO - remove hardcode password during release it-->
 
         </android.support.design.widget.TextInputLayout>

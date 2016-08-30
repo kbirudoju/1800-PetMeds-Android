@@ -92,7 +92,7 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final MyOrderItemViewHolder orderViewHolder = (MyOrderItemViewHolder) holder;
             final OrderList myOrder = (OrderList) getItemAt(position);
             orderViewHolder.tv_order_date.setText(myOrder.getSubmittedDate());
-            orderViewHolder.tv_order_number.setText(myOrder.getDisplayOrderId());
+            orderViewHolder.tv_order_number.setText(myOrder.getOrderId());
             orderViewHolder.tv_order_status.setText(myOrder.getStatus());
             //temporary hardcoded value to check layout, it will be changed after confirmation from backend
             if(myOrder.getStatus().equalsIgnoreCase("PROCESSING")){

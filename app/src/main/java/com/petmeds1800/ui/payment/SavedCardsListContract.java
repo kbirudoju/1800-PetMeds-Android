@@ -18,6 +18,7 @@ public interface SavedCardsListContract {
         boolean isActive();
         void showNoCardsView();
         void showCardsListView(List<Card> cardsList);
+        void showErrorMessage(String errorMessage);
     }
 
     interface Presenter extends BasePresenter {

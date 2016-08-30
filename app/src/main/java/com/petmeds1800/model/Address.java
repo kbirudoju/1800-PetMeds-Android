@@ -10,9 +10,7 @@ import java.io.Serializable;
  */
 public class Address implements Serializable{
 
-    //TODO need to change it to the boolean after backend correction
-    private String isDefaultShippingAddress;
-    //TODO need to check if backend has merged it with firstname field
+    private boolean isDefaultShippingAddress;
     private String lastName;
     private String state;
     private String address1;
@@ -22,16 +20,14 @@ public class Address implements Serializable{
     private String city;
     private String postalCode;
     private String phoneNumber;
-    //TODO need to change it to the boolean after backend correction
-    private String isDefaultBillingAddress;
-    //TODO need to check if backend has merged it with lastname field
+    private boolean isDefaultBillingAddress;
     private String firstName;
 
-    public String getIsDefaultShippingAddress() {
+    public boolean getIsDefaultShippingAddress() {
         return isDefaultShippingAddress;
     }
 
-    public void setIsDefaultShippingAddress(String isDefaultShippingAddress) {
+    public void setIsDefaultShippingAddress(boolean isDefaultShippingAddress) {
         this.isDefaultShippingAddress = isDefaultShippingAddress;
     }
 
@@ -107,11 +103,11 @@ public class Address implements Serializable{
         this.phoneNumber = phoneNumber;
     }
 
-    public String getIsDefaultBillingAddress() {
+    public boolean getIsDefaultBillingAddress() {
         return isDefaultBillingAddress;
     }
 
-    public void setIsDefaultBillingAddress(String isDefaultBillingAddress) {
+    public void setIsDefaultBillingAddress(boolean isDefaultBillingAddress) {
         this.isDefaultBillingAddress = isDefaultBillingAddress;
     }
 

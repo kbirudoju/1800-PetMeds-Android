@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/pattern_light_blue"
     tools:context="com.petmeds1800.ui.payment.AddACardFragment">
 
 
@@ -45,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_10"
                 style="@style/StyledEditTextHintLayout"
                 app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
@@ -64,7 +66,8 @@
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16"
                 style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                android:layout_marginTop="@dimen/dp_10">
 
                 <EditText
                     android:id="@+id/cvv_edit"
@@ -90,10 +93,12 @@
             <TextView
                 android:id="@+id/addressSelection_label"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
+                android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/dp_18"
                 android:paddingRight="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_3"
+                android:paddingTop="@dimen/dp_7"
+                android:paddingBottom="@dimen/dp_7"
+                android:layout_marginTop="@dimen/dp_5"
                 style="@style/styledefault"
                 android:background="@color/white"
                 android:gravity="center_vertical"
@@ -101,17 +106,89 @@
                 android:drawablePadding="@dimen/dp_12"
                 android:drawableRight="@drawable/ic_arrow"/>
 
-        <!--TODO Full address need to be implemeted-->
-            <TextView
+            <RelativeLayout
+                android:id="@+id/addressContainer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp_16"
+                android:background="@color/white"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/addressName_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/addressSelection_radio"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    style="@style/rounded_button_text"
+                    android:text="Todd Shapiro"
+                    />
+
+
+                <TextView
+                    android:id="@+id/addressLine1_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/addressName_label"
+                    android:layout_marginTop="@dimen/dp_6"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    style="@style/rounded_button_text"
+                    android:text="232 Marina Ave"
+                    />
+
+                <TextView
+                    android:id="@+id/addressLine2_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/addressLine1_label"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:layout_marginTop="@dimen/dp_6"
+                    style="@style/rounded_button_text"
+                    android:text="Venice Beach, CA 10290"/>
+
+                <TextView
+                    android:id="@+id/country_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/addressLine2_label"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:layout_marginTop="@dimen/dp_6"
+                    style="@style/rounded_button_text"
+                    android:text="United States"/>
+
+                <TextView
+                    android:id="@+id/phoneNumber_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/country_label"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:layout_marginTop="@dimen/dp_6"
+                    style="@style/rounded_button_text"
+                    android:text="@string/phoneNumberInAddress"/>
+
+            </RelativeLayout>
+           <!-- <TextView
                 android:id="@+id/address_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/dp_18"
                 android:paddingRight="@dimen/dp_16"
                 style="@style/rounded_button_text"
-                android:singleLine="true" />
+                android:singleLine="true" />-->
+
+            <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressbar"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                />
 
         </LinearLayout>
+
+
     </ScrollView>
 
 </LinearLayout>

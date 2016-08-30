@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,9 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 
@@ -35,6 +38,9 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     @BindView(R.id.savedAddress_recyclerView)
     RecyclerView mSavedAddressRecyclerView;
 
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressBar;
+
     private SavedAddressListContract.Presenter mPresenter;
     private AddressSelectionAdapter mSavedAddressAdapter;
     private MenuItem mAddMenuItem;
@@ -52,7 +58,8 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved_address_list, container, false);
         ButterKnife.bind(this, view);
-
+        ((AbstractActivity)getActivity()).enableBackButton();
+        ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.addressSelectionListTitle));
         mSavedAddressAdapter = new AddressSelectionAdapter(false,this,getContext());
         setupCardsRecyclerView();
         return view;
@@ -105,6 +112,7 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
 
     @Override
     public void showNoAddressView() {
+        mProgressBar.setVisibility(View.GONE);
         mNoSavedAddressLinearLayout.setVisibility(View.VISIBLE);
         mSavedAddressRecyclerView.setVisibility(View.VISIBLE);
 
@@ -112,6 +120,7 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
 
     @Override
     public void showAddressListView(List<Address> addressList) {
+        mProgressBar.setVisibility(View.GONE);
         mNoSavedAddressLinearLayout.setVisibility(View.GONE);
         mSavedAddressRecyclerView.setVisibility(View.VISIBLE);
         mSavedAddressAdapter.setData(addressList);
@@ -120,6 +129,12 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     @Override
     public void startAddressUpdate(Address address) {
      // no implementation is required here. But implementation is required in SavedAddressListFragment
+    }
+
+    @Override
+    public void showErrorMessage(String errorMessage) {
+        mProgressBar.setVisibility(View.GONE);
+        Snackbar.make(mSavedAddressRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

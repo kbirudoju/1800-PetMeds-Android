@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.address.AddressSelectionListFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.MonthYearPicker;
@@ -24,6 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -59,8 +62,26 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
     @BindView(R.id.defaultPayment_switch)
     Switch mDefaultPaymentSwitch;
 
-    @BindView(R.id.address_label)
-    TextView mAddressLabel;
+    @BindView(R.id.addressName_label)
+    TextView mAddressNameLabel;
+
+    @BindView(R.id.addressLine1_label)
+    TextView mAddressLine1Label;
+
+    @BindView(R.id.addressLine2_label)
+    TextView mAddressLine2Label;
+
+    @BindView(R.id.phoneNumber_label)
+    TextView mPhoneNumberLabel;
+
+    @BindView(R.id.country_label)
+    TextView mCountryLabel;
+
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.addressContainer_layout)
+    RelativeLayout mAddressContainerLayout;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
@@ -93,7 +114,8 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_a_card, container, false);
         ButterKnife.bind(this, view);
-
+        ((AbstractActivity)getActivity()).enableBackButton();
+        ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.addACardTitle));
         //diasble editing on the expiration date edittext. We will show up a expiration date dialog
         mExpirationDateEdit.setFocusableInTouchMode(false);
 
@@ -164,9 +186,10 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
             }
             //return if needed
             if (invalidCreditCardNumber || invalidExpirationDate || invalidCvv) {
-                return false;
+                return super.onOptionsItemSelected(item);
             }
 
+            mProgressBar.setVisibility(View.VISIBLE);
             CardRequest card = new CardRequest(
                     cardNumber
                     , String.valueOf(mSelectedExpirationMonth)
@@ -188,6 +211,7 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
 
     @Override
     public void paymentMethodApproved() {
+        mProgressBar.setVisibility(View.GONE);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setMessage(R.string.cardSavedInAccount).setCancelable(false);
@@ -198,6 +222,7 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
 
     @Override
     public void paymentMethodDisapproved(String errorMessage) {
+        mProgressBar.setVisibility(View.GONE);
         Snackbar.make(mCardNumberEdit, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
@@ -225,7 +250,13 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
     @Override
     public void displayAddress(Address address) {
         mAddress = address;
-        mAddressLabel.setText(address.getAddress1() + "," + address.getCity());
+        mAddressContainerLayout.setVisibility(View.VISIBLE);
+        mAddressNameLabel.setText(address.getFirstName() + " " + address.getLastName());
+        mAddressLine1Label.setText(address.getAddress1());
+        mAddressLine2Label.setText(address.getAddress2() + " " + address.getState() + " " + address.getPostalCode());
+        mCountryLabel.setText(address.getCountry());
+        mPhoneNumberLabel.setText(address.getPhoneNumber());
+
     }
 
 

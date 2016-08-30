@@ -7,9 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class AddressRequest {
 
-    //TODO need to change it to the boolean after backend correction
-    private String useShippingAddressAsDefault;
-    //TODO need to check if backend has merged it with firstname field
+    private boolean useShippingAddressAsDefault;
     private String lastName;
     private String state;
     private String address1;
@@ -18,15 +16,14 @@ public class AddressRequest {
     private String city;
     private String postalCode;
     private String phoneNumber;
-    //TODO need to change it to the boolean after backend correction
-    private String useBillingAddressAsDefault;
+    private boolean useBillingAddressAsDefault;
     private String firstName;
     private String addressId;
     @SerializedName("_dynSessConf")
     private String sessionConfNumber;
 
 
-    public AddressRequest(String useShippingAddressAsDefault, String lastName, String state, String address1, String address2, String country, String city, String postalCode, String phoneNumber, String useBillingAddressAsDefault, String firstName, String sessionConfNumber) {
+    public AddressRequest(boolean useShippingAddressAsDefault, String lastName, String state, String address1, String address2, String country, String city, String postalCode, String phoneNumber, boolean useBillingAddressAsDefault, String firstName, String sessionConfNumber) {
         this.useShippingAddressAsDefault = useShippingAddressAsDefault;
         this.lastName = lastName;
         this.state = state;

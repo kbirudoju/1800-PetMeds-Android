@@ -54,12 +54,4 @@ public abstract class AbstractActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void hideSoftKeyBoard() {
-        View view = getCurrentFocus();
-        if(view!=null)
-        {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
 }

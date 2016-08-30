@@ -64,8 +64,14 @@
     <item name="android:textColor">@color/black</item>
     <item name="android:paddingLeft">@dimen/dp_16</item>
     <item name="android:paddingRight">@dimen/dp_16</item>
-
     </style>
+
+    <style name="styledefault_no_padding">
+    <item name="android:textSize">@dimen/sp_16</item>
+    <item name="android:fontFamily">@string/font_roboto_regular</item>
+    <item name="android:textColor">@color/black</item>
+    </style>
+
 
     <style name="list_row">
         <item name="android:textSize">@dimen/sp_16</item>

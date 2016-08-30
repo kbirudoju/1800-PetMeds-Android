@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.User;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
@@ -15,8 +16,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import javax.inject.Inject;
 
@@ -25,8 +28,6 @@ import butterknife.ButterKnife;
 
 public class AccountSettingsFragment extends AbstractFragment implements AccountSettingsContract.View {
 
-    @BindView(R.id.nameInputLayout)
-    TextInputLayout mNameInputLayout;
 
     @BindView(R.id.emailInputLayout)
     TextInputLayout mEmailInputLayout;
@@ -34,14 +35,14 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @BindView(R.id.passwordInputLayout)
     TextInputLayout mPasswordInputLayout;
 
-    @BindView(R.id.name_edit)
-    EditText mNameText;
-
     @BindView(R.id.email_edit)
     EditText mEmailText;
 
     @BindView(R.id.password_edit)
-    EditText mNamePasswordText;
+    EditText mPasswordText;
+
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressBar;
 
     private AccountSettingsContract.Presenter mPresenter;
 
@@ -67,6 +68,8 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     public android.view.View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         android.view.View view = inflater.inflate(R.layout.fragment_account_settings, container, false);
         ButterKnife.bind(this, view);
+        ((AbstractActivity)getActivity()).enableBackButton();
+        ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.accountSettingsTitle));
         enableEditTexts(false);
         return view;
 
@@ -99,6 +102,9 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         if (id == R.id.action_edit) {
             enableEditTexts(true);
             enableDoneAction();
+            //clear the password field since we dont store the user's password
+            mPasswordText.setText("");
+
         } else if (id == R.id.action_done) {
 
             boolean invalidName;
@@ -106,17 +112,6 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
             boolean invalidPassword;
 
             ///// Negative flow /////
-            //name validation
-            if (!mPresenter.validateName(mNameText.getText().toString())) {
-                mNameInputLayout.setError(getContext().getString(R.string.accountSettingsNameEmptyError));
-                invalidName = true;
-            } else {
-                mNameInputLayout.setError(null);
-                //following line would help to keep the view size intact
-                mNameInputLayout.setErrorEnabled(false);
-                invalidName = false;
-            }
-
             //email validation
             if (mEmailText.getText().toString().isEmpty()) {
                 mEmailInputLayout.setError(getContext().getString(R.string.accountSettingsEmailEmptyError));
@@ -131,10 +126,10 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
             }
 
             //password validation
-            if (mNamePasswordText.getText().toString().isEmpty()) {
+            if (mPasswordText.getText().toString().isEmpty()) {
                 mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordEmptyError));
                 invalidPassword = true;
-            } else if (!mPresenter.validatePassword(mNamePasswordText.getText().toString())) {
+            } else if (!mPresenter.validatePassword(mPasswordText.getText().toString())) {
                 mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordInvalidError));
                 invalidPassword = true;
             } else {
@@ -143,20 +138,19 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
                 invalidPassword = false;
             }
             //return if needed
-            if (invalidName || invalidEmail || invalidPassword) {
-                return false;
+            if (invalidEmail || invalidPassword) {
+                return super.onOptionsItemSelected(item);
             }
 
             //// Start the Positve flow ////
+            mProgressBar.setVisibility(View.VISIBLE);
             //following should be executable after validation success
             enableEditTexts(false);
             enableEditAction();
             mPresenter.saveSettings(new UpdateAccountSettingsRequest(
-                    mNameText.getText().toString()
-                    , ""   //TODO need to confirm from the backend system
-                    , mEmailText.getText().toString()
+                      mEmailText.getText().toString()
                     , mUserId
-                    , mNamePasswordText.getText().toString()
+                    , mPasswordText.getText().toString()
                     , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
 
         }
@@ -185,22 +179,21 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @Override
     public void enableEditTexts(boolean enable) {
         if (enable) {
-            mNameText.setEnabled(true);
             mEmailText.setEnabled(true);
-            mNamePasswordText.setEnabled(true);
+            mPasswordText.setEnabled(true);
         } else {
-            mNameText.setEnabled(false);
             mEmailText.setEnabled(false);
-            mNamePasswordText.setEnabled(false);
+            mPasswordText.setEnabled(false);
         }
     }
 
     @Override
     public void setUserData(User user) {
-        mNameText.setText(user.getFirstName());
+        mProgressBar.setVisibility(View.GONE);
+
         mEmailText.setText(user.getEmail());
         //we will never receive password as part of the response in User model
-        mNamePasswordText.setText("*******");
+        mPasswordText.setText("*******");
         //intialize the userId to use while changing the settings
         mUserId = user.getUserId();
 
@@ -208,12 +201,14 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
     @Override
     public void showSuccess() {
-        Snackbar.make(mNamePasswordText, R.string.accountSettingsChangedSuccessfully, Snackbar.LENGTH_SHORT).show();
+        mProgressBar.setVisibility(View.GONE);
+        Snackbar.make(mPasswordText, R.string.accountSettingsChangedSuccessfully, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void showError(String error) {
-        Snackbar.make(mNamePasswordText, error, Snackbar.LENGTH_SHORT).show();
+        mProgressBar.setVisibility(View.GONE);
+        Snackbar.make(mPasswordText, error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

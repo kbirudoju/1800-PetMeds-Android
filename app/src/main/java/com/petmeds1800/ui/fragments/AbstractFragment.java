@@ -1,11 +1,15 @@
 package com.petmeds1800.ui.fragments;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.petmeds1800.R;
 
@@ -86,6 +90,21 @@ public abstract class AbstractFragment extends Fragment {
 
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void hideSoftKeyBoard() {
+        View view = getActivity().getCurrentFocus();
+        if(view!=null)
+        {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        hideSoftKeyBoard();
+        return super.onOptionsItemSelected(item);
     }
 
     public interface PermissionRequested {

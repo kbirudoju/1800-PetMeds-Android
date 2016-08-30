@@ -27,6 +27,7 @@
             android:drawableRight="@drawable/ic_arrow"
             android:drawableLeft="@drawable/ic_orders"
             android:drawablePadding="@dimen/dp_12"
+            android:background="@color/white"
 
             />
 <include
@@ -47,6 +48,7 @@
             style="@style/styledefault"
             android:drawableLeft="@drawable/ic_accountsettings"
             android:drawablePadding="@dimen/dp_12"
+            android:background="@color/white"
             android:drawableRight="@drawable/ic_arrow"/>
         <include
             layout="@layout/view_separator"></include>
@@ -55,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
+            android:background="@color/white"
             android:text="@string/title_manage_payment_option"
             style="@style/styledefault"
             android:drawableLeft="@drawable/ic_paymnentinformation"
@@ -70,6 +73,7 @@
             android:gravity="center_vertical"
             android:text="@string/title_manage_address"
             style="@style/styledefault"
+            android:background="@color/white"
             android:drawableLeft="@drawable/ic_manageaddress"
             android:drawablePadding="@dimen/dp_12"
             android:drawableRight="@drawable/ic_arrow"/>
@@ -82,6 +86,7 @@
             android:gravity="center_vertical"
             android:text="@string/title_my_pets"
             style="@style/styledefault"
+            android:background="@color/white"
             android:drawableLeft="@drawable/ic_mypets"
             android:drawablePadding="@dimen/dp_12"
             android:drawableRight="@drawable/ic_arrow"/>
@@ -96,6 +101,7 @@
             style="@style/styledefault"
             android:drawableLeft="@drawable/ic_myvets"
             android:drawablePadding="@dimen/dp_12"
+            android:background="@color/white"
             android:drawableRight="@drawable/ic_arrow"/>
         <include
             layout="@layout/view_separator"></include>
@@ -105,6 +111,7 @@
             android:gravity="center_vertical"
             android:text="@string/title_set_refill_schedule"
             style="@style/styledefault"
+            android:background="@color/white"
             android:drawableLeft="@drawable/ic_refill"
             android:drawablePadding="@dimen/dp_12"
             android:drawableRight="@drawable/ic_arrow"/>
@@ -190,6 +197,7 @@
             android:gravity="center_vertical"
             android:text="@string/title_contact_us"
             style="@style/styledefault"
+            android:background="@color/white"
             android:drawableLeft="@drawable/ic_contact"
             android:drawablePadding="@dimen/dp_12"
             android:drawableRight="@drawable/ic_arrow"/>
@@ -201,6 +209,7 @@
             android:layout_height="@dimen/dp_50"
             android:gravity="center_vertical"
             android:text="@string/title_signout"
+            android:background="@color/white"
             style="@style/styledefault"
             android:drawableLeft="@drawable/ic_logout"
             android:drawablePadding="@dimen/dp_12"

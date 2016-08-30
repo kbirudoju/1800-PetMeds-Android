@@ -280,7 +280,6 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_done) {
-            ((AbstractActivity)getActivity()).hideSoftKeyBoard();
 
             boolean isValidPetName;
             boolean isValidOwnerName;
@@ -305,7 +304,7 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
                     isValidGender ||
                     isValidWeight ||
                     isValidAge)
-                return false;
+                return super.onOptionsItemSelected(item);
         }
         //Todo Remove all hardcoded value after api integration
         progressBar.setVisibility(View.VISIBLE);

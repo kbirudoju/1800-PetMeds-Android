@@ -2,27 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/rectangular_background"
     android:padding="@dimen/dp_16">
 
 
     <RelativeLayout
         android:id="@+id/addressContainer_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_16">
 
         <RadioButton
             android:id="@+id/addressSelection_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:button="@drawable/radio_button_selector"
-            />
+            android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/addressName_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/addressSelection_radio"
+        android:layout_marginLeft="@dimen/dp_23"
+        style="@style/styledefault_no_padding"
         android:text="Todd Shapiro"
         />
 
@@ -32,7 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/addressName_label"
-        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/addressSelection_radio"
+        android:layout_marginTop="@dimen/dp_2"
+        android:layout_marginLeft="@dimen/dp_23"
+        style="@style/rounded_button_text"
         android:text="232 Marina Ave"
         />
 
@@ -41,7 +46,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/addressLine1_label"
-        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/addressSelection_radio"
+        android:layout_marginLeft="@dimen/dp_23"
+        style="@style/rounded_button_text"
         android:text="Venice Beach, CA 10290"/>
 
     <TextView
@@ -49,7 +56,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/addressLine2_label"
-        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/addressSelection_radio"
+        android:layout_marginLeft="@dimen/dp_23"
+        style="@style/rounded_button_text"
         android:text="United States"/>
 
     <TextView
@@ -57,7 +66,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/country_label"
-        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/addressSelection_radio"
+        android:layout_marginLeft="@dimen/dp_23"
+        style="@style/rounded_button_text"
         android:text="@string/phoneNumberInAddress"/>
 
     <TextView
@@ -65,7 +76,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/phoneNumber_label"
-        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/addressSelection_radio"
+        android:layout_marginLeft="@dimen/dp_23"
+        style="@style/formlabel"
         android:text="@string/defaultShippingAddress"/>
 
     </RelativeLayout>
@@ -73,9 +86,12 @@
     <Button
         android:id="@+id/selectAddress_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_45"
+        style="@style/label"
+        android:background="@color/petmeds_blue"
         android:layout_below="@id/addressContainer_layout"
-        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"
         android:text="@string/useThisAddress"/>
 
 

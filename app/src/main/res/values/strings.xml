@@ -123,7 +123,7 @@
     <string name="accountSettingsEmailEmptyError">Email is required</string>
     <string name="accountSettingsEmailInvalidError">Email address must be valid</string>
     <string name="accountSettingsPasswordEmptyError">Password is required</string>
-    <string name="accountSettingsPasswordInvalidError">Password must be XXX</string>
+    <string name="accountSettingsPasswordInvalidError">Password must be 8 character with at least 1 number and 1 upper-case letter</string>
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
     <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method</string>
     <string name="saveCardForFasterCheckoutMessage">Store a payment method for faster checkout.</string>
@@ -195,6 +195,7 @@
     <string name="choose_country_txt">Choose country</string>
 
 
+
     <!--Add pet-->
     <string name="hint_pet_name">Pet Name</string>
     <string name="hint_pet_picture">Pet Picture</string>
@@ -242,4 +243,12 @@
     <string name="title_forgot_password">Forgot Password</string>
     <!--Webview Urls-->
 
+
+    <string name="savedCardsListTitle">Payment information</string>
+    <string name="savedAddressListTitle">Address information</string>
+    <string name="addACardTitle">Add payment method</string>
+    <string name="addAddressTitle">Add new address</string>
+    <string name="editAddressTitle">Edit Address</string>
+    <string name="addressSelectionListTitle">Select billing address</string>
+    <string name="accountSettingsTitle">Account settings</string>
 </resources>

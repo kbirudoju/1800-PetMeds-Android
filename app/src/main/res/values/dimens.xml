@@ -57,5 +57,6 @@
     <dimen name="dp_42">42dp</dimen>
     <dimen name="dp_57">57dp</dimen>
     <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
 
 </resources>

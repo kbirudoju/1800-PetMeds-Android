@@ -86,6 +86,7 @@ public interface PetMedsApiService {
     @POST("rest/model/1800petmeds/pet/PetActor/add")
     Observable<AddPetResponse> addPet(@Body AddPetRequest petRequest);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/atg/userprofiling/ProfileActor/stateList")
     Observable<StatesListResponse> getUsaStatesList();
 

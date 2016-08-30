@@ -24,7 +24,7 @@ public interface AddEditAddressContract {
 
         void addressUpdated();
 
-        void addressAdditionFailed(String errorMessage);
+        void showErrorMessage(String errorMessage);
 
         boolean checkAndShowError(EditText auditEditText , TextInputLayout auditTextInputLayout , int errorStringId);
 
