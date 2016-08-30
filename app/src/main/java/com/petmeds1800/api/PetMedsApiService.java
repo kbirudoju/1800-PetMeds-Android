@@ -99,6 +99,6 @@ public interface PetMedsApiService {
 
     @Headers({"Request-Credential: pmdevrestapi"})
     @GET("/rest/model/atg/userprofiling/SecurityStatusActor/status")
-    Observable<String> getSecurityStatus();
+    Observable<String> getSecurityStatus();   
 
 }
