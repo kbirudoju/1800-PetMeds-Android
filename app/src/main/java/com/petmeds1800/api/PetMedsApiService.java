@@ -10,12 +10,14 @@ import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.model.entities.PetList;
 import com.petmeds1800.model.entities.Profile;
+import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
@@ -38,7 +40,7 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/login")
-    Observable<String> login(@Body LoginRequest loginRequest);
+    Observable<LoginResponse> login(@Body LoginRequest loginRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/forgotPasswordEmail")
@@ -100,6 +102,6 @@ public interface PetMedsApiService {
 
     @Headers({"Request-Credential: pmdevrestapi"})
     @GET("/rest/model/atg/userprofiling/SecurityStatusActor/status")
-    Observable<String> getSecurityStatus();   
+    Observable<SecurityStatusResponse> getSecurityStatus();
 
 }

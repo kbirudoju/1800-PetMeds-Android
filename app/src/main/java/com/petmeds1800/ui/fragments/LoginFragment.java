@@ -1,5 +1,16 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.ForgotPasswordIntent;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.LoginTask.LoginContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -9,16 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.ForgotPasswordIntent;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
-import com.petmeds1800.util.GeneralPreferencesHelper;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -73,7 +75,6 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
-        mPreferencesHelper = new GeneralPreferencesHelper(getActivity());
     }
 
     @Nullable
@@ -152,7 +153,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             mApiService.login(new LoginRequest(mEmailText.getText().toString(),
                     mPasswordText.getText().toString(), "test_test"))
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Subscriber<LoginResponse>() {
                         @Override
                         public void onCompleted() {
 
@@ -164,11 +165,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                         }
 
                         @Override
-                        public void onNext(String s) {
+                        public void onNext(LoginResponse loginResponse) {
 
-                            Log.v("login response", s);
-
-
+                            Log.v("login response", loginResponse.getStatus().getCode());
                         }
                     });
 
@@ -188,9 +187,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                         return mPreferencesHelper.getSessionConfirmationResponse();
                     }
                 })
-                .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
+                .flatMap(new Func1<SessionConfNumberResponse, Observable<LoginResponse>>() {
                     @Override
-                    public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
+                    public Observable<LoginResponse> call(SessionConfNumberResponse sessionConfNumberResponse) {
                         String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
                         Log.v("sessionToken", sessionConfNumber);
                         if (sessionConfNumber != null) {
@@ -205,7 +204,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                                 .subscribeOn(Schedulers.io());
                     }
                 })
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Subscriber<LoginResponse>() {
                     @Override
                     public void onCompleted() {
 
@@ -215,16 +214,23 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                     public void onError(Throwable e) {
 
                         Log.v("onError", e.getMessage());
+                        Toast.makeText(getActivity(), "Error logging in..", Toast.LENGTH_SHORT).show();
                         hideProgress();
                     }
 
                     @Override
-                    public void onNext(String s) {
+                    public void onNext(LoginResponse loginResponse) {
 
-                        Log.v("login response", s);
-
+                        Log.v("login response", loginResponse.getStatus().getCode());
                         hideProgress();
-                        navigateToHome();
+                        if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
+                            mPreferencesHelper.setIsNewUser(false);
+                            navigateToHome();
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    "Error: " + loginResponse.getStatus().getErrorMessages().get(0),
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }

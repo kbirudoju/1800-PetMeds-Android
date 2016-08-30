@@ -1,9 +1,11 @@
 package com.petmeds1800.dagger.module;
 
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.SplashActivity;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.account.AccountSettingsPresenter;
-import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.AddAddressPresenter;
+import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
@@ -21,6 +23,10 @@ import com.petmeds1800.ui.pets.presenter.PetListPresenter;
  * @author Konrad
  */
 public interface Injector {
+
+    void inject(SplashActivity splashActivity);
+
+    void inject(HomeActivity homeActivity);
 
     void inject(LoginFragment loginFragment);
 
@@ -45,7 +51,9 @@ public interface Injector {
     void inject(AccountSettingsFragment accountSettingsFragment);
 
     void inject(PetListPresenter petsListPresenter);
+
     void inject(AddPetPresenter addPetPresenter);
+
     void inject(AddPetFragment addPetFragment);
 
 }

@@ -120,14 +120,6 @@ android {
             printKeystoreInfos(keystore, keystorePassword)
         }
 
-        //Rename our apk files to give to include the version number
-        applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                //Apk that will be renamed
-                File file = output.outputFile;
-                output.outputFile = addVersionToApkName(file)
-            }
-        }
     }
 
     // Use product flavours to customise builds
@@ -217,18 +209,18 @@ dependencies {
     //}
 
     // Android Instrumentation testing only dependencies
-//    androidTestCompile('com.android.support.test:runner:0.4') {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    }
-//    // Set this dependency to use JUnit 4 rules
-//    androidTestCompile('com.android.support.test:rules:0.4') {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    }
-//    // Set this dependency to build and run Espresso tests
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    }
-//    // Set this dependency to build and run UI Automator tests
+    androidTestCompile('com.android.support.test:runner:0.4') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    // Set this dependency to use JUnit 4 rules
+    androidTestCompile('com.android.support.test:rules:0.4') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    // Set this dependency to build and run Espresso tests
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    // Set this dependency to build and run UI Automator tests
 //    androidTestCompile('com.android.support.test.uiautomator:uiautomator-v18:2.1.2') {
 //        exclude group: 'com.android.support', module: 'support-annotations'
 //    }
@@ -283,20 +275,6 @@ configurations {
 }
 
 /**
- * This method takes a file in and will replace
- * the default app name with a name we chose and
- * will append the version number at the end to
- * make versions easy to track
- *
- * @param file
- * @return new file name
- */
-def File addVersionToApkName(File file) {
-    String apkName = file.name.replace(".apk", "-" + version + ".apk")
-    return new File(file.parent, apkName)
-}
-
-/**
  * This method is used for debugging purposes, it allows you
  * to get a quick look at the keystore status on Jenkins
  *
@@ -312,5 +290,5 @@ def printKeystoreInfos(File keystore, File keystorePassword) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.10'
+    gradleVersion = '2.14.1'
 }

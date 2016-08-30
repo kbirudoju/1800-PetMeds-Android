@@ -7,10 +7,13 @@ import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -133,6 +136,12 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
             mStage = Stage.LOGIN;
             updateStage();
             return;
+        } else if(mStage == Stage.FINGERPRINT) {
+            ((HomeActivity) getActivity()).getViewPager().setCurrentItem(0);
+        } else if(mStage == Stage.LOGIN && RxFingerprint.isAvailable(getActivity())){
+            mStage = Stage.FINGERPRINT;
+            updateStage();
+            return;
         }
         dismiss();
     }
@@ -206,6 +215,12 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
                                         .setImageDrawable(ContextCompat
                                                 .getDrawable(getActivity(), R.drawable.ic_fingerprint_success));
                                 mFingerprintStatus.setText(getString(R.string.label_fingerprint_recognized));
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dismiss();
+                                    }
+                                }, 1000);
                                 break;
                         }
                     }
@@ -392,9 +407,9 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
                             return mPreferencesHelper.getSessionConfirmationResponse();
                         }
                     })
-                    .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
+                    .flatMap(new Func1<SessionConfNumberResponse, Observable<LoginResponse>>() {
                         @Override
-                        public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
+                        public Observable<LoginResponse> call(SessionConfNumberResponse sessionConfNumberResponse) {
                             String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
                             Log.v("sessionToken", sessionConfNumber);
                             if (sessionConfNumber != null) {
@@ -408,7 +423,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
                                     .subscribeOn(Schedulers.io());
                         }
                     })
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Subscriber<LoginResponse>() {
                         @Override
                         public void onCompleted() {
 
@@ -423,12 +438,18 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
                         }
 
                         @Override
-                        public void onNext(String s) {
+                        public void onNext(LoginResponse loginResponse) {
 
-                            Log.v("login response", s);
-                            Toast.makeText(getActivity(), "login response" +
-                                    s, Toast.LENGTH_SHORT).show();
+                            Log.v("login response", loginResponse.getStatus().getCode());
                             hideProgress();
+                            if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
+                                mPreferencesHelper.setIsNewUser(false);
+                                dismiss();
+                            } else {
+                                Toast.makeText(getActivity(),
+                                        "Error: " + loginResponse.getStatus().getErrorMessages().get(0),
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
 

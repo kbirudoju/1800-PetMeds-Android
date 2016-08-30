@@ -4,6 +4,7 @@ import com.petmeds1800.dagger.module.AppComponent;
 import com.petmeds1800.dagger.module.ApplicationModule;
 import com.petmeds1800.dagger.module.DaggerAppComponent;
 import com.petmeds1800.dagger.module.RestModule;
+import com.petmeds1800.dagger.module.StorageModule;
 
 import android.app.Application;
 
@@ -28,6 +29,7 @@ public class PetMedsApplication extends Application {
         return DaggerAppComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .restModule(new RestModule(getString(R.string.server_endpoint)))
+                .storageModule(new StorageModule())
                 .build();
     }
 

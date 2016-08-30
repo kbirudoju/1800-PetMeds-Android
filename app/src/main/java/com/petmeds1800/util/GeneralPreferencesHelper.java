@@ -20,6 +20,8 @@ public class GeneralPreferencesHelper {
 
     public static final String LOGIN_PASSWORD = "login_password";
 
+    public static final String IS_NEW_USER = "is_new_user";
+
     private SharedPreferences mPreferences;
 
     public GeneralPreferencesHelper(Context context) {
@@ -44,5 +46,13 @@ public class GeneralPreferencesHelper {
 
     public String getLoginEmail(){
         return mPreferences.getString(LOGIN_EMAIL, null);
+    }
+
+    public void setIsNewUser(boolean value){
+        mPreferences.edit().putBoolean(IS_NEW_USER, value).apply();
+    }
+
+    public boolean getIsNewUser(){
+        return mPreferences.getBoolean(IS_NEW_USER, true);
     }
 }

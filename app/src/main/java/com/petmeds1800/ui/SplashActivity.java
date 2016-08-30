@@ -1,14 +1,19 @@
 package com.petmeds1800.ui;
 
+import com.petmeds1800.BuildConfig;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.intent.LoginIntent;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 
-import com.petmeds1800.BuildConfig;
-import com.petmeds1800.R;
-import com.petmeds1800.intent.LoginIntent;
+import javax.inject.Inject;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -22,10 +27,14 @@ public class SplashActivity extends AppCompatActivity {
 
     private long mFinishTime;
 
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_splash);
+        PetMedsApplication.getAppComponent().inject(this);
 
         if (savedInstanceState != null) {
             mFinishTime = savedInstanceState.getLong(STATE_FINISH_TIME);
@@ -52,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onStart();
 
         if (sHandler == null) {
-            sHandler = new FinishHandler();
+            sHandler = new FinishHandler(mPreferencesHelper);
         }
 
         sHandler.setSplashActivity(this);
@@ -77,6 +86,12 @@ public class SplashActivity extends AppCompatActivity {
 
         private SplashActivity mSplashActivity;
 
+        private GeneralPreferencesHelper mPreferencesHelper;
+
+        public FinishHandler(GeneralPreferencesHelper preferencesHelper) {
+            mPreferencesHelper = preferencesHelper;
+        }
+
         public void setSplashActivity(final SplashActivity splashActivity) {
             mSplashActivity = splashActivity;
         }
@@ -85,11 +100,13 @@ public class SplashActivity extends AppCompatActivity {
         public void handleMessage(final Message msg) {
 
             if (msg.what == MSG_FINISH && mSplashActivity != null) {
-                //Commented code below for testing Login flow
-             //mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
-
-                mSplashActivity.startActivity(new LoginIntent(mSplashActivity));
+                if (mPreferencesHelper.getIsNewUser()) {
+                    mSplashActivity.startActivity(new LoginIntent(mSplashActivity));
+                } else {
+                    mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
+                }
                 mSplashActivity.finish();
+
             }
         }
     }
