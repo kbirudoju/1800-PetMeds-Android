@@ -47,13 +47,13 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     TextInputLayout mEmailInput;
 
     @BindView(R.id.email_edit)
-    EditText mEmailText;
+    EditText mEmailEdit;
 
     @BindView(R.id.password_input)
     TextInputLayout mPasswordInput;
 
     @BindView(R.id.password_edit)
-    EditText mPasswordText;
+    EditText mPasswordEdit;
 
     @Inject
     PetMedsApiService mApiService;
@@ -128,8 +128,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     public void login() {
 
         boolean isValidEmail, isValidPassword;
-        String emailText = mEmailText.getText().toString().trim();
-        String passwordText = mPasswordText.getText().toString().trim();
+        String emailText = mEmailEdit.getText().toString().trim();
+        String passwordText = mPasswordEdit.getText().toString().trim();
 
         if (emailText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
@@ -142,7 +142,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             setPasswordError(getString(R.string.accountSettingsPasswordEmptyError));
             return;
         } else {
-            isValidPassword = mPresenter.validatePassword(emailText);
+            isValidPassword = mPresenter.validatePassword(passwordText);
         }
 
         if (isValidEmail && isValidPassword) {
@@ -150,8 +150,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             showProgress();
 
             //TODO: remove this temporary hack after backend resolves their problem of cookies
-            mApiService.login(new LoginRequest(mEmailText.getText().toString(),
-                    mPasswordText.getText().toString(), "test_test"))
+            mApiService.login(new LoginRequest(mEmailEdit.getText().toString(),
+                    mPasswordEdit.getText().toString(), "test_test"))
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Subscriber<LoginResponse>() {
                         @Override
@@ -174,7 +174,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         } else if (!isValidEmail) {
             setEmailError(getString(R.string.accountSettingsEmailInvalidError));
         } else {
-            setPasswordError(getString(R.string.accountSettingsEmailInvalidError));
+            setPasswordError(getString(R.string.accountSettingsPasswordInvalidError));
         }
     }
 
@@ -197,8 +197,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                         }
 
                         return mApiService
-                                .login(new LoginRequest(mEmailText.getText().toString(),
-                                        mPasswordText.getText().toString(), sessionConfNumber))
+                                .login(new LoginRequest(mEmailEdit.getText().toString(),
+                                        mPasswordEdit.getText().toString(), sessionConfNumber))
 
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io());

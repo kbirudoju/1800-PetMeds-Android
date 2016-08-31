@@ -18,7 +18,7 @@ import javax.inject.Inject;
  */
 public class LoginPresenter implements LoginContract.Presenter {
 
-    private static final int PASSWORD_LENGTH = 3;
+    private static final int PASSWORD_LENGTH = 8;
 
     @NonNull
     private final LoginContract.View mLoginView;

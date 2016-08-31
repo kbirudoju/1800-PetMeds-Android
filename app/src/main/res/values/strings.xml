@@ -123,7 +123,8 @@
     <string name="accountSettingsEmailEmptyError">Email is required</string>
     <string name="accountSettingsEmailInvalidError">Email address must be valid</string>
     <string name="accountSettingsPasswordEmptyError">Password is required</string>
-    <string name="accountSettingsPasswordInvalidError">Password must be 8 character with at least 1 number and 1 upper-case letter</string>
+    <!--<string name="accountSettingsPasswordInvalidError">Password must be 8 character with at least 1 number and 1 upper-case letter</string>-->
+    <string name="accountSettingsPasswordInvalidError">Password must be at least 8 characters</string>
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
     <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method</string>
     <string name="saveCardForFasterCheckoutMessage">Store a payment method for faster checkout.</string>

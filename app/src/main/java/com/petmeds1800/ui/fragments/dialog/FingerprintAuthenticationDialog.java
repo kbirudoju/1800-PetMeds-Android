@@ -99,7 +99,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
 
     private Subscription fingerprintSubscription = Subscribers.empty();
 
-    private static final int PASSWORD_LENGTH = 3;
+    private static final int PASSWORD_LENGTH = 8;
 
     private Stage mStage = Stage.FINGERPRINT;
 
@@ -132,16 +132,18 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
 
     @OnClick(R.id.cancel_button)
     void onCancelButtonClick() {
-        if(mStage == Stage.FORGOT_PASSWORD){
+        if (mStage == Stage.FORGOT_PASSWORD) {
             mStage = Stage.LOGIN;
             updateStage();
             return;
-        } else if(mStage == Stage.FINGERPRINT) {
-            ((HomeActivity) getActivity()).getViewPager().setCurrentItem(0);
-        } else if(mStage == Stage.LOGIN && RxFingerprint.isAvailable(getActivity())){
+        } else if (mStage == Stage.FINGERPRINT) {
+            navigateToHome();
+        } else if (mStage == Stage.LOGIN && RxFingerprint.isAvailable(getActivity())) {
             mStage = Stage.FINGERPRINT;
             updateStage();
             return;
+        } else if (mStage == Stage.LOGIN && RxFingerprint.isUnavailable(getActivity())) {
+            navigateToHome();
         }
         dismiss();
     }
@@ -163,7 +165,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
     void onForgotPasswordClick() {
         if (loginEmail == null) {
             sendForgotPasswordEmail();
-        } else{
+        } else {
             gotoForgotPassword();
         }
     }
@@ -172,6 +174,10 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         fingerprintSubscription.unsubscribe();
+    }
+
+    private void navigateToHome() {
+        ((HomeActivity) getActivity()).getViewPager().setCurrentItem(0);
     }
 
     private void authenticateFingerprint() {
@@ -289,7 +295,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
         updateStage();
     }
 
-    private void gotoForgotPassword(){
+    private void gotoForgotPassword() {
         mStage = Stage.FORGOT_PASSWORD;
         updateStage();
     }
@@ -305,7 +311,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
             return;
         } else {
             isValidEmail = validateEmail(emailText);
-            if (isValidEmail){
+            if (isValidEmail) {
                 loginEmail = emailText;
             }
         }
@@ -363,10 +369,9 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
                         }
                     });
 
-        } else if(mStage == Stage.LOGIN && isValidEmail){
+        } else if (mStage == Stage.LOGIN && isValidEmail) {
             onForgotPasswordClick();
-        }
-        else {
+        } else {
             setEmailError(getString(R.string.accountSettingsEmailInvalidError));
         }
     }
@@ -385,7 +390,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
             return;
         } else {
             isValidEmail = validateEmail(emailText);
-            if (isValidEmail){
+            if (isValidEmail) {
                 loginEmail = emailText;
             }
         }
@@ -456,7 +461,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
         } else if (!isValidEmail) {
             setEmailError(getString(R.string.accountSettingsEmailInvalidError));
         } else {
-            setPasswordError(getString(R.string.accountSettingsEmailInvalidError));
+            setPasswordError(getString(R.string.accountSettingsPasswordInvalidError));
         }
     }
 
