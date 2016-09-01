@@ -252,4 +252,6 @@
     <string name="editAddressTitle">Edit Address</string>
     <string name="addressSelectionListTitle">Select billing address</string>
     <string name="accountSettingsTitle">Account settings</string>
+    <string name="removeThisAddress">Remove Address</string>
+    <string name="addressRemovedMessage">Address Removed.</string>
 </resources>

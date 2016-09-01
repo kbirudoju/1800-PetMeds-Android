@@ -6,6 +6,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Country;
 import com.petmeds1800.model.CountryListResponse;
+import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.UsaState;
 import com.petmeds1800.model.entities.AddAddressResponse;
@@ -195,7 +196,43 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     public void onNext(AddAddressResponse s) {
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
-                                mView.addressAdded();
+                                mView.addressUpdated();
+                            }
+                        } else {
+                            Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
+                            if (mView.isActive()) {
+                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+    }
+
+    @Override
+    public void removeAddress(RemoveAddressRequest removeAddressRequest) {
+        //show the progress
+        mPetMedsApiService.removeAddress(removeAddressRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddAddressResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        Log.e("AddACard", e.getMessage());
+                        mView.showErrorMessage(e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onNext(AddAddressResponse s) {
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.addressRemoved();
                             }
                         } else {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));

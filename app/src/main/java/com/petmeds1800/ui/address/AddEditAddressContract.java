@@ -3,6 +3,7 @@ package com.petmeds1800.ui.address;
 import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
 
+import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.UsaState;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
@@ -23,6 +24,8 @@ public interface AddEditAddressContract {
         void addressAdded();
 
         void addressUpdated();
+
+        void addressRemoved();
 
         void showErrorMessage(String errorMessage);
 
@@ -46,5 +49,7 @@ public interface AddEditAddressContract {
         String getCountryCode(String countryName);
 
         void updateAddress(AddressRequest addressRequest);
+
+        void removeAddress(RemoveAddressRequest removeAddressRequest);
     }
 }

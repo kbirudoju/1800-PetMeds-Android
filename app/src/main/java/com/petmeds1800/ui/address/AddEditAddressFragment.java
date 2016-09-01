@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -21,6 +22,7 @@ import android.widget.Switch;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
+import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
@@ -87,6 +89,8 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
 
     @BindView(R.id.defaultBillingAddress_switch)
     Switch mDefaultBillingAddressSwitch;
+    @BindView(R.id.removeAddress_button)
+    Button mRemoveAddressButton;
 
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
@@ -178,6 +182,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
         super.onViewCreated(view, savedInstanceState);
         mStateOrProvinceOrRegionEdit.setOnClickListener(this);
         mCountryNameEdit.setOnClickListener(this);
+        mRemoveAddressButton.setOnClickListener(this);
     }
 
     @Override
@@ -311,6 +316,14 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
     }
 
     @Override
+    public void addressRemoved() {
+        mProgressBar.setVisibility(View.GONE);
+        Snackbar.make(mAddressLine1Edit, R.string.addressRemovedMessage, Snackbar.LENGTH_LONG).show();
+        popBackStack();
+
+    }
+
+    @Override
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
         Snackbar.make(mAddressLine1Edit, errorMessage, Snackbar.LENGTH_LONG).show();
@@ -346,6 +359,11 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
                 mPresenter.getCountryList();
                 break;
 
+            case R.id.removeAddress_button:
+                mProgressBar.setVisibility(View.VISIBLE);
+                mPresenter.removeAddress(new RemoveAddressRequest(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber() , mAddress.getAddressId()));
+                break;
+
         }
     }
 
@@ -353,7 +371,6 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
     @Override
     public void usaStatesListReceived(String[] usaStateArray) {
         FragmentManager fragManager = getFragmentManager();
-        //TODO we should rename AgeRangeDialogFragment to a generic name
         CommonDialogFragment statesDialogFragment = CommonDialogFragment.newInstance(usaStateArray, getActivity().getString(R.string.choose_city_txt), USA_STATE_LIST_REQUEST);
         statesDialogFragment.setValueSetListener(this);
         statesDialogFragment.show(fragManager);
@@ -363,7 +380,6 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
     @Override
     public void countryListReceived(String[] countryArray) {
         FragmentManager fragManager = getFragmentManager();
-        //TODO we should rename AgeRangeDialogFragment to a generic name
         CommonDialogFragment statesDialogFragment = CommonDialogFragment.newInstance(countryArray, getActivity().getString(R.string.choose_country_txt), COUNTRY_LIST_REQUEST);
         statesDialogFragment.setValueSetListener(this);
         statesDialogFragment.show(fragManager);

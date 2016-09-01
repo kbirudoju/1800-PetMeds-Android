@@ -186,6 +186,17 @@
                 android:fontFamily="@string/font_roboto_regular"
                 android:textColor="@color/black"/>
 
+            <Button
+                android:id="@+id/removeAddress_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:layout_marginTop="@dimen/dp_16"
+                style="@style/label"
+                android:background="@color/petmeds_blue"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/removeThisAddress"/>
+
         </LinearLayout>
             <ProgressBar
                 style="?android:attr/progressBarStyle"

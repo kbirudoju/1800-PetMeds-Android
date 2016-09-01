@@ -170,9 +170,9 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
                         hideProgress();
                         int securityStatus = securityStatusResponse.getSecurityStatus();
                         //TODO: improvement
-                        if (securityStatus == 0) {
+                        if (securityStatus == 0 || securityStatus == 2) {
                             showFingerprintDialog();
-                        } else if (securityStatus == 2 || securityStatus == 4) {
+                        } else if (securityStatus == 4) {
                             //TODO: research more into silent sign in logic
                         }
                     }

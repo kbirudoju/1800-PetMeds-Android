@@ -1,6 +1,7 @@
 package com.petmeds1800.api;
 
 import com.petmeds1800.model.CountryListResponse;
+import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.entities.AddACardResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
@@ -103,5 +104,9 @@ public interface PetMedsApiService {
     @Headers({"Request-Credential: pmdevrestapi"})
     @GET("/rest/model/atg/userprofiling/SecurityStatusActor/status")
     Observable<SecurityStatusResponse> getSecurityStatus();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/contact/ContactActor/remove")
+    Observable<AddAddressResponse> removeAddress(@Body RemoveAddressRequest addressRequest);
 
 }
