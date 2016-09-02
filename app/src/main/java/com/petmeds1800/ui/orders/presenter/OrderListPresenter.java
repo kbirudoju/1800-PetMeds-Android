@@ -50,7 +50,7 @@ public class OrderListPresenter implements OrderListContract.Presenter {
                     @Override
                     public Observable<MyOrder> call(OrderHistoryFilter orderHistoryFilter) {
                         //temporary code just to check API. we will do modification after backend fixes
-                        filterCode=getFilterCode(orderHistoryFilter);
+                        filterCode = getFilterCode(orderHistoryFilter);
 
                         return mApiService
                                 .getOrderList(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(), filterCode)
@@ -73,14 +73,14 @@ public class OrderListPresenter implements OrderListContract.Presenter {
                     @Override
                     public void onNext(MyOrder myOrder) {
                         Log.d("orderlist size", myOrder.getCount() + "");
-                        if(myOrder.getStatus().getCode().equals(API_SUCCESS_CODE)) {
-                            if(mOrderView.isActive()){
+                        if (myOrder.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mOrderView.isActive()) {
                                 if (myOrder.getOrderList() != null) {
                                     mOrderView.updateOrderList(myOrder.getOrderList());
                                 }
                             }
-                        }else{
-                            if(mOrderView.isActive()){
+                        } else {
+                            if (mOrderView.isActive()) {
                                 mOrderView.onError(myOrder.getStatus().getErrorMessages().get(0));
                             }
                         }
@@ -106,10 +106,10 @@ public class OrderListPresenter implements OrderListContract.Presenter {
 
     }
 
-    private String getFilterCode(OrderHistoryFilter orderHistoryFilter){
-        for(OrderFilterList orderFilterList:orderHistoryFilter.getOrderFilterList() ){
-            if(orderFilterList.isDefault()){
-                String code=orderFilterList.getCode();
+    private String getFilterCode(OrderHistoryFilter orderHistoryFilter) {
+        for (OrderFilterList orderFilterList : orderHistoryFilter.getOrderFilterList()) {
+            if (orderFilterList.isDefault()) {
+                String code = orderFilterList.getCode();
                 return code;
             }
         }

@@ -27,7 +27,7 @@ public class AddACardPresenter implements AddACardContract.Presenter {
 
     private final AddACardContract.View mView;
 
-    AddACardPresenter(AddACardContract.View view){
+    AddACardPresenter(AddACardContract.View view) {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
@@ -48,19 +48,18 @@ public class AddACardPresenter implements AddACardContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        Log.e("AddACard",e.getMessage());
+                        Log.e("AddACard", e.getMessage());
                     }
 
                     @Override
                     public void onNext(AddACardResponse s) {
-                        if(s.getStatus().getCode().equals(API_SUCCESS_CODE)){
-                            if(mView.isActive()){
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
                                 mView.paymentMethodApproved();
                             }
-                        }
-                        else{
-                            Log.d("AddACard",s.getStatus().getErrorMessages().get(0));
-                            if(mView.isActive()){
+                        } else {
+                            Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
+                            if (mView.isActive()) {
                                 mView.paymentMethodDisapproved(s.getStatus().getErrorMessages().get(0));
                             }
                         }
@@ -73,23 +72,23 @@ public class AddACardPresenter implements AddACardContract.Presenter {
 
     @Override
     public boolean isCreditCardNumberValid(String creditCardNumber) {
-        if(creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_1 || creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_2){
+        if (creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_1 || creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_2) {
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean isExpirationDateValid(int expirationMonth , int expirationYear) {
-        if(expirationMonth <= 0 && expirationYear <= 0)
-         return false;
+    public boolean isExpirationDateValid(int expirationMonth, int expirationYear) {
+        if (expirationMonth <= 0 && expirationYear <= 0)
+            return false;
         else
             return true;
     }
 
     @Override
     public boolean isCvvValid(String cvv) {
-        if(cvv.length() == CVV_DIGITS_RULE_1 || cvv.length() == CVV_DIGITS_RULE_2){
+        if (cvv.length() == CVV_DIGITS_RULE_1 || cvv.length() == CVV_DIGITS_RULE_2) {
             return true;
         }
         return false;

@@ -254,4 +254,8 @@
     <string name="accountSettingsTitle">Account settings</string>
     <string name="removeThisAddress">Remove Address</string>
     <string name="addressRemovedMessage">Address Removed.</string>
+    <string name="shop_now">SHOP NOW</string>
+    <string name="you_have_no_orders">You have no Orders</string>
+    <string name="lets_find_the_medications_you_need">Lets find the medications you need!</string>
+    <string name="order_status">0 ORDERS IN THE LAST TWO YEARS</string>
 </resources>

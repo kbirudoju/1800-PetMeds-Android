@@ -24,7 +24,7 @@
     <dimen name="xxlarge_margin">20dp</dimen>
     <dimen name="xxxlarge_margin">24dp</dimen>
     <dimen name="xxxxlarge_margin">28dp</dimen>
-    
+
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_12">12sp</dimen>
     <dimen name="sp_14">14sp</dimen>
@@ -43,6 +43,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="dp_180">180dp</dimen>
+    <dimen name="dp_170">170dp</dimen>
     <dimen name="dp_33">33dp</dimen>
     <dimen name="dp_45">45dp</dimen>
     <dimen name="dp_6">6dp</dimen>
@@ -58,5 +59,11 @@
     <dimen name="dp_57">57dp</dimen>
     <dimen name="dp_30">30dp</dimen>
     <dimen name="dp_2">2dp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+    <dimen name="dp_300">300dp</dimen>
+    <dimen name="dp_21">21dp</dimen>
+    <dimen name="dp_15">15dp</dimen>
+    <dimen name="dp_63">63dp</dimen>
+
 
 </resources>
