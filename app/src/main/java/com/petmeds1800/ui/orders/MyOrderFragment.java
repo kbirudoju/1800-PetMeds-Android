@@ -7,14 +7,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.dagger.module.DaggerOrderComponent;
 import com.petmeds1800.dagger.module.OrderPresenterModule;
+import com.petmeds1800.model.entities.OrderFilterList;
 import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
@@ -52,6 +58,19 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
 
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
+
+    @BindView(R.id.order_empty_view)
+    LinearLayout mOrderEmptyLayout;
+
+    @BindView(R.id.order_title_view)
+    RelativeLayout mOrderTitleLayout;
+
+    @BindView(R.id.order_count_label)
+    TextView mOrderCountlabel;
+
+    @BindView(R.id.filter_name_label)
+    TextView mFilterTitleLabel;
+
 
     @Nullable
     @Override
@@ -134,11 +153,23 @@ public class MyOrderFragment extends AbstractFragment implements View.OnClickLis
 
 
     @Override
-    public void updateOrderList(List<OrderList> orderList) {
+    public void updateOrderList(List<OrderList> orderList,OrderFilterList filterList) {
         progressBar.setVisibility(View.GONE);
         mOrderList=orderList;
-        if(orderList.size()>0)
-        mOrderListAdapter.setData(orderList);
+        if(orderList.size()>0) {
+            mOrderRecyclerView.setVisibility(View.VISIBLE);
+            mOrderEmptyLayout.setVisibility(View.GONE);
+            mOrderTitleLayout.setVisibility(View.VISIBLE);
+            mOrderCountlabel.setText(String.valueOf(orderList.size()) + " " + getActivity().getString(R.string.title_orders));
+            mFilterTitleLabel.setText(filterList.getName());
+            mOrderListAdapter.setData(orderList);
+            mFilterButton.setVisibility(View.VISIBLE);
+        }else{
+            mOrderEmptyLayout.setVisibility(View.VISIBLE);
+            mOrderTitleLayout.setVisibility(View.GONE);
+            mOrderRecyclerView.setVisibility(View.GONE);
+            mFilterButton.setVisibility(View.GONE);
+        }
 
     }
 

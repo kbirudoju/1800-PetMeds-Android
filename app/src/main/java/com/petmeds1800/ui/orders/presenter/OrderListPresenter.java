@@ -31,7 +31,8 @@ public class OrderListPresenter implements OrderListContract.Presenter {
     @Inject
     PetMedsApiService mApiService;
 
-    private String filterCode;
+    private String mfilterCode;
+    public OrderFilterList mfilterList;
 
     @Inject
     OrderListPresenter(OrderListContract.View orderView) {
@@ -50,10 +51,10 @@ public class OrderListPresenter implements OrderListContract.Presenter {
                     @Override
                     public Observable<MyOrder> call(OrderHistoryFilter orderHistoryFilter) {
                         //temporary code just to check API. we will do modification after backend fixes
-                        filterCode = getFilterCode(orderHistoryFilter);
-
+                        mfilterList = getFilterCode(orderHistoryFilter);
+                        mfilterCode = mfilterList.getCode();
                         return mApiService
-                                .getOrderList(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(), filterCode)
+                                .getOrderList(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(), mfilterCode)
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io());
                     }
@@ -76,7 +77,7 @@ public class OrderListPresenter implements OrderListContract.Presenter {
                         if (myOrder.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mOrderView.isActive()) {
                                 if (myOrder.getOrderList() != null) {
-                                    mOrderView.updateOrderList(myOrder.getOrderList());
+                                    mOrderView.updateOrderList(myOrder.getOrderList(),mfilterList);
                                 }
                             }
                         } else {
@@ -106,11 +107,11 @@ public class OrderListPresenter implements OrderListContract.Presenter {
 
     }
 
-    private String getFilterCode(OrderHistoryFilter orderHistoryFilter) {
+    private OrderFilterList getFilterCode(OrderHistoryFilter orderHistoryFilter) {
         for (OrderFilterList orderFilterList : orderHistoryFilter.getOrderFilterList()) {
             if (orderFilterList.isDefault()) {
-                String code = orderFilterList.getCode();
-                return code;
+                return orderFilterList;
+
             }
         }
         return null;

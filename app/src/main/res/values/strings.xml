@@ -51,15 +51,15 @@
     <string name="title_orders">ORDERS</string>
     <string name="title_my_orders">My Orders</string>
     <string name="title_account">Account</string>
-    <string name="title_change_account_settings">Change account setting</string>
+    <string name="title_change_account_settings">Change account settings</string>
     <string name="title_manage_payment_option">Manage payment information</string>
     <string name="title_manage_address">Manage addresses</string>
-    <string name="title_my_pets">My pets</string>
-    <string name="title_my_vets">My vets</string>
+    <string name="title_my_pets">My Pets</string>
+    <string name="title_my_vets">My Vets</string>
     <string name="title_set_refill_schedule">Set your easy refill schedule</string>
     <string name="title_setting">SETTINGS</string>
-    <string name="title_use_fingerprint">Use fingerprint</string>
-    <string name="title_push_notification">Push Notification</string>
+    <string name="title_use_fingerprint">Use Fingerprint</string>
+    <string name="title_push_notification">Push Notifications</string>
     <string name="title_more">MORE</string>
     <string name="title_contact_us">Contact us</string>
     <string name="title_signout">Sign out</string>
@@ -255,7 +255,7 @@
     <string name="removeThisAddress">Remove Address</string>
     <string name="addressRemovedMessage">Address Removed.</string>
     <string name="shop_now">SHOP NOW</string>
-    <string name="you_have_no_orders">You have no Orders</string>
-    <string name="lets_find_the_medications_you_need">Lets find the medications you need!</string>
-    <string name="order_status">0 ORDERS IN THE LAST TWO YEARS</string>
+    <string name="you_have_no_orders">You have no orders</string>
+    <string name="lets_find_the_medications_you_need">Let\'s find the medications you need!</string>
+    <string name="order_status">0 ORDERS IN THE LAST 2 YEARS</string>
 </resources>

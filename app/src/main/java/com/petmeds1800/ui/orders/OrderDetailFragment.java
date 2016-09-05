@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -84,9 +86,23 @@ public class OrderDetailFragment extends AbstractFragment {
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_share, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+
     private void setTitle(){
         if(orderList!=null)
-        ((AbstractActivity) getActivity()).setToolBarTitle(orderList.getOrderId());
+        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.order_txt)+"#"+orderList.getOrderId());
     }
 
     private void setRecyclerView(){
