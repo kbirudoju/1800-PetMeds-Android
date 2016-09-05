@@ -120,8 +120,8 @@
     <string name="action_edit">Edit</string>
     <string name="action_done">Done</string>
     <string name="accountSettingsNameEmptyError">Name is required</string>
-    <string name="accountSettingsEmailEmptyError">Email is required</string>
-    <string name="accountSettingsEmailInvalidError">Email address must be valid</string>
+    <string name="accountSettingsEmailEmptyError">Email is required.</string>
+    <string name="accountSettingsEmailInvalidError">Email address must be valid.</string>
     <string name="accountSettingsPasswordEmptyError">Password is required</string>
     <!--<string name="accountSettingsPasswordInvalidError">Password must be 8 character with at least 1 number and 1 upper-case letter</string>-->
     <string name="accountSettingsPasswordInvalidError">Password must be at least 8 characters</string>
@@ -196,7 +196,6 @@
     <string name="choose_country_txt">Choose country</string>
 
 
-
     <!--Add pet-->
     <string name="hint_pet_name">Pet Name</string>
     <string name="hint_pet_picture">Pet Picture</string>
@@ -265,4 +264,6 @@
     <string name="addPetDescription">Add a pet to your account to receive customized recommendations and educational tips</string>
     <string name="addPetCaps">ADD A PET</string>
     <string name="npPetTxt">You have no pets</string>
+    <string name="errorMsgForEmail">There are one or more errors</string>
+
 </resources>

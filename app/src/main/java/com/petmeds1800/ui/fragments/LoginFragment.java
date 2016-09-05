@@ -1,16 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.ForgotPasswordIntent;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -21,6 +10,17 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.ForgotPasswordIntent;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.LoginTask.LoginContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -80,7 +80,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -130,7 +130,10 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         boolean isValidEmail, isValidPassword;
         String emailText = mEmailEdit.getText().toString().trim();
         String passwordText = mPasswordEdit.getText().toString().trim();
-
+        if (emailText.isEmpty() && passwordText.isEmpty()) {
+            setEmailError(getString(R.string.accountSettingsEmailEmptyError));
+            setPasswordError(getString(R.string.accountSettingsPasswordEmptyError));
+        }
         if (emailText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
             return;
