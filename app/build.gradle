@@ -179,6 +179,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.1.0'
 
     // RxJava adapter for retrofit
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
@@ -192,6 +193,11 @@ dependencies {
 
     // RxFingerprint
     compile "com.mtramin:rxfingerprint:1.0.0"
+
+    // Crouton
+    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@jar') {
+        exclude group: 'com.google.android', module: 'support-v4'
+    }
 
     //glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -233,8 +239,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.0-RC1'
     compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.0-RC1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.0-RC1'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.dagger:dagger:2.5'
     compile 'com.jakewharton:butterknife:8.1.0'

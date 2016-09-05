@@ -18,6 +18,8 @@ public interface LoginContract {
 
         void setPasswordError(String errorString);
 
+        void showErrorCrouton(CharSequence message, boolean span);
+
         void navigateToHome();
     }
 

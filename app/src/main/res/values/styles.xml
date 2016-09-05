@@ -28,7 +28,7 @@
 
     <style name="application.theme.splash"></style>
 
-    <style name="style" />
+    <style name="style"/>
 
     <style name="style.text.medium" parent="android:TextAppearance.Medium">
         <item name="android:fontFamily">sans-serif-medium</item>
@@ -178,5 +178,8 @@
         <item name="android:textSize">@dimen/sp_20</item>
     </style>
 
+    <style name="StyleCrouton">
+        <item name="android:textColor">@color/color_snackbar_text</item>
+    </style>
 
 </resources>

@@ -27,5 +27,7 @@
     <color name="fingerprint_success_color">#009688</color>
     <color name="fingerprint_alert_title_background">#f8fafc</color>
     <color name="radio_text_selected">#09304e</color>
+    <color name="color_snackbar">#FFDADA</color>
+    <color name="color_snackbar_text">#E13F3F</color>
 
 </resources>

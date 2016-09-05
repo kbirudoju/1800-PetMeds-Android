@@ -105,8 +105,8 @@ public class SplashActivity extends AppCompatActivity {
                 } else {
                     mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
                 }
+//                mSplashActivity.startActivity(new IntroIntent(mSplashActivity));
                 mSplashActivity.finish();
-
             }
         }
     }

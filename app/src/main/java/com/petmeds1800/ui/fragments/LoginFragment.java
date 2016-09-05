@@ -1,16 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -21,6 +10,22 @@ import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.mvp.LoginTask.LoginContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -55,6 +60,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @BindView(R.id.password_edit)
     EditText mPasswordEdit;
 
+    @BindView(R.id.container_login)
+    RelativeLayout mContainerLayout;
+
     @Inject
     PetMedsApiService mApiService;
 
@@ -80,7 +88,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -110,6 +118,14 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @Override
     public void setPasswordError(String errorString) {
         mPasswordInput.setError(errorString);
+    }
+
+    @Override
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        if (span) {
+            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+        }
+        Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
     }
 
     @Override
@@ -155,6 +171,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             //TODO: remove this temporary hack after backend resolves their problem of cookies
             mApiService.login(new LoginRequest(mEmailEdit.getText().toString(),
                     mPasswordEdit.getText().toString(), "test_test"))
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Subscriber<LoginResponse>() {
                         @Override
@@ -164,12 +181,17 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
                         @Override
                         public void onError(Throwable e) {
-                            doLogin();
+                            int errorId = RetrofitErrorHandler.handleError(e);
+                            if (errorId == R.string.networkError || errorId == R.string.unexpectedError) {
+                                showErrorCrouton(getString(errorId), false);
+                                hideProgress();
+                            } else {
+                                doLogin();
+                            }
                         }
 
                         @Override
                         public void onNext(LoginResponse loginResponse) {
-
                             Log.v("login response", loginResponse.getStatus().getCode());
                         }
                     });
@@ -187,6 +209,10 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                 .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
                     @Override
                     public SessionConfNumberResponse call(Throwable throwable) {
+                        int errorId = RetrofitErrorHandler.handleError(throwable);
+                        if (errorId == R.string.networkError || errorId == R.string.unexpectedError) {
+                            showErrorCrouton(getString(errorId), false);
+                        }
                         return mPreferencesHelper.getSessionConfirmationResponse();
                     }
                 })
@@ -198,11 +224,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                         if (sessionConfNumber != null) {
                             mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
                         }
-
                         return mApiService
                                 .login(new LoginRequest(mEmailEdit.getText().toString(),
                                         mPasswordEdit.getText().toString(), sessionConfNumber))
-
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io());
                     }
@@ -215,24 +239,24 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
                     @Override
                     public void onError(Throwable e) {
-
+                        hideProgress();
+                        int errorId = RetrofitErrorHandler.handleError(e);
+                        if (errorId == R.string.networkError || errorId == R.string.unexpectedError) {
+                            showErrorCrouton(getString(errorId), false);
+                        }
                         Log.v("onError", e.getMessage());
                         Toast.makeText(getActivity(), "Error logging in..", Toast.LENGTH_SHORT).show();
-                        hideProgress();
                     }
 
                     @Override
                     public void onNext(LoginResponse loginResponse) {
-
                         Log.v("login response", loginResponse.getStatus().getCode());
                         hideProgress();
                         if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
                             mPreferencesHelper.setIsNewUser(false);
                             navigateToHome();
                         } else {
-                            Toast.makeText(getActivity(),
-                                    "Error: " + loginResponse.getStatus().getErrorMessages().get(0),
-                                    Toast.LENGTH_SHORT).show();
+                            showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)), true);
                         }
                     }
                 });

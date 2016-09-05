@@ -100,7 +100,9 @@
     <string name="label.fingerprint_cancel">CANCEL</string>
     <string name="label.type_password_description">Type your password to continue.</string>
     <string name="label.fingerprint_forgot_password">FORGOT PASSWORD</string>
-    <string name="description.send_email">An email will be sent to the address below with information to reset your password.</string>
+    <string name="description.send_email">An email will be sent to the address below with information to reset your
+        password.
+    </string>
     <string name="label.send_email">SEND EMAIL</string>
     <string name="label.enter_password">ENTER PASSWORD</string>
     <string name="title.enter_account_info">ENTER ACCOUNT INFORMATION</string>
@@ -195,7 +197,6 @@
     <string name="choose_city_txt">Choose city</string>
     <string name="choose_country_txt">Choose country</string>
 
-
     <!--Add pet-->
     <string name="hint_pet_name">Pet Name</string>
     <string name="hint_pet_picture">Pet Picture</string>
@@ -243,7 +244,6 @@
     <string name="title_forgot_password">Forgot Password</string>
     <!--Webview Urls-->
 
-
     <string name="savedCardsListTitle">Payment information</string>
     <string name="savedAddressListTitle">Address information</string>
     <string name="addACardTitle">Add payment method</string>
@@ -251,6 +251,7 @@
     <string name="editAddressTitle">Edit Address</string>
     <string name="addressSelectionListTitle">Select billing address</string>
     <string name="accountSettingsTitle">Account settings</string>
+
     <string name="removeThisAddress">Remove Address</string>
     <string name="addressRemovedMessage">Address Removed.</string>
     <string name="shop_now">SHOP NOW</string>
@@ -261,9 +262,15 @@
     <string name="takePhotoTxt">Take Photo</string>
     <string name="chooseFromGalleryTxt">Choose from Library</string>
     <string name="noPetTxt">You have no pets</string>
-    <string name="addPetDescription">Add a pet to your account to receive customized recommendations and educational tips</string>
+    <string name="addPetDescription">Add a pet to your account to receive customized recommendations and educational
+        tips
+    </string>
     <string name="addPetCaps">ADD A PET</string>
     <string name="npPetTxt">You have no pets</string>
     <string name="errorMsgForEmail">There are one or more errors</string>
+
+    <string name="networkError">Network error occurred</string>
+    <string name="httpError">Http error occurred</string>
+    <string name="unexpectedError">Unexpected error occurred</string>
 
 </resources>
