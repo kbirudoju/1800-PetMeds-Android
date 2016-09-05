@@ -50,7 +50,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     @Override
     public boolean validatePassword(String password) {
 
-        if(password.length() == PASSWORD_LENGTH) //TODO - Need to use a regex for validation
+        if(password.length() >= PASSWORD_LENGTH) //TODO - Need to use a regex for validation
             return true;
         else
             return false;

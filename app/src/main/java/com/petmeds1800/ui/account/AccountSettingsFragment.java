@@ -12,19 +12,23 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnEditorAction;
 
 public class AccountSettingsFragment extends AbstractFragment implements AccountSettingsContract.View {
 
@@ -71,6 +75,20 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         ((AbstractActivity)getActivity()).enableBackButton();
         ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.accountSettingsTitle));
         enableEditTexts(false);
+
+        //handle keyboard input
+        mPasswordText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    validateAndUpdate();
+                    handled = true;
+                }
+                return handled;
+
+            }
+        });
         return view;
 
     }
@@ -107,55 +125,61 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
         } else if (id == R.id.action_done) {
 
-            boolean invalidName;
-            boolean invalidEmail;
-            boolean invalidPassword;
+            validateAndUpdate();
 
-            ///// Negative flow /////
-            //email validation
-            if (mEmailText.getText().toString().isEmpty()) {
-                mEmailInputLayout.setError(getContext().getString(R.string.accountSettingsEmailEmptyError));
-                invalidEmail = true;
-            } else if (!mPresenter.validateEmail(mEmailText.getText().toString())) {
-                mEmailInputLayout.setError(getContext().getString(R.string.accountSettingsEmailInvalidError));
-                invalidEmail = true;
-            } else {
-                mEmailInputLayout.setError(null);
-                mEmailInputLayout.setErrorEnabled(false);
-                invalidEmail = false;
-            }
 
-            //password validation
-            if (mPasswordText.getText().toString().isEmpty()) {
-                mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordEmptyError));
-                invalidPassword = true;
-            } else if (!mPresenter.validatePassword(mPasswordText.getText().toString())) {
-                mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordInvalidError));
-                invalidPassword = true;
-            } else {
-                mPasswordInputLayout.setError(null);
-                mPasswordInputLayout.setErrorEnabled(false);
-                invalidPassword = false;
-            }
-            //return if needed
-            if (invalidEmail || invalidPassword) {
-                return super.onOptionsItemSelected(item);
-            }
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void validateAndUpdate() {
+        boolean invalidEmail;
+        boolean invalidPassword;
+
+        ///// Negative flow /////
+        //email validation
+        if (mEmailText.getText().toString().isEmpty()) {
+            mEmailInputLayout.setError(getContext().getString(R.string.accountSettingsEmailEmptyError));
+            invalidEmail = true;
+        } else if (!mPresenter.validateEmail(mEmailText.getText().toString())) {
+            mEmailInputLayout.setError(getContext().getString(R.string.accountSettingsEmailInvalidError));
+            invalidEmail = true;
+        } else {
+            mEmailInputLayout.setError(null);
+            mEmailInputLayout.setErrorEnabled(false);
+            invalidEmail = false;
+        }
+
+        //password validation
+        if (mPasswordText.getText().toString().isEmpty()) {
+            mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordEmptyError));
+            invalidPassword = true;
+        } else if (!mPresenter.validatePassword(mPasswordText.getText().toString())) {
+            mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordInvalidError));
+            invalidPassword = true;
+        } else {
+            mPasswordInputLayout.setError(null);
+            mPasswordInputLayout.setErrorEnabled(false);
+            invalidPassword = false;
+        }
+        //return if needed
+        if (invalidEmail || invalidPassword) {
+        // do nothing as we have already prompted for the errors
+        }
+        else {
             //// Start the Positve flow ////
             mProgressBar.setVisibility(View.VISIBLE);
             //following should be executable after validation success
             enableEditTexts(false);
             enableEditAction();
             mPresenter.saveSettings(new UpdateAccountSettingsRequest(
-                      mEmailText.getText().toString()
+                    mEmailText.getText().toString()
                     , mUserId
                     , mPasswordText.getText().toString()
                     , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
 
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

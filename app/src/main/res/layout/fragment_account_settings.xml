@@ -60,12 +60,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
-                    android:imeActionLabel="@string/action_done"
-                    android:imeOptions="actionUnspecified"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText" />
             </android.support.design.widget.TextInputLayout>
 
             <ProgressBar

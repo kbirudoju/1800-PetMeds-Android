@@ -253,9 +253,9 @@ public class AddACardFragment extends AbstractFragment implements AddACardContra
         mAddressContainerLayout.setVisibility(View.VISIBLE);
         mAddressNameLabel.setText(address.getFirstName() + " " + address.getLastName());
         mAddressLine1Label.setText(address.getAddress1());
-        mAddressLine2Label.setText(address.getAddress2() + " " + address.getState() + " " + address.getPostalCode());
+        mAddressLine2Label.setText(address.getAddress2() + ", " + address.getCity() + ", " + address.getState() + " " + address.getPostalCode());
         mCountryLabel.setText(address.getCountry());
-        mPhoneNumberLabel.setText(address.getPhoneNumber());
+        mPhoneNumberLabel.setText(String.format(getContext().getString(R.string.phoneNumberInAddress), address.getPhoneNumber()));
 
     }
 

@@ -40,7 +40,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_firstName"
                     android:singleLine="true"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:maxLength="@integer/characterLimit_40"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -57,7 +58,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_lastName"
                     android:singleLine="true"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:maxLength="@integer/characterLimit_40"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -73,7 +75,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_addressLine1"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:maxLength="@integer/characterLimit_30"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -89,7 +92,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_aptOrSuite"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:maxLength="@integer/characterLimit_30"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -105,7 +109,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_city"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:maxLength="@integer/characterLimit_30"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -137,7 +142,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_zipcode"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:maxLength="@integer/characterLimit_5"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout

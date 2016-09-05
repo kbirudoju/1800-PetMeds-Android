@@ -37,7 +37,8 @@ import butterknife.ButterKnife;
 /**
  * Created by Abhinav on 13/8/16.
  */
-public class AddEditAddressFragment extends AbstractFragment implements AddEditAddressContract.View , View.OnClickListener, CommonDialogFragment.ValueSelectedListener {
+public class
+        AddEditAddressFragment extends AbstractFragment implements AddEditAddressContract.View , View.OnClickListener, CommonDialogFragment.ValueSelectedListener {
 
     private static final int USA_STATE_LIST_REQUEST = 1;
     private static final int COUNTRY_LIST_REQUEST = 2;
@@ -240,7 +241,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
                     ,mLastNameEdit.getText().toString()
                     ,mUsaStateCode == null ? mAddress.getState() : mUsaStateCode //TODO the way usastatecode can be retrived depend upon api.Api should return the state name as well along with state code
                     ,mAddressLine1Edit.getText().toString()
-                    ,mAddressLine1Edit.getText().toString()  //TODO we need to check if AddressLine2 should be included in the designs as its available in the API response
+                    ,mAptOrSuiteEdit.getText().toString()
                     ,mCountryCode == null ? mAddress.getCountry() : mCountryCode
                     ,mCityEdit.getText().toString()
                     ,mZipCodeEdit.getText().toString()
@@ -260,7 +261,7 @@ public class AddEditAddressFragment extends AbstractFragment implements AddEditA
                     ,mLastNameEdit.getText().toString()
                     ,mUsaStateCode
                     ,mAddressLine1Edit.getText().toString()
-                    ,mAddressLine1Edit.getText().toString()  //TODO we need to check if AddressLine2 should be included in the designs as its available in the API response
+                    ,mAptOrSuiteEdit.getText().toString()
                     ,mCountryCode
                     ,mCityEdit.getText().toString()
                     ,mZipCodeEdit.getText().toString()

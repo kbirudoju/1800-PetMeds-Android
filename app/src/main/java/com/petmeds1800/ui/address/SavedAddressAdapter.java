@@ -76,12 +76,11 @@ public class SavedAddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             final Address myAddress = getItemAt(position);
 
 //            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue),myCard.getExpirationMonth(),myCard.getExpirationYear());
-            //TODO Need to check if 2 separate firstname and lastname fields are still required
             orderViewHolder.mNameOnAddressLabel.setText(myAddress.getFirstName() + " " + myAddress.getLastName());
             orderViewHolder.mAddressLine1Label.setText(myAddress.getAddress1());
-            orderViewHolder.mAddressLine2Label.setText(myAddress.getAddress2());
+            orderViewHolder.mAddressLine2Label.setText(myAddress.getAddress2() + ", " + myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
             orderViewHolder.mCountryLabel.setText(myAddress.getCountry());
-            orderViewHolder.mPhoneNumberLabel.setText(myAddress.getPhoneNumber());
+            orderViewHolder.mPhoneNumberLabel.setText(String.format(mContext.getString(R.string.phoneNumberInAddress) , myAddress.getPhoneNumber()));
 
             orderViewHolder.mEditAddressButton.setTag(position);
             orderViewHolder.mEditAddressButton.setOnClickListener(new View.OnClickListener() {
