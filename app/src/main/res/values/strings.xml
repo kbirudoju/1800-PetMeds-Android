@@ -73,7 +73,7 @@
     <string name="status_txt">Status</string>
 
     <!--Login-->
-    <string name="label.email">Email</string>
+    <string name="label.email">Enter Email Address</string>
     <string name="label.password">Password</string>
     <string name="label.skip">"SKIP"</string>
     <string name="label.login">Log In</string>
@@ -82,10 +82,10 @@
     <string name="signup_txt">SIGN UP</string>
 
     <!--Forgot Password-->
-    <string name="label.enter_email_for_temporary_password">Enter your email address and we will send you a new
+    <string name="enterEmailForTemporaryPassword">Enter your email address and we will send you a new
         temporary password.
     </string>
-    <string name="label.email_me_my_password">Email me my password</string>
+    <string name="emailMeMyPassword">EMAIL ME MY PASSWORD</string>
     <string name="label.email_sent">Email Sent</string>
 
     <!--Finger Print Dialog-->

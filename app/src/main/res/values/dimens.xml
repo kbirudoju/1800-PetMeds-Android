@@ -64,6 +64,8 @@
     <dimen name="dp_21">21dp</dimen>
     <dimen name="dp_15">15dp</dimen>
     <dimen name="dp_63">63dp</dimen>
+    <dimen name="dp_94">94dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
 
 
 </resources>
