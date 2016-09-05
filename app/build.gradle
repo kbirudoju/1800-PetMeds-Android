@@ -124,18 +124,14 @@ android {
     }
 
     // Use product flavours to customise builds
-    flavorDimensions 'server'
 
     productFlavors {
         // Servers
         dev {
-            dimension 'server'
-        }
-        stage {
-            dimension 'server'
+            applicationId "com.petmeds1800.dev"
         }
         prod {
-            dimension 'server'
+            applicationId "com.petmeds1800"
         }
     }
 
