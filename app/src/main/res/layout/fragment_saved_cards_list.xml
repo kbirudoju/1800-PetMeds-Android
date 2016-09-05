@@ -32,7 +32,7 @@
             android:layout_gravity="center_horizontal"
             style="@style/paragraph"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="@string/storeAddressFasterCheckoutMessage"/>
+            android:text="@string/saveCardForFasterCheckoutMessage"/>
 
         <Button
             android:id="@+id/addCard_button"

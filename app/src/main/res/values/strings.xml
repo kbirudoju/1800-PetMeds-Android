@@ -128,7 +128,7 @@
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
     <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method</string>
     <string name="saveCardForFasterCheckoutMessage">Store a payment method for faster checkout.</string>
-    <string name="addACreditCardButtonName">Add a Credit Card</string>
+    <string name="addACreditCardButtonName">ADD A PAYMENT METHOD</string>
     <string name="edit">EDIT</string>
     <string name="prompt_cardNumber">Card Number</string>
     <string name="prompt_nameOnCard">Name on card</string>
