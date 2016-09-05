@@ -78,14 +78,21 @@ public class SavedAddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue),myCard.getExpirationMonth(),myCard.getExpirationYear());
             orderViewHolder.mNameOnAddressLabel.setText(myAddress.getFirstName() + " " + myAddress.getLastName());
             orderViewHolder.mAddressLine1Label.setText(myAddress.getAddress1());
-            orderViewHolder.mAddressLine2Label.setText(myAddress.getAddress2() + ", " + myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
+
+            if(myAddress.getAddress2() == null || myAddress.getAddress2().isEmpty()) {
+                orderViewHolder.mAddressLine2Label.setText(myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
+            }
+            else{
+                orderViewHolder.mAddressLine2Label.setText(myAddress.getAddress2() + ", " + myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
+            }
+
             orderViewHolder.mCountryLabel.setText(myAddress.getCountry());
             orderViewHolder.mPhoneNumberLabel.setText(String.format(mContext.getString(R.string.phoneNumberInAddress) , myAddress.getPhoneNumber()));
 
-            orderViewHolder.mEditAddressButton.setTag(position);
-            orderViewHolder.mEditAddressButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        orderViewHolder.mEditAddressButton.setTag(position);
+        orderViewHolder.mEditAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                     mSavedAddressListFragment.startAddressUpdate(getItemAt((Integer) v.getTag()));
                 }
             });

@@ -213,7 +213,6 @@ public class
             invalidFirstName = checkAndShowError(mFirstNameEdit , mfirstNameLayout, R.string.errorFirstNameRequired);
             invalidLastName = checkAndShowError(mLastNameEdit , mLastNameInputLayout , R.string.errorLastNameIsRequired);
             invalidAddressLine1 = checkAndShowError(mAddressLine1Edit , mAddressLine1InputLayout , R.string.errorAddressLine1Required);
-            invalidAptOrSuiteNumber = checkAndShowError(mAptOrSuiteEdit , mAptOrSuiteInputLayout , R.string.errorAptOrSuiteRequired);
             invalidCity = checkAndShowError(mCityEdit , mCityInputLayout , R.string.errorCityRequired);
             invalidStateOrProvinceOrRegion = checkAndShowError(mStateOrProvinceOrRegionEdit , mStateOrProvinceOrRegionInputLayout , R.string.errorStateOrProvinceOrRegionRequired);
             invalidZipcode = checkAndShowError(mZipCodeEdit , mZipCodeInputLayout , R.string.errorZipCodeRequired);
@@ -223,10 +222,8 @@ public class
             if(invalidFirstName ||
                     invalidLastName ||
                     invalidAddressLine1 ||
-                    invalidAptOrSuiteNumber ||
                     invalidStateOrProvinceOrRegion ||
                     invalidCity ||
-                    invalidAptOrSuiteNumber ||
                     invalidZipcode ||
                     invalidPhoneNumber ||
                     invalidCountry)

@@ -76,7 +76,13 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
 //            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue),myCard.getExpirationMonth(),myCard.getExpirationYear());
             orderViewHolder.mNameOnAddressLabel.setText(myAddress.getFirstName() + " " + myAddress.getLastName());
             orderViewHolder.mAddressLine1Label.setText(myAddress.getAddress1());
-            orderViewHolder.mAddressLine2Label.setText(myAddress.getAddress2() + ", " + myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
+
+            if(myAddress.getAddress2() == null || myAddress.getAddress2().isEmpty()) { //addressline2 / APT # is not mandotory
+                orderViewHolder.mAddressLine2Label.setText(myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
+            } else {
+                orderViewHolder.mAddressLine2Label.setText(myAddress.getAddress2() + ", " + myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
+            }
+
             orderViewHolder.mCountryLabel.setText(myAddress.getCountry());
             orderViewHolder.mPhoneNumberLabel.setText(String.format(mContext.getString(R.string.phoneNumberInAddress), myAddress.getPhoneNumber()));
 
@@ -92,19 +98,19 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
 
             orderViewHolder.mAddressSelectionRadio.setClickable(false);
-            orderViewHolder.mAddressContainerLayout.setTag(position);
+        orderViewHolder.mAddressContainerLayout.setTag(position);
 
-            orderViewHolder.mSelectAddressButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAddressSelectionListFragment.popBackStackImmediate();
+        orderViewHolder.mSelectAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAddressSelectionListFragment.popBackStackImmediate();
                     mAddressSelectionListFragment.forwardAddressToActivity(myAddress);
-                }
-            });
+            }
+        });
 
-            orderViewHolder.mAddressContainerLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        orderViewHolder.mAddressContainerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                     mSelectedPosition = (Integer) v.getTag();
                     notifyDataSetChanged();
                 }
