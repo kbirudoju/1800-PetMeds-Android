@@ -7,7 +7,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.petmeds1800.R;
@@ -26,13 +29,17 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 8/22/2016.
  */
-public class PetListFragment extends AbstractFragment implements PetListContract.View {
+public class PetListFragment extends AbstractFragment implements PetListContract.View,OnClickListener{
     @BindView(R.id.pet_list_view)
     RecyclerView mPetRecyclerView;
     private PetListContract.Presenter mPresenter;
     private PetListAdapter mPetListAdapter;
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
+    @BindView(R.id.noPet_layout)
+    LinearLayout noPetLayout;
+    @BindView(R.id.addPet_button)
+    Button mAddPetButton;
 
     @Nullable
     @Override
@@ -40,7 +47,7 @@ public class PetListFragment extends AbstractFragment implements PetListContract
         View view =inflater.inflate(R.layout.fragment_pet_list,null);
         ButterKnife.bind(this, view);
         mPresenter = new PetListPresenter(this);
-        mPetListAdapter=new PetListAdapter(getActivity(), new View.OnClickListener() {
+        mPetListAdapter=new PetListAdapter(getActivity(), new OnClickListener() {
             @Override
             public void onClick(View v) {
              replaceAndAddToBackStack(new AddPetFragment(),AddPetFragment.class.getName());
@@ -65,6 +72,7 @@ public class PetListFragment extends AbstractFragment implements PetListContract
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAddPetButton.setOnClickListener(this);
         setPetRecyclerView();
         mPresenter.start();
     }
@@ -72,7 +80,16 @@ public class PetListFragment extends AbstractFragment implements PetListContract
     @Override
     public void updatePetList(List<Pets> petList) {
         progressBar.setVisibility(View.GONE);
-        mPetListAdapter.setData(petList);
+        if(petList.size()>0){
+            noPetLayout.setVisibility(View.GONE);
+            mPetRecyclerView.setVisibility(View.VISIBLE);
+            mPetListAdapter.setData(petList);
+
+
+        }else{
+            mPetRecyclerView.setVisibility(View.GONE);
+            noPetLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -90,6 +107,12 @@ public class PetListFragment extends AbstractFragment implements PetListContract
     @Override
     public void setPresenter(PetListContract.Presenter presenter) {
         mPresenter = presenter;
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        replaceAndAddToBackStack(new AddPetFragment(),AddPetFragment.class.getName());
 
     }
 }

@@ -258,4 +258,11 @@
     <string name="you_have_no_orders">You have no orders</string>
     <string name="lets_find_the_medications_you_need">Let\'s find the medications you need!</string>
     <string name="order_status">0 ORDERS IN THE LAST 2 YEARS</string>
+    <string name="selectPetTitle">Select pet profile picture</string>
+    <string name="takePhotoTxt">Take Photo</string>
+    <string name="chooseFromGalleryTxt">Choose from Library</string>
+    <string name="noPetTxt">You have no pets</string>
+    <string name="addPetDescription">Add a pet to your account to receive customized recommendations and educational tips</string>
+    <string name="addPetCaps">ADD A PET</string>
+    <string name="npPetTxt">You have no pets</string>
 </resources>

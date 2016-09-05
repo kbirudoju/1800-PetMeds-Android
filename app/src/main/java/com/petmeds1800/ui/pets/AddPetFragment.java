@@ -204,11 +204,11 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
 
     private void showImageOptions() {
         final CharSequence[] items = {
-                "Gallery", "Camera"
+                getString(R.string.takePhotoTxt), getString(R.string.chooseFromGalleryTxt)
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Make your selection");
+        builder.setTitle(getString(R.string.selectPetTitle));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
