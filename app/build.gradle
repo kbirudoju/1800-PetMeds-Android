@@ -6,10 +6,12 @@ buildscript {
 //        classpath 'com.goldengekko.gradle:testfairy-plugin:1.0.0.0'
         classpath 'com.dminc.gradle:android-release-plugin:1.0.2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.testfairy.plugins.gradle:testfairy:1.+'
     }
     repositories {
         mavenLocal()
         maven { url 'https://nexus.dminc-gtc.com/nexus/content/groups/public/' }
+        maven { url 'https://www.testfairy.com/maven' }
     }
 }
 
@@ -33,7 +35,7 @@ apply from: '../pmd.gradle'
 apply from: '../findbugs.gradle'
 //apply plugin: 'ricotta'
 //apply plugin: 'android-quality'
-//apply plugin: 'testfairy'
+ apply plugin: 'testfairy'
 
 
 releaseConfig {
@@ -59,10 +61,9 @@ releaseConfig {
 //    }
 //}
 
-//testfairyConfig {
-//    apiKey 'xxxxxxxxxxx'
-//    testersGroups 'tester_group'
-//}
+testfairyConfig {
+   apiKey "bbb0eae319a1040d4fcf299a1be0a0643533d952"
+}
 
 // Android configuration goes here.
 android {
