@@ -29,6 +29,8 @@ public interface AddEditAddressContract {
 
         void showErrorMessage(String errorMessage);
 
+        void showErrorCrouton(CharSequence message, boolean span);
+
         boolean checkAndShowError(EditText auditEditText , TextInputLayout auditTextInputLayout , int errorStringId);
 
         void usaStatesListReceived(String[] usaStateArray);

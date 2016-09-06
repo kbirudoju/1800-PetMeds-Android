@@ -1,8 +1,10 @@
 package com.petmeds1800.ui.address;
 
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Country;
 import com.petmeds1800.model.CountryListResponse;
@@ -11,6 +13,7 @@ import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.UsaState;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import java.util.HashMap;
 
@@ -54,7 +57,12 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AddACard", e.getMessage());
-                        mView.showErrorMessage(e.getLocalizedMessage());
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if(errorId != 0){
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
+                            }
+                        }
                     }
 
                     @Override
@@ -66,7 +74,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         } else {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
-                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 
@@ -89,8 +97,13 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        Log.e("AddACard",e.getMessage());
-                        mView.showErrorMessage(e.getLocalizedMessage());
+                        Log.e("GetStatesList",e.getMessage());
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if(errorId != 0) { //internet connection error. Unknownhost or SocketTimeout exception
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
+                            }
+                        }
                     }
 
                     @Override
@@ -108,7 +121,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         else{
                             Log.d("AddACard",s.getStatus().getErrorMessages().get(0));
                             if(mView.isActive()){
-                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 
@@ -138,8 +151,13 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        Log.e("AddACard",e.getMessage());
-                        mView.showErrorMessage(e.getLocalizedMessage());
+                        Log.e("GetCountryList",e.getMessage());
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if(errorId != 0) { //internet connection error. Unknownhost or SocketTimeout exception
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
+                            }
+                        }
                     }
 
                     @Override
@@ -157,7 +175,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         else{
                             Log.d("AddACard",s.getStatus().getErrorMessages().get(0));
                             if(mView.isActive()){
-                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 
@@ -188,8 +206,13 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        Log.e("AddACard", e.getMessage());
-                        mView.showErrorMessage(e.getLocalizedMessage());
+                        Log.e("EditACard", e.getMessage());
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if(errorId != 0) { //internet connection error. Unknownhost or SocketTimeout exception
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
+                            }
+                        }
                     }
 
                     @Override
@@ -201,7 +224,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         } else {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
-                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 
@@ -224,8 +247,13 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        Log.e("AddACard", e.getMessage());
-                        mView.showErrorMessage(e.getLocalizedMessage());
+                        Log.e("RemoveACard", e.getMessage());
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if(errorId != 0) { //internet connection error. Unknownhost or SocketTimeout exception
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
+                            }
+                        }
                     }
 
                     @Override
@@ -237,7 +265,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         } else {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
-                                mView.showErrorMessage(s.getStatus().getErrorMessages().get(0));
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 

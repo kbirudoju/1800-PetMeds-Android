@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.petmeds1800.PetMedsApplication;
@@ -28,6 +31,7 @@ import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -95,6 +99,9 @@ public class
 
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.addEditAddress_container)
+    LinearLayout mContainerLayout;
 
 
     @Inject
@@ -325,6 +332,15 @@ public class
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
         Snackbar.make(mAddressLine1Edit, errorMessage, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        mProgressBar.setVisibility(View.GONE);
+        if (span) {
+            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+        }
+        Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
     }
 
     @Override
