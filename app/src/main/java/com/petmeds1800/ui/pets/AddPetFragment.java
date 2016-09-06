@@ -1,7 +1,6 @@
 package com.petmeds1800.ui.pets;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -23,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -54,10 +54,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.petmeds1800.R.id.fromGallery;
+
 /**
  * Created by pooja on 8/23/2016.
  */
-public class AddPetFragment extends AbstractFragment implements View.OnClickListener, GenderDialogFragment.GenderSetListener,CommonDialogFragment.ValueSelectedListener,AddPetContract.View {
+public class AddPetFragment extends AbstractFragment implements View.OnClickListener, GenderDialogFragment.GenderSetListener, CommonDialogFragment.ValueSelectedListener, AddPetContract.View {
     private static final int AGE_REQUEST = 1;
     @BindView(R.id.pet_gender_edit)
     EditText mPetGenderText;
@@ -81,6 +83,8 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
 
     @BindView(R.id.pet_weight_edit)
     EditText mPetWeight;
+
+
     private ArrayList<Integer> medConditionIds;
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
@@ -105,6 +109,8 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     long birthdayInMillis;
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
+    View dialoglayout;
+    AlertDialog alertDailogForPicture;
 
     @Nullable
     @Override
@@ -162,6 +168,14 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
             case R.id.pet_picture_edit:
                 showImageOptions();
                 break;
+            case R.id.takePhoto:
+                updateImageUtil.updateProfilePic(UpdateImageUtil.CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                alertDailogForPicture.dismiss();
+                break;
+            case fromGallery:
+                updateImageUtil.updateProfilePic(UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE);
+                alertDailogForPicture.dismiss();
+                break;
         }
     }
 
@@ -192,9 +206,9 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     };
 
     @Override
-    public void onValueSelected(String value , int requestCode) {
+    public void onValueSelected(String value, int requestCode) {
 
-        switch (requestCode){
+        switch (requestCode) {
             case AGE_REQUEST:
                 mPetAgeText.setText(value);
                 break;
@@ -203,28 +217,19 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     }
 
     private void showImageOptions() {
-        final CharSequence[] items = {
-                getString(R.string.takePhotoTxt), getString(R.string.chooseFromGalleryTxt)
-        };
-
+        dialoglayout = LayoutInflater.from(getActivity()).inflate(
+                R.layout.dialog_for_picture, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.selectPetTitle));
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                switch (item) {
-                    case 0: {
-                        updateImageUtil.updateProfilePic(UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE);
-                    }
-                    break;
-                    case 1: {
-                        updateImageUtil.updateProfilePic(UpdateImageUtil.CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-                    }
-                    break;
-                }
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+        builder.setView(dialoglayout);
+        alertDailogForPicture = builder.create();
+        alertDailogForPicture.show();
+        TextView takePhoto = (TextView) dialoglayout.findViewById(R.id.takePhoto);
+        TextView fromGallery = (TextView) dialoglayout.findViewById(R.id.fromGallery);
+        takePhoto.setTextColor(getActivity().getResources().getColor(R.color.petmeds_blue));
+        fromGallery.setTextColor(getActivity().getResources().getColor(R.color.petmeds_blue));
+        takePhoto.setOnClickListener(this);
+        fromGallery.setOnClickListener(this);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -253,7 +258,7 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
             Uri finalUri = Crop.getOutput(result);
             if (finalUri != null) {
 
-                Glide.with(this).load(finalUri.toString()).asBitmap() .diskCacheStrategy(DiskCacheStrategy.NONE)
+                Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
                     @Override
                     protected void setResource(Bitmap resource) {

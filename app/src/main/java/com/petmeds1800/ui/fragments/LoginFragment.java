@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -42,7 +55,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Digvijay on 8/3/2016.
  */
-public class LoginFragment extends AbstractFragment implements LoginContract.View {
+public class LoginFragment extends AbstractFragment implements LoginContract.View, EditText.OnEditorActionListener {
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
@@ -82,6 +95,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
+
+
     }
 
     @Nullable
@@ -91,6 +106,13 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mPasswordEdit.setOnEditorActionListener(this);
     }
 
     @Override
@@ -149,6 +171,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         if (emailText.isEmpty() && passwordText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
             setPasswordError(getString(R.string.accountSettingsPasswordEmptyError));
+            return;
         }
         if (emailText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
@@ -279,4 +302,12 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         startActivity(new ForgotPasswordIntent(getActivity()));
     }
 
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            login();
+        }
+        return false;
+    }
 }

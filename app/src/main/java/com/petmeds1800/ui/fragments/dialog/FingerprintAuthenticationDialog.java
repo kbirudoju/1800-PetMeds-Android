@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.fragments.dialog;
 
+import android.widget.EditText;
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
 import com.petmeds1800.PetMedsApplication;
@@ -14,7 +15,6 @@ import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -24,14 +24,18 @@ import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 import javax.inject.Inject;
 
@@ -49,7 +53,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Digvijay on 8/24/2016.
  */
-public class FingerprintAuthenticationDialog extends DialogFragment {
+public class FingerprintAuthenticationDialog extends DialogFragment implements EditText.OnEditorActionListener {
 
     @BindView(R.id.txv_fingerprint_status)
     TextView mFingerprintStatus;
@@ -128,9 +132,11 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fingerprint_dialog_container, container, false);
         ButterKnife.bind(this, view);
+        mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mPasswordEdit.setOnEditorActionListener(this);
         authenticateFingerprint();
         return view;
     }
@@ -532,6 +538,14 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
 
     public boolean validatePassword(String password) {
         return password.length() >= PASSWORD_LENGTH;
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            doLogin();
+        }
+        return false;
     }
 
     /**
