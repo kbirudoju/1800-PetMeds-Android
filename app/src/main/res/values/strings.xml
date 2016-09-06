@@ -269,8 +269,6 @@
     <string name="npPetTxt">You have no pets</string>
     <string name="errorMsgForEmail">There are one or more errors</string>
 
-    <string name="networkError">Network error occurred</string>
-    <string name="httpError">Http error occurred</string>
-    <string name="unexpectedError">Unexpected error occurred</string>
-
+    <string name="connectionTimeout">Connection timeout..</string>
+    <string name="noInternetConnection">No internet connection</string>
 </resources>

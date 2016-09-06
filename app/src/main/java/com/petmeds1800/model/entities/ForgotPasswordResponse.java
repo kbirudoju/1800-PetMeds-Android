@@ -5,5 +5,9 @@ package com.petmeds1800.model.entities;
  */
 public class ForgotPasswordResponse {
 
+    private Status status;
 
+    public Status getStatus() {
+        return status;
+    }
 }

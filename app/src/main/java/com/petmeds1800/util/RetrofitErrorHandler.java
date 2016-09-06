@@ -2,26 +2,19 @@ package com.petmeds1800.util;
 
 import com.petmeds1800.R;
 
-import retrofit.RetrofitError;
+import java.net.UnknownHostException;
 
 /**
  * Created by Digvijay on 9/5/2016.
  */
 public class RetrofitErrorHandler {
 
-    public static int handleError(Throwable e) {
-
-        if (e instanceof RetrofitError) {
-            final RetrofitError error = (RetrofitError) e;
-            if (error.getKind() == RetrofitError.Kind.NETWORK) {
-                return R.string.networkError;
-            } else if (error.getKind() == RetrofitError.Kind.HTTP) {
-                return R.string.httpError;
-            } else {
-                return R.string.unexpectedError;
-            }
+    //TODO: logic improvement
+    public static int getErrorMessage(Throwable e) {
+        if (e instanceof UnknownHostException) {
+            return R.string.noInternetConnection;
         } else {
-            return R.string.unexpectedError;
+            return 0;
         }
     }
 }

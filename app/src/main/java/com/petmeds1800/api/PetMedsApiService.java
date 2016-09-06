@@ -10,6 +10,7 @@ import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
+import com.petmeds1800.model.entities.ForgotPasswordResponse;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.MyOrder;
@@ -45,7 +46,7 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/forgotPasswordEmail")
-    Observable<String> forgotPassword(@Body ForgotPasswordRequest forgotPasswordRequest);
+    Observable<ForgotPasswordResponse> forgotPassword(@Body ForgotPasswordRequest forgotPasswordRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("rest/model/atg/userprofiling/ProfileActor/orderHistory")

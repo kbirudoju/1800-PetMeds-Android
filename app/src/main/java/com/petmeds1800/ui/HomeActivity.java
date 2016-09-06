@@ -13,6 +13,7 @@ import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddACardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -22,7 +23,10 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +49,9 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.container_home)
+    RelativeLayout mContainerLayout;
 
     List<Fragment> fragmentList;
 
@@ -163,6 +170,13 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
                     @Override
                     public void onError(Throwable e) {
                         hideProgress();
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId == R.string.noInternetConnection) {
+                            Toast.makeText(HomeActivity.this, getString(R.string.noInternetConnection),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        getViewPager().setCurrentItem(0);
+                        Log.v("onError", e.getMessage());
                     }
 
                     @Override
@@ -185,5 +199,9 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
     public void hideProgress() {
         mProgressBar.setVisibility(View.INVISIBLE);
+    }
+
+    public ViewGroup getContainerView() {
+        return mContainerLayout;
     }
 }

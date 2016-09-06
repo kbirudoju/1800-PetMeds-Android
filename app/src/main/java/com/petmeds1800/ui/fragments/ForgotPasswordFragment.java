@@ -1,5 +1,14 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ForgotPasswordRequest;
+import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.ForgotPasswordTask.ForgotPasswordContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -14,14 +23,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ForgotPasswordRequest;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.ForgotPasswordTask.ForgotPasswordContract;
-import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -154,9 +155,9 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                             return mPreferencesHelper.getSessionConfirmationResponse();
                         }
                     })
-                    .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
+                    .flatMap(new Func1<SessionConfNumberResponse, Observable<ForgotPasswordResponse>>() {
                         @Override
-                        public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
+                        public Observable<ForgotPasswordResponse> call(SessionConfNumberResponse sessionConfNumberResponse) {
                             String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
                             Log.v("sessionToken", sessionConfNumber);
                             if (sessionConfNumber != null) {
@@ -169,7 +170,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                                     .subscribeOn(Schedulers.io());
                         }
                     })
-                    .subscribe(new Subscriber<String>() {
+                    .subscribe(new Subscriber<ForgotPasswordResponse>() {
                         @Override
                         public void onCompleted() {
 
@@ -183,11 +184,10 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                         }
 
                         @Override
-                        public void onNext(String s) {
+                        public void onNext(ForgotPasswordResponse response) {
 
-                            Log.v("response", s);
-                            Toast.makeText(getActivity(), "response" +
-                                    s, Toast.LENGTH_SHORT).show();
+                            Log.v("response", response.getStatus().getErrorMessages().get(0));
+                            Toast.makeText(getActivity(), "response" + response.getStatus().getErrorMessages().get(0), Toast.LENGTH_SHORT).show();
                             hideProgress();
                             mEmailPasswordButton.setText(getString(R.string.label_email_sent));
                         }

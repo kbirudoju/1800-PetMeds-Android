@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -26,6 +12,19 @@ import com.petmeds1800.mvp.LoginTask.LoginContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import javax.inject.Inject;
 
@@ -142,7 +141,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
     @OnClick(R.id.log_in_button)
     public void login() {
-
+        mEmailInput.setError(null);
+        mPasswordInput.setError(null);
         boolean isValidEmail, isValidPassword;
         String emailText = mEmailEdit.getText().toString().trim();
         String passwordText = mPasswordEdit.getText().toString().trim();
@@ -167,7 +167,6 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         if (isValidEmail && isValidPassword) {
 
             showProgress();
-
             //TODO: remove this temporary hack after backend resolves their problem of cookies
             mApiService.login(new LoginRequest(mEmailEdit.getText().toString(),
                     mPasswordEdit.getText().toString(), "test_test"))
@@ -181,15 +180,14 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
                         @Override
                         public void onError(Throwable e) {
-                          /*  int errorId = RetrofitErrorHandler.handleError(e);
-                            if (errorId == R.string.networkError || errorId == R.string.unexpectedError) {
+                            int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                            if (errorId == R.string.noInternetConnection) {
                                 showErrorCrouton(getString(errorId), false);
                                 hideProgress();
-                            } else {*/
+                            } else {
                                 doLogin();
-                            //}
+                            }
                         }
-
                         @Override
                         public void onNext(LoginResponse loginResponse) {
                             Log.v("login response", loginResponse.getStatus().getCode());
@@ -209,26 +207,33 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                 .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
                     @Override
                     public SessionConfNumberResponse call(Throwable throwable) {
-                        int errorId = RetrofitErrorHandler.handleError(throwable);
-                        if (errorId == R.string.networkError || errorId == R.string.unexpectedError) {
+                        int errorId = RetrofitErrorHandler.getErrorMessage(throwable);
+                        if (errorId == R.string.noInternetConnection) {
+                            hideProgress();
                             showErrorCrouton(getString(errorId), false);
+                        } else {
+                            return mPreferencesHelper.getSessionConfirmationResponse();
                         }
-                        return mPreferencesHelper.getSessionConfirmationResponse();
+                        return null;
                     }
                 })
                 .flatMap(new Func1<SessionConfNumberResponse, Observable<LoginResponse>>() {
                     @Override
                     public Observable<LoginResponse> call(SessionConfNumberResponse sessionConfNumberResponse) {
-                        String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                        Log.v("sessionToken", sessionConfNumber);
-                        if (sessionConfNumber != null) {
-                            mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                        if (sessionConfNumberResponse != null) {
+                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
+                            Log.v("sessionToken", sessionConfNumber);
+                            if (sessionConfNumber != null) {
+                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                            }
+                            return mApiService
+                                    .login(new LoginRequest(mEmailEdit.getText().toString(),
+                                            mPasswordEdit.getText().toString(), sessionConfNumber))
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeOn(Schedulers.io());
+                        } else {
+                            return null;
                         }
-                        return mApiService
-                                .login(new LoginRequest(mEmailEdit.getText().toString(),
-                                        mPasswordEdit.getText().toString(), sessionConfNumber))
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeOn(Schedulers.io());
                     }
                 })
                 .subscribe(new Subscriber<LoginResponse>() {
@@ -240,23 +245,25 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                     @Override
                     public void onError(Throwable e) {
                         hideProgress();
-                        int errorId = RetrofitErrorHandler.handleError(e);
-                        if (errorId == R.string.networkError || errorId == R.string.unexpectedError) {
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId == R.string.noInternetConnection) {
                             showErrorCrouton(getString(errorId), false);
                         }
                         Log.v("onError", e.getMessage());
-                        Toast.makeText(getActivity(), "Error logging in..", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onNext(LoginResponse loginResponse) {
-                        Log.v("login response", loginResponse.getStatus().getCode());
                         hideProgress();
-                        if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
-                            mPreferencesHelper.setIsNewUser(false);
-                            navigateToHome();
-                        } else {
-                            showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)), true);
+                        if (loginResponse != null) {
+                            Log.v("login response", loginResponse.getStatus().getCode());
+                            if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
+                                mPreferencesHelper.setIsNewUser(false);
+                                navigateToHome();
+                            } else {
+                                showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),
+                                        true);
+                            }
                         }
                     }
                 });

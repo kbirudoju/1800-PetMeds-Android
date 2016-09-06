@@ -6,11 +6,14 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
+import com.petmeds1800.model.entities.ForgotPasswordResponse;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +21,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -301,6 +306,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
     }
 
     void sendForgotPasswordEmail() {
+        mEmailInput.setError(null);
         boolean isValidEmail;
         String emailText = mEmailEdit.getText().toString().trim();
         if (loginEmail != null) {
@@ -319,29 +325,41 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
         if (mStage == Stage.FORGOT_PASSWORD && isValidEmail) {
             showProgress();
             mApiService.getSessionConfirmationNumber()
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
                         @Override
                         public SessionConfNumberResponse call(Throwable throwable) {
-                            return mPreferencesHelper.getSessionConfirmationResponse();
-                        }
-                    })
-                    .flatMap(new Func1<SessionConfNumberResponse, Observable<String>>() {
-                        @Override
-                        public Observable<String> call(SessionConfNumberResponse sessionConfNumberResponse) {
-                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                            Log.v("sessionToken", sessionConfNumber);
-                            if (sessionConfNumber != null) {
-                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                            int errorId = RetrofitErrorHandler.getErrorMessage(throwable);
+                            if (errorId == R.string.noInternetConnection) {
+                                hideProgress();
+                                showErrorCrouton(getString(errorId), false);
+                            } else {
+                                return mPreferencesHelper.getSessionConfirmationResponse();
                             }
-
-                            return mApiService
-                                    .forgotPassword(new ForgotPasswordRequest(loginEmail, sessionConfNumber))
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io());
+                            return null;
                         }
                     })
-                    .subscribe(new Subscriber<String>() {
+                    .flatMap(new Func1<SessionConfNumberResponse, Observable<ForgotPasswordResponse>>() {
+                        @Override
+                        public Observable<ForgotPasswordResponse> call(
+                                SessionConfNumberResponse sessionConfNumberResponse) {
+                            if (sessionConfNumberResponse != null) {
+                                String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
+                                Log.v("sessionToken", sessionConfNumber);
+                                if (sessionConfNumber != null) {
+                                    mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                                }
+                                return mApiService
+                                        .forgotPassword(new ForgotPasswordRequest(loginEmail, sessionConfNumber))
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.io());
+                            } else {
+                                return null;
+                            }
+                        }
+                    })
+                    .subscribe(new Subscriber<ForgotPasswordResponse>() {
                         @Override
                         public void onCompleted() {
 
@@ -349,23 +367,29 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
 
                         @Override
                         public void onError(Throwable e) {
-
                             Log.v("onError", e.getMessage());
-                            Toast.makeText(getActivity(), "Error" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             hideProgress();
+                            int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                            if (errorId == R.string.noInternetConnection) {
+                                showErrorCrouton(getString(errorId), false);
+                            }
                         }
 
                         @Override
-                        public void onNext(String s) {
-
-                            Log.v("response", s);
-                            Toast.makeText(getActivity(), "response" +
-                                    s, Toast.LENGTH_SHORT).show();
+                        public void onNext(ForgotPasswordResponse response) {
                             hideProgress();
-                            mTextEmailSent.setText(getString(R.string.label_email_sent));
-                            mSecondDialogButton.setText(getString(R.string.label_enter_password));
-                            mStage = Stage.FORGOT_PASSWORD;
-                            updateStage();
+                            if (response != null) {
+                                Log.v("response", response.getStatus().getErrorMessages().get(0));
+                                if (response.getStatus().getCode().equals("SUCCESS")) {
+                                    mTextEmailSent.setText(getString(R.string.label_email_sent));
+                                    mSecondDialogButton.setText(getString(R.string.label_enter_password));
+                                    mStage = Stage.FORGOT_PASSWORD;
+                                    updateStage();
+                                } else {
+                                    showErrorCrouton(Html.fromHtml(response.getStatus().getErrorMessages().get(0)),
+                                            true);
+                                }
+                            }
                         }
                     });
 
@@ -377,7 +401,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
     }
 
     private void doLogin() {
-
+        mEmailInput.setError(null);
+        mPasswordInput.setError(null);
         boolean isValidEmail, isValidPassword;
         String emailText = mEmailEdit.getText().toString().trim();
         String passwordText = mPasswordEdit.getText().toString().trim();
@@ -405,27 +430,38 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
         if (isValidEmail && isValidPassword) {
             showProgress();
             mApiService.getSessionConfirmationNumber()
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
                         @Override
                         public SessionConfNumberResponse call(Throwable throwable) {
-                            return mPreferencesHelper.getSessionConfirmationResponse();
+                            int errorId = RetrofitErrorHandler.getErrorMessage(throwable);
+                            if (errorId == R.string.noInternetConnection) {
+                                hideProgress();
+                                showErrorCrouton(getString(errorId), false);
+                            } else {
+                                return mPreferencesHelper.getSessionConfirmationResponse();
+                            }
+                            return null;
                         }
                     })
                     .flatMap(new Func1<SessionConfNumberResponse, Observable<LoginResponse>>() {
                         @Override
                         public Observable<LoginResponse> call(SessionConfNumberResponse sessionConfNumberResponse) {
-                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                            Log.v("sessionToken", sessionConfNumber);
-                            if (sessionConfNumber != null) {
-                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                            if (sessionConfNumberResponse != null) {
+                                String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
+                                Log.v("sessionToken", sessionConfNumber);
+                                if (sessionConfNumber != null) {
+                                    mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                                }
+                                return mApiService
+                                        .login(new LoginRequest(loginEmail, mPasswordEdit.getText().toString(),
+                                                sessionConfNumber))
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.io());
+                            } else {
+                                return null;
                             }
-
-                            return mApiService
-                                    .login(new LoginRequest(loginEmail, mPasswordEdit.getText().toString(),
-                                            sessionConfNumber))
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io());
                         }
                     })
                     .subscribe(new Subscriber<LoginResponse>() {
@@ -436,24 +472,26 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
 
                         @Override
                         public void onError(Throwable e) {
-
-                            Log.v("onError", e.getMessage());
-                            Toast.makeText(getActivity(), "Error" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             hideProgress();
+                            int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                            if (errorId == R.string.noInternetConnection) {
+                                showErrorCrouton(getString(errorId), false);
+                            }
+                            Log.v("onError", e.getMessage());
                         }
 
                         @Override
                         public void onNext(LoginResponse loginResponse) {
-
-                            Log.v("login response", loginResponse.getStatus().getCode());
                             hideProgress();
-                            if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
-                                mPreferencesHelper.setIsNewUser(false);
-                                dismiss();
-                            } else {
-                                Toast.makeText(getActivity(),
-                                        "Error: " + loginResponse.getStatus().getErrorMessages().get(0),
-                                        Toast.LENGTH_SHORT).show();
+                            if (loginResponse != null) {
+                                Log.v("login response", loginResponse.getStatus().getCode());
+                                if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
+                                    mPreferencesHelper.setIsNewUser(false);
+                                    dismiss();
+                                } else {
+                                    showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),
+                                            true);
+                                }
                             }
                         }
                     });
@@ -471,6 +509,13 @@ public class FingerprintAuthenticationDialog extends DialogFragment {
 
     private void setPasswordError(String errorString) {
         mPasswordInput.setError(errorString);
+    }
+
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        if (span) {
+            Utils.displayCrouton(getActivity(), (Spanned) message, ((HomeActivity) getActivity()).getContainerView());
+        }
+        Utils.displayCrouton(getActivity(), (String) message, ((HomeActivity) getActivity()).getContainerView());
     }
 
     public void showProgress() {
