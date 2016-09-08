@@ -1,20 +1,5 @@
 package com.petmeds1800.ui.fragments.dialog;
 
-import android.widget.EditText;
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ForgotPasswordRequest;
-import com.petmeds1800.model.entities.ForgotPasswordResponse;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -35,7 +20,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ForgotPasswordRequest;
+import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -149,11 +147,11 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
             return;
         } else if (mStage == Stage.FINGERPRINT) {
             navigateToHome();
-        } else if (mStage == Stage.LOGIN && RxFingerprint.isAvailable(getActivity())) {
+        } else if (mStage == Stage.LOGIN && mPreferencesHelper.getIsFingerPrintEnabled()) {
             mStage = Stage.FINGERPRINT;
             updateStage();
             return;
-        } else if (mStage == Stage.LOGIN && RxFingerprint.isUnavailable(getActivity())) {
+        } else if (mStage == Stage.LOGIN && !mPreferencesHelper.getIsFingerPrintEnabled()) {
             navigateToHome();
         }
         dismiss();
@@ -192,8 +190,9 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     }
 
     private void authenticateFingerprint() {
+
         setStatusText();
-        if (RxFingerprint.isUnavailable(getActivity())) {
+        if (RxFingerprint.isUnavailable(getActivity()) || !mPreferencesHelper.getIsFingerPrintEnabled()) {
             mStage = Stage.LOGIN;
             updateStage();
             return;
@@ -249,7 +248,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
             Toast.makeText(getActivity(), "Fingerprint not available", Toast.LENGTH_SHORT).show();
             return;
         }
-        Toast.makeText(getActivity(), "Touch the sensor!", Toast.LENGTH_SHORT).show();
+        if (mPreferencesHelper.getIsFingerPrintEnabled())
+            Toast.makeText(getActivity(), "Touch the sensor!", Toast.LENGTH_SHORT).show();
     }
 
     private void updateStage() {

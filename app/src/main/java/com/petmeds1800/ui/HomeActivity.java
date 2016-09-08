@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -82,10 +83,19 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        PetMedsApplication.getAppComponent().inject(this);
         if (getIntent().getBooleanExtra("isFromHomeActivity", false)) {
             showPushPermissionDailog();
+            if (!RxFingerprint.isHardwareDetected(this)) {
+                mPreferencesHelper.setIsFingerPrintEnabled(false);
+            } else if (!RxFingerprint.hasEnrolledFingerprints(this)) {
+                mPreferencesHelper.setIsFingerPrintEnabled(false);
+            } else {
+                mPreferencesHelper.setIsFingerPrintEnabled(true);
+            }
+
         }
-        PetMedsApplication.getAppComponent().inject(this);
+
         Log.d("HomeActivity", ">>>>>>>>>>>");
         //initialize fragment list
         fragmentList = new ArrayList<Fragment>();

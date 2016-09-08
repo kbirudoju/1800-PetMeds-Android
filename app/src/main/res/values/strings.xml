@@ -276,4 +276,8 @@
     <string name="noInternetConnection">No internet connection</string>
     <string name="notification_title">Allow %1$s to send you notifications?</string>
     <string name="notification_message">Notifications may include alerts,\nsounds and icon badges. These\ncan be configured in Account Settings.</string>
+    <string name="fingerprint_hardware_support_title">Hardware Required</string>
+    <string name="fingerprint_hardware_support_message">Your device does not support fingerprint authentication.</string>
+    <string name="fingerprint_enrollment_title">Enroll</string>
+    <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.</string>
 </resources>
