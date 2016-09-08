@@ -38,5 +38,5 @@
             android:gravity="center_vertical"
             android:text="@string/hint.fingerprint"
             android:textSize="@dimen/sp_14"
-            android:textColor="@color/fingerprint_hint_color"/>
+            android:textColor="@color/hint_color"/>
 </RelativeLayout>

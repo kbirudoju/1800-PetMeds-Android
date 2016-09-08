@@ -4,6 +4,7 @@ import com.petmeds1800.BuildConfig;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.intent.IntroIntent;
 import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
@@ -100,12 +101,15 @@ public class SplashActivity extends AppCompatActivity {
         public void handleMessage(final Message msg) {
 
             if (msg.what == MSG_FINISH && mSplashActivity != null) {
-                if (mPreferencesHelper.getIsNewUser()) {
-                    mSplashActivity.startActivity(new LoginIntent(mSplashActivity));
+                if (mPreferencesHelper.getHaUserSeenIntro()) {
+                    if(mPreferencesHelper.getIsUserLoggedIn()){
+                        mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
+                    }else{
+                        mSplashActivity.startActivity(new LoginIntent(mSplashActivity));
+                    }
                 } else {
-                    mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
+                    mSplashActivity.startActivity(new IntroIntent(mSplashActivity));
                 }
-//                mSplashActivity.startActivity(new IntroIntent(mSplashActivity));
                 mSplashActivity.finish();
             }
         }

@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.ForgotPasswordIntent;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.LoginTask.LoginContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -15,19 +28,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.ForgotPasswordIntent;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -85,8 +85,6 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
-
-
     }
 
     @Nullable
@@ -204,6 +202,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                                 doLogin();
                             }
                         }
+
                         @Override
                         public void onNext(LoginResponse loginResponse) {
                             Log.v("login response", loginResponse.getStatus().getCode());
@@ -274,7 +273,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                         if (loginResponse != null) {
                             Log.v("login response", loginResponse.getStatus().getCode());
                             if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
-                                mPreferencesHelper.setIsNewUser(false);
+                                mPreferencesHelper.setIsUserLoggedIn(false);
                                 navigateToHome();
                             } else {
                                 showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),
@@ -294,7 +293,6 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     public void forgotPassword() {
         startActivity(new ForgotPasswordIntent(getActivity()));
     }
-
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

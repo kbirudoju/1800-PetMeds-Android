@@ -35,7 +35,7 @@ public class CustomValuePicker extends NumberPicker {
 
     public void init() {
         setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-        setDividerColor(getResources().getColor(R.color.fingerprint_hint_color));
+        setDividerColor(getResources().getColor(R.color.hint_color));
     }
 
     public void setValues(String[] values) {

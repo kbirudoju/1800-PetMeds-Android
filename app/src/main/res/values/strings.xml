@@ -274,10 +274,29 @@
 
     <string name="connectionTimeout">Connection timeout..</string>
     <string name="noInternetConnection">No internet connection</string>
+
     <string name="notification_title">Allow %1$s to send you notifications?</string>
-    <string name="notification_message">Notifications may include alerts,\nsounds and icon badges. These\ncan be configured in Account Settings.</string>
+    <string name="notification_message">Notifications may include alerts,\nsounds and icon badges. These\ncan be
+        configured in Account Settings.
+    </string>
     <string name="fingerprint_hardware_support_title">Hardware Required</string>
-    <string name="fingerprint_hardware_support_message">Your device does not support fingerprint authentication.</string>
+    <string name="fingerprint_hardware_support_message">Your device does not support fingerprint authentication.
+    </string>
     <string name="fingerprint_enrollment_title">Enroll</string>
-    <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.</string>
+    <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.
+    </string>
+
+    <string name="label_get_started">Get Started</string>
+    <string name="title_shop">Shop</string>
+    <string name="description_shop">It\'s easy to find and buy what you need.</string>
+    <string name="title_medication_reminder">Medication Reminder</string>
+    <string name="description_medication_reminder">Set notification so that your pet never\nmisses a dose of meds.
+    </string>
+    <string name="title_find_a_pet">Find a Vet</string>
+    <string name="description_find_a_pet">Find a nearby vet using your current\nlocation or ZIP code.</string>
+    <string name="title_education">Education</string>
+    <string name="description_education">Learn about pet health from experts, or\nask our vet a question.</string>
+    <string name="title_ez_refill">EZ Fill</string>
+    <string name="description_ez_refill">Quickly reorder medications you\'ve\npurchased in the past.</string>
+
 </resources>

@@ -1,10 +1,11 @@
 package com.petmeds1800.util;
 
+import com.google.gson.Gson;
+
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.google.gson.Gson;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
 
 /**
  * Created by Digvijay on 8/16/2016.
@@ -19,7 +20,9 @@ public class GeneralPreferencesHelper {
 
     public static final String LOGIN_PASSWORD = "login_password";
 
-    public static final String IS_NEW_USER = "is_new_user";
+    public static final String IS_USER_LOGGED_IN = "is_user_logged_in";
+
+    public static final String HAS_USER_SEEN_INTRO = "has_user_seen_intro";
 
     private SharedPreferences mPreferences;
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";
@@ -40,20 +43,28 @@ public class GeneralPreferencesHelper {
         return null;
     }
 
-    public void setLoginEmail(String email){
+    public void setLoginEmail(String email) {
         mPreferences.edit().putString(LOGIN_EMAIL, email).apply();
     }
 
-    public String getLoginEmail(){
+    public String getLoginEmail() {
         return mPreferences.getString(LOGIN_EMAIL, null);
     }
 
-    public void setIsNewUser(boolean value){
-        mPreferences.edit().putBoolean(IS_NEW_USER, value).apply();
+    public void setIsUserLoggedIn(boolean value) {
+        mPreferences.edit().putBoolean(IS_USER_LOGGED_IN, value).apply();
     }
 
-    public boolean getIsNewUser(){
-        return mPreferences.getBoolean(IS_NEW_USER, true);
+    public boolean getIsUserLoggedIn() {
+        return mPreferences.getBoolean(IS_USER_LOGGED_IN, false);
+    }
+
+    public void setHasUserSeenIntro(boolean value) {
+        mPreferences.edit().putBoolean(HAS_USER_SEEN_INTRO, value).apply();
+    }
+
+    public boolean getHaUserSeenIntro() {
+        return mPreferences.getBoolean(HAS_USER_SEEN_INTRO, false);
     }
 
     public void setIsPushNotificationEnableFlag(boolean value){

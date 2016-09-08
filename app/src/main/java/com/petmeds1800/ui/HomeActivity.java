@@ -1,20 +1,5 @@
 package com.petmeds1800.ui;
 
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -33,6 +18,21 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +44,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HomeActivity extends AbstractActivity implements AddACardContract.AddressSelectionListener, DialogInterface.OnClickListener {
+public class HomeActivity extends AbstractActivity
+        implements AddACardContract.AddressSelectionListener, DialogInterface.OnClickListener {
 
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
@@ -62,8 +63,16 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
     @Inject
     PetMedsApiService mApiService;
+
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
+
+    private boolean mIsAuthDialogShown;
+
+    private int mTabIndex;
+
+    private FingerprintAuthenticationDialog mAuthDialog;
+
     private static final int[] TAB_ICON_UNSELECTED = {R.drawable.ic_menu_home, R.drawable.ic_menu_cart,
             R.drawable.ic_menu_learn, R.drawable.ic_menu_account};
 
@@ -71,7 +80,9 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
             R.drawable.ic_menu_learn_pressed, R.drawable.ic_menu_account_pressed};
 
     public void showPushPermissionDailog() {
-        AlertDialog alertDialog = Utils.showAlertDailog(this, String.format(getString(R.string.notification_title), getString(R.string.application_name)), getString(R.string.notification_message), R.style.StyleForNotification)
+        AlertDialog alertDialog = Utils.showAlertDailog(this,
+                String.format(getString(R.string.notification_title), getString(R.string.application_name)),
+                getString(R.string.notification_message), R.style.StyleForNotification)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.dialog_allow_button).toUpperCase(), this)
                 .setNegativeButton(getString(R.string.dialog_deny_button).toUpperCase(), this)
@@ -115,6 +126,7 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
             @Override
             public void onPageSelected(int position) {
+                mTabIndex = position;
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
                     mHomeTab.getTabAt(i).setIcon(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
                 }
@@ -143,6 +155,15 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mIsAuthDialogShown && mTabIndex == 3) {
+            mAuthDialog.dismiss();
+            showAuthDialog();
+        }
+    }
+
+    @Override
     public void setAddress(Address address) {
         AddACardFragment addCardFragment = (AddACardFragment) getSupportFragmentManager()
                 .findFragmentByTag(AddACardFragment.class.getName());
@@ -158,9 +179,10 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
     }
 
     private void showFingerprintDialog() {
-        FingerprintAuthenticationDialog dialog = new FingerprintAuthenticationDialog();
-        dialog.setCancelable(false);
-        dialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+        mIsAuthDialogShown = true;
+        mAuthDialog = new FingerprintAuthenticationDialog();
+        mAuthDialog.setCancelable(false);
+        mAuthDialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
     }
 
     @Override

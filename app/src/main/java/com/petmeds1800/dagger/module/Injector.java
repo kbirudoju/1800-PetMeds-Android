@@ -1,6 +1,7 @@
 package com.petmeds1800.dagger.module;
 
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.IntroActivity;
 import com.petmeds1800.ui.SplashActivity;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.account.AccountSettingsPresenter;
@@ -34,6 +35,8 @@ public interface Injector {
     void inject(ForgotPasswordFragment forgotPasswordFragment);
 
     void inject(FingerprintAuthenticationDialog fingerprintAuthenticationDialog);
+
+    void inject(IntroActivity introActivity);
 
     void inject(AddACardPresenter addACardPresenter);
 

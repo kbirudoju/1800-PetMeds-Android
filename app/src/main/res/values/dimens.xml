@@ -10,6 +10,8 @@
 
     <dimen name="dp_50">50dp</dimen>
     <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_19">19dp</dimen>
+    <dimen name="dp_22">22dp</dimen>
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_3">3dp</dimen>
@@ -29,6 +31,7 @@
     <dimen name="sp_12">12sp</dimen>
     <dimen name="sp_14">14sp</dimen>
     <dimen name="sp_20">20sp</dimen>
+    <dimen name="sp_28">28sp</dimen>
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_62">62dp</dimen>
     <dimen name="dp_40">40dp</dimen>
@@ -66,7 +69,7 @@
     <dimen name="dp_94">94dp</dimen>
     <dimen name="dp_100">100dp</dimen>
 
-
     <dimen name="height_snackbar">54dp</dimen>
+    <dimen name="height_button_petmeds_blue">48dp</dimen>
 
 </resources>

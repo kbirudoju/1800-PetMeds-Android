@@ -1,17 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
     <VideoView android:layout_width="match_parent"
                android:layout_height="match_parent"
-               android:id="@+id/videoview"/>
+               android:id="@+id/video_view"/>
 
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:text="Done"
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:padding="@dimen/dp_12"
+                  android:layout_alignParentTop="true"
+                  android:layout_above="@+id/button_get_started"
+                  android:orientation="vertical">
+
+        <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+        <com.viewpagerindicator.CirclePageIndicator
+                android:id="@+id/view_indicator"
+                android:layout_width="match_parent"
+                android:padding="@dimen/dp_4"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                app:fillColor="@color/circle_indicator"
+                app:pageColor="@color/transparent_100_percent"
+                app:strokeColor="@color/circle_indicator_stroke"
+                app:radius="@dimen/dp_8"
+                app:strokeWidth="@dimen/dp_2"
+                app:gapWidth="@dimen/dp_18"/>
+    </LinearLayout>
+
+    <Button android:layout_width="match_parent"
+            android:layout_height="@dimen/height_button_petmeds_blue"
+            android:id="@+id/button_get_started"
+            style="@style/StyleButton"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:text="@string/label_get_started"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"/>
 

@@ -1,5 +1,20 @@
 package com.petmeds1800.ui.fragments.dialog;
 
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ForgotPasswordRequest;
+import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -19,21 +34,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ForgotPasswordRequest;
-import com.petmeds1800.model.entities.ForgotPasswordResponse;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -130,7 +130,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fingerprint_dialog_container, container, false);
         ButterKnife.bind(this, view);
         mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -248,8 +248,9 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
             Toast.makeText(getActivity(), "Fingerprint not available", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (mPreferencesHelper.getIsFingerPrintEnabled())
+        if (mPreferencesHelper.getIsFingerPrintEnabled()) {
             Toast.makeText(getActivity(), "Touch the sensor!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateStage() {
@@ -345,7 +346,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                             }
                             return null;
                         }
-                    })
+                    }) //TODO: check if we can add onErrorResumeNext instead
                     .flatMap(new Func1<SessionConfNumberResponse, Observable<ForgotPasswordResponse>>() {
                         @Override
                         public Observable<ForgotPasswordResponse> call(
@@ -492,7 +493,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                             if (loginResponse != null) {
                                 Log.v("login response", loginResponse.getStatus().getCode());
                                 if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
-                                    mPreferencesHelper.setIsNewUser(false);
+                                    mPreferencesHelper.setIsUserLoggedIn(false);
                                     dismiss();
                                 } else {
                                     showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),

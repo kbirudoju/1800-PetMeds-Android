@@ -11,7 +11,7 @@
               android:padding="17dp"
               android:background="@color/fingerprint_alert_title_background"
               android:textSize="@dimen/sp_14"
-              android:textColor="@color/fingerprint_hint_color"
+              android:textColor="@color/hint_color"
               android:text="@string/title.fingerprint_login"/>
 
     <FrameLayout
