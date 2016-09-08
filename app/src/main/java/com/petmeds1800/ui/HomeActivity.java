@@ -1,5 +1,20 @@
 package com.petmeds1800.ui;
 
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -13,20 +28,9 @@ import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddACardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
-
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +43,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HomeActivity extends AbstractActivity implements AddACardContract.AddressSelectionListener {
+public class HomeActivity extends AbstractActivity implements AddACardContract.AddressSelectionListener, DialogInterface.OnClickListener {
 
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
@@ -57,18 +61,30 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
     @Inject
     PetMedsApiService mApiService;
-
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
     private static final int[] TAB_ICON_UNSELECTED = {R.drawable.ic_menu_home, R.drawable.ic_menu_cart,
             R.drawable.ic_menu_learn, R.drawable.ic_menu_account};
 
     private static final int[] TAB_ICON_SELECTED = {R.drawable.ic_menu_home_pressed, R.drawable.ic_menu_cart_pressed,
             R.drawable.ic_menu_learn_pressed, R.drawable.ic_menu_account_pressed};
 
+    public void showPushPermissionDailog() {
+        AlertDialog alertDialog = Utils.showAlertDailog(this, String.format(getString(R.string.notification_title), getString(R.string.application_name)), getString(R.string.notification_message), R.style.StyleForNotification)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_allow_button).toUpperCase(), this)
+                .setNegativeButton(getString(R.string.dialog_deny_button).toUpperCase(), this)
+                .create();
+        alertDialog.show();
+    }
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        if (getIntent().getBooleanExtra("isFromHomeActivity", false)) {
+            showPushPermissionDailog();
+        }
         PetMedsApplication.getAppComponent().inject(this);
         Log.d("HomeActivity", ">>>>>>>>>>>");
         //initialize fragment list
@@ -203,5 +219,18 @@ public class HomeActivity extends AbstractActivity implements AddACardContract.A
 
     public ViewGroup getContainerView() {
         return mContainerLayout;
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        switch (which) {
+            case DialogInterface.BUTTON_POSITIVE:
+                mPreferencesHelper.setIsPushNotificationEnableFlag(true);
+                break;
+            case DialogInterface.BUTTON_NEGATIVE:
+                mPreferencesHelper.setIsPushNotificationEnableFlag(false);
+                break;
+
+        }
     }
 }

@@ -1,11 +1,12 @@
 package com.petmeds1800.util;
 
-import com.petmeds1800.R;
-
 import android.app.Activity;
+import android.support.v7.app.AlertDialog;
 import android.text.Spanned;
 import android.view.Gravity;
 import android.view.ViewGroup;
+
+import com.petmeds1800.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,10 +19,18 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public class Utils {
 
-    public static String changeDateFormat(long millisecond, String dateFormat){
+    public static String changeDateFormat(long millisecond, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         String dateString = formatter.format(new Date(millisecond));
         return dateString;
+    }
+
+    public static AlertDialog.Builder showAlertDailog(Activity activity, String title, String msg, int theme) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, theme);
+        builder.setTitle(title);
+        if (msg != null)
+            builder.setMessage(msg);
+        return builder;
     }
 
     public static void displayCrouton(Activity activity, Spanned messageString, ViewGroup attachToView) {

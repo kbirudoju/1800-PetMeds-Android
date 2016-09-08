@@ -7,6 +7,7 @@ import com.petmeds1800.ui.account.AccountSettingsPresenter;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
+import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
@@ -55,5 +56,7 @@ public interface Injector {
     void inject(AddPetPresenter addPetPresenter);
 
     void inject(AddPetFragment addPetFragment);
+
+    void inject(AccountFragment accountFragment);
 
 }

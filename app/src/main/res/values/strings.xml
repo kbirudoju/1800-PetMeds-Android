@@ -31,7 +31,8 @@
 
     <string name="dialog.ok_button">OK</string>
     <string name="dialog.cancel_button">Cancel</string>
-
+    <string name="dialog.deny_button">Deny</string>
+    <string name="dialog.allow_button">Allow</string>
     <string name="permission.storage_rationale">The permission to write into the external storage is needed to save the
         page content.
     </string>
@@ -273,4 +274,6 @@
 
     <string name="connectionTimeout">Connection timeout..</string>
     <string name="noInternetConnection">No internet connection</string>
+    <string name="notification_title">Allow %1$s to send you notifications?</string>
+    <string name="notification_message">Notifications may include alerts,\nsounds and icon badges. These\ncan be configured in Account Settings.</string>
 </resources>

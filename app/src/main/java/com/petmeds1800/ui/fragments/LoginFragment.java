@@ -3,6 +3,8 @@ package com.petmeds1800.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -11,8 +13,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -25,19 +28,6 @@ import com.petmeds1800.mvp.LoginTask.LoginContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import javax.inject.Inject;
 
@@ -151,7 +141,10 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
     @Override
     public void navigateToHome() {
-        startActivity(new HomeIntent(getActivity()));
+
+        HomeIntent intent = new HomeIntent(getActivity());
+        intent.putExtra("isFromHomeActivity", true);
+        startActivity(intent);
         getActivity().finish();
     }
 
