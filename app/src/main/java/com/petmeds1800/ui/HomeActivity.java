@@ -44,8 +44,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static android.R.attr.button;
-
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener, DialogInterface.OnClickListener {
 
@@ -69,12 +67,13 @@ public class HomeActivity extends AbstractActivity
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    private static final String IS_FROM_HOME_ACTIVITY = "isFromHomeActivity";
+
     private boolean mIsAuthDialogShown;
 
     private int mTabIndex;
 
     private FingerprintAuthenticationDialog mAuthDialog;
-    private static final String IS_FROM_HOME_ACTIVITY = "isFromHomeActivity";
 
     private static final int[] TAB_ICON_UNSELECTED = {R.drawable.ic_menu_home, R.drawable.ic_menu_cart,
             R.drawable.ic_menu_learn, R.drawable.ic_menu_account};
@@ -183,9 +182,9 @@ public class HomeActivity extends AbstractActivity
 
     private void showFingerprintDialog() {
         mIsAuthDialogShown = true;
-        mAuthDialog = new FingerprintAuthenticationDialog();
-        mAuthDialog.setCancelable(false);
-        mAuthDialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+        FingerprintAuthenticationDialog dialog = new FingerprintAuthenticationDialog();
+        dialog.setCancelable(false);
+        dialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
     }
 
     @Override

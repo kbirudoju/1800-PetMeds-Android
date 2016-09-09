@@ -79,6 +79,7 @@
     <string name="label.password">Password</string>
     <string name="label.skip">"SKIP"</string>
     <string name="label.login">Log In</string>
+    <string name="label.login_caps">LOG IN</string>
     <string name="label.login_forgot_password">FORGOT PASSWORD?</string>
     <string name="label.no_account_sign_up">Don\'t have an account?</string>
     <string name="signup_txt">SIGN UP</string>
@@ -301,9 +302,9 @@
     <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.
     </string>
     <string name="logout_alert_title">Are you sure you want to \nlogout?</string>
-    <string name="textForAccountDetails">Login or Sign Up\n to view your account details</string>
+    <string name="textForAccountDetails">Login or Sign Up\n to view your Account details</string>
     <string name="buttonCaptionForSignUpLabel">Don\'t have an account?
-        <b>Sign Up</b>
+        <b>SIGN UP</b>
     </string>
 
 </resources>

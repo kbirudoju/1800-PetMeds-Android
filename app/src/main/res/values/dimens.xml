@@ -71,5 +71,8 @@
 
     <dimen name="height_snackbar">54dp</dimen>
     <dimen name="height_button_petmeds_blue">48dp</dimen>
+    <dimen name="dp_65">65dp</dimen>
+    <dimen name="dp_32">32dp</dimen>
+    <dimen name="dp_17">17dp</dimen>
 
 </resources>
