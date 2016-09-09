@@ -9,8 +9,10 @@ import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
+import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
+import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.payment.AddACardFragment;
 import com.petmeds1800.ui.payment.AddACardPresenter;
@@ -62,4 +64,7 @@ public interface Injector {
 
     void inject(AccountFragment accountFragment);
 
+    void inject(SignOutFragment signoutfragment);
+
+    void inject(AccountRootFragment accountRootFragment);
 }

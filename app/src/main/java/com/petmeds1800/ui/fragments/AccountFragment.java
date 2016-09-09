@@ -1,17 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -23,6 +11,18 @@ import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -61,6 +61,8 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
     private final static int IS_HARDWARE_DETECTED = 4;
     private final static int HAS_ENROLLED_FINGERPRINTS = 5;
     private final static int HAS_ENABILITY = 6;
+    @BindView(R.id.signOut)
+    TextView signOut;
     private int fromWhichAlert = 0;
 
     @Override
@@ -71,6 +73,7 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
         mManagePaymentLabel.setOnClickListener(this);
         mManageAddressLabel.setOnClickListener(this);
         mPetsLabel.setOnClickListener(this);
+        signOut.setOnClickListener(this);
         fillWindow();
     }
 
@@ -92,6 +95,16 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
         AlertDialog alertDialog = Utils.showAlertDailog(getActivity(), title, msg, R.style.StyleForNotification)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.dialog_ok_button).toUpperCase(), null)
+                .create();
+        alertDialog.show();
+    }
+
+    private void showDailogForSignOut(String title, String msg) {
+        fromWhichAlert = FROM_SIGNOUT_OPTION;
+        AlertDialog alertDialog = Utils.showAlertDailog(getActivity(), title, msg, R.style.StyleForNotification)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_logout_button).toUpperCase(), this)
+                .setNegativeButton(getString(R.string.dialog_cancel_button).toUpperCase(), this)
                 .create();
         alertDialog.show();
     }
@@ -138,6 +151,9 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
                 break;
             case R.id.my_pets_label:
                 replaceAndAddToBackStack(new PetListFragment(), PetListFragment.class.getName());
+                break;
+            case R.id.signOut:
+                showDailogForSignOut(getString(R.string.logout_alert_title), null);
                 break;
             default:
                 break;
@@ -187,9 +203,12 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
 
     }
 
-    public void performOperation(int fromWhichAlert, boolean isEnable) {
+    public void performOperation(int fromWhichAlert, boolean isPositive) {
         switch (fromWhichAlert) {
             case FROM_SIGNOUT_OPTION:
+                if (isPositive) {
+                    replaceFragment(new SignOutFragment());
+                }
                 break;
         }
         fromWhichAlert = 0;

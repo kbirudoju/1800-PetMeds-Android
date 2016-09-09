@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/xlarge_margin">
+
+        <ImageView
+            android:id="@+id/topImageView"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_100"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_100"
+            android:src="@drawable/ic_forgot_password" />
+
+        <TextView
+            android:id="@+id/middleTextView"
+            style="@style/rounded_button_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/topImageView"
+            android:layout_marginTop="@dimen/dp_30"
+            android:gravity="center"
+            android:text="@string/textForAccountDetails"
+            android:textColor="@color/hint_color" />
+
+        <Button
+            android:id="@+id/log_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/middleTextView"
+            android:layout_marginTop="@dimen/dp_30"
+            android:background="@color/petmeds_blue"
+            android:gravity="center"
+            android:text="@string/label.login"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/sign_up_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/log_in_button"
+            android:layout_marginTop="18dp"
+            android:background="@color/petmeds_blue"
+            android:gravity="center"
+            android:text="@string/buttonCaptionForSignUpLabel"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+
+    </RelativeLayout>
+</FrameLayout>

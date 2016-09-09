@@ -2,6 +2,7 @@ package com.petmeds1800.ui.fragments;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.os.Bundle;
@@ -13,19 +14,27 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 /**
- * Created by pooja on 8/4/2016.
+ * Created by Sdixit on 08-09-2016.
  */
-public class AccountRootFragment extends AbstractFragment {
 
+public class SignOutFragment extends HomeFragment {
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_account_container, container, false);
+        View view = inflater.inflate(R.layout.fragment_signout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
-        replaceFragment(mPreferencesHelper.getIsUserLoggedIn() ? new AccountFragment() : new SignOutFragment());
+        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
+        mPreferencesHelper.clearGeneralPreferencesData();
         return view;
     }
+
 }

@@ -44,6 +44,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.button;
+
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener, DialogInterface.OnClickListener {
 
@@ -72,6 +74,7 @@ public class HomeActivity extends AbstractActivity
     private int mTabIndex;
 
     private FingerprintAuthenticationDialog mAuthDialog;
+    private static final String IS_FROM_HOME_ACTIVITY = "isFromHomeActivity";
 
     private static final int[] TAB_ICON_UNSELECTED = {R.drawable.ic_menu_home, R.drawable.ic_menu_cart,
             R.drawable.ic_menu_learn, R.drawable.ic_menu_account};
@@ -95,7 +98,7 @@ public class HomeActivity extends AbstractActivity
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         PetMedsApplication.getAppComponent().inject(this);
-        if (getIntent().getBooleanExtra("isFromHomeActivity", false)) {
+        if (getIntent().getBooleanExtra(IS_FROM_HOME_ACTIVITY, false) && mPreferencesHelper.getIsUserLoggedIn()) {
             showPushPermissionDailog();
             if (!RxFingerprint.isHardwareDetected(this)) {
                 mPreferencesHelper.setIsFingerPrintEnabled(false);
@@ -134,7 +137,7 @@ public class HomeActivity extends AbstractActivity
                     removeAllFragment();
                 }
 
-                if (position == 3) {
+                if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
                     showAuthDialog();
                 }

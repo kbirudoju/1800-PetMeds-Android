@@ -493,7 +493,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                             if (loginResponse != null) {
                                 Log.v("login response", loginResponse.getStatus().getCode());
                                 if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
-                                    mPreferencesHelper.setIsUserLoggedIn(false);
+                                    mPreferencesHelper.setIsUserLoggedIn(true);
                                     dismiss();
                                 } else {
                                     showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),

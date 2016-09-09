@@ -7,6 +7,12 @@ import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import static android.content.Context.MODE_PRIVATE;
+
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
 /**
  * Created by Digvijay on 8/16/2016.
  */
@@ -27,8 +33,13 @@ public class GeneralPreferencesHelper {
     private SharedPreferences mPreferences;
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";
     public static final String IS_ISFINGER_PRINT_ENABLED = "is_fingerprint_enabled";
+    public static final String IS_ACCOUNT_SCREEN = "is_account_screen";
     public GeneralPreferencesHelper(Context context) {
-        mPreferences = context.getSharedPreferences(GENERAL_PREFS, Context.MODE_PRIVATE);
+        mPreferences = context.getSharedPreferences(GENERAL_PREFS, MODE_PRIVATE);
+    }
+
+    public void clearGeneralPreferencesData() {
+        mPreferences.edit().clear().apply();
     }
 
     public void saveSessionConfirmationResponse(SessionConfNumberResponse response) {
@@ -65,20 +76,23 @@ public class GeneralPreferencesHelper {
 
     public boolean getHaUserSeenIntro() {
         return mPreferences.getBoolean(HAS_USER_SEEN_INTRO, false);
+
     }
 
-    public void setIsPushNotificationEnableFlag(boolean value){
+    public void setIsPushNotificationEnableFlag(boolean value) {
         mPreferences.edit().putBoolean(IS_NOTIFICATION_ENABLED, value).apply();
     }
 
-    public boolean getIsPushNotificationEnableFlag(){
+    public boolean getIsPushNotificationEnableFlag() {
         return mPreferences.getBoolean(IS_NOTIFICATION_ENABLED, false);
     }
-    public void setIsFingerPrintEnabled(boolean value){
+
+    public void setIsFingerPrintEnabled(boolean value) {
         mPreferences.edit().putBoolean(IS_ISFINGER_PRINT_ENABLED, value).apply();
     }
 
-    public boolean getIsFingerPrintEnabled(){
+    public boolean getIsFingerPrintEnabled() {
         return mPreferences.getBoolean(IS_ISFINGER_PRINT_ENABLED, true);
     }
+
 }

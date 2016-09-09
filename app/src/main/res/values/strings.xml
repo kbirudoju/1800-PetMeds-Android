@@ -33,6 +33,7 @@
     <string name="dialog.cancel_button">Cancel</string>
     <string name="dialog.deny_button">Deny</string>
     <string name="dialog.allow_button">Allow</string>
+    <string name="dialog.logout_button">Logout</string>
     <string name="permission.storage_rationale">The permission to write into the external storage is needed to save the
         page content.
     </string>
@@ -283,8 +284,7 @@
     <string name="fingerprint_hardware_support_message">Your device does not support fingerprint authentication.
     </string>
     <string name="fingerprint_enrollment_title">Enroll</string>
-    <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.
-    </string>
+
 
     <string name="label_get_started">Get Started</string>
     <string name="title_shop">Shop</string>
@@ -298,5 +298,12 @@
     <string name="description_education">Learn about pet health from experts, or\nask our vet a question.</string>
     <string name="title_ez_refill">EZ Fill</string>
     <string name="description_ez_refill">Quickly reorder medications you\'ve\npurchased in the past.</string>
+    <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.
+    </string>
+    <string name="logout_alert_title">Are you sure you want to \nlogout?</string>
+    <string name="textForAccountDetails">Login or Sign Up\n to view your account details</string>
+    <string name="buttonCaptionForSignUpLabel">Don\'t have an account?
+        <b>Sign Up</b>
+    </string>
 
 </resources>
