@@ -2,7 +2,7 @@ package com.petmeds1800.model;
 
 import com.petmeds1800.api.PetMedsApiService;
 
-import com.petmeds1800.dagger.AppScope;
+import com.petmeds1800.dagger.scopes.AppScope;
 
 import rx.Observable;
 

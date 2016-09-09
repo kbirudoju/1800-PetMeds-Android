@@ -1,7 +1,7 @@
 package com.petmeds1800.mvp.LoginTask;
 
-import com.petmeds1800.dagger.ActivityScope;
-import com.petmeds1800.dagger.module.AppComponent;
+import com.petmeds1800.dagger.scopes.ActivityScope;
+import com.petmeds1800.dagger.component.AppComponent;
 import com.petmeds1800.ui.LoginActivity;
 
 import dagger.Component;

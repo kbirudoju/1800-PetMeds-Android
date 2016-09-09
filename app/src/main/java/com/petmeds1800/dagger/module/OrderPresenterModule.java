@@ -11,7 +11,6 @@ import dagger.Provides;
 @Module
 public class OrderPresenterModule {
 
-
     private final OrderListContract.View mView;
 
     public OrderPresenterModule(OrderListContract.View view) {

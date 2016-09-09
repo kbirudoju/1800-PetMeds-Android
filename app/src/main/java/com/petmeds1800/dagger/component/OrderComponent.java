@@ -1,7 +1,8 @@
-package com.petmeds1800.dagger.module;
+package com.petmeds1800.dagger.component;
 
-import com.petmeds1800.dagger.ActivityScope;
+import com.petmeds1800.dagger.scopes.ActivityScope;
 import com.petmeds1800.ui.orders.MyOrderFragment;
+import com.petmeds1800.dagger.module.OrderPresenterModule;
 
 import dagger.Component;
 

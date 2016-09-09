@@ -1,5 +1,6 @@
-package com.petmeds1800.dagger.module;
+package com.petmeds1800.dagger;
 
+import com.petmeds1800.dagger.component.AppComponent;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.IntroActivity;
 import com.petmeds1800.ui.SplashActivity;

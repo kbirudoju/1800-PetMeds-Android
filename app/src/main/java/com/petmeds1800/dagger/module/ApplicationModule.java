@@ -1,7 +1,7 @@
 package com.petmeds1800.dagger.module;
 
 import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.dagger.AppScope;
+import com.petmeds1800.dagger.scopes.AppScope;
 
 import android.app.Application;
 import android.content.Context;

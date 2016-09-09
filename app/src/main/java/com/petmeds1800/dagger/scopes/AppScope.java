@@ -1,4 +1,4 @@
-package com.petmeds1800.dagger;
+package com.petmeds1800.dagger.scopes;
 
 import java.lang.annotation.Retention;
 

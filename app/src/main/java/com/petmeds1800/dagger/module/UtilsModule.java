@@ -1,6 +1,6 @@
 package com.petmeds1800.dagger.module;
 
-import com.petmeds1800.dagger.AppScope;
+import com.petmeds1800.dagger.scopes.AppScope;
 import com.petmeds1800.util.FileUtils;
 import com.petmeds1800.util.PermissionUtils;
 

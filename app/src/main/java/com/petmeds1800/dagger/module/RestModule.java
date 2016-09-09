@@ -2,7 +2,7 @@ package com.petmeds1800.dagger.module;
 
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.dagger.AppScope;
+import com.petmeds1800.dagger.scopes.AppScope;
 
 import dagger.Module;
 import dagger.Provides;

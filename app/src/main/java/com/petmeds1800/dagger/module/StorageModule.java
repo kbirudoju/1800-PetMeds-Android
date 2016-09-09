@@ -3,7 +3,7 @@ package com.petmeds1800.dagger.module;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.petmeds1800.dagger.AppScope;
+import com.petmeds1800.dagger.scopes.AppScope;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.content.Context;

@@ -6,7 +6,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.R;
-import com.petmeds1800.dagger.AppScope;
+import com.petmeds1800.dagger.scopes.AppScope;
 
 import android.app.Application;
 
