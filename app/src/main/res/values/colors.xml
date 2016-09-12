@@ -19,7 +19,7 @@
     <color name="dark_grey">#212224</color>
     <color name="light_turbo_yellow">#1af8be15</color>
     <color name="light_medium_green">#2639b549</color>
-    <color name="grey">#de000000</color>
+    <color name="grey_text">#de000000</color>
     <color name="light_grey">#595959</color>
 
     <color name="hint_color">#4e514e</color>

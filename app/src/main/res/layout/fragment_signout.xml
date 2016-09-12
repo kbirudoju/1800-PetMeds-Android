@@ -58,6 +58,5 @@
                 android:textAllCaps="false"
                 android:textColor="@color/circle_indicator_stroke"/>
 
-
     </RelativeLayout>
 </FrameLayout>

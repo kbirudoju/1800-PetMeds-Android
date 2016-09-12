@@ -131,7 +131,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fingerprint_dialog_container, container, false);
+        View view = inflater.inflate(R.layout.dialog_fingerprint_container, container, false);
         ButterKnife.bind(this, view);
         mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
         mPasswordEdit.setOnEditorActionListener(this);

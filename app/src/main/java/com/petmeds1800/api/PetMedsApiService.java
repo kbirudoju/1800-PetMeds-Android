@@ -3,8 +3,8 @@ package com.petmeds1800.api;
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.StatesListResponse;
-import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
+import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
@@ -24,6 +24,8 @@ import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.model.entities.SignUpRequest;
+import com.petmeds1800.model.entities.SignUpResponse;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
@@ -76,7 +78,7 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/update")
     Observable<UpdateAccountSettingsResponse> updateAccountSettings(
-     @Body UpdateAccountSettingsRequest updateAccountSettingsRequest);
+            @Body UpdateAccountSettingsRequest updateAccountSettingsRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/contact/ContactActor/list")
@@ -116,11 +118,13 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/contact/ContactActor/detailed")
-    Observable<AddAddressResponse> getAddressById(@Query("_dynSessConf") String sessionConfirmation , @Query("addressId") String addressId);
+    Observable<AddAddressResponse> getAddressById(@Query("_dynSessConf") String sessionConfirmation,
+            @Query("addressId") String addressId);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/update")
     Observable<AddEditCardResponse> updateCard(@Body UpdateCardRequest updateCardRequestRequest);
+
     @GET("/rest/model/1800petmeds/reminder/ReminderActor/easyRefillReminder")
     Observable<EasyRefillReminder> getReminderList(@Query("_dynSessConf") String sessionConfirmation);
 
@@ -132,4 +136,6 @@ public interface PetMedsApiService {
     @POST("rest/model/1800petmeds/pet/PetActor/remove")
     Observable<RemovePetResponse> removePet(@Body RemovePetRequest removeRequest);
 
+    @POST("/rest/model/atg/userprofiling/ProfileActor/create")
+    Observable<SignUpResponse> signUp(@Body SignUpRequest signUpRequest);
 }

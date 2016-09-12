@@ -17,6 +17,7 @@ import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
+import com.petmeds1800.ui.fragments.SignUpFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.payment.AddACardPresenter;
@@ -43,6 +44,8 @@ public interface Injector {
     void inject(FingerprintAuthenticationDialog fingerprintAuthenticationDialog);
 
     void inject(IntroActivity introActivity);
+
+    void inject(SignUpFragment signUpFragment);
 
     void inject(AddACardPresenter addACardPresenter);
 

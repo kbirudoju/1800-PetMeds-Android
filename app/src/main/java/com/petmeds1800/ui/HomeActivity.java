@@ -11,6 +11,7 @@ import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.HomeFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
@@ -27,9 +28,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -53,13 +52,8 @@ public class HomeActivity extends AbstractActivity
     @BindView(R.id.viewpager_fragments)
     ViewPager mViewPager;
 
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-
     @BindView(R.id.container_home)
     RelativeLayout mContainerLayout;
-
-    List<Fragment> fragmentList;
 
     @Inject
     PetMedsApiService mApiService;
@@ -67,30 +61,19 @@ public class HomeActivity extends AbstractActivity
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    private ProgressDialog mProgressDialog;
+
+    private FingerprintAuthenticationDialog mAuthenticationDialog;
+
     private static final String IS_FROM_HOME_ACTIVITY = "isFromHomeActivity";
 
-    private boolean mIsAuthDialogShown;
-
     private int mTabIndex;
-
-    private FingerprintAuthenticationDialog mAuthDialog;
 
     private static final int[] TAB_ICON_UNSELECTED = {R.drawable.ic_menu_home, R.drawable.ic_menu_cart,
             R.drawable.ic_menu_learn, R.drawable.ic_menu_account};
 
     private static final int[] TAB_ICON_SELECTED = {R.drawable.ic_menu_home_pressed, R.drawable.ic_menu_cart_pressed,
             R.drawable.ic_menu_learn_pressed, R.drawable.ic_menu_account_pressed};
-
-    public void showPushPermissionDailog() {
-        AlertDialog alertDialog = Utils.showAlertDailog(this,
-                String.format(getString(R.string.notification_title), getString(R.string.application_name)),
-                getString(R.string.notification_message), R.style.StyleForNotification)
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.dialog_allow_button).toUpperCase(), this)
-                .setNegativeButton(getString(R.string.dialog_deny_button).toUpperCase(), this)
-                .create();
-        alertDialog.show();
-    }
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,12 +89,11 @@ public class HomeActivity extends AbstractActivity
             } else {
                 mPreferencesHelper.setIsFingerPrintEnabled(true);
             }
-
         }
 
         Log.d("HomeActivity", ">>>>>>>>>>>");
         //initialize fragment list
-        fragmentList = new ArrayList<Fragment>();
+        List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new HomeFragment());
         fragmentList.add(new CartFragment());
         fragmentList.add(new LearnFragment());
@@ -138,10 +120,9 @@ public class HomeActivity extends AbstractActivity
 
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
-                    showAuthDialog();
+                    checkLoginStatus();
                 }
                 setToolBarTitle((getResources().getStringArray(R.array.tab_title)[position]));
-
             }
 
             @Override
@@ -159,9 +140,21 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (!mIsAuthDialogShown && mTabIndex == 3) {
-            mAuthDialog.dismiss();
-            showAuthDialog();
+        mProgressDialog = new ProgressDialog();
+        mAuthenticationDialog = new FingerprintAuthenticationDialog();
+        if (mTabIndex == 3) {
+            checkLoginStatus();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mProgressDialog.isVisible()) {
+            mProgressDialog.dismiss();
+        }
+        if (mAuthenticationDialog.isVisible()) {
+            mAuthenticationDialog.dismiss();
         }
     }
 
@@ -177,11 +170,20 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
+    public void showPushPermissionDailog() {
+        AlertDialog alertDialog = Utils.showAlertDailog(this,
+                String.format(getString(R.string.notification_title), getString(R.string.application_name)),
+                getString(R.string.notification_message), R.style.StyleForNotification)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_allow_button).toUpperCase(), this)
+                .setNegativeButton(getString(R.string.dialog_deny_button).toUpperCase(), this)
+                .create();
+        alertDialog.show();
+    }
+
     private void showFingerprintDialog() {
-        mIsAuthDialogShown = true;
-        FingerprintAuthenticationDialog dialog = new FingerprintAuthenticationDialog();
-        dialog.setCancelable(false);
-        dialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+        mAuthenticationDialog.setCancelable(false);
+        mAuthenticationDialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
     }
 
     @Override
@@ -203,7 +205,7 @@ public class HomeActivity extends AbstractActivity
         return mViewPager;
     }
 
-    private void showAuthDialog() {
+    private void checkLoginStatus() {
         showProgress();
         mApiService.getSecurityStatus()
                 .subscribeOn(Schedulers.io())
@@ -241,11 +243,12 @@ public class HomeActivity extends AbstractActivity
     }
 
     public void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
     }
 
     public void hideProgress() {
-        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressDialog.dismiss();
     }
 
     public ViewGroup getContainerView() {
@@ -261,7 +264,6 @@ public class HomeActivity extends AbstractActivity
             case DialogInterface.BUTTON_NEGATIVE:
                 mPreferencesHelper.setIsPushNotificationEnableFlag(false);
                 break;
-
         }
     }
 }

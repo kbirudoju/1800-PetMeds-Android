@@ -9,10 +9,6 @@ import android.content.SharedPreferences;
 
 import static android.content.Context.MODE_PRIVATE;
 
-
-import android.content.Context;
-import android.content.SharedPreferences;
-
 /**
  * Created by Digvijay on 8/16/2016.
  */
@@ -31,9 +27,13 @@ public class GeneralPreferencesHelper {
     public static final String HAS_USER_SEEN_INTRO = "has_user_seen_intro";
 
     private SharedPreferences mPreferences;
+
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";
+
     public static final String IS_ISFINGER_PRINT_ENABLED = "is_fingerprint_enabled";
+
     public static final String IS_ACCOUNT_SCREEN = "is_account_screen";
+
     public GeneralPreferencesHelper(Context context) {
         mPreferences = context.getSharedPreferences(GENERAL_PREFS, MODE_PRIVATE);
     }

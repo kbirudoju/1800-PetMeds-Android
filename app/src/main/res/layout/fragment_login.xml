@@ -12,7 +12,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="@dimen/xxlarge_margin"
-        android:text="@string/label.skip"
+        android:text="@string/label_skip"
         android:textColor="@color/petmeds_blue" />
 
     <ImageView
@@ -45,9 +45,8 @@
                 style="@style/StyledEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/label.email"
+                android:hint="@string/label_email"
                 android:inputType="textEmailAddress" />
-            <!--TODO - remove hardcode email during release it-->
 
         </android.support.design.widget.TextInputLayout>
 
@@ -64,9 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/xxxlarge_margin"
-                android:hint="@string/label.password"
+                android:hint="@string/label_password"
                 android:inputType="textPassword" />
-            <!--TODO - remove hardcode password during release it-->
 
         </android.support.design.widget.TextInputLayout>
 
@@ -77,7 +75,7 @@
             android:layout_marginTop="@dimen/xxxlarge_margin"
             android:background="@color/petmeds_blue"
             android:gravity="center"
-            android:text="@string/label.login"
+            android:text="@string/label_login"
             android:textColor="@color/white" />
 
         <TextView
@@ -86,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/xxxlarge_margin"
-            android:text="@string/label.login_forgot_password"
+            android:text="@string/label_login_forgot_password"
             android:textColor="@color/petmeds_blue" />
 
 
@@ -107,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:text="@string/label.no_account_sign_up"
+            android:text="@string/label_no_account_sign_up"
             android:textAllCaps="false"
             android:textColor="@color/black" />
 

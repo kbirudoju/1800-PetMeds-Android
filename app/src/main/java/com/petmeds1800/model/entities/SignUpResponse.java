@@ -9,6 +9,14 @@ public class SignUpResponse {
 
     private Profile profile;
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
     public class Profile{
 
         private String firstName;
@@ -20,10 +28,26 @@ public class SignUpResponse {
         private String email;
 
         private String userId;
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public boolean isPushNotification() {
+            return pushNotification;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
     }
 
-    public SignUpResponse(Status status, Profile profile) {
-        this.status = status;
-        this.profile = profile;
-    }
 }

@@ -101,7 +101,7 @@ public class SplashActivity extends AppCompatActivity {
         public void handleMessage(final Message msg) {
 
             if (msg.what == MSG_FINISH && mSplashActivity != null) {
-                if (mPreferencesHelper.getHaUserSeenIntro()) {
+                if (!mPreferencesHelper.getHaUserSeenIntro()) {
                     if(mPreferencesHelper.getIsUserLoggedIn()){
                         mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
                     }else{

@@ -18,12 +18,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-        <include layout="@layout/fingerprint_dialog_content"/>
+        <include layout="@layout/dialog_fingerprint_content"/>
 
-        <include layout="@layout/fingerprint_dialog_login"
+        <include layout="@layout/dialog_fingerprint_login"
                  android:visibility="gone"/>
 
-        <include layout="@layout/fingerprint_dialog_forgot_password"
+        <include layout="@layout/dialog_fingerprint_forgot_password"
                  android:visibility="gone"/>
 
         <ProgressBar android:layout_width="wrap_content"

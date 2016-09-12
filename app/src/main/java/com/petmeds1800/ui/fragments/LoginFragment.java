@@ -70,7 +70,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
+
     private static final String IS_FROM_HOME_ACTIVITY = "isFromHomeActivity";
+
     private LoginContract.Presenter mPresenter;
 
     public static LoginFragment newInstance() {
@@ -139,7 +141,6 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
     @Override
     public void navigateToHome() {
-
         HomeIntent intent = new HomeIntent(getActivity());
         intent.putExtra(IS_FROM_HOME_ACTIVITY, true);
         startActivity(intent);
