@@ -1,23 +1,41 @@
 package com.petmeds1800.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Abhinav on 11/8/16
  */
-public class Card {
+public class Card implements Serializable {
 
     private String id;
+
     private String cardNumber;
+
     private String cardType;
+
     private String expirationMonth;
+
     private String expirationYear;
+
     private boolean cardIsDefault;
+
     private String cardKey;
+
+    private BillingAddress billingAddress;
 
     public Card(String cardNumber, String cardType, String expirationYear, boolean mDefaultPayment) {
         this.cardNumber = cardNumber;
         this.cardType = cardType;
         this.expirationYear = expirationYear;
         this.cardIsDefault = mDefaultPayment;
+    }
+
+    public BillingAddress getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(BillingAddress billingAddress) {
+        this.billingAddress = billingAddress;
     }
 
     public String getCardNumber() {

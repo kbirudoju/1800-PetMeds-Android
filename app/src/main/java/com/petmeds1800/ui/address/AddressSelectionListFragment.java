@@ -1,5 +1,12 @@
 package com.petmeds1800.ui.address;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,12 +23,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,7 +31,8 @@ import butterknife.ButterKnife;
 /**
  * Created by Abhinav on 11/8/16.
  */
-public class AddressSelectionListFragment extends AbstractFragment implements SavedAddressListContract.View, View.OnClickListener {
+public class AddressSelectionListFragment extends AbstractFragment
+        implements SavedAddressListContract.View, View.OnClickListener {
 
     @BindView(R.id.noSavedAddress_layout)
     LinearLayout mNoSavedAddressLinearLayout;
@@ -42,14 +44,34 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     ProgressBar mProgressBar;
 
     private SavedAddressListContract.Presenter mPresenter;
+
     private AddressSelectionAdapter mSavedAddressAdapter;
+
     private MenuItem mAddMenuItem;
+
     private HomeActivity mCallback;
+
+    private int mRequestCode;
+
+    public static AddressSelectionListFragment newInstance(int requestCode) {
+
+        Bundle args = new Bundle();
+        args.putInt(AddEditCardFragment.REQUEST_CODE, requestCode);
+        AddressSelectionListFragment fragment = new AddressSelectionListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new SavedAddressListPresenter(this);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mRequestCode = bundle.getInt(AddEditCardFragment.REQUEST_CODE);
+        }
+
         setHasOptionsMenu(true);
     }
 
@@ -58,9 +80,9 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved_address_list, container, false);
         ButterKnife.bind(this, view);
-        ((AbstractActivity)getActivity()).enableBackButton();
-        ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.addressSelectionListTitle));
-        mSavedAddressAdapter = new AddressSelectionAdapter(false,this,getContext());
+        ((AbstractActivity) getActivity()).enableBackButton();
+        ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addressSelectionListTitle));
+        mSavedAddressAdapter = new AddressSelectionAdapter(false, this, getContext(), mRequestCode);
         setupCardsRecyclerView();
         return view;
 
@@ -99,8 +121,8 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_add){
-            replaceAndAddToBackStack(new AddEditAddressFragment() , AddEditAddressFragment.class.getName());
+        if (id == R.id.action_add) {
+            replaceAndAddToBackStack(new AddEditAddressFragment(), AddEditAddressFragment.class.getName());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -128,7 +150,7 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
 
     @Override
     public void startAddressUpdate(Address address) {
-     // no implementation is required here. But implementation is required in SavedAddressListFragment
+        // no implementation is required here. But implementation is required in SavedAddressListFragment
     }
 
     @Override
@@ -142,9 +164,9 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
         mPresenter = presenter;
     }
 
-    void forwardAddressToActivity(Address address) {
-        if(mCallback != null) {
-            mCallback.setAddress(address);
+    void forwardAddressToActivity(Address address, int requestCode) {
+        if (mCallback != null) {
+            mCallback.setAddress(address, requestCode);
         }
     }
 

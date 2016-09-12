@@ -25,6 +25,9 @@ import butterknife.ButterKnife;
 public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context mContext;
+
+    private final int mRequestCode;
+
     boolean blankView = false;
 
     AddressSelectionListFragment mAddressSelectionListFragment;
@@ -33,10 +36,11 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
     private int mSelectedPosition;
 
 
-    public AddressSelectionAdapter(boolean blankView, AddressSelectionListFragment mAddressSelectionListFragment, Context context) {
+    public AddressSelectionAdapter(boolean blankView, AddressSelectionListFragment mAddressSelectionListFragment, Context context, int requestCode) {
         this.blankView = blankView;
         this.mAddressSelectionListFragment = mAddressSelectionListFragment;
         this.mContext = context;
+        this.mRequestCode = requestCode;
 
     }
 
@@ -104,7 +108,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
             @Override
             public void onClick(View v) {
                 mAddressSelectionListFragment.popBackStackImmediate();
-                    mAddressSelectionListFragment.forwardAddressToActivity(myAddress);
+                    mAddressSelectionListFragment.forwardAddressToActivity(myAddress , mRequestCode);
             }
         });
 
@@ -116,7 +120,6 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
 
-        //TODO need to change this string comparision to a boolean value once backend do the change
         if(myAddress.getIsDefaultBillingAddress()){
             orderViewHolder.mIsdefaultShippingAddress.setVisibility(View.VISIBLE);
         }

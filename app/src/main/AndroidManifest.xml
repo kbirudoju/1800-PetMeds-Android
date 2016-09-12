@@ -32,10 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!--TODO We should disble the orientation change during release-->
         <activity
                 android:name=".ui.HomeActivity"
-                android:configChanges="orientation"
-                android:screenOrientation="portrait"/>
+                android:configChanges="orientation"/>
         <activity
                 android:name=".ui.LoginActivity"
                 android:configChanges="orientation"

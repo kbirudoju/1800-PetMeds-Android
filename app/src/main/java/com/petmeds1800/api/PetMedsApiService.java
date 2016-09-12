@@ -3,7 +3,7 @@ package com.petmeds1800.api;
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.StatesListResponse;
-import com.petmeds1800.model.entities.AddACardResponse;
+import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
@@ -23,6 +23,7 @@ import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
+import com.petmeds1800.model.entities.UpdateCardRequest;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -59,7 +60,7 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/add")
-    Observable<AddACardResponse> addPaymentCard(@Body CardRequest cardRequest);
+    Observable<AddEditCardResponse> addPaymentCard(@Body CardRequest cardRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/payment/PaymentActor/list")
@@ -110,4 +111,11 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/contact/ContactActor/remove")
     Observable<AddAddressResponse> removeAddress(@Body RemoveAddressRequest addressRequest);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/contact/ContactActor/detailed")
+    Observable<AddAddressResponse> getAddressById(@Query("_dynSessConf") String sessionConfirmation , @Query("addressId") String addressId);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/payment/PaymentActor/update")
+    Observable<AddEditCardResponse> updateCard(@Body UpdateCardRequest updateCardRequestRequest);
 }

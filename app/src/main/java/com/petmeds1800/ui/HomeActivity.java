@@ -12,7 +12,7 @@ import com.petmeds1800.ui.fragments.HomeFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.payment.AddACardContract;
-import com.petmeds1800.ui.payment.AddACardFragment;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
@@ -166,17 +166,14 @@ public class HomeActivity extends AbstractActivity
     }
 
     @Override
-    public void setAddress(Address address) {
-        AddACardFragment addCardFragment = (AddACardFragment) getSupportFragmentManager()
-                .findFragmentByTag(AddACardFragment.class.getName());
+    public void setAddress(Address address, int requestCode) {
+        AddEditCardFragment addCardFragment = (AddEditCardFragment) getSupportFragmentManager()
+                .findFragmentByTag(AddEditCardFragment.class.getName());
         if (addCardFragment != null) {
             addCardFragment.displayAddress(address);
         } else {
-            AddACardFragment newFragment = new AddACardFragment();
-            Bundle args = new Bundle();
-            args.putSerializable(AddACardFragment.FIRST_ARG, address);
-            newFragment.setArguments(args);
-            replaceAndAddToBackStack(newFragment, AddACardFragment.class.getName());
+            AddEditCardFragment newFragment = AddEditCardFragment.newInstance(address, requestCode);
+            replaceAndAddToBackStack(newFragment, AddEditCardFragment.class.getName());
         }
     }
 

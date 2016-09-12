@@ -4,8 +4,11 @@ import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.AddACardResponse;
+import com.petmeds1800.model.entities.AddEditCardResponse;
+import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.UpdateCardRequest;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -24,6 +27,8 @@ public class AddACardPresenter implements AddACardContract.Presenter {
     private static final int CVV_DIGITS_RULE_2 = 4;
     @Inject
     PetMedsApiService mPetMedsApiService;
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     private final AddACardContract.View mView;
 
@@ -39,7 +44,7 @@ public class AddACardPresenter implements AddACardContract.Presenter {
         mPetMedsApiService.addPaymentCard(cardRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<AddACardResponse>() {
+                .subscribe(new Subscriber<AddEditCardResponse>() {
                     @Override
                     public void onCompleted() {
 
@@ -52,7 +57,7 @@ public class AddACardPresenter implements AddACardContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(AddACardResponse s) {
+                    public void onNext(AddEditCardResponse s) {
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.paymentMethodApproved();
@@ -97,6 +102,80 @@ public class AddACardPresenter implements AddACardContract.Presenter {
     @Override
     public boolean isBillingAddressAvailable() {
         return true;
+    }
+
+    @Override
+    public void getAddress(String addressId) {
+        //show the progress
+        mPetMedsApiService.getAddressById(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber() , addressId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddAddressResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("GetAddressById", e.getMessage());
+                        if (mView.isActive()) {
+                            mView.showErrorInMiddle(e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(AddAddressResponse s) {
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.displayAddress(s.getProfileAddress());
+                            }
+                        } else {
+                            Log.d("GetAddressById", s.getStatus().getErrorMessages().get(0));
+                            if (mView.isActive()) {
+                                mView.showErrorInMiddle(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+
+    }
+
+    @Override
+    public void updateCard(UpdateCardRequest updateCardRequest) {
+        mPetMedsApiService.updateCard(updateCardRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddEditCardResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("UpdateAddress", e.getLocalizedMessage());
+                        if (mView.isActive()) {
+                            mView.paymentMethodDisapproved(e.getLocalizedMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(AddEditCardResponse s) {
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.paymentMethodApproved();
+                            }
+                        } else {
+                            Log.d("UpdateAddress", s.getStatus().getErrorMessages().get(0));
+                            if (mView.isActive()) {
+                                mView.paymentMethodDisapproved(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
     }
 
     @Override

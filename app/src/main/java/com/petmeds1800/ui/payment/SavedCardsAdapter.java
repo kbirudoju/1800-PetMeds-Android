@@ -1,5 +1,9 @@
 package com.petmeds1800.ui.payment;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.Card;
+import com.petmeds1800.util.Utils;
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,9 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.petmeds1800.R;
-import com.petmeds1800.model.Card;
 
 import java.util.List;
 
@@ -22,24 +23,24 @@ import butterknife.ButterKnife;
 public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context mContext;
+
     boolean blankView = false;
 
-    View.OnClickListener onClickListener;
+    SavedCardsListFragment mSavedCardsListFragment;
 
     private List<Card> mCards;
-    private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
-            "Nov", "Dec" };
 
-    public SavedCardsAdapter(boolean blankView, View.OnClickListener onClickListener, Context context) {
+
+    public SavedCardsAdapter(boolean blankView, SavedCardsListFragment savedCardListFragment, Context context) {
         this.blankView = blankView;
-        this.onClickListener = onClickListener;
+        this.mSavedCardsListFragment = savedCardListFragment;
         this.mContext = context;
 
     }
 
     public void clearData() {
-        if ( mCards !=null ) {
-          mCards.clear();
+        if (mCards != null) {
+            mCards.clear();
             notifyDataSetChanged();
         }
     }
@@ -52,8 +53,8 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void addData(List<Card> myCard) {
         //write code to add add which is fetched on load more
-            notifyDataSetChanged();
-        }
+        notifyDataSetChanged();
+    }
 
 
     @Override
@@ -72,19 +73,26 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         Log.d("position is", position + ">>>>" + mCards.size());
 
-            CardItemViewHolder orderViewHolder = (CardItemViewHolder) holder;
-            final Card myCard = getItemAt(position);
+        CardItemViewHolder orderViewHolder = (CardItemViewHolder) holder;
+        final Card myCard = getItemAt(position);
 
-            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue) , getShortMonthName(Integer.parseInt(myCard.getExpirationMonth())) , myCard.getExpirationYear());
+        String expirationText = String.format(mContext.getString(R.string.cardExpirationValue), Utils
+                .getShortMonthName(Integer.parseInt(myCard.getExpirationMonth())), myCard.getExpirationYear());
 
-            orderViewHolder.mCardExpirationLabel.setText(expirationText);
-            orderViewHolder.mCardTypelabel.setText(myCard.getCardType());
-            orderViewHolder.mCardNumberLabel.setText(myCard.getCardNumber());
+        orderViewHolder.mCardExpirationLabel.setText(expirationText);
+        orderViewHolder.mCardTypelabel.setText(myCard.getCardType());
+        orderViewHolder.mCardNumberLabel.setText(myCard.getCardNumber());
+        orderViewHolder.mEditCardButton.setTag(position);
+        orderViewHolder.mEditCardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSavedCardsListFragment.startCardUpdate(getItemAt((Integer) v.getTag()));
+            }
+        });
 
-        if(myCard.isCardIsDefault()){
+        if (myCard.isCardIsDefault()) {
             orderViewHolder.mIsCardDefaultLabel.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             orderViewHolder.mIsCardDefaultLabel.setVisibility(View.GONE);
         }
     }
@@ -95,39 +103,38 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        if(mCards == null){
+        if (mCards == null) {
             return 0;
-        }
-        else {
+        } else {
             return mCards.size();
         }
 
     }
 
 
-    private String getShortMonthName(int month){
-        if(month < 1 && month > 12)
-            return "ERR";
-
-        return PICKER_DISPLAY_MONTHS_NAMES[month - 1];
-    }
-
     public static class CardItemViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.nameOnCard_label)
         TextView mNameOnCardlabel;
+
         @BindView(R.id.cardType_label)
         TextView mCardTypelabel;
+
         @BindView(R.id.cardNumber_label)
         TextView mCardNumberLabel;
+
         @BindView(R.id.cardExpiration_label)
         TextView mCardExpirationLabel;
+
         @BindView(R.id.isCardSetDefault_label)
         TextView mIsCardDefaultLabel;
 
+        @BindView(R.id.editCard_button)
+        TextView mEditCardButton;
+
         public CardItemViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
 
         }
     }

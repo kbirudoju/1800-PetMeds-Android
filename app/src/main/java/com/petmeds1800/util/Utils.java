@@ -19,6 +19,9 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public class Utils {
 
+    private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+            "Nov", "Dec" };
+
     public static String changeDateFormat(long millisecond, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         String dateString = formatter.format(new Date(millisecond));
@@ -59,5 +62,13 @@ public class Utils {
                         .setTextColor(android.R.color.white)
                         .build(),
                 attachToView).show();
+    }
+
+
+    public static String getShortMonthName(int month){
+        if(month < 1 && month > 12)
+            return "ERR";
+
+        return PICKER_DISPLAY_MONTHS_NAMES[month - 1];
     }
 }

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Abhinav on 21/8/16.
  */
-public class AddACardResponse implements Serializable {
+public class AddEditCardResponse implements Serializable {
 
     private Status status;
 

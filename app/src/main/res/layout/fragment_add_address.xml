@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/dp_16"
     android:paddingRight="@dimen/dp_16"
     android:background="@color/white"
-    tools:context="com.petmeds1800.ui.payment.AddACardFragment">
+    tools:context="com.petmeds1800.ui.payment.AddEditCardFragment">
 
 
     <ScrollView
