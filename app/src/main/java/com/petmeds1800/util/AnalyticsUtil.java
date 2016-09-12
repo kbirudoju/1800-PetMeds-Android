@@ -3,6 +3,7 @@ package com.petmeds1800.util;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 
 import android.content.Context;
@@ -16,17 +17,23 @@ public class AnalyticsUtil {
 
     @Inject
     Context mContext;
-    @Inject Tracker mTracker;
 
-    public void trackScreen(final ScreenName screen) {
-        mTracker.setScreenName(mContext.getString(screen.getScreenNameRef()));
-        mTracker.send(new HitBuilders.AppViewBuilder().build());
+    @Inject
+    Tracker mTracker;
+
+    public AnalyticsUtil() {
+        PetMedsApplication.getAppComponent().inject(this);
     }
 
-    public void trackEvent(final Event event, final String label) {
+    public void trackScreen(String screenName) {
+        mTracker.setScreenName(screenName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    public void trackEvent(final String category, String action, final String label) {
         mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory(mContext.getString(event.getCategoryRef()))
-                .setAction(mContext.getString(event.getActionRef()))
+                .setCategory(category)
+                .setAction(action)
                 .setLabel(label)
                 .build());
     }
@@ -53,6 +60,7 @@ public class AnalyticsUtil {
         LINK_CLICK(R.string.link_article, R.string.link_action);
 
         private final int mCategoryRef;
+
         private final int mActionRef;
 
         private Event(final int categoryRef, final int actionRef) {

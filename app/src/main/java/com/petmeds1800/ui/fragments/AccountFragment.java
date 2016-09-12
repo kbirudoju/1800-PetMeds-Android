@@ -4,18 +4,24 @@ import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
+import com.petmeds1800.ui.account.SignOutContract;
+import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
+import com.petmeds1800.ui.refillreminder.ReminderListFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
 import android.content.DialogInterface;
+import android.net.Network;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +31,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import javax.inject.Inject;
-import com.petmeds1800.ui.refillreminder.ReminderListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +38,9 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 8/2/2016.
  */
-public class AccountFragment extends AbstractFragment implements View.OnClickListener, Switch.OnCheckedChangeListener, DialogInterface.OnClickListener {
+public class AccountFragment extends AbstractFragment
+        implements View.OnClickListener, Switch.OnCheckedChangeListener, DialogInterface.OnClickListener,
+        SignOutContract.View {
 
     @BindView(R.id.myOrder)
     TextView myOrderView;
@@ -49,25 +56,38 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
 
     @BindView(R.id.my_pets_label)
     TextView mPetsLabel;
+
     @BindView(R.id.fingerPrintStatus)
     Switch fingerPrintStatus;
+
     @BindView(R.id.notificationStatus)
     Switch notificationStatus;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
+
     private final static int FROM_NOTIFICATION = 1;
+
     private final static int FROM_SIGNOUT_OPTION = 2;
+
     private final static int FROM_FINGERPRINT_OPTION = 3;
+
     private final static int IS_HARDWARE_DETECTED = 4;
+
     private final static int HAS_ENROLLED_FINGERPRINTS = 5;
+
     private final static int HAS_ENABILITY = 6;
+
     @BindView(R.id.signOut)
     TextView signOut;
+
     private int fromWhichAlert = 0;
+
 
     @BindView(R.id.refill_reminder_label)
     TextView mRefillReminderLabel;
+    private SignOutContract.Presenter mPresenter;
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -133,6 +153,9 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
         ButterKnife.bind(this, view);
         PetMedsApplication.getAppComponent().inject(this);
 
+        mPresenter = new SignOutPresenter(this);
+        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
+        ((AbstractActivity) getActivity()).disableBackButton();
         return view;
 
     }
@@ -185,7 +208,9 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                showDailogForFingerprintAvailability(getString(R.string.fingerprint_hardware_support_title), getString(R.string.fingerprint_hardware_support_message));
+                                showDailogForFingerprintAvailability(
+                                        getString(R.string.fingerprint_hardware_support_title),
+                                        getString(R.string.fingerprint_hardware_support_message));
                                 fingerPrintStatus.setChecked(false);
                             }
                         }, 300);
@@ -196,7 +221,8 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                showDailogForFingerprintAvailability(getString(R.string.fingerprint_enrollment_title), getString(R.string.fingerprint_enrollment_message));
+                                showDailogForFingerprintAvailability(getString(R.string.fingerprint_enrollment_title),
+                                        getString(R.string.fingerprint_enrollment_message));
                                 fingerPrintStatus.setChecked(false);
                             }
                         }, 300);
@@ -216,7 +242,9 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
         switch (fromWhichAlert) {
             case FROM_SIGNOUT_OPTION:
                 if (isPositive) {
-                    replaceFragment(new SignOutFragment());
+                    ((HomeActivity)getActivity()).showProgress();
+                    mPresenter.sendDataToServer(
+                            mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                 }
                 break;
         }
@@ -235,5 +263,28 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
                 break;
 
         }
+    }
+
+    @Override
+    public void onSuccess() {
+        ((HomeActivity)getActivity()).hideProgress();
+        replaceFragment(new SignOutFragment());
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+        ((HomeActivity)getActivity()).hideProgress();
+        Snackbar.make(getView().findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
+    }
+
+    @Override
+    public void setPresenter(SignOutContract.Presenter presenter) {
+
     }
 }

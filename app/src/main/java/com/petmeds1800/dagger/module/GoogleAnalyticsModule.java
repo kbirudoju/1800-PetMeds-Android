@@ -27,9 +27,9 @@ public class GoogleAnalyticsModule {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(app);
         if (BuildConfig.DEBUG) {
             analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
-            analytics.setDryRun(true);
+            analytics.setDryRun(false);
         }
-        return analytics.newTracker(app.getString(R.string.tracking_id));
+        return analytics.newTracker(R.xml.app_tracker);
     }
 
 }

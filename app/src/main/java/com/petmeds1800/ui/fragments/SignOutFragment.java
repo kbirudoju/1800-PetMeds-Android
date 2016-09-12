@@ -67,9 +67,17 @@ public class SignOutFragment extends HomeFragment {
         return view;
     }
 
+    @Override
+    public void checkRequiredPermission(String[] requestedPermissions,
+            PermissionRequested permissionRequested) {
+        super.checkRequiredPermission(requestedPermissions, permissionRequested);
+    }
+
     @OnClick(R.id.log_in_button)
     public void onClick() {
         startActivity(new LoginIntent(getActivity()));
         getActivity().finish();
     }
+
+
 }

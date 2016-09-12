@@ -26,9 +26,13 @@ import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.model.entities.SignUpRequest;
 import com.petmeds1800.model.entities.SignUpResponse;
+import com.petmeds1800.model.entities.SignOutRequest;
+import com.petmeds1800.model.entities.SignOutResponse;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
+
+import android.net.Network;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -138,4 +142,9 @@ public interface PetMedsApiService {
 
     @POST("/rest/model/atg/userprofiling/ProfileActor/create")
     Observable<SignUpResponse> signUp(@Body SignUpRequest signUpRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/atg/userprofiling/ProfileActor/logout")
+    Observable<SignOutResponse> sendSessionConfig(@Body SignOutRequest signOutRequest);
+
 }

@@ -9,6 +9,7 @@ import com.petmeds1800.ui.IntroActivity;
 import com.petmeds1800.ui.SplashActivity;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.account.AccountSettingsPresenter;
+import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
@@ -25,6 +26,7 @@ import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.presenter.PetListPresenter;
+import com.petmeds1800.util.AnalyticsUtil;
 
 /**
  * Specifies the injection places. Utility interface, to separate from the {@link AppComponent}.
@@ -75,7 +77,6 @@ public interface Injector {
 
     void inject(AccountRootFragment accountRootFragment);
     void inject (RefillReminderService refillReminderService);
-
-
-
+    void inject(SignOutPresenter signOutPresenter);
+    void inject(AnalyticsUtil analyticsUtil);
 }

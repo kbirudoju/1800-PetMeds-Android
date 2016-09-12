@@ -20,6 +20,7 @@ import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
 import android.content.DialogInterface;
+import android.net.Network;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -62,6 +63,7 @@ public class HomeActivity extends AbstractActivity
     GeneralPreferencesHelper mPreferencesHelper;
 
     private ProgressDialog mProgressDialog;
+
 
     private FingerprintAuthenticationDialog mAuthenticationDialog;
 
@@ -156,6 +158,8 @@ public class HomeActivity extends AbstractActivity
         if (mAuthenticationDialog.isVisible()) {
             mAuthenticationDialog.dismiss();
         }
+
+
     }
 
     @Override
