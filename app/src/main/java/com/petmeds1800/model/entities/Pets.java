@@ -17,6 +17,16 @@ public class Pets implements Serializable{
     private String allergyInfo;
     private String medicalInfo;
 
+    public PetAge getPetAge() {
+        return petAge;
+    }
+
+    public void setPetAge(PetAge petAge) {
+        this.petAge = petAge;
+    }
+
+    private PetAge petAge;
+
     public String getPetId() {
         return petId;
     }

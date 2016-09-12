@@ -74,5 +74,6 @@
     <dimen name="dp_65">65dp</dimen>
     <dimen name="dp_32">32dp</dimen>
     <dimen name="dp_17">17dp</dimen>
+    <dimen name="dp_213">213dp</dimen>
 
 </resources>

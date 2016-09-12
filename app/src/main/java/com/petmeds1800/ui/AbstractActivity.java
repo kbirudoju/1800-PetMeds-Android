@@ -1,13 +1,13 @@
 package com.petmeds1800.ui;
 
-import com.petmeds1800.R;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.petmeds1800.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +25,6 @@ public abstract class AbstractActivity extends AppCompatActivity {
     protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         ButterKnife.bind(this);
-
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
             mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
@@ -37,10 +36,17 @@ public abstract class AbstractActivity extends AppCompatActivity {
     }
 
     public void enableBackButton() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar()==null)
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
     public void disableBackButton() {
+        if(getSupportActionBar()==null)
+
+            setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
     }

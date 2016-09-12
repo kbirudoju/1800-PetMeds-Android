@@ -4,6 +4,7 @@ import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
 
 import com.petmeds1800.model.entities.AddPetRequest;
+import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -22,5 +23,7 @@ public interface AddPetContract {
 
     interface Presenter extends BasePresenter {
         void addPetData(AddPetRequest request);
+        void updatePetData(AddPetRequest request);
+        void removePet(RemovePetRequest request);
     }
 }

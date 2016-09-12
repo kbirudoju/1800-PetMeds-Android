@@ -35,7 +35,8 @@
         <!--TODO We should disble the orientation change during release-->
         <activity
                 android:name=".ui.HomeActivity"
-                android:configChanges="orientation"/>
+                android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
                 android:name=".ui.LoginActivity"
                 android:configChanges="orientation"
@@ -52,6 +53,8 @@
         <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version"/>
+
+        <service android:name=".service.RefillReminderService" />
 
     </application>
 

@@ -307,4 +307,18 @@
         <b>SIGN UP</b>
     </string>
 
+    <!--Remove pet-->
+<string name="remove_pet_title">We\'re sorry to hear that!</string>
+    <string name="remove_pet_message">Please tell us why you would like to remove your pet profile</string>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="remove_pet_option">
+        <item>My pet passed away</item>
+        <item>I no longer own this pet</item>
+    </string-array>
+
+
 </resources>

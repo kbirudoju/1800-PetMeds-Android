@@ -8,21 +8,31 @@ android:orientation="vertical"
     >
 
 <TextView
-    android:id="@+id/choose_gender_label"
+    android:id="@+id/title_label"
     style="@style/rounded_button_text"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_45"
-    android:text="@string/choose_gender_label"
     android:gravity="center_vertical"
     android:paddingLeft="@dimen/dp_13"
     android:background="@color/pattern_light_blue"
+    android:layout_alignParentTop="true"
     />
+    <TextView
+        android:id="@+id/message_label"
+        style="@style/rounded_button_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/title_label"
+        android:paddingLeft="@dimen/dp_13"
+        />
 
 <RadioGroup
     android:id="@+id/gender_radio_group"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/choose_gender_label"
+    android:layout_below="@+id/message_label"
     android:layout_marginLeft="@dimen/dp_50"
     android:layout_marginTop="@dimen/dp_23"
     >
@@ -33,7 +43,6 @@ android:orientation="vertical"
         android:layout_height="wrap_content"
         android:checked="true"
         android:tag="@string/male_txt"
-        android:text="@string/male_txt"
         android:textColor="@color/text_color_selector"
         android:padding="@dimen/dp_5"
         android:button="@drawable/radio_button_selector"
@@ -45,7 +54,6 @@ android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:tag="@string/female_txt"
-        android:text="@string/female_txt"
         android:textColor="@color/text_color_selector"
         android:checked="false"
         android:padding="@dimen/dp_5"
@@ -71,7 +79,6 @@ android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:text="@string/dialog.cancel_button"
         style="@style/dialog_button_style"
         />
 
@@ -80,7 +87,6 @@ android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:text="@string/dialog.ok_button"
         style="@style/dialog_button_style"
 
         />

@@ -9,6 +9,7 @@ import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.EasyRefillReminder;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.ForgotPasswordResponse;
 import com.petmeds1800.model.entities.LoginRequest;
@@ -19,6 +20,8 @@ import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.model.entities.PetList;
 import com.petmeds1800.model.entities.Profile;
+import com.petmeds1800.model.entities.RemovePetRequest;
+import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
@@ -118,4 +121,15 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/update")
     Observable<AddEditCardResponse> updateCard(@Body UpdateCardRequest updateCardRequestRequest);
+    @GET("/rest/model/1800petmeds/reminder/ReminderActor/easyRefillReminder")
+    Observable<EasyRefillReminder> getReminderList(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("rest/model/1800petmeds/pet/PetActor/update")
+    Observable<AddPetResponse> updatePet(@Body AddPetRequest petRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("rest/model/1800petmeds/pet/PetActor/remove")
+    Observable<RemovePetResponse> removePet(@Body RemovePetRequest removeRequest);
+
 }

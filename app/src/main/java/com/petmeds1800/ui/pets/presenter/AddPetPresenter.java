@@ -7,6 +7,8 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
+import com.petmeds1800.model.entities.RemovePetRequest;
+import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.ui.pets.support.AddPetContract;
 
 import javax.inject.Inject;
@@ -52,11 +54,48 @@ public class AddPetPresenter implements AddPetContract.Presenter {
 
                     @Override
                     public void onNext(AddPetResponse s) {
-                        Log.d("Addpetresponse",s.toString());
+                        Log.d("Addpetresponse", s.toString());
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.onSuccess();
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.onError(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+
+
+    }
+
+
+    @Override
+    public void updatePetData(AddPetRequest addPetRequest) {
+        mPetMedsApiService.updatePet(addPetRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddPetResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(AddPetResponse s) {
                         if(s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
-                       if(mView.isActive()){
-                           mView.onSuccess();
-                       }
+                            if(mView.isActive()){
+                                mView.onSuccess();
+                            }
                         }else{
                             if(mView.isActive()){
                                 mView.onError(s.getStatus().getErrorMessages().get(0));
@@ -67,6 +106,39 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                 });
     }
 
+    @Override
+    public void removePet(RemovePetRequest request) {
+        mPetMedsApiService.removePet(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<RemovePetResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(RemovePetResponse s) {
+                        if(s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if(mView.isActive()){
+                                mView.onSuccess();
+                            }
+                        }else{
+                            if(mView.isActive()){
+                                mView.onError(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+    }
 
 
     @Override

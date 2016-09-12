@@ -15,6 +15,16 @@ public class AddPetRequest {
     private String petAge;
     private String birthday;
 
+    public String getPetId() {
+        return petId;
+    }
+
+    public void setPetId(String petId) {
+        this.petId = petId;
+    }
+
+    private String petId;
+
     public AddPetRequest(String petName, String ownerName, String petType, String breedType, String gender, String weight, String petAge, String birthday, String allergy, String allergyInfo, String medAllergy1, String medAllergy2, String medAllergy3, String medAllergy4, ArrayList<Integer> medConditionIds, String medicalInfo, String medication1, String medication2, String medication3, String medication4, String _dynSessConf) {
         this.petName = petName;
         this.ownerName = ownerName;
@@ -38,7 +48,31 @@ public class AddPetRequest {
         this.medication4 = medication4;
         this._dynSessConf = _dynSessConf;
     }
-
+    //this constructor will be used to edit pet where petId is required
+    public AddPetRequest(String petId,String petName, String ownerName, String petType, String breedType, String gender, String weight, String petAge, String birthday, String allergy, String allergyInfo, String medAllergy1, String medAllergy2, String medAllergy3, String medAllergy4, ArrayList<Integer> medConditionIds, String medicalInfo, String medication1, String medication2, String medication3, String medication4, String _dynSessConf) {
+        this.petId=petId;
+        this.petName = petName;
+        this.ownerName = ownerName;
+        this.petType = petType;
+        this.breedType = breedType;
+        this.gender = gender;
+        this.weight = weight;
+        this.petAge = petAge;
+        this.birthday = birthday;
+        this.allergy = allergy;
+        this.allergyInfo = allergyInfo;
+        this.medAllergy1 = medAllergy1;
+        this.medAllergy2 = medAllergy2;
+        this.medAllergy3 = medAllergy3;
+        this.medAllergy4 = medAllergy4;
+        this.medConditionIds = medConditionIds;
+        this.medicalInfo = medicalInfo;
+        this.medication1 = medication1;
+        this.medication2 = medication2;
+        this.medication3 = medication3;
+        this.medication4 = medication4;
+        this._dynSessConf = _dynSessConf;
+    }
     private String allergy;
     private String allergyInfo;
     private String medAllergy1;

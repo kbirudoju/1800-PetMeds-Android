@@ -25,6 +25,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import javax.inject.Inject;
+import com.petmeds1800.ui.refillreminder.ReminderListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,9 +66,14 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
     TextView signOut;
     private int fromWhichAlert = 0;
 
+    @BindView(R.id.refill_reminder_label)
+    TextView mRefillReminderLabel;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
+        ((AbstractActivity) getActivity()).disableBackButton();
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
         mManagePaymentLabel.setOnClickListener(this);
@@ -117,6 +123,7 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
             return HAS_ENROLLED_FINGERPRINTS;
         }
         return HAS_ENABILITY;
+       // mRefillReminderLabel.setOnClickListener(this);
     }
 
     @Nullable
@@ -125,8 +132,7 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.bind(this, view);
         PetMedsApplication.getAppComponent().inject(this);
-        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
-        ((AbstractActivity) getActivity()).disableBackButton();
+
         return view;
 
     }
@@ -154,6 +160,9 @@ public class AccountFragment extends AbstractFragment implements View.OnClickLis
                 break;
             case R.id.signOut:
                 showDailogForSignOut(getString(R.string.logout_alert_title), null);
+                break;
+            case R.id.refill_reminder_label:
+                replaceAndAddToBackStack(new ReminderListFragment(), ReminderListFragment.class.getName());
                 break;
             default:
                 break;

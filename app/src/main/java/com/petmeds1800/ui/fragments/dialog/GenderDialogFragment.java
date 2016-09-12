@@ -13,8 +13,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.petmeds1800.R;
+import com.petmeds1800.ui.pets.AddPetFragment;
+import com.petmeds1800.ui.pets.support.DialogOptionEnum;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,9 +36,23 @@ public class GenderDialogFragment extends DialogFragment implements OnClickListe
     RadioButton femaleRadioButton;
     @BindView(R.id.gender_radio_group)
     RadioGroup genderRadioGroup;
+    @BindView(R.id.title_label)
+    TextView titleLabel;
+    @BindView(R.id.message_label)
+    TextView messageLabel;
+
+
+
+    private String [] mOptionArray;
+    private String mTitle;
+    private String mMessage;
+    private String mOkButtonText;
+    private String mCancelButtonText;
+    private int key;
+
 
     private GenderSetListener genderSetListener;
-        String selectedGender;
+    String selectedGender;
 
 
     @Override
@@ -50,6 +67,26 @@ public class GenderDialogFragment extends DialogFragment implements OnClickListe
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mTitle=getArguments().getString("title");
+        mMessage=getArguments().getString("message");
+        mOkButtonText=getArguments().getString("ok");
+        mCancelButtonText=getArguments().getString("cancel");
+        mOptionArray=getArguments().getStringArray("options");
+
+        //set values to label
+        mOkButton.setText(mOkButtonText);
+        mCancelButton.setText(mCancelButtonText);
+        maleRadioButton.setText(mOptionArray[0]);
+        femaleRadioButton.setText(mOptionArray[1]);
+        titleLabel.setText(mTitle);
+        if(mMessage.isEmpty()){
+            messageLabel.setVisibility(View.GONE);
+        }else{
+            messageLabel.setVisibility(View.VISIBLE);
+            messageLabel.setText(mMessage);
+
+        }
+
         mOkButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
     }
@@ -65,20 +102,32 @@ public class GenderDialogFragment extends DialogFragment implements OnClickListe
                 if (genderSetListener != null)
                     switch (genderRadioGroup.getCheckedRadioButtonId()) {
                         case R.id.male_rb:
-                           selected = getString(R.string.male_txt);
+                            selected = getString(R.string.male_txt);
+                            if(this.getTargetRequestCode()== AddPetFragment.GENDER_REQUEST_CODE){
+                                key= DialogOptionEnum.MALE.getValue();
+                            }else if(this.getTargetRequestCode()== AddPetFragment.REMOVE_PET_REQUEST_CODE){
+                                key= DialogOptionEnum.PET_PASSED.getValue();
+                            }
                             break;
                         case R.id.female_rb:
-                           selected = getString(R.string.female_txt);
+                            if(this.getTargetRequestCode()== AddPetFragment.GENDER_REQUEST_CODE){
+                                key= DialogOptionEnum.FEMALE.getValue();
+                            }else if(this.getTargetRequestCode()== AddPetFragment.REMOVE_PET_REQUEST_CODE){
+                                key= DialogOptionEnum.PET_SOLD.getValue();
+                            }
+                            selected = getString(R.string.female_txt);
                             break;
 
                     }
-                genderSetListener.onGenderSet(selected);
+                genderSetListener.onGenderSet(this,selected,key);
                 dismiss();
                 break;
         }
     }
 
-  @Override
+
+
+    @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
         final Fragment fragment = getTargetFragment();
@@ -121,9 +170,9 @@ public class GenderDialogFragment extends DialogFragment implements OnClickListe
 
 
     public interface GenderSetListener {
-     void onGenderSet(String gender);
+        void onGenderSet(GenderDialogFragment dialogFragment,String gender,int key);
 
- }
+    }
 
     public void setGenderSetListener(GenderSetListener genderSetListener) {
         this.genderSetListener = genderSetListener;

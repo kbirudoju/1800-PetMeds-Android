@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.pets;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,9 +20,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,8 @@ import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.AddPetRequest;
+import com.petmeds1800.model.entities.Pets;
+import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
@@ -111,13 +116,49 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     ProgressBar progressBar;
     View dialoglayout;
     AlertDialog alertDailogForPicture;
+    private boolean isEditable;
+    @BindView(R.id.pet_image_layout)
+    RelativeLayout editPetImageView;
+    @BindView(R.id.add_pet_image_layout)
+    RelativeLayout addPetImageView;
+    private MenuItem mEditMenuItem;
+    private MenuItem mDoneMenuItem;
+    private Pets mPet;
+    @BindView(R.id.remove_pet_button)
+    Button removePetButton;
+    @BindView(R.id.edit_pet_image)
+    ImageView mEditPetImage;
+
+    public static final int GENDER_REQUEST_CODE=1;
+    public static final int REMOVE_PET_REQUEST_CODE=2;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_pet, container, false);
         ButterKnife.bind(this, view);
-        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_add_pet));
+        isEditable= getArguments().getBoolean("isEditable");
+        mPet = (Pets) getArguments().getSerializable("pet");
+
+        if(isEditable){
+            ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_pet_profiles));
+            editPetImageView.setVisibility(view.VISIBLE);
+            addPetImageView.setVisibility(view.GONE);
+            removePetButton.setVisibility(View.VISIBLE);
+            setPetData(mPet);
+            enableViews(false);
+
+        }else{
+
+            ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_add_pet));
+            addPetImageView.setVisibility(view.VISIBLE);
+            editPetImageView.setVisibility(view.GONE);
+            removePetButton.setVisibility(View.GONE);
+            enableViews(true);
+
+        }
+
         ((AbstractActivity) getActivity()).enableBackButton();
         return view;
     }
@@ -133,6 +174,8 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
         mPetBirthdayText.setOnClickListener(this);
         mPetAgeText.setOnClickListener(this);
         mPetPictureText.setOnClickListener(this);
+        removePetButton.setOnClickListener(this);
+        mEditPetImage.setOnClickListener(this);
         updateImageUtil = UpdateImageUtil.getInstance(this);
 
         //Todo remove this code after api integration
@@ -148,7 +191,15 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
             case R.id.pet_gender_edit:
                 FragmentManager fm = getFragmentManager();
                 GenderDialogFragment dialogFragment = new GenderDialogFragment();
+                Bundle bundle =new Bundle();
+                bundle.putStringArray("options",getResources().getStringArray(R.array.gender_array));
+                bundle.putString("title", getString(R.string.choose_gender_label));
+                bundle.putString("message", "");
+                bundle.putString("ok",getString(R.string.dialog_ok_button));
+                bundle.putString("cancel",getString(R.string.dialog_cancel_button));
+                dialogFragment.setTargetFragment(this, GENDER_REQUEST_CODE);
                 dialogFragment.setGenderSetListener(this);
+                dialogFragment.setArguments(bundle);
                 dialogFragment.show(fm);
                 break;
             case R.id.pet_birthday_edit:
@@ -175,6 +226,22 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
             case fromGallery:
                 updateImageUtil.updateProfilePic(UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE);
                 alertDailogForPicture.dismiss();
+            case R.id.remove_pet_button:
+                FragmentManager fragmentManager = getFragmentManager();
+                Bundle removePetBundle =new Bundle();
+                removePetBundle.putStringArray("options", getResources().getStringArray(R.array.remove_pet_option));
+                removePetBundle.putString("title", getString(R.string.remove_pet_title));
+                removePetBundle.putString("message", getString(R.string.remove_pet_message));
+                removePetBundle.putString("ok",getString(R.string.label_fingerprint_continue));
+                removePetBundle.putString("cancel", getString(R.string.cancelTextOnDialog));
+                GenderDialogFragment removePetDialog = new GenderDialogFragment();
+                removePetDialog.setTargetFragment(this,REMOVE_PET_REQUEST_CODE);
+                removePetDialog.setGenderSetListener(this);
+                removePetDialog.setArguments(removePetBundle);
+                removePetDialog.show(fragmentManager);
+                break;
+            case R.id.edit_pet_image:
+                showImageOptions();
                 break;
         }
     }
@@ -186,8 +253,14 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
     }
 
     @Override
-    public void onGenderSet(String gender) {
-        mPetGenderText.setText(gender);
+    public void onGenderSet(GenderDialogFragment fragment ,String gender,int key) {
+        if(fragment.getTargetRequestCode()==GENDER_REQUEST_CODE){
+            mPetGenderText.setText(gender);
+        }else if(fragment.getTargetRequestCode()==REMOVE_PET_REQUEST_CODE){
+            RemovePetRequest request= new RemovePetRequest(mPet.getPetId(),String.valueOf(key), mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+            mPresenter.removePet(request);
+
+        }
     }
 
     private SlideDateTimeListener listener = new SlideDateTimeListener() {
@@ -230,6 +303,22 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
         fromGallery.setTextColor(getActivity().getResources().getColor(R.color.petmeds_blue));
         takePhoto.setOnClickListener(this);
         fromGallery.setOnClickListener(this);
+       /* builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                switch (item) {
+                    case 1: {
+                        updateImageUtil.updateProfilePic(UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE);
+                    }
+                    break;
+                    case 0: {
+                        updateImageUtil.updateProfilePic(UpdateImageUtil.CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+                    }
+                    break;
+                }
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();*/
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -258,16 +347,29 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
             Uri finalUri = Crop.getOutput(result);
             if (finalUri != null) {
 
-                Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        mPetImage.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+                if(!isEditable) {
+                    Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            mPetImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                }else{
+                    Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            mEditPetImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                }
             }
 
         } else if (resultCode == Crop.RESULT_ERROR) {
@@ -277,13 +379,25 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_save_a_card, menu);
+        inflater.inflate(R.menu.menu_account_settings, menu);
+        mEditMenuItem = menu.findItem(R.id.action_edit);
+        mDoneMenuItem = menu.findItem(R.id.action_done);
+        if(isEditable){
+            enableEditAction();
+        }else{
+            enableDoneAction();
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if(id==R.id.action_edit){
+            enableDoneAction();
+            enableViews(true);
+            return super.onOptionsItemSelected(item);
+        }
         if (id == R.id.action_done) {
 
             boolean isValidPetName;
@@ -313,29 +427,53 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
         }
         //Todo Remove all hardcoded value after api integration
         progressBar.setVisibility(View.VISIBLE);
-        AddPetRequest addPetRequest = new AddPetRequest(mPetNameText.getText().toString()
-                , mOwnerNameText.getText().toString(),
-                mPetTypeText.getText().toString().toLowerCase(),
-                mBreedTypeText.getText().toString(),
-                mPetGenderText.getText().toString().toLowerCase(),
-                mPetWeight.getText().toString(),
-                "5",
-                Utils.changeDateFormat(birthdayInMillis, "MM/dd/yyyy"),
-                "yes",
-                "dog two allergy info",
-                "Albon",
-                "Amoxicillin",
-                "",
-                "Antirobe",
-                medConditionIds,
-                "dog two other info",
-                "Cefa-Drops",
-                "Cephalexin",
-                "",
-                "Chlorhexidine",
-                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        mPresenter.addPetData(addPetRequest);
-
+        if(isEditable){
+            AddPetRequest addPetRequest = new AddPetRequest(mPet.getPetId(),mPetNameText.getText().toString()
+                    , mOwnerNameText.getText().toString(),
+                    mPetTypeText.getText().toString().toLowerCase(),
+                    mBreedTypeText.getText().toString(),
+                    mPetGenderText.getText().toString().toLowerCase(),
+                    mPetWeight.getText().toString(),
+                    "2",
+                    Utils.changeDateFormat(birthdayInMillis, "MM/dd/yyyy"),
+                    "yes",
+                    "dog two allergy info",
+                    "Albon",
+                    "Amoxicillin",
+                    "",
+                    "Antirobe",
+                    medConditionIds,
+                    "dog two other info",
+                    "Cefa-Drops",
+                    "Cephalexin",
+                    "",
+                    "Chlorhexidine",
+                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+            mPresenter.updatePetData(addPetRequest);
+        }else {
+            AddPetRequest addPetRequest = new AddPetRequest(mPetNameText.getText().toString()
+                    , mOwnerNameText.getText().toString(),
+                    mPetTypeText.getText().toString().toLowerCase(),
+                    mBreedTypeText.getText().toString(),
+                    mPetGenderText.getText().toString().toLowerCase(),
+                    mPetWeight.getText().toString(),
+                    "2",
+                    Utils.changeDateFormat(birthdayInMillis, "MM/dd/yyyy"),
+                    "yes",
+                    "dog two allergy info",
+                    "Albon",
+                    "Amoxicillin",
+                    "",
+                    "Antirobe",
+                    medConditionIds,
+                    "dog two other info",
+                    "Cefa-Drops",
+                    "Cephalexin",
+                    "",
+                    "Chlorhexidine",
+                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+            mPresenter.addPetData(addPetRequest);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -390,5 +528,49 @@ public class AddPetFragment extends AbstractFragment implements View.OnClickList
 
     }
 
+    private void enableDoneAction() {
+        mDoneMenuItem.setVisible(true);
+        mEditMenuItem.setVisible(false);
+    }
+    private void enableEditAction() {
+        mDoneMenuItem.setVisible(false);
+        mEditMenuItem.setVisible(true);
+    }
 
+    private void enableViews(boolean isEnable) {
+        mPetNameText.setEnabled(isEnable);
+        mOwnerNameText.setEnabled(isEnable);
+        mPetTypeText.setEnabled(isEnable);
+        mBreedTypeText.setEnabled(isEnable);
+        mPetGenderText.setEnabled(isEnable);
+        mPetAgeText.setEnabled(isEnable);
+        mPetWeight.setEnabled(isEnable);
+        mPetBirthdayText.setEnabled(isEnable);
+        removePetButton.setEnabled(isEnable);
+        mEditPetImage.setEnabled(isEnable);
+        mPetAgeText.setEnabled(isEnable);
+    }
+
+    private void setPetData(Pets pet){
+        if (pet != null) {
+            mPetNameText.setText(pet.getPetName());
+            mOwnerNameText.setText(pet.getOwnerName());
+            mPetTypeText.setText(pet.getPetType());
+            mBreedTypeText.setText(pet.getBreedType());
+            mPetGenderText.setText(pet.getGender());
+            mPetWeight.setText(pet.getWeight());
+            mPetBirthdayText.setText(pet.getBirthday());
+            mPetAgeText.setText(pet.getPetAge().getName());
+            Glide.with(getActivity()).load(getActivity().getString(R.string.server_endpoint) + pet.getPictureURL()).asBitmap().centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    mEditPetImage.setImageDrawable(circularBitmapDrawable);
+                }
+            });
+
+        }
+    }
 }

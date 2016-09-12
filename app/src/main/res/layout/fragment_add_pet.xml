@@ -13,6 +13,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/pet_image_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_213"
+                android:background="@color/pattern_light_blue"
+                android:visibility="gone">
+                <ImageView
+                    android:id="@+id/edit_pet_image"
+                    android:layout_width="@dimen/dp_126"
+                    android:layout_height="@dimen/dp_126"
+                    android:layout_centerInParent="true"
+                    android:padding="@dimen/dp_1"
+                    android:background="@drawable/circular_background"
+
+                    />
+            </RelativeLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/petNameInputLayout"
                 android:layout_width="match_parent"
@@ -28,11 +45,14 @@
                     android:hint="@string/hint_pet_name"
                     android:maxLength="@integer/characterLimit_30"
                     android:singleLine="true"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <RelativeLayout
+                android:id="@+id/add_pet_image_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/petPictureInputLayout"
                     android:layout_width="match_parent"
@@ -48,7 +68,8 @@
                         android:text="@string/hint_pet_picture"
                         android:singleLine="true"
                         android:focusableInTouchMode="false"
-                        style="@style/StyledEditText"/>
+                        style="@style/StyledEditText"
+                        />
                 </android.support.design.widget.TextInputLayout>
                 <ImageView
                     android:id="@+id/pet_picture_image"
@@ -72,7 +93,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_owner_name"
                     android:singleLine="true"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/petTypeInputLayout"
@@ -91,7 +113,8 @@
                     android:focusableInTouchMode="false"
                     android:editable="false"
                     android:text="Dog"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/breedInputLayout"
@@ -110,7 +133,8 @@
                     android:editable="false"
                     android:text="American Eskimo"
                     android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/genderInputLayout"
@@ -127,7 +151,8 @@
                     android:hint="@string/hint_pet_gender"
                     android:singleLine="true"
                     android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/ageInputLayout"
@@ -161,7 +186,8 @@
                     android:hint="@string/hint_weight_lbs_txt"
                     android:singleLine="true"
                     android:inputType="numberDecimal"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/birthdayInputLayout"
@@ -178,7 +204,8 @@
                     android:hint="@string/hint_pet_birthday_txt"
                     android:singleLine="true"
                     android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/medicationAllergyLayout"
@@ -197,7 +224,8 @@
                     android:editable="false"
                     android:text="Antirobe"
                     android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/currentMedicationInputLayout"
@@ -218,7 +246,8 @@
                     android:editable="false"
                     android:text="Penicillin"
                     android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/medicalConditionInputLayout"
@@ -238,10 +267,21 @@
                     android:focusableInTouchMode="false"
                     android:text="Diabities"
                     android:editable="false"
-                    style="@style/StyledEditText"/>
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
-
+            <Button android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xxxlarge_margin"
+                android:id="@+id/remove_pet_button"
+                android:gravity="center"
+                android:text="REMOVE PET"
+                android:fontFamily="@string/font_roboto_medium"
+                android:textColor="@color/white"
+                android:background="@drawable/button_selector"
+                android:visibility="visible"/>
         </LinearLayout>
+
     </ScrollView>
     <ProgressBar
         style="?android:attr/progressBarStyle"

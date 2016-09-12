@@ -50,7 +50,18 @@ public class PetListFragment extends AbstractFragment implements PetListContract
         mPetListAdapter=new PetListAdapter(getActivity(), new OnClickListener() {
             @Override
             public void onClick(View v) {
-             replaceAndAddToBackStack(new AddPetFragment(),AddPetFragment.class.getName());
+                int position = mPetRecyclerView.getChildAdapterPosition(v);
+                Bundle bundle= new Bundle();
+                if (position > -1 && mPetListAdapter.getItemViewType(position) == PetListAdapter.NORMAL_VIEW_TYPE) {
+                 Pets pet=  mPetListAdapter.getItemAt(position);
+                    bundle.putSerializable("pet",pet);
+                    bundle.putBoolean("isEditable",true);
+                    replaceFragmentWithBundle(new AddPetFragment(), bundle);
+
+                }else{
+                    bundle.putBoolean("isEditable",false);
+                    replaceFragmentWithBundle(new AddPetFragment(), bundle);
+                }
             }
         });
         return view;
@@ -112,7 +123,9 @@ public class PetListFragment extends AbstractFragment implements PetListContract
 
     @Override
     public void onClick(View v) {
-        replaceAndAddToBackStack(new AddPetFragment(),AddPetFragment.class.getName());
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isEditable", false);
+        replaceFragmentWithBundle(new AddPetFragment(), bundle);
 
     }
 }

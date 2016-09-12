@@ -29,8 +29,8 @@ public class PetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Pets> petList;
     private Context mContext;
     View.OnClickListener onClickListener;
-    final static int NORMAL_VIEW_TYPE = 1;
-    final static int ADD_VIEW_TYPE = 2;
+   public final static int NORMAL_VIEW_TYPE = 1;
+   public final static int ADD_VIEW_TYPE = 2;
     private boolean isFooterEnabled = true;
     public PetListAdapter(Context context,View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
@@ -52,7 +52,7 @@ public class PetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             int resource = R.layout.view_pet_row;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new PetViewHolder(v);
-           // v.setOnClickListener(onClickListener);
+            v.setOnClickListener(onClickListener);
         } else {
             int resource = R.layout.view_add_pet_item;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);

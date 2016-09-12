@@ -3,9 +3,9 @@ package com.petmeds1800.model.entities;
 import java.io.Serializable;
 
 /**
- * Created by pooja on 8/23/2016.
+ * Created by pooja on 9/12/2016.
  */
-public class PetMedication implements Serializable {
+public class PetAge implements Serializable {
     private String name;
 
     public String getValue() {
@@ -18,4 +18,11 @@ public class PetMedication implements Serializable {
 
     private String value;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
