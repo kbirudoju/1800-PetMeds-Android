@@ -327,6 +327,11 @@
     <!--Remove pet-->
 <string name="remove_pet_title">We\'re sorry to hear that!</string>
     <string name="remove_pet_message">Please tell us why you would like to remove your pet profile</string>
+    <string name="confirmCardDeletion">This payment method will be deleted from your account.</string>
+    <string name="dialogDeleteButton">DELETE</string>
+    <string name="areYouSure">Are you sure ?</string>
+    <string name="confirmAddressDeletion">This address will be deleted from your account</string>
+    <string name="cardRemovedMessage">Card removed.</string>
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>

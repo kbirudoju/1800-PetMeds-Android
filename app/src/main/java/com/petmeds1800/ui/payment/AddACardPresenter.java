@@ -1,14 +1,17 @@
 package com.petmeds1800.ui.payment;
 
-import android.util.Log;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.AddEditCardResponse;
+import com.petmeds1800.model.RemoveCardRequest;
 import com.petmeds1800.model.entities.AddAddressResponse;
+import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+
+import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -22,15 +25,20 @@ import rx.schedulers.Schedulers;
 public class AddACardPresenter implements AddACardContract.Presenter {
 
     private static final int CREDIT_CARD_DIGITS_RULE_1 = 16;
+
     private static final int CREDIT_CARD_DIGITS_RULE_2 = 15;
+
     private static final int CVV_DIGITS_RULE_1 = 3;
+
     private static final int CVV_DIGITS_RULE_2 = 4;
-    @Inject
-    PetMedsApiService mPetMedsApiService;
-    @Inject
-    GeneralPreferencesHelper mPreferencesHelper;
 
     private final AddACardContract.View mView;
+
+    @Inject
+    PetMedsApiService mPetMedsApiService;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     AddACardPresenter(AddACardContract.View view) {
         mView = view;
@@ -77,7 +85,8 @@ public class AddACardPresenter implements AddACardContract.Presenter {
 
     @Override
     public boolean isCreditCardNumberValid(String creditCardNumber) {
-        if (creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_1 || creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_2) {
+        if (creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_1
+                || creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_2) {
             return true;
         }
         return false;
@@ -85,10 +94,11 @@ public class AddACardPresenter implements AddACardContract.Presenter {
 
     @Override
     public boolean isExpirationDateValid(int expirationMonth, int expirationYear) {
-        if (expirationMonth <= 0 && expirationYear <= 0)
+        if (expirationMonth <= 0 && expirationYear <= 0) {
             return false;
-        else
+        } else {
             return true;
+        }
     }
 
     @Override
@@ -107,7 +117,9 @@ public class AddACardPresenter implements AddACardContract.Presenter {
     @Override
     public void getAddress(String addressId) {
         //show the progress
-        mPetMedsApiService.getAddressById(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber() , addressId)
+        mPetMedsApiService
+                .getAddressById(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                        addressId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<AddAddressResponse>() {
@@ -171,6 +183,46 @@ public class AddACardPresenter implements AddACardContract.Presenter {
                             Log.d("UpdateAddress", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
                                 mView.paymentMethodDisapproved(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+    }
+
+    @Override
+    public void removeCard(RemoveCardRequest removeCardRequest) {
+        mPetMedsApiService.removeCard(removeCardRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddEditCardResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        Log.e("RemoveACard", e.getMessage());
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId != 0) { //internet connection error. Unknownhost or SocketTimeout exception
+                            if (mView.isActive()) {
+                                mView.showErrorCrouton(((Fragment) mView).getString(errorId), false);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onNext(AddEditCardResponse s) {
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.cardRemoved();
+                            }
+                        } else {
+                            Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
+                            if (mView.isActive()) {
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 

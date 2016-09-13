@@ -1,16 +1,12 @@
 package com.petmeds1800.ui.address;
 
-import android.support.design.widget.TextInputLayout;
-import android.widget.EditText;
-
 import com.petmeds1800.model.RemoveAddressRequest;
-import com.petmeds1800.model.UsaState;
 import com.petmeds1800.model.entities.AddressRequest;
-import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
-import java.util.ArrayList;
+import android.support.design.widget.TextInputLayout;
+import android.widget.EditText;
 
 /**
  * Created by Abhinav on 13/8/16.
@@ -31,7 +27,9 @@ public interface AddEditAddressContract {
 
         void showErrorCrouton(CharSequence message, boolean span);
 
-        boolean checkAndShowError(EditText auditEditText , TextInputLayout auditTextInputLayout , int errorStringId);
+        boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId);
+
+        void showDeletionConfirmationDialog();
 
         void usaStatesListReceived(String[] usaStateArray);
 

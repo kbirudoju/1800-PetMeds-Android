@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.Card;
+import com.petmeds1800.model.RemoveCardRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.ui.AbstractActivity;
@@ -21,12 +22,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -44,15 +47,16 @@ import butterknife.OnClick;
 /**
  * Created by Abhinav on 13/8/16.
  */
-public class AddEditCardFragment extends AbstractFragment implements AddACardContract.View {
+public class AddEditCardFragment extends AbstractFragment
+        implements AddACardContract.View, DialogInterface.OnClickListener {
 
     public static final int EDIT_CARD_REQUEST = 1;
 
     public static final String FIRST_ARG = "firstArg";
 
-    private static final String CARD = "card";
-
     public static final String REQUEST_CODE = "request_code";
+
+    private static final String CARD = "card";
 
     private static final int DISMISS_APPROVAL_DIALOG = 1;
 
@@ -109,6 +113,9 @@ public class AddEditCardFragment extends AbstractFragment implements AddACardCon
     @BindView(R.id.addACard_form)
     ScrollView mCardContainerScrollView;
 
+    @BindView(R.id.removeCard_button)
+    Button mRemoveCardButton;
+
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
@@ -154,11 +161,11 @@ public class AddEditCardFragment extends AbstractFragment implements AddACardCon
 
     }
 
-    public static AddEditCardFragment newInstance(Address address , int requestCode) {
+    public static AddEditCardFragment newInstance(Address address, int requestCode) {
 
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable(FIRST_ARG , address);
+        bundle.putSerializable(FIRST_ARG, address);
         bundle.putInt(REQUEST_CODE, requestCode);
 
         AddEditCardFragment addEditCardFragment = new AddEditCardFragment();
@@ -198,6 +205,8 @@ public class AddEditCardFragment extends AbstractFragment implements AddACardCon
                 //hide the cardNumber and CVV view as it card number,CVV can not be edited
                 mCardNumberLayout.setVisibility(View.GONE);
                 mCvvInputLayout.setVisibility(View.GONE);
+                //show the remove button
+                mRemoveCardButton.setVisibility(View.VISIBLE);
                 //get the card
                 mCard = (Card) bundle.getSerializable(CARD);
                 populateData(mCard);
@@ -418,5 +427,51 @@ public class AddEditCardFragment extends AbstractFragment implements AddACardCon
         }, null);
 
         myp.show();
+    }
+
+    @OnClick(R.id.removeCard_button)
+    public void showDeletionConfirmationDialog() {
+        AlertDialog alertDialog = Utils.showAlertDailog(getActivity(),
+                String.format(getString(R.string.areYouSure), getString(R.string.application_name)),
+                getString(R.string.confirmCardDeletion), R.style.StyleForNotification)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialogDeleteButton).toUpperCase(), this)
+                .setNegativeButton(getString(R.string.cancelTextOnDialog).toUpperCase(), this)
+                .create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+        switch (which) {
+            case DialogInterface.BUTTON_POSITIVE:
+                mProgressBar.setVisibility(View.VISIBLE);
+                mPresenter.removeCard(new RemoveCardRequest(
+                        mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                        mCard.getCardKey()));
+
+                break;
+            case DialogInterface.BUTTON_NEGATIVE:
+                dialog.dismiss();
+                break;
+        }
+    }
+
+    @Override
+    public void cardRemoved() {
+        mProgressBar.setVisibility(View.GONE);
+        Snackbar.make(mCardContainerScrollView, R.string.cardRemovedMessage, Snackbar.LENGTH_LONG).show();
+        popBackStack();
+
+    }
+
+    @Override
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        mProgressBar.setVisibility(View.GONE);
+        if (span) {
+            Utils.displayCrouton(getActivity(), (Spanned) message, mCardContainerScrollView);
+        }
+        Utils.displayCrouton(getActivity(), (String) message, mCardContainerScrollView);
     }
 }

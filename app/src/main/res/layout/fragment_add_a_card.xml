@@ -194,6 +194,19 @@
                  android:paddingRight="@dimen/dp_16"
                  style="@style/rounded_button_text"
                  android:singleLine="true" />-->
+            <Button
+                    android:id="@+id/removeCard_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_16"
+                    style="@style/label"
+                    android:background="@color/petmeds_blue"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/removeThisAddress"
+                    android:visibility="gone"/>
 
             <ProgressBar
                     style="?android:attr/progressBarStyle"

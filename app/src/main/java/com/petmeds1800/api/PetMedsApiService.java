@@ -2,6 +2,7 @@ package com.petmeds1800.api;
 
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.RemoveAddressRequest;
+import com.petmeds1800.model.RemoveCardRequest;
 import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddEditCardResponse;
@@ -147,4 +148,7 @@ public interface PetMedsApiService {
     @POST("/rest/model/atg/userprofiling/ProfileActor/logout")
     Observable<SignOutResponse> sendSessionConfig(@Body SignOutRequest signOutRequest);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/payment/PaymentActor/remove")
+    Observable<AddEditCardResponse> removeCard(@Body RemoveCardRequest removeCardRequest);
 }
