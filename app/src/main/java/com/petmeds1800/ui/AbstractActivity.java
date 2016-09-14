@@ -1,13 +1,14 @@
 package com.petmeds1800.ui;
 
+import com.petmeds1800.R;
+import com.petmeds1800.util.AnalyticsUtil;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import com.petmeds1800.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,7 +20,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     //CHECKSTYLE:ON
-
+    AnalyticsUtil mAnalyticsUtil;
 
     @Override
     protected void onPostCreate(final Bundle savedInstanceState) {

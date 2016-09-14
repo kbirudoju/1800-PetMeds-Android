@@ -17,7 +17,6 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
 import android.content.DialogInterface;
-import android.net.Network;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -86,6 +85,7 @@ public class AccountFragment extends AbstractFragment
 
     @BindView(R.id.refill_reminder_label)
     TextView mRefillReminderLabel;
+
     private SignOutContract.Presenter mPresenter;
 
 
@@ -143,7 +143,7 @@ public class AccountFragment extends AbstractFragment
             return HAS_ENROLLED_FINGERPRINTS;
         }
         return HAS_ENABILITY;
-       // mRefillReminderLabel.setOnClickListener(this);
+        // mRefillReminderLabel.setOnClickListener(this);
     }
 
     @Nullable
@@ -200,6 +200,15 @@ public class AccountFragment extends AbstractFragment
             case R.id.notificationStatus:
                 fromWhichAlert = FROM_NOTIFICATION;
                 mPreferencesHelper.setIsPushNotificationEnableFlag(isChecked);
+                if (isChecked) {
+                    ((HomeActivity)getActivity()).getAnalyticsRef().trackEvent(getString(R.string.push_notifications_category),
+                            getString(R.string.push_notifications_enability),
+                            getString(R.string.push_notifications_enable_label));
+                } else {
+                    ((HomeActivity)getActivity()).getAnalyticsRef().trackEvent(getString(R.string.push_notifications_category),
+                            getString(R.string.push_notifications_disability),
+                            getString(R.string.push_notification_disability));
+                }
                 break;
             case R.id.fingerPrintStatus:
                 if (buttonView.isPressed()) {
@@ -242,7 +251,7 @@ public class AccountFragment extends AbstractFragment
         switch (fromWhichAlert) {
             case FROM_SIGNOUT_OPTION:
                 if (isPositive) {
-                    ((HomeActivity)getActivity()).showProgress();
+                    ((HomeActivity) getActivity()).showProgress();
                     mPresenter.sendDataToServer(
                             mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                 }
@@ -267,13 +276,13 @@ public class AccountFragment extends AbstractFragment
 
     @Override
     public void onSuccess() {
-        ((HomeActivity)getActivity()).hideProgress();
+        ((HomeActivity) getActivity()).hideProgress();
         replaceFragment(new SignOutFragment());
     }
 
     @Override
     public void onError(String errorMessage) {
-        ((HomeActivity)getActivity()).hideProgress();
+        ((HomeActivity) getActivity()).hideProgress();
         Snackbar.make(getView().findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_LONG).show();
 
     }

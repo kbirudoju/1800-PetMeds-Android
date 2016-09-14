@@ -27,7 +27,7 @@ import okhttp3.CookieJar;
  * Created by Sdixit on 08-09-2016.
  */
 
-public class SignOutFragment extends HomeFragment {
+public class SignOutFragment extends AbstractFragment {
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
@@ -65,12 +65,6 @@ public class SignOutFragment extends HomeFragment {
         ((PersistentCookieJar)mCookieJar).clear();
         ButterKnife.bind(this, view);
         return view;
-    }
-
-    @Override
-    public void checkRequiredPermission(String[] requestedPermissions,
-            PermissionRequested permissionRequested) {
-        super.checkRequiredPermission(requestedPermissions, permissionRequested);
     }
 
     @OnClick(R.id.log_in_button)

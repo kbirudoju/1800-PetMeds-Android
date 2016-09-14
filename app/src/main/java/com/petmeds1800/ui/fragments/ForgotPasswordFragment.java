@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -34,6 +33,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+import static com.petmeds1800.mvp.BasePresenter.API_SUCCESS_CODE;
 
 /**
  * Created by Digvijay on 8/22/2016.
@@ -60,6 +61,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
 
     @BindView(R.id.errorText)
     TextView errorText;
+
     @BindView(R.id.errorTextOnEmail)
     TextView errorTextOnEmail;
 
@@ -74,7 +76,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_forgot_password, container, false);
         ButterKnife.bind(this, view);
         mEmailText.addTextChangedListener(this);
@@ -88,8 +90,9 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (errorText.getVisibility() != View.INVISIBLE)
+        if (errorText.getVisibility() != View.INVISIBLE) {
             errorText.setVisibility(View.INVISIBLE);
+        }
         if (errorTextOnEmail.getVisibility() != View.INVISIBLE) {
             errorTextOnEmail.setVisibility(View.INVISIBLE);
         }
@@ -157,7 +160,8 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                     })
                     .flatMap(new Func1<SessionConfNumberResponse, Observable<ForgotPasswordResponse>>() {
                         @Override
-                        public Observable<ForgotPasswordResponse> call(SessionConfNumberResponse sessionConfNumberResponse) {
+                        public Observable<ForgotPasswordResponse> call(
+                                SessionConfNumberResponse sessionConfNumberResponse) {
                             String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
                             Log.v("sessionToken", sessionConfNumber);
                             if (sessionConfNumber != null) {
@@ -187,9 +191,13 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                         public void onNext(ForgotPasswordResponse response) {
 
                             Log.v("response", response.getStatus().getErrorMessages().get(0));
-                            Toast.makeText(getActivity(), "response" + response.getStatus().getErrorMessages().get(0), Toast.LENGTH_SHORT).show();
+                            if (response.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                                mEmailPasswordButton.setText(getString(R.string.label_email_sent));
+                            } else {
+                                setEmailError(response.getStatus().getErrorMessages().get(0));
+                            }
                             hideProgress();
-                            mEmailPasswordButton.setText(getString(R.string.label_email_sent));
+
                         }
                     });
 

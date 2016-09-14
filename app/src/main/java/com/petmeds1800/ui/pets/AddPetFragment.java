@@ -1,7 +1,27 @@
 package com.petmeds1800.ui.pets;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.AddPetRequest;
+import com.petmeds1800.model.entities.Pets;
+import com.petmeds1800.model.entities.RemovePetRequest;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
+import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
+import com.petmeds1800.ui.pets.support.AddPetContract;
+import com.petmeds1800.ui.pets.support.UpdateImageUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
+import com.soundcloud.android.crop.Crop;
+
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -28,27 +48,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
-import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.AddPetRequest;
-import com.petmeds1800.model.entities.Pets;
-import com.petmeds1800.model.entities.RemovePetRequest;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
-import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
-import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
-import com.petmeds1800.ui.pets.support.AddPetContract;
-import com.petmeds1800.ui.pets.support.UpdateImageUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-import com.soundcloud.android.crop.Crop;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,7 +63,8 @@ import static com.petmeds1800.R.id.fromGallery;
 /**
  * Created by pooja on 8/23/2016.
  */
-public class AddPetFragment extends AbstractFragment implements View.OnClickListener, GenderDialogFragment.GenderSetListener, CommonDialogFragment.ValueSelectedListener, AddPetContract.View {
+public class AddPetFragment extends AbstractFragment
+        implements View.OnClickListener, GenderDialogFragment.GenderSetListener, CommonDialogFragment.ValueSelectedListener, AddPetContract.View {
     private static final int AGE_REQUEST = 1;
     @BindView(R.id.pet_gender_edit)
     EditText mPetGenderText;

@@ -15,12 +15,12 @@ import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
 import android.content.DialogInterface;
-import android.net.Network;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -77,9 +77,26 @@ public class HomeActivity extends AbstractActivity
     private static final int[] TAB_ICON_SELECTED = {R.drawable.ic_menu_home_pressed, R.drawable.ic_menu_cart_pressed,
             R.drawable.ic_menu_learn_pressed, R.drawable.ic_menu_account_pressed};
 
+
+    public void showPushPermissionDailog() {
+        AlertDialog alertDialog = Utils.showAlertDailog(this,
+                String.format(getString(R.string.notification_title), getString(R.string.application_name)),
+                getString(R.string.notification_message), R.style.StyleForNotification)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_allow_button).toUpperCase(), this)
+                .setNegativeButton(getString(R.string.dialog_deny_button).toUpperCase(), this)
+                .create();
+        alertDialog.show();
+    }
+
+    public AnalyticsUtil getAnalyticsRef() {
+        return mAnalyticsUtil;
+    }
+
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mAnalyticsUtil = new AnalyticsUtil();
         ButterKnife.bind(this);
         PetMedsApplication.getAppComponent().inject(this);
         if (getIntent().getBooleanExtra(IS_FROM_HOME_ACTIVITY, false) && mPreferencesHelper.getIsUserLoggedIn()) {
@@ -174,16 +191,6 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
-    public void showPushPermissionDailog() {
-        AlertDialog alertDialog = Utils.showAlertDailog(this,
-                String.format(getString(R.string.notification_title), getString(R.string.application_name)),
-                getString(R.string.notification_message), R.style.StyleForNotification)
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.dialog_allow_button).toUpperCase(), this)
-                .setNegativeButton(getString(R.string.dialog_deny_button).toUpperCase(), this)
-                .create();
-        alertDialog.show();
-    }
 
     private void showFingerprintDialog() {
         mAuthenticationDialog.setCancelable(false);
@@ -264,9 +271,15 @@ public class HomeActivity extends AbstractActivity
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
                 mPreferencesHelper.setIsPushNotificationEnableFlag(true);
+                mAnalyticsUtil.trackEvent(getString(R.string.push_notifications_category),
+                        getString(R.string.push_notifications_enability),
+                        getString(R.string.push_notifications_enable_label));
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 mPreferencesHelper.setIsPushNotificationEnableFlag(false);
+                mAnalyticsUtil.trackEvent(getString(R.string.push_notifications_category),
+                        getString(R.string.push_notifications_disability),
+                        getString(R.string.push_notification_disability));
                 break;
         }
     }
