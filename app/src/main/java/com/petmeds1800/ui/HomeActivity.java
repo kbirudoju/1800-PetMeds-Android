@@ -161,7 +161,7 @@ public class HomeActivity extends AbstractActivity
         super.onResume();
         mProgressDialog = new ProgressDialog();
         mAuthenticationDialog = new FingerprintAuthenticationDialog();
-        if (mTabIndex == 3) {
+        if (mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
             checkLoginStatus();
         }
     }

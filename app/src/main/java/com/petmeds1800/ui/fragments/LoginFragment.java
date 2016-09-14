@@ -5,6 +5,7 @@ import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.intent.ForgotPasswordIntent;
 import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.intent.SignUpIntent;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
@@ -157,64 +158,55 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     public void login() {
         mEmailInput.setError(null);
         mPasswordInput.setError(null);
-        boolean isValidEmail, isValidPassword;
+
         String emailText = mEmailEdit.getText().toString().trim();
-        String passwordText = mPasswordEdit.getText().toString().trim();
-        if (emailText.isEmpty() && passwordText.isEmpty()) {
-            setEmailError(getString(R.string.accountSettingsEmailEmptyError));
-            setPasswordError(getString(R.string.accountSettingsPasswordEmptyError));
-            return;
-        }
         if (emailText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
             return;
-        } else {
-            isValidEmail = mPresenter.validateEmail(emailText);
+        } else if (!mPresenter.validateEmail(emailText)) {
+            setEmailError(getString(R.string.accountSettingsEmailInvalidError));
+            return;
         }
 
+        String passwordText = mPasswordEdit.getText().toString().trim();
         if (passwordText.isEmpty()) {
             setPasswordError(getString(R.string.accountSettingsPasswordEmptyError));
             return;
-        } else {
-            isValidPassword = mPresenter.validatePassword(passwordText);
-        }
-
-        if (isValidEmail && isValidPassword) {
-
-            showProgress();
-            //TODO: remove this temporary hack after backend resolves their problem of cookies
-            mApiService.login(new LoginRequest(mEmailEdit.getText().toString(),
-                    mPasswordEdit.getText().toString(), "test_test"))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new Subscriber<LoginResponse>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            int errorId = RetrofitErrorHandler.getErrorMessage(e);
-                            if (errorId == R.string.noInternetConnection) {
-                                showErrorCrouton(getString(errorId), false);
-                                hideProgress();
-                            } else {
-                                doLogin();
-                            }
-                        }
-
-                        @Override
-                        public void onNext(LoginResponse loginResponse) {
-                            Log.v("login response", loginResponse.getStatus().getCode());
-                        }
-                    });
-
-        } else if (!isValidEmail) {
-            setEmailError(getString(R.string.accountSettingsEmailInvalidError));
-        } else {
+        } else if (!mPresenter.validatePassword(passwordText)) {
             setPasswordError(getString(R.string.accountSettingsPasswordInvalidError));
+            return;
         }
+
+        showProgress();
+
+        //TODO: remove this temporary hack after backend resolves their problem of cookies
+        mApiService.login(new LoginRequest(mEmailEdit.getText().toString(),
+                mPasswordEdit.getText().toString(), "test_test"))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<LoginResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId == R.string.noInternetConnection) {
+                            showErrorCrouton(getString(errorId), false);
+                            hideProgress();
+                        } else {
+                            doLogin();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(LoginResponse loginResponse) {
+                        Log.v("login response", loginResponse.getStatus().getCode());
+                    }
+                });
+
     }
 
     private void doLogin() {
@@ -293,6 +285,11 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @OnClick(R.id.label_forgot_password)
     public void forgotPassword() {
         startActivity(new ForgotPasswordIntent(getActivity()));
+    }
+
+    @OnClick(R.id.sign_up_button)
+    public void signUp() {
+        startActivity(new SignUpIntent(getActivity()));
     }
 
     @Override

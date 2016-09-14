@@ -14,21 +14,15 @@ public interface SignUpContract {
 
         void hideProgress();
 
-        void setEmailError(String errorString);
-
-        void setPasswordError(String errorString);
-
-        void setNameError(String errorString, int viewId);
-
-        void setAddressError(String errorString, int viewId);
-
-        void setPostalCodeError(String errorString);
-
-        void setPhoneError(String errorString);
+        void setErrorOnView(String errorString, int viewId);
 
         void showErrorCrouton(CharSequence message, boolean span);
 
         void navigateToHome();
+
+        void onStatesListReceived(String[] statesArray);
+
+        void onCountryListReceived(String[] countryArray);
     }
 
     interface Presenter extends BasePresenter {
@@ -46,5 +40,13 @@ public interface SignUpContract {
         boolean validatePostalCode(String postalCode);
 
         boolean validatePhoneNumber(String phoneNumber);
+
+        void getStatesList();
+
+        String getStateCode(String stateName);
+
+        void getCountriesList();
+
+        String getCountryCode(String countryName);
     }
 }

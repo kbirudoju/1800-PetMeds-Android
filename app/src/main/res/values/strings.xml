@@ -94,19 +94,29 @@
     <!--SignUp-->
     <string name="label_confirm_email">Confirm Email</string>
     <string name="label_confirm_password">Confirm Password</string>
-    <string name="label_first_name">First Name</string>
-    <string name="label_last_name">Last Name</string>
-    <string name="label_address_line_1">Address Line 1</string>
-    <string name="label_apt_suite">Apt/Suite#</string>
-    <string name="label_city">City</string>
-    <string name="label_state_province">State/Province/Region</string>
-    <string name="label_zip_code">Zip Code</string>
-    <string name="label_phone_number">Phone Number</string>
-    <string name="label_country">Country</string>
     <string name="label_create_account">Create Account</string>
     <string name="label_billing_address">Billing Address</string>
     <string name="label_shipping_address">Shipping Address</string>
     <string name="label_same_billing_shipping">Same Billing and Shipping Address</string>
+    <string name="label_sign_up">Sign Up</string>
+    <string name="error_confirm_email_must_match">Confirmation email must match your email address</string>
+    <string name="error_confirm_password_must_match">Confirmation password must match your password</string>
+    <string name="error_first_name_required">First name is required</string>
+    <string name="error_first_name_invalid">First name invalid</string>
+    <string name="error_last_name_required">Last name is required</string>
+    <string name="error_last_name_invalid">Last name invalid</string>
+    <string name="error_address_required">Address is required</string>
+    <string name="error_address_invalid">Address invalid</string>
+    <string name="error_apartment_required">Apartment name is required</string>
+    <string name="error_apartment_invalid">Apartment name invalid</string>
+    <string name="error_city_required">City name is required</string>
+    <string name="error_city_invalid">City name invalid</string>
+    <string name="error_state_required">State name is required</string>
+    <string name="error_zip_required">Zip code is required</string>
+    <string name="error_zip_invalid">Zip code invalid</string>
+    <string name="error_phone_required">Phone number is required</string>
+    <string name="error_phone_invalid">Phone number invalid</string>
+    <string name="error_country_required">Country is required</string>
 
     <!--Finger Print Dialog-->
     <string name="title.fingerprint_login">FINGERPRINT LOGIN</string>
@@ -142,11 +152,11 @@
     <string name="action_edit">Edit</string>
     <string name="action_done">Done</string>
     <string name="accountSettingsNameEmptyError">Name is required</string>
-    <string name="accountSettingsEmailEmptyError">Email is required.</string>
-    <string name="accountSettingsEmailInvalidError">Email address must be valid.</string>
+    <string name="accountSettingsEmailEmptyError">Email is required</string>
+    <string name="accountSettingsEmailInvalidError">Email address must be valid</string>
     <string name="accountSettingsPasswordEmptyError">Password is required</string>
     <!--<string name="accountSettingsPasswordInvalidError">Password must be 8 character with at least 1 number and 1 upper-case letter</string>-->
-    <string name="accountSettingsPasswordInvalidError">Password must be at least 8 characters</string>
+    <string name="accountSettingsPasswordInvalidError">Password must be 8 characters long with one number and one capital letter</string>
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
     <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method</string>
     <string name="saveCardForFasterCheckoutMessage">Store a payment method for faster checkout.</string>

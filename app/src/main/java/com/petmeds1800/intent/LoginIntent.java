@@ -10,7 +10,7 @@ import android.content.Intent;
  */
 public class LoginIntent extends Intent{
 
-    public LoginIntent(Context context) {
+    public LoginIntent(final Context context) {
         super(context, LoginActivity.class);
     }
 }

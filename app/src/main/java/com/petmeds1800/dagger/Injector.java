@@ -1,8 +1,7 @@
 package com.petmeds1800.dagger;
 
-import com.petmeds1800.ui.SplashActivity;
-
 import com.petmeds1800.dagger.component.AppComponent;
+import com.petmeds1800.mvp.SignupTask.SignUpPresenter;
 import com.petmeds1800.service.RefillReminderService;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.IntroActivity;
@@ -20,8 +19,8 @@ import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.SignUpFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.payment.AddACardPresenter;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
@@ -48,6 +47,8 @@ public interface Injector {
     void inject(IntroActivity introActivity);
 
     void inject(SignUpFragment signUpFragment);
+
+    void inject(SignUpPresenter signUpPresenter);
 
     void inject(AddACardPresenter addACardPresenter);
 
@@ -76,7 +77,10 @@ public interface Injector {
     void inject(SignOutFragment signoutfragment);
 
     void inject(AccountRootFragment accountRootFragment);
-    void inject (RefillReminderService refillReminderService);
+
+    void inject(RefillReminderService refillReminderService);
+
     void inject(SignOutPresenter signOutPresenter);
+
     void inject(AnalyticsUtil analyticsUtil);
 }

@@ -10,7 +10,7 @@ import android.content.Intent;
  */
 public class IntroIntent extends Intent {
 
-    public IntroIntent(Context context){
+    public IntroIntent(final Context context){
         super(context, IntroActivity.class);
     }
 }

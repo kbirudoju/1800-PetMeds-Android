@@ -9,14 +9,15 @@ import com.petmeds1800.ui.fragments.SignUpFragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by Digvijay on 9/9/2016.
  */
-public class SignUpActivity extends AppCompatActivity{
+public class SignUpActivity extends AbstractActivity{
 
     @Inject
     SignUpPresenter mSignUpPresenter;
@@ -25,6 +26,9 @@ public class SignUpActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        ButterKnife.bind(this);
+        setToolBarTitle(getString(R.string.label_sign_up));
+        enableBackButton();
         setupComponent();
     }
 

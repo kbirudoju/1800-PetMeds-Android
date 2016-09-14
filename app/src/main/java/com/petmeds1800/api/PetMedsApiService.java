@@ -141,6 +141,7 @@ public interface PetMedsApiService {
     @POST("rest/model/1800petmeds/pet/PetActor/remove")
     Observable<RemovePetResponse> removePet(@Body RemovePetRequest removeRequest);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/create")
     Observable<SignUpResponse> signUp(@Body SignUpRequest signUpRequest);
 
