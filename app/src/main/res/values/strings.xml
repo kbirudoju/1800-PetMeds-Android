@@ -360,5 +360,8 @@
     <string name="push_notifications_enable_label">Push notifications Enabled</string>
     <string name="push_notification_disability">Push notifications Disabled</string>
     <string name="home_screen_name">HOME SCREEN</string>
+<!--Home Screen-->
+    <string name="home_title">HOME</string>
+    <string name="shop_category_title">SHOP CATEGORIES</string>
 
 </resources>

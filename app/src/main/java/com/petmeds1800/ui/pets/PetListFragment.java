@@ -116,7 +116,6 @@ public class PetListFragment extends AbstractFragment implements PetListContract
     @Override
     public void onError(String errorMessage) {
         Snackbar.make(mPetRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
-
         progressBar.setVisibility(View.GONE);
     }
 
