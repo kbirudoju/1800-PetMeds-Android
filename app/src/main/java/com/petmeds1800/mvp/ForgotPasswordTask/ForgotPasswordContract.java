@@ -15,6 +15,8 @@ public interface ForgotPasswordContract {
         void hideProgress();
 
         void setEmailError(String errorString);
+
+        void showErrorCrouton(CharSequence message, boolean span);
     }
 
     interface Presenter extends BasePresenter {
