@@ -20,28 +20,47 @@ public abstract class AbstractFragment extends Fragment {
     private static final int PERMISSIONS_REQUEST_CODE = 1001;
     private PermissionRequested permissionRequested;
 
-    public void replaceAndAddToBackStack(Fragment fragment , String tag) {
+    public void replaceAccountAndAddToBackStack(Fragment fragment, String tag) {
         FragmentTransaction trans = getFragmentManager()
                 .beginTransaction();
-        trans.replace(R.id.fragment_container, fragment, tag);
+        trans.replace(R.id.account_root_fragment_container, fragment, tag);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.addToBackStack(null);
         trans.commit();
     }
 
-    void replaceFragment(Fragment fragment) {
+    void replaceAccountFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
 
-        transaction.replace(R.id.fragment_container, fragment);
+        transaction.replace(R.id.account_root_fragment_container, fragment);
         transaction.commit();
 
     }
 
-   public  void replaceFragmentWithBundle(Fragment fragment, Bundle bundle){
+    void replaceHomeFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager()
+                .beginTransaction();
+
+        transaction.replace(R.id.home_root_fragment_container, fragment);
+        transaction.commit();
+
+    }
+
+    void replaceHomeFragmentWithBundle(Fragment fragment, Bundle bundle){
         FragmentTransaction trans = getFragmentManager()
                 .beginTransaction();
-        trans.replace(R.id.fragment_container, fragment);
+        trans.replace(R.id.home_root_fragment_container, fragment);
+        fragment.setArguments(bundle);
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        trans.addToBackStack(null);
+        trans.commit();
+    }
+
+    public  void replaceAccountFragmentWithBundle(Fragment fragment, Bundle bundle){
+        FragmentTransaction trans = getFragmentManager()
+                .beginTransaction();
+        trans.replace(R.id.account_root_fragment_container, fragment);
         fragment.setArguments(bundle);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.addToBackStack(null);

@@ -164,28 +164,29 @@ public class AccountFragment extends AbstractFragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.myOrder:
-                replaceAndAddToBackStack(new MyOrderFragment(), MyOrderFragment.class.getName());
+                replaceAccountAndAddToBackStack(new MyOrderFragment(), MyOrderFragment.class.getName());
                 break;
 
             case R.id.accountSettings_label:
-                replaceAndAddToBackStack(new AccountSettingsFragment(), AccountSettingsFragment.class.getName());
+                replaceAccountAndAddToBackStack(new AccountSettingsFragment(), AccountSettingsFragment.class.getName());
                 break;
 
             case R.id.managePayment_label:
-                replaceAndAddToBackStack(new SavedCardsListFragment(), SavedCardsListFragment.class.getName());
+                replaceAccountAndAddToBackStack(new SavedCardsListFragment(), SavedCardsListFragment.class.getName());
                 break;
 
             case R.id.manageAddress_label:
-                replaceAndAddToBackStack(new SavedAddressListFragment(), SavedAddressListFragment.class.getName());
+                replaceAccountAndAddToBackStack(new SavedAddressListFragment(),
+                        SavedAddressListFragment.class.getName());
                 break;
             case R.id.my_pets_label:
-                replaceAndAddToBackStack(new PetListFragment(), PetListFragment.class.getName());
+                replaceAccountAndAddToBackStack(new PetListFragment(), PetListFragment.class.getName());
                 break;
             case R.id.signOut:
                 showDailogForSignOut(getString(R.string.logout_alert_title), null);
                 break;
             case R.id.refill_reminder_label:
-                replaceAndAddToBackStack(new ReminderListFragment(), ReminderListFragment.class.getName());
+                replaceAccountAndAddToBackStack(new ReminderListFragment(), ReminderListFragment.class.getName());
                 break;
             default:
                 break;
@@ -277,7 +278,7 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onSuccess() {
         ((HomeActivity) getActivity()).hideProgress();
-        replaceFragment(new SignOutFragment());
+        replaceAccountFragment(new SignOutFragment());
     }
 
     @Override

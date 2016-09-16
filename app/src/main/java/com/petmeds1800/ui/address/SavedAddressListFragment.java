@@ -88,7 +88,9 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_add){
-            replaceAndAddToBackStack(AddEditAddressFragment.newInstance(null, AddEditAddressFragment.ADD_ADDRESS_REQUEST) , AddEditAddressFragment.class.getName());
+            replaceAccountAndAddToBackStack(
+                    AddEditAddressFragment.newInstance(null, AddEditAddressFragment.ADD_ADDRESS_REQUEST),
+                    AddEditAddressFragment.class.getName());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -116,7 +118,9 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
 
     @Override
     public void startAddressUpdate(Address address) {
-        replaceAndAddToBackStack(AddEditAddressFragment.newInstance(address, AddEditAddressFragment.EDIT_ADDRESS_REQUEST), AddEditAddressFragment.class.getName());
+        replaceAccountAndAddToBackStack(
+                AddEditAddressFragment.newInstance(address, AddEditAddressFragment.EDIT_ADDRESS_REQUEST),
+                AddEditAddressFragment.class.getName());
     }
 
     @Override
@@ -132,7 +136,9 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
 
     @OnClick(R.id.addAddress_button)
     void showAddAddressFragment() {
-        replaceAndAddToBackStack(AddEditAddressFragment.newInstance(null, AddEditAddressFragment.ADD_ADDRESS_REQUEST) , AddEditAddressFragment.class.getName());
+        replaceAccountAndAddToBackStack(
+                AddEditAddressFragment.newInstance(null, AddEditAddressFragment.ADD_ADDRESS_REQUEST),
+                AddEditAddressFragment.class.getName());
     }
 
 

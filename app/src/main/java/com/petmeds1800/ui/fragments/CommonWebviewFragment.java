@@ -21,6 +21,11 @@ import butterknife.ButterKnife;
  * Created by pooja on 8/25/2016.
  */
 public class CommonWebviewFragment extends AbstractFragment {
+
+    public static final String URL_KEY = "url";
+
+    public static final String TITLE_KEY = "title";
+
     @BindView(R.id.webViewContainer)
     WebView mWebView;
     @BindView(R.id.progressbar)
@@ -34,14 +39,15 @@ public class CommonWebviewFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_common_webview, container, false);
         ButterKnife.bind(this, rootView);
+        ((AbstractActivity)getActivity()).enableBackButton();
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUrl=getArguments().getString("url");
-        mTitle=getArguments().getString("title");
+        mUrl=getArguments().getString(URL_KEY);
+        mTitle=getArguments().getString(TITLE_KEY);
         if(mTitle!=null && !mTitle.isEmpty()){
             ((AbstractActivity)getActivity()).setToolBarTitle(mTitle);
         }

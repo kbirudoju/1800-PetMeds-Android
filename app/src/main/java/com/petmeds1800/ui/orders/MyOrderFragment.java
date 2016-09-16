@@ -86,7 +86,7 @@ public class MyOrderFragment extends AbstractFragment
                 OrderList orderDetail = mOrderList.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("orderlist", orderDetail);
-                replaceFragmentWithBundle(new OrderDetailFragment(), bundle);
+                replaceAccountFragmentWithBundle(new OrderDetailFragment(), bundle);
             }
         });
 

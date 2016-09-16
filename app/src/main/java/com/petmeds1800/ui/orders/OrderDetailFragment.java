@@ -61,17 +61,17 @@ public class OrderDetailFragment extends AbstractFragment {
                         String skuId=orderList.getCommerceItems().get(0).getSkuId();
                         String productId=orderList.getCommerceItems().get(0).getProductId();
                         Bundle bundle = new Bundle();
-                        bundle.putString("title",getString(R.string.title_my_orders));
-                        bundle.putString("url",getActivity().getString(R.string.server_endpoint)+"/product.jsp?id="+productId+"&sku="+skuId+"&review=write");
-                        replaceFragmentWithBundle(new CommonWebviewFragment(),bundle);
+                        bundle.putString(CommonWebviewFragment.TITLE_KEY,getString(R.string.title_my_orders));
+                        bundle.putString(CommonWebviewFragment.URL_KEY,getActivity().getString(R.string.server_endpoint)+"/product.jsp?id="+productId+"&sku="+skuId+"&review=write");
+                        replaceAccountFragmentWithBundle(new CommonWebviewFragment(), bundle);
                         break;
                     case CustomOrderDetailRecyclerAdapter.TRACK_ROW_ID:
                         String trackingId=orderList.getShippingGroups().get(0).getTrackingNumber();
                         String vendorName=orderList.getShippingGroups().get(0).getCompanyName();
                         Bundle shippingBundle = new Bundle();
-                        shippingBundle.putString("title",getString(R.string.title_track_shipment));
-                        shippingBundle.putString("url",getActivity().getString(R.string.server_endpoint)+"rsTrack.jsp?TrackID="+trackingId+"&TrackType="+vendorName);
-                        replaceFragmentWithBundle(new CommonWebviewFragment(), shippingBundle);
+                        shippingBundle.putString(CommonWebviewFragment.TITLE_KEY,getString(R.string.title_track_shipment));
+                        shippingBundle.putString(CommonWebviewFragment.URL_KEY,getActivity().getString(R.string.server_endpoint)+"rsTrack.jsp?TrackID="+trackingId+"&TrackType="+vendorName);
+                        replaceAccountFragmentWithBundle(new CommonWebviewFragment(), shippingBundle);
                         break;
 
                 }

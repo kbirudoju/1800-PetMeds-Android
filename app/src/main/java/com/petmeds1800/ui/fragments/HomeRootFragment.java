@@ -15,17 +15,13 @@ import javax.inject.Inject;
 /**
  * Created by pooja on 8/4/2016.
  */
-public class AccountRootFragment extends AbstractFragment {
-
-    @Inject
-    GeneralPreferencesHelper mPreferencesHelper;
+public class HomeRootFragment extends AbstractFragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_account_container, container, false);
-        PetMedsApplication.getAppComponent().inject(this);
-        replaceAccountFragment(mPreferencesHelper.getIsUserLoggedIn() ? new AccountFragment() : new SignOutFragment());
+        View view = inflater.inflate(R.layout.fragment_home_container, container, false);
+        replaceHomeFragment(new HomeFragment());
         return view;
     }
 }

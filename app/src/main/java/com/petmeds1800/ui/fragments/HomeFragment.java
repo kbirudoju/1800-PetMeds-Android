@@ -11,22 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.petmeds1800.R;
+import com.petmeds1800.model.ProductCategory;
 import com.petmeds1800.ui.AbstractActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.petmeds1800.R;
-import com.petmeds1800.ui.AbstractActivity;
+
 import com.petmeds1800.ui.dashboard.CategoryListFragment;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
+import com.petmeds1800.ui.support.HomeFragmentContract;
+
 import java.util.ArrayList;
 import java.util.List;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by pooja on 8/2/2016.
  */
-public class HomeFragment extends AbstractFragment{
+public class HomeFragment extends AbstractFragment implements HomeFragmentContract.ProductCategoryInteractionListener{
   private Adapter adapter;
     @BindView(R.id.home_tabs)
     TabLayout homeTabs;
@@ -64,6 +64,14 @@ public class HomeFragment extends AbstractFragment{
         viewPager.setAdapter(adapter);
     }
 
+
+    @Override
+    public void startWebViewFragment(ProductCategory productCategory) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CommonWebviewFragment.TITLE_KEY,productCategory.getName());
+        bundle.putString(CommonWebviewFragment.URL_KEY,getString(R.string.server_endpoint)+productCategory.getUrl());
+        replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
+    }
 
 
     static class Adapter extends FragmentPagerAdapter {

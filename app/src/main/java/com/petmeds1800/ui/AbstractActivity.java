@@ -52,9 +52,9 @@ public abstract class AbstractActivity extends AppCompatActivity {
 
     }
 
-    public void replaceAndAddToBackStack(Fragment fragment, String tag) {
+    public void replaceAccountAndAddToBackStack(Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, tag);
+        fragmentTransaction.replace(R.id.account_root_fragment_container, fragment, tag);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

@@ -86,7 +86,7 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_add){
-            replaceAndAddToBackStack(new AddEditCardFragment() , AddEditCardFragment.class.getName());
+            replaceAccountAndAddToBackStack(new AddEditCardFragment(), AddEditCardFragment.class.getName());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -125,13 +125,14 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
 
     @OnClick(R.id.addCard_button)
     void startAddCardFragment() {
-        replaceAndAddToBackStack(new AddEditCardFragment() , AddEditCardFragment.class.getName());
+        replaceAccountAndAddToBackStack(new AddEditCardFragment(), AddEditCardFragment.class.getName());
     }
 
     @Override
     public void startCardUpdate(Card card) {
-        replaceAndAddToBackStack(
-                AddEditCardFragment.newInstance(card, AddEditCardFragment.EDIT_CARD_REQUEST), AddEditCardFragment.class.getName());
+        replaceAccountAndAddToBackStack(
+                AddEditCardFragment.newInstance(card, AddEditCardFragment.EDIT_CARD_REQUEST),
+                AddEditCardFragment.class.getName());
     }
 
     @Override

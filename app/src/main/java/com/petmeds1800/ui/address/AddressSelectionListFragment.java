@@ -122,7 +122,7 @@ public class AddressSelectionListFragment extends AbstractFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            replaceAndAddToBackStack(new AddEditAddressFragment(), AddEditAddressFragment.class.getName());
+            replaceAccountAndAddToBackStack(new AddEditAddressFragment(), AddEditAddressFragment.class.getName());
         }
         return super.onOptionsItemSelected(item);
     }

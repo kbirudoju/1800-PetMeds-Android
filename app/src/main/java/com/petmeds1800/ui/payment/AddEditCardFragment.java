@@ -352,7 +352,7 @@ public class AddEditCardFragment extends AbstractFragment
 
     @OnClick(R.id.addressSelection_label)
     public void selectAddress() {
-        replaceAndAddToBackStack(AddressSelectionListFragment.newInstance(mRequestCode),
+        replaceAccountAndAddToBackStack(AddressSelectionListFragment.newInstance(mRequestCode),
                 AddressSelectionListFragment.class.getSimpleName());
     }
 
