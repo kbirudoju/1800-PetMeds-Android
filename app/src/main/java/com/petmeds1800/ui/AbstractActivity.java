@@ -19,35 +19,39 @@ public abstract class AbstractActivity extends AppCompatActivity {
     @SuppressWarnings("checkstyle:visibilitymodifier")
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+
     //CHECKSTYLE:ON
     AnalyticsUtil mAnalyticsUtil;
 
     @Override
-    protected void onPostCreate(final Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(getLayoutResource());
         ButterKnife.bind(this);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
         }
     }
+
+    protected abstract int getLayoutResource();
 
     public void setToolBarTitle(String title) {
         mToolbar.setTitle(title);
     }
 
     public void enableBackButton() {
-        if(getSupportActionBar()==null)
+        if (getSupportActionBar() == null) {
             setSupportActionBar(mToolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
+        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void disableBackButton() {
-        if(getSupportActionBar()==null)
-
+        if (getSupportActionBar() == null) {
             setSupportActionBar(mToolbar);
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
     }
@@ -58,4 +62,9 @@ public abstract class AbstractActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
 }

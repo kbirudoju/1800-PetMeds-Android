@@ -25,11 +25,15 @@ public class SignUpActivity extends AbstractActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
         setToolBarTitle(getString(R.string.label_sign_up));
         enableBackButton();
         setupComponent();
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_sign_up;
     }
 
     private void setupComponent(){

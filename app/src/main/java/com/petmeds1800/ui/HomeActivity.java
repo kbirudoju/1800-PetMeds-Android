@@ -8,6 +8,7 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
@@ -20,19 +21,29 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +75,6 @@ public class HomeActivity extends AbstractActivity
 
     private ProgressDialog mProgressDialog;
 
-
     private FingerprintAuthenticationDialog mAuthenticationDialog;
 
     private static final String IS_FROM_HOME_ACTIVITY = "isFromHomeActivity";
@@ -77,27 +87,16 @@ public class HomeActivity extends AbstractActivity
     private static final int[] TAB_ICON_SELECTED = {R.drawable.ic_menu_home_pressed, R.drawable.ic_menu_cart_pressed,
             R.drawable.ic_menu_learn_pressed, R.drawable.ic_menu_account_pressed};
 
+    private String mSearchString;
 
-    public void showPushPermissionDailog() {
-        AlertDialog alertDialog = Utils.showAlertDailog(this,
-                String.format(getString(R.string.notification_title), getString(R.string.application_name)),
-                getString(R.string.notification_message), R.style.StyleForNotification)
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.dialog_allow_button).toUpperCase(), this)
-                .setNegativeButton(getString(R.string.dialog_deny_button).toUpperCase(), this)
-                .create();
-        alertDialog.show();
-    }
+    private boolean mShowOptionsMenu;
 
-    public AnalyticsUtil getAnalyticsRef() {
-        return mAnalyticsUtil;
-    }
+    private HomeRootFragment mHomeRootFragment;
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        mAnalyticsUtil = new AnalyticsUtil();
         ButterKnife.bind(this);
+        mAnalyticsUtil = new AnalyticsUtil();
         PetMedsApplication.getAppComponent().inject(this);
         if (getIntent().getBooleanExtra(IS_FROM_HOME_ACTIVITY, false) && mPreferencesHelper.getIsUserLoggedIn()) {
             showPushPermissionDailog();
@@ -113,7 +112,8 @@ public class HomeActivity extends AbstractActivity
         Log.d("HomeActivity", ">>>>>>>>>>>");
         //initialize fragment list
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new HomeRootFragment());
+        mHomeRootFragment = new HomeRootFragment();
+        fragmentList.add(mHomeRootFragment);
         fragmentList.add(new CartFragment());
         fragmentList.add(new LearnFragment());
         fragmentList.add(new AccountRootFragment());
@@ -133,14 +133,24 @@ public class HomeActivity extends AbstractActivity
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
                     mHomeTab.getTabAt(i).setIcon(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
                 }
-                if (position == 0 || position == 1 || position == 2) {
-                    removeAllFragment();
-                }
+                //TODO: could not understand the purpose of this code so removed. If still needed please justify
+//                if (position == 0 || position == 1 || position == 2) {
+//                    removeAllFragment();
+//                }
 
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
                     checkLoginStatus();
                 }
+
+                if (position == 0) {
+                    getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
+                    mShowOptionsMenu = true;
+                } else {
+                    getToolbar().setLogo(null);
+                    mShowOptionsMenu = false;
+                }
+                invalidateOptionsMenu();
                 setToolBarTitle((getResources().getStringArray(R.array.tab_title)[position]));
             }
 
@@ -157,6 +167,11 @@ public class HomeActivity extends AbstractActivity
     }
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_home;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         mProgressDialog = new ProgressDialog();
@@ -164,6 +179,7 @@ public class HomeActivity extends AbstractActivity
         if (mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
             checkLoginStatus();
         }
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -175,8 +191,6 @@ public class HomeActivity extends AbstractActivity
         if (mAuthenticationDialog.isVisible()) {
             mAuthenticationDialog.dismiss();
         }
-
-
     }
 
     @Override
@@ -191,18 +205,111 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        disableBackButton();
+
+        final MenuItem barcodeMenuItem = menu.findItem(R.id.action_barcode);
+        final MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        if (mShowOptionsMenu) {
+            barcodeMenuItem.setVisible(true);
+            searchMenuItem.setVisible(true);
+        } else {
+            barcodeMenuItem.setVisible(false);
+            searchMenuItem.setVisible(false);
+        }
+        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                barcodeMenuItem.setVisible(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                barcodeMenuItem.setVisible(true);
+                return true;
+            }
+        });
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        searchView.setQueryHint(getString(R.string.label_search));
+        searchView.setIconifiedByDefault(false);
+        EditText searchEdit = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEdit.setTextColor(ContextCompat.getColor(this, R.color.white));
+        searchEdit.setHintTextColor(ContextCompat.getColor(this, R.color.hint_color));
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                try {
+                    String encodedQuery = URLEncoder.encode(query, "utf-8");
+                    String url = getString(R.string.server_endpoint) + "/search.jsp?Ns=product.salesvolume%7C1&Ntt="
+                            + encodedQuery;
+                    Bundle bundle = new Bundle();
+                    bundle.putString(CommonWebviewFragment.TITLE_KEY, query);
+                    bundle.putString(CommonWebviewFragment.URL_KEY, url);
+                    getToolbar().setLogo(null);
+                    MenuItemCompat.collapseActionView(searchMenuItem);
+                    mHomeRootFragment.addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle);
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HomeActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String searchText) {
+                return false;
+            }
+        });
+
+        // if prev search string, restore it here
+        if (!TextUtils.isEmpty(mSearchString)) {
+            searchView.setQuery(mSearchString, true);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            setUpToolbar();
+        }
+//        if (item.getItemId() == R.id.action_search) {
+//
+//        } else if (item.getItemId() == R.id.action_barcode) {
+//
+//        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        setUpToolbar();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            super.onBackPressed();
+        }
+    }
+
+    private void setUpToolbar() {
+        mHomeRootFragment.popBackStack();
+        invalidateOptionsMenu();
+        getToolbar().setTitle(null);
+        getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
+    }
 
     private void showFingerprintDialog() {
         mAuthenticationDialog.setCancelable(false);
         mAuthenticationDialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home) {
-            super.onBackPressed();
-        }
-        return super.onOptionsItemSelected(menuItem);
     }
 
     public void removeAllFragment() {
@@ -214,6 +321,21 @@ public class HomeActivity extends AbstractActivity
 
     public ViewPager getViewPager() {
         return mViewPager;
+    }
+
+    public void showPushPermissionDailog() {
+        AlertDialog alertDialog = Utils.showAlertDailog(this,
+                String.format(getString(R.string.notification_title), getString(R.string.application_name)),
+                getString(R.string.notification_message), R.style.StyleForNotification)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_allow_button).toUpperCase(), this)
+                .setNegativeButton(getString(R.string.dialog_deny_button).toUpperCase(), this)
+                .create();
+        alertDialog.show();
+    }
+
+    public AnalyticsUtil getAnalyticsRef() {
+        return mAnalyticsUtil;
     }
 
     private void checkLoginStatus() {

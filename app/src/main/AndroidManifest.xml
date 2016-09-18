@@ -58,6 +58,10 @@
                   android:screenOrientation="portrait"/>
 
         <meta-data
+                android:name="android.app.default_searchable"
+                android:value="com.apkgetter.SearchResultsActivity"/>
+
+        <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version"/>
         <!--
@@ -68,14 +72,14 @@
                 android:name="com.google.android.gms.analytics.AnalyticsReceiver"
                 android:enabled="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH"/>
             </intent-filter>
         </receiver>
 
         <service
                 android:name="com.google.android.gms.analytics.AnalyticsService"
                 android:enabled="true"
-                android:exported="false" />
+                android:exported="false"/>
 
         <service android:name=".service.RefillReminderService"/>
 

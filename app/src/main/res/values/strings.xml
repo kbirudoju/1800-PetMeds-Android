@@ -43,7 +43,7 @@
     <string name="prompt_name">Name</string>
     <!--Home Screen-->
     <string-array name="tab_title">
-        <item>Home</item>
+        <item></item>
         <item>Cart</item>
         <item>Learn</item>
         <item>Account</item>
@@ -363,5 +363,7 @@
 <!--Home Screen-->
     <string name="home_title">HOME</string>
     <string name="shop_category_title">SHOP CATEGORIES</string>
+    <string name="label_barcode">Barcode</string>
+    <string name="label_search">Search...</string>
 
 </resources>
