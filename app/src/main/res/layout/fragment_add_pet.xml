@@ -1,295 +1,306 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:padding="@dimen/dp_16">
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <RelativeLayout
-                android:id="@+id/pet_image_layout"
+            android:fillViewport="true"
+            android:padding="@dimen/dp_16">
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_213"
-                android:background="@color/pattern_light_blue"
-                android:visibility="gone">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <RelativeLayout
+                    android:id="@+id/pet_image_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_213"
+                    android:background="@color/pattern_light_blue"
+                    android:visibility="gone">
                 <ImageView
-                    android:id="@+id/edit_pet_image"
-                    android:layout_width="@dimen/dp_126"
-                    android:layout_height="@dimen/dp_126"
-                    android:layout_centerInParent="true"
-                    android:padding="@dimen/dp_1"
-                    android:background="@drawable/circular_background"
+                        android:id="@+id/edit_pet_image"
+                        android:layout_width="@dimen/dp_126"
+                        android:layout_height="@dimen/dp_126"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/dp_1"
+                        android:background="@drawable/circular_background"
 
-                    />
+                />
             </RelativeLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/petNameInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
-
-                <EditText
-                    android:id="@+id/pet_name_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_pet_name"
-                    android:maxLength="@integer/characterLimit_30"
-                    android:singleLine="true"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
-            </android.support.design.widget.TextInputLayout>
-            <RelativeLayout
-                android:id="@+id/add_pet_image_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/petPictureInputLayout"
+                    android:id="@+id/petNameInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/StyledEditTextHintLayout"
                     app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
                     android:layout_marginTop="@dimen/dp_10">
 
-                    <EditText
-                        android:id="@+id/pet_picture_edit"
+                <EditText
+                        android:id="@+id/pet_name_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/hint_pet_picture"
+                        android:hint="@string/hint_pet_name"
+                        android:maxLength="@integer/characterLimit_30"
+                        android:singleLine="true"
+                        style="@style/StyledEditText"
+                        android:textColor="@color/edittext_selector"/>
+            </android.support.design.widget.TextInputLayout>
+            <RelativeLayout
+                    android:id="@+id/add_pet_image_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+                <android.support.design.widget.TextInputLayout
+                        android:id="@+id/petPictureInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/StyledEditTextHintLayout"
+                        app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                        android:layout_marginTop="@dimen/dp_10">
+
+                    <EditText
+                            android:id="@+id/pet_picture_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hint_pet_picture"
+                            android:singleLine="true"
+                            android:focusableInTouchMode="false"
+                            style="@style/StyledEditText"
+                    />
+                </android.support.design.widget.TextInputLayout>
+                <ImageView
+                        android:id="@+id/pet_picture_image"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_30"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ownerNameInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/StyledEditTextHintLayout"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                <EditText
+                        android:id="@+id/owner_name_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_owner_name"
+                        android:singleLine="true"
+                        style="@style/StyledEditText"
+                        android:textColor="@color/edittext_selector"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/petTypeInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/StyledEditTextHintLayout"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                <EditText
+                        android:id="@+id/pet_type_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_pet_type"
+                        android:singleLine="true"
+                        android:focusableInTouchMode="false"
+                        android:editable="false"
+                        android:text="Dog"
+                        style="@style/StyledEditText"
+                        android:textColor="@color/edittext_selector"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/breedInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/StyledEditTextHintLayout"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                <EditText
+                        android:id="@+id/breed_type_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_pet_breed"
+                        android:singleLine="true"
+                        android:editable="false"
+                        android:text="American Eskimo"
+                        android:focusableInTouchMode="false"
+                        style="@style/StyledEditText"
+                        android:textColor="@color/edittext_selector"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/genderInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/StyledEditTextHintLayout"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                    android:layout_marginTop="@dimen/dp_10">
+
+                <EditText
+                        android:id="@+id/pet_gender_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_pet_gender"
                         android:singleLine="true"
                         android:focusableInTouchMode="false"
                         style="@style/StyledEditText"
-                        />
-                </android.support.design.widget.TextInputLayout>
-                <ImageView
-                    android:id="@+id/pet_picture_image"
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_30"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/dp_5"
-                    android:layout_centerVertical="true"/>
-            </RelativeLayout>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/ownerNameInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
-
-                <EditText
-                    android:id="@+id/owner_name_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_owner_name"
-                    android:singleLine="true"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
+                        android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/petTypeInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
-
-                <EditText
-                    android:id="@+id/pet_type_edit"
+                    android:id="@+id/ageInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_pet_type"
-                    android:singleLine="true"
-                    android:focusableInTouchMode="false"
-                    android:editable="false"
-                    android:text="Dog"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/breedInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
+                    style="@style/StyledEditTextHintLayout"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                    android:layout_marginTop="@dimen/dp_10">
 
                 <EditText
-                    android:id="@+id/breed_type_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_pet_breed"
-                    android:singleLine="true"
-                    android:editable="false"
-                    android:text="American Eskimo"
-                    android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
+                        android:id="@+id/pet_age_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_pet_age"
+                        android:focusableInTouchMode="false"
+                        android:singleLine="true"
+                        style="@style/StyledEditText"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/genderInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
+                    android:id="@+id/weightInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/StyledEditTextHintLayout"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                    android:layout_marginTop="@dimen/dp_10">
 
                 <EditText
-                    android:id="@+id/pet_gender_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_pet_gender"
-                    android:singleLine="true"
-                    android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
+                        android:id="@+id/pet_weight_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_weight_lbs_txt"
+                        android:singleLine="true"
+                        android:inputType="numberDecimal"
+                        style="@style/StyledEditText"
+                        android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/ageInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
+                    android:id="@+id/birthdayInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/StyledEditTextHintLayout"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                    android:layout_marginTop="@dimen/dp_10">
 
                 <EditText
-                    android:id="@+id/pet_age_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_pet_age"
-                    android:focusableInTouchMode="false"
-                    android:singleLine="true"
-                    style="@style/StyledEditText"/>
+                        android:id="@+id/pet_birthday_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_pet_birthday_txt"
+                        android:singleLine="true"
+                        android:focusableInTouchMode="false"
+                        style="@style/StyledEditText"
+                        android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/weightInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
+            <include
+                    layout="@layout/custom_multiselector_layout"/>
 
-                <EditText
-                    android:id="@+id/pet_weight_edit"
+            <android.support.design.widget.TextInputLayout
+                    android:id="@+id/currentMedicationInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_weight_lbs_txt"
-                    android:singleLine="true"
-                    android:inputType="numberDecimal"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/birthdayInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
-
-                <EditText
-                    android:id="@+id/pet_birthday_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_pet_birthday_txt"
-                    android:singleLine="true"
-                    android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/medicationAllergyLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
-
-                <EditText
-                    android:id="@+id/medication_allergy_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/medication_allergy"
-                    android:singleLine="true"
-                    android:editable="false"
-                    android:text="Antirobe"
-                    android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/currentMedicationInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10">
+                    style="@style/StyledEditTextHintLayout"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                    android:layout_marginTop="@dimen/dp_10">
 
                 <!--Todo: Remove all hardcoded values after Api Intergration-->
 
                 <EditText
-                    android:id="@+id/current_medication_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/current_medication"
-                    android:singleLine="true"
-                    android:editable="false"
-                    android:text="Penicillin"
-                    android:focusableInTouchMode="false"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
+                        android:id="@+id/current_medication_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/current_medication"
+                        android:singleLine="true"
+                        android:editable="false"
+                        android:text="Penicillin"
+                        android:focusableInTouchMode="false"
+                        style="@style/StyledEditText"
+                        android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/medicalConditionInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/StyledEditTextHintLayout"
-                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
-                android:layout_marginTop="@dimen/dp_10"
-                >
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginLeft="@dimen/dp_2"
+                            android:paddingTop="@dimen/dp_13"
+                            android:paddingBottom="@dimen/dp_13"
+                            android:paddingRight="@dimen/dp_1"
+                            android:paddingLeft="@dimen/dp_1"
 
-                <EditText
-                    android:id="@+id/medical_condition_edit"
-                    android:layout_width="match_parent"
+            >
+                <TextView
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:id="@+id/medical_condition_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/dialog_button_style"
+                        android:text="Medication Conditions"/>
+                <TextView
+                        android:layout_centerVertical="true"
+                        android:layout_alignBottom="@+id/medical_condition_title"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/add_edit_medication_conditions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/dialog_button_style"
+                        android:text="@string/add_title"/>
+
+            </RelativeLayout>
+            <TextView
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:lineSpacingExtra="3dp"
+                    android:id="@+id/medication_conditions_details"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/medical_condition"
-                    android:singleLine="true"
-                    android:focusableInTouchMode="false"
-                    android:text="Diabities"
-                    android:editable="false"
-                    style="@style/StyledEditText"
-                    android:textColor="@color/edittext_selector"/>
-            </android.support.design.widget.TextInputLayout>
+                    style="@style/rounded_button_text"
+                    android:layout_marginBottom="@dimen/dp_20"
+                    android:layout_alignLeft="@+id/medical_condition_title"
+                    android:layout_below="@+id/medical_condition_title"/>
+            <View android:layout_width="match_parent"
+                  android:layout_marginLeft="@dimen/dp_1"
+                  android:layout_marginRight="@dimen/dp_1"
+                  android:layout_height="1dp"
+                  android:background="@color/circle_indicator_stroke"
+            >
+
+            </View>
+
             <Button android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/xxxlarge_margin"
-                android:id="@+id/remove_pet_button"
-                android:gravity="center"
-                android:text="REMOVE PET"
-                android:fontFamily="@string/font_roboto_medium"
-                android:textColor="@color/white"
-                android:background="@drawable/button_selector"
-                android:visibility="visible"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/xxxlarge_margin"
+                    android:id="@+id/remove_pet_button"
+                    android:gravity="center"
+                    android:text="REMOVE PET"
+                    android:fontFamily="@string/font_roboto_medium"
+                    android:textColor="@color/white"
+                    android:background="@drawable/button_selector"
+                    android:visibility="visible"/>
         </LinearLayout>
 
     </ScrollView>
     <ProgressBar
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressbar"
-        android:layout_gravity="center"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        />
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressbar"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+    />
 </RelativeLayout>

@@ -1,12 +1,13 @@
 package com.petmeds1800.util;
 
+import com.petmeds1800.R;
+
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
 import android.text.Spanned;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
-
-import com.petmeds1800.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,8 +20,9 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public class Utils {
 
-    private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
-            "Nov", "Dec" };
+    private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct",
+            "Nov", "Dec"};
 
     public static String changeDateFormat(long millisecond, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -31,9 +33,18 @@ public class Utils {
     public static AlertDialog.Builder showAlertDailog(Activity activity, String title, String msg, int theme) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, theme);
         builder.setTitle(title);
-        if (msg != null)
+        if (msg != null) {
             builder.setMessage(msg);
+        }
         return builder;
+    }
+
+    public static AlertDialog.Builder showAlertDailogListView(Activity activity, View view,
+            int theme) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, theme);
+        builder.setView(view);
+        return builder;
+
     }
 
     public static void displayCrouton(Activity activity, Spanned messageString, ViewGroup attachToView) {
@@ -65,9 +76,10 @@ public class Utils {
     }
 
 
-    public static String getShortMonthName(int month){
-        if(month < 1 && month > 12)
+    public static String getShortMonthName(int month) {
+        if (month < 1 && month > 12) {
             return "ERR";
+        }
 
         return PICKER_DISPLAY_MONTHS_NAMES[month - 1];
     }

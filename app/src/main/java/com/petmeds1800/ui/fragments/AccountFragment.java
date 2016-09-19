@@ -252,7 +252,7 @@ public class AccountFragment extends AbstractFragment
         switch (fromWhichAlert) {
             case FROM_SIGNOUT_OPTION:
                 if (isPositive) {
-                    ((HomeActivity) getActivity()).showProgress();
+                    //((HomeActivity) getActivity()).showProgress();
                     mPresenter.sendDataToServer(
                             mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                 }
@@ -284,7 +284,7 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onError(String errorMessage) {
         ((HomeActivity) getActivity()).hideProgress();
-        Snackbar.make(getView().findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_LONG).show();
 
     }
 

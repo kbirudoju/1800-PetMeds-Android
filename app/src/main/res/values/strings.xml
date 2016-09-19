@@ -273,6 +273,8 @@
     <string name="title_pet_profiles">Pet profiles</string>
     <string name="title_track_shipment">Track Shipment</string>
     <string name="title_forgot_password">Forgot Password</string>
+    <string name="title_for_pet_allergies">PET MEDICATION ALLERGIES</string>
+    <string name="title_for_pet_conditions">PET MEDICATION CONDITIONS</string>
     <!--Webview Urls-->
 
     <string name="savedCardsListTitle">Payment information</string>
@@ -366,5 +368,6 @@
     <string name="shop_category_title">SHOP CATEGORIES</string>
     <string name="label_barcode">Barcode</string>
     <string name="label_search">Search...</string>
+    <string name="add_title">ADD</string>
 
 </resources>

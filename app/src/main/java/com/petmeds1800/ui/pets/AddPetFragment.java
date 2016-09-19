@@ -8,20 +8,35 @@ import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.AddPetRequest;
+import com.petmeds1800.model.entities.AgeListResponse;
+import com.petmeds1800.model.entities.AlertDailogMultipleChoice;
+import com.petmeds1800.model.entities.BreedItem;
+import com.petmeds1800.model.entities.MedAllergy;
+import com.petmeds1800.model.entities.MedCondition;
+import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.model.entities.PetBreedTypeListResponse;
+import com.petmeds1800.model.entities.PetMedicalConditionResponse;
+import com.petmeds1800.model.entities.PetMedicationResponse;
+import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.Pets;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.support.AddPetContract;
 import com.petmeds1800.ui.pets.support.UpdateImageUtil;
+import com.petmeds1800.util.AlertRecyclerView;
+import com.petmeds1800.util.AlertRecyclerViewAdapter;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -52,6 +67,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -64,84 +80,191 @@ import static com.petmeds1800.R.id.fromGallery;
  * Created by pooja on 8/23/2016.
  */
 public class AddPetFragment extends AbstractFragment
-        implements View.OnClickListener, GenderDialogFragment.GenderSetListener, CommonDialogFragment.ValueSelectedListener, AddPetContract.View {
+        implements View.OnClickListener, GenderDialogFragment.GenderSetListener,
+        CommonDialogFragment.ValueSelectedListener, AddPetContract.View, DialogInterface.OnClickListener {
+
     private static final int AGE_REQUEST = 1;
+
+    private static final int BREED_REQUEST = 2;
+
+    private static final int TYPE_REQUEST = 3;
+
+
     @BindView(R.id.pet_gender_edit)
     EditText mPetGenderText;
+
     @BindView(R.id.pet_birthday_edit)
     EditText mPetBirthdayText;
+
     @BindView(R.id.pet_age_edit)
     EditText mPetAgeText;
+
     @BindView(R.id.pet_picture_edit)
     EditText mPetPictureText;
+
     UpdateImageUtil updateImageUtil;
+
     @BindView(R.id.pet_picture_image)
     ImageView mPetImage;
+
     @BindView(R.id.pet_name_edit)
     EditText mPetNameText;
+
     @BindView(R.id.owner_name_edit)
     EditText mOwnerNameText;
+
     @BindView(R.id.pet_type_edit)
     EditText mPetTypeText;
+
     @BindView(R.id.breed_type_edit)
     EditText mBreedTypeText;
 
     @BindView(R.id.pet_weight_edit)
     EditText mPetWeight;
 
+    @BindView(R.id.medication_allery_title)
+    TextView mMedicationAlleryTitle;
+
+    @BindView(R.id.add_edit_medication_allergies)
+    TextView mAddEditMedicationAllergies;
+
+    @BindView(R.id.medication_allergies_details)
+    TextView mMedicationAllergiesDetails;
+
+    @BindView(R.id.current_medication_edit)
+    EditText mCurrentMedicationEdit;
+
+    @BindView(R.id.medical_condition_title)
+    TextView mMedicalConditionTitle;
+
+    @BindView(R.id.add_edit_medication_conditions)
+    TextView mAddEditMedicationConditions;
+
+    @BindView(R.id.medication_conditions_details)
+    TextView mMedicationConditionsDetails;
+
 
     private ArrayList<Integer> medConditionIds;
+
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
     @BindView(R.id.petNameInputLayout)
     TextInputLayout mPetNameInputLayout;
+
     @BindView(R.id.ownerNameInputLayout)
     TextInputLayout mOwnerNameInputLayout;
+
     @BindView(R.id.petTypeInputLayout)
     TextInputLayout mPetTypeInputLayout;
+
     @BindView(R.id.breedInputLayout)
     TextInputLayout mBreedInputLayout;
+
     @BindView(R.id.genderInputLayout)
     TextInputLayout mGenderInputLayout;
+
     @BindView(R.id.ageInputLayout)
     TextInputLayout mAgeInputLayout;
+
     @BindView(R.id.weightInputLayout)
     TextInputLayout mWeightInputLayout;
+
     @BindView(R.id.birthdayInputLayout)
     TextInputLayout mBirthdayInputLayout;
+
     private AddPetContract.Presenter mPresenter;
+
     long birthdayInMillis;
+
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
+
     View dialoglayout;
+
     AlertDialog alertDailogForPicture;
+
     private boolean isEditable;
+
     @BindView(R.id.pet_image_layout)
     RelativeLayout editPetImageView;
+
     @BindView(R.id.add_pet_image_layout)
     RelativeLayout addPetImageView;
+
     private MenuItem mEditMenuItem;
+
     private MenuItem mDoneMenuItem;
+
     private Pets mPet;
+
     @BindView(R.id.remove_pet_button)
     Button removePetButton;
+
     @BindView(R.id.edit_pet_image)
     ImageView mEditPetImage;
 
-    public static final int GENDER_REQUEST_CODE=1;
-    public static final int REMOVE_PET_REQUEST_CODE=2;
+    public static final int GENDER_REQUEST_CODE = 1;
 
+    public static final int REMOVE_PET_REQUEST_CODE = 2;
+
+
+    private AlertRecyclerViewAdapter mAlertRecyclerViewAdapter;
+
+    private ArrayList<AlertDailogMultipleChoice> perMedicationAlleryList;
+
+    private ArrayList<AlertDailogMultipleChoice> perMedicationConditionList;
+
+    private ArrayList<NameValueData> petAgeData;
+
+    private AlertRecyclerView recyclerView;
+
+    private ArrayList<String> value_details;
+
+    private ArrayList<String> name_details;
+
+    private ArrayList<String> value_details_for_medicalconditions;
+
+    private ArrayList<String> name_details_for_medicalconditions;
+
+    private ArrayList<String> value_details_for_medicalallergy;
+
+    private ArrayList<String> name_details_for_medicalallergy;
+
+    public static int MEDICATION_ALLERGY_1 = 0;
+
+    public static int MEDICATION_ALLERGY_2 = 1;
+
+    public static int MEDICATION_ALLERGY_3 = 2;
+
+    public static int MEDICATION_ALLERGY_4 = 3;
+
+    public boolean loadMedicationAlleryPickerForFirstTime = false;
+
+    public boolean loadMedicationConditionPickerForFirstTime = false;
+
+    public static final String NEXT_LINE = "\n";
+
+    public static final int IS_MEDICATIONS_ALLERGY_DAILOG = 5;
+
+    public static final int IS_MEDICATIONS_CONDITIONS_DAILOG = 6;
+
+    private int fromWhichDailog = 0;
+
+    private String age = "";
 
     @Nullable
     @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_pet, container, false);
         ButterKnife.bind(this, view);
-        isEditable= getArguments().getBoolean("isEditable");
+        isEditable = getArguments().getBoolean("isEditable");
         mPet = (Pets) getArguments().getSerializable("pet");
 
-        if(isEditable){
+        if (isEditable) {
+            loadMedicationAlleryPickerForFirstTime = true;
+            loadMedicationConditionPickerForFirstTime = true;
             ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_pet_profiles));
             editPetImageView.setVisibility(view.VISIBLE);
             addPetImageView.setVisibility(view.GONE);
@@ -149,7 +272,7 @@ public class AddPetFragment extends AbstractFragment
             setPetData(mPet);
             enableViews(false);
 
-        }else{
+        } else {
 
             ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_add_pet));
             addPetImageView.setVisibility(view.VISIBLE);
@@ -163,27 +286,38 @@ public class AddPetFragment extends AbstractFragment
         return view;
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPresenter = new AddPetPresenter(this);
         setHasOptionsMenu(true);
         PetMedsApplication.getAppComponent().inject(this);
-
         mPetGenderText.setOnClickListener(this);
         mPetBirthdayText.setOnClickListener(this);
         mPetAgeText.setOnClickListener(this);
         mPetPictureText.setOnClickListener(this);
         removePetButton.setOnClickListener(this);
         mEditPetImage.setOnClickListener(this);
+        mBreedTypeText.setOnClickListener(this);
+        mPetTypeText.setOnClickListener(this);
+        mAddEditMedicationAllergies.setOnClickListener(this);
+        mAddEditMedicationConditions.setOnClickListener(this);
         updateImageUtil = UpdateImageUtil.getInstance(this);
 
-        //Todo remove this code after api integration
-        medConditionIds = new ArrayList<>();
-        medConditionIds.add(7);
-        medConditionIds.add(21);
 
     }
+
+    public void openDailog(String data[], int code) {
+        ((HomeActivity) getActivity()).hideProgress();
+        FragmentManager fragManager = getFragmentManager();
+        CommonDialogFragment commonDialogFragment = CommonDialogFragment
+                .newInstance(data,
+                        getActivity().getString(R.string.choose_range_txt), code);
+        commonDialogFragment.setValueSetListener(this);
+        commonDialogFragment.show(fragManager);
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -191,29 +325,28 @@ public class AddPetFragment extends AbstractFragment
             case R.id.pet_gender_edit:
                 FragmentManager fm = getFragmentManager();
                 GenderDialogFragment dialogFragment = new GenderDialogFragment();
-                Bundle bundle =new Bundle();
-                bundle.putStringArray("options",getResources().getStringArray(R.array.gender_array));
+                Bundle bundle = new Bundle();
+                bundle.putStringArray("options", getResources().getStringArray(R.array.gender_array));
                 bundle.putString("title", getString(R.string.choose_gender_label));
                 bundle.putString("message", "");
-                bundle.putString("ok",getString(R.string.dialog_ok_button));
-                bundle.putString("cancel",getString(R.string.dialog_cancel_button));
+                bundle.putString("ok", getString(R.string.dialog_ok_button));
+                bundle.putString("cancel", getString(R.string.dialog_cancel_button));
                 dialogFragment.setTargetFragment(this, GENDER_REQUEST_CODE);
                 dialogFragment.setGenderSetListener(this);
                 dialogFragment.setArguments(bundle);
                 dialogFragment.show(fm);
+
                 break;
             case R.id.pet_birthday_edit:
                 new SlideDateTimePicker.Builder(getActivity().getSupportFragmentManager())
                         .setListener(listener).setMaxDate(Calendar.getInstance().getTime())
-                        .setInitialDate(new Date()).setIndicatorColor(getActivity().getResources().getColor(R.color.pattern_blue))
+                        .setInitialDate(new Date())
+                        .setIndicatorColor(getActivity().getResources().getColor(R.color.pattern_blue))
                         .build()
                         .show();
                 break;
             case R.id.pet_age_edit:
-                FragmentManager fragManager = getFragmentManager();
-                CommonDialogFragment commonDialogFragment = CommonDialogFragment.newInstance(getActivity().getResources().getStringArray(R.array.age_range), getActivity().getString(R.string.choose_range_txt), AGE_REQUEST);
-                commonDialogFragment.setValueSetListener(this);
-                commonDialogFragment.show(fragManager);
+                mPresenter.populatePetAgeList();
 
                 break;
             case R.id.pet_picture_edit:
@@ -228,20 +361,46 @@ public class AddPetFragment extends AbstractFragment
                 alertDailogForPicture.dismiss();
             case R.id.remove_pet_button:
                 FragmentManager fragmentManager = getFragmentManager();
-                Bundle removePetBundle =new Bundle();
+                Bundle removePetBundle = new Bundle();
                 removePetBundle.putStringArray("options", getResources().getStringArray(R.array.remove_pet_option));
                 removePetBundle.putString("title", getString(R.string.remove_pet_title));
                 removePetBundle.putString("message", getString(R.string.remove_pet_message));
-                removePetBundle.putString("ok",getString(R.string.label_fingerprint_continue));
+                removePetBundle.putString("ok", getString(R.string.label_fingerprint_continue));
                 removePetBundle.putString("cancel", getString(R.string.cancelTextOnDialog));
                 GenderDialogFragment removePetDialog = new GenderDialogFragment();
-                removePetDialog.setTargetFragment(this,REMOVE_PET_REQUEST_CODE);
+                removePetDialog.setTargetFragment(this, REMOVE_PET_REQUEST_CODE);
                 removePetDialog.setGenderSetListener(this);
                 removePetDialog.setArguments(removePetBundle);
                 removePetDialog.show(fragmentManager);
                 break;
             case R.id.edit_pet_image:
                 showImageOptions();
+                break;
+            case R.id.add_edit_medication_allergies:
+                ((HomeActivity) getActivity()).showProgress();
+                fromWhichDailog = IS_MEDICATIONS_ALLERGY_DAILOG;
+                if (perMedicationAlleryList != null && perMedicationAlleryList.size() > 0) {
+                    showPetMedicalData(getString(R.string.title_for_pet_allergies), perMedicationAlleryList);
+                } else {
+                    mPresenter.populatePetMedicationsList();
+                }
+                break;
+            case R.id.add_edit_medication_conditions:
+                ((HomeActivity) getActivity()).showProgress();
+                fromWhichDailog = IS_MEDICATIONS_CONDITIONS_DAILOG;
+                if (perMedicationConditionList != null && perMedicationConditionList.size() > 0) {
+                    showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
+                } else {
+                    mPresenter.populatePetMedicalconditionsList();
+                }
+                break;
+            case R.id.pet_type_edit:
+                ((HomeActivity) getActivity()).showProgress();
+                mPresenter.populatePetTypeList();
+                break;
+            case R.id.breed_type_edit:
+                ((HomeActivity) getActivity()).showProgress();
+                mPresenter.pouplatePetBreedTypeList();
                 break;
         }
     }
@@ -253,11 +412,12 @@ public class AddPetFragment extends AbstractFragment
     }
 
     @Override
-    public void onGenderSet(GenderDialogFragment fragment ,String gender,int key) {
-        if(fragment.getTargetRequestCode()==GENDER_REQUEST_CODE){
+    public void onGenderSet(GenderDialogFragment fragment, String gender, int key) {
+        if (fragment.getTargetRequestCode() == GENDER_REQUEST_CODE) {
             mPetGenderText.setText(gender);
-        }else if(fragment.getTargetRequestCode()==REMOVE_PET_REQUEST_CODE){
-            RemovePetRequest request= new RemovePetRequest(mPet.getPetId(),String.valueOf(key), mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        } else if (fragment.getTargetRequestCode() == REMOVE_PET_REQUEST_CODE) {
+            RemovePetRequest request = new RemovePetRequest(mPet.getPetId(), String.valueOf(key),
+                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.removePet(request);
 
         }
@@ -285,6 +445,12 @@ public class AddPetFragment extends AbstractFragment
             case AGE_REQUEST:
                 mPetAgeText.setText(value);
                 break;
+            case BREED_REQUEST:
+                mBreedTypeText.setText(value);
+                break;
+            case TYPE_REQUEST:
+                mPetTypeText.setText(value);
+                break;
         }
 
     }
@@ -303,22 +469,6 @@ public class AddPetFragment extends AbstractFragment
         fromGallery.setTextColor(getActivity().getResources().getColor(R.color.petmeds_blue));
         takePhoto.setOnClickListener(this);
         fromGallery.setOnClickListener(this);
-       /* builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                switch (item) {
-                    case 1: {
-                        updateImageUtil.updateProfilePic(UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE);
-                    }
-                    break;
-                    case 0: {
-                        updateImageUtil.updateProfilePic(UpdateImageUtil.CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-                    }
-                    break;
-                }
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();*/
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -347,7 +497,7 @@ public class AddPetFragment extends AbstractFragment
             Uri finalUri = Crop.getOutput(result);
             if (finalUri != null) {
 
-                if(!isEditable) {
+                if (!isEditable) {
                     Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
                         @Override
@@ -358,7 +508,7 @@ public class AddPetFragment extends AbstractFragment
                             mPetImage.setImageDrawable(circularBitmapDrawable);
                         }
                     });
-                }else{
+                } else {
                     Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
                         @Override
@@ -382,9 +532,9 @@ public class AddPetFragment extends AbstractFragment
         inflater.inflate(R.menu.menu_account_settings, menu);
         mEditMenuItem = menu.findItem(R.id.action_edit);
         mDoneMenuItem = menu.findItem(R.id.action_done);
-        if(isEditable){
+        if (isEditable) {
             enableEditAction();
-        }else{
+        } else {
             enableDoneAction();
         }
         super.onCreateOptionsMenu(menu, inflater);
@@ -393,7 +543,9 @@ public class AddPetFragment extends AbstractFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id==R.id.action_edit){
+        String medicationAllergyArray[] = new String[]{"", "", "", ""};
+
+        if (id == R.id.action_edit) {
             enableDoneAction();
             enableViews(true);
             return super.onOptionsItemSelected(item);
@@ -407,7 +559,6 @@ public class AddPetFragment extends AbstractFragment
             boolean isValidGender;
             boolean isValidWeight;
             boolean isValidAge;
-
             isValidPetName = checkAndShowError(mPetNameText, mPetNameInputLayout, R.string.error_petname);
             isValidOwnerName = checkAndShowError(mOwnerNameText, mOwnerNameInputLayout, R.string.error_petowner);
             isValidPetType = checkAndShowError(mPetTypeText, mPetTypeInputLayout, R.string.error_pettype);
@@ -422,26 +573,42 @@ public class AddPetFragment extends AbstractFragment
                     isValidBreedType ||
                     isValidGender ||
                     isValidWeight ||
-                    isValidAge)
+                    isValidAge) {
                 return super.onOptionsItemSelected(item);
+            }
         }
         //Todo Remove all hardcoded value after api integration
         progressBar.setVisibility(View.VISIBLE);
-        if(isEditable){
-            AddPetRequest addPetRequest = new AddPetRequest(mPet.getPetId(),mPetNameText.getText().toString()
+        for (int i = 0; value_details_for_medicalallergy != null && i < value_details_for_medicalallergy.size(); i++) {
+            if (i < 4) {
+                medicationAllergyArray[i] = value_details_for_medicalallergy.get(i);
+            } else {
+                break;
+            }
+        }
+        if (petAgeData != null) {
+            for (NameValueData ageData : petAgeData) {
+                if (ageData.getName().equals(mPetAgeText.getText().toString())) {
+                    age = ageData.getValue();
+                    break;
+                }
+            }
+        }
+        if (isEditable) {
+            AddPetRequest addPetRequest = new AddPetRequest(mPet.getPetId(), mPetNameText.getText().toString()
                     , mOwnerNameText.getText().toString(),
                     mPetTypeText.getText().toString().toLowerCase(),
                     mBreedTypeText.getText().toString(),
                     mPetGenderText.getText().toString().toLowerCase(),
                     mPetWeight.getText().toString(),
-                    "2",
+                    age,
                     Utils.changeDateFormat(birthdayInMillis, "MM/dd/yyyy"),
                     "yes",
                     "dog two allergy info",
-                    "Albon",
-                    "Amoxicillin",
-                    "",
-                    "Antirobe",
+                    medicationAllergyArray[MEDICATION_ALLERGY_1],
+                    medicationAllergyArray[MEDICATION_ALLERGY_2],
+                    medicationAllergyArray[MEDICATION_ALLERGY_3],
+                    medicationAllergyArray[MEDICATION_ALLERGY_4],
                     medConditionIds,
                     "dog two other info",
                     "Cefa-Drops",
@@ -450,21 +617,22 @@ public class AddPetFragment extends AbstractFragment
                     "Chlorhexidine",
                     mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.updatePetData(addPetRequest);
-        }else {
+        } else {
+
             AddPetRequest addPetRequest = new AddPetRequest(mPetNameText.getText().toString()
                     , mOwnerNameText.getText().toString(),
                     mPetTypeText.getText().toString().toLowerCase(),
                     mBreedTypeText.getText().toString(),
                     mPetGenderText.getText().toString().toLowerCase(),
                     mPetWeight.getText().toString(),
-                    "2",
+                    age,
                     Utils.changeDateFormat(birthdayInMillis, "MM/dd/yyyy"),
                     "yes",
                     "dog two allergy info",
-                    "Albon",
-                    "Amoxicillin",
-                    "",
-                    "Antirobe",
+                    medicationAllergyArray[MEDICATION_ALLERGY_1],
+                    medicationAllergyArray[MEDICATION_ALLERGY_2],
+                    medicationAllergyArray[MEDICATION_ALLERGY_3],
+                    medicationAllergyArray[MEDICATION_ALLERGY_4],
                     medConditionIds,
                     "dog two other info",
                     "Cefa-Drops",
@@ -512,7 +680,105 @@ public class AddPetFragment extends AbstractFragment
 
     }
 
-    public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId, EditText birthdayText) {
+    public void showPetMedicalData(String title, List list) {
+        ((HomeActivity) getActivity()).hideProgress();
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.dailog_recyclerview_layout, null);
+        ((TextView) view.findViewById(R.id.titleText)).setText(title);
+        mAlertRecyclerViewAdapter = new AlertRecyclerViewAdapter(getActivity());
+        mAlertRecyclerViewAdapter.setListData((ArrayList<AlertDailogMultipleChoice>) list);
+        recyclerView = ((AlertRecyclerView) view.findViewById(R.id.recyclerView));
+        recyclerView.setAlertRecyclerView(mAlertRecyclerViewAdapter);
+        AlertDialog alertDialog = Utils
+                .showAlertDailogListView(getActivity(), view,
+                        R.style.StyleForNotification)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_ok_button).toUpperCase(), this)
+                .setNegativeButton(getString(R.string.dialog_cancel_button).toUpperCase(), this)
+                .create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void populateData(PetMedicationResponse response) {
+
+        perMedicationAlleryList = new ArrayList<AlertDailogMultipleChoice>();
+        for (MedAllergy medication : response.getMedications()) {
+            AlertDailogMultipleChoice alertDailogMultipleChoice = new AlertDailogMultipleChoice();
+            alertDailogMultipleChoice.setName(medication.getName());
+            alertDailogMultipleChoice.setValue(medication.getValue());
+            if (isEditable && value_details_for_medicalallergy != null
+                    && value_details_for_medicalallergy.size() > 0) {
+                for (String s : value_details_for_medicalallergy) {
+                    if (s.equalsIgnoreCase(alertDailogMultipleChoice.getValue())) {
+                        alertDailogMultipleChoice.setChecked(true);
+                    }
+
+                }
+            }
+            perMedicationAlleryList.add(alertDailogMultipleChoice);
+        }
+
+        showPetMedicalData(getString(R.string.title_for_pet_allergies), perMedicationAlleryList);
+
+    }
+
+    @Override
+    public void populatePetAgeData(AgeListResponse response) {
+        ArrayList<String> list = new ArrayList<String>();
+        petAgeData = response.getAgeList();
+        for (NameValueData data : petAgeData) {
+            list.add(data.getName());
+        }
+        String dataArray[] = new String[list.size()];
+        openDailog(list.toArray(dataArray), AGE_REQUEST);
+
+    }
+
+    @Override
+    public void populatePetTypeData(PetTypesListResponse response) {
+        ArrayList<String> list = new ArrayList<String>();
+        for (NameValueData data : response.getPetTypes()) {
+            list.add(data.getValue());
+        }
+        String dataArray[] = new String[list.size()];
+        openDailog(list.toArray(dataArray), TYPE_REQUEST);
+    }
+
+    @Override
+    public void populatePetBreedTypeData(PetBreedTypeListResponse response) {
+        ArrayList<String> list = new ArrayList<String>();
+        for (BreedItem data : response.getBreeds()) {
+            list.add(data.getValue());
+        }
+        String dataArray[] = new String[list.size()];
+        openDailog(list.toArray(dataArray), BREED_REQUEST);
+    }
+
+    @Override
+    public void populatePetMedicalconditionsData(PetMedicalConditionResponse response) {
+        perMedicationConditionList = new ArrayList<AlertDailogMultipleChoice>();
+        for (NameValueData valueData : response.getMedicalConditions()) {
+            AlertDailogMultipleChoice alertDailogMultipleChoice = new AlertDailogMultipleChoice();
+            alertDailogMultipleChoice.setName(valueData.getName());
+            alertDailogMultipleChoice.setValue(valueData.getValue());
+            if (isEditable && value_details_for_medicalconditions != null
+                    && value_details_for_medicalconditions.size() > 0) {
+                for (String s : value_details_for_medicalconditions) {
+                    if (s.equalsIgnoreCase(alertDailogMultipleChoice.getValue())) {
+                        alertDailogMultipleChoice.setChecked(true);
+                    }
+
+                }
+            }
+            perMedicationConditionList.add(alertDailogMultipleChoice);
+        }
+
+        showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
+    }
+
+    public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,
+            EditText birthdayText) {
         if (auditEditText.getText().toString().isEmpty() && birthdayText.getText().toString().isEmpty()) {
             auditTextInputLayout.setError(getContext().getString(errorStringId));
             return true;
@@ -532,6 +798,7 @@ public class AddPetFragment extends AbstractFragment
         mDoneMenuItem.setVisible(true);
         mEditMenuItem.setVisible(false);
     }
+
     private void enableEditAction() {
         mDoneMenuItem.setVisible(false);
         mEditMenuItem.setVisible(true);
@@ -549,9 +816,11 @@ public class AddPetFragment extends AbstractFragment
         removePetButton.setEnabled(isEnable);
         mEditPetImage.setEnabled(isEnable);
         mPetAgeText.setEnabled(isEnable);
+        mAddEditMedicationAllergies.setEnabled(isEnable);
+        mAddEditMedicationConditions.setEnabled(isEnable);
     }
 
-    private void setPetData(Pets pet){
+    private void setPetData(Pets pet) {
         if (pet != null) {
             mPetNameText.setText(pet.getPetName());
             mOwnerNameText.setText(pet.getOwnerName());
@@ -560,8 +829,12 @@ public class AddPetFragment extends AbstractFragment
             mPetGenderText.setText(pet.getGender());
             mPetWeight.setText(pet.getWeight());
             mPetBirthdayText.setText(pet.getBirthday());
+            age = pet.getPetAge().getValue();
             mPetAgeText.setText(pet.getPetAge().getName());
-            Glide.with(getActivity()).load(getActivity().getString(R.string.server_endpoint) + pet.getPictureURL()).asBitmap().centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
+            updateAllergiesDetails(pet, IS_MEDICATIONS_ALLERGY_DAILOG);
+            updateAllergiesDetails(pet, IS_MEDICATIONS_CONDITIONS_DAILOG);
+            Glide.with(getActivity()).load(getActivity().getString(R.string.server_endpoint) + pet.getPictureURL())
+                    .asBitmap().centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
                 @Override
                 protected void setResource(Bitmap resource) {
                     RoundedBitmapDrawable circularBitmapDrawable =
@@ -573,4 +846,113 @@ public class AddPetFragment extends AbstractFragment
 
         }
     }
+
+    public void updateTextValues(TextView button_text, TextView details_text, int size, String value) {
+        if (size > 0) {
+            button_text.setText(getString(R.string.edit));
+            details_text.setVisibility(View.VISIBLE);
+            details_text.setText(value);
+        } else {
+            details_text.setVisibility(View.GONE);
+            button_text.setText(getString(R.string.add_title));
+        }
+    }
+
+    public void updateValues(int fromPicker, int size, String value, ArrayList<String> namesList,
+            ArrayList<String> valuesList) {
+        switch (fromPicker) {
+            case IS_MEDICATIONS_ALLERGY_DAILOG:
+                updateTextValues(mAddEditMedicationAllergies, mMedicationAllergiesDetails, size, value);
+                value_details_for_medicalallergy = valuesList;
+                name_details_for_medicalallergy = namesList;
+                break;
+            case IS_MEDICATIONS_CONDITIONS_DAILOG:
+                updateTextValues(mAddEditMedicationConditions, mMedicationConditionsDetails, size, value);
+                updateConditionIds(valuesList);
+                value_details_for_medicalconditions = valuesList;
+                name_details_for_medicalconditions = namesList;
+                break;
+        }
+    }
+
+    public void updateConditionIds(ArrayList<String> valueDetails) {
+        medConditionIds = new ArrayList<>();
+        for (String details : valueDetails) {
+            medConditionIds.add(Integer.valueOf(details));
+        }
+    }
+
+    public void updateAllergiesDetails(Pets pet, int fromPicker) {
+        String value = "";
+        if (isEditable && loadMedicationAlleryPickerForFirstTime) {
+            loadMedicationAlleryPickerForFirstTime = false;
+            ArrayList<MedAllergy> list = pet.getMedAllergies();
+            name_details = new ArrayList<String>();
+            value_details = new ArrayList<String>();
+
+            for (int i = 0; i < list.size(); i++) {
+                name_details.add(list.get(i).getName());
+                value_details.add(list.get(i).getValue());
+            }
+        } else if (isEditable && loadMedicationConditionPickerForFirstTime) {
+            loadMedicationConditionPickerForFirstTime = false;
+            ArrayList<MedCondition> list = pet.getMedConditions();
+            name_details = new ArrayList<String>();
+            value_details = new ArrayList<String>();
+
+            for (int i = 0; i < list.size(); i++) {
+                name_details.add(list.get(i).getName());
+                value_details.add(list.get(i).getValue());
+            }
+        } else {
+            name_details = mAlertRecyclerViewAdapter.getCheckedItemsName();
+            value_details = mAlertRecyclerViewAdapter.getCheckedItemsValue();
+
+            if (fromPicker == IS_MEDICATIONS_ALLERGY_DAILOG) {
+                perMedicationAlleryList = mAlertRecyclerViewAdapter.getItems();
+
+            }
+            if (fromPicker == IS_MEDICATIONS_CONDITIONS_DAILOG) {
+                perMedicationConditionList = mAlertRecyclerViewAdapter.getItems();
+
+            }
+        }
+        int size = name_details.size();
+        for (int i = 0; i < size; i++) {
+            value = value + ((size - 1 == 0 || size - 1 == i) ? (name_details.get(i))
+                    : (name_details.get(i) + NEXT_LINE));
+        }
+        updateValues(fromPicker, size, value, name_details, value_details);
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        switch (which) {
+            case DialogInterface.BUTTON_POSITIVE:
+                switch (fromWhichDailog) {
+                    case IS_MEDICATIONS_ALLERGY_DAILOG:
+                        updateAllergiesDetails(null, IS_MEDICATIONS_ALLERGY_DAILOG);
+                        break;
+                    case IS_MEDICATIONS_CONDITIONS_DAILOG:
+                        updateAllergiesDetails(null, IS_MEDICATIONS_CONDITIONS_DAILOG);
+                        break;
+                }
+
+                break;
+            case DialogInterface.BUTTON_NEGATIVE:
+
+                break;
+
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mAlertRecyclerViewAdapter = null;
+        recyclerView = null;
+
+    }
+
+
 }

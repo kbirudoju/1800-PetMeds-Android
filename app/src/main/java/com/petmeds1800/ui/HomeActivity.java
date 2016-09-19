@@ -98,6 +98,7 @@ public class HomeActivity extends AbstractActivity
         ButterKnife.bind(this);
         mAnalyticsUtil = new AnalyticsUtil();
         PetMedsApplication.getAppComponent().inject(this);
+
         if (getIntent().getBooleanExtra(IS_FROM_HOME_ACTIVITY, false) && mPreferencesHelper.getIsUserLoggedIn()) {
             showPushPermissionDailog();
             if (!RxFingerprint.isHardwareDetected(this)) {
@@ -139,6 +140,7 @@ public class HomeActivity extends AbstractActivity
 
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
+                    Log.v("test", "from scroll tab>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                     checkLoginStatus();
                 }
 
@@ -163,6 +165,9 @@ public class HomeActivity extends AbstractActivity
         //code to set default first tab selected
         mViewPager.addOnPageChangeListener(pageChangeListener);
         pageChangeListener.onPageSelected(0);
+        // Instead of initializing it in onResume for many times we initialize it in onCreate
+        mProgressDialog = new ProgressDialog();
+        mAuthenticationDialog = new FingerprintAuthenticationDialog();
     }
 
     @Override
@@ -173,8 +178,6 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mProgressDialog = new ProgressDialog();
-        mAuthenticationDialog = new FingerprintAuthenticationDialog();
         if (mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
             checkLoginStatus();
         }
@@ -184,10 +187,10 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if (mProgressDialog.isVisible()) {
+        if (mProgressDialog != null && mProgressDialog.isVisible()) {
             mProgressDialog.dismiss();
         }
-        if (mAuthenticationDialog.isVisible()) {
+        if (mAuthenticationDialog != null && mAuthenticationDialog.isVisible()) {
             mAuthenticationDialog.dismiss();
         }
     }
@@ -300,7 +303,7 @@ public class HomeActivity extends AbstractActivity
 
     private void setUpToolbar() {
         //we will check if the current selected item is the home tab, we will setup the action bar
-        if ( mViewPager.getCurrentItem() == 0 ) {
+        if (mViewPager.getCurrentItem() == 0) {
             invalidateOptionsMenu();
             getToolbar().setTitle(null);
             getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
@@ -378,7 +381,9 @@ public class HomeActivity extends AbstractActivity
 
     public void showProgress() {
         mProgressDialog.setCancelable(false);
-        mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
+        if (!mProgressDialog.isAdded()) {
+            mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
+        }
     }
 
     public void hideProgress() {

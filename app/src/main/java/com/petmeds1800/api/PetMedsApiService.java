@@ -9,6 +9,7 @@ import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.model.entities.AgeListResponse;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.EasyRefillReminder;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
@@ -19,21 +20,23 @@ import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
+import com.petmeds1800.model.entities.PetBreedTypeListResponse;
 import com.petmeds1800.model.entities.PetList;
+import com.petmeds1800.model.entities.PetMedicalConditionResponse;
+import com.petmeds1800.model.entities.PetMedicationResponse;
+import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.Profile;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.model.entities.SignUpRequest;
-import com.petmeds1800.model.entities.SignUpResponse;
 import com.petmeds1800.model.entities.SignOutRequest;
 import com.petmeds1800.model.entities.SignOutResponse;
+import com.petmeds1800.model.entities.SignUpRequest;
+import com.petmeds1800.model.entities.SignUpResponse;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
-
-import android.net.Network;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -152,4 +155,25 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/remove")
     Observable<AddEditCardResponse> removeCard(@Body RemoveCardRequest removeCardRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/pet/PetActor/medications")
+    Observable<PetMedicationResponse> getPetMedicationList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/pet/PetActor/ageOptions")
+    Observable<AgeListResponse> getPetAgeList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/pet/PetActor/types")
+    Observable<PetTypesListResponse> getPetTypesList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/pet/PetActor/breeds")
+    Observable<PetBreedTypeListResponse> getPetBreedList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/pet/PetActor/medConditions")
+    Observable<PetMedicalConditionResponse> getPetPetMedicalConditions();
+
 }
