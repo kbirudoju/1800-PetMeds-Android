@@ -9,6 +9,16 @@ import java.util.ArrayList;
 public class BrowsingHistory  implements Serializable{
     private ArrayList<Sku> skus;
 
+    public String getWidgetTitle() {
+        return widgetTitle;
+    }
+
+    public void setWidgetTitle(String widgetTitle) {
+        this.widgetTitle = widgetTitle;
+    }
+
+    private String widgetTitle;
+
     public ArrayList<Products> getProducts() {
         return products;
     }

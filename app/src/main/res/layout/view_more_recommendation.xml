@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/petmeds_blue"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_16"
+        >
+        <TextView
+            android:id="@+id/see_product_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            style="style/styledefault_no_padding"
+            android:textColor="@color/learn_more_txt"
+            />
+
+        <ImageView
+            android:id="@+id/arrow_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_white"
+            android:layout_marginRight="@dimen/dp_23"
+           />
+
+
+    </RelativeLayout>
+</LinearLayout>

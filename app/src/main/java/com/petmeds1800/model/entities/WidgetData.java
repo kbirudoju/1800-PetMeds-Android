@@ -15,8 +15,11 @@ public class WidgetData {
     private String content;
     private String learnMoreUrl;
     private String name;
+    private String doctorPictureUrl;
+    private String doctorQuote;
+    private String doctorName;
     //Browsinghistory
-    private ArrayList<BrowsingHistory> browsingHistory;
+    private BrowsingHistory browsingHistory;
     //Recommendations
     private RecommendedCategory recommendedCategory;
     //Refill
@@ -25,6 +28,38 @@ public class WidgetData {
     private WhatsNextCategory whatsNextCategory;
     //Sales Pitch
     private SalePitch SalesPitch;
+
+    public BrowsingHistory getBrowsingHistory() {
+        return browsingHistory;
+    }
+
+    public void setBrowsingHistory(BrowsingHistory browsingHistory) {
+        this.browsingHistory = browsingHistory;
+    }
+
+    public String getDoctorPictureUrl() {
+        return doctorPictureUrl;
+    }
+
+    public void setDoctorPictureUrl(String doctorPictureUrl) {
+        this.doctorPictureUrl = doctorPictureUrl;
+    }
+
+    public String getDoctorQuote() {
+        return doctorQuote;
+    }
+
+    public void setDoctorQuote(String doctorQuote) {
+        this.doctorQuote = doctorQuote;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
 
     public String getWidgetTitle() {
         return widgetTitle;
@@ -82,13 +117,6 @@ public class WidgetData {
         this.name = name;
     }
 
-    public ArrayList<BrowsingHistory> getBrowsingHistory() {
-        return browsingHistory;
-    }
-
-    public void setBrowsingHistory(ArrayList<BrowsingHistory> browsingHistory) {
-        this.browsingHistory = browsingHistory;
-    }
 
     public RecommendedCategory getRecommendedCategory() {
         return recommendedCategory;

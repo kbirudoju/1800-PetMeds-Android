@@ -1,37 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_40">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tip_doctor_image"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
             android:layout_alignParentLeft="true"/>
         <TextView
+            android:id="@+id/tip_title_label"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_toRightOf="@+id/tip_doctor_image"
+            style="@style/styledefault_no_padding"/>
         <TextView
+            android:id="@+id/tip_doctor_name_label"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_toRightOf="@+id/tip_doctor_image"
+            style="@style/rounded_button_text"
+            android:layout_below="@+id/tip_title_label"/>
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/dp_16">
         <TextView
+            android:id="@+id/content_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rectangular_background"
-            android:layout_marginLeft="@dimen/dp_18"
-            android:layout_marginTop="@dimen/dp_21"
-            android:layout_marginRight="@dimen/dp_26"
-            android:layout_marginBottom="@dimen/dp_25"/>
-        <TextView
+            android:paddingLeft="@dimen/dp_18"
+            android:paddingTop="@dimen/dp_21"
+            android:paddingRight="@dimen/dp_26"
+            android:paddingBottom="@dimen/dp_25"
+            style="@style/rounded_button_text"/>
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/petmeds_blue"/>
+            android:background="@color/petmeds_blue"
+            android:padding="@dimen/dp_16"
+            >
+            <TextView
+                android:id="@+id/learn_more_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/learn_more_txt"
+                android:layout_centerVertical="true"
+                style="style/styledefault_no_padding"
+                android:textColor="@color/learn_more_txt"
+                />
+
+            <ImageView
+                android:id="@+id/arrow_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow_white"
+                />
+
+
+        </RelativeLayout>
 
     </LinearLayout>
 

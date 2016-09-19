@@ -37,6 +37,7 @@ import com.petmeds1800.model.entities.SignUpResponse;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
+import com.petmeds1800.model.entities.WidgetListResponse;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -176,4 +177,6 @@ public interface PetMedsApiService {
     @GET("/rest/model/1800petmeds/pet/PetActor/medConditions")
     Observable<PetMedicalConditionResponse> getPetPetMedicalConditions();
 
+    @GET("/rest/model/1800petmeds/home/HomeActor/loadWidgets")
+    Observable<WidgetListResponse> getWidgetData();
 }

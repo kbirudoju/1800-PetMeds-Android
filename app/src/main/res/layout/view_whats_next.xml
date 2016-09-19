@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_40">
     <TextView
         android:id="@+id/title_whats_next"
         android:layout_width="match_parent"
@@ -10,12 +11,40 @@
     <ImageView
         android:id="@+id/whats_next_image"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_160" />
-    <TextView
+        android:background="@drawable/rectangular_background"
+        android:layout_height="@dimen/dp_160"
+        android:layout_marginTop="@dimen/dp_13"/>
+    <!--<TextView
         android:id="@+id/subtitle_whats_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/petmeds_blue"
         style="@style/subtitle_whats_next"
+        />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/petmeds_blue"
+        android:padding="@dimen/dp_16"
+        >
+    <TextView
+        android:id="@+id/subtitle_whats_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="@string/learn_more_txt"
+        android:layout_centerVertical="true"
+        style="style/styledefault_no_padding"
+        android:textColor="@color/learn_more_txt"
         />
+
+    <ImageView
+        android:id="@+id/arrow_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_arrow_white"
+        />
+    </RelativeLayout>
 </LinearLayout>

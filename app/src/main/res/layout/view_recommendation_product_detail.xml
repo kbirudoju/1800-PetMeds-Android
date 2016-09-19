@@ -2,10 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <!--<TextView
-        android:id="@+id/title_shopping_history_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />-->
+    <include
+        layout="@layout/view_separator"></include>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,6 +13,7 @@
             android:layout_width="@dimen/dp_62"
             android:layout_height="@dimen/dp_62"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_16"
             android:background="@drawable/circular_background"/>
         <ImageView
             android:id="@+id/arrow_image"
@@ -44,13 +43,15 @@
             android:layout_toRightOf="@+id/product_image"
             android:layout_below="@+id/product_title_label"
             android:layout_marginBottom="@dimen/dp_23"
+
             >
             <TextView
                 android:id="@id/product_price_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                style="@style/rounded_button_text"
+                style="@style/styledefault_no_padding"
+                android:textColor="@color/battleship_grey"
                 />
             <TextView
                 android:id="@+id/product_selling_price_label"
@@ -58,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/dp_12"
-                style="@style/rounded_button_text"
+                style="@style/styledefault_no_padding"
                 android:textColor="@color/crimson_red"
                 />
         </LinearLayout>

@@ -33,5 +33,6 @@
     <color name="circle_indicator_stroke">#0060a9</color>
     <color name="transparent_100_percent">#00000000</color>
     <color name="grey_disabled">#727272</color>
+    <color name="learn_more_txt">#deffffff</color>
 
 </resources>

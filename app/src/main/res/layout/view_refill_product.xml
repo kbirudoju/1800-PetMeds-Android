@@ -1,44 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/dp_16"
-    android:paddingRight="@dimen/dp_16">
+    android:layout_height="wrap_content"
+    android:background="@drawable/rectangular_background"
+    android:layout_marginTop="@dimen/dp_1"
+
+  >
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/refill_view_pet_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"/>
-        <TextView
-            android:id="@+id/refill_view_title_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/refill_view_pet_image"
-            android:layout_marginLeft="@dimen/dp_16"/>
-        <TextView
-            android:id="@+id/refill_view_pet_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/refill_view_pet_image"
-            android:layout_below="@+id/refill_view_title_label"
-            android:layout_marginLeft="@dimen/dp_16"/>
-    </RelativeLayout>
-    <RelativeLayout
+        android:id="@+id/row_pet_product"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_23"
+        android:paddingTop="@dimen/dp_13"
+
+
        >
         <ImageView
             android:id="@+id/refill_view_product_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_62"
+            android:layout_height="@dimen/dp_62"
+            android:background="@drawable/circular_background"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_logout"/>
+            />
         <LinearLayout
             android:id="@+id/product_detail_layout"
             android:layout_width="wrap_content"
@@ -46,16 +33,21 @@
             android:orientation="vertical"
             android:layout_marginLeft="@dimen/dp_23"
             android:layout_toRightOf="@+id/refill_view_product_image"
-            android:gravity="center">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/dp_11">
             <TextView
                 android:id="@+id/refill_view_product_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/styledefault_no_padding"
+                android:singleLine="true"
                />
             <TextView
                 android:id="@+id/refill_view_date_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/formlabel"
+
                 />
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -65,12 +57,18 @@
                 android:id="@+id/refill_view_original_price_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_3"/>
+                android:layout_marginTop="@dimen/dp_3"
+                android:text="fsdfsdf"
+                style="@style/styledefault_no_padding"/>
             <TextView
                 android:id="@+id/refill_view_sell_price_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_3"/>
+                android:layout_marginTop="@dimen/dp_3"
+                android:text="dsgsdg"
+                android:layout_marginLeft="@dimen/dp_26"
+                style="@style/styledefault_no_padding"
+                android:textColor="@color/crimson_red"/>
             </LinearLayout>
         </LinearLayout>
         <Button
@@ -79,6 +77,9 @@
             android:layout_height="wrap_content"
             android:background="@color/petmeds_blue"
             android:padding="@dimen/dp_13"
-            android:layout_below="@+id/product_detail_layout"/>
+            android:text="@string/add_cart_txt"
+            android:layout_below="@+id/product_detail_layout"
+            style="@style/dialog_button_style"
+            android:textColor="@color/white"/>
     </RelativeLayout>
 </LinearLayout>

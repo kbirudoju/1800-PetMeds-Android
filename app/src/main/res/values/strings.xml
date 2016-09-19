@@ -369,5 +369,14 @@
     <string name="label_barcode">Barcode</string>
     <string name="label_search">Search...</string>
     <string name="add_title">ADD</string>
+    <string name="add_cart_txt">ADD TO CART</string>
+    <string name="learn_more_txt">Learn More</string>
+
+    <string name="strike_through"> <strike> %1$s </strike> </string>
+    <string name="starts_at_txt">"Starts at "</string>
+    <string name="see_all_txt">"See all "</string>
+    <string name="products_txt">Products</string>
+    <string name="due_on_txt">Due on</string>
+    <string name="explore_txt">Explore</string>
 
 </resources>

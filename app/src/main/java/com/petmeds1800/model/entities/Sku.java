@@ -7,9 +7,27 @@ import java.io.Serializable;
  */
 public class Sku implements Serializable{
     private String pageUrl;
-    private String listPrice;
+    private PriceInfo priceInfo;
     private String skuImage;
     private String skuId;
+
+    public RefillProduct getParentProduct() {
+        return parentProduct;
+    }
+
+    public void setParentProduct(RefillProduct parentProduct) {
+        this.parentProduct = parentProduct;
+    }
+
+    public PriceInfo getPriceInfo() {
+        return priceInfo;
+    }
+
+    public void setPriceInfo(PriceInfo priceInfo) {
+        this.priceInfo = priceInfo;
+    }
+
+    private RefillProduct parentProduct;
 
     public String getPageUrl() {
         return pageUrl;
@@ -19,13 +37,6 @@ public class Sku implements Serializable{
         this.pageUrl = pageUrl;
     }
 
-    public String getListPrice() {
-        return listPrice;
-    }
-
-    public void setListPrice(String listPrice) {
-        this.listPrice = listPrice;
-    }
 
     public String getSkuImage() {
         return skuImage;
