@@ -117,7 +117,6 @@ public class HomeActivity extends AbstractActivity
         fragmentList.add(new CartFragment());
         fragmentList.add(new LearnFragment());
         fragmentList.add(new AccountRootFragment());
-
         mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), fragmentList));
         mHomeTab.setupWithViewPager(mViewPager);
 
@@ -282,6 +281,7 @@ public class HomeActivity extends AbstractActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            mHomeRootFragment.popBackStack();
             setUpToolbar();
         }
 //        if (item.getItemId() == R.id.action_search) {
@@ -289,22 +289,23 @@ public class HomeActivity extends AbstractActivity
 //        } else if (item.getItemId() == R.id.action_barcode) {
 //
 //        }
-        return true;
+        return false;
     }
 
     @Override
     public void onBackPressed() {
         setUpToolbar();
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     private void setUpToolbar() {
-        mHomeRootFragment.popBackStack();
-        invalidateOptionsMenu();
-        getToolbar().setTitle(null);
-        getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
+        //we will check if the current selected item is the home tab, we will setup the action bar
+        if ( mViewPager.getCurrentItem() == 0 ) {
+            invalidateOptionsMenu();
+            getToolbar().setTitle(null);
+            getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
+        }
+
     }
 
     private void showFingerprintDialog() {
