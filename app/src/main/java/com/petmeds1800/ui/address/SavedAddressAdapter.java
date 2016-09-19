@@ -97,7 +97,7 @@ public class SavedAddressAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-        if(myAddress.getIsDefaultBillingAddress()){
+        if(myAddress.getIsDefaultShippingAddress()){
             orderViewHolder.mIsdefaultShippingAddress.setVisibility(View.VISIBLE);
         }
         else {

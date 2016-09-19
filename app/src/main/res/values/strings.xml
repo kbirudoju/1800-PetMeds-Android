@@ -211,6 +211,7 @@
     <string name="prompt_phoneNumber">Phone Number</string>
     <string name="prompt_countryName">Country</string>
     <string name="defaultShippingAddress_switch">Default shipping address</string>
+    <string name="defaultBillingAddress_switch">Default billing address</string>
     <string name="selectBillingAddress">Billing Address</string>
     <string name="saveTextOnDialog">SAVE</string>
     <string name="cancelTextOnDialog">CANCEL</string>

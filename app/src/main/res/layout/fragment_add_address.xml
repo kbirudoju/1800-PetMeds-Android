@@ -182,13 +182,28 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Switch
-                        android:id="@+id/defaultBillingAddress_switch"
+                        android:id="@+id/defaultShippingAddress_switch"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/dp_48"
                         android:layout_marginTop="@dimen/dp_18"
                         android:paddingLeft="@dimen/dp_4"
                         android:background="@color/white"
                         android:text="@string/defaultShippingAddress_switch"
+                        android:textSize="@dimen/sp_16"
+                        android:fontFamily="@string/font_roboto_regular"
+                        android:textColor="@color/black"/>
+
+                <View android:layout_width="match_parent"
+                      android:layout_height="1dp"
+                      android:background="@color/petmeds_blue"/>
+
+                <Switch
+                        android:id="@+id/defaultBillingAddress_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_48"
+                        android:paddingLeft="@dimen/dp_4"
+                        android:background="@color/white"
+                        android:text="@string/defaultBillingAddress_switch"
                         android:textSize="@dimen/sp_16"
                         android:fontFamily="@string/font_roboto_regular"
                         android:textColor="@color/black"/>

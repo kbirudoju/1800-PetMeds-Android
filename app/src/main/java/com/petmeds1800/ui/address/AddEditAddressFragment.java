@@ -119,6 +119,9 @@ public class
     @BindView(R.id.defaultBillingAddress_switch)
     Switch mDefaultBillingAddressSwitch;
 
+    @BindView(R.id.defaultShippingAddress_switch)
+    Switch mDefaultShippingAddressSwitch;
+
     @BindView(R.id.removeAddress_button)
     Button mRemoveAddressButton;
 
@@ -223,6 +226,7 @@ public class
         mPhoneNumberEdit.setText(address.getPhoneNumber());
         mCountryNameEdit.setText(address.getCountry());
         mDefaultBillingAddressSwitch.setChecked(Boolean.valueOf(address.getIsDefaultBillingAddress()));
+        mDefaultShippingAddressSwitch.setChecked(Boolean.valueOf(address.getIsDefaultShippingAddress()));
     }
 
     @Override
@@ -289,7 +293,7 @@ public class
 
         if (mRequestCode == EDIT_ADDRESS_REQUEST) {
             AddressRequest addressRequest = new AddressRequest(
-                    mDefaultBillingAddressSwitch.isChecked()
+                    mDefaultShippingAddressSwitch.isChecked()
                     , mLastNameEdit.getText().toString()
                     , mUsaStateCode == null ? mAddress.getState() : mUsaStateCode
                     //TODO the way usastatecode can be retrived depend upon api.Api should return the state name as well along with state code
@@ -309,7 +313,7 @@ public class
             mPresenter.updateAddress(addressRequest);
         } else {
             AddressRequest addressRequest = new AddressRequest(
-                    mDefaultBillingAddressSwitch.isChecked()
+                    mDefaultShippingAddressSwitch.isChecked()
                     , mLastNameEdit.getText().toString()
                     , mUsaStateCode
                     , mAddressLine1Edit.getText().toString()

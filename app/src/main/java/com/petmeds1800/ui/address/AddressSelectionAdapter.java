@@ -120,7 +120,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
 
-        if(myAddress.getIsDefaultBillingAddress()){
+        if(myAddress.getIsDefaultShippingAddress()){
             orderViewHolder.mIsdefaultShippingAddress.setVisibility(View.VISIBLE);
         }
         else {
