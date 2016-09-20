@@ -1,10 +1,6 @@
 package com.petmeds1800.ui.address;
 
-import android.support.v4.app.Fragment;
-import android.util.Log;
-
 import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Country;
 import com.petmeds1800.model.CountryListResponse;
@@ -15,7 +11,10 @@ import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
-import java.util.HashMap;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -32,8 +31,8 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
     PetMedsApiService mPetMedsApiService;
 
     private final AddEditAddressContract.View mView;
-    private HashMap<String , String> usaStatedHashMap;
-    private HashMap<String, String> countryHashMap;
+    private TreeMap<String , String> usaStatedHashMap;
+    private TreeMap<String, String> countryHashMap;
 
     AddAddressPresenter(AddEditAddressContract.View view){
         mView = view;
@@ -111,7 +110,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         if(s.getStatus().getCode().equals(API_SUCCESS_CODE)){
                             if(mView.isActive()){
                                 //StateName would be treated as key while stateCode would be treated as a key so that we could get the code as user selects one name
-                                usaStatedHashMap = new HashMap<>(s.getStateList().size());
+                                usaStatedHashMap = new TreeMap<String, String>();
                                 for(UsaState eachUsaState : s.getStateList()) {
                                     usaStatedHashMap.put(eachUsaState.getDisplayName(),eachUsaState.getCode());
                                 }
@@ -165,7 +164,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         if(s.getStatus().getCode().equals(API_SUCCESS_CODE)){
                             if(mView.isActive()){
                                 //StateName would be treated as key while stateCode would be treated as a key so that we could get the code as user selects one name
-                                countryHashMap = new HashMap<>(s.getCountryList().size());
+                                countryHashMap = new TreeMap<String ,String>();
                                 for(Country eachCountry : s.getCountryList()) {
                                     countryHashMap.put(eachCountry.getDisplayName(), eachCountry.getCode());
                                 }

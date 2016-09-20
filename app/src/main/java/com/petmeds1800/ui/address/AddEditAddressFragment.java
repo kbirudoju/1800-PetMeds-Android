@@ -436,7 +436,7 @@ public class
     public void usaStatesListReceived(String[] usaStateArray) {
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment statesDialogFragment = CommonDialogFragment
-                .newInstance(usaStateArray, getActivity().getString(R.string.choose_city_txt), USA_STATE_LIST_REQUEST);
+                .newInstance(usaStateArray, getActivity().getString(R.string.choose_state_txt), USA_STATE_LIST_REQUEST);
         statesDialogFragment.setValueSetListener(this);
         statesDialogFragment.show(fragManager);
 
