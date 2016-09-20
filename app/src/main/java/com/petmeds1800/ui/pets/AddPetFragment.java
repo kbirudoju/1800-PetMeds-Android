@@ -12,7 +12,6 @@ import com.petmeds1800.model.entities.AgeListResponse;
 import com.petmeds1800.model.entities.AlertDailogMultipleChoice;
 import com.petmeds1800.model.entities.BreedItem;
 import com.petmeds1800.model.entities.MedAllergy;
-import com.petmeds1800.model.entities.MedCondition;
 import com.petmeds1800.model.entities.NameValueData;
 import com.petmeds1800.model.entities.PetBreedTypeListResponse;
 import com.petmeds1800.model.entities.PetMedicalConditionResponse;
@@ -219,17 +218,9 @@ public class AddPetFragment extends AbstractFragment
 
     private AlertRecyclerView recyclerView;
 
-    private ArrayList<String> value_details;
+    private ArrayList<NameValueData> nameValueDetailsForMedicalConditons;
 
-    private ArrayList<String> name_details;
-
-    private ArrayList<String> value_details_for_medicalconditions;
-
-    private ArrayList<String> name_details_for_medicalconditions;
-
-    private ArrayList<String> value_details_for_medicalallergy;
-
-    private ArrayList<String> name_details_for_medicalallergy;
+    private ArrayList<NameValueData> nameValueDetailsForMedicalallergy;
 
     public static int MEDICATION_ALLERGY_1 = 0;
 
@@ -238,10 +229,6 @@ public class AddPetFragment extends AbstractFragment
     public static int MEDICATION_ALLERGY_3 = 2;
 
     public static int MEDICATION_ALLERGY_4 = 3;
-
-    public boolean loadMedicationAlleryPickerForFirstTime = false;
-
-    public boolean loadMedicationConditionPickerForFirstTime = false;
 
     public static final String NEXT_LINE = "\n";
 
@@ -263,8 +250,6 @@ public class AddPetFragment extends AbstractFragment
         mPet = (Pets) getArguments().getSerializable("pet");
 
         if (isEditable) {
-            loadMedicationAlleryPickerForFirstTime = true;
-            loadMedicationConditionPickerForFirstTime = true;
             ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_pet_profiles));
             editPetImageView.setVisibility(view.VISIBLE);
             addPetImageView.setVisibility(view.GONE);
@@ -579,9 +564,9 @@ public class AddPetFragment extends AbstractFragment
         }
         //Todo Remove all hardcoded value after api integration
         progressBar.setVisibility(View.VISIBLE);
-        for (int i = 0; value_details_for_medicalallergy != null && i < value_details_for_medicalallergy.size(); i++) {
+        for (int i = 0; nameValueDetailsForMedicalallergy != null && i < nameValueDetailsForMedicalallergy.size(); i++) {
             if (i < 4) {
-                medicationAllergyArray[i] = value_details_for_medicalallergy.get(i);
+                medicationAllergyArray[i] = nameValueDetailsForMedicalallergy.get(i).getName();
             } else {
                 break;
             }
@@ -707,10 +692,10 @@ public class AddPetFragment extends AbstractFragment
             AlertDailogMultipleChoice alertDailogMultipleChoice = new AlertDailogMultipleChoice();
             alertDailogMultipleChoice.setName(medication.getName());
             alertDailogMultipleChoice.setValue(medication.getValue());
-            if (isEditable && value_details_for_medicalallergy != null
-                    && value_details_for_medicalallergy.size() > 0) {
-                for (String s : value_details_for_medicalallergy) {
-                    if (s.equalsIgnoreCase(alertDailogMultipleChoice.getValue())) {
+            if (isEditable && nameValueDetailsForMedicalallergy != null
+                    && nameValueDetailsForMedicalallergy.size() > 0) {
+                for (NameValueData data : nameValueDetailsForMedicalallergy) {
+                    if (data.getValue().equalsIgnoreCase(alertDailogMultipleChoice.getValue())) {
                         alertDailogMultipleChoice.setChecked(true);
                     }
 
@@ -762,18 +747,16 @@ public class AddPetFragment extends AbstractFragment
             AlertDailogMultipleChoice alertDailogMultipleChoice = new AlertDailogMultipleChoice();
             alertDailogMultipleChoice.setName(valueData.getName());
             alertDailogMultipleChoice.setValue(valueData.getValue());
-            if (isEditable && value_details_for_medicalconditions != null
-                    && value_details_for_medicalconditions.size() > 0) {
-                for (String s : value_details_for_medicalconditions) {
-                    if (s.equalsIgnoreCase(alertDailogMultipleChoice.getValue())) {
+            if (isEditable && nameValueDetailsForMedicalConditons != null
+                    && nameValueDetailsForMedicalConditons.size() > 0) {
+                for (NameValueData data : nameValueDetailsForMedicalConditons) {
+                    if (data.getValue().equalsIgnoreCase(alertDailogMultipleChoice.getValue())) {
                         alertDailogMultipleChoice.setChecked(true);
                     }
-
                 }
             }
             perMedicationConditionList.add(alertDailogMultipleChoice);
         }
-
         showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
     }
 
@@ -858,71 +841,49 @@ public class AddPetFragment extends AbstractFragment
         }
     }
 
-    public void updateValues(int fromPicker, int size, String value, ArrayList<String> namesList,
-            ArrayList<String> valuesList) {
+    public void updateValues(int fromPicker, int size, String value, ArrayList<NameValueData> nameValueList) {
         switch (fromPicker) {
             case IS_MEDICATIONS_ALLERGY_DAILOG:
                 updateTextValues(mAddEditMedicationAllergies, mMedicationAllergiesDetails, size, value);
-                value_details_for_medicalallergy = valuesList;
-                name_details_for_medicalallergy = namesList;
+                nameValueDetailsForMedicalallergy = nameValueList;
                 break;
             case IS_MEDICATIONS_CONDITIONS_DAILOG:
                 updateTextValues(mAddEditMedicationConditions, mMedicationConditionsDetails, size, value);
-                updateConditionIds(valuesList);
-                value_details_for_medicalconditions = valuesList;
-                name_details_for_medicalconditions = namesList;
+                updateConditionIds(nameValueList);
+                nameValueDetailsForMedicalConditons = nameValueList;
                 break;
         }
     }
 
-    public void updateConditionIds(ArrayList<String> valueDetails) {
-        medConditionIds = new ArrayList<>();
-        for (String details : valueDetails) {
-            medConditionIds.add(Integer.valueOf(details));
+    public void updateConditionIds(ArrayList<NameValueData> details) {
+        medConditionIds = new ArrayList<Integer>();
+        for (NameValueData detail : details) {
+            medConditionIds.add(Integer.valueOf(detail.getValue()));
         }
     }
 
     public void updateAllergiesDetails(Pets pet, int fromPicker) {
         String value = "";
-        if (isEditable && loadMedicationAlleryPickerForFirstTime) {
-            loadMedicationAlleryPickerForFirstTime = false;
-            ArrayList<MedAllergy> list = pet.getMedAllergies();
-            name_details = new ArrayList<String>();
-            value_details = new ArrayList<String>();
-
-            for (int i = 0; i < list.size(); i++) {
-                name_details.add(list.get(i).getName());
-                value_details.add(list.get(i).getValue());
-            }
-        } else if (isEditable && loadMedicationConditionPickerForFirstTime) {
-            loadMedicationConditionPickerForFirstTime = false;
-            ArrayList<MedCondition> list = pet.getMedConditions();
-            name_details = new ArrayList<String>();
-            value_details = new ArrayList<String>();
-
-            for (int i = 0; i < list.size(); i++) {
-                name_details.add(list.get(i).getName());
-                value_details.add(list.get(i).getValue());
-            }
+        ArrayList<NameValueData> list;
+        if (isEditable && pet != null && fromPicker == IS_MEDICATIONS_ALLERGY_DAILOG) {
+            list = pet.getMedAllergies();
+        } else if (isEditable && pet != null && fromPicker == IS_MEDICATIONS_CONDITIONS_DAILOG) {
+            list = pet.getMedConditions();
         } else {
-            name_details = mAlertRecyclerViewAdapter.getCheckedItemsName();
-            value_details = mAlertRecyclerViewAdapter.getCheckedItemsValue();
-
+            list = mAlertRecyclerViewAdapter.getCheckedItems();
             if (fromPicker == IS_MEDICATIONS_ALLERGY_DAILOG) {
                 perMedicationAlleryList = mAlertRecyclerViewAdapter.getItems();
-
             }
             if (fromPicker == IS_MEDICATIONS_CONDITIONS_DAILOG) {
                 perMedicationConditionList = mAlertRecyclerViewAdapter.getItems();
-
             }
         }
-        int size = name_details.size();
+        int size = list.size();
         for (int i = 0; i < size; i++) {
-            value = value + ((size - 1 == 0 || size - 1 == i) ? (name_details.get(i))
-                    : (name_details.get(i) + NEXT_LINE));
+            value = value + ((size - 1 == 0 || size - 1 == i) ? (list.get(i).getName())
+                    : (list.get(i).getName() + NEXT_LINE));
         }
-        updateValues(fromPicker, size, value, name_details, value_details);
+        updateValues(fromPicker, size, value, list);
     }
 
     @Override

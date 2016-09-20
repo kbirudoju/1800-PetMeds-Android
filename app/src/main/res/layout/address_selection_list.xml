@@ -1,98 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/rectangular_background"
-    android:padding="@dimen/dp_16">
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rectangular_background"
+                android:padding="@dimen/dp_16">
 
 
     <RelativeLayout
-        android:id="@+id/addressContainer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_16">
+            android:id="@+id/addressContainer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_16">
 
         <RadioButton
-            android:id="@+id/addressSelection_radio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true" />
 
-    <TextView
-        android:id="@+id/addressName_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/addressSelection_radio"
-        android:layout_marginLeft="@dimen/dp_23"
-        style="@style/styledefault_no_padding"
-        android:text="Todd Shapiro"
+                android:id="@+id/addressSelection_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"/>
+
+        <TextView
+                android:id="@+id/addressName_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/addressSelection_radio"
+                android:layout_marginLeft="@dimen/dp_23"
+                style="@style/styledefault_no_padding"
+                android:text="Todd Shapiro"
         />
 
 
-    <TextView
-        android:id="@+id/addressLine1_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addressName_label"
-        android:layout_toRightOf="@id/addressSelection_radio"
-        android:layout_marginTop="@dimen/dp_2"
-        android:layout_marginLeft="@dimen/dp_23"
-        style="@style/rounded_button_text"
-        android:text="232 Marina Ave"
+        <TextView
+                android:id="@+id/addressLine1_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addressName_label"
+                android:layout_toRightOf="@id/addressSelection_radio"
+                android:layout_marginTop="@dimen/dp_2"
+                android:layout_marginLeft="@dimen/dp_23"
+                style="@style/rounded_button_text"
+                android:text="232 Marina Ave"
         />
 
-    <TextView
-        android:id="@+id/addressLine2_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addressLine1_label"
-        android:layout_toRightOf="@id/addressSelection_radio"
-        android:layout_marginLeft="@dimen/dp_23"
-        style="@style/rounded_button_text"
-        android:text="Venice Beach, CA 10290"/>
+        <TextView
+                android:id="@+id/addressLine2_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addressLine1_label"
+                android:layout_toRightOf="@id/addressSelection_radio"
+                android:layout_marginLeft="@dimen/dp_23"
+                style="@style/rounded_button_text"
+                android:text="Venice Beach, CA 10290"/>
 
-    <TextView
-        android:id="@+id/country_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addressLine2_label"
-        android:layout_toRightOf="@id/addressSelection_radio"
-        android:layout_marginLeft="@dimen/dp_23"
-        style="@style/rounded_button_text"
-        android:text="United States"/>
+        <TextView
+                android:id="@+id/country_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addressLine2_label"
+                android:layout_toRightOf="@id/addressSelection_radio"
+                android:layout_marginLeft="@dimen/dp_23"
+                style="@style/rounded_button_text"
+                android:text="United States"/>
 
-    <TextView
-        android:id="@+id/phoneNumber_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/country_label"
-        android:layout_toRightOf="@id/addressSelection_radio"
-        android:layout_marginLeft="@dimen/dp_23"
-        style="@style/rounded_button_text"
-        android:text="@string/phoneNumberInAddress"/>
+        <TextView
+                android:id="@+id/phoneNumber_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/country_label"
+                android:layout_toRightOf="@id/addressSelection_radio"
+                android:layout_marginLeft="@dimen/dp_23"
+                style="@style/rounded_button_text"
+                android:text="@string/phoneNumberInAddress"/>
 
-    <TextView
-        android:id="@+id/isAddressSetDefault_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/phoneNumber_label"
-        android:layout_toRightOf="@id/addressSelection_radio"
-        android:layout_marginLeft="@dimen/dp_23"
-        style="@style/formlabel"
-        android:text="@string/defaultShippingAddress"/>
+        <TextView
+                android:id="@+id/isAddressSetDefault_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/phoneNumber_label"
+                android:layout_toRightOf="@id/addressSelection_radio"
+                android:layout_marginLeft="@dimen/dp_23"
+                style="@style/formlabel"
+                android:text="@string/defaultShippingAddress"/>
 
     </RelativeLayout>
 
     <Button
-        android:id="@+id/selectAddress_button"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_45"
-        style="@style/label"
-        android:background="@color/petmeds_blue"
-        android:layout_below="@id/addressContainer_layout"
-        android:textColor="@color/white"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/useThisAddress"/>
+            android:id="@+id/selectAddress_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45"
+            style="@style/label"
+            android:background="@color/petmeds_blue"
+            android:layout_below="@id/addressContainer_layout"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/useThisAddress"/>
 
 
 </RelativeLayout>

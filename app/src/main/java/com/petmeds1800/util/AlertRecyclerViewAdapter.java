@@ -2,6 +2,7 @@ package com.petmeds1800.util;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.AlertDailogMultipleChoice;
+import com.petmeds1800.model.entities.NameValueData;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -57,8 +58,9 @@ public class AlertRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         alertRecyclerViewHolder.mMultichoiceText.setText(item.getName());
         alertRecyclerViewHolder.mMultiChoiceCheckBox.setOnCheckedChangeListener(null);
         alertRecyclerViewHolder.mMultiChoiceCheckBox.setChecked(item.isChecked());
-        alertRecyclerViewHolder.mMultichoiceText.setTextColor((item.isChecked()) ? mContext.getResources().getColor(R.color.radio_text_selected)
-                                : mContext.getResources().getColor(R.color.petmeds_blue));
+        alertRecyclerViewHolder.mMultichoiceText
+                .setTextColor((item.isChecked()) ? mContext.getResources().getColor(R.color.radio_text_selected)
+                        : mContext.getResources().getColor(R.color.petmeds_blue));
         alertRecyclerViewHolder.mMultiChoiceCheckBox.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -110,6 +112,19 @@ public class AlertRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         for (AlertDailogMultipleChoice item : getItems()) {
             if (item.isChecked()) {
                 list.add(item.getName());
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<NameValueData> getCheckedItems() {
+        ArrayList<NameValueData> list = new ArrayList<NameValueData>();
+        for (AlertDailogMultipleChoice item : getItems()) {
+            if (item.isChecked()) {
+                NameValueData data = new NameValueData();
+                data.setName(item.getName());
+                data.setValue(item.getValue());
+                list.add(data);
             }
         }
         return list;

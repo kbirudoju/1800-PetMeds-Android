@@ -1,10 +1,12 @@
 package com.petmeds1800.model.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by Sdixit on 16-09-2016.
  */
 
-public class NameValueData {
+public class NameValueData implements Serializable{
 
     String name, value;
 

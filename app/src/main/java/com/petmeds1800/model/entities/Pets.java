@@ -139,19 +139,19 @@ public class Pets implements Serializable{
         this.vet = vet;
     }
 
-    public ArrayList<MedAllergy> getMedAllergies() {
+    public ArrayList<NameValueData> getMedAllergies() {
         return medAllergies;
     }
 
-    public void setMedAllergies(ArrayList<MedAllergy> medAllergies) {
+    public void setMedAllergies(ArrayList<NameValueData> medAllergies) {
         this.medAllergies = medAllergies;
     }
 
-    public ArrayList<MedCondition> getMedConditions() {
+    public ArrayList<NameValueData> getMedConditions() {
         return medConditions;
     }
 
-    public void setMedConditions(ArrayList<MedCondition> medConditions) {
+    public void setMedConditions(ArrayList<NameValueData> medConditions) {
         this.medConditions = medConditions;
     }
 
@@ -160,8 +160,8 @@ public class Pets implements Serializable{
     private String gender;
     private String pictureURL;
     private Vet vet;
-    private ArrayList<MedAllergy> medAllergies;
-    private ArrayList<MedCondition> medConditions;
+    private ArrayList<NameValueData> medAllergies;
+    private ArrayList<NameValueData> medConditions;
 
 
 }
