@@ -181,6 +181,19 @@ public class AddEditCardFragment extends AbstractFragment
         mPresenter = new AddACardPresenter(this);
         setHasOptionsMenu(true);
         PetMedsApplication.getAppComponent().inject(this);
+        //check if we have an address for the "add a card" request or "edit a card" request
+        Bundle bundle = getArguments();
+
+        if(bundle != null) {
+            mAddress = (Address) bundle.getSerializable(FIRST_ARG);
+            //get the card
+            mCard = (Card) bundle.getSerializable(CARD);
+        }
+
+        //if address is already added
+        if(mAddress == null && mCard != null) {
+            mPresenter.getAddress(mCard.getBillingAddress().getRepositoryId());
+        }
     }
 
     @Nullable
@@ -207,13 +220,11 @@ public class AddEditCardFragment extends AbstractFragment
                 mCvvInputLayout.setVisibility(View.GONE);
                 //show the remove button
                 mRemoveCardButton.setVisibility(View.VISIBLE);
-                //get the card
-                mCard = (Card) bundle.getSerializable(CARD);
+
                 populateData(mCard);
                 ((AbstractActivity) getActivity()).setToolBarTitle(mCard.getCardType() + " " + mCard.getCardNumber());
             }
-            //check if we have an address for the "add a card" request or "edit a card" request
-            mAddress = (Address) bundle.getSerializable(FIRST_ARG);
+
             if (mAddress != null) {
                 displayAddress(mAddress);
             }
@@ -359,7 +370,6 @@ public class AddEditCardFragment extends AbstractFragment
     @Override
     public void populateData(Card card) {
         mProgressBar.setVisibility(View.VISIBLE);
-        mPresenter.getAddress(card.getBillingAddress().getRepositoryId());
 
         //till the time we get the full Address , populate the other fields
         mExpirationDateEdit.setText(
