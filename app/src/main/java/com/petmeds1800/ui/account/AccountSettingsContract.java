@@ -5,7 +5,6 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.User;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
 
 /**
  * Created by Abhinav on 4/8/16.
@@ -38,6 +37,7 @@ public interface AccountSettingsContract {
 
         boolean validatePassword(String password);
 
+        boolean validateConfirmPassword(String password,String confirmPassword);
         void findUserData();
 
         void saveSettings(UpdateAccountSettingsRequest updateAccountSettingsRequest);

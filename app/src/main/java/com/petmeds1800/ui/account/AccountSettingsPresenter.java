@@ -6,8 +6,10 @@ import com.petmeds1800.model.entities.Profile;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.InputValidationUtil;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import javax.inject.Inject;
@@ -50,10 +52,13 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     @Override
     public boolean validatePassword(String password) {
 
-        if(password.length() >= PASSWORD_LENGTH) //TODO - Need to use a regex for validation
-            return true;
-        else
-            return false;
+        return password.matches(InputValidationUtil.passwordPattern);
+    }
+
+    @Override
+    public boolean validateConfirmPassword(String password, String confirmPassword) {
+
+        return (TextUtils.equals(password, confirmPassword) ? true : false);
     }
 
     @Override
@@ -72,15 +77,16 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        Log.e("AccountSettings",e.getLocalizedMessage());
-                        if(mView.isActive()){
+                        Log.e("AccountSettings", e.getLocalizedMessage());
+                        if (mView.isActive()) {
                             mView.showError(e.getLocalizedMessage());
                         }
                     }
 
                     @Override
                     public void onNext(Profile s) {
-                        if (s != null) { //TODO Need to handle errors.As of now there is no status field in the API response but it should be.
+                        if (s
+                                != null) { //TODO Need to handle errors.As of now there is no status field in the API response but it should be.
                             if (mView.isActive()) {
                                 mView.setUserData(s.getProfile());
                             }
@@ -105,8 +111,8 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        Log.e("AccountSettings",e.getLocalizedMessage());
-                        if(mView.isActive()){
+                        Log.e("AccountSettings", e.getLocalizedMessage());
+                        if (mView.isActive()) {
                             mView.showError(e.getLocalizedMessage());
                         }
                     }
@@ -115,12 +121,11 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                     public void onNext(UpdateAccountSettingsResponse s) {
 
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
-                            if(mView.isActive()){
+                            if (mView.isActive()) {
                                 mView.showSuccess();
                             }
-                        }
-                        else{
-                            if(mView.isActive()){
+                        } else {
+                            if (mView.isActive()) {
                                 mView.showError(s.getStatus().getErrorMessages().get(0));
                             }
                         }

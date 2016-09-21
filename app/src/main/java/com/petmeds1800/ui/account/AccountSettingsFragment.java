@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +29,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnEditorAction;
 
 public class AccountSettingsFragment extends AbstractFragment implements AccountSettingsContract.View {
 
@@ -48,6 +48,12 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
+    @BindView(R.id.confirm_password_edit)
+    EditText mConfirmPasswordEdit;
+
+    @BindView(R.id.confirmPasswordInputLayout)
+    TextInputLayout mConfirmPasswordInputLayout;
+
     private AccountSettingsContract.Presenter mPresenter;
 
     @Inject
@@ -59,6 +65,8 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
     private String mUserId;
 
+    private static final String BLANK = "";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +77,11 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
     @Nullable
     @Override
-    public android.view.View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        android.view.View view = inflater.inflate(R.layout.fragment_account_settings, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_account_settings, container, false);
         ButterKnife.bind(this, view);
-        ((AbstractActivity)getActivity()).enableBackButton();
-        ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.accountSettingsTitle));
+        ((AbstractActivity) getActivity()).enableBackButton();
+        ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.accountSettingsTitle));
         enableEditTexts(false);
 
         //handle keyboard input
@@ -121,7 +129,8 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
             enableEditTexts(true);
             enableDoneAction();
             //clear the password field since we dont store the user's password
-            mPasswordText.setText("");
+            mPasswordText.setText(BLANK);
+            mConfirmPasswordEdit.setText(BLANK);
 
         } else if (id == R.id.action_done) {
 
@@ -152,22 +161,47 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         }
 
         //password validation
-        if (mPasswordText.getText().toString().isEmpty()) {
+        mPasswordInputLayout.setEnabled(true);
+        mConfirmPasswordInputLayout.setEnabled(true);
+        if (TextUtils.isEmpty(mPasswordText.getText()) && TextUtils.isEmpty(mConfirmPasswordEdit.getText())) {
+            mConfirmPasswordInputLayout
+                    .setError(getContext().getString(R.string.accountSettingsConfirmPasswordEmptyError));
             mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordEmptyError));
             invalidPassword = true;
+        } else if (TextUtils.isEmpty(mPasswordText.getText())) {
+            mConfirmPasswordInputLayout.setError(null);
+            mConfirmPasswordInputLayout.setEnabled(false);
+            mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordEmptyError));
+            invalidPassword = true;
+        } else if (TextUtils.isEmpty(mConfirmPasswordEdit.getText())) {
+            mPasswordInputLayout.setError(null);
+            mPasswordInputLayout.setEnabled(false);
+            mConfirmPasswordInputLayout
+                    .setError(getContext().getString(R.string.accountSettingsConfirmPasswordEmptyError));
+            invalidPassword = true;
         } else if (!mPresenter.validatePassword(mPasswordText.getText().toString())) {
+            mConfirmPasswordInputLayout.setError(null);
+            mConfirmPasswordInputLayout.setEnabled(false);
             mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordInvalidError));
+            invalidPassword = true;
+        } else if (!mPresenter.validateConfirmPassword(mPasswordText.getText().toString(),
+                mConfirmPasswordEdit.getText().toString())) {
+            mPasswordInputLayout.setError(null);
+            mPasswordInputLayout.setEnabled(false);
+            mConfirmPasswordInputLayout
+                    .setError(getContext().getString(R.string.accountSettingsConfirmPasswordInvalidError));
             invalidPassword = true;
         } else {
             mPasswordInputLayout.setError(null);
             mPasswordInputLayout.setErrorEnabled(false);
+            mConfirmPasswordInputLayout.setError(null);
+            mConfirmPasswordInputLayout.setEnabled(false);
             invalidPassword = false;
         }
         //return if needed
         if (invalidEmail || invalidPassword) {
-        // do nothing as we have already prompted for the errors
-        }
-        else {
+            // do nothing as we have already prompted for the errors
+        } else {
             //// Start the Positve flow ////
             mProgressBar.setVisibility(View.VISIBLE);
             //following should be executable after validation success
@@ -205,9 +239,11 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         if (enable) {
             mEmailText.setEnabled(true);
             mPasswordText.setEnabled(true);
+            mConfirmPasswordInputLayout.setVisibility(View.VISIBLE);
         } else {
             mEmailText.setEnabled(false);
             mPasswordText.setEnabled(false);
+            mConfirmPasswordInputLayout.setVisibility(View.GONE);
         }
     }
 
