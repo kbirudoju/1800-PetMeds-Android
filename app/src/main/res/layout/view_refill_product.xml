@@ -52,19 +52,32 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp_3">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/starts_at_txt"
+                    style="@style/styledefault_no_padding"
+                    android:textColor="@color/battleship_grey"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/starts_at_txt"
+                    style="@style/styledefault_no_padding"
+                    android:textColor="@color/battleship_grey"
+                    android:layout_marginLeft="@dimen/dp_5"/>
             <TextView
                 android:id="@+id/refill_view_original_price_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_3"
                 android:text="fsdfsdf"
+                android:layout_marginLeft="@dimen/dp_5"
                 style="@style/styledefault_no_padding"/>
             <TextView
                 android:id="@+id/refill_view_sell_price_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_3"
                 android:text="dsgsdg"
                 android:layout_marginLeft="@dimen/dp_26"
                 style="@style/styledefault_no_padding"

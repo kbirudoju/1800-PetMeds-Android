@@ -10,6 +10,8 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -125,12 +127,17 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (viewType) {
             case BANNER_VIEW_TYPE:
                 BannerViewHolder bannerHolder = (BannerViewHolder) holder;
+                String url= (String)getItemAt(position);
+                bannerHolder.bannerWebView.loadUrl(url);
+                bannerHolder.bannerWebView.getSettings().setJavaScriptEnabled(true);
+                bannerHolder.bannerWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                bannerHolder.bannerWebView.setWebViewClient(new WebViewClient());
                 break;
             case REFILL_HEADER_VIEW_TYPE:
                 final RefillHeaderViewHolder refillHeaderHolder = (RefillHeaderViewHolder) holder;
                 RefillItem refillItem = (RefillItem) getItemAt(position);
                 refillHeaderHolder.refillPetName.setText(refillItem.getPetName());
-                refillHeaderHolder.refillTitleLabel.setText("Refill Coming for");
+                refillHeaderHolder.refillTitleLabel.setText(refillItem.getWidgetTitle());
                 Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+refillItem.getPetImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHeaderHolder.refillPetImage) {
                     @Override
                     protected void setResource(Bitmap resource) {
@@ -146,8 +153,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final RefillViewHolder refillHolder = (RefillViewHolder) holder;
                 PetItemList petItem = (PetItemList) getItemAt(position);
                 refillHolder.refillProductTitleLabel.setText(petItem.getSku().getDisplayName());
-                refillHolder.refillOriginalPriceLabel.setText(mContext.getString(R.string.starts_at_txt)+" "+petItem.getSku().getPriceInfo().getListPrice());
-                refillHolder.refillSellingpriceLabel.setText(petItem.getSku().getPriceInfo().getSellingPrice());
+                refillHolder.refillOriginalPriceLabel.setText(" $"+petItem.getSku().getPriceInfo().getListPrice());
+                refillHolder.refillOriginalPriceLabel.setPaintFlags(refillHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                refillHolder.refillSellingpriceLabel.setText(" $"+petItem.getSku().getPriceInfo().getSellingPrice());
                 refillHolder.refillDateLabel.setText(mContext.getString(R.string.due_on_txt)+" "+petItem.getDueDate());
                 Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillProductImage) {
                     @Override
@@ -198,8 +206,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 });
                 recommendationProductViewHolder.recommendationProductLabel.setText(recommendedProducts.getDisplayName());
-                recommendationProductViewHolder.recommendationPriceLabel.setText(mContext.getString(R.string.starts_at_txt)+" "+recommendedProducts.getListPrice());
-                recommendationProductViewHolder.recommendationSellingPriceLabel.setText(String.format(mContext.getString(R.string.strike_through), recommendedProducts.getSellingPrice()));
+                recommendationProductViewHolder.recommendationPriceLabel.setText(" $"+recommendedProducts.getListPrice());
+                recommendationProductViewHolder.recommendationPriceLabel.setPaintFlags(recommendationProductViewHolder.recommendationPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                recommendationProductViewHolder.recommendationSellingPriceLabel.setText(" $"+recommendedProducts.getSellingPrice());
                 break;
             case RECOMMENDATION_VIEW_MORE_PRODUCT:
                 RecommendationMoreViewHolder moreViewHolder =(RecommendationMoreViewHolder)holder;
@@ -256,10 +265,10 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case BROWSE_HISTORY_VIEW_TYPE:
                 final BrowseHistoryViewHolder browseHistoryViewHolder = (BrowseHistoryViewHolder) holder;
                 Products shoppingProducts= (Products)getItemAt(position);
-                browseHistoryViewHolder.productPriceLabel.setText(mContext.getString(R.string.starts_at_txt)+" "+shoppingProducts.getListPrice());
+                browseHistoryViewHolder.productPriceLabel.setText(" $"+shoppingProducts.getListPrice());
                 browseHistoryViewHolder.productPriceLabel.setPaintFlags(browseHistoryViewHolder.productPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                browseHistoryViewHolder.productSellingPriceLabel.setText(shoppingProducts.getSellingPrice());
+                browseHistoryViewHolder.productSellingPriceLabel.setText(" $"+shoppingProducts.getSellingPrice());
                 browseHistoryViewHolder.productTitlelabel.setText(shoppingProducts.getDisplayName());
                 Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + shoppingProducts.getProductImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(browseHistoryViewHolder.productImage) {
                     @Override
@@ -296,6 +305,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     public static class BannerViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.banner_webview)
+        WebView bannerWebView;
 
         public BannerViewHolder(View v) {
             super(v);
@@ -508,6 +519,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return RECOMMENDATION_VIEW_MORE_PRODUCT;
         if(getItemAt(position) instanceof WidgetData)
             return TIP_VIEW_TYPE;
+        if(getItemAt(position) instanceof String)
+            return BANNER_VIEW_TYPE;
 
         return -1;
 

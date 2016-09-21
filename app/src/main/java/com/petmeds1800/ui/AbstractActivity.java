@@ -1,14 +1,15 @@
 package com.petmeds1800.ui;
 
-import com.petmeds1800.R;
-import com.petmeds1800.util.AnalyticsUtil;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+
+import com.petmeds1800.R;
+import com.petmeds1800.util.AnalyticsUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +48,16 @@ public abstract class AbstractActivity extends AppCompatActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+     public void refreshActionBarMenu()
 
+    {
+        Log.d("refreshActionBarMenu",">>>>>>>>>>");
+        if(mToolbar.getMenu()!=null && mToolbar.getMenu().size()>0){
+            mToolbar.getMenu().getItem(0).setVisible(false);
+            mToolbar.getMenu().getItem(0).setEnabled(false);
+        }
+
+    }
     public void disableBackButton() {
         if (getSupportActionBar() == null) {
             setSupportActionBar(mToolbar);

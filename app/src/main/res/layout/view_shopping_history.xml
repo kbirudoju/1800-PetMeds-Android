@@ -9,7 +9,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dp_16">
         <ImageView
             android:id="@+id/product_image"
             android:layout_width="@dimen/dp_62"
@@ -46,11 +47,18 @@
             android:layout_marginBottom="@dimen/dp_23"
             >
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/starts_at_txt"
+                style="@style/styledefault_no_padding"
+                android:textColor="@color/battleship_grey"/>
+            <TextView
                 android:id="@id/product_price_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                style="@style/rounded_button_text"
+                android:layout_marginLeft="@dimen/dp_5"
+                style="@style/styledefault_no_padding"
                 />
             <TextView
                 android:id="@+id/product_selling_price_label"
@@ -58,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:layout_marginLeft="@dimen/dp_12"
-                style="@style/rounded_button_text"
+                style="@style/styledefault_no_padding"
                 android:textColor="@color/crimson_red"
                 />
         </LinearLayout>

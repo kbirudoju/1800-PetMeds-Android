@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_40">
+    android:layout_marginTop="@dimen/dp_40">
     <TextView
         android:id="@+id/title_whats_next"
         android:layout_width="match_parent"
@@ -13,14 +13,9 @@
         android:layout_width="match_parent"
         android:background="@drawable/rectangular_background"
         android:layout_height="@dimen/dp_160"
-        android:layout_marginTop="@dimen/dp_13"/>
-    <!--<TextView
-        android:id="@+id/subtitle_whats_next"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/petmeds_blue"
-        style="@style/subtitle_whats_next"
-        />-->
+        android:layout_marginTop="@dimen/dp_13"
+        android:layout_marginBottom="@dimen/dp_14"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

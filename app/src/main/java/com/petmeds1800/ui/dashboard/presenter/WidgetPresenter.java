@@ -91,7 +91,9 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                 ArrayList<RefillItem> refillItem = widgetData.get(widgetCount).getData().getRefillItems();
                 for (int refillCount = 0; refillCount < refillItem.size(); refillCount++) {
                     //Add Refill Header
-                    mData.add(refillItem.get(refillCount));
+                    RefillItem refillListItem=refillItem.get(refillCount);
+                    refillListItem.setWidgetTitle(widgetData.get(widgetCount).getData().getWidgetTitle());
+                    mData.add(refillListItem);
                     ArrayList<PetItemList> petItemList = refillItem.get(refillCount).getPetItemList();
                     for (int petCount = 0; petCount < petItemList.size(); petCount++) {
                         PetItemList petItem = petItemList.get(petCount);
@@ -139,6 +141,9 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                mData.add(widgetData.get(widgetCount).getData());
             }
 
+            if(widgetData.get(widgetCount).getWidgetType().equalsIgnoreCase(Constants.VIEW_TYPE_BANNER)){
+                mData.add(widgetData.get(widgetCount).getData().getBannerUrl());
+            }
 
             }
         return mData;

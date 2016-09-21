@@ -9,6 +9,15 @@ import java.util.ArrayList;
 public class RefillItem implements Serializable {
     private String petId;
     private String petImageUrl;
+    private String widgetTitle;
+
+    public String getWidgetTitle() {
+        return widgetTitle;
+    }
+
+    public void setWidgetTitle(String widgetTitle) {
+        this.widgetTitle = widgetTitle;
+    }
 
     private String petName;
     private ArrayList<PetItemList> petItemList;

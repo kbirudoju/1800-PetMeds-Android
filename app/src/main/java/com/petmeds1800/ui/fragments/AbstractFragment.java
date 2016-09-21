@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,6 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.petmeds1800.R;
 
 import java.util.HashMap;
 
@@ -34,17 +34,17 @@ public abstract class AbstractFragment extends Fragment {
     void replaceAccountFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
-
         transaction.replace(R.id.account_root_fragment_container, fragment);
         transaction.commit();
 
     }
 
-    void replaceHomeFragment(Fragment fragment) {
+
+    void replaceHomeFragment(Fragment fragment,String tag) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
-
-        transaction.replace(R.id.home_root_fragment_container, fragment);
+        transaction.replace(R.id.home_root_fragment_container, fragment, tag);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
 
     }
@@ -74,7 +74,7 @@ public abstract class AbstractFragment extends Fragment {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             if (fragmentManager.getBackStackEntryCount() == 0) {
                 fragment.setArguments(bundle);
-                transaction.add(R.id.home_root_fragment_container, fragment);
+                transaction.replace(R.id.home_root_fragment_container, fragment);
                 transaction.addToBackStack(fragment.getClass().getSimpleName());
                 transaction.commit();
             } else {

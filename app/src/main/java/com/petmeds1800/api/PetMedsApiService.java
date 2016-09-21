@@ -177,6 +177,7 @@ public interface PetMedsApiService {
     @GET("/rest/model/1800petmeds/pet/PetActor/medConditions")
     Observable<PetMedicalConditionResponse> getPetPetMedicalConditions();
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/home/HomeActor/loadWidgets")
     Observable<WidgetListResponse> getWidgetData();
 }

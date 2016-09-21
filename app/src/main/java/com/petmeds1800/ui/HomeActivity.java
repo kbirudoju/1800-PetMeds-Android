@@ -1,5 +1,17 @@
 package com.petmeds1800.ui;
 
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -8,7 +20,6 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
@@ -21,29 +32,6 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +80,7 @@ public class HomeActivity extends AbstractActivity
     private boolean mShowOptionsMenu;
 
     private HomeRootFragment mHomeRootFragment;
+    TabPagerAdapter mAdapter;
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,8 +107,38 @@ public class HomeActivity extends AbstractActivity
         fragmentList.add(new CartFragment());
         fragmentList.add(new LearnFragment());
         fragmentList.add(new AccountRootFragment());
-        mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), fragmentList));
+        mAdapter=new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
+        mViewPager.setAdapter(mAdapter);
         mHomeTab.setupWithViewPager(mViewPager);
+        mHomeTab.setOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        super.onTabSelected(tab);
+                        int numTab = tab.getPosition();
+                       /* if(numTab==0){
+                          *//*  HomeRootFragment fragment = (HomeRootFragment) getSupportFragmentManager().findFragmentByTag(HomeRootFragment.class.getSimpleName());
+                            fragment.addHomeFragment();*//*
+                            FragmentManager fm = getSupportFragmentManager();
+                            Fragment fr = mAdapter.getItem(numTab);
+                            if(fr instanceof HomeRootFragment){
+                                ((HomeRootFragment)fr).addHomeFragment();
+
+                            }
+                        }*/
+                        Log.d("ontabselected",numTab+">>>>");
+
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+                        super.onTabUnselected(tab);
+                        //TODO: could not understand the purpose of this code so removed. If still needed please justify
+                        removeAllFragment();
+
+                    }
+                });
+
 
         ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
@@ -129,14 +148,12 @@ public class HomeActivity extends AbstractActivity
 
             @Override
             public void onPageSelected(int position) {
+                Log.d("onPageSelected",">>>>>>");
                 mTabIndex = position;
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
                     mHomeTab.getTabAt(i).setIcon(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
                 }
-                //TODO: could not understand the purpose of this code so removed. If still needed please justify
-//                if (position == 0 || position == 1 || position == 2) {
-//                    removeAllFragment();
-//                }
+
 
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
@@ -157,7 +174,6 @@ public class HomeActivity extends AbstractActivity
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
 
         };
@@ -207,108 +223,14 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        disableBackButton();
 
-        final MenuItem barcodeMenuItem = menu.findItem(R.id.action_barcode);
-        final MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        if (mShowOptionsMenu) {
-            barcodeMenuItem.setVisible(true);
-            searchMenuItem.setVisible(true);
-        } else {
-            barcodeMenuItem.setVisible(false);
-            searchMenuItem.setVisible(false);
-        }
-        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                barcodeMenuItem.setVisible(false);
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                barcodeMenuItem.setVisible(true);
-                return true;
-            }
-        });
-
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchView.setQueryHint(getString(R.string.label_search));
-        searchView.setIconifiedByDefault(false);
-        EditText searchEdit = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchEdit.setTextColor(ContextCompat.getColor(this, R.color.white));
-        searchEdit.setHintTextColor(ContextCompat.getColor(this, R.color.hint_color));
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                try {
-                    String encodedQuery = URLEncoder.encode(query, "utf-8");
-                    String url = getString(R.string.server_endpoint) + "/search.jsp?Ns=product.salesvolume%7C1&Ntt="
-                            + encodedQuery;
-                    Bundle bundle = new Bundle();
-                    bundle.putString(CommonWebviewFragment.TITLE_KEY, query);
-                    bundle.putString(CommonWebviewFragment.URL_KEY, url);
-                    getToolbar().setLogo(null);
-                    MenuItemCompat.collapseActionView(searchMenuItem);
-                    mHomeRootFragment.addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle);
-
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    Toast.makeText(HomeActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(final String searchText) {
-                return false;
-            }
-        });
-
-        // if prev search string, restore it here
-        if (!TextUtils.isEmpty(mSearchString)) {
-            searchView.setQuery(mSearchString, true);
-        }
-
-        return true;
-    }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            mHomeRootFragment.popBackStack();
-            setUpToolbar();
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            super.onBackPressed();
         }
-//        if (item.getItemId() == R.id.action_search) {
-//
-//        } else if (item.getItemId() == R.id.action_barcode) {
-//
-//        }
-        return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        setUpToolbar();
-        super.onBackPressed();
-    }
-
-    private void setUpToolbar() {
-        //we will check if the current selected item is the home tab, we will setup the action bar
-        if (mViewPager.getCurrentItem() == 0) {
-            invalidateOptionsMenu();
-            getToolbar().setTitle(null);
-            getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
-        }
-
+        return super.onOptionsItemSelected(menuItem);
     }
 
     private void showFingerprintDialog() {
@@ -317,7 +239,7 @@ public class HomeActivity extends AbstractActivity
     }
 
     public void removeAllFragment() {
-        FragmentManager fm = getSupportFragmentManager();
+        Log.d("remove all frgamnet", ">>>>");
         while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStackImmediate();
         }
@@ -411,4 +333,5 @@ public class HomeActivity extends AbstractActivity
                 break;
         }
     }
+
 }

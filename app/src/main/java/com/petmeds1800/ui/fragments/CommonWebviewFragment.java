@@ -1,8 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-import com.petmeds1800.ui.AbstractActivity;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,6 +10,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,10 +46,13 @@ public class CommonWebviewFragment extends AbstractFragment {
         super.onViewCreated(view, savedInstanceState);
         String url = getArguments().getString(URL_KEY);
         String title = getArguments().getString(TITLE_KEY);
+
         if (title != null && !title.isEmpty()) {
             ((AbstractActivity) getActivity()).setToolBarTitle(title);
         }
         setUpWebView(url);
+        ((AbstractActivity)getActivity()).getToolbar().getMenu().clear();
+        ((AbstractActivity)getActivity()).getToolbar().setLogo(null);
     }
 
     private void setUpWebView(String url) {
@@ -69,4 +72,5 @@ public class CommonWebviewFragment extends AbstractFragment {
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebChromeClient(client);
     }
+
 }

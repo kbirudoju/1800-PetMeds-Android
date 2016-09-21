@@ -16,6 +16,7 @@ public class CartFragment extends AbstractFragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Nullable
@@ -24,4 +25,12 @@ public class CartFragment extends AbstractFragment{
         View view=inflater.inflate(R.layout.fragment_cart,container,false);
         return view;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+    }
+
 }
