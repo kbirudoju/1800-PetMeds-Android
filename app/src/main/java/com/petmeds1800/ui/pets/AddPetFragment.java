@@ -142,6 +142,9 @@ public class AddPetFragment extends AbstractFragment
     @BindView(R.id.medication_conditions_details)
     TextView mMedicationConditionsDetails;
 
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
+
 
     private ArrayList<Integer> medConditionIds;
 
@@ -559,12 +562,14 @@ public class AddPetFragment extends AbstractFragment
                     isValidGender ||
                     isValidWeight ||
                     isValidAge) {
+                Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail), mContainerLayout);
                 return super.onOptionsItemSelected(item);
             }
         }
         //Todo Remove all hardcoded value after api integration
         progressBar.setVisibility(View.VISIBLE);
-        for (int i = 0; nameValueDetailsForMedicalallergy != null && i < nameValueDetailsForMedicalallergy.size(); i++) {
+        for (int i = 0; nameValueDetailsForMedicalallergy != null && i < nameValueDetailsForMedicalallergy.size();
+                i++) {
             if (i < 4) {
                 medicationAllergyArray[i] = nameValueDetailsForMedicalallergy.get(i).getName();
             } else {

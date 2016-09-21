@@ -1,66 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/containerLayout">
 
     <LinearLayout
-        android:id="@+id/noSavedAddress_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:visibility="gone">
+            android:id="@+id/noSavedAddress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_addressempty" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_addressempty"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_13"
-            style="@style/styledefault"
-            android:text="@string/noSavedAddressAvailableMessage"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_13"
+                style="@style/styledefault"
+                android:text="@string/noSavedAddressAvailableMessage"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            style="@style/paragraph"
-            android:layout_marginTop="@dimen/dp_16"
-            android:text="@string/storeAddressFasterCheckoutMessage"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                style="@style/paragraph"
+                android:layout_marginTop="@dimen/dp_16"
+                android:text="@string/storeAddressFasterCheckoutMessage"/>
 
         <Button
-            android:id="@+id/addAddress_button"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_45"
-            style="@style/label"
-            android:layout_marginLeft="@dimen/dp_16"
-            android:layout_marginRight="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_42"
-            android:background="@color/petmeds_blue"
-            android:textColor="@color/white"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/addAddressButtonName"/>
+                android:id="@+id/addAddress_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                style="@style/label"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:layout_marginRight="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_42"
+                android:background="@color/petmeds_blue"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/addAddressButtonName"/>
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/savedAddress_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            android:id="@+id/savedAddress_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
     <ProgressBar
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressbar"
-        android:layout_centerInParent="true"
-        />
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressbar"
+            android:layout_centerInParent="true"
+    />
 
 
 </RelativeLayout>

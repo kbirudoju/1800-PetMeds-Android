@@ -6,12 +6,12 @@ import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.util.Utils;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,11 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.petmeds1800.ui.payment.AddEditCardFragment.TIME_OUT;
 
 /**
  * Created by Abhinav on 11/8/16.
@@ -42,6 +45,9 @@ public class AddressSelectionListFragment extends AbstractFragment
 
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
 
     private SavedAddressListContract.Presenter mPresenter;
 
@@ -156,7 +162,10 @@ public class AddressSelectionListFragment extends AbstractFragment
     @Override
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
-        Snackbar.make(mSavedAddressRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+        errorMessage = errorMessage.equals(TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
+        mProgressBar.setVisibility(View.GONE);
+        Utils.displayCrouton(getActivity(), (String) errorMessage, mContainerLayout);
+
     }
 
     @Override

@@ -44,6 +44,7 @@ public class AddACardPresenter implements AddACardContract.Presenter {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
+
     }
 
     @Override
@@ -62,6 +63,9 @@ public class AddACardPresenter implements AddACardContract.Presenter {
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AddACard", e.getMessage());
+                        if (mView.isActive()) {
+                            mView.showErrorCrouton(e.getMessage(),false);
+                        }
                     }
 
                     @Override

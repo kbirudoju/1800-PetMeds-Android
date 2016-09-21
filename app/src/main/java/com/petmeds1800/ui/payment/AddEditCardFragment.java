@@ -62,6 +62,9 @@ public class AddEditCardFragment extends AbstractFragment
 
     private static final long APPROVAL_DIALOG_DURATION = 1000;
 
+    public static final String TIME_OUT = "timeout";
+
+
     @BindView(R.id.cardNumberLayout)
     TextInputLayout mCardNumberLayout;
 
@@ -118,6 +121,9 @@ public class AddEditCardFragment extends AbstractFragment
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
+
+    @BindView(R.id.containerLayout)
+    LinearLayout mContainerLayout;
 
     private AddACardContract.Presenter mPresenter;
 
@@ -478,10 +484,11 @@ public class AddEditCardFragment extends AbstractFragment
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
+        message = message.equals(TIME_OUT) ? getString(R.string.internet_not_available) : message;
         mProgressBar.setVisibility(View.GONE);
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message, mCardContainerScrollView);
+            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
         }
-        Utils.displayCrouton(getActivity(), (String) message, mCardContainerScrollView);
+        Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
     }
 }

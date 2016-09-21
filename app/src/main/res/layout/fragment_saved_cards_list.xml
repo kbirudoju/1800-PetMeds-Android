@@ -1,68 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/pattern_light_blue">
+                android:id="@+id/containerLayout"
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/pattern_light_blue">
 
     <LinearLayout
-        android:id="@+id/noSavedCards_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:visibility="gone">
+            android:id="@+id/noSavedCards_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_paymentempty" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_paymentempty"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_13"
-            style="@style/styledefault"
-            android:text="@string/noSavedCardsAvailableMessage"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_13"
+                style="@style/styledefault"
+                android:text="@string/noSavedCardsAvailableMessage"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            style="@style/paragraph"
-            android:layout_marginTop="@dimen/dp_16"
-            android:text="@string/saveCardForFasterCheckoutMessage"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                style="@style/paragraph"
+                android:layout_marginTop="@dimen/dp_16"
+                android:text="@string/saveCardForFasterCheckoutMessage"/>
 
         <Button
-            android:id="@+id/addCard_button"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_45"
-            style="@style/label"
-            android:layout_marginLeft="@dimen/dp_16"
-            android:layout_marginRight="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_42"
-            android:background="@color/petmeds_blue"
-            android:textColor="@color/white"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/addACreditCardButtonName"/>
+                android:id="@+id/addCard_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                style="@style/label"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:layout_marginRight="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_42"
+                android:background="@color/petmeds_blue"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/addACreditCardButtonName"/>
 
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/savedCards_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            android:id="@+id/savedCards_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
     <ProgressBar
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressbar"
-        android:layout_centerInParent="true"
-        />
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressbar"
+            android:layout_centerInParent="true"
+    />
 
 
 </RelativeLayout>

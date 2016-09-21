@@ -228,7 +228,7 @@
                     android:id="@+id/progressbar"
                     android:layout_gravity="center"
                     android:visibility="gone"
-                    />
+            />
         </FrameLayout>
     </ScrollView>
 

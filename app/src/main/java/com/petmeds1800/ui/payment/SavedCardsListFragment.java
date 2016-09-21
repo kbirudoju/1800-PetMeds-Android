@@ -1,9 +1,14 @@
 package com.petmeds1800.ui.payment;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.Card;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.Utils;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,13 +17,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
-import com.petmeds1800.R;
-import com.petmeds1800.model.Card;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -26,10 +28,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.petmeds1800.ui.payment.AddEditCardFragment.TIME_OUT;
+
 /**
  * Created by Abhinav on 11/8/16.
  */
-public class SavedCardsListFragment extends AbstractFragment implements SavedCardsListContract.View, View.OnClickListener {
+public class SavedCardsListFragment extends AbstractFragment
+        implements SavedCardsListContract.View, View.OnClickListener {
 
     @BindView(R.id.noSavedCards_layout)
     LinearLayout mNoSavedCardsLinearLayout;
@@ -40,8 +45,16 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
+    @BindView(R.id.addCard_button)
+    Button mAddCardButton;
+
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
+
     private SavedCardsListContract.Presenter mPresenter;
+
     private SavedCardsAdapter mSavedCardsAdapter;
+
     private MenuItem mAddMenuItem;
 
     @Override
@@ -53,12 +66,12 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
 
     @Nullable
     @Override
-    public android.view.View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        android.view.View view = inflater.inflate(R.layout.fragment_saved_cards_list, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_saved_cards_list, container, false);
         ButterKnife.bind(this, view);
-        ((AbstractActivity)getActivity()).enableBackButton();
-        ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.savedCardsListTitle));
-        mSavedCardsAdapter = new SavedCardsAdapter(false,this,getContext());
+        ((AbstractActivity) getActivity()).enableBackButton();
+        ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.savedCardsListTitle));
+        mSavedCardsAdapter = new SavedCardsAdapter(false, this, getContext());
         setupCardsRecyclerView();
         return view;
 
@@ -85,7 +98,7 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_add){
+        if (id == R.id.action_add) {
             replaceAccountAndAddToBackStack(new AddEditCardFragment(), AddEditCardFragment.class.getName());
         }
         return super.onOptionsItemSelected(item);
@@ -115,7 +128,9 @@ public class SavedCardsListFragment extends AbstractFragment implements SavedCar
     @Override
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
-        Snackbar.make(mSavedCardsRecyclerView , errorMessage , Snackbar.LENGTH_LONG).show();
+        errorMessage = errorMessage.equals(TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
+
     }
 
     @Override

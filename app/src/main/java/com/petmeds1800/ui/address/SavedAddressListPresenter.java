@@ -50,6 +50,9 @@ public class SavedAddressListPresenter implements SavedAddressListContract.Prese
                     public void onError(Throwable e) {
                         //notify about the error.It could be any type of error while getting data from the API
                         Log.e(SavedAddressListPresenter.class.getName(), e.getMessage());
+                        if (mView.isActive()) {
+                            mView.showErrorMessage(e.getMessage());
+                        }
                     }
 
                     @Override

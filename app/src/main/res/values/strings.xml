@@ -34,6 +34,7 @@
     <string name="dialog.deny_button">Deny</string>
     <string name="dialog.allow_button">Allow</string>
     <string name="dialog.logout_button">Logout</string>
+    <string name="internet_not_available">Please check your internet connection or Try again later</string>
     <string name="permission.storage_rationale">The permission to write into the external storage is needed to save the
         page content.
     </string>
@@ -141,6 +142,7 @@
     <string name="title_activity_account_settings">Account settings</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
     <string name="action_sign_in">Sign in or register</string>
 
     <string name="error_invalid_email">This email address is invalid</string>

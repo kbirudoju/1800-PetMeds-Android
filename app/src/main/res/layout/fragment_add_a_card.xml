@@ -6,25 +6,12 @@
               android:orientation="vertical"
               android:paddingTop="@dimen/activity_vertical_margin"
               android:background="@color/pattern_light_blue"
-              tools:context="com.petmeds1800.ui.payment.AddEditCardFragment">
+              tools:context="com.petmeds1800.ui.payment.AddEditCardFragment"
+              android:id="@+id/containerLayout">
 
-    <LinearLayout android:id="@+id/error_layout"
-                  android:layout_width="match_parent" android:layout_height="match_parent"
-                  android:orientation="vertical"
-                  android:layout_margin="@dimen/dp_10"
-                  android:gravity="center"
-                  android:visibility="gone">
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:text="Error"
-                  android:gravity="center"
-                  android:id="@+id/error_Text"
-                  android:layout_margin="@dimen/dp_10"/>
-        <Button android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Retry"
-                android:id="@+id/retry_Button"/>
-
-    </LinearLayout>
+    <include
+            layout="@layout/error_retry_layout">
+    </include>
 
     <ScrollView
             android:id="@+id/addACard_form"
@@ -141,7 +128,7 @@
                         android:layout_marginLeft="@dimen/dp_18"
                         style="@style/rounded_button_text"
                         android:text="Todd Shapiro"
-                        />
+                />
 
 
                 <TextView
@@ -153,7 +140,7 @@
                         android:layout_marginLeft="@dimen/dp_18"
                         style="@style/rounded_button_text"
                         android:text="232 Marina Ave"
-                        />
+                />
 
                 <TextView
                         android:id="@+id/addressLine2_label"
@@ -215,7 +202,7 @@
                     android:id="@+id/progressbar"
                     android:layout_gravity="center"
                     android:visibility="gone"
-                    />
+            />
 
         </LinearLayout>
 
