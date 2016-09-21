@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/petmeds_blue"
+        android:paddingLeft="@dimen/dp_20"
+        android:paddingRight="@dimen/dp_20">
+    <View android:layout_width="match_parent"
+          android:layout_marginLeft="@dimen/dp_16"
+          android:layout_marginRight="@dimen/dp_16"
+          android:layout_marginTop="@dimen/dp_25"
+          android:layout_height="@dimen/dp_2"
+          android:background="@color/white"
+          android:alpha="0.6"
+    >
+    </View>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:orientation="horizontal">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/dp_10"
+
+        >
+            <Button
+                    android:id="@+id/firstShipmentAdressButton"
+                    style="@style/checkoutbuttonlabel"
+                    android:layout_marginTop="@dimen/dp_13"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/check_out_white_circle_drawable"
+                    android:text="@string/numeric_one"
+
+            ></Button>
+
+        </LinearLayout>
+        <LinearLayout
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+            <Button
+                    android:id="@+id/secondShipmentAdressButton"
+                    style="@style/checkoutbuttonlabel"
+                    android:layout_marginTop="@dimen/dp_13"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/check_out_white_circle_drawable"
+                    android:text="@string/numeric_two"
+            ></Button>
+
+        </LinearLayout>
+        <LinearLayout
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+            <Button
+                    android:id="@+id/thirdShipmentAdressButton"
+                    style="@style/checkoutbuttonlabel"
+                    android:layout_marginTop="@dimen/dp_13"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/check_out_white_circle_drawable"
+                    android:text="@string/numeric_3"
+            ></Button>
+
+        </LinearLayout>
+        <LinearLayout
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+            <Button
+                    android:id="@+id/fourthShipmentAdressButton"
+                    style="@style/checkoutbuttonlabel"
+                    android:layout_marginTop="@dimen/dp_13"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/check_out_white_circle_drawable"
+                    android:text="@string/numeric_four"
+            ></Button>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:layout_weight="1">
+
+            <Button
+                    android:id="@+id/fifthShipmentAdressButton"
+                    style="@style/checkoutbuttonlabel"
+                    android:layout_marginTop="@dimen/dp_13"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/check_out_white_circle_drawable"
+                    android:text="@string/numeric_five"
+            ></Button>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

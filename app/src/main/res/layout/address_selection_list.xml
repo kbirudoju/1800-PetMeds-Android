@@ -12,8 +12,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_16">
 
-        <RadioButton
-
+        <android.support.v7.widget.AppCompatRadioButton
+                android:buttonTint="@color/petmeds_blue"
                 android:id="@+id/addressSelection_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

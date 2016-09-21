@@ -67,6 +67,12 @@ public abstract class AbstractFragment extends Fragment {
         trans.addToBackStack(null);
         trans.commit();
     }
+    public void replaceStepRootChildFragment(Fragment fragment,int containerId) {
+        FragmentTransaction trans = getFragmentManager().beginTransaction();
+        trans.replace(containerId, fragment);
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        trans.commit();
+    }
 
     public void addOrReplaceFragmentWithBackStack(Fragment fragment, Bundle bundle) {
         if (fragment != null) {

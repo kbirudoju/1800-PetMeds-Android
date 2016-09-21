@@ -399,4 +399,19 @@
     <string name="join_social_network_txt">Join Our Social Network</string>
     <string name="copyright_txt">Copyright 2016 PetMed Express, Inc. All Rights Reserved</string>
 
+
+    <!--Check out Process-->
+    <string name="shipment_address">Shipment Address</string>
+    <string name="shipping_navigator_button_title">CONTINUE TO SHIPPING METHOD</string>
+    <string name="email_us">EMAIL US</string>
+    <string name="call_us">CALL +1 (800) 738 6337</string>
+    <string name="live_chat">LIVE CHAT</string>
+    <string name="add_new_address">ADD NEW ADDRESS</string>
+    <string name="numeric_one">1</string>
+    <string name="numeric_two">2</string>
+    <string name="numeric_3">3</string>
+    <string name="numeric_four">4</string>
+    <string name="numeric_five">5</string>
+    <string name="shiiping_method_title">SELECT A SHIPPING METHOD</string>
+
 </resources>

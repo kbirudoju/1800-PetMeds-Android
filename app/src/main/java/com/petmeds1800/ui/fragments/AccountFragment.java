@@ -1,18 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -28,6 +15,19 @@ import com.petmeds1800.ui.pets.PetListFragment;
 import com.petmeds1800.ui.refillreminder.ReminderListFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -82,10 +82,12 @@ public class AccountFragment extends AbstractFragment
 
     private int fromWhichAlert = 0;
 
+
     @BindView(R.id.refill_reminder_label)
     TextView mRefillReminderLabel;
 
     private SignOutContract.Presenter mPresenter;
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -122,13 +124,7 @@ public class AccountFragment extends AbstractFragment
                 .create();
         alertDialog.show();
     }
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(!isVisibleToUser){
-            ( (HomeActivity)getActivity()).removeAllFragment();
-        }
-    }
+
     private void showDailogForSignOut(String title, String msg) {
         fromWhichAlert = FROM_SIGNOUT_OPTION;
         AlertDialog alertDialog = Utils.showAlertDailog(getActivity(), title, msg, R.style.StyleForNotification)
@@ -289,6 +285,7 @@ public class AccountFragment extends AbstractFragment
     public void onError(String errorMessage) {
         ((HomeActivity) getActivity()).hideProgress();
         Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_LONG).show();
+
     }
 
     @Override

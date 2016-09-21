@@ -1,18 +1,19 @@
 package com.petmeds1800.ui.address;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.ui.checkout.StepOneRootFragment;
+
 import android.content.Context;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.petmeds1800.R;
-import com.petmeds1800.model.Address;
 
 import java.util.List;
 
@@ -94,7 +95,11 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
 
             if(position == mSelectedPosition) {
                 orderViewHolder.mAddressSelectionRadio.setChecked(true);
-                orderViewHolder.mSelectAddressButton.setVisibility(View.VISIBLE);
+                if (this.mRequestCode == StepOneRootFragment.REQUEST_CODE) {
+                    orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);
+                } else {
+                    orderViewHolder.mSelectAddressButton.setVisibility(View.VISIBLE);
+                }
             }
             else {
                 orderViewHolder.mAddressSelectionRadio.setChecked(false);
@@ -149,7 +154,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
         @BindView(R.id.addressContainer_layout)
         RelativeLayout mAddressContainerLayout;
         @BindView(R.id.addressSelection_radio)
-        RadioButton mAddressSelectionRadio;
+        AppCompatRadioButton mAddressSelectionRadio;
         @BindView(R.id.addressName_label)
         TextView mNameOnAddressLabel;
         @BindView(R.id.addressLine2_label)

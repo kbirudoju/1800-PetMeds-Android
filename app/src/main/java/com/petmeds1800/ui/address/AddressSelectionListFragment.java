@@ -4,6 +4,7 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.StepOneRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.util.Utils;
@@ -20,9 +21,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -49,6 +52,12 @@ public class AddressSelectionListFragment extends AbstractFragment
     @BindView(R.id.containerLayout)
     RelativeLayout mContainerLayout;
 
+    @BindView(R.id.addNewAdrress)
+    Button mAddNewAdrress;
+
+    @BindView(R.id.headerText)
+    TextView mHeaderText;
+
     private SavedAddressListContract.Presenter mPresenter;
 
     private AddressSelectionAdapter mSavedAddressAdapter;
@@ -72,13 +81,14 @@ public class AddressSelectionListFragment extends AbstractFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new SavedAddressListPresenter(this);
-
         Bundle bundle = getArguments();
+
         if (bundle != null) {
             mRequestCode = bundle.getInt(AddEditCardFragment.REQUEST_CODE);
         }
-
-        setHasOptionsMenu(true);
+        if (mRequestCode == AddEditCardFragment.EDIT_CARD_REQUEST) {
+            setHasOptionsMenu(true);
+        }
     }
 
     @Nullable
@@ -86,19 +96,31 @@ public class AddressSelectionListFragment extends AbstractFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved_address_list, container, false);
         ButterKnife.bind(this, view);
-        ((AbstractActivity) getActivity()).enableBackButton();
-        ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addressSelectionListTitle));
+        if (mRequestCode == StepOneRootFragment.REQUEST_CODE) {
+            setUpViews();
+        } else {
+            ((AbstractActivity) getActivity()).enableBackButton();
+            ((AbstractActivity) getActivity())
+                    .setToolBarTitle(getContext().getString(R.string.addressSelectionListTitle));
+        }
         mSavedAddressAdapter = new AddressSelectionAdapter(false, this, getContext(), mRequestCode);
         setupCardsRecyclerView();
         return view;
 
     }
 
+    private void setUpViews() {
+        mAddNewAdrress.setVisibility(View.VISIBLE);
+        mHeaderText.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (HomeActivity) context;
+            if (context instanceof HomeActivity) {
+                mCallback = (HomeActivity) context;
+            }
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement AddACardContract.AddressSelectionListener");
@@ -114,7 +136,9 @@ public class AddressSelectionListFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.start();
+        if (mPresenter != null) {
+            mPresenter.start();
+        }
     }
 
     @Override

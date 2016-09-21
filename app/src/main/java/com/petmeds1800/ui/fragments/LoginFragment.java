@@ -280,11 +280,13 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @OnClick(R.id.label_skip)
     public void skipLoginSignUp() {
         navigateToHome();
+
     }
 
     @OnClick(R.id.label_forgot_password)
     public void forgotPassword() {
         startActivity(new ForgotPasswordIntent(getActivity()));
+
     }
 
     @OnClick(R.id.sign_up_button)

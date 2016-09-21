@@ -1,7 +1,6 @@
 package com.petmeds1800.ui.address;
 
 import com.petmeds1800.model.Address;
-import com.petmeds1800.model.Card;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -26,5 +25,6 @@ public interface SavedAddressListContract {
 
         void getSavedAddress();
     }
+
 
 }
