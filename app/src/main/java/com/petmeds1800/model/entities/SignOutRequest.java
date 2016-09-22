@@ -6,9 +6,7 @@ package com.petmeds1800.model.entities;
 
 public class SignOutRequest {
 
-
-
-   /* @SerializedName("_dynSessConf")*/
+    /* @SerializedName("_dynSessConf")*/
     private String _dynSessConf;
 
     public String get_dynSessConf() {

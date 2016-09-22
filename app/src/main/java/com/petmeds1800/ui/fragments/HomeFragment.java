@@ -1,5 +1,12 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.ProductCategory;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.dashboard.CategoryListFragment;
+import com.petmeds1800.ui.dashboard.WidgetListFragment;
+import com.petmeds1800.ui.support.HomeFragmentContract;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -21,13 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.ProductCategory;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.dashboard.CategoryListFragment;
-import com.petmeds1800.ui.dashboard.WidgetListFragment;
-import com.petmeds1800.ui.support.HomeFragmentContract;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -46,10 +46,13 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
 
     @BindView(R.id.home_viewpager)
     ViewPager homeViewPager;
-   private String mSearchString;
+
+    private String mSearchString;
 
     MenuItem barcodeMenuItem;
+
     MenuItem searchMenuItem;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -67,8 +70,8 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Log.d("HomeFragment", "onCreateView>>>>>");
         ButterKnife.bind(this, view);
-        ((AbstractActivity)getActivity()). getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
-        ((AbstractActivity)getActivity()).setToolBarTitle("");
+        ((AbstractActivity) getActivity()).getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
+        ((AbstractActivity) getActivity()).setToolBarTitle("");
         setHasOptionsMenu(true);
         setUpViewPager(homeViewPager);
         homeTabs.setupWithViewPager(homeViewPager);
@@ -121,26 +124,25 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         }
     }
 
-    public void showOptionMenuItem(boolean isVisible){
+    public void showOptionMenuItem(boolean isVisible) {
         barcodeMenuItem.setVisible(isVisible);
         searchMenuItem.setVisible(isVisible);
     }
 
-   @Override
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_home, menu);
-         barcodeMenuItem = menu.findItem(R.id.action_barcode);
-         searchMenuItem = menu.findItem(R.id.action_search);
+        barcodeMenuItem = menu.findItem(R.id.action_barcode);
+        searchMenuItem = menu.findItem(R.id.action_search);
 
        /*This will show the option menu only for homefragmnet*/
-         ViewPager vp=(ViewPager) getActivity().findViewById(R.id.viewpager_fragments);
-       int position=vp.getCurrentItem();
-       if(position==0){
-           showOptionMenuItem(true);
-       }else{
-           showOptionMenuItem(false);
-       }
-
+        ViewPager vp = (ViewPager) getActivity().findViewById(R.id.viewpager_fragments);
+        int position = vp.getCurrentItem();
+        if (position == 0) {
+            showOptionMenuItem(true);
+        } else {
+            showOptionMenuItem(false);
+        }
 
         MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
@@ -197,9 +199,6 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         if (!TextUtils.isEmpty(mSearchString)) {
             searchView.setQuery(mSearchString, true);
         }
-
-
-
 
         super.onCreateOptionsMenu(menu, inflater);
     }

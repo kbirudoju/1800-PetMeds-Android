@@ -33,7 +33,7 @@ public class SignOutPresenter implements SignOutContract.Presenter {
 
     @Override
     public void sendDataToServer(String sessionConfigParam) {
-        mPetMedsApiService.sendSessionConfig(new SignOutRequest(sessionConfigParam))
+        mPetMedsApiService.logout(new SignOutRequest(sessionConfigParam))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SignOutResponse>() {

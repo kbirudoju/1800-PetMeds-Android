@@ -1,21 +1,10 @@
 package com.petmeds1800.ui;
 
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.BarcodeScannerIntent;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
@@ -31,6 +20,18 @@ import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,7 +155,6 @@ public class HomeActivity extends AbstractActivity
                     mHomeTab.getTabAt(i).setIcon(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
                 }
 
-
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
                     Log.v("test", "from scroll tab>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -223,12 +223,13 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == android.R.id.home) {
             super.onBackPressed();
+        }
+        else if (menuItem.getItemId() == R.id.action_barcode) {
+            startActivity(new BarcodeScannerIntent(this));
         }
         return super.onOptionsItemSelected(menuItem);
     }
@@ -291,10 +292,11 @@ public class HomeActivity extends AbstractActivity
                     public void onNext(SecurityStatusResponse securityStatusResponse) {
                         hideProgress();
                         int securityStatus = securityStatusResponse.getSecurityStatus();
+                        Log.i("security status:", securityStatus + "");
                         //TODO: improvement
-                        if (securityStatus == 0 || securityStatus == 2) {
+                        if (securityStatus == 0) {
                             showFingerprintDialog();
-                        } else if (securityStatus == 4) {
+                        } else if (securityStatus == 4 || securityStatus == 2) {
                             //TODO: research more into silent sign in logic
                         }
                     }

@@ -82,12 +82,10 @@ public class AccountFragment extends AbstractFragment
 
     private int fromWhichAlert = 0;
 
-
     @BindView(R.id.refill_reminder_label)
     TextView mRefillReminderLabel;
 
     private SignOutContract.Presenter mPresenter;
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -291,7 +289,6 @@ public class AccountFragment extends AbstractFragment
     public void onError(String errorMessage) {
         ((HomeActivity) getActivity()).hideProgress();
         Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_LONG).show();
-
     }
 
     @Override

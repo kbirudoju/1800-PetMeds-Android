@@ -3,6 +3,7 @@ package com.petmeds1800.dagger;
 import com.petmeds1800.dagger.component.AppComponent;
 import com.petmeds1800.mvp.SignupTask.SignUpPresenter;
 import com.petmeds1800.service.RefillReminderService;
+import com.petmeds1800.ui.BarcodeScannerActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.IntroActivity;
 import com.petmeds1800.ui.SplashActivity;
@@ -50,6 +51,8 @@ public interface Injector {
     void inject(SignUpFragment signUpFragment);
 
     void inject(SignUpPresenter signUpPresenter);
+
+    void inject(BarcodeScannerActivity barcodeScannerActivity);
 
     void inject(AddACardPresenter addACardPresenter);
 

@@ -25,7 +25,6 @@ public class StorageModule {
     }
 
     @Provides
-    @AppScope
     public CookieJar providePersistentCookie(Context context){
         return new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
     }

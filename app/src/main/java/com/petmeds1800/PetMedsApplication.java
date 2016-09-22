@@ -37,5 +37,4 @@ public class PetMedsApplication extends Application {
         return mAppComponent;
     }
 
-
 }

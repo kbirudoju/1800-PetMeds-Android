@@ -151,7 +151,7 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/logout")
-    Observable<SignOutResponse> sendSessionConfig(@Body SignOutRequest signOutRequest);
+    Observable<SignOutResponse> logout(@Body SignOutRequest signOutRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/remove")

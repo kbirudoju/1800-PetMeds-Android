@@ -156,7 +156,9 @@
     <string name="accountSettingsEmailInvalidError">Email address must be valid</string>
     <string name="accountSettingsPasswordEmptyError">Password is required</string>
     <!--<string name="accountSettingsPasswordInvalidError">Password must be 8 character with at least 1 number and 1 upper-case letter</string>-->
-    <string name="accountSettingsPasswordInvalidError">Password must be 8 characters long with one number and one capital letter</string>
+    <string name="accountSettingsPasswordInvalidError">Password must be 8 characters long with one number and one
+        capital letter
+    </string>
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
     <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method</string>
     <string name="saveCardForFasterCheckoutMessage">Store a payment method for faster checkout.</string>
@@ -317,7 +319,6 @@
     </string>
     <string name="fingerprint_enrollment_title">Enroll</string>
 
-
     <string name="label_get_started">Get Started</string>
     <string name="title_shop">Shop</string>
     <string name="description_shop">It\'s easy to find and buy what you need.</string>
@@ -347,7 +348,6 @@
     <string name="confirmAddressDeletion">This address will be deleted from your account</string>
     <string name="cardRemovedMessage">Card removed.</string>
 
-
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
@@ -357,6 +357,7 @@
         <item>My pet passed away</item>
         <item>I no longer own this pet</item>
     </string-array>
+
     <!--Google Analytics -->
     <string name="push_notifications_category">push notifications category</string>
     <string name="push_notifications_enability">enabled</string>
@@ -364,7 +365,8 @@
     <string name="push_notifications_enable_label">Push notifications Enabled</string>
     <string name="push_notification_disability">Push notifications Disabled</string>
     <string name="home_screen_name">HOME SCREEN</string>
-<!--Home Screen-->
+
+    <!--Home Screen-->
     <string name="home_title">HOME</string>
     <string name="shop_category_title">SHOP CATEGORIES</string>
     <string name="label_barcode">Barcode</string>
@@ -379,5 +381,10 @@
     <string name="products_txt">Products</string>
     <string name="due_on_txt">Due on</string>
     <string name="explore_txt">Explore</string>
+    <string name="label_place_barcode_within">Place the barcode within the window to scan. The search will start
+        automatically.
+    </string>
+    <string name="label_scan_results">Scan Results</string>
+    <string name="label_scan_barcode">Scan Barcode</string>
 
 </resources>
