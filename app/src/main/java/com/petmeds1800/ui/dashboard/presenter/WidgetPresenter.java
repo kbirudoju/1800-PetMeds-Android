@@ -13,6 +13,7 @@ import com.petmeds1800.model.entities.RefillItem;
 import com.petmeds1800.model.entities.SalePitch;
 import com.petmeds1800.model.entities.WhatsNextCategory;
 import com.petmeds1800.model.entities.Widget;
+import com.petmeds1800.model.entities.WidgetFooter;
 import com.petmeds1800.model.entities.WidgetListResponse;
 import com.petmeds1800.util.Constants;
 
@@ -146,6 +147,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
             }
 
             }
+        mData.add(new WidgetFooter());
         return mData;
     }
 }

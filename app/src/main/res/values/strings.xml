@@ -386,5 +386,11 @@
     </string>
     <string name="label_scan_results">Scan Results</string>
     <string name="label_scan_barcode">Scan Barcode</string>
+    <string name="email_us_txt">EMAIL US</string>
+    <string name="live_chat_txt">LIVE CHAT</string>
+    <string name="share_feedback_txt">SHARE YOUR FEEDBACK</string>
+    <string name="call_txt">CALL +1 (800) 738 6337</string>
+    <string name="join_social_network_txt">Join Our Social Network</string>
+    <string name="copyright_txt">Copyright 2016 PetMed Express, Inc. All Rights Reserved</string>
 
 </resources>

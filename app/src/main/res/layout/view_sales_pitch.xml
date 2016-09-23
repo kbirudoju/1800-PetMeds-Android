@@ -13,7 +13,7 @@
             android:background="@drawable/rectangular_background"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
-    <RelativeLayout
+    <!--<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_100"
         android:background="@color/petmeds_blue"
@@ -48,6 +48,6 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_white"
             android:layout_marginRight="@dimen/dp_23"/>
-    </RelativeLayout>
+    </RelativeLayout>-->
 
 </LinearLayout>

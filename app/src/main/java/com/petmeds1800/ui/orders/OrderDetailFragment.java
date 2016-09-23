@@ -102,7 +102,7 @@ public class OrderDetailFragment extends AbstractFragment {
 
     private void setTitle(){
         if(orderList!=null)
-        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.order_txt)+"#"+orderList.getOrderId());
+        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.order_txt)+" #"+orderList.getOrderId());
     }
 
     private void setRecyclerView(){

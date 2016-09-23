@@ -36,7 +36,6 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
         ButterKnife.bind(this,view);
         mWidgetListAdapter=new WidgetListAdapter(getActivity());
         mPresenter=new WidgetPresenter(this);
-
         return view;
     }
 

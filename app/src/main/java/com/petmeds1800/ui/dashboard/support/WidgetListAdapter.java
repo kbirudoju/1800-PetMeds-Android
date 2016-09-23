@@ -31,6 +31,7 @@ import com.petmeds1800.model.entities.RefillItem;
 import com.petmeds1800.model.entities.SalePitch;
 import com.petmeds1800.model.entities.WhatsNextCategory;
 import com.petmeds1800.model.entities.WidgetData;
+import com.petmeds1800.model.entities.WidgetFooter;
 
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public final static int BROWSE_HISTORY_VIEW_TYPE = 9;
     public final static int RECOMMENDATION_PRODUCT_DETAIL=10;
     public final static int RECOMMENDATION_VIEW_MORE_PRODUCT=11;
+    public final static int VIEW_FOOTER=12;
     private Context mContext;
 
     public WidgetListAdapter(Context context){
@@ -115,7 +117,12 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             int resource = R.layout.view_shopping_history_header;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new BrowseHistoryHeaderViewHolder(v);
+        }else if(viewType == VIEW_FOOTER){
+            int resource = R.layout.view_widget_footer;
+            v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+            viewHolder = new FooterViewHolder(v);
         }
+
 
         return viewHolder;
 
@@ -285,6 +292,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final BrowseHistoryHeaderViewHolder browseHistoryHeaderViewHolder = (BrowseHistoryHeaderViewHolder) holder;
                 BrowsingHistory browseHistory=(BrowsingHistory)getItemAt(position);
                 browseHistoryHeaderViewHolder.shoppingHistoryTitleLabel.setText(browseHistory.getWidgetTitle());
+                break;
+            case VIEW_FOOTER:
 
                 break;
             default:
@@ -466,11 +475,11 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.sales_pitch_image)
         ImageView salesPitchImage;
 
-        @BindView(R.id.title_sales_pitch_label)
-        TextView salesPitchTitle;
+      /*  @BindView(R.id.title_sales_pitch_label)
+        TextView salesPitchTitle;*/
 
-        @BindView(R.id.price_sales_pitch_label)
-        TextView alesPitchPriceLabel;
+   /*     @BindView(R.id.price_sales_pitch_label)
+        TextView alesPitchPriceLabel;*/
 
         public SalesPitchViewHolder(View v) {
             super(v);
@@ -494,7 +503,14 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         }
     }
+    public static class FooterViewHolder extends RecyclerView.ViewHolder {
 
+        public FooterViewHolder(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
+
+        }
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -521,6 +537,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return TIP_VIEW_TYPE;
         if(getItemAt(position) instanceof String)
             return BANNER_VIEW_TYPE;
+        if(getItemAt(position) instanceof WidgetFooter)
+            return VIEW_FOOTER;
 
         return -1;
 
