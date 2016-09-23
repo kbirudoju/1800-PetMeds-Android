@@ -34,10 +34,12 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
     AddressSelectionListFragment mAddressSelectionListFragment;
 
     private List<Address> mAddresses;
+
     private int mSelectedPosition;
 
 
-    public AddressSelectionAdapter(boolean blankView, AddressSelectionListFragment mAddressSelectionListFragment, Context context, int requestCode) {
+    public AddressSelectionAdapter(boolean blankView, AddressSelectionListFragment mAddressSelectionListFragment,
+            Context context, int requestCode) {
         this.blankView = blankView;
         this.mAddressSelectionListFragment = mAddressSelectionListFragment;
         this.mContext = context;
@@ -46,8 +48,8 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     public void clearData() {
-        if ( mAddresses !=null ) {
-          mAddresses.clear();
+        if (mAddresses != null) {
+            mAddresses.clear();
             notifyDataSetChanged();
         }
     }
@@ -75,60 +77,66 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         Log.d("position is", position + ">>>>" + mAddresses.size());
 
-            final AddressItemViewHolder orderViewHolder = (AddressItemViewHolder) holder;
-            final Address myAddress = getItemAt(position);
+        final AddressItemViewHolder orderViewHolder = (AddressItemViewHolder) holder;
+        final Address myAddress = getItemAt(position);
 
 //            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue),myCard.getExpirationMonth(),myCard.getExpirationYear());
-            orderViewHolder.mNameOnAddressLabel.setText(myAddress.getFirstName() + " " + myAddress.getLastName());
-            orderViewHolder.mAddressLine1Label.setText(myAddress.getAddress1());
+        orderViewHolder.mNameOnAddressLabel.setText(myAddress.getFirstName() + " " + myAddress.getLastName());
+        orderViewHolder.mAddressLine1Label.setText(myAddress.getAddress1());
 
-            if(myAddress.getAddress2() == null || myAddress.getAddress2().isEmpty()) { //addressline2 / APT # is not mandotory
-                orderViewHolder.mAddressLine2Label.setText(myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
-            } else {
-                orderViewHolder.mAddressLine2Label.setText(myAddress.getAddress2() + ", " + myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
-            }
+        if (myAddress.getAddress2() == null || myAddress.getAddress2()
+                .isEmpty()) { //addressline2 / APT # is not mandotory
+            orderViewHolder.mAddressLine2Label
+                    .setText(myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress.getPostalCode());
+        } else {
+            orderViewHolder.mAddressLine2Label.setText(
+                    myAddress.getAddress2() + ", " + myAddress.getCity() + ", " + myAddress.getState() + " " + myAddress
+                            .getPostalCode());
+        }
 
-            orderViewHolder.mCountryLabel.setText(myAddress.getCountry());
-            orderViewHolder.mPhoneNumberLabel.setText(String.format(mContext.getString(R.string.phoneNumberInAddress), myAddress.getPhoneNumber()));
+        orderViewHolder.mCountryLabel.setText(myAddress.getCountry());
+        orderViewHolder.mPhoneNumberLabel
+                .setText(String.format(mContext.getString(R.string.phoneNumberInAddress), myAddress.getPhoneNumber()));
 
-
-
-            if(position == mSelectedPosition) {
-                orderViewHolder.mAddressSelectionRadio.setChecked(true);
-                if (this.mRequestCode == StepOneRootFragment.REQUEST_CODE) {
-                    orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);
-                } else {
-                    orderViewHolder.mSelectAddressButton.setVisibility(View.VISIBLE);
-                }
-            }
-            else {
-                orderViewHolder.mAddressSelectionRadio.setChecked(false);
+        if (position == mSelectedPosition) {
+            orderViewHolder.mAddressSelectionRadio.setChecked(true);
+            if (this.mRequestCode == StepOneRootFragment.REQUEST_CODE) {
                 orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);
+                mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
+            } else {
+                orderViewHolder.mSelectAddressButton.setVisibility(View.VISIBLE);
             }
+        } else {
+            orderViewHolder.mAddressSelectionRadio.setChecked(false);
+            orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);
+        }
 
-            orderViewHolder.mAddressSelectionRadio.setClickable(false);
+        orderViewHolder.mAddressSelectionRadio.setClickable(false);
         orderViewHolder.mAddressContainerLayout.setTag(position);
 
         orderViewHolder.mSelectAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAddressSelectionListFragment.popBackStackImmediate();
-                    mAddressSelectionListFragment.forwardAddressToActivity(myAddress , mRequestCode);
+
+
             }
         });
 
         orderViewHolder.mAddressContainerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    mSelectedPosition = (Integer) v.getTag();
-                    notifyDataSetChanged();
+                mSelectedPosition = (Integer) v.getTag();
+                notifyDataSetChanged();
+                if (orderViewHolder.mAddressSelectionRadio.isChecked()) {
+                    mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
                 }
-            });
+            }
+        });
 
-        if(myAddress.getIsDefaultShippingAddress()){
+        if (myAddress.getIsDefaultShippingAddress()) {
             orderViewHolder.mIsdefaultShippingAddress.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             orderViewHolder.mIsdefaultShippingAddress.setVisibility(View.GONE);
         }
     }
@@ -139,10 +147,9 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
-        if(mAddresses == null){
+        if (mAddresses == null) {
             return 0;
-        }
-        else {
+        } else {
             return mAddresses.size();
         }
 
@@ -153,26 +160,34 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         @BindView(R.id.addressContainer_layout)
         RelativeLayout mAddressContainerLayout;
+
         @BindView(R.id.addressSelection_radio)
         AppCompatRadioButton mAddressSelectionRadio;
+
         @BindView(R.id.addressName_label)
         TextView mNameOnAddressLabel;
+
         @BindView(R.id.addressLine2_label)
         TextView mAddressLine2Label;
+
         @BindView(R.id.addressLine1_label)
         TextView mAddressLine1Label;
+
         @BindView(R.id.country_label)
         TextView mCountryLabel;
+
         @BindView(R.id.phoneNumber_label)
         TextView mPhoneNumberLabel;
+
         @BindView(R.id.isAddressSetDefault_label)
         TextView mIsdefaultShippingAddress;
+
         @BindView(R.id.selectAddress_button)
         Button mSelectAddressButton;
 
         public AddressItemViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
 
         }
     }

@@ -201,6 +201,10 @@ public class AddressSelectionListFragment extends AbstractFragment
         if (mCallback != null) {
             mCallback.setAddress(address, requestCode);
         }
+        if(requestCode==StepOneRootFragment.REQUEST_CODE){
+            ((StepOneRootFragment) getParentFragment()).setAddress(address);
+        }
+
     }
 
     @Override
