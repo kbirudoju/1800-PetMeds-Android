@@ -2,7 +2,7 @@ package com.petmeds1800.ui.checkout;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
-import com.petmeds1800.ui.CheckOutActivity;
+import com.petmeds1800.ui.address.AddressSelectionListFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 
 import android.os.Bundle;
@@ -30,17 +30,16 @@ public class StepOneRootFragment extends AbstractFragment {
 
     Address mAddress;
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     public static StepOneRootFragment newInstance() {
         StepOneRootFragment f = new StepOneRootFragment();
         Bundle args = new Bundle();
         f.setArguments(args);
         return f;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -50,7 +49,7 @@ public class StepOneRootFragment extends AbstractFragment {
         View view = inflater.inflate(R.layout.fragment_checkout, container, false);
 
         ((CheckOutActivity) getActivity()).setCheckOutCircleAsSelected(CheckOutActivity.FIRST_SHIPMENT_CHECKOUT_CIRCLE);
-//        replaceStepRootChildFragment(AddressSelectionListFragment.newInstance(REQUEST_CODE), R.id.detailFragment);
+        replaceStepRootChildFragment(AddressSelectionListFragment.newInstance(REQUEST_CODE), R.id.detailFragment);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
 
@@ -63,12 +62,12 @@ public class StepOneRootFragment extends AbstractFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void setAddress(Address address) {
-        mAddress = address;
-    }
-
     public Address getAddress() {
         return mAddress;
+    }
+
+    public void setAddress(Address address) {
+        mAddress = address;
     }
 
     @OnClick(R.id.shippingNavigator)

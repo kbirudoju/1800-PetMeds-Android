@@ -14,6 +14,7 @@ import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.EasyRefillReminder;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.InitCheckoutResponse;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.MyOrder;
@@ -40,6 +41,8 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.model.entities.WidgetListResponse;
 import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
+
+import java.util.HashMap;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -194,5 +197,9 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/checkout/CheckoutActor/shippingRatesWebView")
     Observable<String> getShippingOptions();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/checkout/CheckoutActor/checkout")
+    Observable<InitCheckoutResponse> initializeCheckout(@Body HashMap<String, String> itemDetail);
 
 }

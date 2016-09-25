@@ -89,7 +89,7 @@
                 android:exported="false"/>
         <service android:name=".service.RefillReminderService"/>
 
-        <activity android:name=".ui.CheckOutActivity">
+        <activity android:name=".ui.checkout.CheckOutActivity">
         </activity>
     </application>
 

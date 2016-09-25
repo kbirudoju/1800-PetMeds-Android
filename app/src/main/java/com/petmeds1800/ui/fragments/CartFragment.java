@@ -1,12 +1,18 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.R;
+import com.petmeds1800.intent.CheckOutIntent;
+import com.petmeds1800.model.shoppingcart.CommerceItems;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
+import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
+import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
+import com.petmeds1800.util.ShoppingCartRecyclerViewAdapter;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,21 +21,28 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
-import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
-import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
-import com.petmeds1800.util.ShoppingCartAdapterViewHolder;
-import com.petmeds1800.util.ShoppingCartRecyclerViewAdapter;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by pooja on 8/2/2016.
  */
-public class CartFragment extends AbstractFragment implements ShoppingCartListContract.View{
+public class CartFragment extends AbstractFragment implements ShoppingCartListContract.View {
+
+    @BindView(R.id.button_checkout)
+    Button mCheckoutButton;
+
+    ShoppingCartListContract.Presenter mPresenter;
 
     private RecyclerView containerLayoutItems;
-    ShoppingCartListContract.Presenter mPresenter;
+
     private ShoppingCartRecyclerViewAdapter shoppingCartRecyclerViewAdapter;
+
+    private ShoppingCartListResponse mShoppingCartListResponse;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +59,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_cart,container,false);
+        View view = inflater.inflate(R.layout.fragment_cart, container, false);
+        ButterKnife.bind(this, view);
         containerLayoutItems = (RecyclerView) view.findViewById(R.id.products_offered_RecyclerView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         containerLayoutItems.setLayoutManager(mLayoutManager);
@@ -61,8 +75,11 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     @Override
     public boolean populateShoppingCartResponse(ShoppingCartListResponse shoppingCartListResponse) {
-        ShoppingCartListResponse local_ShoppingCartListResponse = shoppingCartListResponse;
-        shoppingCartRecyclerViewAdapter = new ShoppingCartRecyclerViewAdapter(local_ShoppingCartListResponse.getShoppingCart().getCommerceItems(),createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_offer_code_card, null, false)),getActivity());
+        mShoppingCartListResponse = shoppingCartListResponse;
+        shoppingCartRecyclerViewAdapter = new ShoppingCartRecyclerViewAdapter(
+                shoppingCartListResponse.getShoppingCart().getCommerceItems(), createFooter(
+                ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                        .inflate(R.layout.view_offer_code_card, null, false)), getActivity());
         containerLayoutItems.setAdapter(shoppingCartRecyclerViewAdapter);
         return true;
     }
@@ -76,10 +93,27 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     }
 
-    private View createFooter(View footerView){
+    private View createFooter(View footerView) {
         LinearLayout OfferCodeContainerLayout = (LinearLayout) footerView.findViewById(R.id.cart_each_item_container);
         TextInputLayout CouponCodeLayout = (TextInputLayout) footerView.findViewById(R.id.coupon_code_input_layout);
         Button OrderStatusLAbel = (Button) footerView.findViewById(R.id.order_status_label);
         return footerView;
+    }
+
+    @OnClick(R.id.button_checkout)
+    void startCheckoutProcess() {
+
+        //TODO need to make this work on backgound thread.Consider moving it to the computational RX
+        //generate a mapping of itemsID and item quantity. We need to do this becoz of backend tem reluctance of changing their code
+        ArrayList<CommerceItems> commerceItems = mShoppingCartListResponse.getShoppingCart().getCommerceItems();
+        HashMap<String, String> itemsDetail = new HashMap<>();
+
+        for (CommerceItems commerceItem : commerceItems) {
+            itemsDetail.put(commerceItem.getCommerceItemId(), commerceItem.getQuantity());
+        }
+
+        //start the checkoutActitiy
+        CheckOutIntent checkOutIntent = new CheckOutIntent(getContext(), itemsDetail);
+        startActivity(checkOutIntent);
     }
 }
