@@ -415,5 +415,16 @@
     <string name="shiiping_method_title">SELECT A SHIPPING METHOD</string>
     <!--Icons-->
     <string name="ok_icon_font">&#xe800;</string>
+    
+    <!--Cart Fragment-->
+    <string name="buy_more_save_more">Buy More Save More</string>
+    <string name="offer_code">Offer Code</string>
+    <string name="offer_code_applied">OFFER CODE APPLIED</string>
+    <string name="qty">QTY</string>
+    <string name="action_remove">REMOVE</string>
+    <string name="items_total">Items Total</string>
+    <string name="your_order_qualifies_for_free_standard_shipping">Your order qualifies for FREE STANDARD SHIPPING!</string>
+    <string name="checkout">Checkout</string>
+
 
 </resources>

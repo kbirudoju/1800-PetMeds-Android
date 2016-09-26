@@ -38,6 +38,7 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.model.entities.WidgetListResponse;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -180,4 +181,8 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/home/HomeActor/loadWidgets")
     Observable<WidgetListResponse> getWidgetData();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/cart/CartActor/list")
+    Observable<ShoppingCartListResponse> getShoppingCartList(@Query("_dynSessConf") String sessionConfirmation);
 }

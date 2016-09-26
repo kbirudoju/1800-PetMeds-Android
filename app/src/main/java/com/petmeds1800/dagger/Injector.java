@@ -27,6 +27,7 @@ import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.presenter.PetListPresenter;
+import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
 import com.petmeds1800.util.AnalyticsUtil;
 
 /**
@@ -89,4 +90,6 @@ public interface Injector {
     void inject(AnalyticsUtil analyticsUtil);
 
     void inject(WidgetPresenter widgetPresenter);
+
+    void inject (ShoppingCartListPresenter shoppingCartListPresenter);
 }
