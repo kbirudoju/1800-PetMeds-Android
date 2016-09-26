@@ -37,8 +37,7 @@ import static com.petmeds1800.ui.payment.AddEditCardFragment.TIME_OUT;
 /**
  * Created by Abhinav on 11/8/16.
  */
-public class AddressSelectionListFragment extends AbstractFragment
-        implements SavedAddressListContract.View, View.OnClickListener {
+public class AddressSelectionListFragment extends AbstractFragment implements SavedAddressListContract.View {
 
     @BindView(R.id.noSavedAddress_layout)
     LinearLayout mNoSavedAddressLinearLayout;
@@ -207,8 +206,4 @@ public class AddressSelectionListFragment extends AbstractFragment
 
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 }

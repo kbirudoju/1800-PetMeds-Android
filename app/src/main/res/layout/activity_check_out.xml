@@ -6,23 +6,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.petmeds1800.ui.CheckOutActivity">
+
     <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-    />
+            android:minHeight="?attr/actionBarSize"/>
+
     <include
             layout="@layout/shipment_progress_layout"
-            android:id="@+id/shipmentOrdersNumberLayout"
-    />
+            android:id="@+id/shipmentOrdersNumberLayout"/>
+
     <FrameLayout
             android:id="@+id/step_one_root_fragment"
             android:layout_alignLeft="@+id/shipmentOrdersNumberLayout"
             android:layout_below="@+id/shipmentOrdersNumberLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-    ></FrameLayout>
+            android:layout_height="match_parent"/>
 
 </RelativeLayout>

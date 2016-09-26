@@ -399,7 +399,6 @@
     <string name="join_social_network_txt">Join Our Social Network</string>
     <string name="copyright_txt">Copyright 2016 PetMed Express, Inc. All Rights Reserved</string>
 
-
     <!--Check out Process-->
     <string name="shipment_address">Shipment Address</string>
     <string name="shipping_navigator_button_title">CONTINUE TO SHIPPING METHOD</string>
@@ -412,10 +411,9 @@
     <string name="numeric_3">3</string>
     <string name="numeric_four">4</string>
     <string name="numeric_five">5</string>
-    <string name="shiiping_method_title">SELECT A SHIPPING METHOD</string>
     <!--Icons-->
     <string name="ok_icon_font">&#xe800;</string>
-    
+
     <!--Cart Fragment-->
     <string name="buy_more_save_more">Buy More Save More</string>
     <string name="offer_code">Offer Code</string>
@@ -425,6 +423,13 @@
     <string name="items_total">Items Total</string>
     <string name="your_order_qualifies_for_free_standard_shipping">Your order qualifies for FREE STANDARD SHIPPING!</string>
     <string name="checkout">Checkout</string>
-
-
+    <string name="shipping_method_title">SELECT A SHIPPING METHOD</string>
+    
+    <!--Shipping Methods-->
+    <string name="label_shipping_method_standard">Standard (5en dash7 business days)</string>
+    <string name="label_shipping_method_priority">Priority (3en dash5 business days)</string>
+    <string name="label_shipping_method_fedex_2day">FedEx 2 Day (2en dash3 business days)</string>
+    <string name="label_shipping_method_fedex_overnight">FedEx Overnight (1en dash2 business days)</string>
+    <string name="label_view_shipping_options">View Shipping Options</string>
+    <string name="label_shipping_options">Shipping Options</string>
 </resources>

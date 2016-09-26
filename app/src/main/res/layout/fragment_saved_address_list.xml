@@ -53,7 +53,7 @@
                 android:visibility="gone"
                 android:id="@+id/headerText"
                 layout="@layout/header_checkout_layout"
-                android:text="@string/shiiping_method_title"
+                android:text="@string/shipping_method_title"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
                 style="@style/StyleForMultiChoiceDailog"

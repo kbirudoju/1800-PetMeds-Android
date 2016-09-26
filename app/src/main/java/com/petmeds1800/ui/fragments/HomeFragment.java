@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.fragments;
 
 import com.petmeds1800.R;
+import com.petmeds1800.intent.BarcodeScannerIntent;
 import com.petmeds1800.model.ProductCategory;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.dashboard.CategoryListFragment;
@@ -18,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,8 +46,6 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
 
     @BindView(R.id.home_viewpager)
     ViewPager homeViewPager;
-
-    private String mSearchString;
 
     MenuItem barcodeMenuItem;
 
@@ -195,15 +193,16 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
             }
         });
 
-        // if prev search string, restore it here
-        if (!TextUtils.isEmpty(mSearchString)) {
-            searchView.setQuery(mSearchString, true);
-        }
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.action_barcode) {
+            startActivity(new BarcodeScannerIntent(getActivity()));
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
 }
 
 

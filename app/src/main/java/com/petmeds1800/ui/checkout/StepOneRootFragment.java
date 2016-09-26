@@ -3,7 +3,6 @@ package com.petmeds1800.ui.checkout;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.ui.CheckOutActivity;
-import com.petmeds1800.ui.address.AddressSelectionListFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 
 import android.os.Bundle;
@@ -44,7 +43,6 @@ public class StepOneRootFragment extends AbstractFragment {
         return f;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -52,13 +50,12 @@ public class StepOneRootFragment extends AbstractFragment {
         View view = inflater.inflate(R.layout.fragment_checkout, container, false);
 
         ((CheckOutActivity) getActivity()).setCheckOutCircleAsSelected(CheckOutActivity.FIRST_SHIPMENT_CHECKOUT_CIRCLE);
-        replaceStepRootChildFragment(AddressSelectionListFragment.newInstance(REQUEST_CODE), R.id.detailFragment);
+//        replaceStepRootChildFragment(AddressSelectionListFragment.newInstance(REQUEST_CODE), R.id.detailFragment);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
 
         ButterKnife.bind(this, view);
         return view;
-
     }
 
     @Override

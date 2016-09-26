@@ -64,7 +64,7 @@ public class CheckOutActivity extends AbstractActivity {
         setToolBarTitle(getString(R.string.shipment_address));
         enableBackButton();
         replaceCheckOutFragment(StepOneRootFragment.newInstance(), StepOneRootFragment.class.getName());
-
+//        replaceCheckOutFragment(StepTwoRootFragment.newInstance(), StepTwoRootFragment.class.getName());
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
+import com.petmeds1800.ui.checkout.StepTwoPresenter;
 import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
@@ -52,6 +53,8 @@ public interface Injector {
     void inject(SignUpFragment signUpFragment);
 
     void inject(SignUpPresenter signUpPresenter);
+
+    void inject(StepTwoPresenter stepTwoPresenter);
 
     void inject(BarcodeScannerActivity barcodeScannerActivity);
 
