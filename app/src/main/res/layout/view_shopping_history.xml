@@ -41,7 +41,6 @@
             android:orientation="horizontal"
             android:layout_marginLeft="@dimen/dp_23"
             android:layout_marginTop="@dimen/dp_12"
-            android:layout_toLeftOf="@+id/arrow_image"
             android:layout_toRightOf="@+id/product_image"
             android:layout_below="@+id/product_title_label"
             android:layout_marginBottom="@dimen/dp_23"

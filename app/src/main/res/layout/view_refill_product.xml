@@ -60,13 +60,13 @@
                     android:text="@string/starts_at_txt"
                     style="@style/styledefault_no_padding"
                     android:textColor="@color/battleship_grey"/>
-                <TextView
+             <!--   <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/starts_at_txt"
                     style="@style/styledefault_no_padding"
                     android:textColor="@color/battleship_grey"
-                    android:layout_marginLeft="@dimen/dp_5"/>
+                    android:layout_marginLeft="@dimen/dp_5"/>-->
             <TextView
                 android:id="@+id/refill_view_original_price_label"
                 android:layout_width="wrap_content"
@@ -83,6 +83,8 @@
                 style="@style/styledefault_no_padding"
                 android:textColor="@color/crimson_red"/>
             </LinearLayout>
+            <include
+                layout="@layout/view_coupon"/>
         </LinearLayout>
         <Button
             android:id="@+id/add_cart_button"

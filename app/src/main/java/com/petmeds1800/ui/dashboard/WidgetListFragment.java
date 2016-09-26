@@ -2,11 +2,13 @@ package com.petmeds1800.ui.dashboard;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.petmeds1800.R;
 import com.petmeds1800.ui.dashboard.presenter.WidgetContract;
@@ -25,6 +27,9 @@ import butterknife.ButterKnife;
 public class WidgetListFragment extends AbstractFragment implements WidgetContract.View {
     @BindView(R.id.widget_recycler_view)
     RecyclerView mWidgetRecyclerView;
+
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressBar;
 
     private WidgetListAdapter mWidgetListAdapter;
     private WidgetContract.Presenter mPresenter;
@@ -64,12 +69,14 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
 
     @Override
     public void onSuccess(List<Object> widgetData) {
+        mProgressBar.setVisibility(View.GONE);
         updateWidgetData(widgetData);
     }
 
     @Override
     public void onError(String errorMessage) {
-
+        mProgressBar.setVisibility(View.GONE);
+        Snackbar.make(mWidgetRecyclerView,errorMessage,Snackbar.LENGTH_LONG).show();
     }
 
     @Override
