@@ -73,7 +73,6 @@ public abstract class AbstractFragment extends Fragment {
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
     }
-
     public void addOrReplaceFragmentWithBackStack(Fragment fragment, Bundle bundle) {
         if (fragment != null) {
             FragmentManager fragmentManager = getFragmentManager();

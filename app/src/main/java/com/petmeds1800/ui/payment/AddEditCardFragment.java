@@ -150,6 +150,14 @@ public class AddEditCardFragment extends AbstractFragment
 
     private int mRequestCode;
 
+    public static AddEditCardFragment newInstance(int requestCode){
+        Bundle bundle = new Bundle();
+        bundle.putInt(REQUEST_CODE, requestCode);
+        AddEditCardFragment addEditCardFragment = new AddEditCardFragment();
+        addEditCardFragment.setArguments(bundle);
+        return new AddEditCardFragment();
+    }
+
     public static AddEditCardFragment newInstance(Card updatedCard, int requestCode) {
 
         Bundle bundle = new Bundle();

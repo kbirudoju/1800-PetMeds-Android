@@ -28,4 +28,9 @@ public class SavedShippingAddressRequest {
     public void setShippingAddressId(String shippingAddressId) {
         this.shippingAddressId = shippingAddressId;
     }
+
+    public SavedShippingAddressRequest(String sessionConfig, String shippingAddressId) {
+        this.sessionConfig = sessionConfig;
+        this.shippingAddressId = shippingAddressId;
+    }
 }

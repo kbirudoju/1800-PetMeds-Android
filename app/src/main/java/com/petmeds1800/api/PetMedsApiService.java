@@ -29,6 +29,7 @@ import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.Profile;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
+import com.petmeds1800.model.entities.SavedShippingAddressRequest;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.model.entities.ShippingMethodsResponse;
@@ -201,5 +202,10 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/checkout/CheckoutActor/checkout")
     Observable<InitCheckoutResponse> initializeCheckout(@Body HashMap<String, String> itemDetail);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/checkout/CheckoutActor/applySavedShippingAddress")
+    Observable<Object> saveShippingAddress(@Body SavedShippingAddressRequest savedShippingAddressRequest);
+
 
 }

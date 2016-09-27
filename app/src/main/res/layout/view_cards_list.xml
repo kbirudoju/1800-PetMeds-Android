@@ -52,7 +52,7 @@
         android:paddingLeft="@dimen/dp_16"
         style="@style/formlabel"
         android:layout_marginTop="@dimen/dp_5"
-        android:text="default payment method"/>
+        android:text="@string/default_payment_method"/>
 
     <TextView
         android:id="@+id/dummyLine"

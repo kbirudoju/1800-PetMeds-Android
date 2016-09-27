@@ -4,6 +4,8 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.StepState;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.util.FontelloTextView;
 
 import android.graphics.Color;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.BindView;
+
 
 public class CheckOutActivity extends AbstractActivity
         implements CheckoutActivityContract.View, CheckoutActivityContract.StepsFragmentInteractionListener {
@@ -166,11 +169,17 @@ public class CheckOutActivity extends AbstractActivity
         }
     }
 
-    public void replaceCheckOutFragment(Fragment fragment, String tag) {
+    public void replaceCheckOutFragment(Fragment fragment, String tag, boolean isBackStackEnable) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.step_one_root_fragment, fragment, tag);
+        if (isBackStackEnable) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -197,18 +206,18 @@ public class CheckOutActivity extends AbstractActivity
         switch (mApplicableSteps.indexOf(nextStepCode)) {
 
             case 0: //step 1 "Select Shipping Address"
-                replaceCheckOutFragment(StepOneRootFragment.newInstance(), StepOneRootFragment.class.getName());
+                replaceCheckOutFragment(StepOneRootFragment.newInstance(), StepOneRootFragment.class.getName(),false);
 
                 break;
 
             case 1: //step 2 "Select Shipping method"
-                replaceCheckOutFragment(StepTwoRootFragment.newInstance(), StepTwoRootFragment.class.getName());
+                replaceCheckOutFragment(StepTwoRootFragment.newInstance(), StepTwoRootFragment.class.getName(),false);
 
                 break;
 
             case 2: //step 3 "Select Payment method"
                 //TODO start the Slect Payment method step. Following is just a temporary adjustment
-                replaceCheckOutFragment(StepOneRootFragment.newInstance(), StepOneRootFragment.class.getName());
+                replaceCheckOutFragment(StepThreeRootFragment.newInstance(), StepThreeRootFragment.class.getName(),false);
 
                 break;
 

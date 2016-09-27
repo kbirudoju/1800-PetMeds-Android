@@ -1,17 +1,25 @@
-package com.petmeds1800.ui.checkout;
+package com.petmeds1800.ui.checkout.steponerootfragment;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
+import com.petmeds1800.model.entities.SavedShippingAddressRequest;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.address.AddressSelectionListFragment;
+import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,14 +29,28 @@ import butterknife.OnClick;
  * Created by Sdixit on 21-09-2016.
  */
 
-public class StepOneRootFragment extends AbstractFragment {
+public class StepOneRootFragment extends AbstractFragment implements StepOneRootContract.View {
 
     public final static int REQUEST_CODE = 2;
 
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
 
-    Address mAddress;
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
+
+    private Address mAddress;
+
+    private StepOneRootContract.Presenter mPresenter;
+
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public static StepOneRootFragment newInstance() {
         StepOneRootFragment f = new StepOneRootFragment();
@@ -37,10 +59,7 @@ public class StepOneRootFragment extends AbstractFragment {
         return f;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+
 
     @Nullable
     @Override
@@ -60,6 +79,9 @@ public class StepOneRootFragment extends AbstractFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mPresenter = new StepOneRootPresentor(this);
+        PetMedsApplication.getAppComponent().inject(this);
+
     }
 
     public Address getAddress() {
@@ -73,8 +95,36 @@ public class StepOneRootFragment extends AbstractFragment {
     @OnClick(R.id.shippingNavigator)
     public void onClick() {
         if (mAddress != null) {
-            Log.v("test", ":::::::::::::::::::" + mAddress.getAddressId());
+            mPresenter.saveShippingAddress(
+                    new SavedShippingAddressRequest(
+                            mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                            mAddress.getAddressId()));
         }
 
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
+    }
+
+    @Override
+    public void onSuccess() {
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+
+    }
+
+    @Override
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+    }
+
+
+    @Override
+    public void setPresenter(StepOneRootContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

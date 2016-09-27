@@ -402,6 +402,7 @@
     <!--Check out Process-->
     <string name="shipment_address">Shipment Address</string>
     <string name="shipping_navigator_button_title">CONTINUE TO SHIPPING METHOD</string>
+    <string name="payment_navigator_button_title">CONTINUE TO PET &amp;VET INFORMATION</string>
     <string name="email_us">EMAIL US</string>
     <string name="call_us">CALL +1 (800) 738 6337</string>
     <string name="live_chat">LIVE CHAT</string>
@@ -411,8 +412,18 @@
     <string name="numeric_3">3</string>
     <string name="numeric_four">4</string>
     <string name="numeric_five">5</string>
+
+    <string name="payment_method_title">CHOOSE A PAYMENT METHOD</string>
     <!--Icons-->
     <string name="ok_icon_font">&#xe800;</string>
+    <!--Step Three checkout-->
+    <string name="credit_card_title">Credit Card</string>
+    <string name="pay_pal_title">Pay Pal</string>
+    <string name="credit_card_details_title">CREDIT CARD DETAILS</string>
+    <string name="input_billing_address">ENTER BILLING ADDRESS</string>
+    <string name="payment_method_button_title">ADD NEW PAYMENT METHOD</string>
+    <string name="my_shipping_address">Use My Shipping Address</string>
+    <string name="default_payment_method">Default payment method</string>
 
     <!--Cart Fragment-->
     <string name="buy_more_save_more">Buy More Save More</string>

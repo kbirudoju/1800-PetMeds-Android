@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/itemContainerLayout"
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rectangular_background"
+                android:padding="@dimen/dp_16">
+
+
+    <android.support.v7.widget.AppCompatRadioButton
+            android:buttonTint="@color/petmeds_blue"
+            android:id="@+id/paymentSelection_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"/>
+
+    <TextView
+            android:id="@+id/cardName_and_Number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/paymentSelection_radio"
+            android:layout_marginLeft="@dimen/dp_23"
+            style="@style/order_label"
+            android:textColor="@color/pet_meds_blue_selected"
+            android:text="VISA **** **** **** 5555"
+    />
+
+    <TextView
+            android:id="@+id/cardExpiration_label"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cardName_and_Number_label"
+            android:layout_toRightOf="@id/paymentSelection_radio"
+            android:layout_marginLeft="@dimen/dp_23"
+            style="@style/rounded_button_text"
+            android:text="Expires: Sep 2019"/>
+
+
+    <TextView
+            android:id="@+id/isAddressSetDefault_label"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cardExpiration_label"
+            android:layout_toRightOf="@id/paymentSelection_radio"
+            android:layout_marginLeft="@dimen/dp_23"
+            style="@style/formlabel"
+            android:text="@string/default_payment_method"/>
+
+
+</RelativeLayout>

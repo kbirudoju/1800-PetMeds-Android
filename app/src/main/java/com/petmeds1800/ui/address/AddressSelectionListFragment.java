@@ -3,8 +3,9 @@ package com.petmeds1800.ui.address;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.util.Utils;
@@ -37,7 +38,7 @@ import static com.petmeds1800.ui.payment.AddEditCardFragment.TIME_OUT;
 /**
  * Created by Abhinav on 11/8/16.
  */
-public class AddressSelectionListFragment extends AbstractFragment implements SavedAddressListContract.View {
+public class AddressSelectionListFragment extends AbstractFragment implements SavedAddressListContract.View,View.OnClickListener {
 
     @BindView(R.id.noSavedAddress_layout)
     LinearLayout mNoSavedAddressLinearLayout;
@@ -95,6 +96,7 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved_address_list, container, false);
         ButterKnife.bind(this, view);
+        mAddNewAdrress.setOnClickListener(this);
         if (mRequestCode == StepOneRootFragment.REQUEST_CODE) {
             setUpViews();
         } else {
@@ -111,6 +113,8 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     private void setUpViews() {
         mAddNewAdrress.setVisibility(View.VISIBLE);
         mHeaderText.setVisibility(View.VISIBLE);
+        mNoSavedAddressLinearLayout.setVisibility(View.GONE);
+        mSavedAddressRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -130,6 +134,9 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     private void setupCardsRecyclerView() {
         mSavedAddressRecyclerView.setAdapter(mSavedAddressAdapter);
         mSavedAddressRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (mRequestCode == StepOneRootFragment.REQUEST_CODE) {
+            mSavedAddressRecyclerView.setNestedScrollingEnabled(false);
+        }
     }
 
     @Override
@@ -164,8 +171,10 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     @Override
     public void showNoAddressView() {
         mProgressBar.setVisibility(View.GONE);
-        mNoSavedAddressLinearLayout.setVisibility(View.VISIBLE);
-        mSavedAddressRecyclerView.setVisibility(View.VISIBLE);
+        if (mRequestCode != StepOneRootFragment.REQUEST_CODE) {
+            mNoSavedAddressLinearLayout.setVisibility(View.VISIBLE);
+            mSavedAddressRecyclerView.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -186,8 +195,8 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
         errorMessage = errorMessage.equals(TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
-        mProgressBar.setVisibility(View.GONE);
         Utils.displayCrouton(getActivity(), (String) errorMessage, mContainerLayout);
+
 
     }
 
@@ -200,9 +209,27 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
         if (mCallback != null) {
             mCallback.setAddress(address, requestCode);
         }
-        if(requestCode==StepOneRootFragment.REQUEST_CODE){
+        if (requestCode == StepOneRootFragment.REQUEST_CODE) {
             ((StepOneRootFragment) getParentFragment()).setAddress(address);
         }
+
+    }
+
+
+    public void addNewAddress() {
+        ((CheckOutActivity) getActivity()).replaceCheckOutFragment(
+                AddEditAddressFragment.newInstance(null, StepOneRootFragment.REQUEST_CODE),
+                AddEditAddressFragment.class.getName(), true);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addNewAdrress:
+                addNewAddress();
+                break;
+        }
+
 
     }
 

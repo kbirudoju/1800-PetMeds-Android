@@ -2,7 +2,7 @@ package com.petmeds1800.ui.address;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
-import com.petmeds1800.ui.checkout.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -102,10 +102,10 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
             orderViewHolder.mAddressSelectionRadio.setChecked(true);
             if (this.mRequestCode == StepOneRootFragment.REQUEST_CODE) {
                 orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);
-                mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
             } else {
                 orderViewHolder.mSelectAddressButton.setVisibility(View.VISIBLE);
             }
+            mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
         } else {
             orderViewHolder.mAddressSelectionRadio.setChecked(false);
             orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);

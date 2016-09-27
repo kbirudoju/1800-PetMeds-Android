@@ -15,6 +15,11 @@ import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
 import com.petmeds1800.ui.checkout.StepTwoPresenter;
 import com.petmeds1800.ui.checkout.CheckoutActivityPresenter;
+
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootPresentor;
+
 import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
@@ -98,4 +103,9 @@ public interface Injector {
     void inject (ShoppingCartListPresenter shoppingCartListPresenter);
 
     void inject(CheckoutActivityPresenter widgetPresenter);
+
+    void inject(StepOneRootPresentor stepOneRootPresentor);
+    void inject(StepOneRootFragment stepOneRootFragment);
+    void inject(StepThreeRootFragment stepThreeRootFragment);
+
 }
