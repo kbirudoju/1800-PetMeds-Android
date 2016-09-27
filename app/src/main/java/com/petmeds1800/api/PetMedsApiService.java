@@ -244,22 +244,27 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/cart/CartActor/list")
-    Observable<ShoppingCartListResponse> getGeneralPopulateShoppingCart(@Query("_dynSessConf") String sessionConfirmation);
+    Observable<ShoppingCartListResponse> getGeneralPopulateShoppingCart(
+            @Query("_dynSessConf") String sessionConfirmation);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/cart/CartActor/add")
-    Observable<ShoppingCartListResponse> getAddItemShoppingCart(@Body AddItemRequestShoppingCart addItemRequestShoppingCart);
+    Observable<ShoppingCartListResponse> getAddItemShoppingCart(
+            @Body AddItemRequestShoppingCart addItemRequestShoppingCart);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/cart/CartActor/remove")
-    Observable<ShoppingCartListResponse> getRemoveItemShoppingCart(@Body RemoveItemRequestShoppingCart removeItemRequestShoppingCart);
+    Observable<ShoppingCartListResponse> getRemoveItemShoppingCart(
+            @Body RemoveItemRequestShoppingCart removeItemRequestShoppingCart);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/cart/CartActor/applyCoupon")
-    Observable<ShoppingCartListResponse> getApplyCouponShoppingCart(@Body ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart);
+    Observable<ShoppingCartListResponse> getApplyCouponShoppingCart(
+            @Body ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/cart/CartActor/update")
-    Observable<ShoppingCartListResponse> getUpdateItemQuantityRequestShoppingCart(@Body HashMap<String,String> getmCommerceIDQuantityMap);
+    Observable<ShoppingCartListResponse> getUpdateItemQuantityRequestShoppingCart(
+            @Body HashMap<String, String> getmCommerceIDQuantityMap);
 
 }

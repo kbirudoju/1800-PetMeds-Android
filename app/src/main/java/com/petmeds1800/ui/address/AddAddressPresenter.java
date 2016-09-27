@@ -34,7 +34,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
     private TreeMap<String , String> usaStatedHashMap;
     private TreeMap<String, String> countryHashMap;
 
-    AddAddressPresenter(AddEditAddressContract.View view){
+    public AddAddressPresenter(AddEditAddressContract.View view){
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);

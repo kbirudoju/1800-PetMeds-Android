@@ -28,7 +28,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    CheckoutActivityPresenter(CheckoutActivityContract.View view) {
+    public CheckoutActivityPresenter(CheckoutActivityContract.View view) {
         mView = view;
         PetMedsApplication.getAppComponent().inject(this);
     }

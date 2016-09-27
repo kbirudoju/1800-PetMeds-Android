@@ -72,8 +72,8 @@ public class PaymentSelectionListAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Log.d("position is", position + ">>>>" + mCards.size());
 
-        PaymentSelectionListAdapter.PaymentItemViewHolder viewHolder
-                = (PaymentSelectionListAdapter.PaymentItemViewHolder) holder;
+        PaymentItemViewHolder viewHolder
+                = (PaymentItemViewHolder) holder;
         final Card myCard = getItemAt(position);
 
         String expirationText = String.format(mContext.getString(R.string.cardExpirationValue), Utils

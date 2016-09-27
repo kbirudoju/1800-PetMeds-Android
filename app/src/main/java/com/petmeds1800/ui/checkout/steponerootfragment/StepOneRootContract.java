@@ -10,7 +10,7 @@ import com.petmeds1800.mvp.BaseView;
  */
 
 public interface StepOneRootContract {
-    interface View extends BaseView<StepOneRootContract.Presenter> {
+    interface View extends BaseView<Presenter> {
         boolean isActive();
         void onSuccess(ShoppingCartListResponse response);
         void onError(String errorMessage);
