@@ -3,9 +3,12 @@ package com.petmeds1800.ui.checkout;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.StepState;
+import com.petmeds1800.model.shoppingcart.CommerceItems;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.FontelloTextView;
 
 import android.graphics.Color;
@@ -75,21 +78,27 @@ public class CheckOutActivity extends AbstractActivity
     private boolean mIsDestroyed = false;
 
     private CheckoutActivityPresenter mCheckoutPresenter;
-
+    private ShoppingCartListResponse mShoppingCartListResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setToolBarTitle(getString(R.string.shipment_address));
-
+        mShoppingCartListResponse= (ShoppingCartListResponse) getIntent().getSerializableExtra(CartFragment.SHOPPING_CART);
         enableBackButton();
 
         mCheckoutPresenter = new CheckoutActivityPresenter(this);
 
         //check if we have the valid items in the shopping cart
         if (getIntent() != null) {
-            HashMap<String, String> itemDetails = (HashMap<String, String>) getIntent().getSerializableExtra(
-                    ITEMS_DETAIL);
+            //TODO need to make this work on backgound thread.Consider moving it to the computational RX
+            //generate a mapping of itemsID and item quantity. We need to do this becoz of backend tem reluctance of changing their code
+            ArrayList<CommerceItems> commerceItems = mShoppingCartListResponse.getShoppingCart().getCommerceItems();
+            HashMap<String, String> itemDetails = new HashMap<>();
+
+            for (CommerceItems commerceItem : commerceItems) {
+                itemDetails.put(commerceItem.getCommerceItemId(), commerceItem.getQuantity());
+            }
             if (itemDetails != null && itemDetails.size() > 0) {
                 //show the progress
                 mCheckoutPresenter.initializeCheckout(itemDetails);
@@ -206,7 +215,7 @@ public class CheckOutActivity extends AbstractActivity
         switch (mApplicableSteps.indexOf(nextStepCode)) {
 
             case 0: //step 1 "Select Shipping Address"
-                replaceCheckOutFragment(StepOneRootFragment.newInstance(), StepOneRootFragment.class.getName(),false);
+                replaceCheckOutFragment(StepOneRootFragment.newInstance(mShoppingCartListResponse), StepOneRootFragment.class.getName(),false);
 
                 break;
 
@@ -217,7 +226,8 @@ public class CheckOutActivity extends AbstractActivity
 
             case 2: //step 3 "Select Payment method"
                 //TODO start the Slect Payment method step. Following is just a temporary adjustment
-                replaceCheckOutFragment(StepThreeRootFragment.newInstance(), StepThreeRootFragment.class.getName(),false);
+                replaceCheckOutFragment(StepThreeRootFragment
+                        .newInstance(mShoppingCartListResponse), StepThreeRootFragment.class.getName(),false);
 
                 break;
 

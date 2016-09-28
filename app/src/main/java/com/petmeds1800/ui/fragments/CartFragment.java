@@ -2,7 +2,6 @@ package com.petmeds1800.ui.fragments;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.CheckOutIntent;
-import com.petmeds1800.model.shoppingcart.CommerceItems;
 import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
@@ -20,9 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +39,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     private ShoppingCartRecyclerViewAdapter shoppingCartRecyclerViewAdapter;
 
     private ShoppingCartListResponse mShoppingCartListResponse;
+
+    public static final String SHOPPING_CART = "shoppingCart";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,17 +101,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @OnClick(R.id.button_checkout)
     void startCheckoutProcess() {
 
-        //TODO need to make this work on backgound thread.Consider moving it to the computational RX
-        //generate a mapping of itemsID and item quantity. We need to do this becoz of backend tem reluctance of changing their code
-        ArrayList<CommerceItems> commerceItems = mShoppingCartListResponse.getShoppingCart().getCommerceItems();
-        HashMap<String, String> itemsDetail = new HashMap<>();
-
-        for (CommerceItems commerceItem : commerceItems) {
-            itemsDetail.put(commerceItem.getCommerceItemId(), commerceItem.getQuantity());
-        }
-
         //start the checkoutActitiy
-        CheckOutIntent checkOutIntent = new CheckOutIntent(getContext(), itemsDetail);
+        CheckOutIntent checkOutIntent = new CheckOutIntent(getContext());
+        checkOutIntent.putExtra(SHOPPING_CART,mShoppingCartListResponse);
         startActivity(checkOutIntent);
     }
 }

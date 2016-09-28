@@ -205,7 +205,7 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/checkout/CheckoutActor/applySavedShippingAddress")
-    Observable<Object> saveShippingAddress(@Body SavedShippingAddressRequest savedShippingAddressRequest);
+    Observable<ShoppingCartListResponse> saveShippingAddress(@Body SavedShippingAddressRequest savedShippingAddressRequest);
 
 
 }

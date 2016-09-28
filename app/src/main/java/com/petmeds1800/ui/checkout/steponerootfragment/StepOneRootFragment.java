@@ -4,10 +4,12 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.SavedShippingAddressRequest;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 import com.petmeds1800.ui.address.AddressSelectionListFragment;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -52,13 +54,13 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
         super.onCreate(savedInstanceState);
     }
 
-    public static StepOneRootFragment newInstance() {
+    public static StepOneRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse) {
         StepOneRootFragment f = new StepOneRootFragment();
         Bundle args = new Bundle();
+        args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
         f.setArguments(args);
         return f;
     }
-
 
 
     @Nullable
@@ -108,8 +110,11 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
         return isAdded();
     }
 
+
+
     @Override
     public void onSuccess() {
+
     }
 
     @Override

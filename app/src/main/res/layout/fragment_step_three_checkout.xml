@@ -117,7 +117,6 @@
                     android:layout_below="@+id/creditCardView"
                     android:theme="@style/StyleForCheckBox"
                     android:layout_alignParentRight="true"
-                    android:checked="true"
                     android:id="@+id/payPalCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

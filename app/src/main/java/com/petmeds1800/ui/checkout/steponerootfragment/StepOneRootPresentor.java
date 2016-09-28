@@ -3,6 +3,7 @@ package com.petmeds1800.ui.checkout.steponerootfragment;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.SavedShippingAddressRequest;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 
 import android.support.annotation.NonNull;
 
@@ -38,7 +39,7 @@ public class StepOneRootPresentor implements StepOneRootContract.Presenter {
         mPetMedsApiService.saveShippingAddress(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Object>() {
+                .subscribe(new Subscriber<ShoppingCartListResponse>() {
                     @Override
                     public void onCompleted() {
 
@@ -52,18 +53,15 @@ public class StepOneRootPresentor implements StepOneRootContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(Object response) {
-                       /* if (response.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                    public void onNext(ShoppingCartListResponse shoppingCartListResponse ) {
+                        if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.onSuccess();
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.onError(response.getStatus().getErrorMessages().get(0));
+                                mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
                             }
-                        }*/
-                        if (mView.isActive()) {
-                            mView.onSuccess();
                         }
 
                     }

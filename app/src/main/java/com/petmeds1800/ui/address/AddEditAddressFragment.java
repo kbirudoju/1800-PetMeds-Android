@@ -231,6 +231,8 @@ AddEditAddressFragment extends AbstractFragment
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.editAddressTitle));
             } else if (mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
                 intitalizeViewsForCheckOutBillingAddress();
+                mAddress = (Address) mBundle.getSerializable(ADDRESS);
+                populateData(mAddress);
             } else {
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
             }
