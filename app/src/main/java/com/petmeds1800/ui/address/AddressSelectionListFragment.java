@@ -32,7 +32,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.petmeds1800.ui.payment.AddEditCardFragment.TIME_OUT;
 
 /**
  * Created by Abhinav on 11/8/16.
@@ -186,7 +185,7 @@ public class AddressSelectionListFragment extends AbstractFragment
     @Override
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
-        errorMessage = errorMessage.equals(TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
+        errorMessage = errorMessage.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
         mProgressBar.setVisibility(View.GONE);
         Utils.displayCrouton(getActivity(), (String) errorMessage, mContainerLayout);
 

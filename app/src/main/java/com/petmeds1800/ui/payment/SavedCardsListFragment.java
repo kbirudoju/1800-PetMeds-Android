@@ -28,8 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.petmeds1800.ui.payment.AddEditCardFragment.TIME_OUT;
-
 /**
  * Created by Abhinav on 11/8/16.
  */
@@ -128,7 +126,7 @@ public class SavedCardsListFragment extends AbstractFragment
     @Override
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
-        errorMessage = errorMessage.equals(TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
+        errorMessage = errorMessage.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
         Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
 
     }

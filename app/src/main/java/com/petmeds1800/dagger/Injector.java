@@ -13,6 +13,8 @@ import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
+import com.petmeds1800.ui.dashboard.CategoryListFragment;
+import com.petmeds1800.ui.dashboard.ProductCategoryPresenter;
 import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
@@ -89,4 +91,8 @@ public interface Injector {
     void inject(AnalyticsUtil analyticsUtil);
 
     void inject(WidgetPresenter widgetPresenter);
+
+    void inject(CategoryListFragment categoryListFragment);
+
+    void inject(ProductCategoryPresenter productCategoryPresenter);
 }

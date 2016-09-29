@@ -19,6 +19,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * Created by pooja on 8/27/2016.
  */
 public class Utils {
+    public static final String TIME_OUT = "timeout";
 
     private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
             "Jul", "Aug", "Sep", "Oct",

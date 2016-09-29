@@ -1,6 +1,7 @@
 package com.petmeds1800.api;
 
 import com.petmeds1800.model.CountryListResponse;
+import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.RemoveCardRequest;
 import com.petmeds1800.model.StatesListResponse;
@@ -180,4 +181,8 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/home/HomeActor/loadWidgets")
     Observable<WidgetListResponse> getWidgetData();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/home/HomeActor/categoryUrls")
+    Observable<ProductCategoryListResponse> getProductCategory();
 }
