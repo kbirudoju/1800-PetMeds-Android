@@ -1,16 +1,5 @@
 package com.petmeds1800.ui.checkout;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CheckoutSteps;
-import com.petmeds1800.model.entities.StepState;
-import com.petmeds1800.model.shoppingcart.CommerceItems;
-import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
-import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.util.FontelloTextView;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +8,16 @@ import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CheckoutSteps;
+import com.petmeds1800.model.entities.StepState;
+import com.petmeds1800.model.shoppingcart.CommerceItems;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.stepfour.StepFourRootFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.util.FontelloTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -211,8 +210,9 @@ public class CheckOutActivity extends AbstractActivity
 
     @Override
     public void startNextStep(String nextStepCode) {
+        replaceCheckOutFragment(StepFourRootFragment.newInstance(mShoppingCartListResponse), StepFourRootFragment.class.getName(),false);
 
-        switch (mApplicableSteps.indexOf(nextStepCode)) {
+        /*switch (mApplicableSteps.indexOf(nextStepCode)) {
 
             case 0: //step 1 "Select Shipping Address"
                 replaceCheckOutFragment(StepOneRootFragment.newInstance(mShoppingCartListResponse), StepOneRootFragment.class.getName(),false);
@@ -245,7 +245,7 @@ public class CheckOutActivity extends AbstractActivity
 
                 break;
         }
-
+*/
     }
 
     @Override

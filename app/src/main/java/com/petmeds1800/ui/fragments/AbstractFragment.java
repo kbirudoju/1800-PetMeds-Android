@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,6 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.petmeds1800.R;
 
 import java.util.HashMap;
 
@@ -70,6 +70,12 @@ public abstract class AbstractFragment extends Fragment {
     public void replaceStepRootChildFragment(Fragment fragment,int containerId) {
         FragmentTransaction trans = getChildFragmentManager().beginTransaction();
         trans.replace(containerId, fragment);
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        trans.commit();
+    }
+    public void replaceStepRootChildFragmentWithTag(Fragment fragment,int containerId,String tag) {
+        FragmentTransaction trans = getChildFragmentManager().beginTransaction();
+        trans.replace(containerId, fragment, tag);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
     }

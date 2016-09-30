@@ -50,6 +50,7 @@ import com.petmeds1800.model.entities.Pets;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.AddNewEntityActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
@@ -242,6 +243,7 @@ public class AddPetFragment extends AbstractFragment
     private int fromWhichDailog = 0;
 
     private String age = "";
+    private AddNewEntityActivity mCallback;
 
     @Nullable
     @Override
@@ -300,7 +302,7 @@ public class AddPetFragment extends AbstractFragment
     }
 
     public void openDailog(String data[], int code) {
-        ((HomeActivity) getActivity()).hideProgress();
+        //((HomeActivity) getActivity()).hideProgress();
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
                 .newInstance(data,
@@ -368,7 +370,7 @@ public class AddPetFragment extends AbstractFragment
                 showImageOptions();
                 break;
             case R.id.add_edit_medication_allergies:
-                ((HomeActivity) getActivity()).showProgress();
+               // ((HomeActivity) getActivity()).showProgress();
                 fromWhichDailog = IS_MEDICATIONS_ALLERGY_DAILOG;
                 if (perMedicationAlleryList != null && perMedicationAlleryList.size() > 0) {
                     showPetMedicalData(getString(R.string.title_for_pet_allergies), perMedicationAlleryList);
@@ -377,7 +379,7 @@ public class AddPetFragment extends AbstractFragment
                 }
                 break;
             case R.id.add_edit_medication_conditions:
-                ((HomeActivity) getActivity()).showProgress();
+             //   ((HomeActivity) getActivity()).showProgress();
                 fromWhichDailog = IS_MEDICATIONS_CONDITIONS_DAILOG;
                 if (perMedicationConditionList != null && perMedicationConditionList.size() > 0) {
                     showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
@@ -386,11 +388,11 @@ public class AddPetFragment extends AbstractFragment
                 }
                 break;
             case R.id.pet_type_edit:
-                ((HomeActivity) getActivity()).showProgress();
+              //  ((HomeActivity) getActivity()).showProgress();
                 mPresenter.populatePetTypeList();
                 break;
             case R.id.breed_type_edit:
-                ((HomeActivity) getActivity()).showProgress();
+              //  ((HomeActivity) getActivity()).showProgress();
                 mPresenter.pouplatePetBreedTypeList();
                 break;
         }
@@ -768,6 +770,17 @@ public class AddPetFragment extends AbstractFragment
         showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
     }
 
+    @Override
+    public void onPetAddSuccess(Pets pet) {
+        progressBar.setVisibility(View.GONE);
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.remove(this);
+        trans.commit();
+        manager.popBackStack();
+        mCallback.setPet(pet);
+    }
+
     public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,
             EditText birthdayText) {
         if (auditEditText.getText().toString().isEmpty() && birthdayText.getText().toString().isEmpty()) {
@@ -922,6 +935,18 @@ public class AddPetFragment extends AbstractFragment
         recyclerView = null;
 
     }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            if (context instanceof AddNewEntityActivity) {
+                mCallback = (AddNewEntityActivity) context;
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement AddACardContract.AddressSelectionListener");
+        }
 
+    }
 
 }

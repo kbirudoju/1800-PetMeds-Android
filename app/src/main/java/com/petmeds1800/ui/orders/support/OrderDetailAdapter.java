@@ -101,7 +101,6 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                         .inflate(resourceTopView, parent, false);
                 viewHolder = new WebViewHolder(v);
                 v.setOnClickListener(listener);
-
                 break;
 
         }
@@ -146,8 +145,6 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                 }else{
                     productHolder.vetNameLabel.setVisibility(View.GONE);
                 }
-
-
                 break;
             case VIEW_TYPE_SHIIPING:
                 ShippingViewHolder shippingHolder = (ShippingViewHolder) holder;

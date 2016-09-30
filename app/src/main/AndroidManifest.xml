@@ -64,6 +64,9 @@
                   android:screenOrientation="portrait"
                   android:stateNotNeeded="true"
                   android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity
+            android:name=".ui.checkout.AddNewEntityActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
                 android:name="android.app.default_searchable"

@@ -1,5 +1,8 @@
 package com.petmeds1800.ui.pets.presenter;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.AddPetRequest;
@@ -12,9 +15,6 @@ import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.ui.pets.support.AddPetContract;
-
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -63,7 +63,7 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                         Log.d("Addpetresponse", s.toString());
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
-                                mView.onSuccess();
+                                mView.onPetAddSuccess(s.getPet());
                             }
                         } else {
                             if (mView.isActive()) {

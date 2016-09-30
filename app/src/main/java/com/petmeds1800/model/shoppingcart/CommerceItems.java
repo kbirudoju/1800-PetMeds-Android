@@ -15,7 +15,16 @@ public class CommerceItems implements Serializable {
     private String skuDisplayName;
     private String petName;
     private String vetClinic;
-    private String isRxItem;
+
+    public boolean isRxItem() {
+        return isRxItem;
+    }
+
+    public void setIsRxItem(boolean isRxItem) {
+        this.isRxItem = isRxItem;
+    }
+
+    private boolean isRxItem;
     private float sellingPrice;
     private String productPageUrl;
     private float listPrice;
@@ -23,6 +32,15 @@ public class CommerceItems implements Serializable {
     private String commerceItemId;
     private String quantity;
     private String vetId;
+    private String vetName;
+
+    public String getVetName() {
+        return vetName;
+    }
+
+    public void setVetName(String vetName) {
+        this.vetName = vetName;
+    }
 
     public String getProductGroup ()
     {
@@ -94,15 +112,6 @@ public class CommerceItems implements Serializable {
         this.vetClinic = vetClinic;
     }
 
-    public String getIsRxItem ()
-    {
-        return isRxItem;
-    }
-
-    public void setIsRxItem (String isRxItem)
-    {
-        this.isRxItem = isRxItem;
-    }
 
     public float getSellingPrice ()
     {

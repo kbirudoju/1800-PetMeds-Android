@@ -33,6 +33,7 @@
                          android:layout_below="@+id/detailFragment"
                          android:layout_alignLeft="@+id/detailFragment"/>
 
+
         </RelativeLayout>
     </ScrollView>
 

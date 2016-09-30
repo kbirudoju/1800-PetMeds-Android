@@ -443,4 +443,12 @@
     <string name="label_shipping_method_fedex_overnight">FedEx Overnight (1en dash2 business days)</string>
     <string name="label_view_shipping_options">View Shipping Options</string>
     <string name="label_shipping_options">Shipping Options</string>
+    <!--Add Pet Vet info-->
+    <string name="confirm_prescription_txt">CONFIRM PRESCRIPTION INFORMATION</string>
+    <string name="select_pet_title">Select Pet</string>
+    <string name="add_new_pet_txt">Add New Pet</string>
+    <string name="add_new_vet_txt">Add New Vet</string>
+    <string name="select_vet_title">Select Vet</string>
+    <string name="hint_vet_name">Vet Name</string>
 </resources>
+
