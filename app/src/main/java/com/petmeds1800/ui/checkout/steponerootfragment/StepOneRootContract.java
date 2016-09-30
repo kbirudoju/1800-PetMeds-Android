@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
 import com.petmeds1800.model.entities.SavedShippingAddressRequest;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -11,7 +12,7 @@ import com.petmeds1800.mvp.BaseView;
 public interface StepOneRootContract {
     interface View extends BaseView<StepOneRootContract.Presenter> {
         boolean isActive();
-        void onSuccess();
+        void onSuccess(ShoppingCartListResponse response);
         void onError(String errorMessage);
         void showErrorCrouton(CharSequence message, boolean span);
     }

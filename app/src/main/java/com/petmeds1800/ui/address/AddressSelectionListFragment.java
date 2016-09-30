@@ -3,8 +3,8 @@ package com.petmeds1800.ui.address;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
@@ -38,7 +38,8 @@ import static com.petmeds1800.ui.payment.AddEditCardFragment.TIME_OUT;
 /**
  * Created by Abhinav on 11/8/16.
  */
-public class AddressSelectionListFragment extends AbstractFragment implements SavedAddressListContract.View,View.OnClickListener {
+public class AddressSelectionListFragment extends AbstractFragment
+        implements SavedAddressListContract.View, View.OnClickListener {
 
     @BindView(R.id.noSavedAddress_layout)
     LinearLayout mNoSavedAddressLinearLayout;
@@ -68,14 +69,18 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
 
     private int mRequestCode;
 
-    public static AddressSelectionListFragment newInstance(int requestCode) {
+    private String mShippingAddressId;
 
+
+    public static AddressSelectionListFragment newInstance(int requestCode, String shippingAddressId) {
         Bundle args = new Bundle();
         args.putInt(AddEditCardFragment.REQUEST_CODE, requestCode);
+        args.putString(StepOneRootFragment.SHIPPING_ADDRESS_KEY, shippingAddressId);
         AddressSelectionListFragment fragment = new AddressSelectionListFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +90,7 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
 
         if (bundle != null) {
             mRequestCode = bundle.getInt(AddEditCardFragment.REQUEST_CODE);
+            mShippingAddressId = bundle.getString(StepOneRootFragment.SHIPPING_ADDRESS_KEY);
         }
         if (mRequestCode == AddEditCardFragment.EDIT_CARD_REQUEST) {
             setHasOptionsMenu(true);
@@ -163,6 +169,9 @@ public class AddressSelectionListFragment extends AbstractFragment implements Sa
         return super.onOptionsItemSelected(item);
     }
 
+    public String getShippingAddressId() {
+        return mShippingAddressId;
+    }
     @Override
     public boolean isActive() {
         return isAdded();

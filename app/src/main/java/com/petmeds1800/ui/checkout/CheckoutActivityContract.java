@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.checkout;
 
 import com.petmeds1800.model.entities.CheckoutSteps;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -22,6 +23,7 @@ public interface CheckoutActivityContract {
 
         /**
          * It should be used to start the next step by making the appropiate fragment transaction
+         *
          * @param nextStepCode represents the current active step
          */
         void startNextStep(String nextStepCode);
@@ -41,15 +43,18 @@ public interface CheckoutActivityContract {
 
     interface StepsFragmentInteractionListener {
 
+        void startNextStep(String stepName, ShoppingCartListResponse shoppingCartListResponse);
+
         /**
          * It should be used to draw the correct states on the top navigation circles
+         *
          * @param lastCompletedStep represents the last completed step
          */
         void setLastCompletedSteps(String lastCompletedStep);
 
         void setActiveStep(String activeStep);
 
-        void moveToNext(String currentStep);
+        void moveToNext(String currentStep, ShoppingCartListResponse mShoppingCartListResponse);
     }
 
 }

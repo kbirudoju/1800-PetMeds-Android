@@ -1,6 +1,8 @@
 package com.petmeds1800.ui.checkout;
 
+import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.model.entities.ShippingMethodsResponse;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -10,7 +12,7 @@ import com.petmeds1800.mvp.BaseView;
 public interface StepTwoContract {
 
     interface View extends BaseView<Presenter> {
-
+        boolean isActive();
         void showProgress();
 
         void hideProgress();
@@ -24,6 +26,10 @@ public interface StepTwoContract {
         void onSuccessShippingMethods(ShippingMethodsResponse shippingMethodsResponse);
 
         void onErrorShippingMethods();
+
+        void onSuccessShippingMethodsApplied(ShoppingCartListResponse shoppingCartListResponse);
+
+        void onErrorShippingMethodsApplied(String error);
     }
 
     interface Presenter extends BasePresenter {
@@ -31,5 +37,7 @@ public interface StepTwoContract {
         void populateShippingMethodsListRecycler();
 
         void showShippingOptions();
+
+        void applyShippingMethods(ShippingMethodsRequest shippingMethodsRequest);
     }
 }

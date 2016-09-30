@@ -2,7 +2,9 @@ package com.petmeds1800.ui.checkout;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.model.entities.ShippingMethodsResponse;
+import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 
 import javax.inject.Inject;
 
@@ -20,7 +22,7 @@ public class StepTwoPresenter implements StepTwoContract.Presenter {
     @Inject
     PetMedsApiService mApiService;
 
-    public StepTwoPresenter(StepTwoContract.View view){
+    public StepTwoPresenter(StepTwoContract.View view) {
         mView = view;
         PetMedsApplication.getAppComponent().inject(this);
     }
@@ -74,6 +76,37 @@ public class StepTwoPresenter implements StepTwoContract.Presenter {
                     }
                 });
     }
+
+    @Override
+    public void applyShippingMethods(ShippingMethodsRequest shippingMethodsRequest) {
+        mApiService.applyShippingMethods(shippingMethodsRequest).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ShoppingCartListResponse>() {
+                    @Override
+                    public void onCompleted() {
+                        mView.hideProgress();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.hideProgress();
+                    }
+
+                    @Override
+                    public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
+                        if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.onSuccessShippingMethodsApplied(shoppingCartListResponse);
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.onErrorShippingMethodsApplied(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+                    }
+                });
+    }
+
 
     @Override
     public void start() {

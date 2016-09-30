@@ -1,11 +1,8 @@
-package com.petmeds1800.ui.checkout.stepfour.presenter;
+package com.petmeds1800.ui.checkout.stepfive;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.SavePetVetRequest;
-import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
-
-import android.support.annotation.NonNull;
+import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
 
 import javax.inject.Inject;
 
@@ -14,21 +11,20 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by pooja on 9/30/2016.
+ * Created by Sdixit on 29-09-2016.
  */
-public class StepFourRootPresenter implements StepFourRootContract.Presenter {
+
+public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
+
+    private StepFiveRootContract.View mView;
 
     @Inject
     PetMedsApiService mPetMedsApiService;
 
-    private StepFourRootContract.View mView;
-
-
-    public StepFourRootPresenter(@NonNull StepFourRootContract.View view) {
+    public StepFiveRootPresentor(StepFiveRootContract.View view) {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
-
     }
 
     @Override
@@ -37,14 +33,13 @@ public class StepFourRootPresenter implements StepFourRootContract.Presenter {
     }
 
     @Override
-    public void applyPetVetInfo(SavePetVetRequest request) {
-        mPetMedsApiService.savePetVet(request)
+    public void getOrderReviewDetails(String sessionConfig) {
+        mPetMedsApiService.getOrderReviewDetails(sessionConfig)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ShoppingCartListResponse>() {
+                .subscribe(new Subscriber<OrderReviewSubmitResponse>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
@@ -55,14 +50,14 @@ public class StepFourRootPresenter implements StepFourRootContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
-                        if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                    public void onNext(OrderReviewSubmitResponse orderReviewSubmitResponse) {
+                        if (orderReviewSubmitResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
-                                mView.onSuccess(shoppingCartListResponse);
+                                mView.populateOrderReviewDetails(orderReviewSubmitResponse);
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                                mView.onError(orderReviewSubmitResponse.getStatus().getErrorMessages().get(0));
                             }
                         }
 

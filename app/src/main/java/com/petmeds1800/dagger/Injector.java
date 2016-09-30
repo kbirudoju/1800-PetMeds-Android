@@ -13,16 +13,18 @@ import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
-import com.petmeds1800.ui.checkout.StepTwoPresenter;
 import com.petmeds1800.ui.checkout.CheckoutActivityPresenter;
-
+import com.petmeds1800.ui.checkout.StepTwoPresenter;
+import com.petmeds1800.ui.checkout.StepTwoRootFragment;
+import com.petmeds1800.ui.checkout.stepfive.StepFiveRootFragment;
+import com.petmeds1800.ui.checkout.stepfive.StepFiveRootPresentor;
 import com.petmeds1800.ui.checkout.stepfour.StepFourRootFragment;
 import com.petmeds1800.ui.checkout.stepfour.presenter.PetVetInfoPresenter;
 import com.petmeds1800.ui.checkout.stepfour.presenter.StepFourRootPresenter;
-import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootPresentor;
-
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootPresentor;
 import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
@@ -103,16 +105,28 @@ public interface Injector {
 
     void inject(WidgetPresenter widgetPresenter);
 
-    void inject (ShoppingCartListPresenter shoppingCartListPresenter);
+    void inject(ShoppingCartListPresenter shoppingCartListPresenter);
 
     void inject(CheckoutActivityPresenter widgetPresenter);
 
     void inject(StepOneRootPresentor stepOneRootPresentor);
+
     void inject(StepOneRootFragment stepOneRootFragment);
+
+    void inject(StepTwoRootFragment stepTwoRootFragment);
+
     void inject(StepThreeRootFragment stepThreeRootFragment);
 
     void inject(PetVetInfoPresenter petVetInfoPresenter);
+
     void inject(StepFourRootPresenter stepFourRootPresenter);
+
     void inject(StepFourRootFragment stepFourRootFragment);
+
+    void inject(StepFiveRootPresentor stepFiveRootPresentor);
+
+    void inject(StepFiveRootFragment stepFiveRootFragment);
+
+    void inject(StepThreeRootPresentor stepThreeRootPresentor);
 
 }

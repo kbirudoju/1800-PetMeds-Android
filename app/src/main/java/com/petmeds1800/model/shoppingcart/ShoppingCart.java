@@ -14,9 +14,18 @@ public class ShoppingCart implements Serializable {
     private String userId;
     private ArrayList<ShippingGroups> shippingGroups;
     private String shoppingCartId;
+    private String shippingAddressId;
     private String coupon;
     private ArrayList<CommerceItems> commerceItems;
     private float discountAmount;
+
+    public String getShippingAddressId() {
+        return shippingAddressId;
+    }
+
+    public void setShippingAddressId(String shippingAddressId) {
+        this.shippingAddressId = shippingAddressId;
+    }
 
     public ArrayList<PaymentGroups> getPaymentGroups() {
         return paymentGroups;

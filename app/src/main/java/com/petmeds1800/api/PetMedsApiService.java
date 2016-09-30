@@ -11,6 +11,7 @@ import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.AgeListResponse;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
 import com.petmeds1800.model.entities.EasyRefillReminder;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.ForgotPasswordResponse;
@@ -21,6 +22,7 @@ import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
+import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
 import com.petmeds1800.model.entities.PetBreedTypeListResponse;
 import com.petmeds1800.model.entities.PetList;
 import com.petmeds1800.model.entities.PetMedicalConditionResponse;
@@ -33,6 +35,7 @@ import com.petmeds1800.model.entities.SavePetVetRequest;
 import com.petmeds1800.model.entities.SavedShippingAddressRequest;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.model.entities.ShippingMethodsResponse;
 import com.petmeds1800.model.entities.SignOutRequest;
 import com.petmeds1800.model.entities.SignOutResponse;
@@ -207,7 +210,8 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/checkout/CheckoutActor/applySavedShippingAddress")
-    Observable<ShoppingCartListResponse> saveShippingAddress(@Body SavedShippingAddressRequest savedShippingAddressRequest);
+    Observable<ShoppingCartListResponse> saveShippingAddress(
+            @Body SavedShippingAddressRequest savedShippingAddressRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/vet/VetActor/list")
@@ -216,5 +220,19 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/checkout/CheckoutActor/linkPetVet")
     Observable<ShoppingCartListResponse> savePetVet(@Body SavePetVetRequest savePetVetRequest);
+
+    @GET("/rest/model/1800petmeds/checkout/CheckoutActor/orderReview")
+    Observable<OrderReviewSubmitResponse> getOrderReviewDetails(
+            @Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/checkout/CheckoutActor/applyShippingMethod")
+    Observable<ShoppingCartListResponse> applyShippingMethods(@Body ShippingMethodsRequest shippingMethodsRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/checkout/CheckoutActor/applyCreditCardPaymentMethod")
+    Observable<ShoppingCartListResponse> applyCreditCardPaymentMethod(
+            @Body CreditCardPaymentMethodRequest creditCardPaymentMethodRequest);
+
 
 }

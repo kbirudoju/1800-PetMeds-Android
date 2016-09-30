@@ -45,6 +45,8 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
 
     private SavedCardsListContract.Presenter mPresenter;
 
+    private Card mCard;
+
     private PaymentSelectionListAdapter mPaymentSelectionListAdapter;
 
     public static PaymentSelectionListFragment newInstance(int requestCode) {
@@ -59,6 +61,13 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new SavedCardsListPresenter(this);
+
+    }
+
+    public void setCard(Card card) {
+        if (getParentFragment() != null && getParentFragment() instanceof StepThreeRootFragment) {
+            ((StepThreeRootFragment) getParentFragment()).setCard(card);
+        }
 
     }
 

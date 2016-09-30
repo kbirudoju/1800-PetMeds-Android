@@ -45,6 +45,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.mContext = context;
         this.mRequestCode = requestCode;
 
+
     }
 
     public void clearData() {
@@ -58,6 +59,17 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void setData(List<Address> myCards) {
         this.mAddresses = myCards;
         notifyDataSetChanged();
+        if (this.mRequestCode == StepOneRootFragment.REQUEST_CODE && mAddresses.size() > 0) {
+            for (int i = 0; i < this.mAddresses.size(); i++) {
+                Address address = this.mAddresses.get(i);
+                if (address.getAddressId() != null && address.getAddressId()
+                        .equals(this.mAddressSelectionListFragment.getShippingAddressId())) {
+                    mSelectedPosition = i;
+                    break;
+                }
+            }
+        }
+
     }
 
 
@@ -79,7 +91,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         final AddressItemViewHolder orderViewHolder = (AddressItemViewHolder) holder;
         final Address myAddress = getItemAt(position);
-
+        Log.d("addresses are ", position + ">>>>" + mAddresses.get(position).getAddressId());
 //            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue),myCard.getExpirationMonth(),myCard.getExpirationYear());
         orderViewHolder.mNameOnAddressLabel.setText(myAddress.getFirstName() + " " + myAddress.getLastName());
         orderViewHolder.mAddressLine1Label.setText(myAddress.getAddress1());
@@ -99,12 +111,12 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
                 .setText(String.format(mContext.getString(R.string.phoneNumberInAddress), myAddress.getPhoneNumber()));
 
         if (position == mSelectedPosition) {
-            orderViewHolder.mAddressSelectionRadio.setChecked(true);
             if (this.mRequestCode == StepOneRootFragment.REQUEST_CODE) {
                 orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);
             } else {
                 orderViewHolder.mSelectAddressButton.setVisibility(View.VISIBLE);
             }
+            orderViewHolder.mAddressSelectionRadio.setChecked(true);
             mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
         } else {
             orderViewHolder.mAddressSelectionRadio.setChecked(false);

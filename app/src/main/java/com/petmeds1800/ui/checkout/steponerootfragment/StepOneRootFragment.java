@@ -35,6 +35,8 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
 
     public final static int REQUEST_CODE = 2;
 
+    public final static String SHIPPING_ADDRESS_KEY = "shippingAddressId";
+
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
 
@@ -45,19 +47,29 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
 
     private StepOneRootContract.Presenter mPresenter;
 
+    private String mStepName;
+
+    private String mshippingAddressId;
+
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    private ShoppingCartListResponse mShoppingCartListResponse;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
+        mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
+                .getSerializable(CartFragment.SHOPPING_CART);
     }
 
-    public static StepOneRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse) {
+    public static StepOneRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse, String stepName) {
         StepOneRootFragment f = new StepOneRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
+        args.putString(CheckOutActivity.STEP_NAME, stepName);
         f.setArguments(args);
         return f;
     }
@@ -68,11 +80,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_checkout, container, false);
-
-        ((CheckOutActivity) getActivity()).setCheckOutCircleAsSelected(CheckOutActivity.FIRST_SHIPMENT_CHECKOUT_CIRCLE);
-        replaceStepRootChildFragment(AddressSelectionListFragment.newInstance(REQUEST_CODE), R.id.detailFragment);
-        replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
-                R.id.communicationfragment);
+        ((CheckOutActivity) getActivity()).setActiveStep(mStepName);
 
         ButterKnife.bind(this, view);
         return view;
@@ -83,8 +91,16 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
         super.onViewCreated(view, savedInstanceState);
         mPresenter = new StepOneRootPresentor(this);
         PetMedsApplication.getAppComponent().inject(this);
+        if (mShoppingCartListResponse != null) {
+            mshippingAddressId = mShoppingCartListResponse.getShoppingCart().getShippingAddressId();
+        }
+        replaceStepRootChildFragment(AddressSelectionListFragment.newInstance(REQUEST_CODE, mshippingAddressId),
+                R.id.detailFragment);
+        replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
+                R.id.communicationfragment);
 
     }
+
 
     public Address getAddress() {
         return mAddress;
@@ -96,6 +112,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
 
     @OnClick(R.id.shippingNavigator)
     public void onClick() {
+        ((CheckOutActivity) getActivity()).showProgress();
         if (mAddress != null) {
             mPresenter.saveShippingAddress(
                     new SavedShippingAddressRequest(
@@ -110,20 +127,22 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
         return isAdded();
     }
 
-
-
     @Override
-    public void onSuccess() {
-
+    public void onSuccess(ShoppingCartListResponse response) {
+        ((CheckOutActivity) getActivity()).hideProgress();
+        ((CheckOutActivity) getActivity()).moveToNext(mStepName, response);
     }
+
 
     @Override
     public void onError(String errorMessage) {
+        ((CheckOutActivity) getActivity()).hideProgress();
 
     }
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
+        ((CheckOutActivity) getActivity()).hideProgress();
         Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
     }
 

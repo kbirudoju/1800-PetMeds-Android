@@ -56,7 +56,7 @@ public class StepOneRootPresentor implements StepOneRootContract.Presenter {
                     public void onNext(ShoppingCartListResponse shoppingCartListResponse ) {
                         if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
-                                mView.onSuccess();
+                                mView.onSuccess(shoppingCartListResponse);
                             }
                         } else {
                             if (mView.isActive()) {

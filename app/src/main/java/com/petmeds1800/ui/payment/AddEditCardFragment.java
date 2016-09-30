@@ -150,7 +150,7 @@ public class AddEditCardFragment extends AbstractFragment
 
     private int mRequestCode;
 
-    public static AddEditCardFragment newInstance(int requestCode){
+    public static AddEditCardFragment newInstance(int requestCode) {
         Bundle bundle = new Bundle();
         bundle.putInt(REQUEST_CODE, requestCode);
         AddEditCardFragment addEditCardFragment = new AddEditCardFragment();
@@ -198,14 +198,14 @@ public class AddEditCardFragment extends AbstractFragment
         //check if we have an address for the "add a card" request or "edit a card" request
         Bundle bundle = getArguments();
 
-        if(bundle != null) {
+        if (bundle != null) {
             mAddress = (Address) bundle.getSerializable(FIRST_ARG);
             //get the card
             mCard = (Card) bundle.getSerializable(CARD);
         }
 
         //if address is already added
-        if(mAddress == null && mCard != null) {
+        if (mAddress == null && mCard != null) {
             mPresenter.getAddress(mCard.getBillingAddress().getRepositoryId());
         }
     }
@@ -377,7 +377,7 @@ public class AddEditCardFragment extends AbstractFragment
 
     @OnClick(R.id.addressSelection_label)
     public void selectAddress() {
-        replaceAccountAndAddToBackStack(AddressSelectionListFragment.newInstance(mRequestCode),
+        replaceAccountAndAddToBackStack(AddressSelectionListFragment.newInstance(mRequestCode, null),
                 AddressSelectionListFragment.class.getSimpleName());
     }
 

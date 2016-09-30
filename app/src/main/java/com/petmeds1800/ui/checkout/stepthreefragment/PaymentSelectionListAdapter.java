@@ -88,6 +88,7 @@ public class PaymentSelectionListAdapter extends RecyclerView.Adapter<RecyclerVi
         }
         if (position == mSelectedPosition) {
             viewHolder.mPaymentSelectionRadio.setChecked(true);
+            this.mPaymentSelectionListFragment.setCard(myCard);
         } else {
             viewHolder.mPaymentSelectionRadio.setChecked(false);
         }
@@ -98,6 +99,7 @@ public class PaymentSelectionListAdapter extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onClick(View v) {
                 mSelectedPosition = (Integer) v.getTag();
+                mPaymentSelectionListFragment.setCard(getItemAt(mSelectedPosition));
                 notifyDataSetChanged();
 
             }
