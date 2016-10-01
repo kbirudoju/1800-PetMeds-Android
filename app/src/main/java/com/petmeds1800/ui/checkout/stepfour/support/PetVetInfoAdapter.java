@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -33,6 +35,7 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private ArrayList<CommerceItems> commerceItems;
     private Context mContext;
     private View.OnClickListener listener;
+    private CompoundButton.OnCheckedChangeListener checkListener;
 
 
     @Override
@@ -42,6 +45,8 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return new HeaderViewHolder (v);
         } else if(viewType == TYPE_FOOTER) {
             View v = LayoutInflater.from (parent.getContext ()).inflate (R.layout.view_pet_vet_info_footer, parent, false);
+            Switch mailOptionSwitch=(Switch)v.findViewById(R.id.mail_option_switch);
+            mailOptionSwitch.setOnCheckedChangeListener(checkListener);
             return new FooterViewHolder (v);
         } else if(viewType == TYPE_ITEM) {
             View v = LayoutInflater.from (parent.getContext ()).inflate (R.layout.view_pet_vet_info_item, parent, false);
@@ -57,9 +62,10 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return null;
     }
 
-    public PetVetInfoAdapter(Context context,View.OnClickListener listener) {
+    public PetVetInfoAdapter(Context context,View.OnClickListener listener,CompoundButton.OnCheckedChangeListener checkListener) {
         this.mContext = context;
         this.listener = listener;
+        this.checkListener=checkListener;
     }
 
     public void setData( ArrayList<CommerceItems> commerceItems) {
@@ -88,33 +94,27 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     itemViewHolder.productImage.setImageDrawable(circularBitmapDrawable);
                 }
             });
-            itemViewHolder.quantityLabel.setText(commerceItem.getQuantity());
+            itemViewHolder.quantityLabel.setText(commerceItem.getSkuDisplayName());
             itemViewHolder.petNameEdit.setTag(position);
             itemViewHolder.vetNameEdit.setTag(position);
-            if(commerceItem.isRxItem()){
-                itemViewHolder.petNameEdit.setVisibility(View.VISIBLE);
-                itemViewHolder.vetNameEdit.setVisibility(View.VISIBLE);
+
                 if(commerceItem.getPetName()!=null && !commerceItem.getPetName().isEmpty()) {
                     itemViewHolder.petNameEdit.setText(commerceItem.getPetName());
                 }if(commerceItem.getVetName()!=null && !commerceItem.getVetName().isEmpty()){
                     itemViewHolder.vetNameEdit.setText(commerceItem.getVetName());
 
                 }
-            }else{
-                itemViewHolder.petNameEdit.setVisibility(View.GONE);
-                itemViewHolder.vetNameEdit.setVisibility(View.GONE);
-
-            }
-
-
 
         }
     }
 
     @Override
     public int getItemCount() {
-        Log.d("Item count",commerceItems.size()+2+">>");
-        return commerceItems.size()+2;
+        if(commerceItems==null){
+            return 0;
+        }else {
+            return commerceItems.size() + 2;
+        }
     }
 
     private CommerceItems getItem (int position) {
@@ -163,8 +163,7 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView productNameLabel;
         @BindView(R.id.quantity_label)
         TextView quantityLabel;
-        @BindView(R.id.quantity_secondary_label)
-        TextView quantitySecondaryLabel;
+
         @BindView(R.id.pet_name_edit)
         EditText petNameEdit;
         @BindView(R.id.vet_name_edit)

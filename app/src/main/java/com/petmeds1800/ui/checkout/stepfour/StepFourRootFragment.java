@@ -1,6 +1,6 @@
 package com.petmeds1800.ui.checkout.stepfour;
 
-import com.petmeds1800.ui.fragments.AbstractFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.SavePetVetRequest;
@@ -21,15 +22,6 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
-
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -95,6 +87,9 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
         Bundle bundle = getArguments();
         if (bundle != null) {
             shoppingCartObj = (ShoppingCartListResponse) bundle.getSerializable(CartFragment.SHOPPING_CART);
+           //temporary line for testing
+           /* shoppingCartObj.getShoppingCart().getCommerceItems().get(0).setIsRxItem(true);
+            shoppingCartObj.getShoppingCart().getCommerceItems().get(2).setIsRxItem(true);*/
             mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
         }
         activity.setActiveStep(mStepName);
@@ -106,12 +101,11 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
         activity.showProgress();
         PetVetInfoFragment fragment = (PetVetInfoFragment) getChildFragmentManager()
                 .findFragmentByTag(PetVetInfoFragment.class.getSimpleName());
-        fragment.shoppingCart.getCommerceItems().size();
         ArrayList<String> commerceItemIds = new ArrayList<>();
         ArrayList<String> petIds = new ArrayList<>();
         ArrayList<String> vetIds = new ArrayList<>();
 
-        for (CommerceItems commerceItem : fragment.shoppingCart.getCommerceItems()) {
+        for (CommerceItems commerceItem : fragment.mCommerceItem) {
             commerceItemIds.add(commerceItem.getCommerceItemId());
             if (commerceItem.getPetId() != null && !commerceItem.getPetId().isEmpty()) {
                 petIds.add(commerceItem.getPetId());

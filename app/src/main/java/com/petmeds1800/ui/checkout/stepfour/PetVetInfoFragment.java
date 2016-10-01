@@ -10,11 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.entities.Pets;
 import com.petmeds1800.model.entities.Vet;
+import com.petmeds1800.model.shoppingcart.CommerceItems;
 import com.petmeds1800.model.shoppingcart.ShoppingCart;
 import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
 import com.petmeds1800.ui.checkout.stepfour.presenter.PetVetInfoContract;
@@ -37,7 +39,7 @@ import butterknife.ButterKnife;
  * Created by pooja on 9/27/2016.
  */
 public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoContract.View,CommonDialogFragment.ValueSelectedListener{
-    public ShoppingCart shoppingCart;
+    //  public ShoppingCart shoppingCart;
     @BindView(R.id.pet_vet_view)
     RecyclerView mPetVetRecyclerView;
 
@@ -47,9 +49,10 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     private static final int PET_REQUEST = 2;
     private PetVetInfoContract.Presenter mPresenter;
     private int mPosition;
-   // private ArrayList<Vet> mVetList;
+    // private ArrayList<Vet> mVetList;
     private LinkedHashMap<String,String> mVetList;
     public String mMailOption="N";
+    public ArrayList<CommerceItems> mCommerceItem;
 
 
     public static PetVetInfoFragment newInstance(ShoppingCartListResponse shoppingCartListResponse) {
@@ -66,19 +69,36 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         View view = inflater.inflate(R.layout.fragment_pet_vet_information, container, false);
         ButterKnife.bind(this, view);
         mPresenter = new PetVetInfoPresenter(this);
-        mAdapter= new PetVetInfoAdapter(getActivity(),new View.OnClickListener(){
+        mAdapter= new PetVetInfoAdapter(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPosition=(int)v.getTag();
-                switch(v.getId()){
+                mPosition = (int) v.getTag();
+                switch (v.getId()) {
                     case R.id.pet_name_edit:
-                        Log.d("petname", "clicked"); ArrayList<String> list = new ArrayList<String>();
-                           mPresenter.getPetListData();
+                        Log.d("petname", "clicked");
+                        if(mPetList!=null && mPetList.size()>0) {
+                            showDialog(mPetList, PET_REQUEST, getActivity().getString(R.string.select_pet_title));
+                        }else{
+                            mPresenter.getPetListData();
+                        }
                         break;
                     case R.id.vet_name_edit:
-                        Log.d("vetname","clicked");
-                        mPresenter.getVetListData();
+                        Log.d("vetname", "clicked");
+                        if(mVetList!=null && mVetList.size()>0){
+                            showDialog(mVetList, VET_REQUEST, getActivity().getString(R.string.select_vet_title));
+                        }else{
+                            mPresenter.getVetListData();
+                        }
                         break;
+                }
+            }
+        }, new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mMailOption="Y";
+                }else{
+                    mMailOption="N";
                 }
             }
         });
@@ -92,7 +112,15 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         Bundle bundle = getArguments();
         if (bundle != null) {
             ShoppingCartListResponse shoppingCartListResponse = (ShoppingCartListResponse)bundle.getSerializable(CartFragment.SHOPPING_CART);
-            shoppingCart=shoppingCartListResponse.getShoppingCart();
+            //Add only those item which is a RxItem
+            ShoppingCart shoppingCartItem=shoppingCartListResponse.getShoppingCart();
+            mCommerceItem=new ArrayList<CommerceItems>();
+            for(CommerceItems commerceItems : shoppingCartItem.getCommerceItems()){
+                if(commerceItems.isRxItem()){
+                    mCommerceItem.add(commerceItems);
+                }
+            }
+
         }
 
     }
@@ -112,8 +140,8 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     }
 
     private void setItem(){
-        if(shoppingCart!=null && shoppingCart.getCommerceItems() != null && shoppingCart.getCommerceItems().size()>0){
-            mAdapter.setData(shoppingCart.getCommerceItems());
+        if(mCommerceItem!=null && mCommerceItem.size()>0){
+            mAdapter.setData(mCommerceItem);
         }
     }
 
@@ -174,9 +202,8 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                     AddNewEntityIntent addNewEntityIntent = new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_PET_REQUEST);
                     startActivityForResult(addNewEntityIntent, 2);
                 }else{
-                    shoppingCart.getCommerceItems().get(mPosition-1).setPetName(value);
-                    shoppingCart.getCommerceItems().get(mPosition-1).setPetId(getPetVetKey(mPetList,value));
-
+                    mCommerceItem.get(mPosition - 1).setPetName(value);
+                    mCommerceItem.get(mPosition - 1).setPetId(getPetVetKey(mPetList,value));
                     mAdapter.notifyItemChanged(mPosition);
                 }
 
@@ -185,8 +212,8 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                 if(value.equalsIgnoreCase(getActivity().getString(R.string.add_new_vet_txt))){
 
                 }else{
-                    shoppingCart.getCommerceItems().get(mPosition-1).setVetName(value);
-                    shoppingCart.getCommerceItems().get(mPosition-1).setVetId(getPetVetKey(mVetList, value));
+                    mCommerceItem.get(mPosition - 1).setVetName(value);
+                    mCommerceItem.get(mPosition - 1).setVetId(getPetVetKey(mVetList, value));
                     mAdapter.notifyItemChanged(mPosition);
                 }
                 break;
@@ -200,10 +227,10 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         // check if the request code is same as what is passed  here it is 2
         if(requestCode==2)
         {
-          Log.d("onActivityResult", ">>>>");
+            Log.d("onActivityResult", ">>>>");
             Pets pet =(Pets)data.getSerializableExtra("pet");
             mPetList.put(pet.getPetId(), pet.getPetName());
-            shoppingCart.getCommerceItems().get(mPosition - 1).setPetName(pet.getPetName());
+            mCommerceItem.get(mPosition - 1).setPetName(pet.getPetName());
             mAdapter.notifyItemChanged(mPosition);
 
         }
