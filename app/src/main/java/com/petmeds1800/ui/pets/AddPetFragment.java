@@ -301,12 +301,12 @@ public class AddPetFragment extends AbstractFragment
 
     }
 
-    public void openDailog(String data[], int code) {
+    public void openDailog(String data[], int code,String title) {
         //((HomeActivity) getActivity()).hideProgress();
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
                 .newInstance(data,
-                        getActivity().getString(R.string.choose_range_txt), code);
+                        title, code);
         commonDialogFragment.setValueSetListener(this);
         commonDialogFragment.show(fragManager);
     }
@@ -352,6 +352,7 @@ public class AddPetFragment extends AbstractFragment
             case fromGallery:
                 updateImageUtil.updateProfilePic(UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE);
                 alertDailogForPicture.dismiss();
+                break;
             case R.id.remove_pet_button:
                 FragmentManager fragmentManager = getFragmentManager();
                 Bundle removePetBundle = new Bundle();
@@ -726,7 +727,7 @@ public class AddPetFragment extends AbstractFragment
             list.add(data.getName());
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), AGE_REQUEST);
+        openDailog(list.toArray(dataArray), AGE_REQUEST, getActivity().getString(R.string.choose_range_txt));
 
     }
 
@@ -737,7 +738,7 @@ public class AddPetFragment extends AbstractFragment
             list.add(data.getValue());
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), TYPE_REQUEST);
+        openDailog(list.toArray(dataArray), TYPE_REQUEST, getActivity().getString(R.string.chhose_pet_title));
     }
 
     @Override
@@ -747,7 +748,7 @@ public class AddPetFragment extends AbstractFragment
             list.add(data.getValue());
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), BREED_REQUEST);
+        openDailog(list.toArray(dataArray), BREED_REQUEST, getActivity().getString(R.string.chhose_breed_title));
     }
 
     @Override
@@ -779,6 +780,17 @@ public class AddPetFragment extends AbstractFragment
         trans.commit();
         manager.popBackStack();
         mCallback.setPet(pet);
+    }
+
+    @Override
+    public void onPetRemoved() {
+        progressBar.setVisibility(View.GONE);
+        Snackbar.make(mPetWeight, getActivity().getString(R.string.pet_removed_msg), Snackbar.LENGTH_LONG).show();
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.remove(this);
+        trans.commit();
+        manager.popBackStack();
     }
 
     public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,

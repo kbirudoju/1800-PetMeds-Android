@@ -113,7 +113,6 @@
                         android:singleLine="true"
                         android:focusableInTouchMode="false"
                         android:editable="false"
-                        android:text="Dog"
                         style="@style/StyledEditText"
                         android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
@@ -132,7 +131,6 @@
                         android:hint="@string/hint_pet_breed"
                         android:singleLine="true"
                         android:editable="false"
-                        android:text="American Eskimo"
                         android:focusableInTouchMode="false"
                         style="@style/StyledEditText"
                         android:textColor="@color/edittext_selector"/>

@@ -134,7 +134,7 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                     public void onNext(RemovePetResponse s) {
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
-                                mView.onSuccess();
+                                mView.onPetRemoved();
                             }
                         } else {
                             if (mView.isActive()) {

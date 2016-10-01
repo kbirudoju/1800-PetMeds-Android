@@ -35,6 +35,7 @@ public interface AddPetContract {
         void populatePetBreedTypeData(PetBreedTypeListResponse reponse);
         void populatePetMedicalconditionsData(PetMedicalConditionResponse response);
         void onPetAddSuccess(Pets pet);
+        void onPetRemoved();
 
 
     }
