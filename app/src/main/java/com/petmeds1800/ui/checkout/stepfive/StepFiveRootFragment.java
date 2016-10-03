@@ -26,8 +26,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -97,6 +99,45 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
 
     @BindView(R.id.subTotal)
     TextView mSubTotal;
+
+    @BindView(R.id.shippingMethodContainer)
+    RelativeLayout mShippingMethodContainer;
+
+    @BindView(R.id.paymentMethodText)
+    TextView mPaymentMethodText;
+
+    @BindView(R.id.paymentMethodContainer)
+    RelativeLayout mPaymentMethodContainer;
+
+    @BindView(R.id.petVetText)
+    TextView mPetVetText;
+
+    @BindView(R.id.petVetContainer)
+    RelativeLayout mPetVetContainer;
+
+    @BindView(R.id.itemsheaderText)
+    TextView mItemsheaderText;
+
+    @BindView(R.id.communicationfragment)
+    FrameLayout mCommunicationfragment;
+
+    @BindView(R.id.scrollerView)
+    ScrollView mScrollerView;
+
+    @BindView(R.id.offerCode)
+    TextView mOfferCode;
+
+    @BindView(R.id.shipping)
+    TextView mShipping;
+
+    @BindView(R.id.taxes)
+    TextView mTaxes;
+
+    @BindView(R.id.total)
+    TextView mTotal;
+
+    @BindView(R.id.bottomContainer)
+    RelativeLayout mBottomContainer;
 
     private String mStepName;
 
@@ -202,6 +243,7 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
         }
 
     }
+
     @OnClick({R.id.shippingAddressEdit, R.id.shippingMethodEdit, R.id.paymentMethodEdit, R.id.petVetEdit})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -287,5 +329,11 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
     @Override
     public void setPresenter(StepFiveRootContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @OnClick(R.id.editCardButton)
+    public void onClick() {
+        getActivity().finish();
+
     }
 }

@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.Card;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
@@ -21,8 +22,19 @@ import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
+
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -45,6 +57,9 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
 
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
+
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
 
     private ShoppingCartListResponse mShoppingCartListResponse;
 
@@ -86,7 +101,8 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity.setToolBarTitle(getString(R.string.payment_method_header));
-        mShoppingCartListResponse = (ShoppingCartListResponse) getArguments().getSerializable(CartFragment.SHOPPING_CART);
+        mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
+                .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
         activity.setLastCompletedSteps(mStepName);
         activity.setActiveStep(mStepName);
@@ -151,9 +167,8 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
 
     @OnClick(R.id.newPaymentMethod)
     public void onClick() {
-        activity.replaceCheckOutFragment(
-                AddEditCardFragment.newInstance(StepThreeRootFragment.REQUEST_CODE),
-                AddEditCardFragment.class.getName(), true);
+        startActivity(new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_PAYMENT_METHOD));
+
     }
 
     @Override
@@ -176,11 +191,37 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         activity.hideProgress();
+        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+    }
+
+    @Override
+    public void setUpdatedAddressOnSuccess(Address address) {
+        activity.hideProgress();
+        mAddress = address;
+        ((AddEditAddressFragment) getChildFragmentManager().findFragmentById(R.id.billingAddressfragment))
+                .populateData(mAddress);
+    }
+
+    @Override
+    public void errorOnUpdateAddress() {
+        activity.hideProgress();
     }
 
     @Override
     public void setPresenter(StepThreeRootContract.Presenter presenter) {
 
+    }
+
+    public void getBillingAddressId() {
+        activity.showProgress();
+        Card card;
+        card = getCard();
+        if (card != null) {
+            mPresenter.getBillingAddressById(
+                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                    card.getBillingAddress().getRepositoryId());
+
+        }
     }
 
     @OnClick(R.id.shippingNavigator)

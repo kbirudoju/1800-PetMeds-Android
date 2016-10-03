@@ -117,7 +117,10 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
                 orderViewHolder.mSelectAddressButton.setVisibility(View.VISIBLE);
             }
             orderViewHolder.mAddressSelectionRadio.setChecked(true);
-            mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
+            // Calling in order to update Address when address selected by default
+            if (mRequestCode == StepOneRootFragment.REQUEST_CODE) {
+                mAddressSelectionListFragment.forwardAddressToFragment(myAddress);
+            }
         } else {
             orderViewHolder.mAddressSelectionRadio.setChecked(false);
             orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);
@@ -130,7 +133,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
             @Override
             public void onClick(View v) {
                 mAddressSelectionListFragment.popBackStackImmediate();
-
+                mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
 
             }
         });
@@ -140,8 +143,10 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
             public void onClick(View v) {
                 mSelectedPosition = (Integer) v.getTag();
                 notifyDataSetChanged();
-                if (orderViewHolder.mAddressSelectionRadio.isChecked()) {
-                    mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
+                // Calling in order to update Address when address selected on listener
+                if (orderViewHolder.mAddressSelectionRadio.isChecked()
+                        && mRequestCode == StepOneRootFragment.REQUEST_CODE) {
+                    mAddressSelectionListFragment.forwardAddressToFragment(myAddress);
                 }
             }
         });

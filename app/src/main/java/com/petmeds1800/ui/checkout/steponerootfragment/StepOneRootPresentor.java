@@ -60,7 +60,7 @@ public class StepOneRootPresentor implements StepOneRootContract.Presenter {
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                                mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0),false);
                             }
                         }
 

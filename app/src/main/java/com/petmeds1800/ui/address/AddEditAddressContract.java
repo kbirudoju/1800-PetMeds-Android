@@ -54,5 +54,6 @@ public interface AddEditAddressContract {
         void updateAddress(AddressRequest addressRequest);
 
         void removeAddress(RemoveAddressRequest removeAddressRequest);
+
     }
 }

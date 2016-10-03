@@ -2,8 +2,11 @@ package com.petmeds1800.ui.checkout.stepthreefragment;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -54,7 +57,8 @@ public class StepThreeRootPresentor implements StepThreeRootContract.Presenter {
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                                mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0),
+                                        false);
                             }
                         }
 
@@ -62,6 +66,44 @@ public class StepThreeRootPresentor implements StepThreeRootContract.Presenter {
                 });
 
 
+    }
+
+    @Override
+    public void getBillingAddressById(String sessionConfig, String addressId) {
+        mPetMedsApiService
+                .getAddressById(sessionConfig,
+                        addressId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddAddressResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("GetAddressById", e.getMessage());
+                        if (mView.isActive()) {
+                            mView.onError(e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(AddAddressResponse s) {
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.setUpdatedAddressOnSuccess(s.getProfileAddress());
+                            }
+                        } else {
+                            Log.d("GetAddressById", s.getStatus().getErrorMessages().get(0));
+                            if (mView.isActive()) {
+                                mView.errorOnUpdateAddress();
+                            }
+                        }
+
+                    }
+                });
     }
 
     @Override

@@ -1,13 +1,14 @@
 package com.petmeds1800.ui.address;
 
 import com.petmeds1800.R;
+import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.Utils;
 
 import android.content.Context;
@@ -130,6 +131,7 @@ public class AddressSelectionListFragment extends AbstractFragment
             if (context instanceof HomeActivity) {
                 mCallback = (HomeActivity) context;
             }
+
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement AddACardContract.AddressSelectionListener");
@@ -172,6 +174,7 @@ public class AddressSelectionListFragment extends AbstractFragment
     public String getShippingAddressId() {
         return mShippingAddressId;
     }
+
     @Override
     public boolean isActive() {
         return isAdded();
@@ -218,17 +221,18 @@ public class AddressSelectionListFragment extends AbstractFragment
         if (mCallback != null) {
             mCallback.setAddress(address, requestCode);
         }
-        if (requestCode == StepOneRootFragment.REQUEST_CODE) {
-            ((StepOneRootFragment) getParentFragment()).setAddress(address);
-        }
+
+    }
+
+    void forwardAddressToFragment(Address address) {
+        ((StepOneRootFragment) getParentFragment()).setAddress(address);
 
     }
 
 
     public void addNewAddress() {
-        ((CheckOutActivity) getActivity()).replaceCheckOutFragment(
-                AddEditAddressFragment.newInstance(null, StepOneRootFragment.REQUEST_CODE),
-                AddEditAddressFragment.class.getName(), true);
+        startActivity(new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_ADDRESS_REQUEST));
+
     }
 
     @Override

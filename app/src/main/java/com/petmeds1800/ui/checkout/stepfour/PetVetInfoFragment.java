@@ -1,5 +1,7 @@
 package com.petmeds1800.ui.checkout.stepfour;
 
+import com.petmeds1800.ui.fragments.AbstractFragment;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.entities.Pets;
@@ -27,6 +28,17 @@ import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.Constants;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -40,14 +52,20 @@ import butterknife.ButterKnife;
  */
 public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoContract.View,CommonDialogFragment.ValueSelectedListener{
     //  public ShoppingCart shoppingCart;
+
     @BindView(R.id.pet_vet_view)
     RecyclerView mPetVetRecyclerView;
 
     private PetVetInfoAdapter mAdapter;
-    private LinkedHashMap<String,String> mPetList;
+
+    private LinkedHashMap<String, String> mPetList;
+
     private static final int VET_REQUEST = 1;
+
     private static final int PET_REQUEST = 2;
+
     private PetVetInfoContract.Presenter mPresenter;
+
     private int mPosition;
     // private ArrayList<Vet> mVetList;
     private LinkedHashMap<String,String> mVetList;
@@ -69,6 +87,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         View view = inflater.inflate(R.layout.fragment_pet_vet_information, container, false);
         ButterKnife.bind(this, view);
         mPresenter = new PetVetInfoPresenter(this);
+
         mAdapter= new PetVetInfoAdapter(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +139,6 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                     mCommerceItem.add(commerceItems);
                 }
             }
-
         }
 
     }
@@ -132,7 +150,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
 
     }
 
-    private void setupRecyclerView(){
+    private void setupRecyclerView() {
         mPetVetRecyclerView.setAdapter(mAdapter);
         mPetVetRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mPetVetRecyclerView.setHasFixedSize(true);
@@ -147,12 +165,12 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
 
     @Override
     public void setPetList(List<Pets> petList) {
-        mPetList=new LinkedHashMap<String,String>();
-        for (Pets pet  : petList) {
-            mPetList.put(pet.getPetId(),pet.getPetName());
+        mPetList = new LinkedHashMap<String, String>();
+        for (Pets pet : petList) {
+            mPetList.put(pet.getPetId(), pet.getPetName());
         }
         //Add view for add pet with id -1
-        mPetList.put("-1",getActivity().getString(R.string.add_new_pet_txt));
+        mPetList.put("-1", getActivity().getString(R.string.add_new_pet_txt));
         showDialog(mPetList, PET_REQUEST, getActivity().getString(R.string.select_pet_title));
 
 
@@ -171,13 +189,13 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     @Override
     public void setVetList(List<Vet> vetList) {
 
-        mVetList= new LinkedHashMap<String ,String>();
-        for(Vet vet:vetList){
+        mVetList = new LinkedHashMap<String, String>();
+        for (Vet vet : vetList) {
             mVetList.put(vet.getId(), vet.getName());
         }
 
         //Add view for add vet with id -1
-        mVetList.put("-1",getActivity().getString(R.string.add_new_vet_txt));
+        mVetList.put("-1", getActivity().getString(R.string.add_new_vet_txt));
         showDialog(mVetList, VET_REQUEST, getActivity().getString(R.string.select_vet_title));
     }
 
@@ -185,7 +203,8 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     public void setPresenter(PetVetInfoContract.Presenter presenter) {
 
     }
-    public void showDialog(HashMap<String,String> data, int code, String title) {
+
+    public void showDialog(HashMap<String, String> data, int code, String title) {
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
                 .newInstance(data,
@@ -196,24 +215,27 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
 
     @Override
     public void onValueSelected(String value, int requestCode) {
-        switch(requestCode){
+        switch (requestCode) {
             case PET_REQUEST:
-                if(value.equalsIgnoreCase(getActivity().getString(R.string.add_new_pet_txt))){
-                    AddNewEntityIntent addNewEntityIntent = new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_PET_REQUEST);
+                if (value.equalsIgnoreCase(getActivity().getString(R.string.add_new_pet_txt))) {
+                    AddNewEntityIntent addNewEntityIntent = new AddNewEntityIntent(getActivity(),
+                            Constants.ADD_NEW_PET_REQUEST);
                     startActivityForResult(addNewEntityIntent, 2);
                 }else{
                     mCommerceItem.get(mPosition - 1).setPetName(value);
                     mCommerceItem.get(mPosition - 1).setPetId(getPetVetKey(mPetList,value));
+
                     mAdapter.notifyItemChanged(mPosition);
                 }
 
                 break;
             case VET_REQUEST:
-                if(value.equalsIgnoreCase(getActivity().getString(R.string.add_new_vet_txt))){
+                if (value.equalsIgnoreCase(getActivity().getString(R.string.add_new_vet_txt))) {
 
                 }else{
                     mCommerceItem.get(mPosition - 1).setVetName(value);
                     mCommerceItem.get(mPosition - 1).setVetId(getPetVetKey(mVetList, value));
+
                     mAdapter.notifyItemChanged(mPosition);
                 }
                 break;
@@ -221,22 +243,23 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
         if(requestCode==2)
         {
-            Log.d("onActivityResult", ">>>>");
-            Pets pet =(Pets)data.getSerializableExtra("pet");
-            mPetList.put(pet.getPetId(), pet.getPetName());
-            mCommerceItem.get(mPosition - 1).setPetName(pet.getPetName());
-            mAdapter.notifyItemChanged(mPosition);
+            if(data!=null) {
+                Log.d("onActivityResult", ">>>>");
+                Pets pet = (Pets) data.getSerializableExtra("pet");
+                mPetList.put(pet.getPetId(), pet.getPetName());
+                mCommerceItem.get(mPosition - 1).setPetName(pet.getPetName());
+                mAdapter.notifyItemChanged(mPosition);
+            }
 
         }
     }
 
-    private String getPetVetKey(HashMap<String,String> petVetMap,String value){
+    private String getPetVetKey(HashMap<String, String> petVetMap, String value) {
         for (String keyset : petVetMap.keySet()) {
             if (petVetMap.get(keyset).equals(value)) {
                 return keyset;

@@ -222,6 +222,7 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/checkout/CheckoutActor/linkPetVet")
     Observable<ShoppingCartListResponse> savePetVet(@Body SavePetVetRequest savePetVetRequest);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/checkout/CheckoutActor/orderReview")
     Observable<OrderReviewSubmitResponse> getOrderReviewDetails(
             @Query("_dynSessConf") String sessionConfirmation);

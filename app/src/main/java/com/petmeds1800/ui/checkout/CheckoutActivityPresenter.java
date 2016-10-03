@@ -63,20 +63,17 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                             //TODO need to know how to handle a success response
                         } else {
                             Log.d("Init Checkout", s.getStatus().getErrorMessages().get(0));
-                            if (mView.isActive()) {
-                                if (s != null) {
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
+                            }
+                        }
+                        if (mView.isActive()) {
+                            if (s != null) {
+                                //TODO Shopping Cart object needs to pass on to the ShoppingCartActivity once Sarthak has done with Cart fragment implementation
+                                if (s.getCheckoutSteps() != null) {
+                                    mView.setCheckoutSteps(s.getCheckoutSteps());
+                                    mView.startNextStep(s.getCheckoutSteps().getStepState().getNextCheckoutStep());
 
-                                    //show the error
-                                    mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
-
-                                    //TODO Shopping Cart object needs to pass on to the ShoppingCartActivity once Sarthak has done with Cart fragment implementation
-
-                                    if (s.getCheckoutSteps() != null) {
-
-                                        mView.setCheckoutSteps(s.getCheckoutSteps());
-                                        mView.startNextStep(s.getCheckoutSteps().getStepState().getNextCheckoutStep());
-
-                                    }
                                 }
                             }
                         }

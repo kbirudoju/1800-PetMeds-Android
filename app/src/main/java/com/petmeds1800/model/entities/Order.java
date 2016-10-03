@@ -20,7 +20,7 @@ public class Order implements Serializable {
 
     private int taxTotal;
 
-    private int shippingTotal;
+    private float shippingTotal;
 
     private ShippingReviewMethod shippingMethod;
 
@@ -64,11 +64,11 @@ public class Order implements Serializable {
         this.taxTotal = taxTotal;
     }
 
-    public Integer getShippingTotal() {
+    public float getShippingTotal() {
         return shippingTotal;
     }
 
-    public void setShippingTotal(Integer shippingTotal) {
+    public void setShippingTotal(float shippingTotal) {
         this.shippingTotal = shippingTotal;
     }
 
