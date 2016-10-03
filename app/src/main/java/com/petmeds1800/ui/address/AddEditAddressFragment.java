@@ -6,6 +6,8 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
@@ -28,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -38,13 +41,15 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.petmeds1800.R.id.firstNameLayout;
+
 /**
  * Created by Abhinav on 13/8/16.
  */
 public class
-        AddEditAddressFragment extends AbstractFragment
+AddEditAddressFragment extends AbstractFragment
         implements AddEditAddressContract.View, View.OnClickListener, CommonDialogFragment.ValueSelectedListener,
-        DialogInterface.OnClickListener {
+        DialogInterface.OnClickListener, Switch.OnCheckedChangeListener {
 
     public static final int ADD_ADDRESS_REQUEST = 3;
 
@@ -62,7 +67,7 @@ public class
 
     private static final long APPROVAL_DIALOG_DURATION = 1000;
 
-    @BindView(R.id.firstNameLayout)
+    @BindView(firstNameLayout)
     TextInputLayout mfirstNameLayout;
 
     @BindView(R.id.lastNameInputLayout)
@@ -134,6 +139,15 @@ public class
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    @BindView(R.id.useMyShippingAddress_switch)
+    Switch mUseMyShippingAddressSwitch;
+
+    @BindView(R.id.useMyShippingAddress_switchview)
+    View mUseMyShippingAddressSwitchview;
+
+    @BindView(R.id.defaultShippingAddress_switchview)
+    View mDefaultShippingAddressSwitchview;
+
     private AddEditAddressContract.Presenter mPresenter;
 
     private AlertDialog mAlertDialog;
@@ -143,7 +157,12 @@ public class
         public boolean handleMessage(Message msg) {
             if (msg.what == DISMISS_APPROVAL_DIALOG) {
                 mAlertDialog.dismiss();
-                popBackStack();
+                if (mRequestCode == StepOneRootFragment.REQUEST_CODE) {
+                    getActivity().finish();
+                } else {
+                    popBackStack();
+                }
+
             }
             return false;
         }
@@ -157,26 +176,41 @@ public class
 
     private int mRequestCode;
 
+    private Bundle mBundle;
+
     public static AddEditAddressFragment newInstance(Address updateAddress, int requestCode) {
-        if (requestCode == EDIT_ADDRESS_REQUEST) {
-            Bundle bundle = new Bundle();
+        Bundle bundle = new Bundle();
+        if (requestCode == EDIT_ADDRESS_REQUEST || requestCode == StepThreeRootFragment.REQUEST_CODE
+                || requestCode == StepOneRootFragment.REQUEST_CODE) {
             bundle.putSerializable(ADDRESS, updateAddress);
             bundle.putInt(REQUEST_CODE, requestCode);
-
             AddEditAddressFragment addEditAddressFragment = new AddEditAddressFragment();
             addEditAddressFragment.setArguments(bundle);
-
             return addEditAddressFragment;
         }
 
         return new AddEditAddressFragment();
     }
 
+    public void intitalizeViewsForCheckOutBillingAddress() {
+        mUseMyShippingAddressSwitch.setVisibility(View.VISIBLE);
+        mUseMyShippingAddressSwitchview.setVisibility(View.VISIBLE);
+        mDefaultBillingAddressSwitch.setVisibility(View.GONE);
+        mDefaultShippingAddressSwitch.setVisibility(View.GONE);
+        mDefaultShippingAddressSwitchview.setVisibility(View.GONE);
+        mUseMyShippingAddressSwitch.setOnCheckedChangeListener(this);
+
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new AddAddressPresenter(this);
-        setHasOptionsMenu(true);
+        mBundle = getArguments();
+        if (mRequestCode != StepThreeRootFragment.REQUEST_CODE) {
+            setHasOptionsMenu(true);
+        }
+
         PetMedsApplication.getAppComponent().inject(this);
     }
 
@@ -194,39 +228,46 @@ public class
         ((AbstractActivity) getActivity()).enableBackButton();
 
         //get the arguments and set views for address updation/edit request
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mRequestCode = bundle.getInt(REQUEST_CODE);
+
+        if (mBundle != null) {
+            mRequestCode = mBundle.getInt(REQUEST_CODE);
             if (mRequestCode == EDIT_ADDRESS_REQUEST) {
-                mAddress = (Address) bundle.getSerializable(ADDRESS);
+                mAddress = (Address) mBundle.getSerializable(ADDRESS);
                 populateData(mAddress);
                 //show the remove button
                 mRemoveAddressButton.setVisibility(View.VISIBLE);
-
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.editAddressTitle));
+            } else if (mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+                intitalizeViewsForCheckOutBillingAddress();
+                mAddress = (Address) mBundle.getSerializable(ADDRESS);
+                populateData(mAddress);
             } else {
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
             }
         } else {
+
             ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
+
         }
 
         return view;
     }
 
-    private void populateData(Address address) {
-
-        mFirstNameEdit.setText(address.getFirstName());
-        mLastNameEdit.setText(address.getLastName());
-        mAddressLine1Edit.setText(address.getAddress1());
-        mAptOrSuiteEdit.setText(address.getAddress2());
-        mCityEdit.setText(address.getCity());
-        mStateOrProvinceOrRegionEdit.setText(address.getState());
-        mZipCodeEdit.setText(address.getPostalCode());
-        mPhoneNumberEdit.setText(address.getPhoneNumber());
-        mCountryNameEdit.setText(address.getCountry());
-        mDefaultBillingAddressSwitch.setChecked(Boolean.valueOf(address.getIsDefaultBillingAddress()));
-        mDefaultShippingAddressSwitch.setChecked(Boolean.valueOf(address.getIsDefaultShippingAddress()));
+    public void populateData(Address address) {
+        mUseMyShippingAddressSwitch.setEnabled(true);
+        mFirstNameEdit.setText(address != null ? address.getFirstName() : "");
+        mLastNameEdit.setText(address != null ? address.getLastName() : "");
+        mAddressLine1Edit.setText(address != null ? address.getAddress1() : "");
+        mAptOrSuiteEdit.setText(address != null ? address.getAddress2() : "");
+        mCityEdit.setText(address != null ? address.getCity() : "");
+        mStateOrProvinceOrRegionEdit.setText(address != null ? address.getState() : "");
+        mZipCodeEdit.setText(address != null ? address.getPostalCode() : "");
+        mPhoneNumberEdit.setText(address != null ? address.getPhoneNumber() : "");
+        mCountryNameEdit.setText(address != null ? address.getCountry() : "");
+        mDefaultBillingAddressSwitch
+                .setChecked(address != null ? Boolean.valueOf(address.getIsDefaultBillingAddress()) : false);
+        mDefaultShippingAddressSwitch
+                .setChecked(address != null ? Boolean.valueOf(address.getIsDefaultShippingAddress()) : false);
     }
 
     @Override
@@ -237,6 +278,9 @@ public class
 
         if (mRequestCode == EDIT_ADDRESS_REQUEST) {
             mRemoveAddressButton.setOnClickListener(this);
+        }
+        if (mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+            intitalizeViewsForCheckOutBillingAddress();
         }
     }
 
@@ -497,6 +541,31 @@ public class
                 break;
         }
 
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.useMyShippingAddress_switch:
+                if (buttonView.isPressed()) {
+                    if (isChecked) {
+                        if (mBundle != null) {
+                            mAddress = (Address) mBundle.getSerializable(ADDRESS);
+                            populateData(mAddress);
+                        }
+                    } else {
+                        populateData(null);
+                        buttonView.setEnabled(false);
+                        if (getParentFragment() != null) {
+                            ((StepThreeRootFragment) getParentFragment()).getBillingAddressId();
+                        }
+
+                    }
+
+                }
+                break;
+        }
 
     }
 }

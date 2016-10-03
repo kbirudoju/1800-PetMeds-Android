@@ -7,7 +7,9 @@ import java.util.ArrayList;
  * Created by pooja on 8/12/2016.
  */
 public class Status implements Serializable {
+
     private ArrayList<String> errorMessages;
+
     private String code;
 
     public ArrayList<String> getErrorMessages() {

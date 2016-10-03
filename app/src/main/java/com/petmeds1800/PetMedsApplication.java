@@ -1,14 +1,12 @@
 package com.petmeds1800;
 
+import android.app.Application;
+
 import com.petmeds1800.dagger.component.AppComponent;
 import com.petmeds1800.dagger.component.DaggerAppComponent;
 import com.petmeds1800.dagger.module.ApplicationModule;
 import com.petmeds1800.dagger.module.RestModule;
 import com.petmeds1800.dagger.module.StorageModule;
-
-import android.app.Application;
-
-import timber.log.Timber;
 
 public class PetMedsApplication extends Application {
 
@@ -18,9 +16,9 @@ public class PetMedsApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
+//        if (BuildConfig.DEBUG) {
+//            Timber.plant(new Timber.DebugTree());
+//        }
 
         mAppComponent = createAppComponent();
     }

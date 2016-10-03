@@ -3,4 +3,5 @@
     <integer name="characterLimit_40">40</integer>
     <integer name="characterLimit_30">30</integer>
     <integer name="characterLimit_5">5</integer>
+    <integer name="characterLimit_3">3</integer>
 </resources>

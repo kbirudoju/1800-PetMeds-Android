@@ -50,6 +50,7 @@ import com.petmeds1800.model.entities.Pets;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.AddNewEntityActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
@@ -242,6 +243,7 @@ public class AddPetFragment extends AbstractFragment
     private int fromWhichDailog = 0;
 
     private String age = "";
+    private AddNewEntityActivity mCallback;
 
     @Nullable
     @Override
@@ -299,12 +301,12 @@ public class AddPetFragment extends AbstractFragment
 
     }
 
-    public void openDailog(String data[], int code) {
-        ((HomeActivity) getActivity()).hideProgress();
+    public void openDailog(String data[], int code,String title) {
+        //((HomeActivity) getActivity()).hideProgress();
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
                 .newInstance(data,
-                        getActivity().getString(R.string.choose_range_txt), code);
+                        title, code);
         commonDialogFragment.setValueSetListener(this);
         commonDialogFragment.show(fragManager);
     }
@@ -350,6 +352,7 @@ public class AddPetFragment extends AbstractFragment
             case fromGallery:
                 updateImageUtil.updateProfilePic(UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE);
                 alertDailogForPicture.dismiss();
+                break;
             case R.id.remove_pet_button:
                 FragmentManager fragmentManager = getFragmentManager();
                 Bundle removePetBundle = new Bundle();
@@ -368,7 +371,7 @@ public class AddPetFragment extends AbstractFragment
                 showImageOptions();
                 break;
             case R.id.add_edit_medication_allergies:
-                ((HomeActivity) getActivity()).showProgress();
+               // ((HomeActivity) getActivity()).showProgress();
                 fromWhichDailog = IS_MEDICATIONS_ALLERGY_DAILOG;
                 if (perMedicationAlleryList != null && perMedicationAlleryList.size() > 0) {
                     showPetMedicalData(getString(R.string.title_for_pet_allergies), perMedicationAlleryList);
@@ -377,7 +380,7 @@ public class AddPetFragment extends AbstractFragment
                 }
                 break;
             case R.id.add_edit_medication_conditions:
-                ((HomeActivity) getActivity()).showProgress();
+             //   ((HomeActivity) getActivity()).showProgress();
                 fromWhichDailog = IS_MEDICATIONS_CONDITIONS_DAILOG;
                 if (perMedicationConditionList != null && perMedicationConditionList.size() > 0) {
                     showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
@@ -386,11 +389,11 @@ public class AddPetFragment extends AbstractFragment
                 }
                 break;
             case R.id.pet_type_edit:
-                ((HomeActivity) getActivity()).showProgress();
+              //  ((HomeActivity) getActivity()).showProgress();
                 mPresenter.populatePetTypeList();
                 break;
             case R.id.breed_type_edit:
-                ((HomeActivity) getActivity()).showProgress();
+              //  ((HomeActivity) getActivity()).showProgress();
                 mPresenter.pouplatePetBreedTypeList();
                 break;
         }
@@ -724,7 +727,7 @@ public class AddPetFragment extends AbstractFragment
             list.add(data.getName());
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), AGE_REQUEST);
+        openDailog(list.toArray(dataArray), AGE_REQUEST, getActivity().getString(R.string.choose_range_txt));
 
     }
 
@@ -735,7 +738,7 @@ public class AddPetFragment extends AbstractFragment
             list.add(data.getValue());
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), TYPE_REQUEST);
+        openDailog(list.toArray(dataArray), TYPE_REQUEST, getActivity().getString(R.string.chhose_pet_title));
     }
 
     @Override
@@ -745,7 +748,7 @@ public class AddPetFragment extends AbstractFragment
             list.add(data.getValue());
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), BREED_REQUEST);
+        openDailog(list.toArray(dataArray), BREED_REQUEST, getActivity().getString(R.string.chhose_breed_title));
     }
 
     @Override
@@ -766,6 +769,28 @@ public class AddPetFragment extends AbstractFragment
             perMedicationConditionList.add(alertDailogMultipleChoice);
         }
         showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
+    }
+
+    @Override
+    public void onPetAddSuccess(Pets pet) {
+        progressBar.setVisibility(View.GONE);
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.remove(this);
+        trans.commit();
+        manager.popBackStack();
+        mCallback.setPet(pet);
+    }
+
+    @Override
+    public void onPetRemoved() {
+        progressBar.setVisibility(View.GONE);
+        Snackbar.make(mPetWeight, getActivity().getString(R.string.pet_removed_msg), Snackbar.LENGTH_LONG).show();
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.remove(this);
+        trans.commit();
+        manager.popBackStack();
     }
 
     public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,
@@ -922,6 +947,18 @@ public class AddPetFragment extends AbstractFragment
         recyclerView = null;
 
     }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            if (context instanceof AddNewEntityActivity) {
+                mCallback = (AddNewEntityActivity) context;
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement AddACardContract.AddressSelectionListener");
+        }
 
+    }
 
 }

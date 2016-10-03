@@ -1,6 +1,6 @@
 package com.petmeds1800.intent;
 
-import com.petmeds1800.ui.CheckOutActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 
 import android.content.Context;
 import android.content.Intent;

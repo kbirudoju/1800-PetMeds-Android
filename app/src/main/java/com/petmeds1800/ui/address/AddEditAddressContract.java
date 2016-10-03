@@ -34,6 +34,9 @@ public interface AddEditAddressContract {
         void usaStatesListReceived(String[] usaStateArray);
 
         void countryListReceived(String[] countryArray);
+
+
+
     }
 
     interface Presenter extends BasePresenter {
@@ -51,5 +54,6 @@ public interface AddEditAddressContract {
         void updateAddress(AddressRequest addressRequest);
 
         void removeAddress(RemoveAddressRequest removeAddressRequest);
+
     }
 }

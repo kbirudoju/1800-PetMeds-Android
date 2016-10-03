@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_group_standard"
+        android:padding="@dimen/xlarge_margin"
+        android:background="@color/white">
+
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/imv_shipping_selection"
+               android:src="@drawable/ic_radio_button_on"
+               android:layout_centerVertical="true"
+               android:layout_marginRight="@dimen/xlarge_margin"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/txv_shipping_text"
+              android:layout_toRightOf="@+id/imv_shipping_selection"
+              android:textSize="@dimen/sp_16"
+              android:textColor="@color/pet_meds_blue_selected"
+              android:text="@string/label_shipping_method_standard"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/txv_shipping_price"
+              android:layout_below="@+id/txv_shipping_text"
+              android:layout_alignLeft="@+id/txv_shipping_text"
+              android:layout_marginTop="@dimen/dp_5"
+              android:textSize="@dimen/sp_16"
+              android:textColor="@color/crimson_red"/>
+</RelativeLayout>

@@ -39,6 +39,12 @@ public abstract class AbstractFragment extends Fragment {
 
     }
 
+    void replaceCartFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.cart_root_fragment_container, fragment);
+        transaction.commit();
+    }
+
 
     void replaceHomeFragment(Fragment fragment,String tag) {
         FragmentTransaction transaction = getFragmentManager()
@@ -71,6 +77,20 @@ public abstract class AbstractFragment extends Fragment {
         FragmentTransaction trans = getChildFragmentManager().beginTransaction();
         trans.replace(containerId, fragment);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        trans.commit();
+    }
+
+    public void replaceStepRootChildFragmentWithTag(Fragment fragment,int containerId,String tag) {
+        FragmentTransaction trans = getChildFragmentManager().beginTransaction();
+        trans.replace(containerId, fragment, tag);
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        trans.commit();
+    }
+
+    public void addStepRootChildFragment(Fragment fragment,int containerId) {
+        FragmentTransaction trans = getActivity().getSupportFragmentManager().beginTransaction();
+        trans.replace(containerId, fragment);
+        trans.addToBackStack(null);
         trans.commit();
     }
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_above="@+id/review_submit_button">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <FrameLayout
+                android:id="@+id/pet_vet_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"></FrameLayout>
+            <FrameLayout
+                android:id="@+id/communication_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pet_vet_container"></FrameLayout>
+        </RelativeLayout>
+    </ScrollView>
+<Button
+    android:id="@+id/review_submit_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="CONTINUE TO REVIEW SUBMIT ORDER"
+    style="@style/dialog_button_style_blue"
+    android:layout_alignParentBottom="true"/>
+</RelativeLayout>

@@ -1,26 +1,5 @@
 package com.petmeds1800.ui;
 
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.BarcodeScannerIntent;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.entities.SecurityStatusResponse;
-import com.petmeds1800.ui.fragments.AccountRootFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.fragments.HomeRootFragment;
-import com.petmeds1800.ui.fragments.LearnFragment;
-import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
-import com.petmeds1800.ui.payment.AddACardContract;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
-import com.petmeds1800.ui.support.TabPagerAdapter;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -32,6 +11,27 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.entities.SecurityStatusResponse;
+import com.petmeds1800.ui.fragments.AccountRootFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CartRootFragment;
+import com.petmeds1800.ui.fragments.HomeRootFragment;
+import com.petmeds1800.ui.fragments.LearnFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
+import com.petmeds1800.ui.payment.AddACardContract;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.ui.support.TabPagerAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +81,7 @@ public class HomeActivity extends AbstractActivity
     private boolean mShowOptionsMenu;
 
     private HomeRootFragment mHomeRootFragment;
+
     TabPagerAdapter mAdapter;
 
     public void onCreate(final Bundle savedInstanceState) {
@@ -105,10 +106,10 @@ public class HomeActivity extends AbstractActivity
         List<Fragment> fragmentList = new ArrayList<>();
         mHomeRootFragment = new HomeRootFragment();
         fragmentList.add(mHomeRootFragment);
-        fragmentList.add(new CartFragment());
+        fragmentList.add(new CartRootFragment());
         fragmentList.add(new LearnFragment());
         fragmentList.add(new AccountRootFragment());
-        mAdapter=new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
+        mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(mAdapter);
         mHomeTab.setupWithViewPager(mViewPager);
         mHomeTab.setOnTabSelectedListener(
@@ -127,7 +128,7 @@ public class HomeActivity extends AbstractActivity
 
                             }
                         }*/
-                        Log.d("ontabselected",numTab+">>>>");
+                        Log.d("ontabselected", numTab + ">>>>");
 
                     }
 
@@ -140,7 +141,6 @@ public class HomeActivity extends AbstractActivity
                     }
                 });
 
-
         ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -149,7 +149,7 @@ public class HomeActivity extends AbstractActivity
 
             @Override
             public void onPageSelected(int position) {
-                Log.d("onPageSelected",">>>>>>");
+                Log.d("onPageSelected", ">>>>>>");
                 mTabIndex = position;
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
                     mHomeTab.getTabAt(i).setIcon(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
@@ -168,6 +168,7 @@ public class HomeActivity extends AbstractActivity
                     getToolbar().setLogo(null);
                     mShowOptionsMenu = false;
                 }
+
                 invalidateOptionsMenu();
                 setToolBarTitle((getResources().getStringArray(R.array.tab_title)[position]));
             }
@@ -227,9 +228,6 @@ public class HomeActivity extends AbstractActivity
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == android.R.id.home) {
             super.onBackPressed();
-        }
-        else if (menuItem.getItemId() == R.id.action_barcode) {
-            startActivity(new BarcodeScannerIntent(this));
         }
         return super.onOptionsItemSelected(menuItem);
     }
@@ -294,9 +292,10 @@ public class HomeActivity extends AbstractActivity
                         int securityStatus = securityStatusResponse.getSecurityStatus();
                         Log.i("security status:", securityStatus + "");
                         //TODO: improvement
-                        if (securityStatus == 0 || securityStatus == 2) {  // We need to treat security status 2 same as 0 as all the API on AccountSection stopped working if we would treat 2 same as 4
+                        if (securityStatus == 0 || securityStatus
+                                == 2) {  // We need to treat security status 2 same as 0 as all the API on AccountSection stopped working if we would treat 2 same as 4
                             showFingerprintDialog();
-                        } else if (securityStatus == 4 ) {
+                        } else if (securityStatus == 4) {
                             //TODO: research more into silent sign in logic
                         }
                     }
@@ -311,7 +310,7 @@ public class HomeActivity extends AbstractActivity
     }
 
     public void hideProgress() {
-        mProgressDialog.dismiss();
+      mProgressDialog.dismiss();
     }
 
     public ViewGroup getContainerView() {

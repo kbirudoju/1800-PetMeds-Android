@@ -202,13 +202,15 @@ public class AccountFragment extends AbstractFragment
                 fromWhichAlert = FROM_NOTIFICATION;
                 mPreferencesHelper.setIsPushNotificationEnableFlag(isChecked);
                 if (isChecked) {
-                    ((HomeActivity)getActivity()).getAnalyticsRef().trackEvent(getString(R.string.push_notifications_category),
-                            getString(R.string.push_notifications_enability),
-                            getString(R.string.push_notifications_enable_label));
+                    ((HomeActivity) getActivity()).getAnalyticsRef()
+                            .trackEvent(getString(R.string.push_notifications_category),
+                                    getString(R.string.push_notifications_enability),
+                                    getString(R.string.push_notifications_enable_label));
                 } else {
-                    ((HomeActivity)getActivity()).getAnalyticsRef().trackEvent(getString(R.string.push_notifications_category),
-                            getString(R.string.push_notifications_disability),
-                            getString(R.string.push_notification_disability));
+                    ((HomeActivity) getActivity()).getAnalyticsRef()
+                            .trackEvent(getString(R.string.push_notifications_category),
+                                    getString(R.string.push_notifications_disability),
+                                    getString(R.string.push_notification_disability));
                 }
                 break;
             case R.id.fingerPrintStatus:

@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.orders;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.dagger.component.DaggerOrderComponent;
-import com.petmeds1800.dagger.module.OrderPresenterModule;
-import com.petmeds1800.model.entities.OrderFilterList;
-import com.petmeds1800.model.entities.OrderList;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment;
-import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment.OnItemSelectedListener;
-import com.petmeds1800.ui.orders.presenter.OrderListPresenter;
-import com.petmeds1800.ui.orders.support.DividerItemDecoration;
-import com.petmeds1800.ui.orders.support.MyOrderAdapter;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -23,10 +9,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.dagger.component.DaggerOrderComponent;
+import com.petmeds1800.dagger.module.OrderPresenterModule;
+import com.petmeds1800.model.entities.OrderFilterList;
+import com.petmeds1800.model.entities.OrderList;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment.OnItemSelectedListener;
+import com.petmeds1800.ui.orders.presenter.OrderListPresenter;
+import com.petmeds1800.ui.orders.support.DividerItemDecoration;
+import com.petmeds1800.ui.orders.support.MyOrderAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,8 @@ public class MyOrderFragment extends AbstractFragment
 
     @BindView(R.id.filter_name_label)
     TextView mFilterTitleLabel;
+    @BindView(R.id.shopNow_button)
+    Button mShopNowButton;
 
 
     @Nullable
@@ -103,6 +107,8 @@ public class MyOrderFragment extends AbstractFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mFilterButton.setOnClickListener(this);
+        mShopNowButton.setOnClickListener(this);
+
 
     }
 
@@ -119,6 +125,9 @@ public class MyOrderFragment extends AbstractFragment
         switch (v.getId()) {
             case R.id.filter_button:
                 mOrderPresenter.setFilterData();
+                break;
+            case R.id.shopNow_button:
+                ((HomeActivity)getActivity()).getViewPager().setCurrentItem(0);
                 break;
         }
     }

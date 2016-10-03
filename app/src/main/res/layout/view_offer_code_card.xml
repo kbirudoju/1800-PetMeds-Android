@@ -1,0 +1,80 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="116dp"
+    android:background="@android:drawable/alert_light_frame"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/cart_each_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp">
+
+            <TextView
+                style="@style/offer_card_title_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_12"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:layout_marginRight="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_21"
+                android:text="@string/buy_more_save_more" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangular_background">
+
+            <RelativeLayout
+                android:id="@+id/coupon_code_input_layout_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/coupon_code_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_16">
+
+                    <EditText
+                        android:id="@+id/textDialog2"
+                        android:layout_width="fill_parent"
+                        android:drawableRight="@drawable/ic_transparent_text_apply"
+                        android:textColor="@color/circle_indicator_stroke"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/offer_code"
+                        android:textColorHint="@color/battleship_grey"
+                        android:textSize="16sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/coupon_code_input_layout_container">
+
+                <Button
+                    android:id="@+id/order_status_label"
+                    style="@style/rounded_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_23"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:background="@drawable/green_rounded_button"
+                    android:drawableLeft="@drawable/i_c_n_status_ic_status_completed"
+                    android:drawablePadding="4dp"
+                    android:text="@string/offer_code_applied" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

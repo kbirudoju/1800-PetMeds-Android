@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.petmeds1800.R;
 import com.petmeds1800.ui.pets.support.CustomValuePicker;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -46,6 +48,18 @@ public class CommonDialogFragment extends DialogFragment implements View.OnClick
         // Supply value input as an argument.
         Bundle args = new Bundle();
         args.putStringArray(VALUE,mValue);
+        args.putString(TITLE, title);
+        args.putInt(REQUEST_CODE,requestCode);
+        f.setArguments(args);
+
+        return f;
+    }
+    public static CommonDialogFragment newInstance(HashMap<String,String> mValue, String title, int requestCode) {
+        CommonDialogFragment f = new CommonDialogFragment();
+
+        // Get array of values  input as an argument.
+        Bundle args = new Bundle();
+        args.putStringArray(VALUE, mValue.values().toArray(new String[mValue.size()]));
         args.putString(TITLE, title);
         args.putInt(REQUEST_CODE,requestCode);
         f.setArguments(args);

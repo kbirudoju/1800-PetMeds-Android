@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_container">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollerView"
+            android:fillViewport="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="@dimen/dp_50">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/pattern_light_blue">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:text="@string/shipping_method_title"
+                          android:textSize="@dimen/sp_14"
+                          android:textColor="@color/hint_color"
+                          android:paddingLeft="@dimen/xlarge_margin"
+                          android:paddingRight="@dimen/xlarge_margin"
+                          android:paddingTop="@dimen/dp_21"
+                          android:paddingBottom="@dimen/large_margin"/>
+
+                <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_shipping_methods"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+
+                <View android:layout_width="match_parent"
+                      android:layout_height="1dp"
+                      android:background="@color/pattern_light_blue"/>
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/txv_view_shipping_options"
+                          android:background="@color/white"
+                          android:padding="@dimen/xlarge_margin"
+                          android:gravity="center_vertical"
+                          android:textColor="@color/black"
+                          android:text="@string/label_view_shipping_options"
+                          android:drawableRight="@drawable/ic_arrow"/>
+
+                <View android:layout_width="match_parent"
+                      android:layout_height="1dp"
+                      android:background="@color/pattern_light_blue"/>
+            </LinearLayout>
+
+            <FrameLayout android:layout_margin="16dp"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:id="@+id/communicationfragment"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+            style="@style/dialog_button_style_blue"
+            android:text="@string/shipping_navigator_button_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_44"
+            android:id="@+id/shippingNavigator"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

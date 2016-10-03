@@ -4,39 +4,39 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:id="@+id/containerLayout"
 >
+
+
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/scrollerView"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="@dimen/dp_50"
+            android:layout_marginBottom="@dimen/dp_50">
 
-    >
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-        >
+                android:layout_height="wrap_content">
+
             <FrameLayout android:layout_width="match_parent"
                          android:layout_height="wrap_content"
                          android:layout_alignParentTop="true"
                          android:layout_alignParentLeft="true"
-                         android:id="@+id/detailFragment">
-            </FrameLayout>
+                         android:id="@+id/detailFragment"/>
 
             <FrameLayout android:layout_margin="16dp"
                          android:layout_width="match_parent"
                          android:layout_height="wrap_content"
                          android:id="@+id/communicationfragment"
                          android:layout_below="@+id/detailFragment"
-                         android:layout_alignLeft="@+id/detailFragment">
-            </FrameLayout>
+                         android:layout_alignLeft="@+id/detailFragment"/>
 
 
         </RelativeLayout>
     </ScrollView>
+
     <Button
             style="@style/dialog_button_style_blue"
             android:text="@string/shipping_navigator_button_title"
@@ -44,6 +44,6 @@
             android:layout_height="@dimen/dp_44"
             android:id="@+id/shippingNavigator"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-    />
+            android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

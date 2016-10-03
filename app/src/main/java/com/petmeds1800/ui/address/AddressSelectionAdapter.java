@@ -2,7 +2,7 @@ package com.petmeds1800.ui.address;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
-import com.petmeds1800.ui.checkout.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -45,6 +45,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.mContext = context;
         this.mRequestCode = requestCode;
 
+
     }
 
     public void clearData() {
@@ -58,6 +59,17 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void setData(List<Address> myCards) {
         this.mAddresses = myCards;
         notifyDataSetChanged();
+        if (this.mRequestCode == StepOneRootFragment.REQUEST_CODE && mAddresses.size() > 0) {
+            for (int i = 0; i < this.mAddresses.size(); i++) {
+                Address address = this.mAddresses.get(i);
+                if (address.getAddressId() != null && address.getAddressId()
+                        .equals(this.mAddressSelectionListFragment.getShippingAddressId())) {
+                    mSelectedPosition = i;
+                    break;
+                }
+            }
+        }
+
     }
 
 
@@ -79,7 +91,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         final AddressItemViewHolder orderViewHolder = (AddressItemViewHolder) holder;
         final Address myAddress = getItemAt(position);
-
+        Log.d("addresses are ", position + ">>>>" + mAddresses.get(position).getAddressId());
 //            String expirationText = String.format(mContext.getString(R.string.cardExpirationValue),myCard.getExpirationMonth(),myCard.getExpirationYear());
         orderViewHolder.mNameOnAddressLabel.setText(myAddress.getFirstName() + " " + myAddress.getLastName());
         orderViewHolder.mAddressLine1Label.setText(myAddress.getAddress1());
@@ -99,12 +111,15 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
                 .setText(String.format(mContext.getString(R.string.phoneNumberInAddress), myAddress.getPhoneNumber()));
 
         if (position == mSelectedPosition) {
-            orderViewHolder.mAddressSelectionRadio.setChecked(true);
             if (this.mRequestCode == StepOneRootFragment.REQUEST_CODE) {
                 orderViewHolder.mSelectAddressButton.setVisibility(View.GONE);
-                mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
             } else {
                 orderViewHolder.mSelectAddressButton.setVisibility(View.VISIBLE);
+            }
+            orderViewHolder.mAddressSelectionRadio.setChecked(true);
+            // Calling in order to update Address when address selected by default
+            if (mRequestCode == StepOneRootFragment.REQUEST_CODE) {
+                mAddressSelectionListFragment.forwardAddressToFragment(myAddress);
             }
         } else {
             orderViewHolder.mAddressSelectionRadio.setChecked(false);
@@ -118,7 +133,7 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
             @Override
             public void onClick(View v) {
                 mAddressSelectionListFragment.popBackStackImmediate();
-
+                mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
 
             }
         });
@@ -128,8 +143,10 @@ public class AddressSelectionAdapter extends RecyclerView.Adapter<RecyclerView.V
             public void onClick(View v) {
                 mSelectedPosition = (Integer) v.getTag();
                 notifyDataSetChanged();
-                if (orderViewHolder.mAddressSelectionRadio.isChecked()) {
-                    mAddressSelectionListFragment.forwardAddressToActivity(myAddress, mRequestCode);
+                // Calling in order to update Address when address selected on listener
+                if (orderViewHolder.mAddressSelectionRadio.isChecked()
+                        && mRequestCode == StepOneRootFragment.REQUEST_CODE) {
+                    mAddressSelectionListFragment.forwardAddressToFragment(myAddress);
                 }
             }
         });

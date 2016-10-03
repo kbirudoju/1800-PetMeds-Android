@@ -26,6 +26,8 @@ public class CommonWebviewFragment extends AbstractFragment {
 
     public static final String TITLE_KEY = "title";
 
+    public static final String HTML_DATA = "html_data";
+
     @BindView(R.id.webViewContainer)
     WebView mWebView;
 
@@ -46,11 +48,17 @@ public class CommonWebviewFragment extends AbstractFragment {
         super.onViewCreated(view, savedInstanceState);
         String url = getArguments().getString(URL_KEY);
         String title = getArguments().getString(TITLE_KEY);
+        String htmlData = getArguments().getString(HTML_DATA);
 
         if (title != null && !title.isEmpty()) {
             ((AbstractActivity) getActivity()).setToolBarTitle(title);
         }
-        setUpWebView(url);
+        if(htmlData != null){
+            loadFromHtmlData(htmlData);
+        }else{
+            setUpWebView(url);
+        }
+
         ((AbstractActivity)getActivity()).getToolbar().getMenu().clear();
         ((AbstractActivity)getActivity()).getToolbar().setLogo(null);
     }
@@ -68,9 +76,42 @@ public class CommonWebviewFragment extends AbstractFragment {
                 }
             }
         };
+
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
     }
 
+    private void loadFromHtmlData(String htmlData){
+        mWebView.loadData(htmlData, "text/html", "UTF-8");
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setBackgroundColor(getResources().getColor(R.color.white));
+
+        WebChromeClient client = new WebChromeClient() {
+
+            public void onProgressChanged(WebView view, int progress) {
+                if (progress == 100) {
+                    mProgressBar.setVisibility(View.GONE);
+
+                }
+            }
+        };
+
+        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mWebView.setWebViewClient(new Callback());
+        mWebView.setWebChromeClient(client);
+    }
+
+    private class Callback extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            System.out.println("when you click on any interlink on webview that time you got url :-" + url);
+
+            if (url.contains("Add+To+Cart")){
+                getActivity().onBackPressed();
+            }
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+    }
 }

@@ -9,6 +9,8 @@ import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.address.AddressSelectionListFragment;
+import com.petmeds1800.ui.checkout.AddNewEntityActivity;
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.MonthYearPicker;
 import com.petmeds1800.util.GeneralPreferencesHelper;
@@ -48,7 +50,7 @@ import butterknife.OnClick;
  * Created by Abhinav on 13/8/16.
  */
 public class AddEditCardFragment extends AbstractFragment
-        implements AddACardContract.View, DialogInterface.OnClickListener {
+        implements AddACardContract.View, DialogInterface.OnClickListener ,AddACardContract.AddressSelectionListener{
 
     public static final int EDIT_CARD_REQUEST = 1;
 
@@ -148,6 +150,14 @@ public class AddEditCardFragment extends AbstractFragment
 
     private int mRequestCode;
 
+    public static AddEditCardFragment newInstance(int requestCode) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(REQUEST_CODE, requestCode);
+        AddEditCardFragment addEditCardFragment = new AddEditCardFragment();
+        addEditCardFragment.setArguments(bundle);
+        return addEditCardFragment;
+    }
+
     public static AddEditCardFragment newInstance(Card updatedCard, int requestCode) {
 
         Bundle bundle = new Bundle();
@@ -168,13 +178,10 @@ public class AddEditCardFragment extends AbstractFragment
     public static AddEditCardFragment newInstance(Address address, int requestCode) {
 
         Bundle bundle = new Bundle();
-
         bundle.putSerializable(FIRST_ARG, address);
         bundle.putInt(REQUEST_CODE, requestCode);
-
         AddEditCardFragment addEditCardFragment = new AddEditCardFragment();
         addEditCardFragment.setArguments(bundle);
-
         return addEditCardFragment;
 
     }
@@ -188,14 +195,14 @@ public class AddEditCardFragment extends AbstractFragment
         //check if we have an address for the "add a card" request or "edit a card" request
         Bundle bundle = getArguments();
 
-        if(bundle != null) {
+        if (bundle != null) {
             mAddress = (Address) bundle.getSerializable(FIRST_ARG);
             //get the card
             mCard = (Card) bundle.getSerializable(CARD);
         }
 
         //if address is already added
-        if(mAddress == null && mCard != null) {
+        if (mAddress == null && mCard != null) {
             mPresenter.getAddress(mCard.getBillingAddress().getRepositoryId());
         }
     }
@@ -367,8 +374,14 @@ public class AddEditCardFragment extends AbstractFragment
 
     @OnClick(R.id.addressSelection_label)
     public void selectAddress() {
-        replaceAccountAndAddToBackStack(AddressSelectionListFragment.newInstance(mRequestCode),
-                AddressSelectionListFragment.class.getSimpleName());
+        if (mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+            ((AddNewEntityActivity) getActivity())
+                    .replaceFragmentWithArgument(AddressSelectionListFragment.newInstance(mRequestCode, null),
+                            AddressSelectionListFragment.class.getSimpleName(),null);
+        } else {
+            replaceAccountAndAddToBackStack(AddressSelectionListFragment.newInstance(mRequestCode, null),
+                    AddressSelectionListFragment.class.getSimpleName());
+        }
     }
 
     @Override
@@ -488,5 +501,10 @@ public class AddEditCardFragment extends AbstractFragment
             Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
         }
         Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
+    }
+
+    @Override
+    public void setAddress(Address address, int requestCode) {
+
     }
 }
