@@ -1,6 +1,6 @@
 package com.petmeds1800.model.entities;
 
-import com.petmeds1800.model.shoppingcart.ShippingAddress;
+import com.petmeds1800.model.shoppingcart.response.ShippingAddress;
 
 import java.io.Serializable;
 import java.util.ArrayList;

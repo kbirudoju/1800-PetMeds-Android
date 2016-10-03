@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
-import com.petmeds1800.model.shoppingcart.CommerceItems;
+import com.petmeds1800.model.shoppingcart.response.CommerceItems;
 
 import java.util.ArrayList;
 

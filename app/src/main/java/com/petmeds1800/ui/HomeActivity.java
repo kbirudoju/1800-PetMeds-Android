@@ -20,6 +20,7 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CartRootFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
@@ -105,7 +106,7 @@ public class HomeActivity extends AbstractActivity
         List<Fragment> fragmentList = new ArrayList<>();
         mHomeRootFragment = new HomeRootFragment();
         fragmentList.add(mHomeRootFragment);
-        fragmentList.add(new CartFragment());
+        fragmentList.add(new CartRootFragment());
         fragmentList.add(new LearnFragment());
         fragmentList.add(new AccountRootFragment());
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);

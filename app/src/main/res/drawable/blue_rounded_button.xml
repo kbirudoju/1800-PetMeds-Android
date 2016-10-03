@@ -6,6 +6,6 @@
     <solid android:color="@color/circle_indicator_stroke" />
 
     <stroke
-        android:width="@dimen/dp_1"
+        android:width="0dp"
         android:color="@color/white"/>
 </shape>

@@ -420,8 +420,8 @@
 
     <!--Icons-->
     <string name="ok_icon_font">&#xe800;</string>
+    
     <!--Step Three checkout-->
-
     <string name="credit_card_title">Credit Card</string>
     <string name="pay_pal_title">Pay Pal</string>
     <string name="credit_card_details_title">CREDIT CARD DETAILS</string>
@@ -431,19 +431,21 @@
     <string name="default_payment_method">Default payment method</string>
     <string name="payment_method_header">Payment method</string>
 
-    <!--Cart Fragment-->
+  <!--Cart Fragment-->
     <string name="buy_more_save_more">Buy More Save More</string>
     <string name="offer_code">Offer Code</string>
     <string name="offer_code_applied">OFFER CODE APPLIED</string>
     <string name="qty">QTY</string>
     <string name="action_remove">REMOVE</string>
     <string name="items_total">Items Total</string>
-    <string name="your_order_qualifies_for_free_standard_shipping">Your order qualifies for FREE STANDARD SHIPPING!
-    </string>
+    <string name="your_order_qualifies_for_free_standard_shipping">Your order qualifies for FREE STANDARD SHIPPING!</string>
     <string name="checkout">Checkout</string>
-    <string name="shipping_method_title">SELECT A SHIPPING METHOD</string>
-
+    <string name="your_cart_is_empty">Your Cart is Empty. \n Let\'s find the medications you need !</string>
+    <string name="dollar_placeholder">$ </string>
+    <string name="cart_title">Cart</string>
+    
     <!--Shipping Methods-->
+    <string name="shipping_method_title">SELECT A SHIPPING METHOD</string>
     <string name="shipment_method_header">SHIPMENT METHOD</string>
     <string name="label_shipping_method_standard">Standard (5en dash7 business days)</string>
     <string name="label_shipping_method_priority">Priority (3en dash5 business days)</string>
@@ -451,6 +453,7 @@
     <string name="label_shipping_method_fedex_overnight">FedEx Overnight (1en dash2 business days)</string>
     <string name="label_view_shipping_options">View Shipping Options</string>
     <string name="label_shipping_options">Shipping Options</string>
+    
     <!--Add Pet Vet info-->
     <string name="confirm_prescription_txt">CONFIRM PRESCRIPTION INFORMATION</string>
     <string name="select_pet_title">Select Pet</string>
@@ -458,9 +461,9 @@
     <string name="add_new_vet_txt">Add New Vet</string>
     <string name="select_vet_title">Select Vet</string>
     <string name="hint_vet_name">Vet Name</string>
-
     <string name="place_order_button_title">PLACE ORDER</string>
     <string name="subtotal_title">Subtotal (%1$s item)</string>
+    
     <!--Review & Submit Order-->
     <string name="review_submit_order_title"><![CDATA[Review & Submit Order]]></string>
     <string name="shipping">Shipping</string>

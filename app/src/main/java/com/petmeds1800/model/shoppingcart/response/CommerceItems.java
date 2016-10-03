@@ -1,4 +1,4 @@
-package com.petmeds1800.model.shoppingcart;
+package com.petmeds1800.model.shoppingcart.response;
 
 import java.io.Serializable;
 

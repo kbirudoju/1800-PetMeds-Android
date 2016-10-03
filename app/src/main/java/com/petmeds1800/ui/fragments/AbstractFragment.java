@@ -1,5 +1,7 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.R;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,8 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
-import com.petmeds1800.R;
 
 import java.util.HashMap;
 
@@ -37,6 +37,12 @@ public abstract class AbstractFragment extends Fragment {
         transaction.replace(R.id.account_root_fragment_container, fragment);
         transaction.commit();
 
+    }
+
+    void replaceCartFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.cart_root_fragment_container, fragment);
+        transaction.commit();
     }
 
 
@@ -73,12 +79,21 @@ public abstract class AbstractFragment extends Fragment {
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
     }
+
     public void replaceStepRootChildFragmentWithTag(Fragment fragment,int containerId,String tag) {
         FragmentTransaction trans = getChildFragmentManager().beginTransaction();
         trans.replace(containerId, fragment, tag);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
     }
+
+    public void addStepRootChildFragment(Fragment fragment,int containerId) {
+        FragmentTransaction trans = getActivity().getSupportFragmentManager().beginTransaction();
+        trans.replace(containerId, fragment);
+        trans.addToBackStack(null);
+        trans.commit();
+    }
+
     public void addOrReplaceFragmentWithBackStack(Fragment fragment, Bundle bundle) {
         if (fragment != null) {
             FragmentManager fragmentManager = getFragmentManager();

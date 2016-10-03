@@ -1,21 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.Card;
-import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
-import com.petmeds1800.model.shoppingcart.ShippingAddress;
-import com.petmeds1800.model.shoppingcart.ShippingGroups;
-import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
-import com.petmeds1800.ui.address.AddEditAddressFragment;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.ui.checkout.CommunicationFragment;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.Card;
+import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
+import com.petmeds1800.model.shoppingcart.response.ShippingAddress;
+import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.address.AddEditAddressFragment;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.ui.checkout.CommunicationFragment;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import java.util.ArrayList;
 

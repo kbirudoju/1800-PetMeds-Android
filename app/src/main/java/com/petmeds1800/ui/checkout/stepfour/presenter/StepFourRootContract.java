@@ -1,7 +1,7 @@
 package com.petmeds1800.ui.checkout.stepfour.presenter;
 
 import com.petmeds1800.model.entities.SavePetVetRequest;
-import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 

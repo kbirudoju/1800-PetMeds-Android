@@ -1,7 +1,7 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
 import com.petmeds1800.model.entities.SavedShippingAddressRequest;
-import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 

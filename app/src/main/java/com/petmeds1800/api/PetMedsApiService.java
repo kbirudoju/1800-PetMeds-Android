@@ -46,10 +46,11 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.model.entities.VetListResponse;
 import com.petmeds1800.model.entities.WidgetListResponse;
-import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
-
+import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import java.util.HashMap;
-
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -233,6 +234,26 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/checkout/CheckoutActor/applyCreditCardPaymentMethod")
     Observable<ShoppingCartListResponse> applyCreditCardPaymentMethod(
             @Body CreditCardPaymentMethodRequest creditCardPaymentMethodRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/cart/CartActor/list")
+    Observable<ShoppingCartListResponse> getGeneralPopulateShoppingCart(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/cart/CartActor/add")
+    Observable<ShoppingCartListResponse> getAddItemShoppingCart(@Body AddItemRequestShoppingCart addItemRequestShoppingCart);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/cart/CartActor/remove")
+    Observable<ShoppingCartListResponse> getRemoveItemShoppingCart(@Body RemoveItemRequestShoppingCart removeItemRequestShoppingCart);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/cart/CartActor/applyCoupon")
+    Observable<ShoppingCartListResponse> getApplyCouponShoppingCart(@Body ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/cart/CartActor/update")
+    Observable<ShoppingCartListResponse> getUpdateItemQuantityRequestShoppingCart(@Body HashMap<String,String> getmCommerceIDQuantityMap);
 
 
 }

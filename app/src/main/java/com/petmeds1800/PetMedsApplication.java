@@ -1,12 +1,12 @@
 package com.petmeds1800;
 
+import android.app.Application;
+
 import com.petmeds1800.dagger.component.AppComponent;
 import com.petmeds1800.dagger.component.DaggerAppComponent;
 import com.petmeds1800.dagger.module.ApplicationModule;
 import com.petmeds1800.dagger.module.RestModule;
 import com.petmeds1800.dagger.module.StorageModule;
-
-import android.app.Application;
 
 public class PetMedsApplication extends Application {
 

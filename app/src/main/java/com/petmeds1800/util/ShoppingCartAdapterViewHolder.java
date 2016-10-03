@@ -4,6 +4,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,8 +21,8 @@ public class ShoppingCartAdapterViewHolder extends RecyclerView.ViewHolder {
     TextView itemDescription;
     TextInputLayout itemQuantityDescription;
     TextView itemCost;
-    Button editItem;
-    Button deleteItem;
+    FrameLayout editItem;
+    FrameLayout deleteItem;
 
     public ShoppingCartAdapterViewHolder(View v, int TYPE) {
         super(v);
@@ -31,9 +32,9 @@ public class ShoppingCartAdapterViewHolder extends RecyclerView.ViewHolder {
             itemTitle = (TextView) v.findViewById(R.id.item_main_title);
             itemDescription = (TextView) v.findViewById(R.id.item_main_desc);
             itemQuantityDescription = (TextInputLayout) v.findViewById(R.id.item_quantity_input_layout);
-            itemCost = (TextView) v.findViewById(R.id.each_item_cost_txt);
-            editItem = (Button) v.findViewById(R.id.button_edit);
-            deleteItem = (Button) v.findViewById(R.id.button_remove);
+            itemCost = (TextView) v.findViewById(R.id.each_item_selling_price);
+            editItem = (FrameLayout) v.findViewById(R.id.button_edit);
+            deleteItem = (FrameLayout) v.findViewById(R.id.button_remove);
         }
     }
 }

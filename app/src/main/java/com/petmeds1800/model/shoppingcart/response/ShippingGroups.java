@@ -1,8 +1,7 @@
-package com.petmeds1800.model.shoppingcart;
+package com.petmeds1800.model.shoppingcart.response;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Sarthak on 9/23/2016.

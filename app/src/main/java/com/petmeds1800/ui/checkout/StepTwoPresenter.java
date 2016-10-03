@@ -4,7 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.model.entities.ShippingMethodsResponse;
-import com.petmeds1800.model.shoppingcart.ShoppingCartListResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 
 import javax.inject.Inject;
 
