@@ -26,6 +26,7 @@ import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
@@ -46,10 +47,6 @@ import butterknife.OnClick;
  */
 public class CartFragment extends AbstractFragment implements ShoppingCartListContract.View {
 
-    @BindView(R.id.button_checkout)
-    Button mCheckoutButton;
-
-    private ShoppingCartListResponse mShoppingCartListResponse;
     private RecyclerView containerLayoutItems;
     private ShoppingCartListContract.Presenter mPresenter;
     private LinearLayout totalCheckOutContainer;
@@ -128,9 +125,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     }
 
     @Override
-    public void setPresenter(ShoppingCartListContract.Presenter presenter) {
-
-    }
+    public void setPresenter(ShoppingCartListContract.Presenter presenter) {    }
 
     private View createFooter(final View footerView,ShoppingCartListResponse shoppingCartListResponse){
         OfferCodeContainerLayout = (LinearLayout) footerView.findViewById(R.id.cart_each_item_container);
@@ -173,19 +168,30 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         return footerView;
     }
 
-    void startCheckoutProcess() {
+    void startCheckoutProcess(ShoppingCartListResponse shoppingCartListResponse) {
         //start the checkoutActitiy
         CheckOutIntent checkOutIntent = new CheckOutIntent(getContext());
-        checkOutIntent.putExtra(SHOPPING_CART,mShoppingCartListResponse);
+        checkOutIntent.putExtra(SHOPPING_CART,shoppingCartListResponse);
         startActivity(checkOutIntent);
     }
 
-    private boolean initializeShoppingCartPage(ShoppingCartListResponse shoppingCartListResponse){
+    private boolean initializeShoppingCartPage(final ShoppingCartListResponse shoppingCartListResponse){
         containerLayoutItems.setAdapter(new ShoppingCartRecyclerViewAdapter(shoppingCartListResponse.getShoppingCart().getCommerceItems(),createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_offer_code_card, null, false),shoppingCartListResponse),getActivity(),CartFragmentMessageHandler));
 
         if(null != shoppingCartListResponse.getShoppingCart()){
             ((TextView)(totalCheckOutContainer.findViewById(R.id.items_total_amt_txt))).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getSubTotal()));
             ((TextView)(totalCheckOutContainer.findViewById(R.id.subtotal_value_txt))).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getSubTotal()));
+
+            ((Button)totalCheckOutContainer.findViewById(R.id.button_checkout)).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if(null != shoppingCartListResponse.getShoppingCart()){
+                        startCheckoutProcess(shoppingCartListResponse);
+                    }
+                }
+            });
+
         } else {
             ((TextView)(totalCheckOutContainer.findViewById(R.id.items_total_amt_txt))).setText("-");
             ((TextView)(totalCheckOutContainer.findViewById(R.id.subtotal_value_txt))).setText("-");
