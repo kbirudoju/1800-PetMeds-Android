@@ -8,8 +8,6 @@ import com.petmeds1800.dagger.module.StorageModule;
 
 import android.app.Application;
 
-import timber.log.Timber;
-
 public class PetMedsApplication extends Application {
 
     private static AppComponent mAppComponent;
@@ -18,9 +16,9 @@ public class PetMedsApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
+//        if (BuildConfig.DEBUG) {
+//            Timber.plant(new Timber.DebugTree());
+//        }
 
         mAppComponent = createAppComponent();
     }

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/root_view">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/pattern_light_blue">
+
+        <ImageView android:layout_width="100dp"
+                   android:layout_height="100dp"
+                   android:id="@+id/imv_receipt"
+                   android:src="@drawable/ic_fingerprint_success"
+                   android:layout_gravity="center_horizontal"
+                   android:layout_marginTop="@dimen/dp_40"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Thank you for your order, Todd."
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginTop="@dimen/dp_32"
+                  android:textSize="@dimen/sp_16"
+                  android:textColor="@color/black"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="@color/white"
+                      android:orientation="vertical"
+                      android:padding="@dimen/dp_16"
+                      android:layout_marginTop="@dimen/dp_40">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/black"
+                      android:text="Your order number"
+                      android:textSize="@dimen/sp_16"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/black"
+                      android:text="242344343431"
+                      android:textSize="@dimen/sp_16"/>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="@color/white"
+                      android:orientation="vertical"
+                      android:padding="@dimen/dp_16">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/black"
+                      android:text="Confirmation email sent"
+                      android:textSize="@dimen/sp_16"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/black"
+                      android:text="todd@yahoo.com"
+                      android:textSize="@dimen/sp_16"/>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="@color/white"
+                      android:orientation="vertical"
+                      android:padding="@dimen/dp_16">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/black"
+                      android:text="Shipping Method"
+                      android:textSize="@dimen/sp_16"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/black"
+                      android:text="Standard (5-7 business days)"
+                      android:textSize="@dimen/sp_16"/>
+
+        </LinearLayout>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="@dimen/dp_16"
+                  android:paddingTop="@dimen/dp_21"
+                  android:paddingBottom="@dimen/dp_12"
+                  android:paddingRight="@dimen/dp_16"
+                  android:text="ITEMS"/>
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:padding="@dimen/dp_16">
+
+            <ImageView android:layout_width="62dp"
+                       android:layout_height="62dp"
+                       android:id="@+id/imv_item"
+                       android:layout_marginRight="@dimen/dp_24"
+                       android:layout_marginTop="@dimen/dp_8"
+                       android:layout_marginBottom="@dimen/dp_8"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/txv_item_name"
+                      android:layout_toRightOf="@+id/imv_item"
+                      android:textSize="@dimen/sp_16"
+                      android:textColor="@color/black"
+                      android:text="Advantix II"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/txv_item_description"
+                      android:layout_below="@+id/txv_item_name"
+                      android:layout_alignLeft="@+id/txv_item_name"
+                      android:layout_marginTop="@dimen/dp_3"
+                      android:textSize="@dimen/sp_14"
+                      android:textColor="@color/hint_color"
+                      android:text="6pk for medium sized..."/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@+id/txv_item_description"
+                      android:layout_alignLeft="@+id/txv_item_description"
+                      android:layout_marginTop="@dimen/dp_3"
+                      android:textSize="@dimen/sp_14"
+                      android:textColor="@color/hint_color"
+                      android:text="Qty: 1"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_alignParentRight="true"
+                      android:layout_alignTop="@+id/txv_item_description"
+                      android:textSize="@dimen/sp_16"
+                      android:textColor="@color/crimson_red"
+                      android:text="$32.75"/>
+        </RelativeLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_marginTop="@dimen/dp_16"
+                      android:background="@color/white">
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/dp_16"
+                            android:paddingRight="@dimen/dp_16"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:text="Subtotal (1 Item)"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/grey_text"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:text="$32.75"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/light_grey"/>
+            </RelativeLayout>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/dp_16"
+                            android:paddingRight="@dimen/dp_16"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:text="Offer Code"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/grey_text"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:text="-$5.25"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/light_grey"/>
+            </RelativeLayout>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/dp_16"
+                            android:paddingRight="@dimen/dp_16"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:text="Shipping"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/grey_text"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:text="$0"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/light_grey"/>
+            </RelativeLayout>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/dp_16"
+                            android:paddingRight="@dimen/dp_16"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:text="Taxes"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/grey_text"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:text="$6.25"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/light_grey"/>
+            </RelativeLayout>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/dp_16"
+                            android:paddingRight="@dimen/dp_16"
+                            android:paddingTop="@dimen/dp_10"
+                            android:paddingBottom="@dimen/dp_10">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:text="Total"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/grey_text"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentRight="true"
+                          android:text="$33.60"
+                          android:textSize="@dimen/sp_16"
+                          android:textColor="@color/crimson_red"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

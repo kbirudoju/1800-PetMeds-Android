@@ -32,14 +32,14 @@
         </activity>
         <!-- TODO We should disble the orientation change during release -->
         <activity
-            android:name=".ui.HomeActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+                android:name=".ui.HomeActivity"
+                android:configChanges="keyboardHidden|orientation"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
         <activity
-            android:name=".ui.LoginActivity"
-            android:configChanges="orientation"
+                android:name=".ui.LoginActivity"
+                android:configChanges="orientation"
                 android:screenOrientation="portrait"/>
         <activity
                 android:name=".ui.ForgotPasswordActivity"
@@ -67,6 +67,9 @@
         <activity
             android:name=".ui.checkout.AddNewEntityActivity"
             android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.ConfirmationReceiptActivity"
+                  android:screenOrientation="portrait"/>
 
         <meta-data
                 android:name="android.app.default_searchable"
