@@ -1,14 +1,20 @@
 package com.petmeds1800.ui;
 
+import com.bumptech.glide.Glide;
 import com.petmeds1800.R;
+import com.petmeds1800.ui.fragments.dialog.LoadingGIFDialogFragment;
 import com.petmeds1800.util.AnalyticsUtil;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,4 +79,17 @@ public abstract class AbstractActivity extends AppCompatActivity {
         return mToolbar;
     }
 
+    public void startLoadingGif(Context mContext) throws Exception{
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        LoadingGIFDialogFragment frag = new LoadingGIFDialogFragment();
+        frag.show(fragmentTransaction, LoadingGIFDialogFragment.class.getSimpleName());
+    }
+
+    public void stopLoadingGif(Context mContext) throws Exception{
+        Fragment prev = getSupportFragmentManager().findFragmentByTag(LoadingGIFDialogFragment.class.getSimpleName());
+        if (prev != null) {
+            LoadingGIFDialogFragment df = (LoadingGIFDialogFragment) prev;
+            df.dismiss();
+        }
+    }
 }

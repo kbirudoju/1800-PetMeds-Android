@@ -35,5 +35,6 @@
     <color name="grey_disabled">#727272</color>
     <color name="learn_more_txt">#deffffff</color>
     <color name="share_txt">#2b2b2d</color>
+    <color name="translucent_black">#80000000</color>
 
 </resources>
