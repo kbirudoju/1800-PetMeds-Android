@@ -90,5 +90,8 @@
     <dimen name="dp_44">44dp</dimen>
     <dimen name="dp_24">24dp</dimen>
     <dimen name="dp_72">72dp</dimen>
+    <dimen name="dp_241">241dp</dimen>
+    <dimen name="dp_239">239dp</dimen>
+    <dimen name="dp_150">150dp</dimen>
 
 </resources>
