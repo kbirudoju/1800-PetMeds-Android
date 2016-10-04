@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/pattern_light_blue">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_vet_title"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_16"
+        android:layout_marginLeft="@dimen/dp_16"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_16"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_31"
+        android:drawableLeft="@drawable/search"
+        style="@style/StyledEditText"
+        android:textColor="@color/petmeds_blue"/>
+    <TextView
+        android:id="@+id/cantFindVetButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cannot_find_vet_txt"
+        android:drawableRight="@drawable/ic_arrow"
+        android:layout_marginTop="@dimen/dp_17"
+        style="@style/order_title"
+        android:padding="@dimen/dp_16"
+        android:textColor="@color/grey_text"
+        android:background="@color/white"/>
+
+</LinearLayout>

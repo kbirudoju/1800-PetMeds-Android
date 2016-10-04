@@ -1,5 +1,7 @@
 package com.petmeds1800.api;
 
+import com.petmeds1800.model.AddVetRequest;
+import com.petmeds1800.model.AddVetResponse;
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.model.RemoveAddressRequest;
@@ -272,5 +274,9 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/checkout/CheckoutActor/commitOrder")
     Observable<CommitOrderResponse> submitCommitedOrderDetails(@Body SessionConfigRequest request);
 
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/vet/VetActor/add")
+    Observable<AddVetResponse> addVet(@Body AddVetRequest addVetRequest);
 
 }

@@ -100,8 +100,8 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 if(commerceItem.getPetName()!=null && !commerceItem.getPetName().isEmpty()) {
                     itemViewHolder.petNameEdit.setText(commerceItem.getPetName());
-                }if(commerceItem.getVetName()!=null && !commerceItem.getVetName().isEmpty()){
-                    itemViewHolder.vetNameEdit.setText(commerceItem.getVetName());
+                }if(commerceItem.getVetClinic()!=null && !commerceItem.getVetClinic().isEmpty()){
+                    itemViewHolder.vetNameEdit.setText(commerceItem.getVetClinic());
 
                 }
 

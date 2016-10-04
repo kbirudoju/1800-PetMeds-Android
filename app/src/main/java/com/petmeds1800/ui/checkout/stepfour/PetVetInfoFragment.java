@@ -132,6 +132,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         if (bundle != null) {
             ShoppingCartListResponse shoppingCartListResponse = (ShoppingCartListResponse)bundle.getSerializable(CartFragment.SHOPPING_CART);
             //Add only those item which is a RxItem
+           // shoppingCartListResponse.getShoppingCart().getCommerceItems().get(0).setIsRxItem(true);
             ShoppingCart shoppingCartItem=shoppingCartListResponse.getShoppingCart();
             mCommerceItem=new ArrayList<CommerceItems>();
             for(CommerceItems commerceItems : shoppingCartItem.getCommerceItems()){
@@ -217,10 +218,10 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     public void onValueSelected(String value, int requestCode) {
         switch (requestCode) {
             case PET_REQUEST:
-                if (value.equalsIgnoreCase(getActivity().getString(R.string.add_new_pet_txt))) {
-                    AddNewEntityIntent addNewEntityIntent = new AddNewEntityIntent(getActivity(),
-                            Constants.ADD_NEW_PET_REQUEST);
-                    startActivityForResult(addNewEntityIntent, 2);
+
+                if(value.equalsIgnoreCase(getActivity().getString(R.string.add_new_pet_txt))){
+                    AddNewEntityIntent addNewEntityIntent = new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_PET_REQUEST);
+                    startActivityForResult(addNewEntityIntent, Constants.ADD_NEW_PET_REQUEST);
                 }else{
                     mCommerceItem.get(mPosition - 1).setPetName(value);
                     mCommerceItem.get(mPosition - 1).setPetId(getPetVetKey(mPetList,value));
@@ -230,10 +231,12 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
 
                 break;
             case VET_REQUEST:
-                if (value.equalsIgnoreCase(getActivity().getString(R.string.add_new_vet_txt))) {
+                if(value.equalsIgnoreCase(getActivity().getString(R.string.add_new_vet_txt))){
+                    AddNewEntityIntent addNewEntityIntent = new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_VET_REQUEST);
+                    startActivityForResult(addNewEntityIntent, Constants.ADD_NEW_VET_REQUEST);
 
                 }else{
-                    mCommerceItem.get(mPosition - 1).setVetName(value);
+                    mCommerceItem.get(mPosition - 1).setVetClinic(value);
                     mCommerceItem.get(mPosition - 1).setVetId(getPetVetKey(mVetList, value));
 
                     mAdapter.notifyItemChanged(mPosition);
@@ -245,8 +248,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 2
-        if(requestCode==2)
+        if(requestCode==Constants.ADD_NEW_PET_REQUEST)
         {
             if(data!=null) {
                 Log.d("onActivityResult", ">>>>");
@@ -255,6 +257,15 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                 mCommerceItem.get(mPosition - 1).setPetName(pet.getPetName());
                 mAdapter.notifyItemChanged(mPosition);
             }
+
+        }
+        if(requestCode==Constants.ADD_NEW_VET_REQUEST)
+        {
+            Log.d("onActivityResult", ">>>>");
+            Vet vet =(Vet)data.getSerializableExtra("vet");
+            mVetList.put(vet.getId(), vet.getName());
+            mCommerceItem.get(mPosition - 1).setVetClinic(vet.getName());
+            mAdapter.notifyItemChanged(mPosition);
 
         }
     }

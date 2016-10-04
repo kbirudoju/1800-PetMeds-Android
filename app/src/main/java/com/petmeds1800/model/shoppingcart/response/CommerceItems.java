@@ -32,7 +32,7 @@ public class CommerceItems implements Serializable {
     private String commerceItemId;
     private String quantity;
     private String vetId;
-    private String vetName;
+   /* private String vetName;
 
     public String getVetName() {
         return vetName;
@@ -40,7 +40,7 @@ public class CommerceItems implements Serializable {
 
     public void setVetName(String vetName) {
         this.vetName = vetName;
-    }
+    }*/
 
     public String getProductGroup ()
     {
