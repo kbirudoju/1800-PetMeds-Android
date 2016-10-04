@@ -2,7 +2,9 @@ package com.petmeds1800.ui.checkout.stepfive;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
+import com.petmeds1800.model.entities.SessionConfigRequest;
 
 import javax.inject.Inject;
 
@@ -45,7 +47,7 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        mView.showErrorCrouton(e.getLocalizedMessage(),false);
+                        mView.showErrorCrouton(e.getLocalizedMessage(), false);
 
                     }
 
@@ -57,7 +59,42 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.showErrorCrouton(orderReviewSubmitResponse.getStatus().getErrorMessages().get(0),false);
+                                mView.showErrorCrouton(orderReviewSubmitResponse.getStatus().getErrorMessages().get(0),
+                                        false);
+                            }
+                        }
+
+                    }
+                });
+    }
+
+    @Override
+    public void submitComittedOrderDetails(String sessionConfig) {
+        mPetMedsApiService.submitCommitedOrderDetails(new SessionConfigRequest(sessionConfig))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<CommitOrderResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.showErrorCrouton(e.getLocalizedMessage(), false);
+
+                    }
+
+                    @Override
+                    public void onNext(CommitOrderResponse commitOrderResponse) {
+                        if (commitOrderResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.navigateOnOrderConfirmation(commitOrderResponse);
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.showErrorCrouton(commitOrderResponse.getStatus().getErrorMessages().get(0),
+                                        false);
                             }
                         }
 

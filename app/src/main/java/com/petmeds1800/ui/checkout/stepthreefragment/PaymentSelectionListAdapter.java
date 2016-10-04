@@ -75,9 +75,11 @@ public class PaymentSelectionListAdapter extends RecyclerView.Adapter<RecyclerVi
         PaymentItemViewHolder viewHolder
                 = (PaymentItemViewHolder) holder;
         final Card myCard = getItemAt(position);
-
-        String expirationText = String.format(mContext.getString(R.string.cardExpirationValue), Utils
-                .getShortMonthName(Integer.parseInt(myCard.getExpirationMonth())), myCard.getExpirationYear());
+        // Null expiration month coming
+        int expirationMonth = myCard.getExpirationMonth() != null ? Integer.parseInt(myCard.getExpirationMonth()) : 0;
+        String expirationText = String
+                .format(mContext.getString(R.string.cardExpirationValue), expirationMonth == 0 ? "" : Utils
+                        .getShortMonthName(expirationMonth), myCard.getExpirationYear());
 
         viewHolder.mCardExpirationLabel.setText(expirationText);
         viewHolder.mCardNameAndNumberLabel.setText(myCard.getCardType() + " : " + myCard.getCardNumber());

@@ -18,7 +18,7 @@ public interface StepOneRootContract {
     }
 
     interface Presenter extends BasePresenter {
-         public void saveShippingAddress(SavedShippingAddressRequest request);
+        void saveShippingAddress(SavedShippingAddressRequest request);
     }
 
 }

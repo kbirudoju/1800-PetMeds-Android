@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.checkout.stepfive;
 
+import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
@@ -9,14 +10,24 @@ import com.petmeds1800.mvp.BaseView;
  */
 
 public class StepFiveRootContract {
+
     interface View extends BaseView<StepFiveRootContract.Presenter> {
+
         boolean isActive();
+
         void populateOrderReviewDetails(OrderReviewSubmitResponse response);
+
         void onError(String errorMessage);
+
         void showErrorCrouton(CharSequence message, boolean span);
+
+        void navigateOnOrderConfirmation(CommitOrderResponse response);
     }
 
     interface Presenter extends BasePresenter {
-        public void getOrderReviewDetails(String sessionConfig);
+
+        void getOrderReviewDetails(String sessionConfig);
+
+        void submitComittedOrderDetails(String sessionConfig);
     }
 }

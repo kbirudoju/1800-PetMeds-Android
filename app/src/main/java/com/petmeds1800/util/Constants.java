@@ -37,4 +37,6 @@ public class Constants {
     public static final int ADD_NEW_ADDRESS_REQUEST = 2;
 
     public static final int ADD_NEW_PAYMENT_METHOD = 3;
+
+    public static final String CONFIRMATION_ORDER_RESPONSE = "confirmationOrderResponse";
 }

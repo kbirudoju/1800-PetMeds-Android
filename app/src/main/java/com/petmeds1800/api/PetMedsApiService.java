@@ -12,6 +12,7 @@ import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.AgeListResponse;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
 import com.petmeds1800.model.entities.EasyRefillReminder;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
@@ -38,7 +39,7 @@ import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.model.entities.ShippingMethodsResponse;
-import com.petmeds1800.model.entities.SignOutRequest;
+import com.petmeds1800.model.entities.SessionConfigRequest;
 import com.petmeds1800.model.entities.SignOutResponse;
 import com.petmeds1800.model.entities.SignUpRequest;
 import com.petmeds1800.model.entities.SignUpResponse;
@@ -165,7 +166,7 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/logout")
-    Observable<SignOutResponse> logout(@Body SignOutRequest signOutRequest);
+    Observable<SignOutResponse> logout(@Body SessionConfigRequest sessionConfigRequest);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/remove")
@@ -266,5 +267,10 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/cart/CartActor/update")
     Observable<ShoppingCartListResponse> getUpdateItemQuantityRequestShoppingCart(
             @Body HashMap<String, String> getmCommerceIDQuantityMap);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/checkout/CheckoutActor/commitOrder")
+    Observable<CommitOrderResponse> submitCommitedOrderDetails(@Body SessionConfigRequest request);
+
 
 }

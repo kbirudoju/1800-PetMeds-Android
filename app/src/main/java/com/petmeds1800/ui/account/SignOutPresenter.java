@@ -2,7 +2,7 @@ package com.petmeds1800.ui.account;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.SignOutRequest;
+import com.petmeds1800.model.entities.SessionConfigRequest;
 import com.petmeds1800.model.entities.SignOutResponse;
 
 import android.support.annotation.NonNull;
@@ -33,7 +33,7 @@ public class SignOutPresenter implements SignOutContract.Presenter {
 
     @Override
     public void sendDataToServer(String sessionConfigParam) {
-        mPetMedsApiService.logout(new SignOutRequest(sessionConfigParam))
+        mPetMedsApiService.logout(new SessionConfigRequest(sessionConfigParam))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SignOutResponse>() {

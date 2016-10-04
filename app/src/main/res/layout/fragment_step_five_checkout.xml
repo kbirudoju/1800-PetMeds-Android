@@ -16,6 +16,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_above="@+id/bottomContainer"
+            android:visibility="gone"
     >
 
         <RelativeLayout
@@ -231,7 +232,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/shippingNavigator"
             android:background="@color/white"
-
+            android:visibility="gone"
 
     >
         <TextView
@@ -368,6 +369,14 @@
                 android:layout_marginRight="@dimen/dp_16"
         />
     </RelativeLayout>
+    <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressbar"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+    />
     <Button
             style="@style/dialog_button_style_blue"
             android:text="@string/place_order_button_title"

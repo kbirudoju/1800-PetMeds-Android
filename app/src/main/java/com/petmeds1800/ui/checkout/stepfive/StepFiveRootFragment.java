@@ -2,7 +2,9 @@ package com.petmeds1800.ui.checkout.stepfive;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.intent.ConfirmationOrderIntent;
 import com.petmeds1800.model.entities.CheckoutSteps;
+import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.Item;
 import com.petmeds1800.model.entities.Order;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
@@ -14,6 +16,7 @@ import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -28,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -138,6 +142,9 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
 
     @BindView(R.id.bottomContainer)
     RelativeLayout mBottomContainer;
+
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressbar;
 
     private String mStepName;
 
@@ -277,6 +284,7 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
 
     @Override
     public void populateOrderReviewDetails(OrderReviewSubmitResponse response) {
+        mProgressbar.setVisibility(View.GONE);
         CheckoutSteps checkoutSteps = response.getCheckoutSteps();
         mOrder = response.getOrder();
 
@@ -312,18 +320,40 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
             }
 
         }
+        mBottomContainer.setVisibility(View.VISIBLE);
+        mScrollerView.setVisibility(View.VISIBLE);
 
 
     }
 
     @Override
     public void onError(String errorMessage) {
-
+        if (mProgressbar.getVisibility() == View.VISIBLE) {
+            mProgressbar.setVisibility(View.GONE);
+        }
+        activity.hideProgress();
     }
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
+        activity.hideProgress();
+        if (mProgressbar.getVisibility() == View.VISIBLE) {
+            mProgressbar.setVisibility(View.GONE);
+        }
         Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+    }
+
+    @Override
+    public void navigateOnOrderConfirmation(CommitOrderResponse response) {
+        activity.hideProgress();
+        ConfirmationOrderIntent confirmationOrderIntent = new ConfirmationOrderIntent(getActivity());
+        confirmationOrderIntent.putExtra(Constants.CONFIRMATION_ORDER_RESPONSE, response);
+        if (!getActivity().isFinishing()) {
+            getActivity().finish();
+        }
+        startActivity(confirmationOrderIntent);
+
+
     }
 
     @Override
@@ -333,7 +363,17 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
 
     @OnClick(R.id.editCardButton)
     public void onClick() {
-        getActivity().finish();
+        if (!getActivity().isFinishing()) {
+            getActivity().finish();
+        }
+
+    }
+
+    @OnClick(R.id.shippingNavigator)
+    public void onSubbmitOrderClick() {
+        activity.showProgress();
+        mPresenter.submitComittedOrderDetails(
+                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
 
     }
 }
