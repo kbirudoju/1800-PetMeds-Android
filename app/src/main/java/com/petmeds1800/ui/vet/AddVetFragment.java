@@ -1,7 +1,10 @@
 package com.petmeds1800.ui.vet;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,11 +12,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.model.AddVetRequest;
+import com.petmeds1800.model.VetList;
+import com.petmeds1800.model.entities.Vet;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.AddNewEntityActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.vet.support.VetListSuggestionAdapter;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,12 +36,18 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 10/3/2016.
  */
-public class AddVetFragment extends AbstractFragment implements View.OnClickListener{
+public class AddVetFragment extends AbstractFragment implements View.OnClickListener,CantFindVetContract.View{
     @BindView(R.id.cantFindVetButton)
     TextView mCantFindVetButton;
 
-
-
+    @BindView(R.id.vetTextView)
+    AutoCompleteTextView mVetTextView;
+    private VetList vetList;
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+    private CantFindVetContract.Presenter mPresenter;
+    private AddNewEntityActivity mCallback;
+    private String mZipCode;
 
     @Nullable
     @Override
@@ -34,8 +55,12 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         View view = inflater.inflate(R.layout.fragment_add_vet, container, false);
         ButterKnife.bind(this,view);
         mCantFindVetButton.setOnClickListener(this);
+        PetMedsApplication.getAppComponent().inject(this);
+        mPresenter=new CantFindVetPresenter(this);
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.add_vet_header));
         ((AbstractActivity) getActivity()).enableBackButton();
+
+        mZipCode=getArguments().getString("zipcode");
         setHasOptionsMenu(true);
         return view;
     }
@@ -44,13 +69,48 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_account_settings, menu);
         MenuItem editMenuItem = menu.findItem(R.id.action_edit);
+        MenuItem doneMenuItem= menu.findItem(R.id.action_done);
+        doneMenuItem.setVisible(true);
         editMenuItem.setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_done) {
+            if(mVetTextView.getText().toString()!=null && !mVetTextView.getText().toString().isEmpty()) {
+                if (vetList != null) {
+                    String vetName = vetList.getClinic();
+                    String vetClinic = vetList.getName();
+                    String vetPhone = vetList.getPhone();
+                    AddVetRequest addVetRequest = new AddVetRequest(vetName, vetClinic, vetPhone
+                            , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                    mPresenter.addVetData(addVetRequest);
+                }
+            }else{
+                mVetTextView.setError(getActivity().getString(R.string.empty_vet_error));
+
+            }
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mVetTextView.setAdapter(new VetListSuggestionAdapter(getActivity(), mZipCode));
+        // Click Listener for result items
+        mVetTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+             vetList = (VetList) adapterView.getItemAtPosition(position);
+                String vetDetail=vetList.getName()+'\n'+vetList.getAddress();
+                mVetTextView.setText(vetDetail);
+                hideSoftKeyBoard();
+            }
+        });
     }
 
     @Override
@@ -61,5 +121,49 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
        // fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId) {
+        return false;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
+    }
+
+    @Override
+    public void onSuccess(Vet vet) {
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.remove(this);
+        trans.commit();
+        manager.popBackStack();
+        mCallback.setVet(vet);
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+
+    }
+
+    @Override
+    public void setPresenter(CantFindVetContract.Presenter presenter) {
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            if (context instanceof AddNewEntityActivity) {
+                mCallback = (AddNewEntityActivity) context;
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+            );
+        }
+
     }
 }

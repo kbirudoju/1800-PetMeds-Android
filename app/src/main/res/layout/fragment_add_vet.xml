@@ -15,12 +15,15 @@
         android:layout_marginLeft="@dimen/dp_16"
         />
 
-    <EditText
+    <AutoCompleteTextView
+        android:id="@+id/vetTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_16"
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_31"
+        android:maxLines="2"
+        android:inputType="textMultiLine"
         android:drawableLeft="@drawable/search"
         style="@style/StyledEditText"
         android:textColor="@color/petmeds_blue"/>

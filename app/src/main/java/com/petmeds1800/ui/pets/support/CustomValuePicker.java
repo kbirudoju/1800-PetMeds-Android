@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.pets.support;
 
-import com.petmeds1800.R;
-
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -9,6 +7,8 @@ import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
+
+import com.petmeds1800.R;
 
 import java.lang.reflect.Field;
 
@@ -36,6 +36,11 @@ public class CustomValuePicker extends NumberPicker {
     public void init() {
         setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         setDividerColor(getResources().getColor(R.color.hint_color));
+    }
+
+    @Override
+    public void setValue(int value) {
+        super.setValue(value);
     }
 
     public void setValues(String[] values) {

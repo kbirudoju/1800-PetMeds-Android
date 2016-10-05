@@ -1,5 +1,13 @@
 package com.petmeds1800.ui.checkout;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.MenuItem;
+
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.entities.Pets;
@@ -14,13 +22,6 @@ import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.vet.AddVetFragment;
 import com.petmeds1800.ui.vet.CantFindVetContract;
 import com.petmeds1800.util.Constants;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.view.MenuItem;
 
 /**
  * Created by pooja on 9/29/2016.
@@ -50,8 +51,12 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
                         AddEditCardFragment.newInstance(StepThreeRootFragment.REQUEST_CODE),
                         AddEditCardFragment.class.getName());
             case Constants.ADD_NEW_VET_REQUEST:
+               Log.d("zipcode is", getIntent().getStringExtra("zipcode"));
+                String zipcode=getIntent().getStringExtra("zipcode");
+                Bundle codeBundle = new Bundle();
+                codeBundle.putString("zipcode", zipcode);
                 getSupportFragmentManager().addOnBackStackChangedListener(getListener());
-                replaceFragment(new AddVetFragment(), AddVetFragment.class.getSimpleName());
+                replaceFragmentWithArgument(new AddVetFragment(), AddVetFragment.class.getSimpleName(),codeBundle);
                 break;
         }
     }

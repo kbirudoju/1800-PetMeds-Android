@@ -340,7 +340,6 @@ public class AddPetFragment extends AbstractFragment
                 break;
             case R.id.pet_age_edit:
                 mPresenter.populatePetAgeList();
-
                 break;
             case R.id.pet_picture_edit:
                 showImageOptions();

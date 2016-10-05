@@ -1,5 +1,14 @@
 package com.petmeds1800.ui.checkout;
 
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.StepState;
@@ -13,15 +22,6 @@ import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
-
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -276,9 +276,10 @@ public class CheckOutActivity extends AbstractActivity
                             StepFourRootFragment.class.getName(), false);
                 } else if (mApplicableSteps.size() == 4) {
                     //TODO start the PETVet step
-                    replaceCheckOutFragment(
+                   replaceCheckOutFragment(
                             StepFiveRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepFiveRootFragment.class.getName(), false);
+
                 }
                 break;
 

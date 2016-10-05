@@ -3,6 +3,7 @@ package com.petmeds1800.ui.vet;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -92,13 +93,13 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_done) {
+            if (id == R.id.action_done) {
             boolean isValidPetName;
             boolean isValidClinicName;
             boolean isValidPhoneNumber;
 
-            isValidPetName = checkAndShowError(mInputFieldEdit, mInputFieldInputLayout, R.string.error_petname);
-            isValidClinicName = checkAndShowError(mClinicNameEdit, mClinicNameInputLayout, R.string.error_petname);
+            isValidPetName = checkAndShowError(mInputFieldEdit, mInputFieldInputLayout, R.string.empty_pet_name);
+            isValidClinicName = checkAndShowError(mClinicNameEdit, mClinicNameInputLayout, R.string.empty_vet_name);
             isValidPhoneNumber = checkAndShowError(mPhoneNumberEdit, mPhoneInputLayout, R.string.error_validPhone);
 
 
@@ -110,7 +111,7 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
                 return super.onOptionsItemSelected(item);
             }
 
-            AddVetRequest addVetRequest=new AddVetRequest(mClinicNameEdit.getText().toString(),mInputFieldEdit.getText().toString(),mPhoneNumberEdit.getText().toString()
+            AddVetRequest addVetRequest=new AddVetRequest(mInputFieldEdit.getText().toString(),mClinicNameEdit.getText().toString(),mPhoneNumberEdit.getText().toString()
             ,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.addVetData(addVetRequest);
         }
@@ -146,7 +147,7 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
 
     @Override
     public void onError(String errorMessage) {
-
+        Snackbar.make(mClinicNameEdit, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

@@ -494,9 +494,12 @@
     <string name="cannot_find_vet_desc">As a licensed pharmacy we are required by law to contact your veterinarian to obtain authorization for your pet\'s prescription medications.</string>
     <string name="enter_vet_clinic_txt">Enter your vet or clinic\’s name and phone number below.</string>
     <string name="clinic_name_txt">Clinic Name</string>
-    <string name="input_field_txt">Input Field</string>
+    <string name="input_field_txt">Vet\'s Name</string>
     <string name="vet_phone_number_txt">Vet\'s Phone Number</string>
     <string name="error_validPhone">PhoneNumber is required</string>
+    <string name="empty_vet_error">Please select a Vet</string>
+    <string name="empty_pet_name">PetName is required</string>
+    <string name="empty_vet_name">VetName is required</string>
 
 </resources>
 

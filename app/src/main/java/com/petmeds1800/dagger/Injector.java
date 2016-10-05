@@ -13,8 +13,6 @@ import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
-import com.petmeds1800.ui.dashboard.CategoryListFragment;
-import com.petmeds1800.ui.dashboard.ProductCategoryPresenter;
 import com.petmeds1800.ui.checkout.CheckoutActivityPresenter;
 import com.petmeds1800.ui.checkout.StepTwoPresenter;
 import com.petmeds1800.ui.checkout.StepTwoRootFragment;
@@ -27,6 +25,8 @@ import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootPresentor;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootPresentor;
+import com.petmeds1800.ui.dashboard.CategoryListFragment;
+import com.petmeds1800.ui.dashboard.ProductCategoryPresenter;
 import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
@@ -42,6 +42,8 @@ import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.presenter.PetListPresenter;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
+import com.petmeds1800.ui.vet.AddVetFragment;
+import com.petmeds1800.ui.vet.AddVetPresenter;
 import com.petmeds1800.ui.vet.CantFindVetFragment;
 import com.petmeds1800.ui.vet.CantFindVetPresenter;
 import com.petmeds1800.util.AnalyticsUtil;
@@ -138,5 +140,7 @@ public interface Injector {
     void inject(StepThreeRootPresentor stepThreeRootPresentor);
     void inject(CantFindVetPresenter cantFindVetPresenter);
     void inject(CantFindVetFragment cantFindVetFragment);
+    void inject (AddVetPresenter addVetPresenter);
+    void inject(AddVetFragment addVetFragment);
 
 }

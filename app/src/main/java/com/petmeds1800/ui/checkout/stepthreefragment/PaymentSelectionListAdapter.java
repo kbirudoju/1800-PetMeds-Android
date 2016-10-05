@@ -1,9 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.Card;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.Card;
+import com.petmeds1800.util.Utils;
 
 import java.util.List;
 

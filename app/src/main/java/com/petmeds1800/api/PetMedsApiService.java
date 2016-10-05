@@ -6,6 +6,7 @@ import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.RemoveCardRequest;
+import com.petmeds1800.model.SearchVetByZipCodeResponse;
 import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddEditCardResponse;
@@ -278,5 +279,9 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/vet/VetActor/add")
     Observable<AddVetResponse> addVet(@Body AddVetRequest addVetRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/vet/VetActor/findByZip")
+    Observable<SearchVetByZipCodeResponse> getVetByZipCode(@Query("zip") String zip);
 
 }

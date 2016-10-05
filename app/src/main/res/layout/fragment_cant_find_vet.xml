@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/vet_phone_number_txt"
-                    android:maxLength="@integer/characterLimit_30"
+                    android:maxLength="10"
                     android:singleLine="true"
                     style="@style/StyledEditText"
                     android:textColor="@color/edittext_selector"/>

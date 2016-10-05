@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:paddingLeft="@dimen/dp_16">
+        <ImageView
+            android:id="@+id/location_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_location"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_toRightOf="@+id/location_image"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:gravity="center_vertical">
+    <TextView
+        android:id="@+id/vet_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/rounded_button_text"
+        android:text="sfsf"/>
+    <TextView
+        android:id="@+id/vet_address_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/formlabel"
+        android:text="sfsf"/>
+        </LinearLayout>
+    </RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_1"
+    android:background="@color/pattern_blue"></LinearLayout>
+</LinearLayout>

@@ -2,9 +2,12 @@ package com.petmeds1800.ui.checkout.stepfour.support;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
 import com.petmeds1800.model.shoppingcart.response.CommerceItems;
+import com.petmeds1800.ui.checkout.stepfour.StepFourRootFragment;
 
 import java.util.ArrayList;
 
@@ -36,7 +40,7 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
     private View.OnClickListener listener;
     private CompoundButton.OnCheckedChangeListener checkListener;
-
+    Fragment mFragment;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -55,17 +59,19 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             EditText vetNameView=(EditText)v.findViewById(R.id.vet_name_edit);
             petNameView.setOnClickListener(listener);
             Log.d("tag set",viewHolder.getAdapterPosition()+">>>>");
-          //  vetNameView.setTag(viewHolder.getAdapterPosition());
+            //  vetNameView.setTag(viewHolder.getAdapterPosition());
             vetNameView.setOnClickListener(listener);
+
             return viewHolder;
         }
         return null;
     }
 
-    public PetVetInfoAdapter(Context context,View.OnClickListener listener,CompoundButton.OnCheckedChangeListener checkListener) {
+    public PetVetInfoAdapter(Context context,View.OnClickListener listener,CompoundButton.OnCheckedChangeListener checkListener,Fragment fragment) {
         this.mContext = context;
         this.listener = listener;
         this.checkListener=checkListener;
+        this.mFragment=fragment;
     }
 
     public void setData( ArrayList<CommerceItems> commerceItems) {
@@ -97,13 +103,25 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemViewHolder.quantityLabel.setText(commerceItem.getSkuDisplayName());
             itemViewHolder.petNameEdit.setTag(position);
             itemViewHolder.vetNameEdit.setTag(position);
+            StepFourRootFragment fragment = (StepFourRootFragment)mFragment.getParentFragment();
 
-                if(commerceItem.getPetName()!=null && !commerceItem.getPetName().isEmpty()) {
-                    itemViewHolder.petNameEdit.setText(commerceItem.getPetName());
-                }if(commerceItem.getVetClinic()!=null && !commerceItem.getVetClinic().isEmpty()){
-                    itemViewHolder.vetNameEdit.setText(commerceItem.getVetClinic());
+           //Condition to show error if pet/vet is empty
+            if(commerceItem.getPetName()!=null && !commerceItem.getPetName().isEmpty()) {
+                itemViewHolder.petNameInputLayout.setError(null);
+                itemViewHolder.petNameEdit.setText(commerceItem.getPetName());
+            }else{
+                if(fragment.isEmpty)
+                itemViewHolder.petNameInputLayout.setError(mContext.getString(R.string.empty_pet_name));
+            }
+            if(commerceItem.getVetClinic()!=null && !commerceItem.getVetClinic().isEmpty()){
+                itemViewHolder.vetNameInputLayout.setError(null);
+                itemViewHolder.vetNameEdit.setText(commerceItem.getVetClinic());
 
+            }else{
+                if(fragment.isEmpty) {
+                    itemViewHolder.vetNameInputLayout.setError(mContext.getString(R.string.empty_vet_name));
                 }
+            }
 
         }
     }
@@ -168,6 +186,12 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         EditText petNameEdit;
         @BindView(R.id.vet_name_edit)
         EditText vetNameEdit;
+
+        @BindView(R.id.petNameInputLayout)
+        TextInputLayout petNameInputLayout;
+
+        @BindView(R.id.vetNameInputLayout)
+        TextInputLayout vetNameInputLayout;
 
         public ItemViewHolder (View itemView) {
             super (itemView);
