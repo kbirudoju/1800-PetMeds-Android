@@ -18,6 +18,8 @@ public class ShoppingCart implements Serializable {
     private String coupon;
     private ArrayList<CommerceItems> commerceItems;
     private float discountAmount;
+    private float itemsTotal;
+    private String totalCommerceItemCount;
 
     public String getShippingAddressId() {
         return shippingAddressId;
@@ -51,9 +53,6 @@ public class ShoppingCart implements Serializable {
         this.shippingGroups = shippingGroups;
     }
 
-    private String totalCommerceItemCount;
-
-
     public float getSubTotal() {
         return subTotal;
     }
@@ -69,7 +68,6 @@ public class ShoppingCart implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 
     public String getShoppingCartId() {
         return shoppingCartId;
@@ -87,7 +85,6 @@ public class ShoppingCart implements Serializable {
         this.coupon = coupon;
     }
 
-
     public float getDiscountAmount() {
         return discountAmount;
     }
@@ -102,5 +99,13 @@ public class ShoppingCart implements Serializable {
 
     public void setTotalCommerceItemCount(String totalCommerceItemCount) {
         this.totalCommerceItemCount = totalCommerceItemCount;
+    }
+
+    public float getItemsTotal() {
+        return itemsTotal;
+    }
+
+    public void setItemsTotal(float itemsTotal) {
+        this.itemsTotal = itemsTotal;
     }
 }
