@@ -24,6 +24,7 @@ public class ShoppingCartAdapterViewHolder extends RecyclerView.ViewHolder {
     FrameLayout mEditItemLayout;
     FrameLayout mDeleteItemLayout;
     Spinner mItemQuantitySpinner;
+    TextView mSpinnerTitle;
 
     public ShoppingCartAdapterViewHolder(View v, int TYPE) {
         super(v);
@@ -37,6 +38,7 @@ public class ShoppingCartAdapterViewHolder extends RecyclerView.ViewHolder {
             mEditItemLayout = (FrameLayout) v.findViewById(R.id.button_edit);
             mDeleteItemLayout = (FrameLayout) v.findViewById(R.id.button_remove);
             mItemQuantitySpinner = (Spinner) v.findViewById(R.id.spinner_item_quantity);
+            mSpinnerTitle = (TextView) v.findViewById(R.id.spinner_item_quantity_title);
         }
     }
 }

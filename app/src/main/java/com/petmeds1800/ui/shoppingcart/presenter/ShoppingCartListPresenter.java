@@ -151,7 +151,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                     }
                 } else {
                     if (mView.isActive()) {
-                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),ApplyCouponRequestShoppingCart.class.getSimpleName() );
+                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),UpdateItemQuantityRequestShoppingCart.class.getSimpleName() );
                     }
                 }
             }

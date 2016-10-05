@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -132,8 +133,9 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
             if (Integer.parseInt(mCommerceItemsesCollection.get(position).getQuantity()) > 0 && Integer.parseInt(mCommerceItemsesCollection.get(position).getQuantity()) < 10){
                 holder.mItemQuantityDescription.setVisibility(View.GONE);
                 holder.mItemQuantitySpinner.setVisibility(View.VISIBLE);
+                holder.mSpinnerTitle.setVisibility(View.VISIBLE);
 
-                ArrayAdapter dataAdapter = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, mContext.getResources().getStringArray(R.array.items_quantity_array));
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, mContext.getResources().getStringArray(R.array.items_quantity_array));
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 holder.mItemQuantitySpinner.setAdapter(dataAdapter);
                 holder.mItemQuantitySpinner.setSelection((Integer.parseInt(mCommerceItemsesCollection.get(position).getQuantity()))-1);
@@ -146,15 +148,17 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                         if (pos == 9 && parent.getItemAtPosition(pos).toString().equalsIgnoreCase("10+")){
                             holder.mItemQuantityDescription.setVisibility(View.VISIBLE);
                             holder.mItemQuantitySpinner.setVisibility(View.GONE);
+                            holder.mSpinnerTitle.setVisibility(View.GONE);
                             holder.mItemQuantityDescription.getEditText().setText(mCommerceItemsesCollection.get(position).getQuantity());
                             holder.mItemQuantityDescription.requestFocus();
                             InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.showSoftInput(holder.mItemQuantityDescription.getEditText(), InputMethodManager.SHOW_FORCED);
 
-                            holder.mItemQuantityDescription.getEditText().setOnKeyListener(new View.OnKeyListener() {
+                            holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
                                 @Override
-                                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                    if (((((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) || keyCode == EditorInfo.IME_ACTION_DONE) && (holder.mItemQuantityDescription.getEditText()).getText() != null) ) {
+                                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                                    if (actionId == EditorInfo.IME_ACTION_DONE && holder.mItemQuantityDescription.getEditText().getText() != null) {
                                         Message msg = Message.obtain(null,Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
                                         Bundle b = new Bundle();
 
@@ -176,10 +180,10 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                                         } finally {
                                             return true;
                                         }
-                                    } else {
-                                        return false;
                                     }
-                                }});
+                                    return false;
+                                }
+                            });
                         }
                         else if (!parent.getItemAtPosition(pos).toString().trim().equalsIgnoreCase(mCommerceItemsesCollection.get(position).getQuantity())) {
                             Message msg = Message.obtain(null,Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
@@ -213,12 +217,14 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
             else if (Integer.parseInt(mCommerceItemsesCollection.get(position).getQuantity()) >= 10){
                 holder.mItemQuantityDescription.setVisibility(View.VISIBLE);
                 holder.mItemQuantitySpinner.setVisibility(View.GONE);
+                holder.mSpinnerTitle.setVisibility(View.GONE);
                 holder.mItemQuantityDescription.getEditText().setText(mCommerceItemsesCollection.get(position).getQuantity());
 
-                holder.mItemQuantityDescription.getEditText().setOnKeyListener(new View.OnKeyListener() {
+                holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
                     @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if (((((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) || keyCode == EditorInfo.IME_ACTION_DONE) && (holder.mItemQuantityDescription.getEditText()).getText() != null) ) {
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_DONE && holder.mItemQuantityDescription.getEditText().getText() != null) {
                             Message msg = Message.obtain(null,Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
                             Bundle b = new Bundle();
 
@@ -240,20 +246,22 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                             } finally {
                                 return true;
                             }
-                        } else {
-                            return false;
                         }
-                }});
+                        return false;
+                    }
+                });
 
             } else {
                 holder.mItemQuantityDescription.setVisibility(View.VISIBLE);
                 holder.mItemQuantitySpinner.setVisibility(View.GONE);
+                holder.mSpinnerTitle.setVisibility(View.GONE);
                 holder.mItemQuantityDescription.getEditText().setText(mContext.getResources().getInteger(R.integer.default_Quantity));
 
-                holder.mItemQuantityDescription.getEditText().setOnKeyListener(new View.OnKeyListener() {
+                holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
                     @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && (holder.mItemQuantityDescription.getEditText()).getText() != null ) {
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_DONE && holder.mItemQuantityDescription.getEditText().getText() != null) {
                             Message msg = Message.obtain(null,Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
                             Bundle b = new Bundle();
 
@@ -275,10 +283,10 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                             } finally {
                                 return true;
                             }
-                        } else {
-                            return false;
                         }
-                    }});
+                        return false;
+                    }
+                });
             }
         }
     }

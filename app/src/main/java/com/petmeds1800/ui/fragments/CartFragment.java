@@ -34,6 +34,7 @@ import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.ShoppingCartRecyclerViewAdapter;
+import com.petmeds1800.util.Utils;
 
 import java.util.HashMap;
 
@@ -118,6 +119,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             CouponCodeLayout.setError(errorMessage);
             OfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
 //            Utils.displayCrouton(getActivity(), (String) errorMessage, CouponCodeLayout);
+        }
+        else if (simpleName.equalsIgnoreCase(UpdateItemQuantityRequestShoppingCart.class.getSimpleName())){
+            Utils.displayCrouton(getActivity(), (String) errorMessage, itemListtContainer);
         }
 
         progressBar.setVisibility(View.GONE);
