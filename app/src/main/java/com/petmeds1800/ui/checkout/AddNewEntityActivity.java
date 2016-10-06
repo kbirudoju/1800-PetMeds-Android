@@ -3,6 +3,7 @@ package com.petmeds1800.ui.checkout;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.entities.Pets;
+import com.petmeds1800.model.entities.Vet;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.checkout.stepfour.presenter.PetVetInfoContract.PetSelectionListener;
@@ -10,6 +11,8 @@ import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.pets.AddPetFragment;
+import com.petmeds1800.ui.vet.AddVetFragment;
+import com.petmeds1800.ui.vet.CantFindVetContract;
 import com.petmeds1800.util.Constants;
 
 import android.content.Intent;
@@ -22,8 +25,8 @@ import android.view.MenuItem;
 /**
  * Created by pooja on 9/29/2016.
  */
-public class AddNewEntityActivity extends AbstractActivity implements PetSelectionListener {
 
+public class AddNewEntityActivity extends AbstractActivity implements PetSelectionListener,CantFindVetContract.VetSelectionListener{
     private int mRequestCode;
 
     @Override
@@ -46,6 +49,9 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
                 replaceFragment(
                         AddEditCardFragment.newInstance(StepThreeRootFragment.REQUEST_CODE),
                         AddEditCardFragment.class.getName());
+            case Constants.ADD_NEW_VET_REQUEST:
+                getSupportFragmentManager().addOnBackStackChangedListener(getListener());
+                replaceFragment(new AddVetFragment(), AddVetFragment.class.getSimpleName());
                 break;
         }
     }
@@ -71,7 +77,14 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit();
     }
 
-    /*Method will be called whenver there is changes in backstack.If the backstack is zero then finish the activity*/
+    public void replaceFragmentWithBackStack(Fragment fragment, String tag) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.add_entity_container, fragment, tag);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+/*Method will be called whenver there is changes in backstack.If the backstack is zero then finish the activity*/
     private FragmentManager.OnBackStackChangedListener getListener() {
         FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener() {
             public void onBackStackChanged() {
@@ -90,9 +103,18 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
 
     @Override
     public void setPet(Pets pet) {
-        Intent intent = new Intent();
-        intent.putExtra("pet", pet);
-        setResult(2, intent);
+
+        Intent intent=new Intent();
+        intent.putExtra("pet",pet);
+        setResult(Constants.ADD_NEW_PET_REQUEST,intent);
+        finish();//finishing activity
+    }
+
+    @Override
+    public void setVet(Vet vet) {
+        Intent intent=new Intent();
+        intent.putExtra("vet",vet);
+        setResult(Constants.ADD_NEW_VET_REQUEST,intent);
         finish();//finishing activity
     }
 

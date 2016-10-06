@@ -42,6 +42,8 @@ import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.presenter.PetListPresenter;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
+import com.petmeds1800.ui.vet.CantFindVetFragment;
+import com.petmeds1800.ui.vet.CantFindVetPresenter;
 import com.petmeds1800.util.AnalyticsUtil;
 
 /**
@@ -134,5 +136,7 @@ public interface Injector {
     void inject(StepFiveRootFragment stepFiveRootFragment);
 
     void inject(StepThreeRootPresentor stepThreeRootPresentor);
+    void inject(CantFindVetPresenter cantFindVetPresenter);
+    void inject(CantFindVetFragment cantFindVetFragment);
 
 }
