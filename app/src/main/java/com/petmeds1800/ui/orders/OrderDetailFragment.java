@@ -2,6 +2,7 @@ package com.petmeds1800.ui.orders;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,14 +12,21 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.model.ReOrderRequest;
 import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.model.entities.WebViewHeader;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
 import com.petmeds1800.ui.orders.support.CustomOrderDetailRecyclerAdapter;
 import com.petmeds1800.ui.orders.support.OrderDetailAdapter;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,12 +34,14 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 8/19/2016.
  */
-public class OrderDetailFragment extends AbstractFragment {
+public class OrderDetailFragment extends AbstractFragment implements OrderDetailContract.View{
     @BindView(R.id.order_deatil_recycler_view)
     RecyclerView mOrderDetailRecyclerView;
 
     private OrderDetailAdapter mOrderDetailAdapter;
-
+    private OrderDetailContract.Presenter mPresenter;
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
     OrderList orderList;
 
     @Nullable
@@ -39,6 +49,8 @@ public class OrderDetailFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_detail, null);
         ButterKnife.bind(this, view);
+        mPresenter=new OrderDetailPresenter(this);
+        PetMedsApplication.getAppComponent().inject(this);
         return view;
     }
 
@@ -58,8 +70,11 @@ public class OrderDetailFragment extends AbstractFragment {
                 WebViewHeader webviewRow=(WebViewHeader)mOrderDetailAdapter.getItemAt(position);
                 switch(webviewRow.getId()){
                     case CustomOrderDetailRecyclerAdapter.REVIEW_ROW_ID:
-                        String skuId=orderList.getCommerceItems().get(0).getSkuId();
-                        String productId=orderList.getCommerceItems().get(0).getProductId();
+                       /* String skuId=orderList.getCommerceItems().get(position).getSkuId();
+                        String productId=orderList.getCommerceItems().get(position).getProductId();
+*/
+                        String skuId=webviewRow.getItemId();
+                        String productId=webviewRow.getProductId();
                         Bundle bundle = new Bundle();
                         bundle.putString(CommonWebviewFragment.TITLE_KEY,getString(R.string.title_my_orders));
                         bundle.putString(CommonWebviewFragment.URL_KEY,getActivity().getString(R.string.server_endpoint)+"/product.jsp?id="+productId+"&sku="+skuId+"&review=write");
@@ -69,9 +84,13 @@ public class OrderDetailFragment extends AbstractFragment {
                         String trackingId=orderList.getShippingGroups().get(0).getTrackingNumber();
                         String vendorName=orderList.getShippingGroups().get(0).getCompanyName();
                         Bundle shippingBundle = new Bundle();
-                        shippingBundle.putString(CommonWebviewFragment.TITLE_KEY,getString(R.string.title_track_shipment));
-                        shippingBundle.putString(CommonWebviewFragment.URL_KEY,getActivity().getString(R.string.server_endpoint)+"rsTrack.jsp?TrackID="+trackingId+"&TrackType="+vendorName);
-                        replaceAccountFragmentWithBundle(new CommonWebviewFragment(), shippingBundle);
+                        shippingBundle.putString("vendorName",vendorName);
+                        shippingBundle.putString("trackingId",trackingId);
+                        replaceAccountFragmentWithBundle(new TrackShipmentFragment(), shippingBundle);
+                        break;
+                    case CustomOrderDetailRecyclerAdapter.REORDER_ENTIRE_ORDER_ROW_ID:
+                        ReOrderRequest reOrderRequest= new ReOrderRequest(orderList.getOrderId(),mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                        mPresenter.reOrder(reOrderRequest);
                         break;
 
                 }
@@ -109,5 +128,26 @@ public class OrderDetailFragment extends AbstractFragment {
         mOrderDetailRecyclerView.setAdapter(mOrderDetailAdapter);
         mOrderDetailRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mOrderDetailRecyclerView.setHasFixedSize(true);
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+        Snackbar.make(mOrderDetailRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onSuccess() {
+        ((HomeActivity)getActivity()).getViewPager().setCurrentItem(1);
+    }
+
+    @Override
+    public void setPresenter(OrderDetailContract.Presenter presenter) {
+
     }
 }

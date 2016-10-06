@@ -500,6 +500,8 @@
     <string name="empty_vet_error">Please select a Vet</string>
     <string name="empty_pet_name">PetName is required</string>
     <string name="empty_vet_name">VetName is required</string>
+    <string name="tracking_txt">Tracking #</string>
+    <string name="track_via_txt">"Track via "</string>
 
 </resources>
 

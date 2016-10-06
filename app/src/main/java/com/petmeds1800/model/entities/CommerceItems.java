@@ -109,6 +109,16 @@ public class CommerceItems implements Serializable {
     private String petName;
     private String vetName;
 
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
+    }
+
+    private String skuName;
+
     public String getPetName() {
         return petName;
     }

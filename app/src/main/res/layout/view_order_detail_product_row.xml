@@ -38,7 +38,6 @@
                     android:layout_height="wrap_content"
                     style="@style/rounded_button_text"
                     android:singleLine="true"
-                    android:visibility="gone"
             />
             <TextView
                     android:id="@+id/quantity_label"

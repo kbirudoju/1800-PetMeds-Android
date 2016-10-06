@@ -4,6 +4,8 @@ import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.AddVetResponse;
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.ProductCategoryListResponse;
+import com.petmeds1800.model.ReOrderRequest;
+import com.petmeds1800.model.ReOrderResponse;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.RemoveCardRequest;
 import com.petmeds1800.model.SearchVetByZipCodeResponse;
@@ -283,5 +285,9 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/vet/VetActor/findByZip")
     Observable<SearchVetByZipCodeResponse> getVetByZipCode(@Query("zip") String zip);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/atg/userprofiling/ProfileActor/reOrder")
+    Observable<ReOrderResponse> reOrder(@Body ReOrderRequest request);
 
 }

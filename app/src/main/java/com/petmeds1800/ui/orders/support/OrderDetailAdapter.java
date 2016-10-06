@@ -123,6 +123,7 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                 productHolder.priceLabel.setText("$"+commerceItem.getAmount());
                 productHolder.productNameLabel.setText(commerceItem.getProductName());
                 productHolder.quantityLabel.setText(context.getString(R.string.quantity_txt) + commerceItem.getQuantity());
+                productHolder.productDescLabel.setText(commerceItem.getSkuName());
                 Glide.with(context).load(context.getString(R.string.server_endpoint)+commerceItem.getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(productHolder.productImage) {
                     @Override
                     protected void setResource(Bitmap resource) {
@@ -256,6 +257,8 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         TextView petNameLabel;
         @BindView(R.id.vet_name_label)
         TextView vetNameLabel;
+        @BindView(R.id.item_description)
+        TextView productDescLabel;
 
 
         public ProductViewHolder(View itemView) {

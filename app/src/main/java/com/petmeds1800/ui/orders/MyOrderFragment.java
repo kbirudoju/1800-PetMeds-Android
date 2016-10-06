@@ -71,6 +71,7 @@ public class MyOrderFragment extends AbstractFragment
 
     @BindView(R.id.filter_name_label)
     TextView mFilterTitleLabel;
+
     @BindView(R.id.shopNow_button)
     Button mShopNowButton;
 
@@ -108,8 +109,6 @@ public class MyOrderFragment extends AbstractFragment
         super.onViewCreated(view, savedInstanceState);
         mFilterButton.setOnClickListener(this);
         mShopNowButton.setOnClickListener(this);
-
-
     }
 
 
