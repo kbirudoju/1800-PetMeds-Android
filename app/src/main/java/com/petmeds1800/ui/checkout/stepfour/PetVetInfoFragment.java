@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.checkout.stepfour;
 
-import com.petmeds1800.ui.fragments.AbstractFragment;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.entities.Pets;
@@ -28,17 +27,6 @@ import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.Constants;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -51,12 +39,12 @@ import butterknife.ButterKnife;
  * Created by pooja on 9/27/2016.
  */
 public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoContract.View,CommonDialogFragment.ValueSelectedListener{
-    //  public ShoppingCart shoppingCart;
+     private ShoppingCart shoppingCart;
 
     @BindView(R.id.pet_vet_view)
     RecyclerView mPetVetRecyclerView;
 
-    private PetVetInfoAdapter mAdapter;
+    public PetVetInfoAdapter mAdapter;
 
     private LinkedHashMap<String, String> mPetList;
 
@@ -71,6 +59,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     private LinkedHashMap<String,String> mVetList;
     public String mMailOption="N";
     public ArrayList<CommerceItems> mCommerceItem;
+    private StepFourRootFragment parentFragment;
 
 
     public static PetVetInfoFragment newInstance(ShoppingCartListResponse shoppingCartListResponse) {
@@ -87,7 +76,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         View view = inflater.inflate(R.layout.fragment_pet_vet_information, container, false);
         ButterKnife.bind(this, view);
         mPresenter = new PetVetInfoPresenter(this);
-
+        parentFragment=(StepFourRootFragment)getParentFragment();
         mAdapter= new PetVetInfoAdapter(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +109,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                     mMailOption="N";
                 }
             }
-        });
+        },this);
         setupRecyclerView();
         return view;
     }
@@ -133,9 +122,9 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
             ShoppingCartListResponse shoppingCartListResponse = (ShoppingCartListResponse)bundle.getSerializable(CartFragment.SHOPPING_CART);
             //Add only those item which is a RxItem
            // shoppingCartListResponse.getShoppingCart().getCommerceItems().get(0).setIsRxItem(true);
-            ShoppingCart shoppingCartItem=shoppingCartListResponse.getShoppingCart();
+           shoppingCart=shoppingCartListResponse.getShoppingCart();
             mCommerceItem=new ArrayList<CommerceItems>();
-            for(CommerceItems commerceItems : shoppingCartItem.getCommerceItems()){
+            for(CommerceItems commerceItems : shoppingCart.getCommerceItems()){
                 if(commerceItems.isRxItem()){
                     mCommerceItem.add(commerceItems);
                 }
@@ -224,22 +213,25 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                     startActivityForResult(addNewEntityIntent, Constants.ADD_NEW_PET_REQUEST);
                 }else{
                     mCommerceItem.get(mPosition - 1).setPetName(value);
-                    mCommerceItem.get(mPosition - 1).setPetId(getPetVetKey(mPetList,value));
-
-                    mAdapter.notifyItemChanged(mPosition);
+                    mCommerceItem.get(mPosition - 1).setPetId(getPetVetKey(mPetList, value));
+                    parentFragment.isEmpty=false;
+                   //mAdapter.notifyItemChanged(mPosition);
+                  mAdapter.notifyDataSetChanged();
                 }
 
                 break;
             case VET_REQUEST:
                 if(value.equalsIgnoreCase(getActivity().getString(R.string.add_new_vet_txt))){
                     AddNewEntityIntent addNewEntityIntent = new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_VET_REQUEST);
+                    addNewEntityIntent.putExtra("zipcode",shoppingCart.getShippingGroups().get(0).getShippingAddress().getPostalCode());
                     startActivityForResult(addNewEntityIntent, Constants.ADD_NEW_VET_REQUEST);
 
                 }else{
                     mCommerceItem.get(mPosition - 1).setVetClinic(value);
                     mCommerceItem.get(mPosition - 1).setVetId(getPetVetKey(mVetList, value));
-
-                    mAdapter.notifyItemChanged(mPosition);
+                    parentFragment.isEmpty=false;
+                    //mAdapter.notifyItemChanged(mPosition);
+                    mAdapter.notifyDataSetChanged();
                 }
                 break;
         }
@@ -253,19 +245,30 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
             if(data!=null) {
                 Log.d("onActivityResult", ">>>>");
                 Pets pet = (Pets) data.getSerializableExtra("pet");
+                //remove add new pet item and add again to the last position
+                mPetList.remove("-1");
                 mPetList.put(pet.getPetId(), pet.getPetName());
+                mPetList.put("-1", getActivity().getString(R.string.add_new_pet_txt));
                 mCommerceItem.get(mPosition - 1).setPetName(pet.getPetName());
-                mAdapter.notifyItemChanged(mPosition);
+                parentFragment.isEmpty=false;
+               // mAdapter.notifyItemChanged(mPosition);
+                mAdapter.notifyDataSetChanged();
             }
 
         }
         if(requestCode==Constants.ADD_NEW_VET_REQUEST)
         {
-            Log.d("onActivityResult", ">>>>");
-            Vet vet =(Vet)data.getSerializableExtra("vet");
-            mVetList.put(vet.getId(), vet.getName());
-            mCommerceItem.get(mPosition - 1).setVetClinic(vet.getName());
-            mAdapter.notifyItemChanged(mPosition);
+            if(data!=null) {
+                Log.d("onActivityResult", ">>>>");
+                Vet vet = (Vet) data.getSerializableExtra("vet");
+                mVetList.remove("-1");
+                mVetList.put(vet.getId(), vet.getName());
+                mVetList.put("-1", getActivity().getString(R.string.add_new_vet_txt));
+                mCommerceItem.get(mPosition - 1).setVetClinic(vet.getName());
+                parentFragment.isEmpty=false;
+               // mAdapter.notifyItemChanged(mPosition);
+                mAdapter.notifyDataSetChanged();
+            }
 
         }
     }

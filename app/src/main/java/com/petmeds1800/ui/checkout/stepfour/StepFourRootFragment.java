@@ -48,6 +48,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     private CheckOutActivity activity;
 
     private String mStepName;
+    public boolean isEmpty=false;
 
     public static StepFourRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse, String stepName) {
         Bundle args = new Bundle();
@@ -87,7 +88,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
         Bundle bundle = getArguments();
         if (bundle != null) {
             shoppingCartObj = (ShoppingCartListResponse) bundle.getSerializable(CartFragment.SHOPPING_CART);
-           //temporary line for testing
+            //temporary line for testing
            /* shoppingCartObj.getShoppingCart().getCommerceItems().get(0).setIsRxItem(true);
             shoppingCartObj.getShoppingCart().getCommerceItems().get(2).setIsRxItem(true);*/
             mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
@@ -98,27 +99,30 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        activity.showProgress();
+
         PetVetInfoFragment fragment = (PetVetInfoFragment) getChildFragmentManager()
                 .findFragmentByTag(PetVetInfoFragment.class.getSimpleName());
         ArrayList<String> commerceItemIds = new ArrayList<>();
         ArrayList<String> petIds = new ArrayList<>();
         ArrayList<String> vetIds = new ArrayList<>();
-
-        for (CommerceItems commerceItem : fragment.mCommerceItem) {
-            commerceItemIds.add(commerceItem.getCommerceItemId());
-            if (commerceItem.getPetId() != null && !commerceItem.getPetId().isEmpty()) {
+        for(CommerceItems commerceItem : fragment.mCommerceItem){
+            if(commerceItem.getVetClinic()!=null && commerceItem.getPetName()!=null){
+                commerceItemIds.add(commerceItem.getCommerceItemId());
                 petIds.add(commerceItem.getPetId());
-            }
-            if (commerceItem.getVetId() != null && !commerceItem.getVetId().isEmpty()) {
-
                 vetIds.add(commerceItem.getVetId());
+            }else{
+                isEmpty=true;
+                fragment.mAdapter.notifyDataSetChanged();
+                break;
             }
         }
-        //create request for add pet and vet info to cart
-        SavePetVetRequest savePetVetRequest = new SavePetVetRequest(true, fragment.mMailOption, commerceItemIds, petIds,
-                vetIds, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        mPresenter.applyPetVetInfo(savePetVetRequest);
+        if(!isEmpty) {
+            activity.showProgress();
+            //create request for add pet and vet info to cart
+            SavePetVetRequest savePetVetRequest = new SavePetVetRequest(true, fragment.mMailOption, commerceItemIds, petIds,
+                    vetIds, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+            mPresenter.applyPetVetInfo(savePetVetRequest);
+        }
     }
 
     @Override

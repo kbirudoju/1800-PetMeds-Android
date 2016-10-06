@@ -10,7 +10,7 @@ public class VetList implements Serializable{
     private String lastName;
     private String  phone;
     private String fax;
-    private int  distanceFromZip;
+    private float  distanceFromZip;
     private String clinic;
     private String state;
     private String display;
@@ -57,11 +57,11 @@ public class VetList implements Serializable{
         this.fax = fax;
     }
 
-    public int getDistanceFromZip() {
+    public float getDistanceFromZip() {
         return distanceFromZip;
     }
 
-    public void setDistanceFromZip(int distanceFromZip) {
+    public void setDistanceFromZip(float distanceFromZip) {
         this.distanceFromZip = distanceFromZip;
     }
 
