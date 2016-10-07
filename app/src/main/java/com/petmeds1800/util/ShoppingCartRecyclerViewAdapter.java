@@ -1,22 +1,26 @@
 package com.petmeds1800.util;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -70,8 +74,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
 
         holder.mItemTitle.setText(mCommerceItemsesCollection.get(position).getProductDisplayName());
         holder.mItemDescription.setText(mCommerceItemsesCollection.get(position).getSkuDisplayName());
-
-        holder.mItemCost.setText(Float.toString(mCommerceItemsesCollection.get(position).getSellingPrice()));
+        holder.mItemCost.setText(mContext.getResources().getString(R.string.dollar_placeholder) + Float.toString(mCommerceItemsesCollection.get(position).getSellingPrice()));
 
         Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + mCommerceItemsesCollection.get(position).getImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(holder.itemImage) {
 
@@ -87,7 +90,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
             @Override
             public void onClick(View v) {
 
-                Message msg = Message.obtain(null,Constants.DELETE_ITEM_REQUEST_SHOPPINGCART);
+                Message msg = Message.obtain(null, Constants.DELETE_ITEM_REQUEST_SHOPPINGCART);
                 Bundle b = new Bundle();
                 b.putString(Constants.COMMERCE_ITEM_ID, mCommerceItemsesCollection.get(position).getCommerceItemId());
                 msg.setData(b);
@@ -129,165 +132,139 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
             holder.mEditItemLayout.setVisibility(View.GONE);
         }
 
-        if (null != mCommerceItemsesCollection.get(position) && !mCommerceItemsesCollection.get(position).getQuantity().isEmpty()){
-            if (Integer.parseInt(mCommerceItemsesCollection.get(position).getQuantity()) > 0 && Integer.parseInt(mCommerceItemsesCollection.get(position).getQuantity()) < 10){
-                holder.mItemQuantityDescription.setVisibility(View.GONE);
-                holder.mItemQuantitySpinner.setVisibility(View.VISIBLE);
-                holder.mSpinnerTitle.setVisibility(View.VISIBLE);
+        if (null != mCommerceItemsesCollection.get(position) && !mCommerceItemsesCollection.get(position).getQuantity().isEmpty()) {
 
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter(mContext, android.R.layout.simple_spinner_item, mContext.getResources().getStringArray(R.array.items_quantity_array));
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                holder.mItemQuantitySpinner.setAdapter(dataAdapter);
-                holder.mItemQuantitySpinner.setSelection((Integer.parseInt(mCommerceItemsesCollection.get(position).getQuantity()))-1);
+            holder.mItemQuantityDescription.getEditText().setFocusable(false);
+            holder.mItemQuantityDescription.getEditText().setFocusableInTouchMode(false);
+            holder.mItemQuantityDescription.getEditText().setText(mCommerceItemsesCollection.get(position).getQuantity());
+            holder.mItemQuantityDescription.getEditText().setOnClickListener(new View.OnClickListener() {
 
-                holder.mItemQuantitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onClick(View v) {
 
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    {
+                        final Dialog dialog = new Dialog(mContext);
+                        dialog.setTitle(mContext.getResources().getString(R.string.select_item_quantity));
+                        View view = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_quanity_list, null);
+                        ListView mListView = (ListView) view.findViewById(R.id.quantity_available_list);
+                        mListView.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, mContext.getResources().getStringArray(R.array.items_quantity_array)));
+                        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                        if (pos == 9 && parent.getItemAtPosition(pos).toString().equalsIgnoreCase("10+")){
-                            holder.mItemQuantityDescription.setVisibility(View.VISIBLE);
-                            holder.mItemQuantitySpinner.setVisibility(View.GONE);
-                            holder.mSpinnerTitle.setVisibility(View.GONE);
-                            holder.mItemQuantityDescription.getEditText().setText(mCommerceItemsesCollection.get(position).getQuantity());
-                            holder.mItemQuantityDescription.requestFocus();
-                            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.showSoftInput(holder.mItemQuantityDescription.getEditText(), InputMethodManager.SHOW_FORCED);
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                                if (pos < 9) {
+                                    holder.mItemQuantityDescription.getEditText().setText(mContext.getResources().getStringArray(R.array.items_quantity_array)[pos]);
+                                    Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
+                                    Bundle b = new Bundle();
 
-                            holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                                    HashMap<String, String> commerceID_QuantityMap = new HashMap<>();
 
-                                @Override
-                                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                    if (actionId == EditorInfo.IME_ACTION_DONE && holder.mItemQuantityDescription.getEditText().getText() != null) {
-                                        Message msg = Message.obtain(null,Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
-                                        Bundle b = new Bundle();
-
-                                        HashMap<String,String> commerceID_QuantityMap = new HashMap<>();
-
-                                        for (int i = 0 ; i < mCommerceItemsesCollection.size() ; i++){
-                                            commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(),(mCommerceItemsesCollection.get(i).getQuantity()));
-                                        }
-                                        commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(),holder.mItemQuantityDescription.getEditText().getText().toString().trim());
-                                        b.putSerializable(Constants.QUANTITY_MAP,commerceID_QuantityMap);
-                                        msg.setData(b);
-
-                                        try {
-                                            mHandler.sendMessage(msg);
-                                        } catch (ClassCastException e) {
-                                            e.printStackTrace();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            return true;
-                                        }
+                                    for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
+                                        commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
                                     }
-                                    return false;
+                                    commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(), holder.mItemQuantityDescription.getEditText().getText().toString().trim());
+                                    b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
+                                    msg.setData(b);
+
+                                    try {
+                                        mHandler.sendMessage(msg);
+                                    } catch (ClassCastException e) {
+                                        e.printStackTrace();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        dialog.setOnDismissListener(null);
+                                        dialog.dismiss();
+                                    }
                                 }
-                            });
-                        }
-                        else if (!parent.getItemAtPosition(pos).toString().trim().equalsIgnoreCase(mCommerceItemsesCollection.get(position).getQuantity())) {
-                            Message msg = Message.obtain(null,Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
-                            Bundle b = new Bundle();
+                                 else if (pos >= 9) {
 
-                            HashMap<String,String> commerceID_QuantityMap = new HashMap<>();
+                                    dialog.setOnDismissListener(null);
+                                    dialog.dismiss();
+                                    holder.mItemQuantityDescription.getEditText().setFocusable(true);
+                                    holder.mItemQuantityDescription.getEditText().setClickable(true);
+                                    holder.mItemQuantityDescription.getEditText().setFocusableInTouchMode(true);
+                                    holder.mItemQuantityDescription.getEditText().setOnClickListener(null);
+                                    holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
-                            for (int i = 0 ; i < mCommerceItemsesCollection.size() ; i++){
-                                commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(),(mCommerceItemsesCollection.get(i).getQuantity()));
+                                        @Override
+                                        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                                            if (actionId == EditorInfo.IME_ACTION_DONE && !holder.mItemQuantityDescription.getEditText().getText().toString().isEmpty() && !(mCommerceItemsesCollection.get(position).getQuantity()).equalsIgnoreCase(holder.mItemQuantityDescription.getEditText().getText().toString().trim())) {
+                                                Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
+                                                Bundle b = new Bundle();
+
+                                                HashMap<String, String> commerceID_QuantityMap = new HashMap<>();
+
+                                                for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
+                                                    commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
+                                                }
+                                                commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(), holder.mItemQuantityDescription.getEditText().getText().toString().trim());
+                                                b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
+                                                msg.setData(b);
+
+                                                try {
+                                                    mHandler.sendMessage(msg);
+                                                } catch (ClassCastException e) {
+                                                    e.printStackTrace();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                } finally {
+                                                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                    imm.hideSoftInputFromWindow(holder.mItemQuantityDescription.getEditText().getWindowToken(), 0);
+                                                    return true;
+                                                }
+                                            } else return false;
+                                        }
+
+                                    });
+
+                                    holder.mItemQuantityDescription.getEditText().requestFocus();
+                                    (new Handler()).postDelayed(new Runnable() {
+
+                                        public void run() {
+                                            holder.mItemQuantityDescription.getEditText().dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN , 0, 0, 0));
+                                            holder.mItemQuantityDescription.getEditText().dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP , 0, 0, 0));
+                                            holder.mItemQuantityDescription.getEditText().setText(mCommerceItemsesCollection.get(position).getQuantity());
+                                            holder.mItemQuantityDescription.getEditText().setSelection(holder.mItemQuantityDescription.getEditText().getText().length());
+                                        }
+                                    }, 200);
+                                }
                             }
-                            commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(),parent.getItemAtPosition(pos).toString().trim());
-                            b.putSerializable(Constants.QUANTITY_MAP,commerceID_QuantityMap);
-                            msg.setData(b);
+                        });
+                        dialog.setContentView(view);
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
-                            try {
-                                mHandler.sendMessage(msg);
-                            } catch (ClassCastException e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
+                                Bundle b = new Bundle();
+
+                                HashMap<String, String> commerceID_QuantityMap = new HashMap<>();
+
+                                for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
+                                    commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
+                                }
+                                b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
+                                msg.setData(b);
+
+                                try {
+                                    mHandler.sendMessage(msg);
+                                } catch (ClassCastException e) {
+                                    e.printStackTrace();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(holder.mItemQuantityDescription.getEditText().getWindowToken(), 0);
+                                }
                             }
-                        }
+                        });
+                        dialog.show();
                     }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-            }
-            else if (Integer.parseInt(mCommerceItemsesCollection.get(position).getQuantity()) >= 10){
-                holder.mItemQuantityDescription.setVisibility(View.VISIBLE);
-                holder.mItemQuantitySpinner.setVisibility(View.GONE);
-                holder.mSpinnerTitle.setVisibility(View.GONE);
-                holder.mItemQuantityDescription.getEditText().setText(mCommerceItemsesCollection.get(position).getQuantity());
-
-                holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_DONE && holder.mItemQuantityDescription.getEditText().getText() != null) {
-                            Message msg = Message.obtain(null,Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
-                            Bundle b = new Bundle();
-
-                            HashMap<String,String> commerceID_QuantityMap = new HashMap<>();
-
-                            for (int i = 0 ; i < mCommerceItemsesCollection.size() ; i++){
-                                commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(),(mCommerceItemsesCollection.get(i).getQuantity()));
-                            }
-                            commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(),holder.mItemQuantityDescription.getEditText().getText().toString().trim());
-                            b.putSerializable(Constants.QUANTITY_MAP,commerceID_QuantityMap);
-                            msg.setData(b);
-
-                            try {
-                                mHandler.sendMessage(msg);
-                            } catch (ClassCastException e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                return true;
-                            }
-                        }
-                        return false;
-                    }
-                });
-
-            } else {
-                holder.mItemQuantityDescription.setVisibility(View.VISIBLE);
-                holder.mItemQuantitySpinner.setVisibility(View.GONE);
-                holder.mSpinnerTitle.setVisibility(View.GONE);
-                holder.mItemQuantityDescription.getEditText().setText(mContext.getResources().getInteger(R.integer.default_Quantity));
-
-                holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_DONE && holder.mItemQuantityDescription.getEditText().getText() != null) {
-                            Message msg = Message.obtain(null,Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
-                            Bundle b = new Bundle();
-
-                            HashMap<String,String> commerceID_QuantityMap = new HashMap<>();
-
-                            for (int i = 0 ; i < mCommerceItemsesCollection.size() ; i++){
-                                commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(),(mCommerceItemsesCollection.get(i).getQuantity()));
-                            }
-                            commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(),holder.mItemQuantityDescription.getEditText().getText().toString().trim());
-                            b.putSerializable(Constants.QUANTITY_MAP,commerceID_QuantityMap);
-                            msg.setData(b);
-
-                            try {
-                                mHandler.sendMessage(msg);
-                            } catch (ClassCastException e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                return true;
-                            }
-                        }
-                        return false;
-                    }
-                });
-            }
+                }
+            });
         }
     }
 

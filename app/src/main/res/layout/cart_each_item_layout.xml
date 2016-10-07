@@ -1,4 +1,5 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="246dp"
@@ -56,7 +57,7 @@
 
             <RelativeLayout
                 android:id="@+id/item_quantity_parent_layout"
-                android:layout_width="206dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_below="@+id/item_main_desc"
@@ -65,64 +66,45 @@
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@+id/item_main_image">
 
-                <TextView
-                    android:id="@+id/spinner_item_quantity_title"
-                    android:layout_width="206dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|left"
-                    android:text="@string/spinner_item_quantity_title"
-                    android:textSize="16sp" />
-
-                <Spinner
-                    android:id="@+id/spinner_item_quantity"
-                    style="@android:style/Widget.Spinner"
-                    android:layout_width="206dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/spinner_item_quantity_title"
-                    android:gravity="bottom"
-                    android:minHeight="60dp"
-                    android:overlapAnchor="false"
-                    android:prompt="@string/spinner_item_quantity_title"
-                    android:spinnerMode="dropdown" />
-
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/item_quantity_input_layout"
-                    android:layout_width="206dp"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="149dp"
                     android:layout_height="wrap_content"
                     android:gravity="bottom"
                     android:minHeight="60dp"
-                    android:visibility="gone">
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                     <EditText
                         android:id="@+id/each_item_quantity"
+                        style="@style/StyledEditText"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/qty"
                         android:imeOptions="actionDone"
                         android:inputType="number"
                         android:maxLength="@integer/characterLimit_3"
+                        android:singleLine="true"
                         android:textColorHint="@color/battleship_grey"
                         android:textSize="16sp" />
                 </android.support.design.widget.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/each_item_selling_price"
+                    style="@style/cart_item_title"
+                    android:layout_toRightOf="@+id/item_quantity_input_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/dp_5"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:gravity="bottom|right"
+                    android:singleLine="true"
+                    android:text="$32.75"
+                    android:textColor="@color/crimson_red" />
+
             </RelativeLayout>
-
-
-            <TextView
-                android:id="@+id/each_item_selling_price"
-                style="@style/cart_item_title"
-                android:layout_width="57dp"
-                android:layout_height="16dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/item_main_desc"
-                android:layout_marginBottom="@dimen/dp_20"
-                android:layout_marginRight="@dimen/dp_16"
-                android:layout_toRightOf="@+id/item_quantity_parent_layout"
-                android:gravity="bottom|right"
-                android:singleLine="true"
-                android:text="$32.75"
-                android:textColor="@color/crimson_red" />
 
         </RelativeLayout>
 

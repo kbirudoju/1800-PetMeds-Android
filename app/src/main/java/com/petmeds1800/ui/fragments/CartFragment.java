@@ -26,7 +26,6 @@ import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
@@ -39,9 +38,6 @@ import com.petmeds1800.util.Utils;
 import java.util.HashMap;
 
 import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by pooja on 8/2/2016.
@@ -118,7 +114,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         if (simpleName.equalsIgnoreCase(ApplyCouponRequestShoppingCart.class.getSimpleName())){
             CouponCodeLayout.setError(errorMessage);
             OfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
-//            Utils.displayCrouton(getActivity(), (String) errorMessage, CouponCodeLayout);
         }
         else if (simpleName.equalsIgnoreCase(UpdateItemQuantityRequestShoppingCart.class.getSimpleName())){
             Utils.displayCrouton(getActivity(), (String) errorMessage, itemListtContainer);
@@ -181,7 +176,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     private boolean initializeShoppingCartPage(final ShoppingCartListResponse shoppingCartListResponse){
         containerLayoutItems.setAdapter(new ShoppingCartRecyclerViewAdapter(shoppingCartListResponse.getShoppingCart().getCommerceItems(),createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_offer_code_card, null, false),shoppingCartListResponse),getActivity(),CartFragmentMessageHandler));
-
         if(null != shoppingCartListResponse.getShoppingCart()){
             ((TextView)(totalCheckOutContainer.findViewById(R.id.items_total_amt_txt))).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getItemsTotal()));
             ((TextView)(totalCheckOutContainer.findViewById(R.id.subtotal_value_txt))).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getSubTotal()));
@@ -271,8 +265,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             } else if (msg.what == Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART){
                 callmShoppingCartAPI(new UpdateItemQuantityRequestShoppingCart(((HashMap<String,String>)msg.getData().getSerializable(Constants.QUANTITY_MAP))));
             } else if (msg.what == Constants.CLICK_ITEM_UPDATE_SHOPPINGCART){
-//                replaceAccountFragmentWithBundle(new CommonWebviewFragment(), msg.getData());
-
                 CommonWebviewFragment commonWebviewFragment = new CommonWebviewFragment();
                 commonWebviewFragment.setArguments(msg.getData());
                 addStepRootChildFragment(commonWebviewFragment,R.id.cart_root_fragment_container);
