@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.ConfirmationOrderIntent;
 import com.petmeds1800.model.entities.CheckoutSteps;
+import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.Item;
 import com.petmeds1800.model.entities.Order;
@@ -16,13 +17,14 @@ import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,7 +50,8 @@ import butterknife.OnClick;
  * Created by Sdixit on 28-09-2016.
  */
 
-public class StepFiveRootFragment extends AbstractFragment implements StepFiveRootContract.View {
+public class StepFiveRootFragment extends AbstractFragment
+        implements StepFiveRootContract.View, ReviewSubmitAdapter.OpenDailogListener {
 
     @BindView(R.id.shippingAddressDetailsText)
     TextView mShippingAddressDetailsText;
@@ -146,6 +149,7 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
     @BindView(R.id.progressbar)
     ProgressBar mProgressbar;
 
+
     private String mStepName;
 
     private CheckOutActivity activity;
@@ -161,6 +165,10 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
     private static final String BLANK_SPACE = " ";
 
     private static final String FORWARD_SLASH = "/";
+
+    private static final int ADD_ONE_MONTH = 1;
+
+    private static final int SIZE_FOUR = 4;
 
     private ReviewSubmitAdapter mReviewSubmitAdapter;
 
@@ -179,28 +187,22 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    private ArrayList<String> commerceItemIds;
+
+    private ArrayList<Integer> reminderMonths;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        activity.setToolBarTitle(getString(R.string.review_submit_order_title));
+        commerceItemIds = new ArrayList<String>();
+        reminderMonths = new ArrayList<Integer>();
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
-        activity.setActiveStep(mStepName);
-        activity.setLastCompletedSteps(mStepName);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof CheckOutActivity) {
-            activity = (CheckOutActivity) context;
-        }
-
-    }
 
     public static StepFiveRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse, String stepName) {
         StepFiveRootFragment f = new StepFiveRootFragment();
@@ -232,12 +234,20 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
 
     }
 
-    public void navigateToRespectiveCheckoutScreen(String screenName) {
-
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        activity = (CheckOutActivity) getActivity();
+        if (savedInstanceState == null) {
+            activity.setToolBarTitle(getString(R.string.review_submit_order_title));
+            activity.setLastCompletedSteps(mStepName);
+            activity.setActiveStep(mStepName);
+        }
     }
 
     private void setupCardsRecyclerView(ArrayList<Item> items) {
         mReviewSubmitAdapter = new ReviewSubmitAdapter(getContext());
+        mReviewSubmitAdapter.setOpenDailogListener(this);
         mReviewSubmitAdapter.setItems(items);
         mOrdersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mOrdersRecyclerView.setNestedScrollingEnabled(false);
@@ -245,7 +255,8 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
     }
 
     private void markAsUnselected(int initial, int lastStep) {
-        for (int index = initial; index < lastStep; index++) {
+
+        for (int index = initial; index <= lastStep; index++) {
             activity.setCheckOutCircleAsUnSelectedAndUnDone(index);
         }
 
@@ -253,34 +264,38 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
 
     @OnClick({R.id.shippingAddressEdit, R.id.shippingMethodEdit, R.id.paymentMethodEdit, R.id.petVetEdit})
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.shippingAddressEdit:
-                markAsUnselected(CheckOutActivity.SHIPPMENT_ADDRESS, CheckOutActivity.SUBMIT_N_REVIEW);
-                activity.startNextStep(mApplicableSteps.get(CheckOutActivity.SHIPPMENT_ADDRESS),
-                        mShoppingCartListResponse);
-                break;
-            case R.id.shippingMethodEdit:
-                markAsUnselected(CheckOutActivity.SHIPPMENT_METHOD, CheckOutActivity.SUBMIT_N_REVIEW);
-                activity.startNextStep(mApplicableSteps.get(CheckOutActivity.SHIPPMENT_METHOD),
-                        mShoppingCartListResponse);
-                break;
-            case R.id.paymentMethodEdit:
-                markAsUnselected(CheckOutActivity.PAYMENT_METHOD, CheckOutActivity.SUBMIT_N_REVIEW);
-                activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PAYMENT_METHOD),
-                        mShoppingCartListResponse);
-                break;
-            case R.id.petVetEdit:
-                markAsUnselected(CheckOutActivity.SUBMIT_N_REVIEW, CheckOutActivity.SUBMIT_N_REVIEW);
-                activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PET_VET_INFORMATION),
-                        mShoppingCartListResponse);
-                break;
+        if (mApplicableSteps != null) {
+            switch (view.getId()) {
+                case R.id.shippingAddressEdit:
+                    markAsUnselected(CheckOutActivity.SHIPPMENT_ADDRESS, CheckOutActivity.SUBMIT_N_REVIEW);
+                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.SHIPPMENT_ADDRESS),
+                            mShoppingCartListResponse);
+                    break;
+                case R.id.shippingMethodEdit:
+                    markAsUnselected(CheckOutActivity.SHIPPMENT_METHOD, CheckOutActivity.SUBMIT_N_REVIEW);
+                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.SHIPPMENT_METHOD),
+                            mShoppingCartListResponse);
+                    break;
+                case R.id.paymentMethodEdit:
+                    markAsUnselected(CheckOutActivity.PAYMENT_METHOD, CheckOutActivity.SUBMIT_N_REVIEW);
+                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PAYMENT_METHOD),
+                            mShoppingCartListResponse);
+                    break;
+                case R.id.petVetEdit:
+                    markAsUnselected(CheckOutActivity.SUBMIT_N_REVIEW, CheckOutActivity.SUBMIT_N_REVIEW);
+                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PET_VET_INFORMATION),
+                            mShoppingCartListResponse);
+                    break;
+            }
         }
+
     }
 
     @Override
     public boolean isActive() {
         return isAdded();
     }
+
 
     @Override
     public void populateOrderReviewDetails(OrderReviewSubmitResponse response) {
@@ -290,6 +305,9 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
 
         if (checkoutSteps != null) {
             mApplicableSteps = checkoutSteps.getApplicableSteps();
+        }
+        if (mApplicableSteps != null && mApplicableSteps.size() == SIZE_FOUR) {
+            mPetVetContainer.setVisibility(View.GONE);
         }
         if (mOrder != null) {
             mSubTotalValue.setText(DOLLAR_SIGN + String.valueOf(mOrder.getOrderSubTotal()));
@@ -370,10 +388,28 @@ public class StepFiveRootFragment extends AbstractFragment implements StepFiveRo
     }
 
     @OnClick(R.id.shippingNavigator)
-    public void onSubbmitOrderClick() {
+    public void onSubmitOrderClick() {
         activity.showProgress();
-        mPresenter.submitComittedOrderDetails(
-                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        CommitOrderRequest commitOrderRequest = new CommitOrderRequest();
+        commitOrderRequest.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        commitOrderRequest.setCommerceItemIds(null);
+        commitOrderRequest.setReminderMonths(null);
+        mPresenter.submitComittedOrderDetails(commitOrderRequest);
 
+    }
+
+    @Override
+    public void openDailog(String[] data, int code, String title, int defaultValue, final TextView textview) {
+        FragmentManager fragManager = getFragmentManager();
+        CommonDialogFragment commonDialogFragment = CommonDialogFragment
+                .newInstance(data,
+                        title, code, defaultValue);
+        commonDialogFragment.setValueSetListener(new CommonDialogFragment.ValueSelectedListener() {
+            @Override
+            public void onValueSelected(String value, int requestCode) {
+                textview.setText(value);
+            }
+        });
+        commonDialogFragment.show(fragManager);
     }
 }

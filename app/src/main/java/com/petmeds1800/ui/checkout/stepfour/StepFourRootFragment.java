@@ -1,14 +1,5 @@
 package com.petmeds1800.ui.checkout.stepfour;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.SavePetVetRequest;
@@ -21,6 +12,14 @@ import com.petmeds1800.ui.checkout.stepfour.presenter.StepFourRootPresenter;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -59,14 +58,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
         return fragment;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof CheckOutActivity) {
-            activity = (CheckOutActivity) context;
-        }
 
-    }
 
     @Nullable
     @Override
@@ -81,7 +73,16 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
                 R.id.communication_container);
         return view;
     }
-
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        activity = (CheckOutActivity) getActivity();
+        if (savedInstanceState == null) {
+            activity.setToolBarTitle(getString(R.string.label_pet_vet_title));
+            activity.setLastCompletedSteps(mStepName);
+            activity.setActiveStep(mStepName);
+        }
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +94,6 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
             shoppingCartObj.getShoppingCart().getCommerceItems().get(2).setIsRxItem(true);*/
             mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
         }
-        activity.setActiveStep(mStepName);
-        activity.setLastCompletedSteps(mStepName);
     }
 
     @Override

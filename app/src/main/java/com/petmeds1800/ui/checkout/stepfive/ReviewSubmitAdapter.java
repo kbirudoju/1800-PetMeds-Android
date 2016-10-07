@@ -15,10 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,9 +36,15 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private Context mContext;
 
+    private static final int REQUEST_MONTHS = 1;
+
     private static int adpaterPosition = 0;
 
     List<Item> mItems;
+
+    private TextView tempLabelForReminderMonth;
+
+    private OpenDailogListener mOpenDailogListener;
 
     public ReviewSubmitAdapter(Context context) {
         this.mContext = context;
@@ -44,6 +53,15 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void setItems(ArrayList<Item> items) {
         mItems = items;
         notifyDataSetChanged();
+    }
+
+    public interface OpenDailogListener {
+        void openDailog(String data[], int code, String title, int defaultValue,TextView textview);
+
+    }
+
+    public void setOpenDailogListener(OpenDailogListener openDailogListener) {
+        this.mOpenDailogListener = openDailogListener;
     }
 
     @Override
@@ -64,16 +82,34 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mItems.get(position);
     }
 
+
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Log.d("position of items :::: ", position + ">>>>" + mItems.size());
         final ReviewSubmitViewHolder reviewSubmitViewHolder = (ReviewSubmitViewHolder) holder;
         final Item item = (Item) getItemAt(position);
+        if (item.isRxItem()) {
+            reviewSubmitViewHolder.mRefillReminderContainer.setVisibility(View.VISIBLE);
+            reviewSubmitViewHolder.mReminderMonth.setText(
+                    mContext.getResources().getStringArray(R.array.month_names)[Integer
+                            .parseInt(item.getReOrderReminderMonth())]);
+            reviewSubmitViewHolder.mReminderMonthEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Calendar now = Calendar.getInstance();
+                   mOpenDailogListener.openDailog(mContext.getResources().getStringArray(R.array.month_names), REQUEST_MONTHS,
+                            mContext.getString(R.string.reminder_title), now.get(Calendar.MONTH),  reviewSubmitViewHolder.mReminderMonth);
+                }
+            });
+        }
+
         reviewSubmitViewHolder.mProductNameLabel.setText(item.getProductName());
         reviewSubmitViewHolder.mQuantityLabel.setText(String.valueOf(item.getItemQuantity()));
         reviewSubmitViewHolder.mItemDescription.setVisibility(View.VISIBLE);
         reviewSubmitViewHolder.mItemDescription.setText(item.getSkuName());
-        reviewSubmitViewHolder.mProductPriceLabel.setText(StepFiveRootFragment.DOLLAR_SIGN+String.valueOf(item.getSellingPrice()));
+        reviewSubmitViewHolder.mProductPriceLabel
+                .setText(StepFiveRootFragment.DOLLAR_SIGN + String.valueOf(item.getSellingPrice()));
         Glide.with(mContext).load(item.getItemImageURL()).asBitmap()
                 .centerCrop().into(new BitmapImageViewTarget(reviewSubmitViewHolder.mProductImage) {
             @Override
@@ -90,6 +126,7 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
+
         return mItems.size();
     }
 
@@ -109,6 +146,15 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @BindView(R.id.product_price_label)
         TextView mProductPriceLabel;
+
+        @BindView(R.id.reminderMonth)
+        TextView mReminderMonth;
+
+        @BindView(R.id.reminderMonthEdit)
+        ImageButton mReminderMonthEdit;
+
+        @BindView(R.id.refillReminderContainer)
+        RelativeLayout mRefillReminderContainer;
 
         public ReviewSubmitViewHolder(View v) {
             super(v);

@@ -50,7 +50,7 @@ import butterknife.OnClick;
  * Created by Abhinav on 13/8/16.
  */
 public class AddEditCardFragment extends AbstractFragment
-        implements AddACardContract.View, DialogInterface.OnClickListener ,AddACardContract.AddressSelectionListener{
+        implements AddACardContract.View, DialogInterface.OnClickListener {
 
     public static final int EDIT_CARD_REQUEST = 1;
 
@@ -135,6 +135,10 @@ public class AddEditCardFragment extends AbstractFragment
             if (msg.what == DISMISS_APPROVAL_DIALOG) {
                 mAlertDialog.dismiss();
                 popBackStack();
+            }
+            if (msg.what == DISMISS_APPROVAL_DIALOG && mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+                mAlertDialog.dismiss();
+                getActivity().finish();
             }
             return false;
         }
@@ -353,7 +357,6 @@ public class AddEditCardFragment extends AbstractFragment
     @Override
     public void paymentMethodApproved() {
         mProgressBar.setVisibility(View.GONE);
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setMessage(R.string.cardSavedInAccount).setCancelable(false);
         mAlertDialog = alertDialogBuilder.create();
@@ -377,7 +380,7 @@ public class AddEditCardFragment extends AbstractFragment
         if (mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
             ((AddNewEntityActivity) getActivity())
                     .replaceFragmentWithArgument(AddressSelectionListFragment.newInstance(mRequestCode, null),
-                            AddressSelectionListFragment.class.getSimpleName(),null);
+                            AddressSelectionListFragment.class.getSimpleName(), null);
         } else {
             replaceAccountAndAddToBackStack(AddressSelectionListFragment.newInstance(mRequestCode, null),
                     AddressSelectionListFragment.class.getSimpleName());
@@ -503,8 +506,4 @@ public class AddEditCardFragment extends AbstractFragment
         Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
     }
 
-    @Override
-    public void setAddress(Address address, int requestCode) {
-
-    }
 }

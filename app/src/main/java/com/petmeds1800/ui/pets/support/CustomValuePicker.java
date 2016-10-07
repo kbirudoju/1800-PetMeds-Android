@@ -49,7 +49,10 @@ public class CustomValuePicker extends NumberPicker {
         setDisplayedValues(values);
         setWrapSelectorWheel(false);
     }
-
+    public void setValues(String[] values,int value) {
+        setValues(values);
+        setValue(value);
+    }
     @Override
     public void setDividerDrawable(Drawable divider) {
         super.setDividerDrawable(divider);

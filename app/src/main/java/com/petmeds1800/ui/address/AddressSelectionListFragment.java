@@ -5,6 +5,7 @@ import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.AddNewEntityActivity;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
@@ -64,6 +65,8 @@ public class AddressSelectionListFragment extends AbstractFragment
     private AddressSelectionAdapter mSavedAddressAdapter;
 
     private MenuItem mAddMenuItem;
+
+    private AddNewEntityActivity stepOneCallBack;
 
     private HomeActivity mCallback;
 
@@ -130,7 +133,9 @@ public class AddressSelectionListFragment extends AbstractFragment
             if (context instanceof HomeActivity) {
                 mCallback = (HomeActivity) context;
             }
-
+            if (context instanceof AddNewEntityActivity) {
+                stepOneCallBack = (AddNewEntityActivity) context;
+            }
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement AddACardContract.AddressSelectionListener");
@@ -220,6 +225,9 @@ public class AddressSelectionListFragment extends AbstractFragment
     void forwardAddressToActivity(Address address, int requestCode) {
         if (mCallback != null) {
             mCallback.setAddress(address, requestCode);
+        }
+        if (stepOneCallBack != null) {
+            stepOneCallBack.setAddress(address, requestCode);
         }
 
     }

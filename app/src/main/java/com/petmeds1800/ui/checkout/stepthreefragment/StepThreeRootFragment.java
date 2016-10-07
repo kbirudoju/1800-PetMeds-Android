@@ -1,13 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
@@ -25,7 +17,6 @@ import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
-
 
 import android.content.Context;
 import android.os.Bundle;
@@ -91,21 +82,16 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof CheckOutActivity) {
-            activity = (CheckOutActivity) context;
-        }
+
 
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity.setToolBarTitle(getString(R.string.payment_method_header));
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
-        activity.setLastCompletedSteps(mStepName);
-        activity.setActiveStep(mStepName);
 
 
     }
@@ -122,12 +108,25 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
 
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        activity = (CheckOutActivity) getActivity();
+        if (savedInstanceState == null) {
+            activity.setToolBarTitle(getString(R.string.payment_method_header));
+            activity.setLastCompletedSteps(mStepName);
+            activity.setActiveStep(mStepName);
+        }
+    }
+
+
     public Card getCard() {
         return mCard;
     }
 
     public void setCard(Card card) {
         mCard = card;
+
     }
 
     public void populateAddress() {

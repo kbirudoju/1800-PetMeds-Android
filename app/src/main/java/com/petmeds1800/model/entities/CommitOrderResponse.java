@@ -1,19 +1,22 @@
 package com.petmeds1800.model.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by Digvijay on 9/28/2016.
  */
 public class CommitOrderResponse implements Serializable {
 
-    private List<Order> order;
+    private Order order;
 
     private Status status;
 
-    public List<Order> getOrder() {
+    public Order getOrder() {
         return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Status getStatus() {

@@ -279,9 +279,51 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
     @OnClick(R.id.label_skip)
     public void skipLoginSignUp() {
-        navigateToHome();
+        SessionConfNumberResponse sessionConfNumberResponse = mPreferencesHelper.getSessionConfirmationResponse();
+        if (sessionConfNumberResponse != null && sessionConfNumberResponse.getSessionConfirmationNumber() != null) {
+            navigateToHome();
+        } else {
+            showProgress();
+            mApiService.getSessionConfirmationNumber()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<SessionConfNumberResponse>() {
+                        @Override
+                        public void onCompleted() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            //error handling would be implemented once we get the details from backend team
+                            hideProgress();
+                            showErrorCrouton(e.getLocalizedMessage(), false);
+                        }
+
+                        @Override
+                        public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
+                            hideProgress();
+                            if (sessionConfNumberResponse != null) {
+                                String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
+                                Log.v("sessionToken", sessionConfNumber);
+                                if (sessionConfNumber != null) {
+                                    mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                                    navigateToHome();
+                                } else {
+                                    //TODO Have to change the message
+                                    showErrorCrouton("Session number not generated", false);
+                                }
+                            } else {
+                                //TODO Have to change the message
+                                showErrorCrouton("Session response not generated", false);
+                            }
+
+                        }
+                    });
+        }
+
 
     }
+
 
     @OnClick(R.id.label_forgot_password)
     public void forgotPassword() {

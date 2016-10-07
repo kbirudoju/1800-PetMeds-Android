@@ -5,9 +5,11 @@ import com.petmeds1800.R;
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,7 +49,9 @@ public class Utils {
         return builder;
 
     }
-
+    public static boolean checkConfirmFields(EditText enteredText,EditText confirmedText){
+        return TextUtils.equals(enteredText.getText().toString(),confirmedText.getText().toString());
+    }
     public static void displayCrouton(Activity activity, Spanned messageString, ViewGroup attachToView) {
         Crouton.makeText(activity,
                 messageString,

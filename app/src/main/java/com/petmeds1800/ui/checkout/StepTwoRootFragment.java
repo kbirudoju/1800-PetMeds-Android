@@ -1,5 +1,17 @@
 package com.petmeds1800.ui.checkout;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ShippingMethod;
+import com.petmeds1800.model.entities.ShippingMethodsRequest;
+import com.petmeds1800.model.entities.ShippingMethodsResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,18 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ShippingMethod;
-import com.petmeds1800.model.entities.ShippingMethodsRequest;
-import com.petmeds1800.model.entities.ShippingMethodsResponse;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,13 +84,10 @@ public class StepTwoRootFragment extends AbstractFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCheckOutActivity.setToolBarTitle(getString(R.string.shipping_method_title));
         mPresenter = new StepTwoPresenter(this);
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
-        mCheckOutActivity.setLastCompletedSteps(mStepName);
-        mCheckOutActivity.setActiveStep(mStepName);
     }
 
     @Override
@@ -100,6 +97,17 @@ public class StepTwoRootFragment extends AbstractFragment
             mCheckOutActivity = (CheckOutActivity) context;
         }
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mCheckOutActivity = (CheckOutActivity) getActivity();
+        if (savedInstanceState == null) {
+            mCheckOutActivity.setToolBarTitle(getString(R.string.shipping_method_title));
+            mCheckOutActivity.setLastCompletedSteps(mStepName);
+            mCheckOutActivity.setActiveStep(mStepName);
+        }
     }
 
     @Nullable

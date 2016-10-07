@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
+import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.Pets;
 import com.petmeds1800.model.entities.Vet;
 import com.petmeds1800.ui.AbstractActivity;
@@ -17,6 +18,7 @@ import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.checkout.stepfour.presenter.PetVetInfoContract.PetSelectionListener;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
+import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.vet.AddVetFragment;
@@ -27,7 +29,7 @@ import com.petmeds1800.util.Constants;
  * Created by pooja on 9/29/2016.
  */
 
-public class AddNewEntityActivity extends AbstractActivity implements PetSelectionListener,CantFindVetContract.VetSelectionListener{
+public class AddNewEntityActivity extends AbstractActivity implements PetSelectionListener,AddACardContract.AddressSelectionListener ,CantFindVetContract.VetSelectionListener{
     private int mRequestCode;
 
     @Override
@@ -131,4 +133,16 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
         return super.onOptionsItemSelected(menuItem);
     }
 
+
+    @Override
+    public void setAddress(Address address, int requestCode) {
+        AddEditCardFragment addCardFragment = (AddEditCardFragment) getSupportFragmentManager()
+                .findFragmentByTag(AddEditCardFragment.class.getName());
+        if (addCardFragment != null) {
+            addCardFragment.displayAddress(address);
+        } else {
+            AddEditCardFragment newFragment = AddEditCardFragment.newInstance(address, requestCode);
+            replaceAccountAndAddToBackStack(newFragment, AddEditCardFragment.class.getName());
+        }
+    }
 }

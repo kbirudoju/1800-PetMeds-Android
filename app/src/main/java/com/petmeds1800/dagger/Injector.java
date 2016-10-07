@@ -21,6 +21,7 @@ import com.petmeds1800.ui.checkout.stepfive.StepFiveRootPresentor;
 import com.petmeds1800.ui.checkout.stepfour.StepFourRootFragment;
 import com.petmeds1800.ui.checkout.stepfour.presenter.PetVetInfoPresenter;
 import com.petmeds1800.ui.checkout.stepfour.presenter.StepFourRootPresenter;
+import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootPresentor;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootPresentor;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
@@ -148,5 +149,7 @@ public interface Injector {
     void inject(OrderDetailPresenter orderDetailPresenter);
     void inject(OrderDetailFragment orderDetailFragment);
     void inject (WidgetListFragment widgetListFragment);
+
+    void inject(GuestStepOneRootPresentor guestStepOneRootPresentor);
 
 }

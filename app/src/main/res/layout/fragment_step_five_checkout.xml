@@ -206,12 +206,12 @@
                     android:layout_height="wrap_content">
 
             </android.support.v7.widget.RecyclerView>
-            <Button
 
+            <Button
                     android:layout_below="@+id/ordersList"
                     android:layout_marginTop="@dimen/dp_23"
                     style="@style/dialog_button_style_blue"
-                    android:text="EDIT CART"
+                    android:text="@string/edit_cart_title"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_44"
                     android:id="@+id/editCardButton"

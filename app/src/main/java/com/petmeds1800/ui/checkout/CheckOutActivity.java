@@ -22,7 +22,8 @@ import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
-
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -75,6 +76,12 @@ public class CheckOutActivity extends AbstractActivity
 
     @BindView(R.id.fifthShipmentAdressFontText)
     FontelloTextView mFifthShipmentAdressFontText;
+
+    @BindView(R.id.fourthContainer)
+    LinearLayout mFourthContainer;
+
+    @BindView(R.id.shipmentOrdersNumberLayout)
+    RelativeLayout mCheckOutBoxContainer;
 
     private ArrayList<String> mApplicableSteps;
 
@@ -238,7 +245,17 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     public void setCheckoutSteps(CheckoutSteps checkoutSteps) {
         mApplicableSteps = checkoutSteps.getApplicableSteps();
+        mCheckOutBoxContainer.setVisibility(View.VISIBLE);
+        if (mApplicableSteps.size() == 4) {
+            hideStepContainer();
+        }
         mStepStates = checkoutSteps.getStepState();
+    }
+
+    private void hideStepContainer() {
+        mFourthContainer.setVisibility(View.GONE);
+        mFifthShipmentAdressButton.setText(getResources().getString(R.string.numeric_four));
+
     }
 
     @Override
@@ -249,7 +266,6 @@ public class CheckOutActivity extends AbstractActivity
             case 0: //step 1 "Select Shipping Address"
                 replaceCheckOutFragment(StepOneRootFragment.newInstance(mShoppingCartListResponse, stepName),
                         StepOneRootFragment.class.getName(), false);
-
                 break;
 
             case 1: //step 2 "Select Shipping method"
@@ -281,6 +297,7 @@ public class CheckOutActivity extends AbstractActivity
                             StepFiveRootFragment.class.getName(), false);
 
                 }
+
                 break;
 
             case 4: //step 5 "Do order review"
@@ -358,7 +375,9 @@ public class CheckOutActivity extends AbstractActivity
                         .setBackground(ContextCompat
                                 .getDrawable(getApplicationContext(),
                                         R.drawable.check_out_blue_circle_drawable));
-                break;
+                if (mApplicableSteps.size() == 5) {
+                    break;
+                }
             case SUBMIT_N_REVIEW:
                 mFifthShipmentAdressButton.setTextColor(Color.WHITE);
                 mFifthShipmentAdressButton

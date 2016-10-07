@@ -203,6 +203,40 @@
                             android:hint="@string/prompt_countryName"
                             style="@style/StyledEditText"/>
                 </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                        android:visibility="gone"
+                        android:id="@+id/emailInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+                        style="@style/StyledEditTextHintLayout"
+                        app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                            android:id="@+id/email_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_email"
+                            android:inputType="textEmailAddress"
+                            style="@style/StyledEditText"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                        android:visibility="gone"
+                        android:id="@+id/confirmEmailInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+                        style="@style/StyledEditTextHintLayout"
+                        app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                            android:id="@+id/confirm_email_edit"
+                            android:inputType="textEmailAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_confirm_email"
+                            style="@style/StyledEditText"/>
+                </android.support.design.widget.TextInputLayout>
 
                 <Switch
                         android:id="@+id/defaultShippingAddress_switch"
@@ -222,6 +256,7 @@
                         android:layout_height="1dp"
                         android:background="@color/petmeds_blue"/>
 
+
                 <Switch
                         android:id="@+id/defaultBillingAddress_switch"
                         android:layout_width="match_parent"
@@ -232,6 +267,8 @@
                         android:textSize="@dimen/sp_16"
                         android:fontFamily="@string/font_roboto_regular"
                         android:textColor="@color/black"/>
+
+
 
                 <Button
                         android:id="@+id/removeAddress_button"
@@ -244,6 +281,7 @@
                         android:layout_gravity="center_horizontal"
                         android:text="@string/removeThisAddress"
                         android:visibility="gone"/>
+
 
             </LinearLayout>
             <ProgressBar

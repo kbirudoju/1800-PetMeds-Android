@@ -17,7 +17,13 @@ public class Item {
     private String skuName;
     private String commerceItemId;
     private String productName;
-
+    private boolean isRxItem;
+    public boolean isRxItem() {
+        return isRxItem;
+    }
+    public void setRxItem(boolean rxItem) {
+        isRxItem = rxItem;
+    }
     public String getItemImageURL() {
         return itemImageURL;
     }

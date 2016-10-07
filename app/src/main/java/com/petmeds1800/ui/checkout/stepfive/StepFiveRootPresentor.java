@@ -1,10 +1,9 @@
 package com.petmeds1800.ui.checkout.stepfive;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
-import com.petmeds1800.model.entities.SessionConfigRequest;
 
 import javax.inject.Inject;
 
@@ -69,8 +68,8 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
     }
 
     @Override
-    public void submitComittedOrderDetails(String sessionConfig) {
-        mPetMedsApiService.submitCommitedOrderDetails(new SessionConfigRequest(sessionConfig))
+    public void submitComittedOrderDetails(CommitOrderRequest commitOrderRequest) {
+        mPetMedsApiService.submitCommitedOrderDetails(commitOrderRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<CommitOrderResponse>() {

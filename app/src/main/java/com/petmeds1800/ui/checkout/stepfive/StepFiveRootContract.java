@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.checkout.stepfive;
 
+import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
 import com.petmeds1800.mvp.BasePresenter;
@@ -28,6 +29,7 @@ public class StepFiveRootContract {
 
         void getOrderReviewDetails(String sessionConfig);
 
-        void submitComittedOrderDetails(String sessionConfig);
+        void submitComittedOrderDetails(CommitOrderRequest commitOrderRequest);
+
     }
 }

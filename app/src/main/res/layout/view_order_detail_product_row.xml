@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical" android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:paddingRight="@dimen/dp_16"
-              android:paddingLeft="@dimen/dp_16"
               android:layout_marginTop="@dimen/dp_16">
     <RelativeLayout
+            android:paddingRight="@dimen/dp_16"
+            android:paddingLeft="@dimen/dp_16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <ImageView
@@ -70,6 +70,45 @@
                 style="@style/list_row"
                 android:text="$567.89"
                 android:textColor="@color/crimson_red"/>
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_72"
+            android:id="@+id/refillReminderContainer"
+            android:background="@color/white"
+            android:visibility="gone"
+    >
+        <TextView
+                android:layout_marginTop="@dimen/dp_16"
+                android:id="@+id/reminderHeader"
+                android:text="@string/refill_reminder_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/cart_item_title"
+                android:paddingLeft="@dimen/dp_16"
+        />
+        <TextView
+                android:text="October"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:id="@+id/reminderMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_50"
+                style="@style/rounded_button_text"
+                android:layout_below="@+id/reminderHeader"
+        />
+        <ImageButton
+                android:id="@+id/reminderMonthEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_small_edit"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_alignTop="@+id/reminderHeader"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
 </LinearLayout>

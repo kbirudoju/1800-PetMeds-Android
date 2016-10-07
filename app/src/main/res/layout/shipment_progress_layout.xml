@@ -2,6 +2,7 @@
 
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/checkOutBoxContainer"
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
@@ -18,6 +19,7 @@
     >
     </View>
     <LinearLayout
+            android:id="@+id/firstContainer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:orientation="horizontal">
@@ -58,6 +60,7 @@
 
         </LinearLayout>
         <LinearLayout
+                android:id="@+id/secondContainer"
                 android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
@@ -90,6 +93,7 @@
             </com.petmeds1800.util.FontelloTextView>
         </LinearLayout>
         <LinearLayout
+                android:id="@+id/thirdContainer"
                 android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
@@ -122,6 +126,7 @@
             </com.petmeds1800.util.FontelloTextView>
         </LinearLayout>
         <LinearLayout
+                android:id="@+id/fourthContainer"
                 android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
@@ -154,6 +159,7 @@
             </com.petmeds1800.util.FontelloTextView>
         </LinearLayout>
         <LinearLayout
+                android:id="@+id/fifthContainer"
                 android:layout_marginRight="@dimen/dp_10"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"

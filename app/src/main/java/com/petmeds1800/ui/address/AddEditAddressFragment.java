@@ -5,7 +5,10 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.model.entities.ShippingAddressRequest;
+import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
@@ -46,8 +49,7 @@ import static com.petmeds1800.R.id.firstNameLayout;
 /**
  * Created by Abhinav on 13/8/16.
  */
-public class
-AddEditAddressFragment extends AbstractFragment
+public class AddEditAddressFragment extends AbstractFragment
         implements AddEditAddressContract.View, View.OnClickListener, CommonDialogFragment.ValueSelectedListener,
         DialogInterface.OnClickListener, Switch.OnCheckedChangeListener {
 
@@ -148,6 +150,7 @@ AddEditAddressFragment extends AbstractFragment
     @BindView(R.id.defaultShippingAddress_switchview)
     View mDefaultShippingAddressSwitchview;
 
+
     private AddEditAddressContract.Presenter mPresenter;
 
     private AlertDialog mAlertDialog;
@@ -181,7 +184,8 @@ AddEditAddressFragment extends AbstractFragment
     public static AddEditAddressFragment newInstance(Address updateAddress, int requestCode) {
         Bundle bundle = new Bundle();
         if (requestCode == EDIT_ADDRESS_REQUEST || requestCode == StepThreeRootFragment.REQUEST_CODE
-                || requestCode == StepOneRootFragment.REQUEST_CODE) {
+                || requestCode == StepOneRootFragment.REQUEST_CODE
+                || requestCode == GuestStepOneRootFragment.REQUEST_CODE) {
             bundle.putSerializable(ADDRESS, updateAddress);
             bundle.putInt(REQUEST_CODE, requestCode);
             AddEditAddressFragment addEditAddressFragment = new AddEditAddressFragment();
@@ -202,15 +206,24 @@ AddEditAddressFragment extends AbstractFragment
 
     }
 
+    public void intitalizeViewsForGuestCheckOutBillingAddress() {
+        mDefaultBillingAddressSwitch.setVisibility(View.GONE);
+        mDefaultShippingAddressSwitch.setVisibility(View.GONE);
+        mDefaultShippingAddressSwitchview.setVisibility(View.GONE);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new AddAddressPresenter(this);
         mBundle = getArguments();
-        if (mRequestCode != StepThreeRootFragment.REQUEST_CODE) {
+        if (mBundle != null) {
+            mRequestCode = mBundle.getInt(REQUEST_CODE);
+        }
+        if (mRequestCode != StepThreeRootFragment.REQUEST_CODE
+                && mRequestCode != GuestStepOneRootFragment.REQUEST_CODE) {
             setHasOptionsMenu(true);
         }
-
         PetMedsApplication.getAppComponent().inject(this);
     }
 
@@ -230,7 +243,6 @@ AddEditAddressFragment extends AbstractFragment
         //get the arguments and set views for address updation/edit request
 
         if (mBundle != null) {
-            mRequestCode = mBundle.getInt(REQUEST_CODE);
             if (mRequestCode == EDIT_ADDRESS_REQUEST) {
                 mAddress = (Address) mBundle.getSerializable(ADDRESS);
                 populateData(mAddress);
@@ -241,6 +253,8 @@ AddEditAddressFragment extends AbstractFragment
                 intitalizeViewsForCheckOutBillingAddress();
                 mAddress = (Address) mBundle.getSerializable(ADDRESS);
                 populateData(mAddress);
+            } else if (mRequestCode == GuestStepOneRootFragment.REQUEST_CODE) {
+                intitalizeViewsForGuestCheckOutBillingAddress();
             } else {
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
             }
@@ -290,45 +304,55 @@ AddEditAddressFragment extends AbstractFragment
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    public boolean validateFields() {
+        boolean invalidFirstName;
+        boolean invalidLastName;
+        boolean invalidAddressLine1;
+        boolean invalidAptOrSuiteNumber;
+        boolean invalidCity;
+        boolean invalidStateOrProvinceOrRegion;
+        boolean invalidZipcode;
+        boolean invalidPhoneNumber;
+        boolean invalidCountry;
+        boolean invalidEmail = false;
+        boolean invalidConfirmEmail = false;
+        boolean invalidPassword = false;
+        boolean invalidConfirmPassword = false;
+
+        //return in-case of any error
+        invalidFirstName = checkAndShowError(mFirstNameEdit, mfirstNameLayout, R.string.errorFirstNameRequired);
+        invalidLastName = checkAndShowError(mLastNameEdit, mLastNameInputLayout, R.string.errorLastNameIsRequired);
+        invalidAddressLine1 = checkAndShowError(mAddressLine1Edit, mAddressLine1InputLayout,
+                R.string.errorAddressLine1Required);
+        invalidCity = checkAndShowError(mCityEdit, mCityInputLayout, R.string.errorCityRequired);
+        invalidStateOrProvinceOrRegion = checkAndShowError(mStateOrProvinceOrRegionEdit,
+                mStateOrProvinceOrRegionInputLayout, R.string.errorStateOrProvinceOrRegionRequired);
+        invalidZipcode = checkAndShowError(mZipCodeEdit, mZipCodeInputLayout, R.string.errorZipCodeRequired);
+        invalidPhoneNumber = checkAndShowError(mPhoneNumberEdit, mPhoneNumberInputLayout,
+                R.string.errorPhoneNumberRequired);
+        invalidCountry = checkAndShowError(mCountryNameEdit, mCountryNameInputLayout,
+                R.string.errorCountryNameRequired);
+
+        if (invalidFirstName ||
+                invalidLastName ||
+                invalidAddressLine1 ||
+                invalidStateOrProvinceOrRegion ||
+                invalidCity ||
+                invalidZipcode ||
+                invalidPhoneNumber ||
+                invalidCountry) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_done) {
-
-            boolean invalidFirstName;
-            boolean invalidLastName;
-            boolean invalidAddressLine1;
-            boolean invalidAptOrSuiteNumber;
-            boolean invalidCity;
-            boolean invalidStateOrProvinceOrRegion;
-            boolean invalidZipcode;
-            boolean invalidPhoneNumber;
-            boolean invalidCountry;
-
-            //return in-case of any error
-            invalidFirstName = checkAndShowError(mFirstNameEdit, mfirstNameLayout, R.string.errorFirstNameRequired);
-            invalidLastName = checkAndShowError(mLastNameEdit, mLastNameInputLayout, R.string.errorLastNameIsRequired);
-            invalidAddressLine1 = checkAndShowError(mAddressLine1Edit, mAddressLine1InputLayout,
-                    R.string.errorAddressLine1Required);
-            invalidCity = checkAndShowError(mCityEdit, mCityInputLayout, R.string.errorCityRequired);
-            invalidStateOrProvinceOrRegion = checkAndShowError(mStateOrProvinceOrRegionEdit,
-                    mStateOrProvinceOrRegionInputLayout, R.string.errorStateOrProvinceOrRegionRequired);
-            invalidZipcode = checkAndShowError(mZipCodeEdit, mZipCodeInputLayout, R.string.errorZipCodeRequired);
-            invalidPhoneNumber = checkAndShowError(mPhoneNumberEdit, mPhoneNumberInputLayout,
-                    R.string.errorPhoneNumberRequired);
-            invalidCountry = checkAndShowError(mCountryNameEdit, mCountryNameInputLayout,
-                    R.string.errorCountryNameRequired);
-
-            if (invalidFirstName ||
-                    invalidLastName ||
-                    invalidAddressLine1 ||
-                    invalidStateOrProvinceOrRegion ||
-                    invalidCity ||
-                    invalidZipcode ||
-                    invalidPhoneNumber ||
-                    invalidCountry) {
+            if (!validateFields()) {
                 return super.onOptionsItemSelected(item);
             }
         }
@@ -388,6 +412,20 @@ AddEditAddressFragment extends AbstractFragment
         }
 
 
+    }
+
+    public ShippingAddressRequest getShippingAddressAttribute() {
+        ShippingAddressRequest shippingAddressRequest =new ShippingAddressRequest();
+        shippingAddressRequest.setDynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        shippingAddressRequest.setShippingAddress1(mAddressLine1Edit.getText().toString());
+        shippingAddressRequest.setShippingAddressFirstName(mFirstNameEdit.getText().toString());
+        shippingAddressRequest.setShippingAddressLastName(mLastNameEdit.getText().toString());
+        shippingAddressRequest.setShippingAddressCity(mCityEdit.getText().toString());
+        shippingAddressRequest.setShippingAddressPostalCode(mZipCodeEdit.getText().toString());
+        shippingAddressRequest.setShippingAddressPhoneNumber(mPhoneNumberEdit.getText().toString());
+        shippingAddressRequest.setShippingAddressCountry(mCountryCode);
+        shippingAddressRequest.setShippingAddressState(mUsaStateCode);
+        return shippingAddressRequest;
     }
 
     @Override

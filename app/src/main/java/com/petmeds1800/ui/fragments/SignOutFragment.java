@@ -61,7 +61,7 @@ public class SignOutFragment extends AbstractFragment {
         View view = inflater.inflate(R.layout.fragment_signout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
-        mPreferencesHelper.clearGeneralPreferencesData();
+        mPreferencesHelper.setIsUserLoggedIn(false);
         ((PersistentCookieJar)mCookieJar).clear();
         ButterKnife.bind(this, view);
         return view;

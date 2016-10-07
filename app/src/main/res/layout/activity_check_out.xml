@@ -15,6 +15,7 @@
             android:minHeight="?attr/actionBarSize"/>
 
     <include
+            android:visibility="gone"
             layout="@layout/shipment_progress_layout"
             android:id="@+id/shipmentOrdersNumberLayout"/>
 
