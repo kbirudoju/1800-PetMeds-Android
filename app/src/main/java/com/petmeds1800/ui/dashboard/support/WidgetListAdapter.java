@@ -57,9 +57,10 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public final static int RECOMMENDATION_VIEW_MORE_PRODUCT=11;
     public final static int VIEW_FOOTER=12;
     private Context mContext;
-
-    public WidgetListAdapter(Context context){
+    private View.OnClickListener listener;
+    public WidgetListAdapter(Context context,View.OnClickListener listener){
         this.mContext=context;
+        this.listener = listener;
     }
 
     public void setData(List<Object> widgetListData) {
@@ -84,6 +85,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }else if(viewType == REFILL_PRODUCT_VIEW_TYPE){
             int resource = R.layout.view_refill_product;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+            Button addCartBtn= (Button)v.findViewById(R.id.add_cart_button);
+            addCartBtn.setOnClickListener(listener);
             viewHolder = new RefillViewHolder(v);
         }else if(viewType == RECOMENDATION_HEADER_VIEW_TYPE){
             int resource = R.layout.view_recommendation;
@@ -162,7 +165,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 refillHolder.refillProductTitleLabel.setText(petItem.getSku().getDisplayName());
                 refillHolder.refillOriginalPriceLabel.setText(" $"+petItem.getSku().getPriceInfo().getListPrice());
                 refillHolder.refillOriginalPriceLabel.setPaintFlags(refillHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                refillHolder.refillSellingpriceLabel.setText(" $"+petItem.getSku().getPriceInfo().getSellingPrice());
+                refillHolder.refillSellingpriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
                 refillHolder.refillDateLabel.setText(mContext.getString(R.string.due_on_txt)+" "+petItem.getDueDate());
                 Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillProductImage) {
                     @Override
@@ -173,6 +176,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         refillHolder.refillProductImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
+                refillHolder.refillAddCartButton.setTag(petItem);
                 break;
             case RECOMENDATION_HEADER_VIEW_TYPE:
                 final RecommendationViewHolder recommendationViewHolder = (RecommendationViewHolder) holder;

@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.dashboard.presenter;
 
+import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -14,10 +15,12 @@ public interface WidgetContract {
         boolean isActive();
         void onSuccess(List<Object> widgetListData);
         void onError(String errorMessage);
+        void addToCartSuccess();
     }
 
     interface Presenter extends BasePresenter {
         void getWidgetListData();
+        void addToCart(AddToCartRequest addToCartRequest);
 
     }
 }

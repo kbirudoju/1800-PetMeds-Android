@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class PetItemList implements Serializable {
     private String orderRefId;
     private String itemRefId;
-    private String refillQuantity;
+    private int refillQuantity;
     private Sku sku;
     private String dueDate;
 
@@ -39,11 +39,11 @@ public class PetItemList implements Serializable {
         this.itemRefId = itemRefId;
     }
 
-    public String getRefillQuantity() {
+    public int getRefillQuantity() {
         return refillQuantity;
     }
 
-    public void setRefillQuantity(String refillQuantity) {
+    public void setRefillQuantity(int refillQuantity) {
         this.refillQuantity = refillQuantity;
     }
 

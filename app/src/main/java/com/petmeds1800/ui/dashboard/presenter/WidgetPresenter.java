@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.entities.BrowsingHistory;
 import com.petmeds1800.model.entities.PetItemList;
 import com.petmeds1800.model.entities.Products;
@@ -15,6 +16,7 @@ import com.petmeds1800.model.entities.WhatsNextCategory;
 import com.petmeds1800.model.entities.Widget;
 import com.petmeds1800.model.entities.WidgetFooter;
 import com.petmeds1800.model.entities.WidgetListResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.Constants;
 
 import java.util.ArrayList;
@@ -68,6 +70,42 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.onSuccess(formatWidgetData(s.getWidgets()));
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.onError(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+
+
+    }
+
+    @Override
+    public void addToCart(AddToCartRequest addToCartRequest) {
+        mApiService.addToCart(addToCartRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ShoppingCartListResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(ShoppingCartListResponse s) {
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.addToCartSuccess();
                             }
                         } else {
                             if (mView.isActive()) {

@@ -1,5 +1,6 @@
 package com.petmeds1800.api;
 
+import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.AddVetResponse;
 import com.petmeds1800.model.CountryListResponse;
@@ -42,9 +43,9 @@ import com.petmeds1800.model.entities.SavePetVetRequest;
 import com.petmeds1800.model.entities.SavedShippingAddressRequest;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.model.entities.SessionConfigRequest;
 import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.model.entities.ShippingMethodsResponse;
-import com.petmeds1800.model.entities.SessionConfigRequest;
 import com.petmeds1800.model.entities.SignOutResponse;
 import com.petmeds1800.model.entities.SignUpRequest;
 import com.petmeds1800.model.entities.SignUpResponse;
@@ -57,7 +58,9 @@ import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+
 import java.util.HashMap;
+
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -289,5 +292,9 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/reOrder")
     Observable<ReOrderResponse> reOrder(@Body ReOrderRequest request);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/cart/CartActor/add")
+    Observable<ShoppingCartListResponse> addToCart(@Body AddToCartRequest request);
 
 }
