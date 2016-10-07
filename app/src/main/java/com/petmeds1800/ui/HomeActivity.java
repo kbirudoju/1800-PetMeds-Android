@@ -24,7 +24,6 @@ import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
@@ -108,7 +107,6 @@ public class HomeActivity extends AbstractActivity
             }
         }
 
-        Log.d("HomeActivity", ">>>>>>>>>>>");
         //initialize fragment list
         List<Fragment> fragmentList = new ArrayList<>();
         mHomeRootFragment = new HomeRootFragment();

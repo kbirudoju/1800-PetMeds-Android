@@ -3,6 +3,7 @@ package com.petmeds1800.ui.vet;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -81,6 +82,11 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         if (id == R.id.action_done) {
             if(mVetTextView.getText().toString()!=null && !mVetTextView.getText().toString().isEmpty()) {
                 if (vetList != null) {
+                    try {
+                        ((AbstractActivity)getActivity()).startLoadingGif(getActivity());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     String vetName = vetList.getClinic();
                     String vetClinic = vetList.getName();
                     String vetPhone = vetList.getPhone();
@@ -135,6 +141,11 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
 
     @Override
     public void onSuccess(Vet vet) {
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         FragmentManager manager = getActivity().getSupportFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.remove(this);
@@ -145,7 +156,12 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
 
     @Override
     public void onError(String errorMessage) {
-
+        Snackbar.make(mVetTextView, errorMessage, Snackbar.LENGTH_LONG).show();
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

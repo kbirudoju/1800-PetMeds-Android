@@ -39,7 +39,9 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     RecyclerView mOrderDetailRecyclerView;
 
     private OrderDetailAdapter mOrderDetailAdapter;
+
     private OrderDetailContract.Presenter mPresenter;
+
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
     OrderList orderList;
@@ -90,6 +92,11 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                         break;
                     case CustomOrderDetailRecyclerAdapter.REORDER_ENTIRE_ORDER_ROW_ID:
                         ReOrderRequest reOrderRequest= new ReOrderRequest(orderList.getOrderId(),mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                        try {
+                            ((AbstractActivity)getActivity()).startLoadingGif(getActivity());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         mPresenter.reOrder(reOrderRequest);
                         break;
 
@@ -138,11 +145,21 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     @Override
     public void onError(String errorMessage) {
         Snackbar.make(mOrderDetailRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void onSuccess() {
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ((HomeActivity)getActivity()).getViewPager().setCurrentItem(1);
     }
 

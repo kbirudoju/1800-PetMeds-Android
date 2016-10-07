@@ -3,6 +3,7 @@ package com.petmeds1800.ui.checkout.stepfour;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
@@ -61,6 +63,9 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
     public ArrayList<CommerceItems> mCommerceItem;
     private StepFourRootFragment parentFragment;
 
+    @BindView(R.id.progressbar)
+    ProgressBar mProgressBar;
+
 
     public static PetVetInfoFragment newInstance(ShoppingCartListResponse shoppingCartListResponse) {
         Bundle args = new Bundle();
@@ -87,6 +92,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                         if(mPetList!=null && mPetList.size()>0) {
                             showDialog(mPetList, PET_REQUEST, getActivity().getString(R.string.select_pet_title));
                         }else{
+                            mProgressBar.setVisibility(View.VISIBLE);
                             mPresenter.getPetListData();
                         }
                         break;
@@ -95,6 +101,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                         if(mVetList!=null && mVetList.size()>0){
                             showDialog(mVetList, VET_REQUEST, getActivity().getString(R.string.select_vet_title));
                         }else{
+                            mProgressBar.setVisibility(View.VISIBLE);
                             mPresenter.getVetListData();
                         }
                         break;
@@ -121,7 +128,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         if (bundle != null) {
             ShoppingCartListResponse shoppingCartListResponse = (ShoppingCartListResponse)bundle.getSerializable(CartFragment.SHOPPING_CART);
             //Add only those item which is a RxItem
-           // shoppingCartListResponse.getShoppingCart().getCommerceItems().get(0).setIsRxItem(true);
+         //  shoppingCartListResponse.getShoppingCart().getCommerceItems().get(0).setIsRxItem(true);
            shoppingCart=shoppingCartListResponse.getShoppingCart();
             mCommerceItem=new ArrayList<CommerceItems>();
             for(CommerceItems commerceItems : shoppingCart.getCommerceItems()){
@@ -155,6 +162,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
 
     @Override
     public void setPetList(List<Pets> petList) {
+        mProgressBar.setVisibility(View.GONE);
         mPetList = new LinkedHashMap<String, String>();
         for (Pets pet : petList) {
             mPetList.put(pet.getPetId(), pet.getPetName());
@@ -168,7 +176,8 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
 
     @Override
     public void onError(String errorMessage) {
-
+        mProgressBar.setVisibility(View.GONE);
+        Snackbar.make(mPetVetRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -178,7 +187,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
 
     @Override
     public void setVetList(List<Vet> vetList) {
-
+        mProgressBar.setVisibility(View.GONE);
         mVetList = new LinkedHashMap<String, String>();
         for (Vet vet : vetList) {
             mVetList.put(vet.getId(), vet.getName());

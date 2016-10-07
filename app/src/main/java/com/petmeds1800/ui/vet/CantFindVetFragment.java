@@ -110,7 +110,11 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
                // Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail), mContainerLayout);
                 return super.onOptionsItemSelected(item);
             }
-
+                try {
+                    ((AbstractActivity)getActivity()).startLoadingGif(getActivity());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             AddVetRequest addVetRequest=new AddVetRequest(mInputFieldEdit.getText().toString(),mClinicNameEdit.getText().toString(),mPhoneNumberEdit.getText().toString()
             ,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.addVetData(addVetRequest);
@@ -137,6 +141,11 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
 
     @Override
     public void onSuccess(Vet vet) {
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         FragmentManager manager = getActivity().getSupportFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.remove(this);
@@ -148,6 +157,11 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
     @Override
     public void onError(String errorMessage) {
         Snackbar.make(mClinicNameEdit, errorMessage, Snackbar.LENGTH_LONG).show();
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

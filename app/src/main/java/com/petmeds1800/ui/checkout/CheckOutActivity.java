@@ -276,7 +276,7 @@ public class CheckOutActivity extends AbstractActivity
                             StepFourRootFragment.class.getName(), false);
                 } else if (mApplicableSteps.size() == 4) {
                     //TODO start the PETVet step
-                   replaceCheckOutFragment(
+                  replaceCheckOutFragment(
                             StepFiveRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepFiveRootFragment.class.getName(), false);
 
