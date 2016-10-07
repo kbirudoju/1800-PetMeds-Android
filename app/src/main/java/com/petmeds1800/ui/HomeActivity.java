@@ -1,5 +1,6 @@
 package com.petmeds1800.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -7,9 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mtramin.rxfingerprint.RxFingerprint;
@@ -84,6 +89,8 @@ public class HomeActivity extends AbstractActivity
 
     TabPagerAdapter mAdapter;
 
+    ArrayList<View> mTabLayoutArray = new ArrayList<>();
+
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
@@ -112,6 +119,13 @@ public class HomeActivity extends AbstractActivity
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(mAdapter);
         mHomeTab.setupWithViewPager(mViewPager);
+
+        for (int i = 0; i < mHomeTab.getTabCount(); i++) {
+            View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_tab_image_overlay,null,false);
+            mTabLayoutArray.add(i,v);
+            mHomeTab.getTabAt(i).setCustomView(mTabLayoutArray.get(i));
+        }
+
         mHomeTab.setOnTabSelectedListener(
                 new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
                     @Override
@@ -152,8 +166,10 @@ public class HomeActivity extends AbstractActivity
                 Log.d("onPageSelected", ">>>>>>");
                 mTabIndex = position;
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
-                    mHomeTab.getTabAt(i).setIcon(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
+                    ((ImageView)(mHomeTab.getTabAt(i).getCustomView()).findViewById(R.id.tab_default_image)).setImageResource(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
+
                 }
+
 
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
