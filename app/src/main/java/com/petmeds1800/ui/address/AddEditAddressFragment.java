@@ -6,7 +6,6 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.ShippingAddressRequest;
-import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;

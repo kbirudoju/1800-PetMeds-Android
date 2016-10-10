@@ -102,7 +102,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_GO);
         mPasswordEdit.setOnEditorActionListener(this);
     }
 
@@ -177,40 +177,13 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             return;
         }
 
-        showProgress();
-
-        //TODO: remove this temporary hack after backend resolves their problem of cookies
-        mApiService.login(new LoginRequest(mEmailEdit.getText().toString(),
-                mPasswordEdit.getText().toString(), "test_test"))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<LoginResponse>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
-                        if (errorId == R.string.noInternetConnection) {
-                            showErrorCrouton(getString(errorId), false);
-                            hideProgress();
-                        } else {
-                            doLogin();
-                        }
-                    }
-
-                    @Override
-                    public void onNext(LoginResponse loginResponse) {
-                        Log.v("login response", loginResponse.getStatus().getCode());
-                    }
-                });
-
+        doTempHackForGettingSessionCookies();
     }
 
     private void doLogin() {
+        showProgress();
         mApiService.getSessionConfirmationNumber()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
                     @Override
@@ -235,8 +208,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                                 mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
                             }
                             return mApiService
-                                    .login(new LoginRequest(mEmailEdit.getText().toString(),
-                                            mPasswordEdit.getText().toString(), sessionConfNumber))
+                                    .login(new LoginRequest(mEmailEdit.getText().toString().trim(),
+                                            mPasswordEdit.getText().toString().trim(), sessionConfNumber))
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
                         } else {
@@ -273,6 +246,37 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                                         true);
                             }
                         }
+                    }
+                });
+    }
+
+    private void doTempHackForGettingSessionCookies(){
+        showProgress();
+        //TODO: remove this temporary hack after backend resolves their problem of cookies
+        mApiService.login(new LoginRequest("", "", "test"))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<LoginResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId == R.string.noInternetConnection) {
+                            showErrorCrouton(getString(errorId), false);
+                            hideProgress();
+                        } else {
+                            doLogin();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(LoginResponse loginResponse) {
+                        hideProgress();
+                        Log.v("login response", loginResponse.getStatus().getCode());
                     }
                 });
     }
@@ -328,7 +332,6 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @OnClick(R.id.label_forgot_password)
     public void forgotPassword() {
         startActivity(new ForgotPasswordIntent(getActivity()));
-
     }
 
     @OnClick(R.id.sign_up_button)
@@ -338,7 +341,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_DONE) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
             login();
         }
         return false;

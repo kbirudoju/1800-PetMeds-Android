@@ -7,13 +7,14 @@ import java.io.Serializable;
  */
 public class Profile implements Serializable {
 
-    private User profile;
+    private User user;
 
-    public User getProfile() {
-        return profile;
+    public User getUser() {
+        return user;
     }
 
-    public void setProfile(User profile) {
-        this.profile = profile;
+    public void setUser(User user) {
+        this.user = this.user;
     }
+
 }

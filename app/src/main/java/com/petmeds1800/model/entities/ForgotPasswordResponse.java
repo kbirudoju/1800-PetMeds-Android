@@ -10,4 +10,5 @@ public class ForgotPasswordResponse {
     public Status getStatus() {
         return status;
     }
+
 }

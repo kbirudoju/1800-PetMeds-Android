@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.StepState;
@@ -378,6 +377,7 @@ public class CheckOutActivity extends AbstractActivity
                 if (mApplicableSteps.size() == 5) {
                     break;
                 }
+
             case SUBMIT_N_REVIEW:
                 mFifthShipmentAdressButton.setTextColor(Color.WHITE);
                 mFifthShipmentAdressButton

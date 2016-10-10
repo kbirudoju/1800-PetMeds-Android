@@ -1,5 +1,11 @@
 package com.petmeds1800.ui;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
+import android.support.v7.app.AppCompatActivity;
+
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -7,12 +13,6 @@ import com.petmeds1800.intent.HomeIntent;
 import com.petmeds1800.intent.IntroIntent;
 import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.util.GeneralPreferencesHelper;
-
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
@@ -102,9 +102,9 @@ public class SplashActivity extends AppCompatActivity {
 
             if (msg.what == MSG_FINISH && mSplashActivity != null) {
                 if (!mPreferencesHelper.getHaUserSeenIntro()) {
-                    if(mPreferencesHelper.getIsUserLoggedIn()){
+                    if (mPreferencesHelper.getIsUserLoggedIn()) {
                         mSplashActivity.startActivity(new HomeIntent(mSplashActivity));
-                    }else{
+                    } else {
                         mSplashActivity.startActivity(new LoginIntent(mSplashActivity));
                     }
                 } else {

@@ -1,7 +1,11 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +14,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-
-import com.petmeds1800.R;
-import com.petmeds1800.ui.AbstractActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,7 +68,7 @@ public class CommonWebviewFragment extends AbstractFragment {
         mWebView.loadUrl(url);
         Log.d("URL", url + ">>>>>");
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setBackgroundColor(getResources().getColor(R.color.white));
+        mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
         WebChromeClient client = new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
@@ -85,7 +86,7 @@ public class CommonWebviewFragment extends AbstractFragment {
     private void loadFromHtmlData(String htmlData){
         mWebView.loadData(htmlData, "text/html", "UTF-8");
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setBackgroundColor(getResources().getColor(R.color.white));
+        mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
 
         WebChromeClient client = new WebChromeClient() {
 
@@ -115,3 +116,4 @@ public class CommonWebviewFragment extends AbstractFragment {
         }
     }
 }
+

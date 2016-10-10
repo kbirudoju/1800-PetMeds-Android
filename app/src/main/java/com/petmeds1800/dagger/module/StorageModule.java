@@ -24,8 +24,4 @@ public class StorageModule {
         return new GeneralPreferencesHelper(context);
     }
 
-    @Provides
-    public CookieJar providePersistentCookie(Context context){
-        return new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
-    }
 }

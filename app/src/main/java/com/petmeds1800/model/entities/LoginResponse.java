@@ -7,7 +7,14 @@ public class LoginResponse {
 
     private Status status;
 
+    private Profile profile;
+
     public Status getStatus() {
         return status;
     }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
 }

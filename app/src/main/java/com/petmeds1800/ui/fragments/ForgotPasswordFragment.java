@@ -5,6 +5,8 @@ import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.mvp.ForgotPasswordTask.ForgotPasswordContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
@@ -19,13 +21,16 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -43,7 +48,7 @@ import static com.petmeds1800.mvp.BasePresenter.API_SUCCESS_CODE;
 /**
  * Created by Digvijay on 8/22/2016.
  */
-public class ForgotPasswordFragment extends AbstractFragment implements ForgotPasswordContract.View, TextWatcher {
+public class ForgotPasswordFragment extends AbstractFragment implements ForgotPasswordContract.View, EditText.OnEditorActionListener {
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
@@ -77,28 +82,13 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_forgot_password, container, false);
         ButterKnife.bind(this, view);
-        mEmailText.addTextChangedListener(this);
+        mEmailText.setImeOptions(EditorInfo.IME_ACTION_GO);
+        mEmailText.setOnEditorActionListener(this);
         return view;
     }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
-
 
     @Override
     public void onResume() {
@@ -136,7 +126,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
     }
 
     @OnClick(R.id.email_my_password_button)
-    public void emailMyPassword() {
+    public void sendForgotPasswordEmail() {
         mEmailInput.setError(null);
         String emailText = mEmailText.getText().toString().trim();
 
@@ -145,8 +135,44 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
             return;
         } else if (!mPresenter.validateEmail(emailText)) {
             setEmailError(getString(R.string.accountSettingsEmailInvalidError));
+            return;
         }
 
+        doTempHackForGettingSessionCookies();
+    }
+
+    private void doTempHackForGettingSessionCookies(){
+        showProgress();
+        //TODO: remove this temporary hack after backend resolves their problem of cookies
+        mApiService.login(new LoginRequest("", "", "test"))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<LoginResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId == R.string.noInternetConnection) {
+                            showErrorCrouton(getString(errorId), false);
+                            hideProgress();
+                        } else {
+                            makeForgotPasswordApiCall();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(LoginResponse loginResponse) {
+                        hideProgress();
+                        Log.v("login response", loginResponse.getStatus().getCode());
+                    }
+                });
+    }
+
+    private void makeForgotPasswordApiCall(){
         showProgress();
         mApiService.getSessionConfirmationNumber()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -177,7 +203,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
 
                             return mApiService
                                     .forgotPassword(
-                                            new ForgotPasswordRequest("api-demo@gmail.com", sessionConfNumber))
+                                            new ForgotPasswordRequest(mEmailText.getText().toString().trim(), sessionConfNumber))
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
                         } else {
@@ -198,14 +224,14 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                         if (errorId == R.string.noInternetConnection) {
                             showErrorCrouton(getString(errorId), false);
                         }
-                        Log.v("onError", e.getMessage());
+                        Log.v("onError", e.getMessage());    
                     }
 
                     @Override
                     public void onNext(ForgotPasswordResponse response) {
                         hideProgress();
                         if (response != null) {
-                            Log.v("response", response.getStatus().getErrorMessages().get(0));
+                            Log.v("response", response.getStatus().getCode());
                             if (response.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 mEmailPasswordButton.setText(getString(R.string.label_email_sent));
                             } else {
@@ -216,5 +242,13 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                     }
                 });
 
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+            sendForgotPasswordEmail();
+        }
+        return false;
     }
 }

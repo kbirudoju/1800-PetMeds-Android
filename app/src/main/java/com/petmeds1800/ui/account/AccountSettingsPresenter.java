@@ -88,7 +88,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                         if (s
                                 != null) { //TODO Need to handle errors.As of now there is no status field in the API response but it should be.
                             if (mView.isActive()) {
-                                mView.setUserData(s.getProfile());
+                                mView.setUserData(s.getUser());
                             }
                         }
                     }

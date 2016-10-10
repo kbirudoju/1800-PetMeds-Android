@@ -1,5 +1,10 @@
 package com.petmeds1800.dagger.module;
 
+import android.content.Context;
+
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.dagger.scopes.AppScope;
@@ -48,6 +53,12 @@ public class RestModule {
                 .baseUrl(mEndpoint);
 
         return builder.build();
+    }
+
+    @Provides
+    @AppScope
+    public CookieJar providePersistentCookie(Context context){
+        return new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
     }
 
     @Provides

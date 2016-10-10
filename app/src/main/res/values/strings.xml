@@ -462,6 +462,7 @@
     <!--Shipping Methods-->
     <string name="shipping_method_title">SELECT A SHIPPING METHOD</string>
     <string name="shipment_method_header">SHIPMENT METHOD</string>
+
     <string name="label_shipping_method_standard">Standard (5en dash7 business days)</string>
     <string name="label_shipping_method_priority">Priority (3en dash5 business days)</string>
     <string name="label_shipping_method_fedex_2day">FedEx 2 Day (2en dash3 business days)</string>
