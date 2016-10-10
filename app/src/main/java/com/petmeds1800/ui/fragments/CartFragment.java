@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
@@ -51,7 +50,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     private LinearLayout mEmptyCheckoutContainer;
     private TextInputLayout mCouponCodeLayout;
     private LinearLayout mOfferCodeContainerLayout;
-    private ProgressBar mProgressBar;
+
     public static int sPreviousScrollPosition = 0;
 
     @Inject
@@ -71,7 +70,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mTotalCheckOutContainer = (LinearLayout) view.findViewById(R.id.total_checkout_container);
         mItemListtContainer = (LinearLayout) view.findViewById(R.id.item_list_container);
         mEmptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
         return view;
     }
@@ -105,7 +103,11 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             toggleVisibilityShoppingList(true);
         }
 
-        mProgressBar.setVisibility(View.GONE);
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return response;
     }
 
@@ -120,7 +122,11 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
         }
 
-        mProgressBar.setVisibility(View.GONE);
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -235,7 +241,12 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     }
 
     private void callmShoppingCartAPI(Object object){
-        mProgressBar.setVisibility(View.VISIBLE);
+
+        try {
+            ((AbstractActivity)getActivity()).startLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (mPresenter == null){
             mPresenter = new ShoppingCartListPresenter(this);

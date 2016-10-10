@@ -8,6 +8,7 @@ import com.petmeds1800.util.AnalyticsUtil;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -86,10 +87,16 @@ public abstract class AbstractActivity extends AppCompatActivity {
     }
 
     public void stopLoadingGif(Context mContext) throws Exception{
-        Fragment prev = getSupportFragmentManager().findFragmentByTag(LoadingGIFDialogFragment.class.getSimpleName());
-        if (prev != null) {
-            LoadingGIFDialogFragment df = (LoadingGIFDialogFragment) prev;
-            df.dismiss();
-        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Fragment prev = getSupportFragmentManager().findFragmentByTag(LoadingGIFDialogFragment.class.getSimpleName());
+                if (prev != null) {
+                    LoadingGIFDialogFragment df = (LoadingGIFDialogFragment) prev;
+                    df.dismiss();
+                }
+            }
+        },1000);
     }
 }
