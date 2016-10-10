@@ -44,14 +44,15 @@ import javax.inject.Inject;
  */
 public class CartFragment extends AbstractFragment implements ShoppingCartListContract.View {
 
-    private RecyclerView containerLayoutItems;
+    private RecyclerView mContainerLayoutItems;
     private ShoppingCartListContract.Presenter mPresenter;
-    private LinearLayout totalCheckOutContainer;
-    private LinearLayout itemListtContainer;
-    private LinearLayout emptyCheckoutContainer;
-    private TextInputLayout CouponCodeLayout;
-    private LinearLayout OfferCodeContainerLayout;
-    private ProgressBar progressBar;
+    private LinearLayout mTotalCheckOutContainer;
+    private LinearLayout mItemListtContainer;
+    private LinearLayout mEmptyCheckoutContainer;
+    private TextInputLayout mCouponCodeLayout;
+    private LinearLayout mOfferCodeContainerLayout;
+    private ProgressBar mProgressBar;
+    public static int sPreviousScrollPosition = 0;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
@@ -62,15 +63,16 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
-        containerLayoutItems = (RecyclerView) view.findViewById(R.id.products_offered_RecyclerView);
+        mContainerLayoutItems = (RecyclerView) view.findViewById(R.id.products_offered_RecyclerView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        containerLayoutItems.setLayoutManager(mLayoutManager);
-        containerLayoutItems.setItemAnimator(new DefaultItemAnimator());
+        mContainerLayoutItems.setLayoutManager(mLayoutManager);
+        mContainerLayoutItems.setItemAnimator(new DefaultItemAnimator());
 
-        totalCheckOutContainer = (LinearLayout) view.findViewById(R.id.total_checkout_container);
-        itemListtContainer = (LinearLayout) view.findViewById(R.id.item_list_container);
-        emptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+        mTotalCheckOutContainer = (LinearLayout) view.findViewById(R.id.total_checkout_container);
+        mItemListtContainer = (LinearLayout) view.findViewById(R.id.item_list_container);
+        mEmptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+
         return view;
     }
 
@@ -78,7 +80,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     public void onResume() {
         super.onResume();
         callmShoppingCartAPI(null);
-        ((AbstractActivity) getActivity()).setToolBarTitle(getString(R.string.cart_title));
+        ((AbstractActivity)getActivity()).setToolBarTitle(getString(R.string.cart_title));
     }
 
     @Override
@@ -96,52 +98,52 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     public boolean postGeneralPopulateShoppingCart(ShoppingCartListResponse shoppingCartListResponse) {
 
         boolean response = false;
-        if (null != shoppingCartListResponse && shoppingCartListResponse.getItemCount() > 0) {
+        if (null != shoppingCartListResponse && shoppingCartListResponse.getItemCount() > 0){
             response = initializeShoppingCartPage(shoppingCartListResponse);
             toggleVisibilityShoppingList(false);
-        } else if (null == shoppingCartListResponse || shoppingCartListResponse.getItemCount() == 0) {
+        } else if (null == shoppingCartListResponse || shoppingCartListResponse.getItemCount() == 0){
             toggleVisibilityShoppingList(true);
         }
 
-        progressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
         return response;
     }
 
     @Override
     public boolean onError(String errorMessage, String simpleName) {
 
-        if (simpleName.equalsIgnoreCase(ApplyCouponRequestShoppingCart.class.getSimpleName())) {
-            CouponCodeLayout.setError(errorMessage);
-            OfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
-        } else if (simpleName.equalsIgnoreCase(UpdateItemQuantityRequestShoppingCart.class.getSimpleName())) {
-            Utils.displayCrouton(getActivity(), (String) errorMessage, itemListtContainer);
+        if (simpleName.equalsIgnoreCase(ApplyCouponRequestShoppingCart.class.getSimpleName())){
+            mCouponCodeLayout.setError(errorMessage);
+            mOfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
+        }
+        else if (simpleName.equalsIgnoreCase(UpdateItemQuantityRequestShoppingCart.class.getSimpleName())){
+            Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
         }
 
-        progressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
         return false;
     }
 
     @Override
-    public void setPresenter(ShoppingCartListContract.Presenter presenter) {
-    }
+    public void setPresenter(ShoppingCartListContract.Presenter presenter) {    }
 
-    private View createFooter(final View footerView, ShoppingCartListResponse shoppingCartListResponse) {
-        OfferCodeContainerLayout = (LinearLayout) footerView.findViewById(R.id.cart_each_item_container);
-        CouponCodeLayout = (TextInputLayout) footerView.findViewById(R.id.coupon_code_input_layout);
+    private View createFooter(final View footerView,ShoppingCartListResponse shoppingCartListResponse){
+        mOfferCodeContainerLayout = (LinearLayout) footerView.findViewById(R.id.cart_each_item_container);
+        mCouponCodeLayout = (TextInputLayout) footerView.findViewById(R.id.coupon_code_input_layout);
         Button OrderStatusLAbel = (Button) footerView.findViewById(R.id.order_status_label);
 
         OrderStatusLAbel.setVisibility(View.GONE);
-        ((EditText) CouponCodeLayout.getEditText()).setOnKeyListener(new View.OnKeyListener() {
+        ((EditText) mCouponCodeLayout.getEditText()).setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && ((EditText) CouponCodeLayout.getEditText()).getText() != null) {
-                    callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(((EditText) CouponCodeLayout.getEditText()).getText().toString().trim(), null));
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && ((EditText) mCouponCodeLayout.getEditText()).getText() != null ) {
+                    callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(((EditText) mCouponCodeLayout.getEditText()).getText().toString().trim(),null));
                     return true;
                 }
                 return false;
             }
         });
 
-        ((EditText) CouponCodeLayout.getEditText()).setOnTouchListener(new View.OnTouchListener() {
+        ((EditText) mCouponCodeLayout.getEditText()).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 final int DRAWABLE_LEFT = 0;
@@ -149,9 +151,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
                 final int DRAWABLE_RIGHT = 2;
                 final int DRAWABLE_BOTTOM = 3;
 
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (((EditText) CouponCodeLayout.getEditText()).getRight() - ((EditText) CouponCodeLayout.getEditText()).getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(((EditText) CouponCodeLayout.getEditText()).getText().toString().trim(), null));
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (((EditText) mCouponCodeLayout.getEditText()).getRight() - ((EditText) mCouponCodeLayout.getEditText()).getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(((EditText) mCouponCodeLayout.getEditText()).getText().toString().trim(),null));
                         return true;
                     }
                 }
@@ -159,8 +161,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             }
         });
 
-        if (null != shoppingCartListResponse && null != shoppingCartListResponse.getShoppingCart().getCoupon() && !shoppingCartListResponse.getShoppingCart().getCoupon().isEmpty()) {
-            CouponCodeLayout.getEditText().setText(shoppingCartListResponse.getShoppingCart().getCoupon());
+        if (null != shoppingCartListResponse && null != shoppingCartListResponse.getShoppingCart().getCoupon() && !shoppingCartListResponse.getShoppingCart().getCoupon().isEmpty()){
+            mCouponCodeLayout.getEditText().setText(shoppingCartListResponse.getShoppingCart().getCoupon());
             OrderStatusLAbel.setVisibility(View.VISIBLE);
         }
         return footerView;
@@ -169,94 +171,110 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     void startCheckoutProcess(ShoppingCartListResponse shoppingCartListResponse) {
         //start the checkoutActitiy
         CheckOutIntent checkOutIntent = new CheckOutIntent(getContext());
-        checkOutIntent.putExtra(SHOPPING_CART, shoppingCartListResponse);
+        checkOutIntent.putExtra(SHOPPING_CART,shoppingCartListResponse);
         startActivity(checkOutIntent);
     }
 
-    private boolean initializeShoppingCartPage(final ShoppingCartListResponse shoppingCartListResponse) {
-        containerLayoutItems.setAdapter(new ShoppingCartRecyclerViewAdapter(shoppingCartListResponse.getShoppingCart().getCommerceItems(), createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_offer_code_card, null, false), shoppingCartListResponse), getActivity(), CartFragmentMessageHandler));
-        if (null != shoppingCartListResponse.getShoppingCart()) {
-            ((TextView) (totalCheckOutContainer.findViewById(R.id.items_total_amt_txt))).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getItemsTotal()));
-            ((TextView) (totalCheckOutContainer.findViewById(R.id.subtotal_value_txt))).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getSubTotal()));
+    private boolean initializeShoppingCartPage(final ShoppingCartListResponse shoppingCartListResponse){
+        mContainerLayoutItems.setAdapter(new ShoppingCartRecyclerViewAdapter(shoppingCartListResponse.getShoppingCart().getCommerceItems(),createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_offer_code_card, null, false),shoppingCartListResponse),getActivity(),CartFragmentMessageHandler));
 
-            ((Button) totalCheckOutContainer.findViewById(R.id.button_checkout)).setOnClickListener(new View.OnClickListener() {
+        if (sPreviousScrollPosition > 0){
+            mContainerLayoutItems.scrollToPosition(sPreviousScrollPosition);
+            sPreviousScrollPosition = 0;
+        }
+
+        if(null != shoppingCartListResponse.getShoppingCart()){
+            ((TextView)(mTotalCheckOutContainer.findViewById(R.id.items_total_amt_txt))).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getItemsTotal()));
+            ((TextView)(mTotalCheckOutContainer.findViewById(R.id.subtotal_value_txt))).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getSubTotal()));
+
+            ((Button) mTotalCheckOutContainer.findViewById(R.id.button_checkout)).setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    if (null != shoppingCartListResponse.getShoppingCart()) {
+                    if(null != shoppingCartListResponse.getShoppingCart()){
                         startCheckoutProcess(shoppingCartListResponse);
                     }
                 }
             });
 
         } else {
-            ((TextView) (totalCheckOutContainer.findViewById(R.id.items_total_amt_txt))).setText("-");
-            ((TextView) (totalCheckOutContainer.findViewById(R.id.subtotal_value_txt))).setText("-");
+            ((TextView)(mTotalCheckOutContainer.findViewById(R.id.items_total_amt_txt))).setText("-");
+            ((TextView)(mTotalCheckOutContainer.findViewById(R.id.subtotal_value_txt))).setText("-");
         }
 
-        if (null != shoppingCartListResponse.getShoppingCart()) {
-            ((TextView) totalCheckOutContainer.findViewById(R.id.offer_code_value_txt)).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getDiscountAmount()));
+        if(null != shoppingCartListResponse.getShoppingCart()){
+            ((TextView) mTotalCheckOutContainer.findViewById(R.id.offer_code_value_txt)).setText(getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getDiscountAmount()));
         } else {
-            ((TextView) totalCheckOutContainer.findViewById(R.id.offer_code_value_txt)).setText("-");
+            ((TextView) mTotalCheckOutContainer.findViewById(R.id.offer_code_value_txt)).setText("-");
         }
 
-        if (shoppingCartListResponse.getShippingMessageInfo().getIsFreeShipping()) {
-            totalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.VISIBLE);
-            ((TextView) (totalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText(getActivity().getResources().getString(R.string.your_order_qualifies_for_free_standard_shipping));
-        } else if (!shoppingCartListResponse.getShippingMessageInfo().getIsFreeShipping() && null != shoppingCartListResponse.getShippingMessageInfo().getMessage() && shoppingCartListResponse.getShippingMessageInfo().getMessage().length() > 0) {
-            totalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.VISIBLE);
-            ((TextView) (totalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText(shoppingCartListResponse.getShippingMessageInfo().getMessage().trim());
+        if (shoppingCartListResponse.getShippingMessageInfo().getIsFreeShipping()){
+            mTotalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.VISIBLE);
+            ((TextView)(mTotalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText(getActivity().getResources().getString(R.string.your_order_qualifies_for_free_standard_shipping));
+        } else if (!shoppingCartListResponse.getShippingMessageInfo().getIsFreeShipping() && null != shoppingCartListResponse.getShippingMessageInfo().getMessage() && shoppingCartListResponse.getShippingMessageInfo().getMessage().length()>0){
+            mTotalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.VISIBLE);
+            ((TextView)(mTotalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText(shoppingCartListResponse.getShippingMessageInfo().getMessage().trim());
         } else {
-            ((TextView) (totalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText("-");
-            totalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.GONE);
+            ((TextView)(mTotalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText("-");
+            mTotalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.GONE);
         }
         return true;
     }
 
-    private void toggleVisibilityShoppingList(boolean isEmpty) {
-        if (!isEmpty) {
-            totalCheckOutContainer.setVisibility(View.VISIBLE);
-            itemListtContainer.setVisibility(View.VISIBLE);
-            emptyCheckoutContainer.setVisibility(View.GONE);
-        } else if (isEmpty) {
-            totalCheckOutContainer.setVisibility(View.GONE);
-            itemListtContainer.setVisibility(View.GONE);
-            emptyCheckoutContainer.setVisibility(View.VISIBLE);
+    private void toggleVisibilityShoppingList(boolean isEmpty){
+        if (!isEmpty){
+            mTotalCheckOutContainer.setVisibility(View.VISIBLE);
+            mItemListtContainer.setVisibility(View.VISIBLE);
+            mEmptyCheckoutContainer.setVisibility(View.GONE);
+        }
+        else if (isEmpty){
+            mTotalCheckOutContainer.setVisibility(View.GONE);
+            mItemListtContainer.setVisibility(View.GONE);
+            mEmptyCheckoutContainer.setVisibility(View.VISIBLE);
         }
     }
 
-    private void callmShoppingCartAPI(Object object) {
-        progressBar.setVisibility(View.VISIBLE);
+    private void callmShoppingCartAPI(Object object){
+        mProgressBar.setVisibility(View.VISIBLE);
 
-        if (mPresenter == null) {
+        if (mPresenter == null){
             mPresenter = new ShoppingCartListPresenter(this);
         }
-        if (object == null) {
+        if (object == null)
+        {
             mPresenter.getGeneralPopulateShoppingCart();
-        } else if (object instanceof AddItemRequestShoppingCart) {
-            mPresenter.getAddItemShoppingCart((AddItemRequestShoppingCart) (object));
-        } else if (object instanceof RemoveItemRequestShoppingCart) {
-            mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart) (object));
-        } else if (object instanceof ApplyCouponRequestShoppingCart) {
-            mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart) (object));
-        } else if (object instanceof UpdateItemQuantityRequestShoppingCart) {
-            mPresenter.getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart) (object));
+        } else
+        if (object instanceof AddItemRequestShoppingCart)
+        {
+            mPresenter.getAddItemShoppingCart((AddItemRequestShoppingCart)(object));
+        } else
+        if (object instanceof RemoveItemRequestShoppingCart)
+        {
+            mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart)(object));
+        } else
+        if (object instanceof ApplyCouponRequestShoppingCart)
+        {
+            mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart)(object));
+        } else
+        if (object instanceof UpdateItemQuantityRequestShoppingCart)
+        {
+            mPresenter.getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart)(object));
         }
     }
 
-    private final Handler CartFragmentMessageHandler = new Handler() {
+    private final Handler CartFragmentMessageHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            if (msg.what == Constants.DELETE_ITEM_REQUEST_SHOPPINGCART) {
-                callmShoppingCartAPI(new RemoveItemRequestShoppingCart(msg.getData().get(Constants.COMMERCE_ITEM_ID).toString(), null));
-            } else if (msg.what == Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART) {
-                callmShoppingCartAPI(new UpdateItemQuantityRequestShoppingCart(((HashMap<String, String>) msg.getData().getSerializable(Constants.QUANTITY_MAP))));
-            } else if (msg.what == Constants.CLICK_ITEM_UPDATE_SHOPPINGCART) {
+            if (msg.what == Constants.DELETE_ITEM_REQUEST_SHOPPINGCART){
+                callmShoppingCartAPI(new RemoveItemRequestShoppingCart(msg.getData().get(Constants.COMMERCE_ITEM_ID).toString(),null));
+            } else if (msg.what == Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART){
+                callmShoppingCartAPI(new UpdateItemQuantityRequestShoppingCart(((HashMap<String,String>)msg.getData().getSerializable(Constants.QUANTITY_MAP))));
+            } else if (msg.what == Constants.CLICK_ITEM_UPDATE_SHOPPINGCART){
                 CommonWebviewFragment commonWebviewFragment = new CommonWebviewFragment();
                 commonWebviewFragment.setArguments(msg.getData());
-                addStepRootChildFragment(commonWebviewFragment, R.id.cart_root_fragment_container);
+                addStepRootChildFragment(commonWebviewFragment,R.id.cart_root_fragment_container);
             }
         }
     };

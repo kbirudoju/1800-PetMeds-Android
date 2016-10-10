@@ -524,6 +524,7 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+    
     <!--Shipping Address-->
     <string name="shipping_address_title">ENTER A SHIPPING ADDRESS</string>
     <string name="myBillingAddress">Use This As My Billing Address</string>
@@ -531,6 +532,11 @@
     <string name="errorPasswordFieldRequired">Password Field is required</string>
     <string name="confirmFieldRequired">Confirm Field Required</string>
     <string name="errorConfirmEmail">Confirm email does not match</string>
+    
+    
+    <string name="customer_care_email_id">customerservice@1800petmeds.com</string>
+    <string name="choose_email_client">Choose Email Client</string>
+    <string name="no_email_client_found">No Email Client Found</string>
 
 </resources>
 

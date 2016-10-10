@@ -11,6 +11,8 @@ import android.os.SystemClock;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,10 +29,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
 import com.petmeds1800.model.shoppingcart.response.CommerceItems;
+import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.RunnableFuture;
 
 /**
  * Created by Sarthak on 9/26/2016.
@@ -45,12 +49,16 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
     private View mItemFooter;
     private Context mContext;
     private Handler mHandler;
+    private Handler mTextChangeHandler;
+    private Runnable mTextChangeRunnable;
+    private ShoppingCartRecyclerViewAdapter mShoppingCartRecyclerViewAdapter;
 
     public ShoppingCartRecyclerViewAdapter(ArrayList<CommerceItems> commerceItemsesCollection, View itemFooter, Context context, Handler handler) {
         this.mCommerceItemsesCollection = commerceItemsesCollection;
         this.mItemFooter = itemFooter;
         this.mContext = context;
         this.mHandler = handler;
+        this.mShoppingCartRecyclerViewAdapter =this;
     }
 
     @Override
@@ -133,123 +141,80 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
         }
 
         if (null != mCommerceItemsesCollection.get(position) && !mCommerceItemsesCollection.get(position).getQuantity().isEmpty()) {
-
-            holder.mItemQuantityDescription.getEditText().setFocusable(false);
-            holder.mItemQuantityDescription.getEditText().setFocusableInTouchMode(false);
             holder.mItemQuantityDescription.getEditText().setText(mCommerceItemsesCollection.get(position).getQuantity());
-            holder.mItemQuantityDescription.getEditText().setOnClickListener(new View.OnClickListener() {
+
+            holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
                 @Override
-                public void onClick(View v) {
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE && !holder.mItemQuantityDescription.getEditText().getText().toString().isEmpty() && !(mCommerceItemsesCollection.get(position).getQuantity()).equalsIgnoreCase(holder.mItemQuantityDescription.getEditText().getText().toString().trim())) {
+                        Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
+                        Bundle b = new Bundle();
 
-//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    {
-                        final Dialog dialog = new Dialog(mContext);
-                        dialog.setTitle(mContext.getResources().getString(R.string.select_item_quantity));
-                        View view = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_quanity_list, null);
-                        ListView mListView = (ListView) view.findViewById(R.id.quantity_available_list);
-                        mListView.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, mContext.getResources().getStringArray(R.array.items_quantity_array)));
-                        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        HashMap<String, String> commerceID_QuantityMap = new HashMap<String, String>();
+                        for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
+                            commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
+                        }
+                        commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(), holder.mItemQuantityDescription.getEditText().getText().toString().trim());
+                        mCommerceItemsesCollection.get(position).setQuantity(holder.mItemQuantityDescription.getEditText().getText().toString().trim());
+                        b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
+                        msg.setData(b);
 
+                        try {
+                            CartFragment.sPreviousScrollPosition = position;
+                            mHandler.sendMessage(msg);
+                        } catch (ClassCastException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(holder.mItemQuantityDescription.getEditText().getWindowToken(), 0);
+                            return true;
+                        }
+                    } else return false;
+                }
+            });
+
+            holder.mItemQuantityDescription.getEditText().addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                    if (!holder.mItemQuantityDescription.getEditText().getText().toString().isEmpty() && !(mCommerceItemsesCollection.get(position).getQuantity()).equalsIgnoreCase(holder.mItemQuantityDescription.getEditText().getText().toString().trim())) {
+
+                        if (mTextChangeRunnable != null && mTextChangeHandler != null){
+                            mTextChangeHandler.removeCallbacks(mTextChangeRunnable);
+                            mTextChangeRunnable = null;
+                            mTextChangeHandler = null;
+                        }
+
+                        mTextChangeRunnable = new Runnable() {
                             @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                                if (pos < 9) {
-                                    holder.mItemQuantityDescription.getEditText().setText(mContext.getResources().getStringArray(R.array.items_quantity_array)[pos]);
-                                    Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
-                                    Bundle b = new Bundle();
-
-                                    HashMap<String, String> commerceID_QuantityMap = new HashMap<>();
-
-                                    for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
-                                        commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
-                                    }
-                                    commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(), holder.mItemQuantityDescription.getEditText().getText().toString().trim());
-                                    b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
-                                    msg.setData(b);
-
-                                    try {
-                                        mHandler.sendMessage(msg);
-                                    } catch (ClassCastException e) {
-                                        e.printStackTrace();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        dialog.setOnDismissListener(null);
-                                        dialog.dismiss();
-                                    }
-                                }
-                                 else if (pos >= 9) {
-
-                                    dialog.setOnDismissListener(null);
-                                    dialog.dismiss();
-                                    holder.mItemQuantityDescription.getEditText().setFocusable(true);
-                                    holder.mItemQuantityDescription.getEditText().setClickable(true);
-                                    holder.mItemQuantityDescription.getEditText().setFocusableInTouchMode(true);
-                                    holder.mItemQuantityDescription.getEditText().setOnClickListener(null);
-                                    holder.mItemQuantityDescription.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-                                        @Override
-                                        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                            if (actionId == EditorInfo.IME_ACTION_DONE && !holder.mItemQuantityDescription.getEditText().getText().toString().isEmpty() && !(mCommerceItemsesCollection.get(position).getQuantity()).equalsIgnoreCase(holder.mItemQuantityDescription.getEditText().getText().toString().trim())) {
-                                                Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
-                                                Bundle b = new Bundle();
-
-                                                HashMap<String, String> commerceID_QuantityMap = new HashMap<>();
-
-                                                for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
-                                                    commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
-                                                }
-                                                commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(), holder.mItemQuantityDescription.getEditText().getText().toString().trim());
-                                                b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
-                                                msg.setData(b);
-
-                                                try {
-                                                    mHandler.sendMessage(msg);
-                                                } catch (ClassCastException e) {
-                                                    e.printStackTrace();
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                } finally {
-                                                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                                    imm.hideSoftInputFromWindow(holder.mItemQuantityDescription.getEditText().getWindowToken(), 0);
-                                                    return true;
-                                                }
-                                            } else return false;
-                                        }
-
-                                    });
-
-                                    holder.mItemQuantityDescription.getEditText().requestFocus();
-                                    (new Handler()).postDelayed(new Runnable() {
-
-                                        public void run() {
-                                            holder.mItemQuantityDescription.getEditText().dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN , 0, 0, 0));
-                                            holder.mItemQuantityDescription.getEditText().dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP , 0, 0, 0));
-                                            holder.mItemQuantityDescription.getEditText().setText(mCommerceItemsesCollection.get(position).getQuantity());
-                                            holder.mItemQuantityDescription.getEditText().setSelection(holder.mItemQuantityDescription.getEditText().getText().length());
-                                        }
-                                    }, 200);
-                                }
-                            }
-                        });
-                        dialog.setContentView(view);
-                        dialog.setCanceledOnTouchOutside(true);
-                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
+                            public void run() {
                                 Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
                                 Bundle b = new Bundle();
 
-                                HashMap<String, String> commerceID_QuantityMap = new HashMap<>();
-
+                                HashMap<String, String> commerceID_QuantityMap = new HashMap<String, String>();
                                 for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
                                     commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
                                 }
+                                commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(), holder.mItemQuantityDescription.getEditText().getText().toString().trim());
+                                mCommerceItemsesCollection.get(position).setQuantity(holder.mItemQuantityDescription.getEditText().getText().toString().trim());
                                 b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
                                 msg.setData(b);
 
                                 try {
+                                    CartFragment.sPreviousScrollPosition = position;
                                     mHandler.sendMessage(msg);
                                 } catch (ClassCastException e) {
                                     e.printStackTrace();
@@ -260,8 +225,10 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                                     imm.hideSoftInputFromWindow(holder.mItemQuantityDescription.getEditText().getWindowToken(), 0);
                                 }
                             }
-                        });
-                        dialog.show();
+                        };
+
+                        mTextChangeHandler = new Handler();
+                        mTextChangeHandler.postDelayed(mTextChangeRunnable,1000);
                     }
                 }
             });

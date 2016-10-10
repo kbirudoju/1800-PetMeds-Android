@@ -1,8 +1,10 @@
 package com.petmeds1800.ui.dashboard.support;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
@@ -123,6 +125,37 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }else if(viewType == VIEW_FOOTER){
             int resource = R.layout.view_widget_footer;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+            ((Button)v.findViewById(R.id.email_button)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL,  new String[]{mContext.getResources().getString(R.string.customer_care_email_id)});
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+
+                    //need this to prompts email client only
+                    emailIntent.setType("message/rfc822");
+                    try {
+                        mContext.startActivity(Intent.createChooser(emailIntent,mContext.getResources().getString(R.string.choose_email_client)));
+                    } catch (android.content.ActivityNotFoundException ex) {
+
+                    }
+                }
+            });
+
+            ((Button)v.findViewById(R.id.call_button)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:1-800-738-6337"));
+
+                    try {
+                        mContext.startActivity(intent);
+                    } catch (android.content.ActivityNotFoundException ex) {
+
+                    }
+                }
+            });
             viewHolder = new FooterViewHolder(v);
         }
 
