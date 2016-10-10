@@ -176,8 +176,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         } else if (TextUtils.isEmpty(mConfirmPasswordEdit.getText())) {
             mPasswordInputLayout.setError(null);
             mPasswordInputLayout.setEnabled(false);
-            mConfirmPasswordInputLayout
-                    .setError(getContext().getString(R.string.accountSettingsConfirmPasswordEmptyError));
+            mConfirmPasswordInputLayout.getEditText().requestFocus();
             invalidPassword = true;
         } else if (!mPresenter.validatePassword(mPasswordText.getText().toString())) {
             mConfirmPasswordInputLayout.setError(null);

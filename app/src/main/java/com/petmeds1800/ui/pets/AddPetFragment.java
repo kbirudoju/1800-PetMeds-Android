@@ -1,34 +1,5 @@
 package com.petmeds1800.ui.pets;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -62,6 +33,35 @@ import com.petmeds1800.util.AlertRecyclerViewAdapter;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -131,9 +131,6 @@ public class AddPetFragment extends AbstractFragment
     @BindView(R.id.medication_allergies_details)
     TextView mMedicationAllergiesDetails;
 
-    @BindView(R.id.current_medication_edit)
-    EditText mCurrentMedicationEdit;
-
     @BindView(R.id.medical_condition_title)
     TextView mMedicalConditionTitle;
 
@@ -145,6 +142,15 @@ public class AddPetFragment extends AbstractFragment
 
     @BindView(R.id.containerLayout)
     RelativeLayout mContainerLayout;
+
+    @BindView(R.id.current_medications_title)
+    TextView mCurrentMedicationsTitle;
+
+    @BindView(R.id.add_edit_current_medications)
+    TextView mAddEditCurrentMedications;
+
+    @BindView(R.id.current_medications_details)
+    TextView mCurrentMedicationsDetails;
 
 
     private ArrayList<Integer> medConditionIds;
@@ -214,9 +220,11 @@ public class AddPetFragment extends AbstractFragment
 
     private AlertRecyclerViewAdapter mAlertRecyclerViewAdapter;
 
-    private ArrayList<AlertDailogMultipleChoice> perMedicationAlleryList;
+    private ArrayList<AlertDailogMultipleChoice> petMedicationAlleryList;
 
-    private ArrayList<AlertDailogMultipleChoice> perMedicationConditionList;
+    private ArrayList<AlertDailogMultipleChoice> petMedicationConditionList;
+
+    private ArrayList<AlertDailogMultipleChoice> petCurrentMedicationList;
 
     private ArrayList<NameValueData> petAgeData;
 
@@ -225,6 +233,8 @@ public class AddPetFragment extends AbstractFragment
     private ArrayList<NameValueData> nameValueDetailsForMedicalConditons;
 
     private ArrayList<NameValueData> nameValueDetailsForMedicalallergy;
+
+    private ArrayList<NameValueData> nameValueDetailsForCurrentMedications;
 
     public static int MEDICATION_ALLERGY_1 = 0;
 
@@ -240,9 +250,12 @@ public class AddPetFragment extends AbstractFragment
 
     public static final int IS_MEDICATIONS_CONDITIONS_DAILOG = 6;
 
+    public static final int IS_CURRENT_MEDICATIONS_DAILOG = 7;
+
     private int fromWhichDailog = 0;
 
     private String age = "";
+
     private AddNewEntityActivity mCallback;
 
     @Nullable
@@ -255,7 +268,7 @@ public class AddPetFragment extends AbstractFragment
         mPet = (Pets) getArguments().getSerializable("pet");
 
         if (isEditable) {
-            if(mPet!= null){
+            if (mPet != null) {
                 ((AbstractActivity) getActivity()).setToolBarTitle(mPet.getPetName());
 
             }
@@ -296,12 +309,13 @@ public class AddPetFragment extends AbstractFragment
         mPetTypeText.setOnClickListener(this);
         mAddEditMedicationAllergies.setOnClickListener(this);
         mAddEditMedicationConditions.setOnClickListener(this);
+        mAddEditCurrentMedications.setOnClickListener(this);
         updateImageUtil = UpdateImageUtil.getInstance(this);
 
 
     }
 
-    public void openDailog(String data[], int code,String title) {
+    public void openDailog(String data[], int code, String title) {
         //((HomeActivity) getActivity()).hideProgress();
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
@@ -370,29 +384,38 @@ public class AddPetFragment extends AbstractFragment
                 showImageOptions();
                 break;
             case R.id.add_edit_medication_allergies:
-               // ((HomeActivity) getActivity()).showProgress();
+                // ((HomeActivity) getActivity()).showProgress();
                 fromWhichDailog = IS_MEDICATIONS_ALLERGY_DAILOG;
-                if (perMedicationAlleryList != null && perMedicationAlleryList.size() > 0) {
-                    showPetMedicalData(getString(R.string.title_for_pet_allergies), perMedicationAlleryList);
+                if (petMedicationAlleryList != null && petMedicationAlleryList.size() > 0) {
+                    showPetMedicalData(getString(R.string.title_for_pet_allergies), petMedicationAlleryList);
                 } else {
                     mPresenter.populatePetMedicationsList();
                 }
                 break;
             case R.id.add_edit_medication_conditions:
-             //   ((HomeActivity) getActivity()).showProgress();
+                //   ((HomeActivity) getActivity()).showProgress();
                 fromWhichDailog = IS_MEDICATIONS_CONDITIONS_DAILOG;
-                if (perMedicationConditionList != null && perMedicationConditionList.size() > 0) {
-                    showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
+                if (petMedicationConditionList != null && petMedicationConditionList.size() > 0) {
+                    showPetMedicalData(getString(R.string.title_for_pet_conditions), petMedicationConditionList);
                 } else {
                     mPresenter.populatePetMedicalconditionsList();
                 }
                 break;
+            case R.id.add_edit_current_medications:
+                fromWhichDailog = IS_CURRENT_MEDICATIONS_DAILOG;
+                if (petCurrentMedicationList != null && petCurrentMedicationList.size() > 0) {
+                    showPetMedicalData(getString(R.string.current_medication), petCurrentMedicationList);
+                } else {
+                    mPresenter.populatePetMedicationsList();
+                }
+
+                break;
             case R.id.pet_type_edit:
-              //  ((HomeActivity) getActivity()).showProgress();
+                //  ((HomeActivity) getActivity()).showProgress();
                 mPresenter.populatePetTypeList();
                 break;
             case R.id.breed_type_edit:
-              //  ((HomeActivity) getActivity()).showProgress();
+                //  ((HomeActivity) getActivity()).showProgress();
                 mPresenter.pouplatePetBreedTypeList();
                 break;
         }
@@ -537,7 +560,7 @@ public class AddPetFragment extends AbstractFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         String medicationAllergyArray[] = new String[]{"", "", "", ""};
-
+        String currentMedicationArray[] = new String[]{"", "", "", ""};
         if (id == R.id.action_edit) {
             enableDoneAction();
             enableViews(true);
@@ -581,6 +604,15 @@ public class AddPetFragment extends AbstractFragment
                 break;
             }
         }
+        for (int i = 0;
+                nameValueDetailsForCurrentMedications != null && i < nameValueDetailsForCurrentMedications.size();
+                i++) {
+            if (i < 4) {
+                currentMedicationArray[i] = nameValueDetailsForCurrentMedications.get(i).getName();
+            } else {
+                break;
+            }
+        }
         if (petAgeData != null) {
             for (NameValueData ageData : petAgeData) {
                 if (ageData.getName().equals(mPetAgeText.getText().toString())) {
@@ -606,10 +638,10 @@ public class AddPetFragment extends AbstractFragment
                     medicationAllergyArray[MEDICATION_ALLERGY_4],
                     medConditionIds,
                     "dog two other info",
-                    "Cefa-Drops",
-                    "Cephalexin",
-                    "",
-                    "Chlorhexidine",
+                    currentMedicationArray[MEDICATION_ALLERGY_1],
+                    currentMedicationArray[MEDICATION_ALLERGY_2],
+                    currentMedicationArray[MEDICATION_ALLERGY_3],
+                    currentMedicationArray[MEDICATION_ALLERGY_4],
                     mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.updatePetData(addPetRequest);
         } else {
@@ -630,10 +662,10 @@ public class AddPetFragment extends AbstractFragment
                     medicationAllergyArray[MEDICATION_ALLERGY_4],
                     medConditionIds,
                     "dog two other info",
-                    "Cefa-Drops",
-                    "Cephalexin",
-                    "",
-                    "Chlorhexidine",
+                    currentMedicationArray[MEDICATION_ALLERGY_1],
+                    currentMedicationArray[MEDICATION_ALLERGY_2],
+                    currentMedicationArray[MEDICATION_ALLERGY_3],
+                    currentMedicationArray[MEDICATION_ALLERGY_4],
                     mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.addPetData(addPetRequest);
         }
@@ -694,27 +726,36 @@ public class AddPetFragment extends AbstractFragment
         alertDialog.show();
     }
 
-    @Override
-    public void populateData(PetMedicationResponse response) {
-
-        perMedicationAlleryList = new ArrayList<AlertDailogMultipleChoice>();
+    private void executeCommonLogic(PetMedicationResponse response, String title,
+            ArrayList<AlertDailogMultipleChoice> list, ArrayList<NameValueData> nameValuelist) {
+        list = new ArrayList<AlertDailogMultipleChoice>();
         for (MedAllergy medication : response.getMedications()) {
             AlertDailogMultipleChoice alertDailogMultipleChoice = new AlertDailogMultipleChoice();
             alertDailogMultipleChoice.setName(medication.getName());
             alertDailogMultipleChoice.setValue(medication.getValue());
-            if (isEditable && nameValueDetailsForMedicalallergy != null
-                    && nameValueDetailsForMedicalallergy.size() > 0) {
-                for (NameValueData data : nameValueDetailsForMedicalallergy) {
+            if (isEditable && nameValuelist != null
+                    && nameValuelist.size() > 0) {
+                for (NameValueData data : nameValuelist) {
                     if (data.getValue().equalsIgnoreCase(alertDailogMultipleChoice.getValue())) {
                         alertDailogMultipleChoice.setChecked(true);
                     }
 
                 }
             }
-            perMedicationAlleryList.add(alertDailogMultipleChoice);
+            list.add(alertDailogMultipleChoice);
         }
+        showPetMedicalData(title, list);
+    }
 
-        showPetMedicalData(getString(R.string.title_for_pet_allergies), perMedicationAlleryList);
+    @Override
+    public void populateData(PetMedicationResponse response) {
+        if (fromWhichDailog == IS_MEDICATIONS_ALLERGY_DAILOG) {
+            executeCommonLogic(response, getString(R.string.title_for_pet_allergies), petMedicationAlleryList,
+                    nameValueDetailsForMedicalallergy);
+        } else {
+            executeCommonLogic(response, getString(R.string.current_medications), petCurrentMedicationList,
+                    nameValueDetailsForCurrentMedications);
+        }
 
     }
 
@@ -752,7 +793,7 @@ public class AddPetFragment extends AbstractFragment
 
     @Override
     public void populatePetMedicalconditionsData(PetMedicalConditionResponse response) {
-        perMedicationConditionList = new ArrayList<AlertDailogMultipleChoice>();
+        petMedicationConditionList = new ArrayList<AlertDailogMultipleChoice>();
         for (NameValueData valueData : response.getMedicalConditions()) {
             AlertDailogMultipleChoice alertDailogMultipleChoice = new AlertDailogMultipleChoice();
             alertDailogMultipleChoice.setName(valueData.getName());
@@ -765,9 +806,9 @@ public class AddPetFragment extends AbstractFragment
                     }
                 }
             }
-            perMedicationConditionList.add(alertDailogMultipleChoice);
+            petMedicationConditionList.add(alertDailogMultipleChoice);
         }
-        showPetMedicalData(getString(R.string.title_for_pet_conditions), perMedicationConditionList);
+        showPetMedicalData(getString(R.string.title_for_pet_conditions), petMedicationConditionList);
     }
 
     @Override
@@ -833,6 +874,7 @@ public class AddPetFragment extends AbstractFragment
         mPetAgeText.setEnabled(isEnable);
         mAddEditMedicationAllergies.setEnabled(isEnable);
         mAddEditMedicationConditions.setEnabled(isEnable);
+        mAddEditCurrentMedications.setEnabled(isEnable);
     }
 
     private void setPetData(Pets pet) {
@@ -848,6 +890,7 @@ public class AddPetFragment extends AbstractFragment
             mPetAgeText.setText(pet.getPetAge().getName());
             updateAllergiesDetails(pet, IS_MEDICATIONS_ALLERGY_DAILOG);
             updateAllergiesDetails(pet, IS_MEDICATIONS_CONDITIONS_DAILOG);
+            updateAllergiesDetails(pet, IS_CURRENT_MEDICATIONS_DAILOG);
             Glide.with(getActivity()).load(getActivity().getString(R.string.server_endpoint) + pet.getPictureURL())
                     .asBitmap().centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
                 @Override
@@ -879,6 +922,10 @@ public class AddPetFragment extends AbstractFragment
                 updateTextValues(mAddEditMedicationAllergies, mMedicationAllergiesDetails, size, value);
                 nameValueDetailsForMedicalallergy = nameValueList;
                 break;
+            case IS_CURRENT_MEDICATIONS_DAILOG:
+                updateTextValues(mAddEditCurrentMedications, mCurrentMedicationsDetails, size, value);
+                nameValueDetailsForCurrentMedications = nameValueList;
+                break;
             case IS_MEDICATIONS_CONDITIONS_DAILOG:
                 updateTextValues(mAddEditMedicationConditions, mMedicationConditionsDetails, size, value);
                 updateConditionIds(nameValueList);
@@ -897,17 +944,26 @@ public class AddPetFragment extends AbstractFragment
     public void updateAllergiesDetails(Pets pet, int fromPicker) {
         String value = "";
         ArrayList<NameValueData> list;
+
         if (isEditable && pet != null && fromPicker == IS_MEDICATIONS_ALLERGY_DAILOG) {
             list = pet.getMedAllergies();
         } else if (isEditable && pet != null && fromPicker == IS_MEDICATIONS_CONDITIONS_DAILOG) {
             list = pet.getMedConditions();
+        } else if (isEditable && pet != null && fromPicker == IS_CURRENT_MEDICATIONS_DAILOG) {
+            list = pet.getMedications();
         } else {
             list = mAlertRecyclerViewAdapter.getCheckedItems();
-            if (fromPicker == IS_MEDICATIONS_ALLERGY_DAILOG) {
-                perMedicationAlleryList = mAlertRecyclerViewAdapter.getItems();
-            }
-            if (fromPicker == IS_MEDICATIONS_CONDITIONS_DAILOG) {
-                perMedicationConditionList = mAlertRecyclerViewAdapter.getItems();
+            switch (fromPicker) {
+                case IS_MEDICATIONS_ALLERGY_DAILOG:
+                    petMedicationAlleryList = mAlertRecyclerViewAdapter.getItems();
+                    break;
+                case IS_MEDICATIONS_CONDITIONS_DAILOG:
+                    petMedicationConditionList = mAlertRecyclerViewAdapter.getItems();
+                    break;
+                case IS_CURRENT_MEDICATIONS_DAILOG:
+                    petCurrentMedicationList = mAlertRecyclerViewAdapter.getItems();
+                    break;
+
             }
         }
         int size = list.size();
@@ -929,6 +985,9 @@ public class AddPetFragment extends AbstractFragment
                     case IS_MEDICATIONS_CONDITIONS_DAILOG:
                         updateAllergiesDetails(null, IS_MEDICATIONS_CONDITIONS_DAILOG);
                         break;
+                    case IS_CURRENT_MEDICATIONS_DAILOG:
+                        updateAllergiesDetails(null, IS_CURRENT_MEDICATIONS_DAILOG);
+                        break;
                 }
 
                 break;
@@ -946,6 +1005,7 @@ public class AddPetFragment extends AbstractFragment
         recyclerView = null;
 
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

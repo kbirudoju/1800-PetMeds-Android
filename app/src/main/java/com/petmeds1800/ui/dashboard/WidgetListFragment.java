@@ -1,5 +1,16 @@
 package com.petmeds1800.ui.dashboard;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.AddToCartRequest;
+import com.petmeds1800.model.entities.PetItemList;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.dashboard.presenter.WidgetContract;
+import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
+import com.petmeds1800.ui.dashboard.support.WidgetListAdapter;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -10,16 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.AddToCartRequest;
-import com.petmeds1800.model.entities.PetItemList;
-import com.petmeds1800.ui.dashboard.presenter.WidgetContract;
-import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
-import com.petmeds1800.ui.dashboard.support.WidgetListAdapter;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import java.util.List;
 
@@ -54,6 +55,11 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                 String productId=petItem.getSku().getParentProduct().getProductId();
                 String skuId=petItem.getSku().getSkuId();
                 int quantity=petItem.getRefillQuantity();
+                try {
+                    ((AbstractActivity)getActivity()).startLoadingGif(getActivity());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 AddToCartRequest addToCartRequest=new AddToCartRequest(skuId,productId,quantity,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                 mPresenter.addToCart(addToCartRequest);
                 Log.d("cart detail",petItem.getRefillQuantity()+">>>"+petItem.getSku().getParentProduct().getProductId()+">>>"+petItem.getSku().getSkuId());
@@ -100,8 +106,22 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     }
 
     @Override
-    public void addToCartSuccess() {
+    public void onAddCartError(String errorMessage) {
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Snackbar.make(mWidgetRecyclerView,errorMessage,Snackbar.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void addToCartSuccess() {
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

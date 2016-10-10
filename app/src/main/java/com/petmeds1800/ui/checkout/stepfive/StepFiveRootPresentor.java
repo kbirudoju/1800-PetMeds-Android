@@ -1,9 +1,12 @@
 package com.petmeds1800.ui.checkout.stepfive;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
+
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -81,6 +84,7 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                        Log.v("error is ::::: ","error is ::::::::::::::::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>> "+e.getLocalizedMessage());
 
                     }
 

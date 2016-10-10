@@ -238,12 +238,14 @@ public class AddEditCardFragment extends AbstractFragment
 
                 populateData(mCard);
                 ((AbstractActivity) getActivity()).setToolBarTitle(mCard.getCardType() + " " + mCard.getCardNumber());
+            }else{
+                ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addACardTitle));
             }
 
             if (mAddress != null) {
                 displayAddress(mAddress);
             }
-            ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addACardTitle));
+
 
         } else {
             ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addACardTitle));

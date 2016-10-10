@@ -1,10 +1,12 @@
 package com.petmeds1800.model.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by Sdixit on 29-09-2016.
  */
 
-public class Item {
+public class Item implements Serializable{
 
     private String itemImageURL;
     private Double sellingPrice;

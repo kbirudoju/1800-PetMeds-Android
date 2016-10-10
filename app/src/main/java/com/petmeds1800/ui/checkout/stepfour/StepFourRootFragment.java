@@ -12,6 +12,7 @@ import com.petmeds1800.ui.checkout.stepfour.presenter.StepFourRootPresenter;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -42,12 +44,16 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
+
     private StepFourRootContract.Presenter mPresenter;
 
     private CheckOutActivity activity;
 
     private String mStepName;
-    public boolean isEmpty=false;
+
+    public boolean isEmpty = false;
 
     public static StepFourRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse, String stepName) {
         Bundle args = new Bundle();
@@ -59,20 +65,21 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     }
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_checkout_step_two, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         mReviewSubmitButton.setOnClickListener(this);
         PetMedsApplication.getAppComponent().inject(this);
-        mPresenter=new StepFourRootPresenter(this);
-        replaceStepRootChildFragmentWithTag(PetVetInfoFragment.newInstance(shoppingCartObj), R.id.pet_vet_container, PetVetInfoFragment.class.getSimpleName());
+        mPresenter = new StepFourRootPresenter(this);
+        replaceStepRootChildFragmentWithTag(PetVetInfoFragment.newInstance(shoppingCartObj), R.id.pet_vet_container,
+                PetVetInfoFragment.class.getSimpleName());
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communication_container);
         return view;
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -83,6 +90,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
             activity.setActiveStep(mStepName);
         }
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,21 +112,22 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
         ArrayList<String> commerceItemIds = new ArrayList<>();
         ArrayList<String> petIds = new ArrayList<>();
         ArrayList<String> vetIds = new ArrayList<>();
-        for(CommerceItems commerceItem : fragment.mCommerceItem){
-            if(commerceItem.getVetClinic()!=null && commerceItem.getPetName()!=null){
+        for (CommerceItems commerceItem : fragment.mCommerceItem) {
+            if (commerceItem.getVetClinic() != null && commerceItem.getPetName() != null) {
                 commerceItemIds.add(commerceItem.getCommerceItemId());
                 petIds.add(commerceItem.getPetId());
                 vetIds.add(commerceItem.getVetId());
-            }else{
-                isEmpty=true;
+            } else {
+                isEmpty = true;
                 fragment.mAdapter.notifyDataSetChanged();
                 break;
             }
         }
-        if(!isEmpty) {
+        if (!isEmpty) {
             activity.showProgress();
             //create request for add pet and vet info to cart
-            SavePetVetRequest savePetVetRequest = new SavePetVetRequest(true, fragment.mMailOption, commerceItemIds, petIds,
+            SavePetVetRequest savePetVetRequest = new SavePetVetRequest(true, fragment.mMailOption, commerceItemIds,
+                    petIds,
                     vetIds, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.applyPetVetInfo(savePetVetRequest);
         }
@@ -133,7 +142,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     public void onSuccess(ShoppingCartListResponse response) {
         Snackbar.make(mReviewSubmitButton, "Success", Snackbar.LENGTH_LONG).show();
         activity.hideProgress();
-        activity.moveToNext(mStepName,response);
+        activity.moveToNext(mStepName, response);
 
 
     }
@@ -141,6 +150,11 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     @Override
     public void onError(String errorMessage) {
         activity.hideProgress();
+    }
+
+    @Override
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
     }
 
     @Override

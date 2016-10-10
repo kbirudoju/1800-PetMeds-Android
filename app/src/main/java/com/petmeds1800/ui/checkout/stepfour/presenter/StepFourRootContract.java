@@ -17,6 +17,8 @@ public interface StepFourRootContract {
         void onSuccess(ShoppingCartListResponse response);
 
         void onError(String errorMessage);
+
+        void showErrorCrouton(CharSequence message, boolean span);
     }
 
     interface Presenter extends BasePresenter {

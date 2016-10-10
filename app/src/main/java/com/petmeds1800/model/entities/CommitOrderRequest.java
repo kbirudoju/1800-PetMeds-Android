@@ -15,13 +15,13 @@ public class CommitOrderRequest {
 
     private ArrayList<String> commerceItemIds;
 
-    private ArrayList<Integer> reminderMonths;
+    private ArrayList<String> reminderMonths;
 
-    public ArrayList<Integer> getReminderMonths() {
+    public ArrayList<String> getReminderMonths() {
         return reminderMonths;
     }
 
-    public void setReminderMonths(ArrayList<Integer> reminderMonths) {
+    public void setReminderMonths(ArrayList<String> reminderMonths) {
         this.reminderMonths = reminderMonths;
     }
 

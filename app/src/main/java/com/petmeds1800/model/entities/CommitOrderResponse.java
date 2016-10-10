@@ -7,15 +7,15 @@ import java.io.Serializable;
  */
 public class CommitOrderResponse implements Serializable {
 
-    private Order order;
+    private CommitOrder order;
 
     private Status status;
 
-    public Order getOrder() {
+    public CommitOrder getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(CommitOrder order) {
         this.order = order;
     }
 

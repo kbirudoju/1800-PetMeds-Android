@@ -11,7 +11,7 @@ public class Pets implements Serializable{
     private String birthday;
     private String ownerName;
     private String weight;
-    private ArrayList<PetMedication> medications;
+    private ArrayList<NameValueData> medications;
     private String breedType;
     private String petName;
     private String allergyInfo;
@@ -59,11 +59,11 @@ public class Pets implements Serializable{
         this.weight = weight;
     }
 
-    public ArrayList<PetMedication> getMedications() {
+    public ArrayList<NameValueData> getMedications() {
         return medications;
     }
 
-    public void setMedications(ArrayList<PetMedication> medications) {
+    public void setMedications(ArrayList<NameValueData> medications) {
         this.medications = medications;
     }
 

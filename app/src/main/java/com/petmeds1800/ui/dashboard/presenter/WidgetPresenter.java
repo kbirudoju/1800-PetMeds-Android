@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.dashboard.presenter;
 
-import android.support.annotation.NonNull;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.AddToCartRequest;
@@ -18,6 +16,8 @@ import com.petmeds1800.model.entities.WidgetFooter;
 import com.petmeds1800.model.entities.WidgetListResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.Constants;
+
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +97,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        mView.onError(e.getLocalizedMessage());
+                        mView.onAddCartError(e.getLocalizedMessage());
 
                     }
 
@@ -109,7 +109,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.onError(s.getStatus().getErrorMessages().get(0));
+                                mView.onAddCartError(s.getStatus().getErrorMessages().get(0));
                             }
                         }
 

@@ -15,6 +15,7 @@ public interface WidgetContract {
         boolean isActive();
         void onSuccess(List<Object> widgetListData);
         void onError(String errorMessage);
+        void onAddCartError(String errorMessage);
         void addToCartSuccess();
     }
 

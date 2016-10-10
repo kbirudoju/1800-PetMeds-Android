@@ -365,13 +365,9 @@ public class StepFiveRootFragment extends AbstractFragment
     public void navigateOnOrderConfirmation(CommitOrderResponse response) {
         activity.hideProgress();
         ConfirmationOrderIntent confirmationOrderIntent = new ConfirmationOrderIntent(getActivity());
-        confirmationOrderIntent.putExtra(Constants.CONFIRMATION_ORDER_RESPONSE, response);
-        if (!getActivity().isFinishing()) {
-            getActivity().finish();
-        }
+        confirmationOrderIntent.putExtra(Constants.CONFIRMATION_ORDER_RESPONSE,response);
+        getActivity().finish();
         startActivity(confirmationOrderIntent);
-
-
     }
 
     @Override
@@ -392,8 +388,8 @@ public class StepFiveRootFragment extends AbstractFragment
         activity.showProgress();
         CommitOrderRequest commitOrderRequest = new CommitOrderRequest();
         commitOrderRequest.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        commitOrderRequest.setCommerceItemIds(null);
-        commitOrderRequest.setReminderMonths(null);
+        commitOrderRequest.setCommerceItemIds(new ArrayList<String>());
+        commitOrderRequest.setReminderMonths(new ArrayList<String>());
         mPresenter.submitComittedOrderDetails(commitOrderRequest);
 
     }
