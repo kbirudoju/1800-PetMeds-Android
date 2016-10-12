@@ -4,13 +4,24 @@ package com.petmeds1800.model.entities;
  * Created by pooja on 8/22/2016.
  */
 public class WebViewHeader {
-    public WebViewHeader(String webviewHeader,int id,String itemID,String productId) {
+    public WebViewHeader(String webviewHeader,int id,String itemID,String productId,int quantity) {
         this.webviewHeader = webviewHeader;
         this.id=id;
         this.itemId=itemID;
         this.productId=productId;
+        this.quantity=quantity;
+
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    private int quantity;
     private String webviewHeader;
     private int id;
 

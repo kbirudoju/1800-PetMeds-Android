@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.ReOrderRequest;
 import com.petmeds1800.model.ReOrderResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.orders.OrderDetailContract;
 
 import javax.inject.Inject;
@@ -63,6 +65,75 @@ public class OrderDetailPresenter implements OrderDetailContract.Presenter
                 });
     }
 
+
+    @Override
+    public void cancelOrder(ReOrderRequest reOrderRequest) {
+        mPetMedsApiService.cancelOrder(reOrderRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ReOrderResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(ReOrderResponse s) {
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            mView.onCancelSuccess();
+
+                        } else {
+                            if (mView.isActive()) {
+                                mView.onError(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+    }
+
+
+    @Override
+    public void addToCart(AddToCartRequest addToCartRequest) {
+        mPetMedsApiService.addToCart(addToCartRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ShoppingCartListResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(ShoppingCartListResponse s) {
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.addToCartSuccess();
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.onError(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+
+
+    }
     @Override
     public void start() {
 

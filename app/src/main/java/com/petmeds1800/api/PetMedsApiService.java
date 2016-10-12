@@ -302,4 +302,8 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/cart/CartActor/add")
     Observable<ShoppingCartListResponse> addToCart(@Body AddToCartRequest request);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/atg/userprofiling/ProfileActor/cancelOrder")
+    Observable<ReOrderResponse> cancelOrder(@Body ReOrderRequest request);
+
 }
