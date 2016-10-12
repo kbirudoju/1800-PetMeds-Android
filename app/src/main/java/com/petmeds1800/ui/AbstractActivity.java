@@ -80,12 +80,30 @@ public abstract class AbstractActivity extends AppCompatActivity {
         return mToolbar;
     }
 
+    /**
+     * Starts Paws animation located in assets. Blocks UI
+     * For updates to Cart Fragment in case of Update Quantity or apply coupon
+     * @param mContext
+     * @throws Exception
+     */
     public void startLoadingGif(Context mContext) throws Exception{
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        LoadingGIFDialogFragment frag = new LoadingGIFDialogFragment();
-        frag.show(fragmentTransaction, LoadingGIFDialogFragment.class.getSimpleName());
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                LoadingGIFDialogFragment frag = new LoadingGIFDialogFragment();
+                frag.show(fragmentTransaction, LoadingGIFDialogFragment.class.getSimpleName());
+            }
+        },100);
     }
 
+    /**
+     * Stops Paws animation located in assets. Removed Blocks to UI
+     * For updates to Cart Fragment in case of Update Quantity or apply coupon
+     * @param mContext
+     * @throws Exception
+     */
     public void stopLoadingGif(Context mContext) throws Exception{
 
         new Handler().postDelayed(new Runnable() {

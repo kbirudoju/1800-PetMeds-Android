@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
@@ -50,13 +51,16 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     private LinearLayout mEmptyCheckoutContainer;
     private TextInputLayout mCouponCodeLayout;
     private LinearLayout mOfferCodeContainerLayout;
+    private ProgressBar mProgressBar;
+    private static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
+    private static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
+
 
     public static int sPreviousScrollPosition = 0;
+    public static final String SHOPPING_CART = "shoppingCart";
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
-
-    public static final String SHOPPING_CART = "shoppingCart";
 
     @Nullable
     @Override
@@ -70,6 +74,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mTotalCheckOutContainer = (LinearLayout) view.findViewById(R.id.total_checkout_container);
         mItemListtContainer = (LinearLayout) view.findViewById(R.id.item_list_container);
         mEmptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
         return view;
     }
@@ -102,12 +107,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         } else if (null == shoppingCartListResponse || shoppingCartListResponse.getItemCount() == 0){
             toggleVisibilityShoppingList(true);
         }
+        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
+        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
 
-        try {
-            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return response;
     }
 
@@ -122,11 +124,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
         }
 
-        try {
-            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
+        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
         return false;
     }
 
@@ -242,17 +241,12 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     private void callmShoppingCartAPI(Object object){
 
-        try {
-            ((AbstractActivity)getActivity()).startLoadingGif(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         if (mPresenter == null){
             mPresenter = new ShoppingCartListPresenter(this);
         }
         if (object == null)
         {
+            toggleProgressDialogVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
             mPresenter.getGeneralPopulateShoppingCart();
         } else
         if (object instanceof AddItemRequestShoppingCart)
@@ -261,14 +255,17 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         } else
         if (object instanceof RemoveItemRequestShoppingCart)
         {
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
             mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart)(object));
         } else
         if (object instanceof ApplyCouponRequestShoppingCart)
         {
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
             mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart)(object));
         } else
         if (object instanceof UpdateItemQuantityRequestShoppingCart)
         {
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
             mPresenter.getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart)(object));
         }
     }
@@ -289,4 +286,40 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             }
         }
     };
+
+    private void toggleProgressDialogVisibility(boolean showVisisble){
+        if (showVisisble){
+            if (mProgressBar != null && mProgressBar.getVisibility()==View.GONE){
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mProgressBar != null && mProgressBar.getVisibility()==View.VISIBLE){
+                mProgressBar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void toggleGIFAnimantionVisibility(boolean showVisible) {
+        if (showVisible) {
+            try {
+                ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
+            } catch (Exception e) {
+                try {
+                    ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } else {
+            try {
+                ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
+            } catch (Exception e) {
+                try {
+                    ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
 }

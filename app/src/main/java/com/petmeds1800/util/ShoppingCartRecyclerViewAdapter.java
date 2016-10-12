@@ -161,6 +161,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                         msg.setData(b);
 
                         try {
+                            holder.mItemQuantityDescription.getEditText().addTextChangedListener(null);
                             CartFragment.sPreviousScrollPosition = position;
                             mHandler.sendMessage(msg);
                         } catch (ClassCastException e) {
@@ -176,27 +177,39 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                 }
             });
 
+            holder.mItemQuantityDescription.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus){
+                        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(holder.mItemQuantityDescription.getEditText().getWindowToken(), 0);
+                    }
+                }
+            });
+
             holder.mItemQuantityDescription.getEditText().addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                    if (mTextChangeRunnable != null && mTextChangeHandler != null){
+                        mTextChangeHandler.removeCallbacks(mTextChangeRunnable);
+                        mTextChangeRunnable = null;
+                        mTextChangeHandler = null;
+                    }
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
                 @Override
                 public void afterTextChanged(Editable s) {
 
-                    if (!holder.mItemQuantityDescription.getEditText().getText().toString().isEmpty() && !(mCommerceItemsesCollection.get(position).getQuantity()).equalsIgnoreCase(holder.mItemQuantityDescription.getEditText().getText().toString().trim())) {
+                    if (mTextChangeRunnable != null && mTextChangeHandler != null){
+                        mTextChangeHandler.removeCallbacks(mTextChangeRunnable);
+                        mTextChangeRunnable = null;
+                        mTextChangeHandler = null;
+                    }
 
-                        if (mTextChangeRunnable != null && mTextChangeHandler != null){
-                            mTextChangeHandler.removeCallbacks(mTextChangeRunnable);
-                            mTextChangeRunnable = null;
-                            mTextChangeHandler = null;
-                        }
+                    if (!holder.mItemQuantityDescription.getEditText().getText().toString().isEmpty() && !(mCommerceItemsesCollection.get(position).getQuantity()).equalsIgnoreCase(holder.mItemQuantityDescription.getEditText().getText().toString().trim())) {
 
                         mTextChangeRunnable = new Runnable() {
                             @Override
@@ -228,7 +241,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                         };
 
                         mTextChangeHandler = new Handler();
-                        mTextChangeHandler.postDelayed(mTextChangeRunnable,1000);
+                        mTextChangeHandler.postDelayed(mTextChangeRunnable,2000);
                     }
                 }
             });
