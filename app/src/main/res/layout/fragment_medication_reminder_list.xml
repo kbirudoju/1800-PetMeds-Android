@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/dp_16"
+                android:background="@color/white"
+                android:id="@+id/containerLayout">
+
+    <ProgressBar android:id="@+id/progressBar"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerInParent="true"/>
+    <include layout="@layout/view_empty_medication_reminders"
+             android:visibility="gone">
+    </include>
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/medicationsreminder_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+</RelativeLayout>

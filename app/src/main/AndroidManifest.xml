@@ -20,6 +20,7 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/application.name"
             android:theme="@style/application.theme">
+
         <activity
                 android:name=".ui.SplashActivity"
                 android:screenOrientation="portrait"
@@ -92,6 +93,8 @@
                 android:enabled="true"
                 android:exported="false"/>
         <service android:name=".service.RefillReminderService"/>
+        <receiver android:name=".util.alarm.MedicationAlarmReceiver" />
+        <service android:name=".util.alarm.MedicationSchedulingService" />
         <activity android:name=".ui.checkout.CheckOutActivity"
                   android:screenOrientation="portrait"
         />

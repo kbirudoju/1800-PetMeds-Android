@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -87,5 +89,9 @@ public class Utils {
         }
 
         return PICKER_DISPLAY_MONTHS_NAMES[month - 1];
+    }
+    public static Date getDate(String dateStr) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
+        return formatter.parse(dateStr);
     }
 }

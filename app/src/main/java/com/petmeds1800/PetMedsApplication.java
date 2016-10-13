@@ -1,14 +1,14 @@
 package com.petmeds1800;
 
-import android.app.Application;
-
 import com.petmeds1800.dagger.component.AppComponent;
 import com.petmeds1800.dagger.component.DaggerAppComponent;
 import com.petmeds1800.dagger.module.ApplicationModule;
 import com.petmeds1800.dagger.module.RestModule;
 import com.petmeds1800.dagger.module.StorageModule;
 
-public class PetMedsApplication extends Application {
+import android.support.multidex.MultiDexApplication;
+
+public class PetMedsApplication extends MultiDexApplication {
 
     private static AppComponent mAppComponent;
 

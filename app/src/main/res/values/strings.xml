@@ -256,6 +256,7 @@
     <string name="add_txt">Add</string>
     <string name="save_txt">SAVE</string>
     <string name="choose_range_txt">CHOOSE A RANGE</string>
+    <string name="current_medications">Current Medications</string>
     <string-array name="age_range">
         <item>0-1 years</item>
         <item>2-3 years</item>
@@ -440,7 +441,8 @@
     <string name="qty">QTY</string>
     <string name="action_remove">REMOVE</string>
     <string name="items_total">Items Total</string>
-    <string name="your_order_qualifies_for_free_standard_shipping">Your order qualifies for FREE STANDARD SHIPPING!</string>
+    <string name="your_order_qualifies_for_free_standard_shipping">Your order qualifies for FREE STANDARD SHIPPING!
+    </string>
     <string name="checkout">Checkout</string>
     <string name="your_cart_is_empty">Your Cart is Empty. \n Let\'s find the medications you need !</string>
     <string name="dollar_placeholder">$</string>
@@ -488,15 +490,19 @@
     <string name="choose_pet_title">Choose pet type</string>
     <string name="choose_breed_title">Choose breed type</string>
     <string name="choose_age_title">Choose an age range</string>
-    
+
     <!--Add Vet-->
-    <string name="add_vet_title">Start by typing your Clinic or Vet’s name below, then select your clinic from the list that appears.</string>
+    <string name="add_vet_title">Start by typing your Clinic or Vet’s name below, then select your clinic from the list
+        that appears.
+    </string>
     <string name="add_vet_header">Add a vet</string>
     <string name="cannot_find_vet_txt">Can\'t find your vet?</string>
-    
+
     <!--Can't find vet-->
     <string name="required_rx_medication_txt">Required for RX Medications</string>
-    <string name="cannot_find_vet_desc">As a licensed pharmacy we are required by law to contact your veterinarian to obtain authorization for your pet\'s prescription medications.</string>
+    <string name="cannot_find_vet_desc">As a licensed pharmacy we are required by law to contact your veterinarian to
+        obtain authorization for your pet\'s prescription medications.
+    </string>
     <string name="enter_vet_clinic_txt">Enter your vet or clinic\’s name and phone number below.</string>
     <string name="clinic_name_txt">Clinic Name</string>
     <string name="input_field_txt">Vet\'s Name</string>
@@ -525,7 +531,7 @@
         <item>November</item>
         <item>December</item>
     </string-array>
-    
+
     <!--Shipping Address-->
     <string name="shipping_address_title">ENTER A SHIPPING ADDRESS</string>
     <string name="myBillingAddress">Use This As My Billing Address</string>
@@ -536,7 +542,6 @@
     <string name="customer_care_email_id">customerservice@1800petmeds.com</string>
     <string name="choose_email_client">Choose Email Client</string>
     <string name="no_email_client_found">No Email Client Found</string>
-    <string name="current_medications">Current Medications</string>
     <string name="cancel_order_error_msg">Order can\'t be cancelled</string>
     <string name="cancel_order_msg">Are you sure you want to cancel order #</string>
     <string name="cancel_order_title">Are you sure?</string>
@@ -550,6 +555,21 @@
     <string name="add_vet_caps">ADD A VET</string>
     <string name="add_vet_description">Add a vet for easier  prescription ordering </string>
     <string name="no_vet_txt">You have no vets</string>
+    <string name="medicationAlert">Medication Time</string>
+    <!--Medication Reminders-->
+    <string name="medicationreminders_title">Medication Reminders</string>
+    <string name="hint_item">Item</string>
+    <string name="hint_time">Time</string>
+    <string name="hint_repeat">Repeat</string>
+    <string name="remove_reminder_title">Remove reminder</string>
+    <string name="edit_reminder">Edit reminder</string>
+    <string name="add_reminder">Add Reminder</string>
+    <string name="no_medication_reminders_txt">You have no medication reminders</string>
+    <string name="pet_medication_reminder_description">Add a reminder to receive a notification on when to administer
+        your pet\'s medication.
+    </string>
+    <string name="add_reminder_txt">Add a Reminder</string>
+
 
 </resources>
 

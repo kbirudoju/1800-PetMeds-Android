@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:padding="@dimen/dp_16">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/itemInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                android:layout_marginTop="@dimen/dp_10">
+
+            <EditText
+                    android:id="@+id/item_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_item"
+                    android:maxLength="@integer/characterLimit_30"
+                    android:focusableInTouchMode="false"
+                    android:singleLine="true"
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/petNameInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                android:layout_marginTop="@dimen/dp_10">
+
+            <EditText
+                    android:id="@+id/pet_name_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_pet_name"
+                    android:focusableInTouchMode="false"
+                    android:maxLength="@integer/characterLimit_30"
+                    android:singleLine="true"
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/timeInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                android:layout_marginTop="@dimen/dp_10">
+
+            <EditText
+                    android:id="@+id/time_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_time"
+                    android:focusableInTouchMode="false"
+                    android:maxLength="@integer/characterLimit_30"
+                    android:singleLine="true"
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/repeatInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/StyledEditTextHintLayout"
+                app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+                android:layout_marginTop="@dimen/dp_10">
+
+            <EditText
+                    android:id="@+id/repeat_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_repeat"
+                    android:focusableInTouchMode="false"
+                    android:maxLength="@integer/characterLimit_30"
+                    android:singleLine="true"
+                    style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
+        </android.support.design.widget.TextInputLayout>
+        <Button android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xxlarge_margin"
+                android:id="@+id/remove_pet_button"
+                android:gravity="center"
+                android:text="@string/remove_reminder_title"
+                android:fontFamily="@string/font_roboto_medium"
+                android:textColor="@color/white"
+                android:background="@drawable/button_selector"
+               />
+    </LinearLayout>
+</ScrollView>

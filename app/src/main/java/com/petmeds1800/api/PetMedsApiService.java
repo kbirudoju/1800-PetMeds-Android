@@ -27,6 +27,7 @@ import com.petmeds1800.model.entities.ForgotPasswordResponse;
 import com.petmeds1800.model.entities.InitCheckoutResponse;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.MedicationReminderListResponse;
 import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.MySavedCard;
@@ -305,5 +306,9 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/cancelOrder")
     Observable<ReOrderResponse> cancelOrder(@Body ReOrderRequest request);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/reminder/ReminderActor/listMedReminders")
+    Observable<MedicationReminderListResponse> getMedicationReminderList();
 
 }

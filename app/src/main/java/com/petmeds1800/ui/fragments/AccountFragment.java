@@ -1,5 +1,23 @@
 package com.petmeds1800.ui.fragments;
 
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.account.AccountSettingsFragment;
+import com.petmeds1800.ui.account.SignOutContract;
+import com.petmeds1800.ui.account.SignOutPresenter;
+import com.petmeds1800.ui.address.SavedAddressListFragment;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
+import com.petmeds1800.ui.orders.MyOrderFragment;
+import com.petmeds1800.ui.payment.SavedCardsListFragment;
+import com.petmeds1800.ui.pets.PetListFragment;
+import com.petmeds1800.ui.refillreminder.ReminderListFragment;
+import com.petmeds1800.ui.vet.VetListFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,23 +30,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.account.AccountSettingsFragment;
-import com.petmeds1800.ui.account.SignOutContract;
-import com.petmeds1800.ui.account.SignOutPresenter;
-import com.petmeds1800.ui.address.SavedAddressListFragment;
-import com.petmeds1800.ui.orders.MyOrderFragment;
-import com.petmeds1800.ui.payment.SavedCardsListFragment;
-import com.petmeds1800.ui.pets.PetListFragment;
-import com.petmeds1800.ui.refillreminder.ReminderListFragment;
-import com.petmeds1800.ui.vet.VetListFragment;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -84,6 +85,11 @@ public class AccountFragment extends AbstractFragment
     @BindView(R.id.signOut)
     TextView signOut;
 
+    @BindView(R.id.medication_reminder_label)
+    TextView mMedicationReminderLabel;
+
+
+
     private int fromWhichAlert = 0;
 
 
@@ -105,6 +111,7 @@ public class AccountFragment extends AbstractFragment
         mVetLabel.setOnClickListener(this);
         mPetsLabel.setOnClickListener(this);
         signOut.setOnClickListener(this);
+        mMedicationReminderLabel.setOnClickListener(this);
         fillWindow();
     }
 
@@ -193,8 +200,15 @@ public class AccountFragment extends AbstractFragment
             case R.id.refill_reminder_label:
                 replaceAccountAndAddToBackStack(new ReminderListFragment(), ReminderListFragment.class.getName());
                 break;
+
             case R.id.my_vets_label:
                 replaceAccountAndAddToBackStack(new VetListFragment(), VetListFragment.class.getName());
+                break;
+            case R.id.medication_reminder_label:
+                replaceAccountAndAddToBackStack(MedicationReminderListFragment.newInstance(),
+                        MedicationReminderListFragment.class.getName());
+                break;
+
             default:
                 break;
 
