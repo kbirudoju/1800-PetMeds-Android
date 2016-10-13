@@ -41,7 +41,14 @@ import butterknife.ButterKnife;
  * Created by pooja on 9/27/2016.
  */
 public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoContract.View,CommonDialogFragment.ValueSelectedListener{
-     private ShoppingCart shoppingCart;
+
+    public static final String ZIPCODE_KEY = "zipcode";
+
+    public static final String PET_KEY = "pet";
+
+    public static final String VET_KEY = "vet";
+
+    private ShoppingCart shoppingCart;
 
     @BindView(R.id.pet_vet_view)
     RecyclerView mPetVetRecyclerView;
@@ -233,7 +240,8 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
             case VET_REQUEST:
                 if(value.equalsIgnoreCase(getActivity().getString(R.string.add_new_vet_txt))){
                     AddNewEntityIntent addNewEntityIntent = new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_VET_REQUEST);
-                    addNewEntityIntent.putExtra("zipcode",shoppingCart.getShippingGroups().get(0).getShippingAddress().getPostalCode());
+                    addNewEntityIntent.putExtra(
+                            ZIPCODE_KEY,shoppingCart.getShippingGroups().get(0).getShippingAddress().getPostalCode());
                     startActivityForResult(addNewEntityIntent, Constants.ADD_NEW_VET_REQUEST);
 
                 }else{
@@ -254,7 +262,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         {
             if(data!=null) {
                 Log.d("onActivityResult", ">>>>");
-                Pets pet = (Pets) data.getSerializableExtra("pet");
+                Pets pet = (Pets) data.getSerializableExtra(PET_KEY);
                 //remove add new pet item and add again to the last position
                 mPetList.remove("-1");
                 mPetList.put(pet.getPetId(), pet.getPetName());
@@ -270,7 +278,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
         {
             if(data!=null) {
                 Log.d("onActivityResult", ">>>>");
-                Vet vet = (Vet) data.getSerializableExtra("vet");
+                Vet vet = (Vet) data.getSerializableExtra(VET_KEY);
                 mVetList.remove("-1");
                 mVetList.put(vet.getId(), vet.getName());
                 mVetList.put("-1", getActivity().getString(R.string.add_new_vet_txt));

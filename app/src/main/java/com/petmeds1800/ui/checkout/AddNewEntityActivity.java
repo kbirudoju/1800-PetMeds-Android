@@ -15,6 +15,7 @@ import com.petmeds1800.model.entities.Pets;
 import com.petmeds1800.model.entities.Vet;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
+import com.petmeds1800.ui.checkout.stepfour.PetVetInfoFragment;
 import com.petmeds1800.ui.checkout.stepfour.presenter.PetVetInfoContract.PetSelectionListener;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
@@ -52,11 +53,12 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
                 replaceFragment(
                         AddEditCardFragment.newInstance(StepThreeRootFragment.REQUEST_CODE),
                         AddEditCardFragment.class.getName());
+                break;
             case Constants.ADD_NEW_VET_REQUEST:
-               Log.d("zipcode is", getIntent().getStringExtra("zipcode"));
-                String zipcode=getIntent().getStringExtra("zipcode");
+               Log.d("zipcode is", getIntent().getStringExtra(PetVetInfoFragment.ZIPCODE_KEY));
+                String zipcode=getIntent().getStringExtra(PetVetInfoFragment.ZIPCODE_KEY);
                 Bundle codeBundle = new Bundle();
-                codeBundle.putString("zipcode", zipcode);
+                codeBundle.putString(PetVetInfoFragment.ZIPCODE_KEY, zipcode);
                 getSupportFragmentManager().addOnBackStackChangedListener(getListener());
                 replaceFragmentWithArgument(new AddVetFragment(), AddVetFragment.class.getSimpleName(),codeBundle);
                 break;
@@ -112,7 +114,7 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
     public void setPet(Pets pet) {
 
         Intent intent=new Intent();
-        intent.putExtra("pet",pet);
+        intent.putExtra(PetVetInfoFragment.PET_KEY,pet);
         setResult(Constants.ADD_NEW_PET_REQUEST,intent);
         finish();//finishing activity
     }
@@ -120,7 +122,7 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
     @Override
     public void setVet(Vet vet) {
         Intent intent=new Intent();
-        intent.putExtra("vet",vet);
+        intent.putExtra(PetVetInfoFragment.VET_KEY,vet);
         setResult(Constants.ADD_NEW_VET_REQUEST,intent);
         finish();//finishing activity
     }
