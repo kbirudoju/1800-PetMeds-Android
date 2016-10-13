@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <ScrollView android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/container_fragment_receipt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-        <LinearLayout android:orientation="vertical"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
+        <fragment
+            android:id="@+id/fragment_communication"
+            android:name="com.petmeds1800.ui.checkout.CommunicationFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dp_16"
+            tools:layout="@layout/fragment_communication" />
 
-            <fragment android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:id="@+id/fragment_receipt"
-                      android:name="com.petmeds1800.ui.fragments.ConfirmationReceiptFragment"
-                      tools:layout="@layout/fragment_confirmation_receipt"/>
-
-            <fragment android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:layout_margin="@dimen/dp_16"
-                      android:id="@+id/fragment_communication"
-                      android:name="com.petmeds1800.ui.checkout.CommunicationFragment"
-                      tools:layout="@layout/fragment_communication"/>
-
-            <Button android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_start_new_order"
-                    style="@style/StyleButton"
-                    android:layout_marginLeft="@dimen/dp_16"
-                    android:layout_marginRight="@dimen/dp_16"
-                    android:layout_marginBottom="@dimen/dp_16"
-                    android:text="@string/label_start_new_order"/>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_start_new_order"
+            style="@style/StyleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:text="@string/label_start_new_order" />
+    </LinearLayout>
+</ScrollView>

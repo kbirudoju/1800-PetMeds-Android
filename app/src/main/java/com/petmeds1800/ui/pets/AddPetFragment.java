@@ -778,7 +778,7 @@ public class AddPetFragment extends AbstractFragment
             list.add(data.getValue());
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), TYPE_REQUEST, getActivity().getString(R.string.chhose_pet_title));
+        openDailog(list.toArray(dataArray), TYPE_REQUEST, getActivity().getString(R.string.choose_pet_title));
     }
 
     @Override
@@ -788,7 +788,7 @@ public class AddPetFragment extends AbstractFragment
             list.add(data.getValue());
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), BREED_REQUEST, getActivity().getString(R.string.chhose_breed_title));
+        openDailog(list.toArray(dataArray), BREED_REQUEST, getActivity().getString(R.string.choose_breed_title));
     }
 
     @Override

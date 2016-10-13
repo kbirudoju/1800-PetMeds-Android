@@ -19,7 +19,7 @@ public class CommitOrder implements Serializable {
     private String shippingMethod;
     private String firstName;
     private String orderId;
-    private int discount;
+    private double discount;
 
     public double getOrderSubTotal() {
         return orderSubTotal;
@@ -90,7 +90,7 @@ public class CommitOrder implements Serializable {
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
     public void setDiscount(int discount) {

@@ -2,7 +2,6 @@ package com.petmeds1800.ui.checkout.stepfive;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
-import com.petmeds1800.intent.ConfirmationOrderIntent;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
@@ -364,10 +363,7 @@ public class StepFiveRootFragment extends AbstractFragment
     @Override
     public void navigateOnOrderConfirmation(CommitOrderResponse response) {
         activity.hideProgress();
-        ConfirmationOrderIntent confirmationOrderIntent = new ConfirmationOrderIntent(getActivity());
-        confirmationOrderIntent.putExtra(Constants.CONFIRMATION_ORDER_RESPONSE,response);
-        getActivity().finish();
-        startActivity(confirmationOrderIntent);
+        //TODO: add integration of ConfirmationReceiptRootFragment here
     }
 
     @Override

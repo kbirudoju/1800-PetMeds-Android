@@ -49,7 +49,6 @@ public class StepTwoRootFragment extends AbstractFragment
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
 
-
     private ShippingMethodsListAdapter mListAdapter;
 
     protected List<ShippingMethod> mShippingMethodList = new ArrayList<>();

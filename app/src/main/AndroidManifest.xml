@@ -69,9 +69,6 @@
                 android:name=".ui.checkout.AddNewEntityActivity"
                 android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.ConfirmationReceiptActivity"
-                  android:screenOrientation="portrait"/>
-
         <meta-data
                 android:name="android.app.default_searchable"
                 android:value="com.apkgetter.SearchResultsActivity"/>
