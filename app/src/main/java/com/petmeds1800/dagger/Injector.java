@@ -37,6 +37,7 @@ import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.SignUpFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderListPresentor;
 import com.petmeds1800.ui.orders.OrderDetailFragment;
 import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
 import com.petmeds1800.ui.payment.AddACardPresenter;
@@ -151,5 +152,5 @@ public interface Injector {
     void inject (WidgetListFragment widgetListFragment);
 
     void inject(GuestStepOneRootPresentor guestStepOneRootPresentor);
-
+    void inject(MedicationReminderListPresentor medicationReminderListPresentor);
 }

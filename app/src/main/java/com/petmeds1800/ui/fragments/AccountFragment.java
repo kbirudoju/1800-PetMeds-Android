@@ -9,6 +9,7 @@ import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.account.SignOutContract;
 import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
 import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
@@ -80,6 +81,9 @@ public class AccountFragment extends AbstractFragment
     @BindView(R.id.signOut)
     TextView signOut;
 
+    @BindView(R.id.medication_reminder_label)
+    TextView mMedicationReminderLabel;
+
     private int fromWhichAlert = 0;
 
 
@@ -100,6 +104,7 @@ public class AccountFragment extends AbstractFragment
         mManageAddressLabel.setOnClickListener(this);
         mPetsLabel.setOnClickListener(this);
         signOut.setOnClickListener(this);
+        mMedicationReminderLabel.setOnClickListener(this);
         fillWindow();
     }
 
@@ -187,6 +192,9 @@ public class AccountFragment extends AbstractFragment
                 break;
             case R.id.refill_reminder_label:
                 replaceAccountAndAddToBackStack(new ReminderListFragment(), ReminderListFragment.class.getName());
+                break;
+            case R.id.medication_reminder_label:
+                replaceAccountAndAddToBackStack(MedicationReminderListFragment.newInstance(), MedicationReminderListFragment.class.getName());
                 break;
             default:
                 break;

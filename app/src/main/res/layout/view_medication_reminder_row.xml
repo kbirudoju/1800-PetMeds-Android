@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_marginTop="@dimen/dp_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/refillReminderContainer"
+                android:background="@color/white"
+>
+
+    <TextView
+            android:layout_marginTop="@dimen/dp_16"
+            android:id="@+id/reminderName"
+            android:text="Triffix Lorem Ipsum Dolor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/cart_item_title"
+            android:paddingLeft="@dimen/dp_16"
+    />
+    <TextView
+            android:layout_marginTop="@dimen/dp_1"
+            android:text="Marty"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:id="@+id/petName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/rounded_button_text"
+            android:layout_below="@+id/reminderName"
+    />
+    <TextView
+            android:text="Sunday,Dec 12 ,10:00 AM"
+            android:layout_marginTop="@dimen/dp_1"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:id="@+id/reminderDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/rounded_button_text"
+            android:layout_below="@+id/petName"/>
+    <ImageButton
+            android:layout_marginRight="@dimen/dp_5"
+            android:id="@+id/reminderMonthEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_small_edit"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

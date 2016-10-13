@@ -46,7 +46,9 @@ public class Constants {
     public static final int ADD_NEW_VET_REQUEST = 4;
 
     public static final int DIALOG_REMINDER_REQUEST = 5;
-
     public static final String DIALOG_DATA_TOKEN = "Dialog_data_token";
+    public static final String IS_EDITABLE = "isEditable";
+    public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
+
 
 }

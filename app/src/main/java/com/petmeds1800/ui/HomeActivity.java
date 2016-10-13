@@ -1,23 +1,5 @@
 package com.petmeds1800.ui;
 
-import com.petmeds1800.ui.payment.AddACardContract;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -38,6 +20,7 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -47,8 +30,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -134,8 +120,9 @@ public class HomeActivity extends AbstractActivity
         mHomeTab.setupWithViewPager(mViewPager);
 
         for (int i = 0; i < mHomeTab.getTabCount(); i++) {
-            View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_tab_image_overlay,null,false);
-            mTabLayoutArray.add(i,v);
+            View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                    .inflate(R.layout.custom_tab_image_overlay, null, false);
+            mTabLayoutArray.add(i, v);
             mHomeTab.getTabAt(i).setCustomView(mTabLayoutArray.get(i));
         }
 
@@ -176,13 +163,14 @@ public class HomeActivity extends AbstractActivity
 
             @Override
             public void onPageSelected(int position) {
+
                 Log.d("onPageSelected", ">>>>>>");
                 mTabIndex = position;
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
-                    ((ImageView)(mHomeTab.getTabAt(i).getCustomView()).findViewById(R.id.tab_default_image)).setImageResource(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
+                    ((ImageView) (mHomeTab.getTabAt(i).getCustomView()).findViewById(R.id.tab_default_image))
+                            .setImageResource(i != position ? TAB_ICON_UNSELECTED[i] : TAB_ICON_SELECTED[i]);
 
                 }
-
 
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
@@ -339,7 +327,7 @@ public class HomeActivity extends AbstractActivity
     }
 
     public void hideProgress() {
-      mProgressDialog.dismiss();
+        mProgressDialog.dismiss();
     }
 
     public ViewGroup getContainerView() {
