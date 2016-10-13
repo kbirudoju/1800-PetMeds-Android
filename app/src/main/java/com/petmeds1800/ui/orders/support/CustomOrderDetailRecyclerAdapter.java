@@ -44,8 +44,8 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
         int commerceItemSize= orderList.getCommerceItems().size();
         mData.add(orderList);
         //Add webview Items
-        mData.add(new WebViewHeader(context.getString(R.string.cancel_order_header),CANCEL_ORDER_ROW_ID,orderList.getOrderId(),orderList.getDisplayOrderId()));
-        mData.add(new WebViewHeader(context.getString(R.string.reorder_entire),REORDER_ENTIRE_ORDER_ROW_ID,orderList.getOrderId(),orderList.getDisplayOrderId()));
+        mData.add(new WebViewHeader(context.getString(R.string.cancel_order_header),CANCEL_ORDER_ROW_ID,orderList.getOrderId(),orderList.getDisplayOrderId(),0));
+        mData.add(new WebViewHeader(context.getString(R.string.reorder_entire),REORDER_ENTIRE_ORDER_ROW_ID,orderList.getOrderId(),orderList.getDisplayOrderId(),0));
 
 
         //Add item header
@@ -54,8 +54,8 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
         for(int commerceItemCount=0; commerceItemCount< commerceItemSize;commerceItemCount++){
             CommerceItems commerceItem=orderList.getCommerceItems().get(commerceItemCount);
             mData.add(commerceItem);
-            mData.add(new WebViewHeader(context.getString(R.string.reorder_item),REORDER_ITEM_ROW_ID,commerceItem.getSkuId(),commerceItem.getProductId()));
-            mData.add(new WebViewHeader(context.getString(R.string.write_review_header),REVIEW_ROW_ID,commerceItem.getSkuId(),commerceItem.getProductId()));
+            mData.add(new WebViewHeader(context.getString(R.string.reorder_item),REORDER_ITEM_ROW_ID,commerceItem.getSkuId(),commerceItem.getProductId(),Integer.parseInt(commerceItem.getQuantity())));
+            mData.add(new WebViewHeader(context.getString(R.string.write_review_header),REVIEW_ROW_ID,commerceItem.getSkuId(), commerceItem.getProductId(),Integer.parseInt(commerceItem.getQuantity())));
         }
 
 
@@ -69,7 +69,7 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
             ShippingGroup shippingGroup=orderList.getShippingGroups().get(shippingItemCount);
             mData.add(shippingGroup);
         }
-        mData.add(new WebViewHeader(context.getString(R.string.track_shipment),TRACK_ROW_ID,orderList.getShippingGroups().get(0).getTrackingNumber(),orderList.getShippingGroups().get(0).getCompanyName()));
+        mData.add(new WebViewHeader(context.getString(R.string.track_shipment),TRACK_ROW_ID,orderList.getShippingGroups().get(0).getTrackingNumber(),orderList.getShippingGroups().get(0).getCompanyName(),0));
 
         //Add payment header
         mData.add(new OrderDetailHeader(context.getString(R.string.payment_header)));

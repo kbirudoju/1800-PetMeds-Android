@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.orders;
 
+import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.ReOrderRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
@@ -12,10 +13,14 @@ public interface OrderDetailContract {
         boolean isActive();
         void onError(String errorMessage);
         void onSuccess();
+        void addToCartSuccess();
+        void onCancelSuccess();
 
     }
 
     interface Presenter extends BasePresenter {
         void reOrder(ReOrderRequest reOrderRequest);
+        void cancelOrder(ReOrderRequest reOrderRequest);
+        void addToCart(AddToCartRequest addToCartRequest);
     }
 }

@@ -538,5 +538,9 @@
     <string name="no_email_client_found">No Email Client Found</string>
     <string name="current_medications">Current Medications</string>
 
+    <string name="cancel_order_error_msg">Order can\'t be cancelled</string>
+    <string name="cancel_order_msg">Are you sure you want to cancel order #</string>
+    <string name="cancel_order_title">Are you sure?</string>
+    <string name="order_cancelled_success_msg">Successfully cancelled order</string>
 </resources>
 

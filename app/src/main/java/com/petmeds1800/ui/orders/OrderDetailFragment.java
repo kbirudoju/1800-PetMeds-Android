@@ -3,6 +3,9 @@ package com.petmeds1800.ui.orders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.ReOrderRequest;
 import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.model.entities.WebViewHeader;
@@ -21,6 +25,8 @@ import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
 import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
 import com.petmeds1800.ui.orders.support.CustomOrderDetailRecyclerAdapter;
 import com.petmeds1800.ui.orders.support.OrderDetailAdapter;
@@ -72,9 +78,6 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                 WebViewHeader webviewRow=(WebViewHeader)mOrderDetailAdapter.getItemAt(position);
                 switch(webviewRow.getId()){
                     case CustomOrderDetailRecyclerAdapter.REVIEW_ROW_ID:
-                       /* String skuId=orderList.getCommerceItems().get(position).getSkuId();
-                        String productId=orderList.getCommerceItems().get(position).getProductId();
-*/
                         String skuId=webviewRow.getItemId();
                         String productId=webviewRow.getProductId();
                         Bundle bundle = new Bundle();
@@ -99,7 +102,47 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                         }
                         mPresenter.reOrder(reOrderRequest);
                         break;
+                    case CustomOrderDetailRecyclerAdapter.CANCEL_ORDER_ROW_ID:
+                        if(orderList.getIsCancellable().equals("true")) {
 
+                            final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment().newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(), getString(R.string.cancel_order_title));
+                            okCancelDialogFragment.show(((AbstractActivity)getActivity()).getSupportFragmentManager());
+                            okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
+                                @Override
+                                public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
+                                    ReOrderRequest cancelOrderRequest = new ReOrderRequest(orderList.getOrderId(), mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                                    try {
+                                        ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    mPresenter.cancelOrder(cancelOrderRequest);
+
+                                }
+                            });
+                            okCancelDialogFragment.setNegativeListener(new BaseDialogFragment.DialogButtonsListener() {
+                                @Override
+                                public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
+                                    okCancelDialogFragment.dismiss();
+                                }
+                            });
+
+                        }else{
+                            Snackbar.make(mOrderDetailRecyclerView, getString(R.string.cancel_order_error_msg), Snackbar.LENGTH_LONG).show();
+                        }
+                        break;
+                    case CustomOrderDetailRecyclerAdapter.REORDER_ITEM_ROW_ID:
+                        try {
+                            ((AbstractActivity)getActivity()).startLoadingGif(getActivity());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        String reOrderProductId=webviewRow.getProductId();
+                        String reOrderSkuId=webviewRow.getItemId();
+                        int quantity=webviewRow.getQuantity();
+                        AddToCartRequest addToCartRequest=new AddToCartRequest(reOrderSkuId,reOrderProductId,quantity,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                        mPresenter.addToCart(addToCartRequest);
+                        break;
                 }
 
             }
@@ -107,8 +150,6 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         setRecyclerView();
         setTitle();
         mOrderDetailAdapter.setData(orderList);
-
-
 
     }
 
@@ -128,7 +169,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
 
     private void setTitle(){
         if(orderList!=null)
-        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.order_txt)+" #"+orderList.getOrderId());
+            ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.order_txt)+" #"+orderList.getOrderId());
     }
 
     private void setRecyclerView(){
@@ -161,6 +202,30 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
             e.printStackTrace();
         }
         ((HomeActivity)getActivity()).getViewPager().setCurrentItem(1);
+    }
+
+    @Override
+    public void addToCartSuccess() {
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onCancelSuccess() {
+        try {
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Snackbar.make(mOrderDetailRecyclerView, R.string.order_cancelled_success_msg, Snackbar.LENGTH_LONG).show();
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.remove(this);
+        trans.commit();
+        manager.popBackStack();
     }
 
     @Override
