@@ -8,6 +8,9 @@ public class Constants {
     /*WidgetTypes Constant*/
     public static final String VIEW_TYPE_BANNER = "Banner";
 
+    public static enum RepeatFrequency {
+        REPEAT_DAILY,REPEAT_WEEKLY,REPEAT_MONTHLY
+    }
 
     /*ShoppingCart Constants*/
     public static final int DELETE_ITEM_REQUEST_SHOPPINGCART = 1268;
@@ -39,5 +42,11 @@ public class Constants {
     public static final int ADD_NEW_PAYMENT_METHOD = 3;
 
     public static final String CONFIRMATION_ORDER_RESPONSE = "confirmationOrderResponse";
- public static final int  ADD_NEW_VET_REQUEST=4;
+
+    public static final int ADD_NEW_VET_REQUEST = 4;
+
+    public static final int DIALOG_REMINDER_REQUEST = 5;
+
+    public static final String DIALOG_DATA_TOKEN = "Dialog_data_token";
+
 }

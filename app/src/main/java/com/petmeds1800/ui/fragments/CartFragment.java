@@ -1,11 +1,14 @@
 package com.petmeds1800.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,18 +19,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.CheckOutIntent;
+import com.petmeds1800.model.ReminderDialogData;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.dialog.ReminderDialogFragment;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
 import com.petmeds1800.util.Constants;
@@ -55,7 +61,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     private static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
     private static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
 
-
     public static int sPreviousScrollPosition = 0;
     public static final String SHOPPING_CART = "shoppingCart";
 
@@ -77,6 +82,16 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.DIALOG_REMINDER_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.hasExtra(Constants.DIALOG_DATA_TOKEN)){
+            ReminderDialogData reminderDialogData = (ReminderDialogData) data.getExtras().getSerializable(Constants.DIALOG_DATA_TOKEN);
+        }
+
     }
 
     @Override

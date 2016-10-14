@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -21,5 +22,10 @@ public class CartRootFragment extends AbstractFragment {
         View view = inflater.inflate(R.layout.fragment_cart_container, container, false);
         replaceCartFragment(new CartFragment());
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

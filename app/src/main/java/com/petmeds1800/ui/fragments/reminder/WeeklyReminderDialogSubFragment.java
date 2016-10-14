@@ -23,9 +23,7 @@ import java.util.Locale;
 
 public class WeeklyReminderDialogSubFragment extends Fragment {
 
-    Calendar myCalendar = Calendar.getInstance();
     EditText mRepeatQuantity;
-    EditText mRepeatStartDate;
 
     @Nullable
     @Override
@@ -33,25 +31,6 @@ public class WeeklyReminderDialogSubFragment extends Fragment {
         View v = inflater.inflate(R.layout.dailog_weekly_reminder_layout, container, false);
 
         mRepeatQuantity = (EditText) v.findViewById(R.id.repeat_every_amount);
-        mRepeatStartDate = (EditText) v.findViewById(R.id.start_days_Value);
-        mRepeatStartDate.setText((new SimpleDateFormat("MM/dd/yy")).format(new Date()));
-
-        mRepeatStartDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        myCalendar.set(Calendar.YEAR, year);
-                        myCalendar.set(Calendar.MONTH, monthOfYear);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        String myFormat = "MM/dd/yy";
-                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                        mRepeatStartDate.setText(sdf.format(myCalendar.getTime()));;
-                    }
-                }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
         return v;
     }
 }
