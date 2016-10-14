@@ -447,17 +447,10 @@
     <string name="cart_title">Cart</string>
     <string name="select_item_quantity">Select Item Quantity</string>
 
-    <string-array name="items_quantity_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10+</item>
+    <string-array name="items_reminder_array">
+        <item>REPEAT DAILY</item>
+        <item>REPEAT WEEKLY</item>
+        <item>REPEAT MONTHLY</item>
     </string-array>
 
     <!--Shipping Methods-->
