@@ -9,13 +9,22 @@ import java.util.List;
 /**
  * Created by pooja on 8/2/2016.
  */
-public class TabPagerAdapter  extends FragmentStatePagerAdapter {
+public class TabPagerAdapter extends FragmentStatePagerAdapter {
+
     List<Fragment> fragmentList;
 
-    public TabPagerAdapter(FragmentManager fm,List<Fragment> fragmentList) {
+    public TabPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);
-        this.fragmentList=fragmentList;
+        this.fragmentList = fragmentList;
 
+    }
+
+    public List<Fragment> getitems() {
+        return this.fragmentList;
+    }
+
+    public void setItemAtPosition(int position,Fragment fragment) {
+        this.fragmentList.set(position,fragment);
     }
 
     @Override

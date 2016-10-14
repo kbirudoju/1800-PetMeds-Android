@@ -5,6 +5,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Address;
+import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
@@ -16,6 +17,7 @@ import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
 import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
@@ -91,6 +93,32 @@ public class HomeActivity extends AbstractActivity
 
     ArrayList<View> mTabLayoutArray = new ArrayList<>();
 
+    private CommitOrderResponse commitOrderResponse;
+
+    private CartRootFragment mCartRootFragment;
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // TODO Auto-generated method stub
+        Log.v("on new intent fired", "on new intent fired");
+        super.onNewIntent(intent);
+        setIntent(intent);
+        commitOrderResponse = (CommitOrderResponse) getIntent().getSerializableExtra(
+                Constants.CONFIRMATION_ORDER_RESPONSE);
+        mCartRootFragment = ((CartRootFragment) mAdapter.getItem(1));
+        mCartRootFragment.replaceConfirmOrderFragment(commitOrderResponse);
+
+    }
+
+    //Call to replace receipt fragment on page listener
+    private void replaceFragmentOnConfirmReceipt() {
+        if (commitOrderResponse != null) {
+            commitOrderResponse = null;
+            mCartRootFragment.replaceConfirmOrderFragment(commitOrderResponse);
+
+        }
+    }
+
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
@@ -111,8 +139,9 @@ public class HomeActivity extends AbstractActivity
         //initialize fragment list
         List<Fragment> fragmentList = new ArrayList<>();
         mHomeRootFragment = new HomeRootFragment();
+        mCartRootFragment = new CartRootFragment();
         fragmentList.add(mHomeRootFragment);
-        fragmentList.add(new CartRootFragment());
+        fragmentList.add(mCartRootFragment);
         fragmentList.add(new LearnFragment());
         fragmentList.add(new AccountRootFragment());
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
@@ -156,6 +185,7 @@ public class HomeActivity extends AbstractActivity
                 });
 
         ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -164,6 +194,7 @@ public class HomeActivity extends AbstractActivity
             @Override
             public void onPageSelected(int position) {
 
+                replaceFragmentOnConfirmReceipt();
                 Log.d("onPageSelected", ">>>>>>");
                 mTabIndex = position;
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
@@ -198,6 +229,12 @@ public class HomeActivity extends AbstractActivity
 
         //code to set default first tab selected
         mViewPager.addOnPageChangeListener(pageChangeListener);
+
+        if (commitOrderResponse != null) {
+            mViewPager.setCurrentItem(1);
+        } else {
+            mViewPager.setCurrentItem(0);
+        }
         pageChangeListener.onPageSelected(0);
         // Instead of initializing it in onResume for many times we initialize it in onCreate
         mProgressDialog = new ProgressDialog();
@@ -339,10 +376,6 @@ public class HomeActivity extends AbstractActivity
         super.onApplyThemeResource(theme, resid, first);
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-    }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
@@ -361,5 +394,6 @@ public class HomeActivity extends AbstractActivity
                 break;
         }
     }
+
 
 }

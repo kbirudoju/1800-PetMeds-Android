@@ -2,6 +2,7 @@ package com.petmeds1800.ui.checkout.stepfive;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.intent.HomeIntent;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
@@ -21,6 +22,7 @@ import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -363,7 +365,12 @@ public class StepFiveRootFragment extends AbstractFragment
     @Override
     public void navigateOnOrderConfirmation(CommitOrderResponse response) {
         activity.hideProgress();
+        activity.finish();
         //TODO: add integration of ConfirmationReceiptRootFragment here
+        Intent intent = new HomeIntent(getActivity());
+        intent.putExtra(Constants.CONFIRMATION_ORDER_RESPONSE, response);
+        startActivity(intent);
+
     }
 
     @Override
@@ -383,7 +390,8 @@ public class StepFiveRootFragment extends AbstractFragment
     public void onSubmitOrderClick() {
         activity.showProgress();
         CommitOrderRequest commitOrderRequest = new CommitOrderRequest();
-        commitOrderRequest.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        commitOrderRequest
+                .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         commitOrderRequest.setCommerceItemIds(new ArrayList<String>());
         commitOrderRequest.setReminderMonths(new ArrayList<String>());
         mPresenter.submitComittedOrderDetails(commitOrderRequest);

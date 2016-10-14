@@ -62,7 +62,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     @BindView(R.id.discount)
     TextView mDiscount;
 
-    @BindView(R.id.shipping)
+    @BindView(R.id.txv_shipping)
     TextView mShipping;
 
     @BindView(R.id.txv_taxes)
