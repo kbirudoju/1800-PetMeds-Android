@@ -1,6 +1,7 @@
 package com.petmeds1800.model.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Sdixit on 13-10-2016.
@@ -16,7 +17,7 @@ public class MedicationReminderItem implements Serializable {
 
     private String petName;
 
-    private String daysOfWeek;
+    private ArrayList<NameValueData> daysOfWeek;
 
     private String timeHourMin;
 
@@ -72,11 +73,11 @@ public class MedicationReminderItem implements Serializable {
         this.petName = petName;
     }
 
-    public Object getDaysOfWeek() {
+    public ArrayList<NameValueData> getDaysOfWeek() {
         return daysOfWeek;
     }
 
-    public void setDaysOfWeek(String daysOfWeek) {
+    public void setDaysOfWeek(ArrayList<NameValueData> daysOfWeek) {
         this.daysOfWeek = daysOfWeek;
     }
 

@@ -39,6 +39,7 @@ public class MedicationRemindersAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public void setItems(ArrayList<MedicationReminderItem> medicationReminderItemArrayList) {
         mMedicationReminderItemArrayList = medicationReminderItemArrayList;
+        notifyDataSetChanged();
     }
 
     public void setListener(MedicationReminderListener listener) {

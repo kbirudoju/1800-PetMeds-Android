@@ -37,6 +37,8 @@ import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.SignUpFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationReminders;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersPresentor;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListPresentor;
 import com.petmeds1800.ui.orders.OrderDetailFragment;
 import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
@@ -153,4 +155,6 @@ public interface Injector {
 
     void inject(GuestStepOneRootPresentor guestStepOneRootPresentor);
     void inject(MedicationReminderListPresentor medicationReminderListPresentor);
+    void inject(AddEditMedicationRemindersPresentor addEditMedicationRemindersPresentor);
+    void inject(AddEditMedicationReminders addEditMedicationReminders);
 }

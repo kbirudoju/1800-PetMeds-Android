@@ -13,6 +13,8 @@ import com.petmeds1800.model.SearchVetByZipCodeResponse;
 import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddEditCardResponse;
+import com.petmeds1800.model.entities.AddMedicationReminderRequest;
+import com.petmeds1800.model.entities.AddMedicationReminderResponse;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
@@ -310,5 +312,10 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/reminder/ReminderActor/listMedReminders")
     Observable<MedicationReminderListResponse> getMedicationReminderList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/createMedReminder")
+    Observable<AddMedicationReminderResponse> saveMedicationReminders(
+            @Body AddMedicationReminderRequest addMedicationReminderRequest);
 
 }

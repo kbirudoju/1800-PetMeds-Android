@@ -2,13 +2,14 @@ package com.petmeds1800.model.entities;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Sdixit on 14-10-2016.
  */
 
-public class AddMedicationReminderRequest {
+public class AddMedicationReminderRequest implements Serializable{
 
     private String reminderName;
 

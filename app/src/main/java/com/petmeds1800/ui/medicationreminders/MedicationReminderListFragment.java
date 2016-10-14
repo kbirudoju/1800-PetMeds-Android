@@ -9,6 +9,7 @@ import com.petmeds1800.util.Utils;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,9 +62,10 @@ public class MedicationReminderListFragment extends AbstractFragment
 
     private void setupCardsRecyclerView(ArrayList<MedicationReminderItem> items) {
         mMedicationsreminderRecyclerView.setVisibility(View.VISIBLE);
-        mMedicationRemindersAdapter = new MedicationRemindersAdapter(getContext());
+        mMedicationRemindersAdapter = new MedicationRemindersAdapter(getActivity());
         mMedicationRemindersAdapter.setListener(this);
         mMedicationRemindersAdapter.setItems(items);
+        mMedicationsreminderRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMedicationsreminderRecyclerView.setAdapter(mMedicationRemindersAdapter);
 
     }

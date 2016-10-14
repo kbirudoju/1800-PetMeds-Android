@@ -1,10 +1,14 @@
 package com.petmeds1800.ui.medicationreminders;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.model.entities.AddMedicationReminderRequest;
+import com.petmeds1800.model.entities.AddMedicationReminderResponse;
 import com.petmeds1800.model.entities.MedicationReminderItem;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
 import android.app.TimePickerDialog;
@@ -19,10 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TimePicker;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +43,7 @@ import static com.petmeds1800.util.Constants.MEDICATION_REMINDER_INFO;
  */
 
 public class AddEditMedicationReminders extends AbstractFragment
-        implements View.OnClickListener, TimePickerDialog.OnTimeSetListener {
+        implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, AddEditMedicationRemindersContract.View {
 
     @BindView(R.id.item_edit)
     EditText mItemEdit;
@@ -64,6 +72,9 @@ public class AddEditMedicationReminders extends AbstractFragment
     @BindView(R.id.remove_pet_button)
     Button mRemovePetButton;
 
+    @BindView(R.id.containerLayout)
+    ScrollView mContainerLayout;
+
     private boolean isEditable;
 
     private TimePickerDialog mTimePickerDialog;
@@ -73,6 +84,11 @@ public class AddEditMedicationReminders extends AbstractFragment
     private final String PM = "PM";
 
     private final String HOUR_12 = "12";
+
+    AddEditMedicationRemindersContract.Presenter mPresenter;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     public static AddEditMedicationReminders newInstance(boolean isEditable, MedicationReminderItem item) {
         AddEditMedicationReminders addEditMedicationReminders = new AddEditMedicationReminders();
@@ -88,6 +104,8 @@ public class AddEditMedicationReminders extends AbstractFragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_edit_medication_reminders, container, false);
+        PetMedsApplication.getAppComponent().inject(this);
+        mPresenter = new AddEditMedicationRemindersPresentor(this);
         ButterKnife.bind(this, view);
         Bundle bundle = getArguments();
         isEditable = bundle.getBoolean(Constants.IS_EDITABLE);
@@ -123,6 +141,20 @@ public class AddEditMedicationReminders extends AbstractFragment
     }
 
     private void submitMedicationReminderDetails() {
+
+        AddMedicationReminderRequest addMedicationReminderRequest = new AddMedicationReminderRequest();
+        addMedicationReminderRequest.setDaysOfWeek(new ArrayList<String>());
+        addMedicationReminderRequest.setDisableReminder(true);
+        addMedicationReminderRequest.setPetName("Rody");
+        addMedicationReminderRequest.setReminderName("Treeeee Lorem Ipsum Dolor");
+        addMedicationReminderRequest
+                .setDynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        addMedicationReminderRequest.setReminderType("daily");
+        addMedicationReminderRequest.setStartDate("");
+        addMedicationReminderRequest.setTimeHourMin("12:30 AM");
+        addMedicationReminderRequest.setRepeatInterval("2");
+        addMedicationReminderRequest.setShortDescription("6pk Dog 10.1-20lbs");
+        mPresenter.saveReminders(addMedicationReminderRequest);
 
     }
 
@@ -192,4 +224,29 @@ public class AddEditMedicationReminders extends AbstractFragment
         mTimeEdit.setText(strHrsToShow + ":" + calendar.get(Calendar.MINUTE) + " " + am_pm);
     }
 
+    @Override
+    public boolean isActive() {
+        return isAdded();
+    }
+
+    @Override
+    public void onSuccess(AddMedicationReminderResponse response) {
+        getFragmentManager().popBackStack();
+
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
+    }
+
+    @Override
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+    }
+
+    @Override
+    public void setPresenter(AddEditMedicationRemindersContract.Presenter presenter) {
+
+    }
 }
