@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/noVet_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_petprofileempty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_13"
+            style="@style/styledefault"
+            android:text="@string/noPetTxt"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            style="@style/paragraph"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/addPetDescription"/>
+
+        <Button
+            android:id="@+id/addPet_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45"
+            style="@style/label"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_42"
+            android:background="@color/petmeds_blue"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/add_new_vet_txt"/>
+
+    </LinearLayout>
+</RelativeLayout>

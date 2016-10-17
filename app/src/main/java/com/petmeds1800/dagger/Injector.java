@@ -50,6 +50,7 @@ import com.petmeds1800.ui.vet.AddVetFragment;
 import com.petmeds1800.ui.vet.AddVetPresenter;
 import com.petmeds1800.ui.vet.CantFindVetFragment;
 import com.petmeds1800.ui.vet.CantFindVetPresenter;
+import com.petmeds1800.ui.vet.VetListPresenter;
 import com.petmeds1800.util.AnalyticsUtil;
 
 /**
@@ -151,5 +152,6 @@ public interface Injector {
     void inject (WidgetListFragment widgetListFragment);
 
     void inject(GuestStepOneRootPresentor guestStepOneRootPresentor);
+    void inject(VetListPresenter vetListPresenter);
 
 }

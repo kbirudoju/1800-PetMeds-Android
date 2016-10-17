@@ -545,6 +545,8 @@
     <!--Order Receipt-->
     <string name="quantity_formatter">Qty %d</string>
     <string name="items_formatter">Subtotal (%d Item)</string>
+    <!--Vet-->
+    <string name="action_call">CALL</string>
 
 </resources>
 

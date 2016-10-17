@@ -93,6 +93,7 @@
         <include layout="@layout/view_separator"/>
 
         <TextView
+            android:id="@+id/my_vets_label"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
                 android:gravity="center_vertical"

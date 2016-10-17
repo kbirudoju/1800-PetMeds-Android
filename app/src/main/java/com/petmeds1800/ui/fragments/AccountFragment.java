@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.fragments;
 
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
+
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -13,21 +26,9 @@ import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
 import com.petmeds1800.ui.refillreminder.ReminderListFragment;
+import com.petmeds1800.ui.vet.VetListFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
-
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -61,6 +62,9 @@ public class AccountFragment extends AbstractFragment
 
     @BindView(R.id.notificationStatus)
     Switch notificationStatus;
+
+    @BindView(R.id.my_vets_label)
+    TextView mVetLabel;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
@@ -98,6 +102,7 @@ public class AccountFragment extends AbstractFragment
         mAccountSettings.setOnClickListener(this);
         mManagePaymentLabel.setOnClickListener(this);
         mManageAddressLabel.setOnClickListener(this);
+        mVetLabel.setOnClickListener(this);
         mPetsLabel.setOnClickListener(this);
         signOut.setOnClickListener(this);
         fillWindow();
@@ -188,6 +193,8 @@ public class AccountFragment extends AbstractFragment
             case R.id.refill_reminder_label:
                 replaceAccountAndAddToBackStack(new ReminderListFragment(), ReminderListFragment.class.getName());
                 break;
+            case R.id.my_vets_label:
+                replaceAccountAndAddToBackStack(new VetListFragment(), VetListFragment.class.getName());
             default:
                 break;
 
