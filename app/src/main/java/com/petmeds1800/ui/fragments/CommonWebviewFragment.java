@@ -92,10 +92,12 @@ public class CommonWebviewFragment extends AbstractFragment {
         int currentApiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView,true);
         } else {
             CookieManager.getInstance().removeAllCookie();
+            CookieManager.getInstance().setAcceptCookie(true);
         }
-        CookieManager.getInstance().setAcceptCookie(true);
+
 
         String cookieString = null;
         for (Iterator<Cookie> iterator = mCookieCache.iterator() ; iterator.hasNext();) {
@@ -153,7 +155,6 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            System.out.println("when you click on any interlink on webview that time you got url :-" + url);
 
             if (url.contains("Add+To+Cart")){
                 getActivity().onBackPressed();

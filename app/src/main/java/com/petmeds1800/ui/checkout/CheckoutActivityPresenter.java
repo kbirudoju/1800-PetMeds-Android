@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.InitCheckoutResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.util.Log;
@@ -32,13 +33,44 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    private HashMap<String, String> mItemDetail;
+
     public CheckoutActivityPresenter(CheckoutActivityContract.View view) {
         mView = view;
         PetMedsApplication.getAppComponent().inject(this);
     }
 
+    private void renewSessionConfirmationNumber() {
+
+        mPetMedsApiService.getSessionConfirmationNumber()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<SessionConfNumberResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
+
+                        if(!sessionConfNumberResponse.getSessionConfirmationNumber().isEmpty()){
+                            mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                            initializeCheckout(mItemDetail);
+                        }
+                    }
+                });
+
+    }
+
     @Override
     public void initializeCheckout(HashMap<String, String> itemsDetail) {
+        mItemDetail = itemsDetail;
         //TODO need to handle the 409 conflict error
         //attach the session confirmation number
         itemsDetail.put("_dynSessConf",
@@ -57,8 +89,13 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AddACard", e.getMessage());
-                        if (mView.isActive()) {
-                            mView.showErrorCrouton(e.getMessage(), false);
+                        if(e.getMessage().contains("Conflict")) { //TODO need to change it
+                            renewSessionConfirmationNumber();
+                        }
+                        else {
+                            if (mView.isActive()) {
+                                mView.showErrorCrouton(e.getMessage(), false);
+                            }
                         }
 
                     }
