@@ -8,7 +8,10 @@ import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.StepState;
 import com.petmeds1800.model.shoppingcart.response.CommerceItems;
@@ -16,15 +19,21 @@ import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.checkout.stepfive.StepFiveRootFragment;
 import com.petmeds1800.ui.checkout.stepfour.StepFourRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 
@@ -94,6 +103,12 @@ public class CheckOutActivity extends AbstractActivity
 
     private ProgressDialog mProgressDialog;
 
+    @Inject
+    PetMedsApiService mPetMedsApiService;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +117,8 @@ public class CheckOutActivity extends AbstractActivity
         mShoppingCartListResponse = (ShoppingCartListResponse) getIntent()
                 .getSerializableExtra(CartFragment.SHOPPING_CART);
         enableBackButton();
+
+        PetMedsApplication.getAppComponent().inject(this);
 
         mCheckoutPresenter = new CheckoutActivityPresenter(this);
 
@@ -263,9 +280,17 @@ public class CheckOutActivity extends AbstractActivity
         switch (mApplicableSteps.indexOf(stepName)) {
 
             case 0: //step 1 "Select Shipping Address"
-                replaceCheckOutFragment(StepOneRootFragment.newInstance(mShoppingCartListResponse, stepName),
-                        StepOneRootFragment.class.getName(), false);
-                break;
+                //check if the user is logged-in
+                if ( mPreferencesHelper.getIsUserLoggedIn() ) {
+                    replaceCheckOutFragment(StepOneRootFragment.newInstance(mShoppingCartListResponse, stepName),
+                            StepOneRootFragment.class.getName(), false);
+                }
+                else {
+                    replaceCheckOutFragment(GuestStepOneRootFragment.newInstance(mShoppingCartListResponse, stepName),
+                            GuestStepOneRootFragment.class.getName(), false);
+                }
+
+                break;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 
             case 1: //step 2 "Select Shipping method"
                 replaceCheckOutFragment(StepTwoRootFragment.newInstance(mShoppingCartListResponse, stepName),
@@ -274,11 +299,18 @@ public class CheckOutActivity extends AbstractActivity
                 break;
 
             case 2: //step 3 "Select Payment method"
-                //TODO start the Slect Payment method step. Following is just a temporary adjustment
-                replaceCheckOutFragment(StepThreeRootFragment
-                                .newInstance(mShoppingCartListResponse, stepName),
-                        StepThreeRootFragment.class.getName(),
-                        false);
+                if ( mPreferencesHelper.getIsUserLoggedIn() ) {
+                    replaceCheckOutFragment(StepThreeRootFragment
+                                    .newInstance(mShoppingCartListResponse, stepName),
+                            StepThreeRootFragment.class.getName(),
+                            false);
+                }
+                else {
+                    replaceCheckOutFragment(GuestStepThreeRootFragment
+                                    .newInstance(mShoppingCartListResponse, stepName),
+                            GuestStepThreeRootFragment.class.getName(),
+                            false);
+                }
 
                 break;
 

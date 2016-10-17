@@ -9,6 +9,7 @@ import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
 
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,14 +24,6 @@ import rx.schedulers.Schedulers;
  * Created by Abhinav on 13/8/16.
  */
 public class AddACardPresenter implements AddACardContract.Presenter {
-
-    private static final int CREDIT_CARD_DIGITS_RULE_1 = 16;
-
-    private static final int CREDIT_CARD_DIGITS_RULE_2 = 15;
-
-    private static final int CVV_DIGITS_RULE_1 = 3;
-
-    private static final int CVV_DIGITS_RULE_2 = 4;
 
     private final AddACardContract.View mView;
 
@@ -89,28 +82,17 @@ public class AddACardPresenter implements AddACardContract.Presenter {
 
     @Override
     public boolean isCreditCardNumberValid(String creditCardNumber) {
-        if (creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_1
-                || creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_2) {
-            return true;
-        }
-        return false;
+        return Utils.isCreditCardNumberValid(creditCardNumber);
     }
 
     @Override
     public boolean isExpirationDateValid(int expirationMonth, int expirationYear) {
-        if (expirationMonth <= 0 && expirationYear <= 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return Utils.isExpirationDateValid(expirationMonth, expirationYear);
     }
 
     @Override
     public boolean isCvvValid(String cvv) {
-        if (cvv.length() == CVV_DIGITS_RULE_1 || cvv.length() == CVV_DIGITS_RULE_2) {
-            return true;
-        }
-        return false;
+        return Utils.isCvvValid(cvv);
     }
 
     @Override

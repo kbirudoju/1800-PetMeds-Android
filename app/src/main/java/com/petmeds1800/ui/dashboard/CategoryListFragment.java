@@ -82,7 +82,7 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
     }
 
 
-    void onAttachFragment(Fragment fragment) {
+    public void onAttachFragment(Fragment fragment) {
         try {
              mProductCategoryInteractionListener = (HomeFragmentContract.ProductCategoryInteractionListener) fragment;
         }

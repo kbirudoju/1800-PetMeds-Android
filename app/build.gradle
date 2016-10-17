@@ -159,7 +159,7 @@ android {
     testBuildType "release"
 }
 
-def playServicesVersion = '8.4.0'
+def playServicesVersion = '9.4.0'
 
 // Use http://gradleplease.appspot.com/ to find dependency names.
 dependencies {
@@ -175,7 +175,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.0-RC1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.0-RC1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     // Injection stuff
     apt 'com.google.dagger:dagger-compiler:2.5'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
@@ -272,6 +271,9 @@ dependencies {
 
     //mutidex support for prior to lollipop
     compile 'com.android.support:multidex:1.0.0'
+
+    // Urban Airship SDK
+    compile 'com.urbanairship.android:urbanairship-sdk:8.0.+'
 }
 
 configurations {

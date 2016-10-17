@@ -5,6 +5,7 @@ import com.petmeds1800.dagger.component.DaggerAppComponent;
 import com.petmeds1800.dagger.module.ApplicationModule;
 import com.petmeds1800.dagger.module.RestModule;
 import com.petmeds1800.dagger.module.StorageModule;
+import com.urbanairship.UAirship;
 
 import android.support.multidex.MultiDexApplication;
 
@@ -16,9 +17,14 @@ public class PetMedsApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-//        if (BuildConfig.DEBUG) {
-//            Timber.plant(new Timber.DebugTree());
-//        }
+        UAirship.takeOff(this, new UAirship.OnReadyCallback() {
+            @Override
+            public void onAirshipReady(UAirship airship) {
+
+                // Enable user notifications
+                airship.getPushManager().setUserNotificationsEnabled(true);
+            }
+        });
 
         mAppComponent = createAppComponent();
     }
@@ -26,7 +32,7 @@ public class PetMedsApplication extends MultiDexApplication {
     protected AppComponent createAppComponent() {
         return DaggerAppComponent.builder()
                 .applicationModule(new ApplicationModule(this))
-                .restModule(new RestModule(getString(R.string.server_endpoint)))
+                .restModule(new RestModule(getString(R.string.server_endpoint) , getApplicationContext()))
                 .storageModule(new StorageModule())
                 .build();
     }

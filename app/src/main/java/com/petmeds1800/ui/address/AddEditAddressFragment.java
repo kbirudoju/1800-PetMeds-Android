@@ -9,6 +9,8 @@ import com.petmeds1800.model.entities.ShippingAddressRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootContract;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
@@ -50,7 +52,8 @@ import static com.petmeds1800.R.id.firstNameLayout;
  */
 public class AddEditAddressFragment extends AbstractFragment
         implements AddEditAddressContract.View, View.OnClickListener, CommonDialogFragment.ValueSelectedListener,
-        DialogInterface.OnClickListener, Switch.OnCheckedChangeListener {
+        DialogInterface.OnClickListener, Switch.OnCheckedChangeListener ,
+        GuestStepThreeRootContract.AddAddressInteractionListener {
 
     public static final int ADD_ADDRESS_REQUEST = 3;
 
@@ -179,6 +182,8 @@ public class AddEditAddressFragment extends AbstractFragment
     private int mRequestCode;
 
     private Bundle mBundle;
+
+    private AddressRequest mAddressRequest;
 
     public static AddEditAddressFragment newInstance(Address updateAddress, int requestCode) {
         Bundle bundle = new Bundle();
@@ -359,7 +364,7 @@ public class AddEditAddressFragment extends AbstractFragment
         mProgressBar.setVisibility(View.VISIBLE);
 
         if (mRequestCode == EDIT_ADDRESS_REQUEST) {
-            AddressRequest addressRequest = new AddressRequest(
+            mAddressRequest = new AddressRequest(
                     mDefaultShippingAddressSwitch.isChecked()
                     , mLastNameEdit.getText().toString()
                     , mUsaStateCode == null ? mAddress.getState() : mUsaStateCode
@@ -375,11 +380,11 @@ public class AddEditAddressFragment extends AbstractFragment
                     , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
 
             //setting addressId is must for the editAddress API call
-            addressRequest.setAddressId(mAddress.getAddressId());
+            mAddressRequest.setAddressId(mAddress.getAddressId());
 
-            mPresenter.updateAddress(addressRequest);
+            mPresenter.updateAddress(mAddressRequest);
         } else {
-            AddressRequest addressRequest = new AddressRequest(
+            mAddressRequest = new AddressRequest(
                     mDefaultShippingAddressSwitch.isChecked()
                     , mLastNameEdit.getText().toString()
                     , mUsaStateCode
@@ -393,7 +398,7 @@ public class AddEditAddressFragment extends AbstractFragment
                     , mFirstNameEdit.getText().toString()
                     , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
 
-            mPresenter.saveAddress(addressRequest);
+            mPresenter.saveAddress(mAddressRequest);
         }
 
         return super.onOptionsItemSelected(item);
@@ -430,6 +435,12 @@ public class AddEditAddressFragment extends AbstractFragment
     @Override
     public boolean isActive() {
         return isAdded();
+    }
+
+
+    @Override
+    public AddressRequest getAddressRequest() {
+        return mAddressRequest;
     }
 
     @Override
@@ -593,11 +604,16 @@ public class AddEditAddressFragment extends AbstractFragment
                         }
                     } else {
                         populateData(null);
-                        buttonView.setEnabled(false);
-                        if (getParentFragment() != null) {
-                            ((StepThreeRootFragment) getParentFragment()).getBillingAddressId();
-                        }
 
+                        if(mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+                            buttonView.setEnabled(false);
+                            if (getParentFragment() != null) {
+                                ((StepThreeRootFragment) getParentFragment()).getBillingAddressId();
+                            }
+                        }
+                        else if(mRequestCode == GuestStepThreeRootFragment.REQUEST_CODE) {
+                            // do nothing . We only need to make all the address fields as blank
+                        }
                     }
 
                 }

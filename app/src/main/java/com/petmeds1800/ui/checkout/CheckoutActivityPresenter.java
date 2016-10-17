@@ -2,6 +2,7 @@ package com.petmeds1800.ui.checkout;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.InitCheckoutResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
@@ -11,8 +12,11 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -35,6 +39,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
 
     @Override
     public void initializeCheckout(HashMap<String, String> itemsDetail) {
+        //TODO need to handle the 409 conflict error
         //attach the session confirmation number
         itemsDetail.put("_dynSessConf",
                 mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
@@ -55,6 +60,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                         if (mView.isActive()) {
                             mView.showErrorCrouton(e.getMessage(), false);
                         }
+
                     }
 
                     @Override
@@ -63,7 +69,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                             //TODO need to know how to handle a success response
                         } else {
                             Log.d("Init Checkout", s.getStatus().getErrorMessages().get(0));
-                            if(mView.isActive()){
+                            if (mView.isActive()) {
                                 mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
                             }
                         }

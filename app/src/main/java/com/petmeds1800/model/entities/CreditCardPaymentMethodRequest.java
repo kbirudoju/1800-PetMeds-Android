@@ -15,6 +15,12 @@ public class CreditCardPaymentMethodRequest {
     @SerializedName("_dynSessConf")
     private String dynSessConf;
 
+    public CreditCardPaymentMethodRequest(String cardId, String billingAddressId, String dynSessConf) {
+        this.cardId = cardId;
+        this.billingAddressId = billingAddressId;
+        this.dynSessConf = dynSessConf;
+    }
+
     public String getCardId() {
         return cardId;
     }

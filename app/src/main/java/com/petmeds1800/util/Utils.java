@@ -29,6 +29,14 @@ public class Utils {
             "Jul", "Aug", "Sep", "Oct",
             "Nov", "Dec"};
 
+    private static final int CREDIT_CARD_DIGITS_RULE_1 = 16;
+
+    private static final int CREDIT_CARD_DIGITS_RULE_2 = 15;
+
+    private static final int CVV_DIGITS_RULE_1 = 3;
+
+    private static final int CVV_DIGITS_RULE_2 = 4;
+
     public static String changeDateFormat(long millisecond, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         String dateString = formatter.format(new Date(millisecond));
@@ -90,8 +98,32 @@ public class Utils {
 
         return PICKER_DISPLAY_MONTHS_NAMES[month - 1];
     }
+
     public static Date getDate(String dateStr) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
         return formatter.parse(dateStr);
+    }
+
+    public static boolean isCreditCardNumberValid(String creditCardNumber) {
+        if (creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_1
+                || creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_2) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isExpirationDateValid(int expirationMonth, int expirationYear) {
+        if (expirationMonth <= 0 && expirationYear <= 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isCvvValid(String cvv) {
+        if (cvv.length() == CVV_DIGITS_RULE_1 || cvv.length() == CVV_DIGITS_RULE_2) {
+            return true;
+        }
+        return false;
     }
 }

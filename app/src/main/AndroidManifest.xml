@@ -70,6 +70,9 @@
                 android:name=".ui.checkout.AddNewEntityActivity"
                 android:screenOrientation="portrait"/>
 
+        <activity android:name=".ui.checkout.CheckOutActivity"
+                  android:screenOrientation="portrait"/>
+
         <meta-data
                 android:name="android.app.default_searchable"
                 android:value="com.apkgetter.SearchResultsActivity"/>
@@ -98,6 +101,7 @@
         <activity android:name=".ui.checkout.CheckOutActivity"
                   android:screenOrientation="portrait"
         />
+
     </application>
 
 </manifest>

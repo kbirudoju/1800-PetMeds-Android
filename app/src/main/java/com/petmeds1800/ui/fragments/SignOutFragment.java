@@ -32,9 +32,6 @@ public class SignOutFragment extends AbstractFragment {
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    @Inject
-    CookieJar mCookieJar;
-
     @BindView(R.id.topImageView)
     ImageView mTopImageView;
 
@@ -47,8 +44,7 @@ public class SignOutFragment extends AbstractFragment {
         View view = inflater.inflate(R.layout.fragment_signout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
-        mPreferencesHelper.clearGeneralPreferencesData();
-        ((PersistentCookieJar) mCookieJar).clear();
+        mPreferencesHelper.setIsUserLoggedIn(false);
         ButterKnife.bind(this, view);
         return view;
     }

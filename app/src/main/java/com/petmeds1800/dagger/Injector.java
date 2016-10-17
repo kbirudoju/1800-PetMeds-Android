@@ -13,6 +13,13 @@ import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.ui.checkout.CheckoutActivityContract;
+import com.petmeds1800.ui.checkout.stepthreefragment.AddGuestCardFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreePresenter;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
+import com.petmeds1800.ui.dashboard.CategoryListFragment;
+import com.petmeds1800.ui.dashboard.ProductCategoryPresenter;
 import com.petmeds1800.ui.checkout.CheckoutActivityPresenter;
 import com.petmeds1800.ui.checkout.StepTwoPresenter;
 import com.petmeds1800.ui.checkout.StepTwoRootFragment;
@@ -32,6 +39,7 @@ import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
@@ -153,6 +161,17 @@ public interface Injector {
     void inject (WidgetListFragment widgetListFragment);
 
     void inject(GuestStepOneRootPresentor guestStepOneRootPresentor);
+
     void inject(VetListPresenter vetListPresenter);
     void inject(MedicationReminderListPresentor medicationReminderListPresentor);
+
+    void inject(CommonWebviewFragment commonWebviewFragment);
+
+    void inject(GuestStepThreeRootFragment guestStepThreeRootFragment);
+
+    void inject(GuestStepThreePresenter guestStepThreePresenter);
+
+    void inject(AddGuestCardFragment addGuestCardFragment);
+
+    void inject(CheckOutActivity addGuestCardFragment);
 }

@@ -10,13 +10,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
 
+
+import java.util.Iterator;
+
+import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by pooja on 8/25/2016.
@@ -34,6 +49,15 @@ public class CommonWebviewFragment extends AbstractFragment {
 
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
+
+    @Inject
+    SetCookieCache mCookieCache;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PetMedsApplication.getAppComponent().inject(this);
+    }
 
     @Nullable
     @Override
@@ -65,6 +89,28 @@ public class CommonWebviewFragment extends AbstractFragment {
     }
 
     private void setUpWebView(String url) {
+        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().removeAllCookies(null);
+        } else {
+            CookieManager.getInstance().removeAllCookie();
+        }
+        CookieManager.getInstance().setAcceptCookie(true);
+
+        String cookieString = null;
+        for (Iterator<Cookie> iterator = mCookieCache.iterator() ; iterator.hasNext();) {
+            Cookie cookie = iterator.next();
+            if(cookie.name().equals("JSESSIONID")) {
+               cookieString = "JSESSIONID=" + cookie.value() + ";";
+            }
+            else if(cookie.name().equals("SITESERVER")) {
+                cookieString = cookieString + "SITESERVER=" + cookie.value() + ";";
+            }
+        }
+        cookieString = cookieString + "app=true;";
+        CookieManager.getInstance().setCookie(url, cookieString);
+        CookieSyncManager.getInstance().sync();
+
         mWebView.loadUrl(url);
         Log.d("URL", url + ">>>>>");
         mWebView.getSettings().setJavaScriptEnabled(true);

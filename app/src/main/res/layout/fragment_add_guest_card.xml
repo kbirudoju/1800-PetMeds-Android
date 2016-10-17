@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:background="@color/pattern_light_blue"
+              tools:context="com.petmeds1800.ui.checkout.stepthreefragment.AddGuestCard"
+              android:id="@+id/containerLayout">
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/cardNumberLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16"
+            style="@style/StyledEditTextHintLayout"
+            app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+        <EditText
+                android:id="@+id/cardNumber_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_cardNumber"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLength="16"
+                style="@style/StyledEditText"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/expirationDateInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_10"
+            style="@style/StyledEditTextHintLayout"
+            app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+        <EditText
+                android:id="@+id/expirationDate_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_expirationDate"
+                android:inputType="date"
+                style="@style/StyledEditText"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/cvvInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16"
+            style="@style/StyledEditTextHintLayout"
+            app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+            android:layout_marginTop="@dimen/dp_10">
+
+        <EditText
+                android:id="@+id/cvv_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_cvv"
+                android:inputType="number"
+                style="@style/StyledEditText"
+                android:maxLength="4"
+                android:imeOptions="actionDone"/>
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>
+
+
+

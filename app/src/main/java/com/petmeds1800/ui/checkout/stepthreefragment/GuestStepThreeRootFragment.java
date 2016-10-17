@@ -2,10 +2,12 @@ package com.petmeds1800.ui.checkout.stepthreefragment;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
-import com.petmeds1800.intent.AddNewEntityIntent;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.Card;
-import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
+import com.petmeds1800.model.entities.AddAddressResponse;
+import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.shoppingcart.response.PaymentGroups;
 import com.petmeds1800.model.shoppingcart.response.ShippingAddress;
 import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
@@ -14,7 +16,6 @@ import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -36,15 +37,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Sdixit on 27-09-2016.
+ * Created by Abhinav on 27-09-2016.
  */
 
-public class StepThreeRootFragment extends AbstractFragment implements StepThreeRootContract.View {
+public class GuestStepThreeRootFragment extends AbstractFragment implements GuestStepThreeRootContract.View {
 
     @BindView(R.id.newPaymentMethod)
     Button mNewPaymentMethod;
 
-    public final static int REQUEST_CODE = 6;
+    public final static int REQUEST_CODE = 8;
 
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
@@ -62,16 +63,18 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
 
     private String mStepName;
 
-    private StepThreeRootContract.Presenter mPresenter;
+    private GuestStepThreePresenter mPresenter;
 
     private Card mCard;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    public static StepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
+    private PaymentGroups mPaymentGroup;
+
+    public static GuestStepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
             String stepName) {
-        StepThreeRootFragment f = new StepThreeRootFragment();
+        GuestStepThreeRootFragment f = new GuestStepThreeRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
         args.putString(CheckOutActivity.STEP_NAME, stepName);
@@ -82,16 +85,21 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        if (context instanceof CheckOutActivity) {
+            activity = (CheckOutActivity) context;
+        }
 
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity.setToolBarTitle(getString(R.string.payment_method_header));
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
+        activity.setLastCompletedSteps(mStepName);
+        activity.setActiveStep(mStepName);
 
 
     }
@@ -103,22 +111,14 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
         View view = inflater.inflate(R.layout.fragment_step_three_checkout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
         ButterKnife.bind(this, view);
+
+        mNewPaymentMethod.setVisibility(View.GONE);
+
         populateAddress();
+        populatePaymentGroup();
         return view;
 
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        activity = (CheckOutActivity) getActivity();
-        if (savedInstanceState == null) {
-            activity.setToolBarTitle(getString(R.string.payment_method_header));
-            activity.setLastCompletedSteps(mStepName);
-            activity.setActiveStep(mStepName);
-        }
-    }
-
 
     public Card getCard() {
         return mCard;
@@ -126,11 +126,10 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
 
     public void setCard(Card card) {
         mCard = card;
-
     }
 
     public void populateAddress() {
-
+        //we need to perform this unnecessary conversion into Address model as reusable 'AddEditFragment' only knows about Address model
         ArrayList<ShippingGroups> shippingGroupses = mShoppingCartListResponse.getShoppingCart().getShippingGroups();
         ShippingAddress shippingAddress = null;
         mAddress = new Address();
@@ -150,23 +149,36 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
 
     }
 
+    private void populatePaymentGroup() {
+        mPaymentGroup = mShoppingCartListResponse.getShoppingCart().getPaymentGroups().get(0);
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter = new StepThreeRootPresentor(this);
+        mPresenter = new GuestStepThreePresenter(this);
+
+        //add the creditCardFragment
+        //check if a payment method is present
+        if(mPaymentGroup == null) {
+            replaceStepRootChildFragment(
+                    AddGuestCardFragment.newInstance(),
+                    R.id.creditCardDetailFragment);
+        }
+        else {
+            replaceStepRootChildFragment(
+                    AddGuestCardFragment.newInstance(mPaymentGroup),
+                    R.id.creditCardDetailFragment);
+        }
+
+        //add the addeditAddressFragment
         replaceStepRootChildFragment(
-                PaymentSelectionListFragment.newInstance(PaymentSelectionListFragment.REQUEST_CODE),
+                AddGuestCardFragment.newInstance(),
                 R.id.creditCardDetailFragment);
-        replaceStepRootChildFragment(AddEditAddressFragment.newInstance(mAddress, StepThreeRootFragment.REQUEST_CODE),
+        replaceStepRootChildFragment(AddEditAddressFragment.newInstance(mAddress, GuestStepThreeRootFragment.REQUEST_CODE),
                 R.id.billingAddressfragment);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
-
-    }
-
-    @OnClick(R.id.newPaymentMethod)
-    public void onClick() {
-        startActivity(new AddNewEntityIntent(getActivity(), Constants.ADD_NEW_PAYMENT_METHOD));
 
     }
 
@@ -176,10 +188,13 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     }
 
     @Override
-    public void onSuccessCreditCardPayment(ShoppingCartListResponse response) {
-        activity.hideProgress();
-        activity.moveToNext(mStepName, response);
+    public void onSuccessAddressAddition(AddAddressResponse addAddressResponse) {
 
+    }
+
+    @Override
+    public void onSuccessCreditCardAddition(Object response) {
+        activity.hideProgress();
     }
 
     @Override
@@ -193,47 +208,41 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
         Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
     }
 
-    @Override
-    public void setUpdatedAddressOnSuccess(Address address) {
-        activity.hideProgress();
-        mAddress = address;
-        ((AddEditAddressFragment) getChildFragmentManager().findFragmentById(R.id.billingAddressfragment))
-                .populateData(mAddress);
-    }
-
-    @Override
-    public void errorOnUpdateAddress() {
-        activity.hideProgress();
-    }
-
-    @Override
-    public void setPresenter(StepThreeRootContract.Presenter presenter) {
-
-    }
-
-    public void getBillingAddressId() {
-        activity.showProgress();
-        Card card;
-        card = getCard();
-        if (card != null) {
-            mPresenter.getBillingAddressById(
-                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
-                    card.getBillingAddress().getRepositoryId());
-
-        }
-    }
 
     @OnClick(R.id.shippingNavigator)
     public void onShippingNavigatorClick() {
         activity.showProgress();
-        Card card;
-        card = getCard();
-        if (card != null) {
-            CreditCardPaymentMethodRequest request = new CreditCardPaymentMethodRequest(card.getId()
-                    , card.getBillingAddress().getRepositoryId()
-                    , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-            mPresenter.applyCreditCardPaymentMethod(request);
+        //TODO call the presenter to first save the address and then card and then apply both of them
+        AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager().findFragmentById(R.id.creditCardDetailFragment);
+        CardRequest cardRequest;
+        AddressRequest addressRequest;
+        if(addGuestCardFragment != null) {
+            if( addGuestCardFragment.checkAndShowError()) {
+                cardRequest = addGuestCardFragment.getCard();
+
+                AddEditAddressFragment addEditAddressFragment = (AddEditAddressFragment) getChildFragmentManager().findFragmentById(R.id.billingAddressfragment);
+                if(addEditAddressFragment != null) {
+                    if(addEditAddressFragment.validateFields()) {
+                        addressRequest = addEditAddressFragment.getAddressRequest();
+
+                        mPresenter.applyCreditCardPaymentMethod(addressRequest , cardRequest);
+                    }
+                }
+            }
         }
+        activity.hideProgress();
+
+    }
+
+    @Override
+    public void onSuccessCreditCardPayment(ShoppingCartListResponse response) {
+        activity.hideProgress();
+        activity.moveToNext(mStepName, response);
+
+    }
+
+    @Override
+    public void setPresenter(GuestStepThreeRootContract.Presenter presenter) {
 
     }
 }

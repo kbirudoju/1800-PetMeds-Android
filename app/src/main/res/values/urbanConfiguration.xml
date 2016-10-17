@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="uaDevelopmentAppKey">IY15SbPiSFuJ-9O3lfvvsA</string>
+    <string name="uaDevelopmentAppSecret">kG7_I8MMQ_qszwasWadffw</string>
+    <string name="uaProductionAppKey"></string>
+    <string name="uaProductionAppSecret"></string>
+    <string name="uaLogLevel">DEBUG</string>
+    <string name="uaGcmSender">761969710064</string>
+
+</resources>

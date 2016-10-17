@@ -24,6 +24,7 @@ import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
 import com.petmeds1800.model.entities.EasyRefillReminder;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.GuestCheckoutPaymentReuest;
 import com.petmeds1800.model.entities.InitCheckoutResponse;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;

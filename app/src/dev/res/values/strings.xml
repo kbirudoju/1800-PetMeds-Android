@@ -2,5 +2,4 @@
 <resources>
 
     <string name="server.endpoint">https://dev.1800petmeds.com</string>
-
 </resources>
