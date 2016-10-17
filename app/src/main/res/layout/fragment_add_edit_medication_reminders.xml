@@ -5,9 +5,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:id="@+id/containerLayout"
+
         android:padding="@dimen/dp_16">
     <LinearLayout
+            android:id="@+id/containerLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -25,7 +26,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_item"
                     android:maxLength="@integer/characterLimit_30"
-                    android:focusableInTouchMode="false"
+
                     android:singleLine="true"
                     style="@style/StyledEditText"
                     android:textColor="@color/edittext_selector"/>
@@ -43,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_pet_name"
-                    android:focusableInTouchMode="false"
+
                     android:maxLength="@integer/characterLimit_30"
                     android:singleLine="true"
                     style="@style/StyledEditText"
@@ -97,6 +98,7 @@
                 android:fontFamily="@string/font_roboto_medium"
                 android:textColor="@color/white"
                 android:background="@drawable/button_selector"
+                android:visibility="gone"
                />
     </LinearLayout>
 </ScrollView>

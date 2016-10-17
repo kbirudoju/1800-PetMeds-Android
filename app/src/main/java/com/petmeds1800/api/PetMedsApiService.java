@@ -41,6 +41,8 @@ import com.petmeds1800.model.entities.PetMedicalConditionResponse;
 import com.petmeds1800.model.entities.PetMedicationResponse;
 import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.Profile;
+import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
+import com.petmeds1800.model.entities.RemoveMedicationReminderResponse;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.model.entities.SavePetVetRequest;
@@ -317,5 +319,15 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/reminder/ReminderActor/createMedReminder")
     Observable<AddMedicationReminderResponse> saveMedicationReminders(
             @Body AddMedicationReminderRequest addMedicationReminderRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/updateMedReminder")
+    Observable<AddMedicationReminderResponse> updateMedicationReminders(
+            @Body AddMedicationReminderRequest addMedicationReminderRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/deleteMedReminder")
+    Observable<RemoveMedicationReminderResponse> removeMedicationReminders(
+            @Body RemoveMedicationReminderRequest removeMedicationReminderRequest);
 
 }

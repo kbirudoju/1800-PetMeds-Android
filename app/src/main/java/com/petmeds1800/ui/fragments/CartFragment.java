@@ -84,15 +84,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         return view;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Constants.DIALOG_REMINDER_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.hasExtra(Constants.DIALOG_DATA_TOKEN)){
-            ReminderDialogData reminderDialogData = (ReminderDialogData) data.getExtras().getSerializable(Constants.DIALOG_DATA_TOKEN);
-        }
-
-    }
 
     @Override
     public void onResume() {

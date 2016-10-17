@@ -559,6 +559,20 @@
     <string name="add_reminder_txt">Add a Reminder</string>
     <string name="pet_name">PET NAME</string>
     <string name="add_new_pet">+ Add New Pet</string>
+    <string name="error_empty_day_reminder">Day entry should not be empty</string>
+    <string name="error_empty_month_reminder">Month entry should not be empty</string>
+    <string name="error_empty_week_reminder">Week entry should not be empty</string>
+    <string name="day_sunday">SUN</string>
+    <string name="day_monday">MON</string>
+    <string name="day_tuesday">TUE</string>
+    <string name="day_wednesday">WED</string>
+    <string name="day_thursday">THU</string>
+    <string name="day_friday">FRI</string>
+    <string name="day_saturday">SAT</string>
+    <string name="medication_reminder_added_message">Medication reminder added successfully</string>
+    <string name="medication_reminder_removed_message">Medication reminder removed successfully</string>
+    <string name="medication_reminder_updated_message">Medication reminder updated successfully</string>
+    <string name="medication_reminder_status">Medication Reminder has been set</string>
 
 </resources>
 

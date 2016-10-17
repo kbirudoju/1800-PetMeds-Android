@@ -28,7 +28,7 @@ public class Utils {
     private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
             "Jul", "Aug", "Sep", "Oct",
             "Nov", "Dec"};
-
+    public  static final String [] WEEKDAYS_NAMES = new String[]{"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
     public static String changeDateFormat(long millisecond, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         String dateString = formatter.format(new Date(millisecond));
@@ -91,7 +91,16 @@ public class Utils {
         return PICKER_DISPLAY_MONTHS_NAMES[month - 1];
     }
     public static Date getDate(String dateStr) throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
+        DateFormat formatter = new SimpleDateFormat("h:mm a");
         return formatter.parse(dateStr);
+    }
+    public static Date getReminderDate(String dateStr) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("MMM dd h:mm a");
+        return formatter.parse(dateStr);
+    }
+
+    public static String getDateInMM_DD_YYYY_Format(Date date){
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        return formatter.format(date);
     }
 }

@@ -17,7 +17,6 @@ import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
-import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -155,7 +154,7 @@ public class StepFiveRootFragment extends AbstractFragment
 
     private StepFiveRootContract.Presenter mPresenter;
 
-    private Order mOrder;
+ 
 
     public static final String DOLLAR_SIGN = "$";
 
@@ -168,8 +167,6 @@ public class StepFiveRootFragment extends AbstractFragment
     private static final int ADD_ONE_MONTH = 1;
 
     private static final int SIZE_FOUR = 4;
-
-    private ReviewSubmitAdapter mReviewSubmitAdapter;
 
     private ShippingAddress mShippingAddress;
 
@@ -245,7 +242,7 @@ public class StepFiveRootFragment extends AbstractFragment
     }
 
     private void setupCardsRecyclerView(ArrayList<Item> items) {
-        mReviewSubmitAdapter = new ReviewSubmitAdapter(getContext());
+        ReviewSubmitAdapter mReviewSubmitAdapter = new ReviewSubmitAdapter(getContext());
         mReviewSubmitAdapter.setOpenDailogListener(this);
         mReviewSubmitAdapter.setItems(items);
         mOrdersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -300,7 +297,7 @@ public class StepFiveRootFragment extends AbstractFragment
     public void populateOrderReviewDetails(OrderReviewSubmitResponse response) {
         mProgressbar.setVisibility(View.GONE);
         CheckoutSteps checkoutSteps = response.getCheckoutSteps();
-        mOrder = response.getOrder();
+        Order mOrder = response.getOrder();
 
         if (checkoutSteps != null) {
             mApplicableSteps = checkoutSteps.getApplicableSteps();

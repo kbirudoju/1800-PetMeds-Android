@@ -2,6 +2,7 @@ package com.petmeds1800.ui.medicationreminders;
 
 import com.petmeds1800.model.entities.AddMedicationReminderRequest;
 import com.petmeds1800.model.entities.AddMedicationReminderResponse;
+import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -12,13 +13,16 @@ import com.petmeds1800.mvp.BaseView;
 public class AddEditMedicationRemindersContract {
     interface View extends BaseView<Presenter> {
         boolean isActive();
-        void onSuccess(AddMedicationReminderResponse response);
+        void onAddEditSuccess(AddMedicationReminderResponse response);
+        void onRemoveSuccess();
         void onError(String errorMessage);
         void showErrorCrouton(CharSequence message, boolean span);
     }
 
     interface Presenter extends BasePresenter {
         void saveReminders(AddMedicationReminderRequest request);
+        void updateReminders(AddMedicationReminderRequest request);
+        void removeMedicationReminders(RemoveMedicationReminderRequest removeMedicationReminderRequest);
     }
 
 }

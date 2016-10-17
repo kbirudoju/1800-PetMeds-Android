@@ -32,6 +32,15 @@ public class MedicationReminderItem implements Serializable {
     private String userId;
 
     private String reminderId;
+    private boolean disableReminder;
+
+    public boolean isDisableReminder() {
+        return disableReminder;
+    }
+
+    public void setDisableReminder(boolean disableReminder) {
+        this.disableReminder = disableReminder;
+    }
 
     public String getStartDate() {
         return startDate;
