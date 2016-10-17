@@ -8,13 +8,13 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_petprofileempty" />
+            android:src="@drawable/ic_emptystate_askvet" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp_13"
             style="@style/styledefault"
-            android:text="@string/noPetTxt"/>
+            android:text="@string/no_vet_txt"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,7 +31,9 @@
             style="@style/paragraph"
             android:gravity="center"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="@string/addPetDescription"/>
+            android:text="@string/add_vet_description"
+            android:layout_marginLeft="@dimen/dp_57"
+            android:layout_marginRight="@dimen/dp_57"/>
 
         <Button
             android:id="@+id/addPet_button"
@@ -44,7 +46,7 @@
             android:background="@color/petmeds_blue"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
-            android:text="@string/add_new_vet_txt"/>
+            android:text="@string/add_vet_caps"/>
 
     </LinearLayout>
 </RelativeLayout>

@@ -547,6 +547,9 @@
     <string name="items_formatter">Subtotal (%d Item)</string>
     <!--Vet-->
     <string name="action_call">CALL</string>
+    <string name="add_vet_caps">ADD A VET</string>
+    <string name="add_vet_description">Add a vet for easier  prescription ordering </string>
+    <string name="no_vet_txt">You have no vets</string>
 
 </resources>
 

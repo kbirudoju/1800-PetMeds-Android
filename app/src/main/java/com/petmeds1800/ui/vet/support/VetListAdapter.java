@@ -70,7 +70,7 @@ public class VetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        return ((vetList == null || position >= vetList.size())) ? FOOTER_VIEW_TYPE : NORMAL_VIEW_TYPE;
+        return ((position >= vetList.size())) ? FOOTER_VIEW_TYPE : NORMAL_VIEW_TYPE;
     }
 
 

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.petmeds1800.R;
@@ -34,6 +35,8 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     private VetListContract.Presenter mPresenter;
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
+    @BindView(R.id.noVet_layout)
+    LinearLayout noVetView;
 
     @Nullable
     @Override
@@ -76,7 +79,15 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     @Override
     public void onSuccess(ArrayList<Vet> vetList) {
         progressBar.setVisibility(View.GONE);
-        mVetListAdapter.setData(vetList);
+        if(vetList!=null && vetList.size()==0){
+            noVetView.setVisibility(View.VISIBLE);
+            mVetRecyclerView.setVisibility(View.GONE);
+        }else{
+            noVetView.setVisibility(View.GONE);
+            mVetRecyclerView.setVisibility(View.VISIBLE);
+            mVetListAdapter.setData(vetList);
+        }
+
     }
 
     @Override
