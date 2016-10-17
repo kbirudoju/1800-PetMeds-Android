@@ -22,7 +22,8 @@ public class GoogleAnalyticsModule {
     public GoogleAnalyticsModule() {
     }
 
-    @Provides @AppScope
+    @Provides
+    @AppScope
     Tracker provideTracker(Application app) {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(app);
         if (BuildConfig.DEBUG) {

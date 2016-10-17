@@ -62,6 +62,14 @@ public class GeneralPreferencesHelper {
         return mPreferences.getString(LOGIN_EMAIL, null);
     }
 
+    public void setLoginPassword(String password){
+        mPreferences.edit().putString(LOGIN_PASSWORD, password).apply();
+    }
+
+    public String getLoginPassword(){
+        return mPreferences.getString(LOGIN_PASSWORD, null);
+    }
+
     public void setIsUserLoggedIn(boolean value) {
         mPreferences.edit().putBoolean(IS_USER_LOGGED_IN, value).apply();
     }

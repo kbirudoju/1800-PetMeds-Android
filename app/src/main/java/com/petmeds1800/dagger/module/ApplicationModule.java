@@ -20,12 +20,14 @@ public class ApplicationModule {
         this.mApp = app;
     }
 
-    @Provides @AppScope
+    @Provides
+    @AppScope
     Application provideApplication() {
         return mApp;
     }
 
-    @Provides @AppScope
+    @Provides
+    @AppScope
     Context provideContext(){
         return mApp;
     }

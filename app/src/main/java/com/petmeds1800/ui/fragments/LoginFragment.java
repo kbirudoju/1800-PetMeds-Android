@@ -181,6 +181,10 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     }
 
     private void doLogin() {
+
+        final String emailText = mEmailEdit.getText().toString().trim();
+        final String passwordText = mPasswordEdit.getText().toString().trim();
+
         showProgress();
         mApiService.getSessionConfirmationNumber()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -208,8 +212,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                                 mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
                             }
                             return mApiService
-                                    .login(new LoginRequest(mEmailEdit.getText().toString().trim(),
-                                            mPasswordEdit.getText().toString().trim(), sessionConfNumber))
+                                    .login(new LoginRequest(emailText, passwordText, sessionConfNumber))
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
                         } else {
@@ -240,6 +243,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                             Log.v("login response", loginResponse.getStatus().getCode());
                             if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
                                 mPreferencesHelper.setIsUserLoggedIn(true);
+                                mPreferencesHelper.setLoginEmail(loginResponse.getProfile().getEmail());
+                                mPreferencesHelper.setLoginPassword(passwordText);
                                 navigateToHome();
                             } else {
                                 showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),

@@ -32,7 +32,7 @@ public class PetMedsApplication extends MultiDexApplication {
     protected AppComponent createAppComponent() {
         return DaggerAppComponent.builder()
                 .applicationModule(new ApplicationModule(this))
-                .restModule(new RestModule(getString(R.string.server_endpoint) , getApplicationContext()))
+                .restModule(new RestModule(getString(R.string.server_endpoint), getApplicationContext()))
                 .storageModule(new StorageModule())
                 .build();
     }

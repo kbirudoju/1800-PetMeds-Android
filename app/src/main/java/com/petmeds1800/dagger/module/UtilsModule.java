@@ -18,12 +18,14 @@ public class UtilsModule {
     public UtilsModule() {
     }
 
-    @Provides @AppScope
+    @Provides
+    @AppScope
     PermissionUtils providePermissionsUtils(Application app) {
         return new PermissionUtils(app);
     }
 
-    @Provides @AppScope
+    @Provides
+    @AppScope
     FileUtils provideFileUtils() {
         return new FileUtils();
     }

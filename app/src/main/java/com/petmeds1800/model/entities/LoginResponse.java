@@ -17,4 +17,37 @@ public class LoginResponse {
         return profile;
     }
 
+    public class Profile {
+
+        private String lastName;
+
+        private boolean pushNotification;
+
+        private String email;
+
+        private String userId;
+
+        private String firstName;
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public boolean isPushNotification() {
+            return pushNotification;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+    }
+
 }

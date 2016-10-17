@@ -626,6 +626,8 @@ public class SignUpFragment extends AbstractFragment
                             Log.v("login response", signUpResponse.getStatus().getCode());
                             if (signUpResponse.getStatus().getCode().equals("SUCCESS")) {
                                 mPreferencesHelper.setIsUserLoggedIn(true);
+                                mPreferencesHelper.setLoginEmail(signUpResponse.getProfile().getEmail());
+                                mPreferencesHelper.setLoginPassword(passwordText);
                                 navigateToHome();
                             } else {
                                 showErrorCrouton(Html.fromHtml(signUpResponse.getStatus().getErrorMessages().get(0)),

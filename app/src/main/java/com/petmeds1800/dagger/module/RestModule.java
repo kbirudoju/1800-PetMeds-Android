@@ -28,11 +28,10 @@ public class RestModule {
 
     private final SharedPrefsCookiePersistor mSharedPrefsCookiePersistor;
 
-    public RestModule(String endpoint , Context applicationContext) {
+    public RestModule(String endpoint, Context applicationContext) {
         mEndpoint = endpoint;
         mSessionCookie = new SetCookieCache();
         mSharedPrefsCookiePersistor = new SharedPrefsCookiePersistor(applicationContext);
-
     }
 
     @Provides
@@ -44,7 +43,6 @@ public class RestModule {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addNetworkInterceptor(interceptor);
-
         }
         return builder.cookieJar(cookieJar).build();
     }
@@ -64,22 +62,16 @@ public class RestModule {
 
     @Provides
     @AppScope
-    public CookieJar providePersistentCookie(Context context){
+    public CookieJar providePersistentCookie() {
         return new PersistentCookieJar(mSessionCookie, mSharedPrefsCookiePersistor);
     }
 
     @Provides
     @AppScope
-    public SetCookieCache provideCookieCache(){
+    public SetCookieCache provideCookieCache() {
         return mSessionCookie;
     }
 
-  /*  @Provides
-    @AppScope
-    public CookieJar providePersistentCookie(Context context){
-        return new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
-    }
-*/
     @Provides
     @AppScope
     public PetMedsApiService provideApiService(Retrofit retrofit) {
