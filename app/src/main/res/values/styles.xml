@@ -287,4 +287,9 @@
         <item name="android:textColor">@color/grey_text</item>
     </style>
 
+    <style name="radionbutton"
+        parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radio_button_selector</item>
+    </style>
+
 </resources>

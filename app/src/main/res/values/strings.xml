@@ -557,6 +557,8 @@
         your pet\'s medication.
     </string>
     <string name="add_reminder_txt">Add a Reminder</string>
+    <string name="pet_name">PET NAME</string>
+    <string name="add_new_pet">+ Add New Pet</string>
 
 </resources>
 
