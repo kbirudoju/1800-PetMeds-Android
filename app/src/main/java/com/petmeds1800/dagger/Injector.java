@@ -59,7 +59,10 @@ import com.petmeds1800.ui.vet.AddVetFragment;
 import com.petmeds1800.ui.vet.AddVetPresenter;
 import com.petmeds1800.ui.vet.CantFindVetFragment;
 import com.petmeds1800.ui.vet.CantFindVetPresenter;
+import com.petmeds1800.ui.vet.EditVetFragment;
 import com.petmeds1800.ui.vet.VetListPresenter;
+import com.petmeds1800.ui.vet.presenter.EditVetPresenter;
+import com.petmeds1800.ui.vet.presenter.FindVetPresenter;
 import com.petmeds1800.util.AnalyticsUtil;
 
 /**
@@ -172,6 +175,9 @@ public interface Injector {
     void inject(GuestStepThreePresenter guestStepThreePresenter);
 
     void inject(AddGuestCardFragment addGuestCardFragment);
+    void inject(FindVetPresenter findVetPresenter);
+    void inject(EditVetPresenter editVetPresenter);
+    void inject(EditVetFragment editVetFragment);
 
     void inject(CheckOutActivity addGuestCardFragment);
 }

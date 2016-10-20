@@ -94,5 +94,6 @@
     <dimen name="dp_239">239dp</dimen>
     <dimen name="dp_150">150dp</dimen>
     <dimen name="dp_52">52dp</dimen>
+    <dimen name="dp_98">98dp</dimen>
 
 </resources>

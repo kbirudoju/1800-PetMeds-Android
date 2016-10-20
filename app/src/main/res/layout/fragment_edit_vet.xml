@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/containerlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dp_16">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/vetNameInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/StyledEditTextHintLayout"
+        app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+        android:layout_marginTop="@dimen/dp_10">
+
+        <EditText
+            android:id="@+id/vet_name_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_vet_name"
+            android:maxLength="@integer/characterLimit_30"
+            android:singleLine="true"
+            style="@style/StyledEditText"
+            android:textColor="@color/edittext_selector"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/clinicNameInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/StyledEditTextHintLayout"
+        app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+        android:layout_marginTop="@dimen/dp_10">
+
+        <EditText
+            android:id="@+id/clinic_name_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_clinic"
+            android:maxLength="@integer/characterLimit_30"
+            android:singleLine="true"
+            style="@style/StyledEditText"
+            android:textColor="@color/edittext_selector"/>
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/phoneNumberInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/StyledEditTextHintLayout"
+        app:hintTextAppearance="@style/StyledEditTextFloatingLabel"
+        android:layout_marginTop="@dimen/dp_10">
+
+        <EditText
+            android:id="@+id/phone_number_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_phoneNumber"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:singleLine="true"
+            style="@style/StyledEditText"
+            android:textColor="@color/edittext_selector"/>
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        android:id="@+id/removeVetButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/dialog_button_style_blue"
+        android:text="@string/remove_vet_txt"
+        android:layout_marginTop="@dimen/dp_30"
+        />
+</LinearLayout>

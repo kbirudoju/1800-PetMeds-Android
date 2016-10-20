@@ -19,10 +19,16 @@ import butterknife.ButterKnife;
  * Created by pooja on 10/12/2016.
  */
 public class VetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    final static int NORMAL_VIEW_TYPE = 1;
-    final static int FOOTER_VIEW_TYPE = 2;
+   public final static int NORMAL_VIEW_TYPE = 1;
+   public final static int FOOTER_VIEW_TYPE = 2;
     private ArrayList<Vet> vetList;
+    View.OnClickListener onClickListener;
 
+
+    public VetListAdapter( View.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,10 +38,13 @@ public class VetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             int resource = R.layout.view_vet_list_item;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new VetItemViewHolder(v);
+            LinearLayout editLayout=(LinearLayout)v.findViewById(R.id.edit_action_view);
+            editLayout.setOnClickListener(onClickListener);
         } else {
             int resource = R.layout.view_find_a_vet;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder=new FooterViewHolder(v);
+            v.setOnClickListener(onClickListener);
         }
         return viewHolder;
     }
@@ -50,6 +59,7 @@ public class VetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             vetViewHolder.clinic_name_label.setText(vet.getClinic());
             vetViewHolder.vet_name_label.setText(vet.getName());
             vetViewHolder.phone_number_label.setText(vet.getPhoneNumber());
+            vetViewHolder.edit_action_view.setTag(vet);
 
         }
     }

@@ -570,6 +570,16 @@
     </string>
     <string name="add_reminder_txt">Add a Reminder</string>
 
+    <string name="miles_txt">miles</string>
+    <string name="referal_confirmation_txt">If you would like us to notify this clinic that you are interested in their services please ensure the information below is correct and tap Request Referral.</string>
+    <string name="request_referral_txt">REQUEST REFERRAL</string>
+    <string name="hint_your_name">Your Name</string>
+    <string name="hint_phone_number">Your Phone Number</string>
+    <string name="hint_clinic">Clinic</string>
+    <string name="remove_vet_txt">Remove Vet</string>
+    <string name="from_txt">from</string>
+    <string name="near_vet_txt">"Vet near "</string>
+    <string name="phone_title_txt">"Phone: "</string>
 
 </resources>
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/pattern_light_blue"
+        android:layout_alignParentTop="true"
+       >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search by Zip Code or City and State"
+            style="@style/formlabel"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_12"/>
+    <EditText
+        android:id="@+id/zipCodeEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_11"
+        android:layout_marginBottom="@dimen/dp_17"
+        android:maxLines="2"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/search"
+        android:drawableRight="@drawable/ic_near_me"
+        android:inputType="number"
+        style="@style/StyledEditText"
+        android:imeOptions="actionSearch"
+        android:textColor="@color/petmeds_blue"/>
+
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/vet_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="@dimen/dp_1"
+        android:visibility="visible"
+        android:background="@color/pattern_blue"
+        android:layout_below="@+id/top_layout"
+        />
+</RelativeLayout>

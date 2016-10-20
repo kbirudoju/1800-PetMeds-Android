@@ -9,8 +9,10 @@ import com.petmeds1800.model.ReOrderRequest;
 import com.petmeds1800.model.ReOrderResponse;
 import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.RemoveCardRequest;
+import com.petmeds1800.model.RemoveVetRequest;
 import com.petmeds1800.model.SearchVetByZipCodeResponse;
 import com.petmeds1800.model.StatesListResponse;
+import com.petmeds1800.model.UpdateVetRequest;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.AddPetRequest;
@@ -311,5 +313,14 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/reminder/ReminderActor/listMedReminders")
     Observable<MedicationReminderListResponse> getMedicationReminderList();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/vet/VetActor/update")
+    Observable<AddVetResponse> updateVet(@Body UpdateVetRequest request);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/vet/VetActor/remove")
+    Observable<RemovePetResponse> removeVet(@Body RemoveVetRequest request);
+
 
 }

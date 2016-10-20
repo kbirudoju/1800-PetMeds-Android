@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,7 +53,21 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mVetListAdapter=new VetListAdapter();
+        mVetListAdapter=new VetListAdapter(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("tag",v.getTag()+">>>>");
+                if(v.getTag()!=null){
+                    Bundle bundle= new Bundle();
+                    bundle.putSerializable("vet_info",(Vet)v.getTag());
+                    replaceAccountFragmentWithBundle(new EditVetFragment(), bundle);
+                }else{
+                    replaceAccountAndAddToBackStack(new FindAVetFragment(), FindAVetFragment.class.getName());
+
+                }
+
+            }
+        });
         setHasOptionsMenu(true);
         setUpVetList();
         mPresenter.getVetListData();
