@@ -11,6 +11,7 @@ import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
+import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.ui.payment.AddACardContract;
@@ -83,12 +84,6 @@ public class HomeActivity extends AbstractActivity
     private static final int[] TAB_ICON_SELECTED = {R.drawable.ic_menu_home_pressed, R.drawable.ic_menu_cart_pressed,
             R.drawable.ic_menu_learn_pressed, R.drawable.ic_menu_account_pressed};
 
-    private String mSearchString;
-
-    private boolean mShowOptionsMenu;
-
-    private HomeRootFragment mHomeRootFragment;
-
     TabPagerAdapter mAdapter;
 
     ArrayList<View> mTabLayoutArray = new ArrayList<>();
@@ -138,11 +133,11 @@ public class HomeActivity extends AbstractActivity
 
         //initialize fragment list
         List<Fragment> fragmentList = new ArrayList<>();
-        mHomeRootFragment = new HomeRootFragment();
+        HomeRootFragment mHomeRootFragment = new HomeRootFragment();
         mCartRootFragment = new CartRootFragment();
         fragmentList.add(mHomeRootFragment);
         fragmentList.add(mCartRootFragment);
-        fragmentList.add(new LearnFragment());
+        fragmentList.add(new LearnRootFragment());
         fragmentList.add(new AccountRootFragment());
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(mAdapter);
@@ -211,10 +206,9 @@ public class HomeActivity extends AbstractActivity
 
                 if (position == 0) {
                     getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
-                    mShowOptionsMenu = true;
+
                 } else {
                     getToolbar().setLogo(null);
-                    mShowOptionsMenu = false;
                 }
 
                 invalidateOptionsMenu();

@@ -1,5 +1,22 @@
 package com.petmeds1800.ui.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -12,25 +29,6 @@ import com.petmeds1800.mvp.ForgotPasswordTask.ForgotPasswordContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -116,8 +114,9 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
     public void showErrorCrouton(CharSequence message, boolean span) {
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+        } else {
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
-        Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
     }
 
     @Override
@@ -141,7 +140,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
         doTempHackForGettingSessionCookies();
     }
 
-    private void doTempHackForGettingSessionCookies(){
+    private void doTempHackForGettingSessionCookies() {
         showProgress();
         //TODO: remove this temporary hack after backend resolves their problem of cookies
         mApiService.login(new LoginRequest("", "", "test"))
@@ -172,7 +171,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                 });
     }
 
-    private void makeForgotPasswordApiCall(){
+    private void makeForgotPasswordApiCall() {
         showProgress();
         mApiService.getSessionConfirmationNumber()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -224,7 +223,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                         if (errorId == R.string.noInternetConnection) {
                             showErrorCrouton(getString(errorId), false);
                         }
-                        Log.v("onError", e.getMessage());    
+                        Log.v("onError", e.getMessage());
                     }
 
                     @Override

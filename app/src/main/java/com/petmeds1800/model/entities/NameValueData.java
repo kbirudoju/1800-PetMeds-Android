@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class NameValueData implements Serializable{
 
-    String name, value;
+    private String name, value;
 
     public String getName() {
         return name;

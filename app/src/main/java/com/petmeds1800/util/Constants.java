@@ -8,7 +8,6 @@ public class Constants {
     /*WidgetTypes Constant*/
     public static final String VIEW_TYPE_BANNER = "Banner";
 
-
     /*ShoppingCart Constants*/
     public static final int DELETE_ITEM_REQUEST_SHOPPINGCART = 1268;
 
@@ -43,7 +42,8 @@ public class Constants {
     public static final int ADD_NEW_VET_REQUEST = 4;
 
     public static final String IS_EDITABLE = "isEditable";
+
     public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
 
-
+    public static final int STORAGE_ACCESS_REQUEST_CODE = 111;
 }

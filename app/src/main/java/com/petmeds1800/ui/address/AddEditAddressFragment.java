@@ -482,8 +482,9 @@ public class AddEditAddressFragment extends AbstractFragment
         mProgressBar.setVisibility(View.GONE);
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+        }else {
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
-        Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
     }
 
     @Override

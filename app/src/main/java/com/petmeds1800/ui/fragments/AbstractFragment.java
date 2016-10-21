@@ -36,7 +36,6 @@ public abstract class AbstractFragment extends Fragment {
                 .beginTransaction();
         transaction.replace(R.id.account_root_fragment_container, fragment);
         transaction.commit();
-
     }
 
     void replaceCartFragment(Fragment fragment) {
@@ -45,16 +44,22 @@ public abstract class AbstractFragment extends Fragment {
         transaction.commit();
     }
 
-
-    void replaceHomeFragment(Fragment fragment,String tag) {
+    void replaceHomeFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
         transaction.replace(R.id.home_root_fragment_container, fragment, tag);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
-
     }
 
+    void replaceFragment(Fragment fragment, String tag, int containerId) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(containerId, fragment, tag);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.commit();
+    }
+
+    //TODO: can be replaced with replaceFragmentWithBundle
     void replaceHomeFragmentWithBundle(Fragment fragment, Bundle bundle) {
         FragmentTransaction trans = getFragmentManager()
                 .beginTransaction();
@@ -65,6 +70,7 @@ public abstract class AbstractFragment extends Fragment {
         trans.commit();
     }
 
+    //TODO: can be replaced with replaceFragmentWithBundle
     public void replaceAccountFragmentWithBundle(Fragment fragment, Bundle bundle) {
         FragmentTransaction trans = getFragmentManager().beginTransaction();
         trans.replace(R.id.account_root_fragment_container, fragment);
@@ -73,52 +79,56 @@ public abstract class AbstractFragment extends Fragment {
         trans.addToBackStack(null);
         trans.commit();
     }
+
     public void addAccountFragmentWithBundle(Fragment fragment, Bundle bundle) {
         FragmentTransaction trans = getFragmentManager().beginTransaction();
         trans.add(R.id.account_root_fragment_container, fragment);
+    }
+
+    public void replaceFragmentWithBundle(Fragment fragment, Bundle bundle, int containerId) {
+        FragmentTransaction trans = getFragmentManager().beginTransaction();
+        trans.replace(containerId, fragment);
         fragment.setArguments(bundle);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.addToBackStack(null);
         trans.commit();
     }
 
-    public void replaceStepRootChildFragment(Fragment fragment,int containerId) {
+    public void replaceStepRootChildFragment(Fragment fragment, int containerId) {
         FragmentTransaction trans = getChildFragmentManager().beginTransaction();
         trans.replace(containerId, fragment);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
     }
 
-    public void replaceStepRootChildFragmentWithTag(Fragment fragment,int containerId,String tag) {
+    public void replaceStepRootChildFragmentWithTag(Fragment fragment, int containerId, String tag) {
         FragmentTransaction trans = getChildFragmentManager().beginTransaction();
         trans.replace(containerId, fragment, tag);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
     }
 
-    public void addStepRootChildFragment(Fragment fragment,int containerId) {
+    public void addStepRootChildFragment(Fragment fragment, int containerId) {
         FragmentTransaction trans = getActivity().getSupportFragmentManager().beginTransaction();
         trans.replace(containerId, fragment);
         trans.addToBackStack(null);
         trans.commit();
     }
 
-    public void addOrReplaceFragmentWithBackStack(Fragment fragment, Bundle bundle) {
+    public void addOrReplaceFragmentWithBackStack(Fragment fragment, Bundle bundle, int containerId) {
         if (fragment != null) {
+            fragment.setArguments(bundle);
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             if (fragmentManager.getBackStackEntryCount() == 0) {
-                fragment.setArguments(bundle);
-                transaction.replace(R.id.home_root_fragment_container, fragment);
+                transaction.replace(containerId, fragment);
                 transaction.addToBackStack(fragment.getClass().getSimpleName());
-                transaction.commit();
             } else {
-                fragment.setArguments(bundle);
                 fragmentManager.popBackStack();
-                transaction.replace(R.id.home_root_fragment_container, fragment);
+                transaction.replace(containerId, fragment);
                 transaction.addToBackStack(null);
-                transaction.commit();
             }
+            transaction.commit();
         }
     }
 
@@ -137,7 +147,7 @@ public abstract class AbstractFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         HashMap<String, Boolean> deniedPermission = new HashMap<String, Boolean>();
         switch (requestCode) {
             case PERMISSIONS_REQUEST_CODE: {

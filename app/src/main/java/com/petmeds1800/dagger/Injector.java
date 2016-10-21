@@ -14,7 +14,6 @@ import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
 import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.ui.checkout.CheckoutActivityContract;
 import com.petmeds1800.ui.checkout.stepthreefragment.AddGuestCardFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreePresenter;
 import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
@@ -33,8 +32,6 @@ import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootPresentor;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootPresentor;
-import com.petmeds1800.ui.dashboard.CategoryListFragment;
-import com.petmeds1800.ui.dashboard.ProductCategoryPresenter;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
@@ -45,6 +42,7 @@ import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.SignUpFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.learn.MedConditionsListPresenter;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListPresentor;
 import com.petmeds1800.ui.orders.OrderDetailFragment;
 import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
@@ -180,4 +178,6 @@ public interface Injector {
     void inject(EditVetFragment editVetFragment);
 
     void inject(CheckOutActivity addGuestCardFragment);
+
+    void inject(MedConditionsListPresenter medConditionsListPresenter);
 }

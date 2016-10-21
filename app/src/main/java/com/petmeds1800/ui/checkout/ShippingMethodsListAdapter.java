@@ -85,7 +85,6 @@ public class ShippingMethodsListAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(View view) {
             if (mOnItemClickListener != null) {
-                notifyItemChanged(selectedPosition);
                 selectedPosition = getAdapterPosition();
                 notifyItemChanged(selectedPosition);
                 mOnItemClickListener.onItemClick(getAdapterPosition());

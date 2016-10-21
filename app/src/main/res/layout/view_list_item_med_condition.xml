@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/txv_med_condition"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/sp_16"
+    android:text="dsdsadsa"
+    android:drawableRight="@drawable/ic_arrow"
+    android:padding="@dimen/dp_16" />

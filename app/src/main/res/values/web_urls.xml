@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="url_med_condition">http://dev.1800petmeds.com/peteducation/search.jsp?Ntt=</string>
+    <string name="url_featured_education">http://www.1800petmeds.com/education</string>
+    <string name="url_featured_ask_vet">http://www.1800petmeds.com/education/ask-the-vet-form.htm</string>
+</resources>

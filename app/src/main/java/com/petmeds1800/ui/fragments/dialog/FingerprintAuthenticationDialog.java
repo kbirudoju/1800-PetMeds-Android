@@ -528,8 +528,9 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     public void showErrorCrouton(CharSequence message, boolean span) {
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, ((HomeActivity) getActivity()).getContainerView());
+        }else {
+            Utils.displayCrouton(getActivity(), (String) message, ((HomeActivity) getActivity()).getContainerView());
         }
-        Utils.displayCrouton(getActivity(), (String) message, ((HomeActivity) getActivity()).getContainerView());
     }
 
     public void showProgress() {

@@ -4,7 +4,6 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.ConfirmationReceiptFragment;
 import com.petmeds1800.util.Constants;
 
 import android.os.Bundle;

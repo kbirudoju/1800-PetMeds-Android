@@ -18,7 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by digvi on 10/13/2016.
+ * Created by Digvijay on 10/13/2016.
  */
 
 public class ReceiptItemsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

@@ -227,7 +227,7 @@ public class SignUpFragment extends AbstractFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -285,8 +285,9 @@ public class SignUpFragment extends AbstractFragment
     public void showErrorCrouton(CharSequence message, boolean span) {
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+        } else {
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
-        Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
     }
 
     @Override
@@ -623,7 +624,7 @@ public class SignUpFragment extends AbstractFragment
                     public void onNext(SignUpResponse signUpResponse) {
                         hideProgress();
                         if (signUpResponse != null) {
-                            Log.v("login response", signUpResponse.getStatus().getCode());
+                            Log.v("signup response", signUpResponse.getStatus().getCode());
                             if (signUpResponse.getStatus().getCode().equals("SUCCESS")) {
                                 mPreferencesHelper.setIsUserLoggedIn(true);
                                 mPreferencesHelper.setLoginEmail(signUpResponse.getProfile().getEmail());

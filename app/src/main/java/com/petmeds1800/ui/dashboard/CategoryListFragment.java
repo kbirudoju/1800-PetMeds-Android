@@ -16,15 +16,12 @@ import android.widget.TextView;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.ProductCategory;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
 import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +30,7 @@ import butterknife.OnClick;
 /**
  * Created by pooja on 9/13/2016.
  */
-public class CategoryListFragment extends AbstractFragment implements ProductCategoryListContract.View{
+public class CategoryListFragment extends AbstractFragment implements ProductCategoryListContract.View {
 
 
     @BindView(R.id.error_layout)
@@ -61,7 +58,7 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPresenter = new ProductCategoryPresenter(this , getContext());
+        mPresenter = new ProductCategoryPresenter(this, getContext());
         onAttachFragment(getParentFragment());
 
         PetMedsApplication.getAppComponent().inject(this);
@@ -71,7 +68,7 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_category_list,container,false);
+        View view = inflater.inflate(R.layout.fragment_category_list, container, false);
         ButterKnife.bind(this, view);
         mProductCategoryAdapter = new ProductCategoryAdapter(this, getContext());
 
@@ -84,9 +81,8 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
 
     public void onAttachFragment(Fragment fragment) {
         try {
-             mProductCategoryInteractionListener = (HomeFragmentContract.ProductCategoryInteractionListener) fragment;
-        }
-        catch(ClassCastException e) {
+            mProductCategoryInteractionListener = (HomeFragmentContract.ProductCategoryInteractionListener) fragment;
+        } catch (ClassCastException e) {
             throw new ClassCastException(fragment.toString() + "must implement ProductCategoryInteractionListener");
         }
     }
@@ -117,8 +113,9 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
         mProgressBar.setVisibility(View.GONE);
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+        } else {
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
-        Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
     }
 
     @Override
@@ -143,7 +140,7 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
 
     @Override
     public void startWebView(ProductCategory productCategory) {
-        if(mProductCategoryInteractionListener != null) {
+        if (mProductCategoryInteractionListener != null) {
             mProductCategoryInteractionListener.startWebViewFragment(productCategory);
         }
     }

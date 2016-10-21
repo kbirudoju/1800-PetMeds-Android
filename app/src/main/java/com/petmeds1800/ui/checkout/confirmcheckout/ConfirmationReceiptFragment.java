@@ -1,10 +1,10 @@
-package com.petmeds1800.ui.fragments;
+package com.petmeds1800.ui.checkout.confirmcheckout;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CommitOrder;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.Item;
-import com.petmeds1800.ui.checkout.confirmcheckout.ReceiptItemsListAdapter;
+import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.LayoutPrintingUtils;
 
@@ -78,7 +78,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
 
     protected List<Item> mReceiptItemList = new ArrayList<>();
 
-    private final int STORAGE_ACCESS_REQUEST_CODE = 111;
+
 
     public static ConfirmationReceiptFragment newInstance(CommitOrderResponse commitOrderResponse) {
 
@@ -107,6 +107,14 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_share) {
+            initStoragePermissionsWrapper();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -114,12 +122,6 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         mListAdapter = new ReceiptItemsListAdapter(mReceiptItemList, getContext());
         mRecyclerReceiptItems.setAdapter(mListAdapter);
         populateReceiptData();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        initStoragePermissionsWrapper();
-        return super.onOptionsItemSelected(item);
     }
 
     public File generatePdf() {
@@ -152,7 +154,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         if (hasStorageAccessPermission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat
                     .requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            STORAGE_ACCESS_REQUEST_CODE);
+                            Constants.STORAGE_ACCESS_REQUEST_CODE);
             return;
         }
         showShareOptions();
@@ -161,7 +163,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case STORAGE_ACCESS_REQUEST_CODE:
+            case Constants.STORAGE_ACCESS_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
                     showShareOptions();

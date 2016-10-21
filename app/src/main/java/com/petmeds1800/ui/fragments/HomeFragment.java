@@ -52,11 +52,6 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
     MenuItem searchMenuItem;
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         ((AbstractActivity) getActivity()).disableBackButton();
@@ -178,7 +173,7 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
                     bundle.putString(CommonWebviewFragment.URL_KEY, url);
                     // getToolbar().setLogo(null);
                     MenuItemCompat.collapseActionView(searchMenuItem);
-                    addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle);
+                    addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.home_root_fragment_container);
 
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();

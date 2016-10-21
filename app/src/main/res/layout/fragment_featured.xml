@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pattern_light_blue"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txv_questions"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="@dimen/dp_17"
+        android:layout_marginTop="@dimen/dp_19"
+        android:background="@color/white"
+        android:drawableRight="@drawable/ic_arrow"
+        android:padding="@dimen/large_margin"
+        android:text="@string/label_got_questions"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/black" />
+
+    <FrameLayout
+        android:id="@+id/container_webview_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

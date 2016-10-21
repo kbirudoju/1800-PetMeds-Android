@@ -1,6 +1,7 @@
 package com.petmeds1800.model.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sdixit on 16-09-2016.
@@ -10,9 +11,9 @@ public class PetMedicalConditionResponse {
 
     private Status status;
 
-    private ArrayList<NameValueData> medicalConditions;
+    private List<NameValueData> medicalConditions;
 
-    public ArrayList<NameValueData> getMedicalConditions() {
+    public List<NameValueData> getMedicalConditions() {
         return medicalConditions;
     }
 

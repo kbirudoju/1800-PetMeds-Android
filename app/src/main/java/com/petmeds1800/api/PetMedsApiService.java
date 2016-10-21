@@ -26,7 +26,6 @@ import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
 import com.petmeds1800.model.entities.EasyRefillReminder;
 import com.petmeds1800.model.entities.ForgotPasswordRequest;
 import com.petmeds1800.model.entities.ForgotPasswordResponse;
-import com.petmeds1800.model.entities.GuestCheckoutPaymentReuest;
 import com.petmeds1800.model.entities.InitCheckoutResponse;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;
@@ -94,7 +93,7 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("rest/model/atg/userprofiling/ProfileActor/orderHistory")
     Observable<MyOrder> getOrderList(@Query("_dynSessConf") String sessionConfirmation,
-            @Query("filterId") String filterId);
+                                     @Query("filterId") String filterId);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("rest/model/atg/userprofiling/ProfileActor/orderHistoryFilterlist")
@@ -156,7 +155,7 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/contact/ContactActor/detailed")
     Observable<AddAddressResponse> getAddressById(@Query("_dynSessConf") String sessionConfirmation,
-            @Query("addressId") String addressId);
+                                                  @Query("addressId") String addressId);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/update")
@@ -321,6 +320,5 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/vet/VetActor/remove")
     Observable<RemovePetResponse> removeVet(@Body RemoveVetRequest request);
-
 
 }

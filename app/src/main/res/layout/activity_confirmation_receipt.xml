@@ -22,7 +22,7 @@
             <fragment android:layout_width="match_parent"
                       android:layout_height="match_parent"
                       android:id="@+id/fragment_receipt"
-                      android:name="com.petmeds1800.ui.fragments.ConfirmationReceiptFragment"
+                      android:name="com.petmeds1800.ui.checkout.confirmcheckout.ConfirmationReceiptFragment"
                       tools:layout="@layout/fragment_confirmation_receipt"/>
 
             <fragment android:layout_width="match_parent"
