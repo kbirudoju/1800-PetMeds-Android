@@ -1,5 +1,26 @@
 package com.petmeds1800.ui.fragments.dialog;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
 import com.petmeds1800.PetMedsApplication;
@@ -14,26 +35,6 @@ import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
-
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -116,8 +117,6 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-//    private String loginEmail;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,7 +161,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
         if (mStage == Stage.FINGERPRINT) {
             gotoLogin();
         } else if (mStage == Stage.LOGIN) {
-            doLogin(null, null);
+            hideKeyboard(mEmailEdit);
+            doLogin(mPreferencesHelper.getLoginEmail(), null);
         } else if (mStage == Stage.FORGOT_PASSWORD) {
             sendForgotPasswordEmail();
         } else {
@@ -222,17 +222,10 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                                         Toast.LENGTH_SHORT).show();
                                 break;
                             case AUTHENTICATED:
-//                                Toast.makeText(getActivity(), "Successfully authenticated!", Toast.LENGTH_SHORT).show();
                                 mFingerprintIcon
                                         .setImageDrawable(ContextCompat
                                                 .getDrawable(getActivity(), R.drawable.ic_fingerprint_success));
                                 mFingerprintStatus.setText(getString(R.string.label_fingerprint_recognized));
-//                                new Handler().postDelayed(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        dismiss();
-//                                    }
-//                                }, 1000);
                                 doLogin(mPreferencesHelper.getLoginEmail(), mPreferencesHelper.getLoginPassword());
                                 break;
                         }
@@ -313,17 +306,11 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
         mEmailInput.setError(null);
         boolean isValidEmail;
         final String emailText = mEmailEdit.getText().toString().trim();
-//        if (loginEmail != null) {
-//            emailText = loginEmail;
-//        }
         if (emailText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
             return;
         } else {
             isValidEmail = validateEmail(emailText);
-//            if (isValidEmail) {
-//                loginEmail = emailText;
-//            }
         }
 
         if (mStage == Stage.FORGOT_PASSWORD && isValidEmail) {
@@ -411,25 +398,22 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
         boolean isValidEmail, isValidPassword;
         final String emailText, passwordText;
 
-        if (email != null && password != null) {
+        if (email != null) {
             emailText = email;
-            passwordText = password;
         } else {
             emailText = mEmailEdit.getText().toString().trim();
+        }
+        if (password != null) {
+            passwordText = password;
+        } else {
             passwordText = mPasswordEdit.getText().toString().trim();
         }
 
-//        if (loginEmail != null) {
-//            emailText = loginEmail;
-//        }
         if (emailText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
             return;
         } else {
             isValidEmail = validateEmail(emailText);
-//            if (isValidEmail) {
-//                loginEmail = emailText;
-//            }
         }
 
         if (passwordText.isEmpty()) {
@@ -467,7 +451,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                                     mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
                                 }
                                 return mApiService
-                                        .login(new LoginRequest(emailText, password,
+                                        .login(new LoginRequest(emailText, passwordText,
                                                 sessionConfNumber))
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribeOn(Schedulers.io());
@@ -528,7 +512,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     public void showErrorCrouton(CharSequence message, boolean span) {
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, ((HomeActivity) getActivity()).getContainerView());
-        }else {
+        } else {
             Utils.displayCrouton(getActivity(), (String) message, ((HomeActivity) getActivity()).getContainerView());
         }
     }
@@ -552,9 +536,17 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            doLogin(null, null);
+            doLogin(mPreferencesHelper.getLoginEmail(), null);
         }
         return false;
+    }
+
+    /*Used for hiding keyboard */
+    protected void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**
