@@ -111,10 +111,9 @@ public class HomeActivity extends AbstractActivity
             } else {
                 mPreferencesHelper.setIsFingerPrintEnabled(true);
             }
-        }
-        if (mPreferencesHelper.getIsUserLoggedIn()) {
             startService(new AddUpdateMedicationRemindersIntent(this, false));
         }
+
 
         //initialize fragment list
         List<Fragment> fragmentList = new ArrayList<>();

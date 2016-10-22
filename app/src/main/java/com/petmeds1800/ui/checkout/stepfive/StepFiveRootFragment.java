@@ -37,6 +37,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -154,7 +155,6 @@ public class StepFiveRootFragment extends AbstractFragment
 
     private StepFiveRootContract.Presenter mPresenter;
 
- 
 
     public static final String DOLLAR_SIGN = "$";
 
@@ -186,6 +186,8 @@ public class StepFiveRootFragment extends AbstractFragment
     private ArrayList<String> commerceItemIds;
 
     private ArrayList<Integer> reminderMonths;
+
+    private ReviewSubmitAdapter mReviewSubmitAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -242,7 +244,7 @@ public class StepFiveRootFragment extends AbstractFragment
     }
 
     private void setupCardsRecyclerView(ArrayList<Item> items) {
-        ReviewSubmitAdapter mReviewSubmitAdapter = new ReviewSubmitAdapter(getContext());
+        mReviewSubmitAdapter = new ReviewSubmitAdapter(getContext());
         mReviewSubmitAdapter.setOpenDailogListener(this);
         mReviewSubmitAdapter.setItems(items);
         mOrdersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -380,15 +382,19 @@ public class StepFiveRootFragment extends AbstractFragment
     public void onSubmitOrderClick() {
         activity.showProgress();
         CommitOrderRequest commitOrderRequest = new CommitOrderRequest();
-        commitOrderRequest.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        commitOrderRequest.setCommerceItemIds(new ArrayList<String>());
-        commitOrderRequest.setReminderMonths(new ArrayList<String>());
+        commitOrderRequest
+                .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        commitOrderRequest.setCommerceItemIds(mReviewSubmitAdapter.getCommerceItemsIdList());
+        commitOrderRequest.setReminderMonths(mReviewSubmitAdapter.getReorderMonthsIdList());
         mPresenter.submitComittedOrderDetails(commitOrderRequest);
 
     }
 
     @Override
-    public void openDailog(String[] data, int code, String title, int defaultValue, final TextView textview) {
+    public void openDailog(String[] data, int code, String title, int defaultValue, final TextView textview,
+            ArrayList<String> commerceItemIdsList, final ArrayList<String> reorderMonthsList) {
+
+        final int position = reorderMonthsList.indexOf(String.valueOf(defaultValue));
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
                 .newInstance(data,
@@ -397,6 +403,9 @@ public class StepFiveRootFragment extends AbstractFragment
             @Override
             public void onValueSelected(String value, int requestCode) {
                 textview.setText(value);
+                int monthsId = new ArrayList<String>(
+                        Arrays.asList(getActivity().getResources().getStringArray(R.array.month_names))).indexOf(value);
+                reorderMonthsList.set(position, String.valueOf(monthsId));
             }
         });
         commonDialogFragment.show(fragManager);
