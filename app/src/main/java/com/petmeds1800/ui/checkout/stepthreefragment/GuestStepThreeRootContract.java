@@ -61,6 +61,8 @@ public class GuestStepThreeRootContract {
          */
         boolean validateFields();
 
+        void initializeGuestAddressRequest();
+
         AddressRequest getAddressRequest();
 
     }

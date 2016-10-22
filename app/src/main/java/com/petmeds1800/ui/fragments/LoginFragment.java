@@ -178,7 +178,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             return;
         }
 
-        doTempHackForGettingSessionCookies();
+        doTempHackForGettingSessionCookies(true);
     }
 
     private void doLogin() {
@@ -256,7 +256,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                 });
     }
 
-    private void doTempHackForGettingSessionCookies() {
+    private void doTempHackForGettingSessionCookies(final boolean doLogin) {
         showProgress();
         //TODO: remove this temporary hack after backend resolves their problem of cookies
         mApiService.login(new LoginRequest("", "", "test"))
@@ -275,7 +275,13 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                             showErrorCrouton(getString(errorId), false);
                             hideProgress();
                         } else {
-                            doLogin();
+                            if(doLogin){
+                                doLogin();
+                            }
+                            else {
+                                initializeSessionConfirmationNumber();
+                            }
+
                         }
                     }
 
@@ -294,44 +300,47 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             navigateToHome();
         } else {
             showProgress();
-            mApiService.getSessionConfirmationNumber()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<SessionConfNumberResponse>() {
-                        @Override
-                        public void onCompleted() {
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            //error handling would be implemented once we get the details from backend team
-                            hideProgress();
-                            showErrorCrouton(e.getLocalizedMessage(), false);
-                        }
-
-                        @Override
-                        public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
-                            hideProgress();
-                            if (sessionConfNumberResponse != null) {
-                                String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                                Log.v("sessionToken", sessionConfNumber);
-                                if (sessionConfNumber != null) {
-                                    mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                                    navigateToHome();
-                                } else {
-                                    //TODO Have to change the message
-                                    showErrorCrouton("Session number not generated", false);
-                                }
-                            } else {
-                                //TODO Have to change the message
-                                showErrorCrouton("Session response not generated", false);
-                            }
-
-                        }
-                    });
+            doTempHackForGettingSessionCookies(false);
         }
 
+    }
 
+    private void initializeSessionConfirmationNumber() {
+        mApiService.getSessionConfirmationNumber()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<SessionConfNumberResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        hideProgress();
+                        showErrorCrouton(e.getLocalizedMessage(), false);
+                    }
+
+                    @Override
+                    public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
+                        hideProgress();
+                        if (sessionConfNumberResponse != null) {
+                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
+                            Log.v("sessionToken", sessionConfNumber);
+                            if (sessionConfNumber != null) {
+                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                                navigateToHome();
+                            } else {
+                                //TODO Have to change the message
+                                showErrorCrouton("Session number not generated", false);
+                            }
+                        } else {
+                            //TODO Have to change the message
+                            showErrorCrouton("Session response not generated", false);
+                        }
+
+                    }
+                });
     }
 
 

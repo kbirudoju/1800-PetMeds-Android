@@ -34,6 +34,7 @@ public interface CheckoutActivityContract {
 
         boolean isActive();
 
+        void startNextStep(String stepName, ShoppingCartListResponse shoppingCartListResponse, boolean isReviewOn);
     }
 
     interface Presenter extends BasePresenter {

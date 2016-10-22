@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class AddEditCardResponse implements Serializable {
 
-    private Card card;
+    private Card creditCard;
 
     private Status status;
 
@@ -22,10 +22,10 @@ public class AddEditCardResponse implements Serializable {
     }
 
     public Card getCard() {
-        return card;
+        return creditCard;
     }
 
     public void setCard(Card card) {
-        this.card = card;
+        this.creditCard = card;
     }
 }

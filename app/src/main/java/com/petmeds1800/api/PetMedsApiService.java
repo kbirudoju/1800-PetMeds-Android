@@ -3,6 +3,7 @@ package com.petmeds1800.api;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.AddVetResponse;
+import com.petmeds1800.model.Card;
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.model.ReOrderRequest;
@@ -61,7 +62,9 @@ import com.petmeds1800.model.entities.VetListResponse;
 import com.petmeds1800.model.entities.WidgetListResponse;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.response.CardDetailResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 
 import java.util.HashMap;
@@ -325,6 +328,10 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/vet/VetActor/notify")
     Observable<RemovePetResponse> requestRefrral(@Body UpdateVetRequest request);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/payment/PaymentActor/detailed")
+    Observable<CardDetailResponse> getCardByPaymentCardKey(@Body CardDetailRequest request);
 
 
 }

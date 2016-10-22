@@ -4,8 +4,11 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.ShippingAddressRequest;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -42,12 +45,24 @@ public class GuestStepOneRootPresentor implements GuestStepOneRootContract.Prese
                     public void onCompleted() {
 
                     }
+
                     @Override
                     public void onError(Throwable e) {
-                        //error handling would be implemented once we get the details from backend team
-                        mView.onError(e.getLocalizedMessage());
+                        Log.e("AddACard", e.getMessage());
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if(errorId != 0){
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
+                            }
 
+                        }
+                        else {
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                            }
+                        }
                     }
+
                     @Override
                     public void onNext(ShoppingCartListResponse shoppingCartListResponse ) {
                         if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {

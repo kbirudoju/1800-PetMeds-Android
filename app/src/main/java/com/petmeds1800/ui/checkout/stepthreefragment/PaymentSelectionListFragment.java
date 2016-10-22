@@ -1,11 +1,14 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Card;
+import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.payment.SavedCardsListContract;
 import com.petmeds1800.ui.payment.SavedCardsListPresenter;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
 import android.os.Bundle;
@@ -21,6 +24,8 @@ import android.widget.RelativeLayout;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,7 +36,7 @@ import butterknife.ButterKnife;
 
 public class PaymentSelectionListFragment extends AbstractFragment implements SavedCardsListContract.View {
 
-    public static final int REQUEST_CODE = 5;
+    public static final String REVIEW_ON_KEY = "review_on";
 
     @BindView(R.id.paymentList_recyclerView)
     RecyclerView mPaymentListRecyclerView;
@@ -48,6 +53,15 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
 
     private PaymentSelectionListAdapter mPaymentSelectionListAdapter;
 
+    private String mPaymentCardKey;
+
+    private int mRequestCode;
+
+    private boolean mReviewOn;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     public static PaymentSelectionListFragment newInstance(int requestCode) {
         Bundle args = new Bundle();
         args.putInt(AddEditCardFragment.REQUEST_CODE, requestCode);
@@ -56,10 +70,30 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
         return fragment;
     }
 
+    public static PaymentSelectionListFragment newInstance(int requestCode , String paymentCardKey , boolean isReviewOn) {
+        Bundle args = new Bundle();
+        args.putInt(AddEditCardFragment.REQUEST_CODE, requestCode);
+        args.putString(AddEditCardFragment.FIRST_ARG, paymentCardKey);
+        args.putBoolean(REVIEW_ON_KEY, isReviewOn);
+        PaymentSelectionListFragment fragment = new PaymentSelectionListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            mRequestCode =  bundle.getInt(AddEditCardFragment.REQUEST_CODE);
+            mPaymentCardKey = bundle.getString(AddEditCardFragment.FIRST_ARG);
+            mReviewOn = bundle.getBoolean(REVIEW_ON_KEY);
+
+        }
         mPresenter = new SavedCardsListPresenter(this);
+
+        PetMedsApplication.getAppComponent().inject(this);
 
     }
 
@@ -76,7 +110,7 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
         View view = inflater.inflate(R.layout.fragment_payment_selction_list, container, false);
         ButterKnife.bind(this, view);
         mPaymentSelectionListAdapter = new PaymentSelectionListAdapter(this,
-                getContext(), PaymentSelectionListFragment.REQUEST_CODE);
+                getContext(), mRequestCode);
         setupCardsRecyclerView();
         return view;
 
@@ -101,7 +135,13 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.start();
+        if(mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
+            mPresenter.getSavedCards();
+        }
+        else { //for guest user we would get the data from paymentActor/Detail API
+            mPresenter.getCardDetaiBypaymentCardKey(new CardDetailRequest(mPaymentCardKey , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
+        }
+
     }
 
     @Override
@@ -134,6 +174,5 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
     public void setPresenter(@NonNull SavedCardsListContract.Presenter presenter) {
         mPresenter = presenter;
     }
-
 
 }

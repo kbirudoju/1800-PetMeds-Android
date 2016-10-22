@@ -187,9 +187,10 @@ public class AddEditAddressFragment extends AbstractFragment
 
     public static AddEditAddressFragment newInstance(Address updateAddress, int requestCode) {
         Bundle bundle = new Bundle();
-        if (requestCode == EDIT_ADDRESS_REQUEST || requestCode == StepThreeRootFragment.REQUEST_CODE
+        if (requestCode == EDIT_ADDRESS_REQUEST || requestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE
                 || requestCode == StepOneRootFragment.REQUEST_CODE
-                || requestCode == GuestStepOneRootFragment.REQUEST_CODE) {
+                || requestCode == GuestStepOneRootFragment.REQUEST_CODE
+                || requestCode == GuestStepThreeRootFragment.REQUEST_CODE) {
             bundle.putSerializable(ADDRESS, updateAddress);
             bundle.putInt(REQUEST_CODE, requestCode);
             AddEditAddressFragment addEditAddressFragment = new AddEditAddressFragment();
@@ -224,7 +225,8 @@ public class AddEditAddressFragment extends AbstractFragment
         if (mBundle != null) {
             mRequestCode = mBundle.getInt(REQUEST_CODE);
         }
-        if (mRequestCode != StepThreeRootFragment.REQUEST_CODE
+        if (mRequestCode != StepThreeRootFragment.LOGGED_IN_REQUEST_CODE
+                && mRequestCode != StepThreeRootFragment.GUEST_REQUEST_CODE
                 && mRequestCode != GuestStepOneRootFragment.REQUEST_CODE) {
             setHasOptionsMenu(true);
         }
@@ -253,13 +255,18 @@ public class AddEditAddressFragment extends AbstractFragment
                 //show the remove button
                 mRemoveAddressButton.setVisibility(View.VISIBLE);
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.editAddressTitle));
-            } else if (mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+            } else if (mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
                 intitalizeViewsForCheckOutBillingAddress();
                 mAddress = (Address) mBundle.getSerializable(ADDRESS);
                 populateData(mAddress);
             } else if (mRequestCode == GuestStepOneRootFragment.REQUEST_CODE) {
                 intitalizeViewsForGuestCheckOutBillingAddress();
-            } else {
+            } else if (mRequestCode == GuestStepThreeRootFragment.REQUEST_CODE) {
+                intitalizeViewsForCheckOutBillingAddress();
+                mAddress = (Address) mBundle.getSerializable(ADDRESS);
+                populateData(mAddress);
+            }
+            else {
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
             }
         } else {
@@ -297,7 +304,7 @@ public class AddEditAddressFragment extends AbstractFragment
         if (mRequestCode == EDIT_ADDRESS_REQUEST) {
             mRemoveAddressButton.setOnClickListener(this);
         }
-        if (mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+        if (mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
             intitalizeViewsForCheckOutBillingAddress();
         }
     }
@@ -348,6 +355,29 @@ public class AddEditAddressFragment extends AbstractFragment
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void initializeGuestAddressRequest() {
+
+        mAddressRequest = new AddressRequest(
+                mDefaultShippingAddressSwitch.isChecked()
+                , mLastNameEdit.getText().toString()
+                , mUsaStateCode == null ? mAddress.getState() : mUsaStateCode
+                //TODO the way usastatecode can be retrived depend upon api.Api should return the state name as well along with state code
+                , mAddressLine1Edit.getText().toString()
+                , mAptOrSuiteEdit.getText().toString()
+                , mCountryCode == null ? mAddress.getCountry() : mCountryCode
+                , mCityEdit.getText().toString()
+                , mZipCodeEdit.getText().toString()
+                , mPhoneNumberEdit.getText().toString()
+                , mDefaultBillingAddressSwitch.isChecked()
+                , mFirstNameEdit.getText().toString()
+                , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+
+        //setting addressId is must for the editAddress API call
+        mAddressRequest.setAddressId(mAddress.getAddressId());
+
     }
 
     @Override
@@ -606,7 +636,7 @@ public class AddEditAddressFragment extends AbstractFragment
                     } else {
                         populateData(null);
 
-                        if(mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+                        if(mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
                             buttonView.setEnabled(false);
                             if (getParentFragment() != null) {
                                 ((StepThreeRootFragment) getParentFragment()).getBillingAddressId();

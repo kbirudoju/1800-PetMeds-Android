@@ -17,6 +17,7 @@ import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.stepthreefragment.AddGuestCardFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreePresenter;
 import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.PaymentSelectionListFragment;
 import com.petmeds1800.ui.dashboard.CategoryListFragment;
 import com.petmeds1800.ui.dashboard.ProductCategoryPresenter;
 import com.petmeds1800.ui.checkout.CheckoutActivityPresenter;
@@ -187,4 +188,6 @@ public interface Injector {
     void inject(MedConditionsListPresenter medConditionsListPresenter);
     void inject(VetDetailPresenter vetDetailPresenter);
     void inject(VetDetailFragment vetDetailFragment);
+    void inject(PaymentSelectionListFragment paymentSelectionListFragment);
 }
+

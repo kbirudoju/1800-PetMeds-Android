@@ -103,6 +103,8 @@ public class CheckOutActivity extends AbstractActivity
 
     private ProgressDialog mProgressDialog;
 
+    boolean mIsReviewOn = false;
+
     @Inject
     PetMedsApiService mPetMedsApiService;
 
@@ -299,13 +301,20 @@ public class CheckOutActivity extends AbstractActivity
                 break;
 
             case 2: //step 3 "Select Payment method"
-                if ( mPreferencesHelper.getIsUserLoggedIn() ) {
+                if ( mPreferencesHelper.getIsUserLoggedIn()) {
                     replaceCheckOutFragment(StepThreeRootFragment
-                                    .newInstance(mShoppingCartListResponse, stepName),
+                                    .newInstance(mShoppingCartListResponse, stepName , StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                             StepThreeRootFragment.class.getName(),
                             false);
                 }
-                else {
+                //TODO need a new design for this specific case
+//                else if( ! mPreferencesHelper.getIsUserLoggedIn() && mIsReviewOn) {  //Guest user reviewing payment
+//                    replaceCheckOutFragment(StepThreeRootFragment
+//                                    .newInstance(mShoppingCartListResponse, stepName , StepThreeRootFragment.GUEST_REQUEST_CODE , mIsReviewOn),
+//                            StepThreeRootFragment.class.getName(),
+//                            false);
+//                }
+                else { //guest user adding payment for first time
                     replaceCheckOutFragment(GuestStepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName),
                             GuestStepThreeRootFragment.class.getName(),
@@ -426,10 +435,16 @@ public class CheckOutActivity extends AbstractActivity
         int lastCompletedStep = mApplicableSteps.indexOf(currentStep);
         //check of current step is the last known step under applicable steps
         if (mApplicableSteps.indexOf(currentStep) == mApplicableSteps.size() - 1) {
-            //TODO finish the checkout activity
+            //need to finish the activity
         } else {
             startNextStep(mApplicableSteps.get(lastCompletedStep + 1));
         }
 
+    }
+
+    @Override
+    public void startNextStep(String stepName, ShoppingCartListResponse shoppingCartListResponse, boolean isReviewOn) {
+        mIsReviewOn = isReviewOn;
+        startNextStep(stepName,shoppingCartListResponse);
     }
 }

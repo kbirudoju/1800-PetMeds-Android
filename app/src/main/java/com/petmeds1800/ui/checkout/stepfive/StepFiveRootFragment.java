@@ -285,7 +285,7 @@ public class StepFiveRootFragment extends AbstractFragment
                 case R.id.paymentMethodEdit:
                     markAsUnselected(CheckOutActivity.PAYMENT_METHOD, CheckOutActivity.SUBMIT_N_REVIEW);
                     activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PAYMENT_METHOD),
-                            mShoppingCartListResponse);
+                            mShoppingCartListResponse , true);
                     break;
                 case R.id.petVetEdit:
                     markAsUnselected(CheckOutActivity.SUBMIT_N_REVIEW, CheckOutActivity.SUBMIT_N_REVIEW);

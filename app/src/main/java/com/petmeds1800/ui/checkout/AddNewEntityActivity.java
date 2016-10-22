@@ -51,7 +51,7 @@ public class AddNewEntityActivity extends AbstractActivity implements PetSelecti
                 break;
             case Constants.ADD_NEW_PAYMENT_METHOD:
                 replaceFragment(
-                        AddEditCardFragment.newInstance(StepThreeRootFragment.REQUEST_CODE),
+                        AddEditCardFragment.newInstance(StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                         AddEditCardFragment.class.getName());
                 break;
             case Constants.ADD_NEW_VET_REQUEST:

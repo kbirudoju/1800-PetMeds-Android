@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -223,6 +224,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
                 AddEditAddressFragment addEditAddressFragment = (AddEditAddressFragment) getChildFragmentManager().findFragmentById(R.id.billingAddressfragment);
                 if(addEditAddressFragment != null) {
                     if(addEditAddressFragment.validateFields()) {
+                        addEditAddressFragment.initializeGuestAddressRequest();
                         addressRequest = addEditAddressFragment.getAddressRequest();
 
                         mPresenter.applyCreditCardPaymentMethod(addressRequest , cardRequest);
@@ -230,7 +232,6 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
                 }
             }
         }
-        activity.hideProgress();
 
     }
 

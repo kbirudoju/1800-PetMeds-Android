@@ -136,7 +136,7 @@ public class AddEditCardFragment extends AbstractFragment
                 mAlertDialog.dismiss();
                 popBackStack();
             }
-            if (msg.what == DISMISS_APPROVAL_DIALOG && mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+            if (msg.what == DISMISS_APPROVAL_DIALOG && mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
                 mAlertDialog.dismiss();
                 getActivity().finish();
             }
@@ -379,7 +379,7 @@ public class AddEditCardFragment extends AbstractFragment
 
     @OnClick(R.id.addressSelection_label)
     public void selectAddress() {
-        if (mRequestCode == StepThreeRootFragment.REQUEST_CODE) {
+        if (mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
             ((AddNewEntityActivity) getActivity())
                     .replaceFragmentWithArgument(AddressSelectionListFragment.newInstance(mRequestCode, null),
                             AddressSelectionListFragment.class.getSimpleName(), null);

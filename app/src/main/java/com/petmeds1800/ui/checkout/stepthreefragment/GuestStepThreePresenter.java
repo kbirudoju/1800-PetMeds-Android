@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddEditCardResponse;
@@ -38,6 +39,7 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
 
     public GuestStepThreePresenter(GuestStepThreeRootContract.View view) {
         mView = view;
+        PetMedsApplication.getAppComponent().inject(this);
     }
 
     @Override
@@ -50,6 +52,8 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
     public void applyCreditCardPaymentMethod(AddressRequest addressRequest , final CardRequest cardRequest) {
 
         mPetMedsApiService.addAddress(addressRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(new Func1<Throwable, AddAddressResponse>() {
                     @Override
                     public AddAddressResponse call(Throwable throwable) {
@@ -57,6 +61,10 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
                         if (errorId != 0) {
 //                            mView.hideProgress();
                             mView.showErrorCrouton(((Fragment) mView).getString(errorId), false);
+                        } else {
+                            if (mView.isActive()) {
+                                mView.showErrorCrouton(throwable.getLocalizedMessage(), false);
+                            }
                         }
 
                         return null;
@@ -66,14 +74,13 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
                     @Override
                     public Observable<AddEditCardResponse> call(AddAddressResponse addAddressResponse) {
 
-                        if(addAddressResponse.getStatus().equals(API_SUCCESS_CODE)) {
+                        if (addAddressResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             //set the received addressId to the card request
                             cardRequest.setBillingAddressId(addAddressResponse.getProfileAddress().getAddressId());
                             return mPetMedsApiService.addPaymentCard(cardRequest)
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
-                        }
-                        else {
+                        } else {
                             //                            mView.hideProgress();
                             mView.showErrorCrouton(addAddressResponse.getStatus().getErrorMessages().get(0), false);
                             return null;
@@ -84,20 +91,21 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
                     @Override
                     public Observable<ShoppingCartListResponse> call(AddEditCardResponse addEditCardResponse) {
 
-                        if(addEditCardResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                        if (addEditCardResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             //create a GuestPaymentRequest
                             CreditCardPaymentMethodRequest creditCardPaymentMethodRequest =
                                     new CreditCardPaymentMethodRequest(
                                             addEditCardResponse.getCard().getId()
-                                    , addEditCardResponse.getCard().getBillingAddress().getRepositoryId()
-                                    , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()
+                                            , addEditCardResponse.getCard().getBillingAddress().getRepositoryId()
+                                            , mPreferencesHelper.getSessionConfirmationResponse()
+                                            .getSessionConfirmationNumber()
                                     );
 
                             return mPetMedsApiService.applyCreditCardPaymentMethod(creditCardPaymentMethodRequest)
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
-                        }
-                        else {
+                        } else {
+                            mView.showErrorCrouton(addEditCardResponse.getStatus().getErrorMessages().get(0), false);
                             return null;
                         }
 
@@ -113,7 +121,6 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
                     public void onError(Throwable e) {
                         int errorId = RetrofitErrorHandler.getErrorMessage(e);
                         if (errorId != 0) {
-//                            mView.hideProgress();
                             mView.showErrorCrouton(((Fragment) mView).getString(errorId), false);
                         }
                     }

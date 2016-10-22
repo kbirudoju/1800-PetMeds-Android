@@ -41,10 +41,15 @@ import butterknife.OnClick;
 
 public class StepThreeRootFragment extends AbstractFragment implements StepThreeRootContract.View {
 
+
     @BindView(R.id.newPaymentMethod)
     Button mNewPaymentMethod;
 
-    public final static int REQUEST_CODE = 6;
+    public final static int LOGGED_IN_REQUEST_CODE = 6;
+    public final static int GUEST_REQUEST_CODE = 12;
+
+    private static String REQUEST_CODE_KEY = "request_code";
+    private static final String REVIEW_ON_KEY = "review_on";
 
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
@@ -69,12 +74,29 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    private int mRequestCode;
+
+    private boolean mReviewOn;
+
     public static StepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
-            String stepName) {
+            String stepName , int requestCode) {
         StepThreeRootFragment f = new StepThreeRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
         args.putString(CheckOutActivity.STEP_NAME, stepName);
+        args.putInt(REQUEST_CODE_KEY , requestCode);
+        f.setArguments(args);
+        return f;
+    }
+
+    public static StepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
+            String stepName , int requestCode , boolean mReviewIsOn) {
+        StepThreeRootFragment f = new StepThreeRootFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
+        args.putString(CheckOutActivity.STEP_NAME, stepName);
+        args.putInt(REQUEST_CODE_KEY, requestCode);
+        args.putBoolean(REVIEW_ON_KEY, mReviewIsOn);
         f.setArguments(args);
         return f;
     }
@@ -92,6 +114,12 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
+
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            mRequestCode = bundle.getInt(REQUEST_CODE_KEY);
+            mReviewOn = bundle.getBoolean(REVIEW_ON_KEY);
+        }
 
 
     }
@@ -154,10 +182,22 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPresenter = new StepThreeRootPresentor(this);
-        replaceStepRootChildFragment(
-                PaymentSelectionListFragment.newInstance(PaymentSelectionListFragment.REQUEST_CODE),
-                R.id.creditCardDetailFragment);
-        replaceStepRootChildFragment(AddEditAddressFragment.newInstance(mAddress, StepThreeRootFragment.REQUEST_CODE),
+
+        if(mRequestCode == LOGGED_IN_REQUEST_CODE) {
+            replaceStepRootChildFragment(
+                    PaymentSelectionListFragment.newInstance(LOGGED_IN_REQUEST_CODE),
+                    R.id.creditCardDetailFragment);
+        }
+        else if(mRequestCode == GUEST_REQUEST_CODE && mReviewOn) {
+            replaceStepRootChildFragment(
+                    PaymentSelectionListFragment.newInstance(GUEST_REQUEST_CODE , mShoppingCartListResponse.getShoppingCart().getPaymentCardKey(), mReviewOn),
+                    R.id.creditCardDetailFragment);
+        }
+        else {
+            //qwe can ignore it as first time filling of payment for an anonymous is being handled by the GuestStepThreeFragment
+        }
+
+        replaceStepRootChildFragment(AddEditAddressFragment.newInstance(mAddress, StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                 R.id.billingAddressfragment);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);

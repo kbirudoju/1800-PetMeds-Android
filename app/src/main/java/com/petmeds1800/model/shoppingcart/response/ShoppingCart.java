@@ -20,6 +20,7 @@ public class ShoppingCart implements Serializable {
     private float discountAmount;
     private float itemsTotal;
     private String totalCommerceItemCount;
+    private String paymentCardKey;
 
     public String getShippingAddressId() {
         return shippingAddressId;
@@ -107,5 +108,13 @@ public class ShoppingCart implements Serializable {
 
     public void setItemsTotal(float itemsTotal) {
         this.itemsTotal = itemsTotal;
+    }
+
+    public String getPaymentCardKey() {
+        return paymentCardKey;
+    }
+
+    public void setPaymentCardKey(String paymentCardKey) {
+        this.paymentCardKey = paymentCardKey;
     }
 }

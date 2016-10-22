@@ -72,6 +72,8 @@ public class AddGuestCardFragment extends AbstractFragment implements
 
     private CardRequest mCardRequest;
 
+    private PaymentGroups mPaymentGroups;
+
     public static AddGuestCardFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -93,6 +95,13 @@ public class AddGuestCardFragment extends AbstractFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if(args != null) {
+            PaymentGroups paymentGroups = (PaymentGroups) args.getSerializable(PAYMENT_GROUP);
+            if(paymentGroups != null) {
+                        populateCardData(paymentGroups);
+            }
+        }
         setHasOptionsMenu(true);
         PetMedsApplication.getAppComponent().inject(this);
     }
@@ -104,13 +113,17 @@ public class AddGuestCardFragment extends AbstractFragment implements
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_a_card, container, false);
         ButterKnife.bind(this, view);
+
+        //diasble editing on the expiration date edittext. We will show up a expiration date dialog
+        mExpirationDateEdit.setFocusableInTouchMode(false);
+
         mDefaultPaymentSwitch.setVisibility(View.GONE);
         mAddressContainerLayout.setVisibility(View.GONE);
         mAddressSelectionLabel.setVisibility(View.GONE);
         return view;
     }
 
-    private void populateData() {
+    private void populateCardData(PaymentGroups paymentGroups) {
         //TODO need to implement onec API flow is finalized for the anonymous user
     }
 

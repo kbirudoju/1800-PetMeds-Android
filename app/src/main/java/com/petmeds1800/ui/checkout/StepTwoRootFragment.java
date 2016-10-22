@@ -11,6 +11,7 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,9 @@ import butterknife.OnClick;
  */
 public class StepTwoRootFragment extends AbstractFragment
         implements StepTwoContract.View, ShippingMethodsListAdapter.OnItemClickListener {
+
+    @BindView(R.id.fragment_container)
+    RelativeLayout mContainerLayout;
 
     @BindView(R.id.recycler_shipping_methods)
     RecyclerView mRecyclerShippingMethods;
@@ -170,8 +175,18 @@ public class StepTwoRootFragment extends AbstractFragment
     }
 
     @Override
-    public void showErrorCrouton(CharSequence message, boolean span) {
+    public void showActivityProgress() {
+        ((CheckOutActivity) getActivity()).hideProgress();
+    }
 
+    @Override
+    public void hideActivityProgress() {
+        ((CheckOutActivity) getActivity()).hideProgress();
+    }
+
+    @Override
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
     }
 
     @Override
@@ -213,7 +228,7 @@ public class StepTwoRootFragment extends AbstractFragment
 
     @Override
     public void onErrorShippingMethodsApplied(String error) {
-        ((CheckOutActivity) getActivity()).hideProgress();
+        showErrorCrouton(error , false);
     }
 
     @Override
@@ -223,10 +238,14 @@ public class StepTwoRootFragment extends AbstractFragment
 
     @OnClick(R.id.shippingNavigator)
     public void onClick() {
-        ((CheckOutActivity) getActivity()).showProgress();
+
         if (mShippingMethod != null) {
+            ((CheckOutActivity) getActivity()).showProgress();
             mPresenter.applyShippingMethods(new ShippingMethodsRequest(mShippingMethod.getShippingMethod(),
                     mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
+        }
+        else {
+            showErrorCrouton("You must have a shipping method",false);
         }
     }
 }

@@ -17,6 +17,10 @@ public interface StepTwoContract {
 
         void hideProgress();
 
+        void showActivityProgress();
+
+        void hideActivityProgress();
+
         void showErrorCrouton(CharSequence message, boolean span);
 
         void onSuccessShippingOptions(String htmlResponse);

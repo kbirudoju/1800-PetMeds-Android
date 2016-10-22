@@ -5,6 +5,9 @@ import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.ShippingMethodsRequest;
 import com.petmeds1800.model.entities.ShippingMethodsResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.util.RetrofitErrorHandler;
+
+import android.support.v4.app.Fragment;
 
 import javax.inject.Inject;
 
@@ -41,13 +44,36 @@ public class StepTwoPresenter implements StepTwoContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.hideProgress();
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+
+                        if(mView.isActive()) {
+                            if(errorId != 0) {
+                                mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
+                            }
+                            else {
+                                mView.showErrorCrouton("Unexpected error", false);
+                            }
+                            mView.hideProgress();
+                        }
+
+
                     }
 
                     @Override
                     public void onNext(ShippingMethodsResponse shippingMethodsResponse) {
-                        mView.hideProgress();
-                        mView.onSuccessShippingMethods(shippingMethodsResponse);
+                        if(shippingMethodsResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if(mView.isActive()) {
+                                mView.onSuccessShippingMethods(shippingMethodsResponse);
+                                mView.hideProgress();
+                            }
+
+                        }
+                        else {
+                            if(mView.isActive()) {
+                                mView.showErrorCrouton(shippingMethodsResponse.getStatus().getErrorMessages().get(0) , false);
+                                mView.hideProgress();
+                            }
+                        }
                     }
                 });
     }
@@ -84,12 +110,24 @@ public class StepTwoPresenter implements StepTwoContract.Presenter {
                 .subscribe(new Subscriber<ShoppingCartListResponse>() {
                     @Override
                     public void onCompleted() {
-                        mView.hideProgress();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.hideProgress();
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId != 0) {
+                            if (mView.isActive()){
+                                mView.showErrorCrouton(((Fragment) mView).getString(errorId), false);
+                                mView.hideActivityProgress();
+                            }
+                        }
+                        else {
+                            if (mView.isActive()){
+                                mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                                mView.hideActivityProgress();
+                            }
+                        }
                     }
 
                     @Override
@@ -97,10 +135,12 @@ public class StepTwoPresenter implements StepTwoContract.Presenter {
                         if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.onSuccessShippingMethodsApplied(shoppingCartListResponse);
+                                mView.hideActivityProgress();
                             }
                         } else {
                             if (mView.isActive()) {
                                 mView.onErrorShippingMethodsApplied(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                                mView.hideActivityProgress();
                             }
                         }
                     }

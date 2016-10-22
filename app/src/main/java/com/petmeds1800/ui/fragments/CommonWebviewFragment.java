@@ -1,6 +1,8 @@
 package com.petmeds1800.ui.fragments;
 
 import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.AbstractActivity;
 
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -32,6 +35,9 @@ import butterknife.ButterKnife;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.OkHttpClient;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by pooja on 8/25/2016.
@@ -53,10 +59,14 @@ public class CommonWebviewFragment extends AbstractFragment {
     @Inject
     SetCookieCache mCookieCache;
 
+    @Inject
+    PetMedsApiService mPetMedsApiService;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
+
     }
 
     @Nullable
@@ -88,32 +98,38 @@ public class CommonWebviewFragment extends AbstractFragment {
         ((AbstractActivity)getActivity()).getToolbar().setLogo(null);
     }
 
-    private void setUpWebView(String url) {
-        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+    private void setUpWebView(final String url) {
+
+        final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().removeAllCookies(null);
-            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView,true);
+            //removeSessionCookies seems the only working option.removeAllCookie didn't clear all the cookies in this case.
+            CookieManager.getInstance().removeSessionCookies(null);
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
         } else {
-            CookieManager.getInstance().removeAllCookie();
+            CookieManager.getInstance().removeSessionCookie();
             CookieManager.getInstance().setAcceptCookie(true);
         }
-
 
         String cookieString = null;
         for (Iterator<Cookie> iterator = mCookieCache.iterator() ; iterator.hasNext();) {
             Cookie cookie = iterator.next();
             if(cookie.name().equals("JSESSIONID")) {
-               cookieString = "JSESSIONID=" + cookie.value() + ";";
+                cookieString = "JSESSIONID=" + cookie.value() + "; ";
             }
             else if(cookie.name().equals("SITESERVER")) {
-                cookieString = cookieString + "SITESERVER=" + cookie.value() + ";";
+                cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
             }
         }
-        cookieString = cookieString + "app=true;";
+        cookieString = cookieString + "app=true; ";
         CookieManager.getInstance().setCookie(url, cookieString);
-        CookieSyncManager.getInstance().sync();
 
-        mWebView.loadUrl(url);
+        if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().flush();
+        }
+        else {
+            CookieSyncManager.getInstance().sync();
+        }
+
         Log.d("URL", url + ">>>>>");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
@@ -129,6 +145,9 @@ public class CommonWebviewFragment extends AbstractFragment {
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
+
+        mWebView.loadUrl(url);
+
     }
 
     private void loadFromHtmlData(String htmlData){

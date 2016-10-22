@@ -2,6 +2,7 @@ package com.petmeds1800.ui.payment;
 
 import com.petmeds1800.model.Card;
 import com.petmeds1800.model.entities.User;
+import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -26,6 +27,7 @@ public interface SavedCardsListContract {
     interface Presenter extends BasePresenter {
 
         void getSavedCards();
+        void getCardDetaiBypaymentCardKey(CardDetailRequest cardDetailRequest);
     }
 
 }

@@ -2,6 +2,7 @@ package com.petmeds1800.ui.checkout.stepthreefragment;
 
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
+import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
@@ -34,4 +35,5 @@ public class StepThreeRootContract {
         void getBillingAddressById(String sessionConfig, String addressId);
 
     }
+
 }
