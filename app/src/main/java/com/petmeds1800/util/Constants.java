@@ -51,11 +51,18 @@ public class Constants {
 
     public static final int DIALOG_REMINDER_REQUEST = 5;
 
+    public static final int DIALOG_REMINDER_PET_NAME_REQUEST = 6;
+
     public static final String DIALOG_DATA_TOKEN = "Dialog_data_token";
 
     public static final String IS_EDITABLE = "isEditable";
 
     public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
+    public static final String PET_NAME = "petName";
+    public static final String IS_CANCEL_ALARM = "isCancelAlarm";
+    public static final String MEDICATION_RESULT_RECEIVER = "medicationResultReceiver";
+    public static final String RESULT_VALUE = "resultValue";
+    public static final String SUCCESS = "success";
 
 
 }

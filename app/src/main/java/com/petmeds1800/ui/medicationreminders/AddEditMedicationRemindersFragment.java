@@ -6,12 +6,13 @@ import com.petmeds1800.model.ReminderDialogData;
 import com.petmeds1800.model.entities.AddMedicationReminderRequest;
 import com.petmeds1800.model.entities.AddMedicationReminderResponse;
 import com.petmeds1800.model.entities.MedicationReminderItem;
-import com.petmeds1800.model.entities.MedicationReminderTest;
-import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.model.entities.MedicationRemindersAlarmData;
 import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.PetNameDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.ReminderDialogFragment;
+import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
@@ -19,12 +20,16 @@ import com.petmeds1800.util.alarm.MedicationAlarmReceiver;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,13 +55,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.petmeds1800.util.Constants.MEDICATION_REMINDER_INFO;
+import static com.petmeds1800.util.Utils.getReminderTypeValue;
+import static com.petmeds1800.util.Utils.populateDaysOfWeeks;
+import static com.petmeds1800.util.Utils.reminderTypeArray;
 
 /**
  * Created by Sdixit on 13-10-2016.
  */
 
-public class AddEditMedicationReminders extends AbstractFragment
-        implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, AddEditMedicationRemindersContract.View {
+public class AddEditMedicationRemindersFragment extends AbstractFragment
+        implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, AddEditMedicationRemindersContract.View,
+        AddPetNameListener, DialogInterface.OnClickListener {
 
     @BindView(R.id.item_edit)
     EditText mItemEdit;
@@ -90,18 +99,18 @@ public class AddEditMedicationReminders extends AbstractFragment
 
     private boolean isEditable;
 
-    private TimePickerDialog mTimePickerDialog;
-
     private final int ZERO_INDEX = 0;
 
+    private String mProductName;
 
-    private final int SIZE_SEVEN = 7;
+    private String mItemDescription;
+
 
     AddEditMedicationRemindersContract.Presenter mPresenter;
 
     private ReminderDialogData mReminderDialogData;
 
-    private final String reminderTypeArray[] = new String[]{"daily", "weekly", "monthly"};
+
 
     private ArrayList<String> mDayOfWeeks;
 
@@ -120,13 +129,20 @@ public class AddEditMedicationReminders extends AbstractFragment
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    public static AddEditMedicationReminders newInstance(boolean isEditable, MedicationReminderItem item) {
-        AddEditMedicationReminders addEditMedicationReminders = new AddEditMedicationReminders();
+    public static AddEditMedicationRemindersFragment newInstance(boolean isEditable, MedicationReminderItem item) {
+        AddEditMedicationRemindersFragment addEditMedicationRemindersFragment
+                = new AddEditMedicationRemindersFragment();
         Bundle args = new Bundle();
         args.putBoolean(Constants.IS_EDITABLE, isEditable);
         args.putSerializable(MEDICATION_REMINDER_INFO, item);
-        addEditMedicationReminders.setArguments(args);
-        return addEditMedicationReminders;
+        addEditMedicationRemindersFragment.setArguments(args);
+        return addEditMedicationRemindersFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Date date = new Date();
     }
 
     @Nullable
@@ -141,10 +157,10 @@ public class AddEditMedicationReminders extends AbstractFragment
         Bundle bundle = getArguments();
         isEditable = bundle.getBoolean(Constants.IS_EDITABLE);
         if (isEditable) {
-
             populateMedicalReminderData(
                     (MedicationReminderItem) bundle.getSerializable(Constants.MEDICATION_REMINDER_INFO));
         }
+
         return view;
     }
 
@@ -156,6 +172,16 @@ public class AddEditMedicationReminders extends AbstractFragment
             mReminderDialogData = (ReminderDialogData) data.getExtras()
                     .getSerializable(Constants.DIALOG_DATA_TOKEN);
             mRepeatEdit.setText(reminderTypeArray[mReminderDialogData.getRepeatFrequency().ordinal()]);
+        }
+        if (requestCode == Constants.DIALOG_REMINDER_PET_NAME_REQUEST && resultCode == Activity.RESULT_OK
+                && data != null && data
+                .hasExtra(Constants.PET_NAME)) {
+            String petName = data
+                    .getStringExtra(Constants.PET_NAME);
+            if (petName != null) {
+                mPetNameEdit.setText(petName);
+            }
+
         }
 
     }
@@ -170,6 +196,7 @@ public class AddEditMedicationReminders extends AbstractFragment
         }
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -177,19 +204,9 @@ public class AddEditMedicationReminders extends AbstractFragment
 
     }
 
-    private ArrayList<String> populateDaysOfWeeks(ArrayList<NameValueData> nameValueDatas) {
-        ArrayList<String> weeksList = new ArrayList<String>();
-        if (nameValueDatas != null) {
-            for (NameValueData value : nameValueDatas) {
-                weeksList.add(value.getValue());
-            }
-        }
-
-        return weeksList;
-
-    }
 
     private boolean[] setToggleValuse(ArrayList<String> weeksList) {
+        int SIZE_SEVEN = 7;
         boolean toggleValues[] = new boolean[SIZE_SEVEN];
         if (weeksList.size() > ZERO_INDEX) {
             int count = ZERO_INDEX;
@@ -201,21 +218,7 @@ public class AddEditMedicationReminders extends AbstractFragment
         return toggleValues;
     }
 
-    private Constants.RepeatFrequency getReminderTypeValue(String value) {
-        for (int i = 0; i < reminderTypeArray.length; i++) {
-            if (reminderTypeArray[i].equalsIgnoreCase(value)) {
-                switch (i) {
-                    case 0:
-                        return Constants.RepeatFrequency.REPEAT_DAILY;
-                    case 1:
-                        return Constants.RepeatFrequency.REPEAT_WEEKLY;
-                    case 2:
-                        return Constants.RepeatFrequency.REPEAT_MONTHLY;
-                }
-            }
-        }
-        return Constants.RepeatFrequency.REPEAT_DAILY;
-    }
+
 
     private void populateMedicalReminderData(MedicationReminderItem item) {
         mRemovePetButton.setVisibility(View.VISIBLE);
@@ -250,14 +253,48 @@ public class AddEditMedicationReminders extends AbstractFragment
         mRepeatEdit.setText(item.getReminderType());
     }
 
+    public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId) {
+        if (auditEditText.getText().toString().isEmpty()) {
+            auditTextInputLayout.setError(getContext().getString(errorStringId));
+            return true;
+        } else {
+            auditTextInputLayout.setError(null);
+            auditTextInputLayout.setErrorEnabled(false);
+            return false;
+        }
+    }
+
+    public boolean validateFields() {
+        boolean invalidItem;
+        boolean invalidPetName;
+        boolean invalidTime;
+        boolean invalidRepeatTime;
+        //return in-case of any error
+        invalidItem = checkAndShowError(mItemEdit, mItemInputLayout, R.string.errorItemRequired);
+        invalidPetName = checkAndShowError(mPetNameEdit, mPetNameInputLayout, R.string.errorPetNameRequired);
+        invalidTime = checkAndShowError(mTimeEdit, mTimeInputLayout,
+                R.string.errorInvalidTimeRequired);
+        invalidRepeatTime = checkAndShowError(mRepeatEdit, mRepeatInputLayout, R.string.errorRepeatTimeRequired);
+        if (invalidItem ||
+                invalidPetName ||
+                invalidTime ||
+                invalidRepeatTime) {
+            return false;
+        }
+        return true;
+    }
+
     private void submitMedicationReminderDetails() {
+        if (!validateFields()) {
+            return;
+        }
         AddMedicationReminderRequest addMedicationReminderRequest = new AddMedicationReminderRequest();
         String startDate = (mReminderDialogData.getRepeatFrequency().ordinal() == 2) ? Utils
                 .getDateInMM_DD_YYYY_Format(mReminderDialogData.getmStartDate()) : "";
         addMedicationReminderRequest.setDaysOfWeek(mReminderDialogData.getDayOfWeeks());
         addMedicationReminderRequest.setDisableReminder(!mReminderDialogData.isActive());
         addMedicationReminderRequest.setPetName(mPetNameEdit.getText().toString());
-        addMedicationReminderRequest.setReminderName(mItemEdit.getText().toString());
+        addMedicationReminderRequest.setReminderName(mProductName);
         addMedicationReminderRequest
                 .setDynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         addMedicationReminderRequest
@@ -266,7 +303,7 @@ public class AddEditMedicationReminders extends AbstractFragment
                 .setStartDate(startDate);
         addMedicationReminderRequest.setTimeHourMin(mTimeEdit.getText().toString());
         addMedicationReminderRequest.setRepeatInterval(String.valueOf(mReminderDialogData.getmRepeatValue()));
-        addMedicationReminderRequest.setShortDescription("6pk Dog 10.1-20lbs");
+        addMedicationReminderRequest.setShortDescription((mItemDescription != null) ? mItemDescription : "");
         if (isEditable) {
             addMedicationReminderRequest.setReminderId(reminderId);
             mPresenter.updateReminders(addMedicationReminderRequest);
@@ -285,7 +322,6 @@ public class AddEditMedicationReminders extends AbstractFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_done:
                 submitMedicationReminderDetails();
@@ -307,9 +343,10 @@ public class AddEditMedicationReminders extends AbstractFragment
         }
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
-        mTimePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerDialogTheme, this, hour, minute,
-                false);//Yes 24 hour time
-        mTimePickerDialog.show();
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerDialogTheme, this,
+                hour, minute,
+                false);
+        timePickerDialog.show();
     }
 
     public void openReminderDailog(ReminderDialogData reminderDialogData) {
@@ -318,12 +355,24 @@ public class AddEditMedicationReminders extends AbstractFragment
         fragment.show(getFragmentManager(), ReminderDialogFragment.class.getSimpleName());
     }
 
+
+    public void openPetNameDailog(String petName) {
+        DialogFragment fragment = PetNameDialogFragment.newInstance(petName);
+        fragment.setTargetFragment(this, Constants.DIALOG_REMINDER_PET_NAME_REQUEST);
+        ((PetNameDialogFragment) fragment).setAddPetNameListener(this);
+        fragment.show(getFragmentManager(), PetNameDialogFragment.class.getSimpleName());
+    }
+
     @OnClick({R.id.item_edit, R.id.pet_name_edit, R.id.time_edit, R.id.repeat_edit, R.id.remove_pet_button})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.item_edit:
+                Fragment fragment = MedicationReminderItemsListFragment.newInstance();
+                replaceAccountAndAddToBackStack(fragment,
+                        MedicationReminderItemsListFragment.class.getName());
                 break;
             case R.id.pet_name_edit:
+                openPetNameDailog(null);
                 break;
             case R.id.time_edit:
                 openTimePickerDailog();
@@ -342,9 +391,13 @@ public class AddEditMedicationReminders extends AbstractFragment
                 }
                 break;
             case R.id.remove_pet_button:
-                mPresenter.removeMedicationReminders(new RemoveMedicationReminderRequest(
-                        mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
-                        reminderId));
+                AlertDialog alertDialog = Utils.showAlertDailog(getActivity(), getString(R.string.areYouSure)
+                        , getString(R.string.reminder_removal_alert_msg)
+                        , R.style.StyleForNotification)
+                        .setPositiveButton(getString(R.string.dialog_ok_button).toUpperCase(), this)
+                        .setNegativeButton(getString(R.string.dialog_cancel_button).toUpperCase(), this)
+                        .create();
+                alertDialog.show();
                 break;
         }
     }
@@ -381,16 +434,14 @@ public class AddEditMedicationReminders extends AbstractFragment
         if (medicationReminderItem != null) {
             if (!(medicationReminderItem.isDisableReminder())) {
                 weeksList = populateDaysOfWeeks(medicationReminderItem.getDaysOfWeek());
-                ArrayList<MedicationReminderTest> medicationReminderTestArrayList
-                        = new ArrayList<MedicationReminderTest>();
-
-                ;
-                medicationReminderTestArrayList.add(new MedicationReminderTest(medicationReminderItem.getReminderName(),
+                ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDataArrayList
+                        = new ArrayList<MedicationRemindersAlarmData>();
+                medicationRemindersAlarmDataArrayList.add(new MedicationRemindersAlarmData(medicationReminderItem.getReminderName(),
                         Integer.valueOf(medicationReminderItem.getRepeatInterval()),
                         getReminderTypeValue(medicationReminderItem.getReminderType()),
                         Integer.valueOf(medicationReminderItem.getReminderId()), weeksList,
                         medicationReminderItem.getTimeHourMin(), medicationReminderItem.getStartDate()));
-                new MedicationAlarmReceiver().addMultipleAlarms(getContext(), medicationReminderTestArrayList);
+                new MedicationAlarmReceiver().addMultipleAlarms(getContext(), medicationRemindersAlarmDataArrayList);
                 Snackbar.make(mContainerLayout, R.string.medication_reminder_status, Snackbar.LENGTH_LONG).show();
             } else {
                 if (isEditable) {
@@ -437,6 +488,48 @@ public class AddEditMedicationReminders extends AbstractFragment
     @Override
     public void setPresenter(AddEditMedicationRemindersContract.Presenter presenter) {
 
+    }
+
+    @Override
+    public void openAddPetScreen() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isEditable", false);
+        AddPetFragment addPetFragment = new AddPetFragment();
+        addPetFragment.setAddPetNameListener(this);
+        replaceAccountFragmentWithBundle(addPetFragment, bundle);
+    }
+
+    @Override
+    public void openAddPetDailog(final String petName) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                openPetNameDailog(petName);
+            }
+        }, 500);
+
+    }
+
+    public void displayItemText(String productName, String decription) {
+        mProductName = productName;
+        mItemDescription = decription;
+        mItemEdit.setText(
+                (decription != null && !decription.equals("")) ? productName + "\n" + decription : productName);
+    }
+
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        switch (which) {
+            case DialogInterface.BUTTON_POSITIVE:
+                mPresenter.removeMedicationReminders(new RemoveMedicationReminderRequest(
+                        mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                        reminderId));
+                break;
+            case DialogInterface.BUTTON_NEGATIVE:
+
+                break;
+        }
     }
 
 }

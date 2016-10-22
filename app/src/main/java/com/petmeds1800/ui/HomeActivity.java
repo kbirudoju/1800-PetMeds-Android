@@ -4,6 +4,7 @@ import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
@@ -12,6 +13,8 @@ import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract;
 import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
@@ -50,7 +53,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class HomeActivity extends AbstractActivity
-        implements AddACardContract.AddressSelectionListener, DialogInterface.OnClickListener {
+        implements AddACardContract.AddressSelectionListener,
+        MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener {
 
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
@@ -91,6 +95,7 @@ public class HomeActivity extends AbstractActivity
 
     ArrayList<View> mTabLayoutArray = new ArrayList<>();
 
+
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
@@ -106,6 +111,9 @@ public class HomeActivity extends AbstractActivity
             } else {
                 mPreferencesHelper.setIsFingerPrintEnabled(true);
             }
+        }
+        if (mPreferencesHelper.getIsUserLoggedIn()) {
+            startService(new AddUpdateMedicationRemindersIntent(this, false));
         }
 
         //initialize fragment list
@@ -366,4 +374,20 @@ public class HomeActivity extends AbstractActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+    @Override
+    public void setItemDescription(String productName, String description) {
+        AddEditMedicationRemindersFragment addEditMedicationRemindersFragment
+                = (AddEditMedicationRemindersFragment) getSupportFragmentManager()
+                .findFragmentByTag(AddEditMedicationRemindersFragment.class.getName());
+        if (addEditMedicationRemindersFragment != null) {
+            addEditMedicationRemindersFragment.displayItemText(productName, description);
+        } else {
+            replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+                    AddEditMedicationRemindersFragment.class.getName());
+        }
+    }
+
+
 }

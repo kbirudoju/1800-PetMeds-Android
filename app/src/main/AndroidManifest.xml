@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
             android:name=".PetMedsApplication"
             android:allowBackup="true"
@@ -87,17 +87,27 @@
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH"/>
             </intent-filter>
         </receiver>
-
+        <receiver
+                android:name=".util.BootReceiver"
+                android:enabled="true"
+                android:exported="true"
+                android:label="BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
         <service
                 android:name="com.google.android.gms.analytics.AnalyticsService"
                 android:enabled="true"
                 android:exported="false"/>
         <service android:name=".service.RefillReminderService"/>
-        <receiver android:name=".util.alarm.MedicationAlarmReceiver" />
-        <service android:name=".util.alarm.MedicationSchedulingService" />
+        <receiver android:name=".util.alarm.MedicationAlarmReceiver"/>
+        <service android:name=".util.alarm.MedicationSchedulingService"/>
         <activity android:name=".ui.checkout.CheckOutActivity"
                   android:screenOrientation="portrait"
         />
+        <service android:name=".ui.medicationreminders.service.UpdateMedicationRemindersAlarmService"/>
     </application>
 
 </manifest>

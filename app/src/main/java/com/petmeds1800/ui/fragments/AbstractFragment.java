@@ -31,6 +31,8 @@ public abstract class AbstractFragment extends Fragment {
         trans.commit();
     }
 
+
+
     void replaceAccountFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();

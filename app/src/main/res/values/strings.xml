@@ -573,6 +573,15 @@
     <string name="medication_reminder_removed_message">Medication reminder removed successfully</string>
     <string name="medication_reminder_updated_message">Medication reminder updated successfully</string>
     <string name="medication_reminder_status">Medication Reminder has been set</string>
+    <string name="no_pet_title">No Pet</string>
+    <string name="errorItemRequired">Item is required</string>
+    <string name="errorPetNameRequired">Pet Name is required</string>
+    <string name="errorRepeatTimeRequired">Repeat type is rquired</string>
+    <string name="errorInvalidTimeRequired">Time is required</string>
+    <string name="items_title">Items</string>
+    <string name="promptItemName">Type an item name</string>
+    <string name="item_selection_header_text">select an item from previous order</string>
+    <string name="reminder_removal_alert_msg">This reminder will be deleted from your profile.</string>
 
 </resources>
 

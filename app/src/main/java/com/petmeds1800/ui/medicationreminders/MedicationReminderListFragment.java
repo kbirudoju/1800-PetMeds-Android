@@ -116,8 +116,8 @@ public class MedicationReminderListFragment extends AbstractFragment
 
         switch (item.getItemId()) {
             case R.id.action_add:
-                replaceAccountAndAddToBackStack(AddEditMedicationReminders.newInstance(false, null),
-                        MedicationReminderListFragment.class.getName());
+                replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+                        AddEditMedicationRemindersFragment.class.getName());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -125,8 +125,8 @@ public class MedicationReminderListFragment extends AbstractFragment
 
     @Override
     public void OnClickMedicationEdit(MedicationReminderItem item) {
-        replaceAccountAndAddToBackStack(AddEditMedicationReminders.newInstance(true, item),
-                MedicationReminderListFragment.class.getName());
+        replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(true, item),
+                AddEditMedicationRemindersFragment.class.getName());
 
     }
 
@@ -164,7 +164,7 @@ public class MedicationReminderListFragment extends AbstractFragment
 
     @OnClick(R.id.addReminder_button)
     public void onClick() {
-        replaceAccountAndAddToBackStack(AddEditMedicationReminders.newInstance(false, null),
-                MedicationReminderListFragment.class.getName());
+        replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+                AddEditMedicationRemindersFragment.class.getName());
     }
 }

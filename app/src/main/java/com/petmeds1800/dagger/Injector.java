@@ -37,9 +37,11 @@ import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.SignUpFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.medicationreminders.AddEditMedicationReminders;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
 import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersPresentor;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderItemsListPresentor;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListPresentor;
+import com.petmeds1800.ui.medicationreminders.service.UpdateMedicationRemindersAlarmService;
 import com.petmeds1800.ui.orders.OrderDetailFragment;
 import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
 import com.petmeds1800.ui.payment.AddACardPresenter;
@@ -54,6 +56,7 @@ import com.petmeds1800.ui.vet.AddVetPresenter;
 import com.petmeds1800.ui.vet.CantFindVetFragment;
 import com.petmeds1800.ui.vet.CantFindVetPresenter;
 import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.BootReceiver;
 
 /**
  * Specifies the injection places. Utility interface, to separate from the {@link AppComponent}.
@@ -156,5 +159,9 @@ public interface Injector {
     void inject(GuestStepOneRootPresentor guestStepOneRootPresentor);
     void inject(MedicationReminderListPresentor medicationReminderListPresentor);
     void inject(AddEditMedicationRemindersPresentor addEditMedicationRemindersPresentor);
-    void inject(AddEditMedicationReminders addEditMedicationReminders);
+    void inject(AddEditMedicationRemindersFragment addEditMedicationRemindersFragment);
+    void inject(MedicationReminderItemsListPresentor medicationReminderItemsListPresentor);
+    void inject(UpdateMedicationRemindersAlarmService updateMedicationRemindersAlarmService);
+    void inject(BootReceiver bootReceiver);
+
 }

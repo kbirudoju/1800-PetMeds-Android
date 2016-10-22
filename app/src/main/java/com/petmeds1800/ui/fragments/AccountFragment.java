@@ -3,6 +3,7 @@ package com.petmeds1800.ui.fragments;
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
@@ -10,6 +11,7 @@ import com.petmeds1800.ui.account.SignOutContract;
 import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
+import com.petmeds1800.ui.medicationreminders.service.MedicationReminderResultReceiver;
 import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
@@ -27,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -35,12 +38,16 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.app.Activity.RESULT_OK;
+import static com.petmeds1800.util.Constants.RESULT_VALUE;
+import static com.petmeds1800.util.Constants.SUCCESS;
+
 /**
  * Created by pooja on 8/2/2016.
  */
 public class AccountFragment extends AbstractFragment
         implements View.OnClickListener, Switch.OnCheckedChangeListener, DialogInterface.OnClickListener,
-        SignOutContract.View {
+        SignOutContract.View, MedicationReminderResultReceiver.Receiver {
 
     @BindView(R.id.myOrder)
     TextView myOrderView;
@@ -84,6 +91,9 @@ public class AccountFragment extends AbstractFragment
     @BindView(R.id.medication_reminder_label)
     TextView mMedicationReminderLabel;
 
+    @BindView(R.id.containerLayout)
+    LinearLayout mContainerLayout;
+
     private int fromWhichAlert = 0;
 
 
@@ -91,6 +101,8 @@ public class AccountFragment extends AbstractFragment
     TextView mRefillReminderLabel;
 
     private SignOutContract.Presenter mPresenter;
+
+    private MedicationReminderResultReceiver mMedicationReminderResultReceiver;
 
 
     @Override
@@ -194,7 +206,8 @@ public class AccountFragment extends AbstractFragment
                 replaceAccountAndAddToBackStack(new ReminderListFragment(), ReminderListFragment.class.getName());
                 break;
             case R.id.medication_reminder_label:
-                replaceAccountAndAddToBackStack(MedicationReminderListFragment.newInstance(), MedicationReminderListFragment.class.getName());
+                replaceAccountAndAddToBackStack(MedicationReminderListFragment.newInstance(),
+                        MedicationReminderListFragment.class.getName());
                 break;
             default:
                 break;
@@ -262,9 +275,14 @@ public class AccountFragment extends AbstractFragment
         switch (fromWhichAlert) {
             case FROM_SIGNOUT_OPTION:
                 if (isPositive) {
-                    //((HomeActivity) getActivity()).showProgress();
-                    mPresenter.sendDataToServer(
-                            mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                    ((HomeActivity) getActivity()).showProgress();
+                    setupServiceReceiver();
+                    AddUpdateMedicationRemindersIntent addUpdateMedicationRemindersIntent
+                            = new AddUpdateMedicationRemindersIntent(getContext(), true);
+                    addUpdateMedicationRemindersIntent
+                            .putExtra("medicationResultReceiver", mMedicationReminderResultReceiver);
+                    getContext().startService(addUpdateMedicationRemindersIntent);
+
                 }
                 break;
         }
@@ -306,5 +324,29 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void setPresenter(SignOutContract.Presenter presenter) {
 
+    }
+
+    // Setup the callback for when data is received from the service
+    public void setupServiceReceiver() {
+        mMedicationReminderResultReceiver = new MedicationReminderResultReceiver(new Handler());
+        // This is where we specify what happens when data is received from the service
+        mMedicationReminderResultReceiver.setReceiver(this);
+    }
+
+    //Result retreived from the medication reminder service
+    @Override
+    public void onReceiveResult(int resultCode, Bundle resultData) {
+        ((HomeActivity) getActivity()).hideProgress();
+        if (resultCode == RESULT_OK) {
+            String resultValue = resultData.getString(RESULT_VALUE);
+            if (resultValue.equals(SUCCESS)) {
+                ((HomeActivity) getActivity()).showProgress();
+                mPresenter.sendDataToServer(
+                        mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+            } else {
+                Utils.displayCrouton(getActivity(), resultValue, mContainerLayout);
+            }
+
+        }
     }
 }

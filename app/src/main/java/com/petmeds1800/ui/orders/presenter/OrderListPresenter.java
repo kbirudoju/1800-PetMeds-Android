@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.orders.presenter;
 
-import android.util.Log;
-
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.OrderFilterList;
@@ -9,6 +7,8 @@ import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment;
 import com.petmeds1800.ui.orders.OrderListContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class OrderListPresenter implements OrderListContract.Presenter {
     public OrderFilterList mfilterList;
 
     @Inject
-    OrderListPresenter(OrderListContract.View orderView) {
+    public OrderListPresenter(OrderListContract.View orderView) {
         mOrderView = orderView;
     }
 

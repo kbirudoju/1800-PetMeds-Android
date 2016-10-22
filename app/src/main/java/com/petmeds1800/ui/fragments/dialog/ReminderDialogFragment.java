@@ -88,7 +88,6 @@ public class ReminderDialogFragment extends DialogFragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //mReminderPicker.setOnItemSelectedListener(this);
         mOKButton.setOnClickListener(this);
         if (getArguments() != null && getArguments().containsKey(Constants.DIALOG_DATA_TOKEN)) {
             reminderDialogState = ((ReminderDialogData) (getArguments().getSerializable(Constants.DIALOG_DATA_TOKEN)));

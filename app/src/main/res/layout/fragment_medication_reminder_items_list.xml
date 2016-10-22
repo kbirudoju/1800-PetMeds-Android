@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/fingerprint_alert_title_background"
+                android:id="@+id/containerLayout"
+                tools:context="com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment">
+    <android.support.design.widget.TextInputLayout
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_marginRight="@dimen/dp_16"
+            android:id="@+id/itemNameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/StyledEditTextHintLayout"
+            app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+        <EditText
+                android:id="@+id/itemName_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/promptItemName"
+                android:singleLine="true"
+                style="@style/StyledEditText"
+                android:maxLength="@integer/characterLimit_40"/>
+    </android.support.design.widget.TextInputLayout>
+    <TextView
+            android:text="@string/item_selection_header_text"
+            style="@style/formlabel"
+            android:id="@+id/selectOrderstxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/itemNameLayout"
+            android:padding="@dimen/xlarge_margin"
+    />
+    <ProgressBar android:id="@+id/progressBar"
+
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerInParent="true"/>
+
+    <android.support.v7.widget.RecyclerView
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_below="@+id/selectOrderstxt"
+            android:id="@+id/medicationsreminderitems_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+</RelativeLayout>

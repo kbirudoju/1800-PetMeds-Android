@@ -1,7 +1,7 @@
 package com.petmeds1800.util.alarm;
 
 import com.petmeds1800.intent.AlarmIntent;
-import com.petmeds1800.model.entities.MedicationReminderTest;
+import com.petmeds1800.model.entities.MedicationRemindersAlarmData;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.Utils;
 
@@ -79,7 +79,7 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
 
     // END_INCLUDE(set_alarm)
 
-    public void addMultipleAlarms(Context context, ArrayList<MedicationReminderTest> medicationReminderTests) {
+    public void addMultipleAlarms(Context context, ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDatas) {
 
 //        String currentDayFormatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         Calendar now = Calendar.getInstance();
@@ -87,18 +87,17 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
         long millis = now.getTimeInMillis();
         String currentDate = Utils.changeDateFormat(millis, "yyyy/MM/dd");
         SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy/MM/dd h:mm a");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        if (medicationReminderTests != null && medicationReminderTests.size() > 0 && medicationReminderTests
+
+        if (medicationRemindersAlarmDatas != null && medicationRemindersAlarmDatas.size() > 0 && medicationRemindersAlarmDatas
                 .get(ZERO_INDEX).getRepeatFrequency() == Constants.RepeatFrequency.REPEAT_MONTHLY) {
             Calendar calendar = Calendar.getInstance();
             try {
                 DateFormat formatter = new SimpleDateFormat("MMM dd");
-                Date date = formatter.parse(medicationReminderTests
+                Date date = formatter.parse(medicationRemindersAlarmDatas
                         .get(ZERO_INDEX).getStartdate());
                 calendar.setTime(date);
                 calendar.set(Calendar.YEAR, year);
                 currentDate = Utils.changeDateFormat(calendar.getTimeInMillis(), "yyyy/MM/dd");
-
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -106,24 +105,23 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
         }
 
         {
-            for (MedicationReminderTest medicationReminderTest : medicationReminderTests) {
+            for (MedicationRemindersAlarmData medicationRemindersAlarmData : medicationRemindersAlarmDatas) {
                 //get the hour and minutes
                 Date date = null;
                 try {
                     //We need to concatenate the
-                    String dateWithTime = currentDate + " " + medicationReminderTest.getReminderTime();
+                    String dateWithTime = currentDate + " " + medicationRemindersAlarmData.getReminderTime();
                     date = inputDateFormat.parse(dateWithTime);
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date);
                     calendar.get(Calendar.HOUR_OF_DAY);
                     calendar.get(Calendar.MINUTE);
                     //get the day in week
-                    ArrayList<String> days = medicationReminderTest.getDaysOfWeek();
+                    ArrayList<String> days = medicationRemindersAlarmData.getDaysOfWeek();
                     //We need an id in order to keep reference of alarms getting added into the system
                     if (days != null && days.size() > 0) {
                         int reminderIdIncremnetFactor = DAILY_INTERVAL;
                         for (String eachDay : days) {
-
                             switch (eachDay) {
                                 case "SUN":
                                     calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
@@ -148,19 +146,18 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
                                     break;
 
                             }
-                            Date date11 = calendar.getTime();
                             //TODO We need a ask backend for unique ID for a medication reminder
-                            setAlarm(context, calendar, medicationReminderTest.getRepeatFrequency().ordinal(),
-                                    medicationReminderTest.getRepeatValue(),
-                                    medicationReminderTest.getReminderId() * INCREMENT_FACTOR
+                            setAlarm(context, calendar, medicationRemindersAlarmData.getRepeatFrequency().ordinal(),
+                                    medicationRemindersAlarmData.getRepeatValue(),
+                                    medicationRemindersAlarmData.getReminderId() * INCREMENT_FACTOR
                                             + reminderIdIncremnetFactor,
-                                    medicationReminderTest.getNotificationMessage());
+                                    medicationRemindersAlarmData.getNotificationMessage());
                             reminderIdIncremnetFactor++;
                         }
                     } else {
-                        setAlarm(context, calendar, medicationReminderTest.getRepeatFrequency().ordinal(),
-                                medicationReminderTest.getRepeatValue(), medicationReminderTest.getReminderId(),
-                                medicationReminderTest.getNotificationMessage());
+                        setAlarm(context, calendar, medicationRemindersAlarmData.getRepeatFrequency().ordinal(),
+                                medicationRemindersAlarmData.getRepeatValue(), medicationRemindersAlarmData.getReminderId(),
+                                medicationRemindersAlarmData.getNotificationMessage());
                     }
 
 
@@ -187,13 +184,13 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
      * Cancels the alarm.
      */
     // BEGIN_INCLUDE(cancel_alarm)
-    public void cancelAllAlarms(Context context, ArrayList<MedicationReminderTest> medicationReminderTests) {
+    public void cancelAllAlarms(Context context, ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDatas) {
         // If the alarm has been set, cancel it.
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, MedicationAlarmReceiver.class);
-        for (int i = 0; i < medicationReminderTests.size(); i++) {
+        for (int i = 0; i < medicationRemindersAlarmDatas.size(); i++) {
             PendingIntent addedIntent = PendingIntent
-                    .getBroadcast(context, medicationReminderTests.get(i).getReminderId(), intent,
+                    .getBroadcast(context, medicationRemindersAlarmDatas.get(i).getReminderId(), intent,
                             PendingIntent.FLAG_UPDATE_CURRENT);
             alarmMgr.cancel(addedIntent);
         }

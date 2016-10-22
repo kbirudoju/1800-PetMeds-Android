@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Abhinav on 8/9/16.
  */
-public class MedicationReminderTest implements Serializable {
+public class MedicationRemindersAlarmData implements Serializable {
 
     private String reminderTime;
     private ArrayList<String> daysOfWeek;
@@ -17,7 +17,7 @@ public class MedicationReminderTest implements Serializable {
     private int mRepeatValue;
     private String notificationMessage;
     private String startdate;
-    public MedicationReminderTest(String notificationMessage, int repeatValue,
+    public MedicationRemindersAlarmData(String notificationMessage, int repeatValue,
             Constants.RepeatFrequency repeatFrequency, int reminderId, ArrayList<String> daysOfWeek,
             String reminderTime, String startdate) {
         this.notificationMessage = notificationMessage;
