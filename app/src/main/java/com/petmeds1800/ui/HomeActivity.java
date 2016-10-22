@@ -28,7 +28,6 @@ import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
-import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
@@ -133,7 +132,10 @@ public class HomeActivity extends AbstractActivity
             } else {
                 mPreferencesHelper.setIsFingerPrintEnabled(true);
             }
+            //startService(new AddUpdateMedicationRemindersIntent(this, false));
+
         }
+
 
         //initialize fragment list
         List<Fragment> fragmentList = new ArrayList<>();
@@ -228,11 +230,11 @@ public class HomeActivity extends AbstractActivity
         //code to set default first tab selected
         mViewPager.addOnPageChangeListener(pageChangeListener);
 
-        if (commitOrderResponse != null) {
+      /*  if (commitOrderResponse != null) {
             mViewPager.setCurrentItem(1);
         } else {
             mViewPager.setCurrentItem(0);
-        }
+        }*/
         pageChangeListener.onPageSelected(0);
         // Instead of initializing it in onResume for many times we initialize it in onCreate
         mProgressDialog = new ProgressDialog();
