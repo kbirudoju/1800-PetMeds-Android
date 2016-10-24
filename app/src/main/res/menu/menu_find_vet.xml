@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.petmeds1800.ui.vet.FindAVetFragment">
+
+    <item
+        android:id="@+id/action_map"
+        android:icon="@drawable/ic_map_white"
+        android:title="@string/action_done"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_list"
+        android:icon="@drawable/rectangle"
+        android:title="@string/action_done"
+        app:showAsAction="always"
+        android:visible="false"/>
+
+</menu>

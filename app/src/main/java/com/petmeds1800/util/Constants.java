@@ -43,6 +43,9 @@ public class Constants {
 
     public static final String IS_EDITABLE = "isEditable";
 
+    public static final int SHOW_VET_ON_MAP=5;
+    public static final int REFRESH_VET_DATA=6;
+
     public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
 
     public static final int STORAGE_ACCESS_REQUEST_CODE = 111;

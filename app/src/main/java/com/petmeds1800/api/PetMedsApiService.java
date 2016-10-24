@@ -321,4 +321,10 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/vet/VetActor/remove")
     Observable<RemovePetResponse> removeVet(@Body RemoveVetRequest request);
 
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/vet/VetActor/notify")
+    Observable<RemovePetResponse> requestRefrral(@Body UpdateVetRequest request);
+
+
 }

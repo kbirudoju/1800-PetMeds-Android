@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        />
+
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/toolbar"
+    android:layout_above="@+id/vet_deatil_layout">
+        <RelativeLayout
+            android:id="@+id/map_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+        </RelativeLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_below="@+id/toolbar"
+    android:layout_marginRight="@dimen/dp_20"
+    android:layout_marginLeft="@dimen/dp_12"
+    android:layout_marginTop="@dimen/dp_11"
+    android:layout_marginBottom="@dimen/dp_17"
+    android:paddingLeft="@dimen/dp_16"
+    android:paddingRight="@dimen/dp_16">
+    <EditText
+        android:id="@+id/zipCodeEdit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/search"
+        android:inputType="number"
+        android:imeOptions="actionSearch"
+        android:textColor="@color/petmeds_blue"
+        android:textColorHint="@color/grey_disabled"
+        android:hint="Find a location"
+        android:layout_toLeftOf="@+id/location_icon"
+        android:drawablePadding="@dimen/dp_16"
+        android:background="@null"
+        style="@style/order_title"
+
+        />
+    <ImageView
+        android:id="@+id/location_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_near_me"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>
+</FrameLayout>
+<RelativeLayout
+    android:id="@+id/vet_deatil_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:paddingBottom="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_16"
+    android:paddingLeft="@dimen/dp_16"
+    android:paddingTop="@dimen/dp_10"
+    android:background="@color/white"
+    >
+    <ImageView
+        android:id="@+id/loaction_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_location"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:layout_alignParentLeft="true"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/loaction_image"
+        android:layout_toLeftOf="@+id/arrow_image"
+        android:layout_marginLeft="@dimen/dp_13"
+        >
+        <TextView
+            android:id="@+id/clinicNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/vet_name_title"/>
+        <TextView
+            android:id="@+id/addressLine1_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            style="@style/rounded_button_text"/>
+        <TextView
+            android:id="@+id/addressLine2_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            style="@style/rounded_button_text"/>
+        <TextView
+            android:id="@+id/distanceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            style="@style/formlabel"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/arrow_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:src="@drawable/ic_arrow"/>
+</RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

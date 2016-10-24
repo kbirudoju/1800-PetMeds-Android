@@ -580,6 +580,8 @@
     <string name="from_txt">from</string>
     <string name="near_vet_txt">"Vet near "</string>
     <string name="phone_title_txt">"Phone: "</string>
+    <string name="clinic_empty_error">Clinic name is requied</string>
+    <string name="requestReferralMsg">We have notified %1$s of your interest in their services.</string>
 
     <!--Learn-->
     <string name="title_featured">FEATURED</string>

@@ -30,6 +30,9 @@ import com.petmeds1800.ui.checkout.stepfour.presenter.StepFourRootPresenter;
 import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootPresentor;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootPresentor;
+import com.petmeds1800.ui.checkout.stepthreefragment.AddGuestCardFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreePresenter;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootPresentor;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
@@ -58,9 +61,11 @@ import com.petmeds1800.ui.vet.AddVetPresenter;
 import com.petmeds1800.ui.vet.CantFindVetFragment;
 import com.petmeds1800.ui.vet.CantFindVetPresenter;
 import com.petmeds1800.ui.vet.EditVetFragment;
+import com.petmeds1800.ui.vet.VetDetailFragment;
 import com.petmeds1800.ui.vet.VetListPresenter;
 import com.petmeds1800.ui.vet.presenter.EditVetPresenter;
 import com.petmeds1800.ui.vet.presenter.FindVetPresenter;
+import com.petmeds1800.ui.vet.presenter.VetDetailPresenter;
 import com.petmeds1800.util.AnalyticsUtil;
 
 /**
@@ -180,4 +185,6 @@ public interface Injector {
     void inject(CheckOutActivity addGuestCardFragment);
 
     void inject(MedConditionsListPresenter medConditionsListPresenter);
+    void inject(VetDetailPresenter vetDetailPresenter);
+    void inject(VetDetailFragment vetDetailFragment);
 }

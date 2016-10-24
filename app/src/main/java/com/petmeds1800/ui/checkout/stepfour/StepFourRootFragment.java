@@ -1,5 +1,14 @@
 package com.petmeds1800.ui.checkout.stepfour;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.SavePetVetRequest;
@@ -13,15 +22,6 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -133,6 +133,8 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
         }
     }
 
+
+
     @Override
     public boolean isActive() {
         return isAdded();
@@ -149,11 +151,13 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
 
     @Override
     public void onError(String errorMessage) {
-        activity.hideProgress();
+      showErrorCrouton(errorMessage,false);
+
     }
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
+        activity.hideProgress();
         Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
     }
 

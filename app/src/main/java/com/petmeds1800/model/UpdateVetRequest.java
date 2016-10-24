@@ -18,6 +18,13 @@ public class UpdateVetRequest {
         this._dynSessConf = _dynSessConf;
     }
 
+    public UpdateVetRequest(String vetId,  String phoneNumber, String name, String _dynSessConf){
+        this.vetId = vetId;
+        this.phoneNumber = phoneNumber;
+        this.name = name;
+        this._dynSessConf = _dynSessConf;
+    }
+
     public String getVetId() {
         return vetId;
     }

@@ -2,4 +2,5 @@
 <resources>
 
     <string name="server.endpoint">https://dev.1800petmeds.com</string>
+    <string name="google_map_api_key">AIzaSyArUw37Y2g7yXp6wKVVdDrE9IqgXAvSL64</string>
 </resources>

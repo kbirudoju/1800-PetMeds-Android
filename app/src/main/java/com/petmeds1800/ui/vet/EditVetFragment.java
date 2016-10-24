@@ -116,8 +116,8 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
             boolean isValidPhoneNumber;
 
             isValidVetName = checkAndShowError(mVetNameEdit, mVetNameInputLayout, R.string.error_petname);
-            isValidClinicName = checkAndShowError(mClinicNameEdit, mClinicNameInputLayout, R.string.error_petname);
-            isValidPhoneNumber = checkAndShowError(mPhoneNumberEdit, mPhoneNumberInputLayout, R.string.error_petname);
+            isValidClinicName = checkAndShowError(mClinicNameEdit, mClinicNameInputLayout, R.string.clinic_empty_error);
+            isValidPhoneNumber = checkAndShowError(mPhoneNumberEdit, mPhoneNumberInputLayout, R.string.error_phone_required);
 
             if (isValidVetName ||
                     isValidClinicName ||

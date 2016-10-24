@@ -1,23 +1,38 @@
 package com.petmeds1800.ui.vet;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.petmeds1800.R;
+import com.petmeds1800.intent.ShowVetOnMapIntent;
 import com.petmeds1800.model.VetList;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.vet.presenter.FindVetPresenter;
+import com.petmeds1800.ui.vet.support.LocationRelatedStuff;
 import com.petmeds1800.ui.vet.support.SearchVetAdapter;
+import com.petmeds1800.util.Constants;
 
 import java.util.ArrayList;
 
@@ -27,32 +42,42 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 10/18/2016.
  */
-public class FindAVetFragment extends AbstractFragment implements FindVetContract.View {
+public class FindAVetFragment extends AbstractFragment implements FindVetContract.View,LocationRelatedStuff.ZipCodeListener {
     @BindView(R.id.vet_recycler_view)
     RecyclerView mVetListRecyclerView;
-
 
     private SearchVetAdapter mVetListAdapter;
     private FindVetContract.Presenter mPresenter;
     @BindView(R.id.zipCodeEdit)
     EditText mZipCodeEdit;
-    private ArrayList<VetList>mVetList;
+    private ArrayList<VetList> mVetList;
+    private String mZipCode;
+    @BindView(R.id.location_icon)
+    ImageView mLocationImage;
+    private LocationRelatedStuff locationRelatedStuff;
+
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_find_vet, container, false);
         ButterKnife.bind(this, view);
-        mPresenter=new FindVetPresenter(this);
+        mPresenter = new FindVetPresenter(this);
         setHasOptionsMenu(true);
+        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_my_vets));
+        ((AbstractActivity) getActivity()).enableBackButton();
 
-        mVetListAdapter=new SearchVetAdapter(getActivity(), new View.OnClickListener() {
+        locationRelatedStuff = new LocationRelatedStuff(getActivity());
+        locationRelatedStuff.setZipCodeListener(this);
+
+        mVetListAdapter = new SearchVetAdapter(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = mVetListRecyclerView.getChildAdapterPosition(v);
-                Bundle bundle =new Bundle();
-                bundle.putSerializable("vet_detail",mVetList.get(position));
-                addAccountFragmentWithBundle(new VetDetailFragment(), bundle);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("vet_detail", mVetList.get(position));
+                replaceAccountFragmentWithBundle(new VetDetailFragment(), bundle);
             }
         });
 
@@ -61,22 +86,37 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     hideSoftKeyBoard();
-                    if(mZipCodeEdit.getText().toString()!=null && !mZipCodeEdit.getText().toString().isEmpty())
+                    if (mZipCodeEdit.getText().toString() != null && !mZipCodeEdit.getText().toString().isEmpty()) {
                         try {
                             ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        mZipCode = mZipCodeEdit.getText().toString();
                         performSearch(mZipCodeEdit.getText().toString());
+
+                    }
                     return true;
                 }
                 return false;
             }
         });
-        return  view;
+
+        mLocationImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //locationRelatedStuff = new LocationRelatedStuff(ShowVetOnMapActivity.this);
+                locationRelatedStuff.initLocation();
+                locationRelatedStuff.connectGoogleApiClient();
+            }
+        });
+
+        return view;
     }
 
-    private void performSearch(String zipCode){
+
+
+    private void performSearch(String zipCode) {
         mPresenter.getVetList(zipCode);
     }
 
@@ -84,9 +124,20 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUpVetList();
+        Log.d("mZipCode", mZipCode + ">>>>");
+            if (mZipCode != null && !mZipCode.isEmpty()) {
+                Log.d("zipcode is", mZipCode);
+                try {
+                    ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                performSearch(mZipCode);
+            }
+        }
 
 
-    }
+
 
     private void setUpVetList() {
         mVetListRecyclerView.setAdapter(mVetListAdapter);
@@ -101,30 +152,115 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
 
     @Override
     public void onSuccess(ArrayList<VetList> vetList) {
-        mVetList=new ArrayList<>();
-        mVetList=vetList;
+        mVetList = new ArrayList<>();
+        mVetList = vetList;
         try {
-            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+            ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
         }
-     mVetListAdapter.setData(vetList);
+        mZipCodeEdit.setText(mZipCode);
+        mVetListAdapter.setData(vetList);
+
     }
 
     @Override
     public void onError(String errorMessage) {
+        Snackbar.make(mVetListRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
 
         try {
-            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
+            ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_find_vet, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_map) {
+            ShowVetOnMapIntent showVetOnMapIntent = new ShowVetOnMapIntent(getActivity(), mVetList,mZipCode);
+            startActivityForResult(showVetOnMapIntent, Constants.REFRESH_VET_DATA);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void setPresenter(FindVetContract.Presenter presenter) {
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            FragmentManager manager = getActivity().getSupportFragmentManager();
+            FragmentTransaction trans = manager.beginTransaction();
+            trans.remove(this);
+            trans.commit();
+            manager.popBackStack();
+        }else if(requestCode==Constants.REFRESH_VET_DATA){
+            //Reload data of vet
+            if(data!=null){
+                Log.d("zipCode",mZipCode+">>");
+                Bundle b=data.getExtras();
+                String currentZipCode=b.getString("zipCode");
+                if(currentZipCode!=null && !currentZipCode.isEmpty()) {
+                    mZipCode=currentZipCode;
+                    mZipCodeEdit.setText(mZipCode);
+                    ArrayList<VetList> vetList = (ArrayList<VetList>) b.getSerializable("vetList");
+                    onSuccess(vetList);
+                }
+            }
+        }
+        else if(requestCode== LocationRelatedStuff.REQUEST_CHECK_SETTINGS) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    locationRelatedStuff.checkMarshMallowPermissions();
+                    Log.i("TAG", "User agreed to make required location settings changes.");
+                    break;
+                case Activity.RESULT_CANCELED:
+                    Log.i("TAG", "User chose not to make required location settings changes.");
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onZipCodeFetched(String zipCode) {
+        if (zipCode != null) {
+            try {
+                ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mZipCode = zipCode;
+            performSearch(mZipCode);
+        }
+    }
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case LocationRelatedStuff.LOCATION_REQUEST:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationRelatedStuff.getLocationUpdate();
+                } else {
+                    Toast.makeText(getActivity(), "Permission Denied, You cannot access location data.", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+
 }

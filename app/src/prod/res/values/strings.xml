@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="server.endpoint">https://dev.1800petmeds.com</string>
+    <string name="google_map_api_key">AIzaSyAoRGFJ1mjQA5coZ5s07IIqBANthoTOUNk</string>
 </resources>
