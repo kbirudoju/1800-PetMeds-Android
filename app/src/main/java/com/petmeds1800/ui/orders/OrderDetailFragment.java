@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.orders;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,6 +14,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,14 +25,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.ReOrderRequest;
+import com.petmeds1800.model.entities.CommerceItems;
+import com.petmeds1800.model.entities.OrderDetailHeader;
 import com.petmeds1800.model.entities.OrderList;
+import com.petmeds1800.model.entities.PaymentGroup;
+import com.petmeds1800.model.entities.ShippingGroup;
 import com.petmeds1800.model.entities.WebViewHeader;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
@@ -45,6 +58,7 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.LayoutPrintingUtils;
 
 import java.io.File;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -56,8 +70,11 @@ import butterknife.ButterKnife;
  */
 public class OrderDetailFragment extends AbstractFragment implements OrderDetailContract.View {
 
-//    @BindView(R.id.root_view)
-//    LinearLayout mRootView;
+    @BindView(R.id.scroll_view)
+    ScrollView mScrollView;
+
+    @BindView(R.id.linear_container)
+    LinearLayout mPrintViewsLinearLayout;
 
     @BindView(R.id.order_detail_recycler_view)
     RecyclerView mOrderDetailRecyclerView;
@@ -68,7 +85,8 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
-    OrderList orderList;
+
+    private OrderList orderList;
 
     @Nullable
     @Override
@@ -81,7 +99,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -167,8 +185,21 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         });
         setRecyclerView();
         setTitle();
-        mOrderDetailAdapter.setData(orderList);
+        List<Object> mData = mOrderDetailAdapter.setData(orderList);
+        prepareListViewContentForPrinting(mData);
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        final ViewTreeObserver viewTreeObserver = mPrintViewsLinearLayout.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                viewTreeObserver.removeOnGlobalLayoutListener(this);
+                mScrollView.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -295,7 +326,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
 
     public File generatePdf() {
         LayoutPrintingUtils layoutPrintingUtils = new LayoutPrintingUtils();
-        Bitmap bitmap = layoutPrintingUtils.getBitmapFromView(getContext());
+        Bitmap bitmap = layoutPrintingUtils.getBitmapFromView(mScrollView);
         if (bitmap != null) {
             File pdfFile = layoutPrintingUtils.printViewToPdf("receipt", bitmap);
             if (pdfFile != null) {
@@ -315,5 +346,116 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         email.setType("application/pdf");
         email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getActivity().startActivity(email);
+    }
+
+    private LinearLayout prepareListViewContentForPrinting(List<Object> data) {
+
+        LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        for (int i = 0; i < data.size(); i++) {
+            int viewType = mOrderDetailAdapter.getItemViewType(i);
+            switch (viewType) {
+                case OrderDetailAdapter.VIEW_TYPE_HEADER:
+                    LinearLayout headerView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_header_row, null);
+                    OrderDetailHeader header = (OrderDetailHeader) data.get(i);
+                    ((TextView) headerView.getChildAt(0)).setText(header.getHeader());
+                    mPrintViewsLinearLayout.addView(headerView);
+                    break;
+
+                case OrderDetailAdapter.VIEW_TYPE_PRODUCT:
+                    LinearLayout productView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_product_row, null);
+                    CommerceItems commerceItem = (CommerceItems) data.get(i);
+                    ((TextView) productView.findViewById(R.id.product_price_label)).setText("$" + commerceItem.getAmount());
+                    ((TextView) productView.findViewById(R.id.product_name_label)).setText(commerceItem.getProductName());
+                    ((TextView) productView.findViewById(R.id.quantity_label)).setText(getString(R.string.quantity_txt) + commerceItem.getQuantity());
+                    ((TextView) productView.findViewById(R.id.item_description)).setText(commerceItem.getSkuName());
+                    final ImageView productImage = (ImageView) productView.findViewById(R.id.product_image);
+                    Glide.with(this).load(getString(R.string.server_endpoint) + commerceItem.getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(productImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            productImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                    TextView petNameLabel = ((TextView) productView.findViewById(R.id.pet_name_label));
+                    if (commerceItem.getPetName() != null && !commerceItem.getPetName().isEmpty()) {
+                        petNameLabel.setText(getString(R.string.pet_txt) + commerceItem.getPetName());
+                    } else {
+                        petNameLabel.setVisibility(View.GONE);
+                    }
+
+                    TextView vetNameLabel = ((TextView) productView.findViewById(R.id.vet_name_label));
+                    if (commerceItem.getVetName() != null && !commerceItem.getVetName().isEmpty()) {
+                        vetNameLabel.setText(getString(R.string.vet_txt) + commerceItem.getVetName());
+                    } else {
+                        vetNameLabel.setVisibility(View.GONE);
+                    }
+                    mPrintViewsLinearLayout.addView(productView);
+                    break;
+
+                case OrderDetailAdapter.VIEW_TYPE_SHIPPING:
+                    LinearLayout shippingView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_shipping_row, null);
+                    ShippingGroup shippingDetail = (ShippingGroup) data.get(i);
+                    ((TextView) shippingView.findViewById(R.id.shipping_method_label)).setText(shippingDetail.getShippingMethod());
+
+                    TextView shippingAddressLabel = ((TextView) shippingView.findViewById(R.id.shipping_address_label));
+                    if (shippingDetail.getAddress2() != null && !shippingDetail.getAddress2().isEmpty()) {
+                        shippingAddressLabel.setText(shippingDetail.getAddress1() + "," + shippingDetail.getAddress2());
+                    } else {
+                        shippingAddressLabel.setText(shippingDetail.getAddress1());
+                    }
+                    mPrintViewsLinearLayout.addView(shippingView);
+                    break;
+
+                case OrderDetailAdapter.VIEW_TYPE_FIXED:
+                    LinearLayout fixedView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_webview_row, null);
+                    WebViewHeader webViewHeader = (WebViewHeader) data.get(i);
+                    ((TextView) fixedView.findViewById(R.id.webview_header_label)).setText(webViewHeader.getWebviewHeader());
+                    mPrintViewsLinearLayout.addView(fixedView);
+                    break;
+
+                case OrderDetailAdapter.VIEW_TYPE_PAYMENT:
+                    LinearLayout paymentView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_payment_row, null);
+                    PaymentGroup paymentInfo = (PaymentGroup) data.get(i);
+                    TextView billingAddressLabel = ((TextView) paymentView.findViewById(R.id.billing_address_label));
+                    if (paymentInfo.getAddress2() != null && !paymentInfo.getAddress2().isEmpty()) {
+                        billingAddressLabel.setText(paymentInfo.getAddress1() + "," + paymentInfo.getAddress2());
+                    } else {
+                        billingAddressLabel.setText(paymentInfo.getAddress1());
+                    }
+                    ((TextView) paymentView.findViewById(R.id.payment_method_label)).setText(paymentInfo.getPaymentMethod());
+                    mPrintViewsLinearLayout.addView(paymentView);
+                    break;
+
+                case OrderDetailAdapter.VIEW_TYPE_INFO:
+                    LinearLayout infoView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_info_row, null);
+                    OrderList orderInfo = (OrderList) data.get(i);
+                    ((TextView) infoView.findViewById(R.id.order_no_label)).setText(orderInfo.getOrderId());
+                    ((TextView) infoView.findViewById(R.id.order_date_label)).setText(orderInfo.getSubmittedDate());
+                    ((TextView) infoView.findViewById(R.id.ship_to_label)).setText(orderInfo.getShipTo());
+                    ((TextView) infoView.findViewById(R.id.order_total_label)).setText("$" + String.valueOf(orderInfo.getTotal()));
+                    TextView orderStatusLabel = ((TextView) infoView.findViewById(R.id.status_label));
+                    orderStatusLabel.setText(orderInfo.getStatus());
+
+                    //temporary hardcoded value to check layout, it will be changed after confirmation from backend
+                    if (orderInfo.getStatus().equalsIgnoreCase("PROCESSING")) {
+                        ((TextView) infoView.findViewById(R.id.status_label)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
+                        orderStatusLabel.setBackgroundResource(R.drawable.yellow_rounded_button);
+                    } else if (orderInfo.getStatus().equalsIgnoreCase("Cancelled")) {
+                        orderStatusLabel.setBackgroundResource(R.drawable.red_rounded_button);
+                        orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
+                    } else {
+                        orderStatusLabel.setBackgroundResource(R.drawable.green_rounded_button);
+                    }
+                    mPrintViewsLinearLayout.addView(infoView);
+                    break;
+            }
+        }
+
+        //Add some padding below before printing
+        mPrintViewsLinearLayout.setPadding(0, 0, 0, 20);
+
+        return mPrintViewsLinearLayout;
     }
 }

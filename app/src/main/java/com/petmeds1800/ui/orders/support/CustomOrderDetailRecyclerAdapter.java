@@ -28,16 +28,13 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
     public static final int REVIEW_ROW_ID=3;
     public static final int TRACK_ROW_ID=4;
 
-
-
     public CustomOrderDetailRecyclerAdapter(Context context) {
         mData = new ArrayList<Object>();
         mNotifyOnChange=true;
         this.context=context;
     }
 
-
-    public void setData(OrderList orderList){
+    public List<Object> setData(OrderList orderList){
         //Add orderdetail header
         mData.add(new OrderDetailHeader(context.getString(R.string.order_detail_header)));
         //Add allCommerce Item in list
@@ -46,7 +43,6 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
         //Add webview Items
         mData.add(new WebViewHeader(context.getString(R.string.cancel_order_header),CANCEL_ORDER_ROW_ID,orderList.getOrderId(),orderList.getDisplayOrderId(),0));
         mData.add(new WebViewHeader(context.getString(R.string.reorder_entire),REORDER_ENTIRE_ORDER_ROW_ID,orderList.getOrderId(),orderList.getDisplayOrderId(),0));
-
 
         //Add item header
         mData.add(new OrderDetailHeader(context.getString(R.string.item_header)));
@@ -57,8 +53,6 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
             mData.add(new WebViewHeader(context.getString(R.string.reorder_item),REORDER_ITEM_ROW_ID,commerceItem.getSkuId(),commerceItem.getProductId(),Integer.parseInt(commerceItem.getQuantity())));
             mData.add(new WebViewHeader(context.getString(R.string.write_review_header),REVIEW_ROW_ID,commerceItem.getSkuId(), commerceItem.getProductId(),Integer.parseInt(commerceItem.getQuantity())));
         }
-
-
 
         //Add shipment header
         mData.add(new OrderDetailHeader(context.getString(R.string.shipment_header)));
@@ -84,10 +78,8 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
         if (mNotifyOnChange)
             notifyItemRangeInserted(0, mData.size());
 
-
+        return mData;
     }
-
-
 
     @Override
     public int getItemCount() {

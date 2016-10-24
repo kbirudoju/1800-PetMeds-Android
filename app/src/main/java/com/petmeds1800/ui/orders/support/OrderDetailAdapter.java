@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
@@ -31,16 +32,14 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
 
     public static final int VIEW_TYPE_HEADER = 0;
     public static final int VIEW_TYPE_PRODUCT = 1;
-    public static final int VIEW_TYPE_SHIIPING= 2;
-    public static final int VIEW_TYPE_PAYMENT= 3;
+    public static final int VIEW_TYPE_SHIPPING = 2;
+    public static final int VIEW_TYPE_PAYMENT = 3;
     public static final int VIEW_TYPE_FIXED = 4;
     public static final int VIEW_TYPE_INFO = 5;
-
 
     private OrderList orderList;
     private Context context;
     private View.OnClickListener listener;
-
 
     public OrderDetailAdapter(Context context, OrderList orderList) {
         super(context);
@@ -54,7 +53,6 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         this.context = context;
         this.listener = listener;
     }
-
 
    /* public void setIsDefaultLayout(boolean isDefaultLayout) {
         this.isDefaultLayout = isDefaultLayout;
@@ -71,30 +69,35 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                         .inflate(resource, parent, false);
                 viewHolder = new HeaderViewHolder(v);
                 break;
+
             case VIEW_TYPE_PRODUCT:
                 int resourceProductSection = R.layout.view_order_detail_product_row;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resourceProductSection, parent, false);
                 viewHolder = new ProductViewHolder(v);
                 break;
+
             case VIEW_TYPE_PAYMENT:
                 int resourcePaymentSection = R.layout.view_order_detail_payment_row;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resourcePaymentSection, parent, false);
                 viewHolder = new PaymentViewHolder(v);
                 break;
-            case VIEW_TYPE_SHIIPING:
+
+            case VIEW_TYPE_SHIPPING:
                 int resourceShippingSection = R.layout.view_order_detail_shipping_row;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resourceShippingSection, parent, false);
                 viewHolder = new ShippingViewHolder(v);
                 break;
+
             case VIEW_TYPE_INFO:
                 int resourceInfoSection = R.layout.view_order_detail_info_row;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resourceInfoSection, parent, false);
                 viewHolder = new OrderInfoViewHolder(v);
                 break;
+
             case VIEW_TYPE_FIXED:
                 int resourceTopView = R.layout.view_order_detail_webview_row;
                 v = LayoutInflater.from(parent.getContext())
@@ -117,14 +120,15 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                 OrderDetailHeader header = (OrderDetailHeader) getItemAt(position);
                 headerHolder.headerLabel.setText(header.getHeader());
                 break;
+
             case VIEW_TYPE_PRODUCT:
                 final ProductViewHolder productHolder = (ProductViewHolder) holder;
                 CommerceItems commerceItem = (CommerceItems) getItemAt(position);
-                productHolder.priceLabel.setText("$"+commerceItem.getAmount());
+                productHolder.priceLabel.setText("$" + commerceItem.getAmount());
                 productHolder.productNameLabel.setText(commerceItem.getProductName());
                 productHolder.quantityLabel.setText(context.getString(R.string.quantity_txt) + commerceItem.getQuantity());
                 productHolder.productDescLabel.setText(commerceItem.getSkuName());
-                Glide.with(context).load(context.getString(R.string.server_endpoint)+commerceItem.getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(productHolder.productImage) {
+                Glide.with(context).load(context.getString(R.string.server_endpoint) + commerceItem.getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(productHolder.productImage) {
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
@@ -133,70 +137,67 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                         productHolder.productImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
-                if(commerceItem.getPetName()!=null && !commerceItem.getPetName().isEmpty()){
+                if (commerceItem.getPetName() != null && !commerceItem.getPetName().isEmpty()) {
                     productHolder.petNameLabel.setText(context.getString(R.string.pet_txt) + commerceItem.getPetName());
 
-                }else{
+                } else {
                     productHolder.petNameLabel.setVisibility(View.GONE);
                 }
 
-                if(commerceItem.getVetName()!=null && !commerceItem.getVetName().isEmpty()){
-                    productHolder.vetNameLabel.setText(context.getString(R.string.vet_txt)+commerceItem.getVetName());
+                if (commerceItem.getVetName() != null && !commerceItem.getVetName().isEmpty()) {
+                    productHolder.vetNameLabel.setText(context.getString(R.string.vet_txt) + commerceItem.getVetName());
 
-                }else{
+                } else {
                     productHolder.vetNameLabel.setVisibility(View.GONE);
                 }
                 break;
-            case VIEW_TYPE_SHIIPING:
+
+            case VIEW_TYPE_SHIPPING:
                 ShippingViewHolder shippingHolder = (ShippingViewHolder) holder;
-                ShippingGroup shippingDetail=(ShippingGroup)getItemAt(position);
+                ShippingGroup shippingDetail = (ShippingGroup) getItemAt(position);
                 shippingHolder.shippingMethodLabel.setText(shippingDetail.getShippingMethod());
-                if(shippingDetail.getAddress2()!=null && !shippingDetail.getAddress2().isEmpty()){
-                    shippingHolder.shippingAddressLabel.setText(shippingDetail.getAddress1() +"," +shippingDetail.getAddress2());
-
-                }else{
+                if (shippingDetail.getAddress2() != null && !shippingDetail.getAddress2().isEmpty()) {
+                    shippingHolder.shippingAddressLabel.setText(shippingDetail.getAddress1() + "," + shippingDetail.getAddress2());
+                } else {
                     shippingHolder.shippingAddressLabel.setText(shippingDetail.getAddress1());
-
                 }
-
                 break;
+
             case VIEW_TYPE_FIXED:
                 WebViewHolder webViewHolder = (WebViewHolder) holder;
                 WebViewHeader webViewHeader = (WebViewHeader) getItemAt(position);
                 webViewHolder.webViewHeaderLabel.setText(webViewHeader.getWebviewHeader());
-
                 break;
+
             case VIEW_TYPE_PAYMENT:
                 PaymentViewHolder paymentViewHolder = (PaymentViewHolder) holder;
-                PaymentGroup paymentInfo=(PaymentGroup)getItemAt(position);
-                if(paymentInfo.getAddress2()!=null && !paymentInfo.getAddress2().isEmpty()){
-                    paymentViewHolder.billingAddressLabel.setText(paymentInfo.getAddress1() + ","+paymentInfo.getAddress2());
-
-                }else{
+                PaymentGroup paymentInfo = (PaymentGroup) getItemAt(position);
+                if (paymentInfo.getAddress2() != null && !paymentInfo.getAddress2().isEmpty()) {
+                    paymentViewHolder.billingAddressLabel.setText(paymentInfo.getAddress1() + "," + paymentInfo.getAddress2());
+                } else {
                     paymentViewHolder.billingAddressLabel.setText(paymentInfo.getAddress1());
-
                 }
-
                 paymentViewHolder.paymentMethodLabel.setText(paymentInfo.getPaymentMethod());
                 break;
+
             case VIEW_TYPE_INFO:
                 OrderInfoViewHolder orderInfoViewHolder = (OrderInfoViewHolder) holder;
-                OrderList orderInfo=(OrderList)getItemAt(position);
+                OrderList orderInfo = (OrderList) getItemAt(position);
                 orderInfoViewHolder.orderNoLabel.setText(orderInfo.getOrderId());
                 orderInfoViewHolder.orderDateLabel.setText(orderInfo.getSubmittedDate());
                 orderInfoViewHolder.orderShipToLabel.setText(orderInfo.getShipTo());
-                orderInfoViewHolder.orderTotalLabel.setText("$"+String.valueOf(orderInfo.getTotal()));
+                orderInfoViewHolder.orderTotalLabel.setText("$" + String.valueOf(orderInfo.getTotal()));
                 orderInfoViewHolder.orderStatusLabel.setText(orderInfo.getStatus());
 
                 //temporary hardcoded value to check layout, it will be changed after confirmation from backend
-                if(orderInfo.getStatus().equalsIgnoreCase("PROCESSING")){
+                if (orderInfo.getStatus().equalsIgnoreCase("PROCESSING")) {
                     orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
                     orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.yellow_rounded_button);
-                }else if(orderInfo.getStatus().equalsIgnoreCase("Cancelled")){
+                } else if (orderInfo.getStatus().equalsIgnoreCase("Cancelled")) {
                     orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.red_rounded_button);
                     orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
 
-                }else{
+                } else {
                     orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.green_rounded_button);
                 }
                 break;
@@ -208,14 +209,14 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         if (getItemAt(position) instanceof CommerceItems)
             return VIEW_TYPE_PRODUCT;
         if (getItemAt(position) instanceof ShippingGroup)
-            return VIEW_TYPE_SHIIPING;
+            return VIEW_TYPE_SHIPPING;
         if (getItemAt(position) instanceof PaymentGroup)
             return VIEW_TYPE_PAYMENT;
         if (getItemAt(position) instanceof OrderList)
             return VIEW_TYPE_INFO;
-        if(getItemAt(position) instanceof OrderDetailHeader)
+        if (getItemAt(position) instanceof OrderDetailHeader)
             return VIEW_TYPE_HEADER;
-        if(getItemAt(position) instanceof WebViewHeader)
+        if (getItemAt(position) instanceof WebViewHeader)
             return VIEW_TYPE_FIXED;
 
 
@@ -230,9 +231,9 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         public HeaderViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
         }
     }
+
     public static class WebViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.webview_header_label)
         TextView webViewHeaderLabel;
@@ -240,7 +241,6 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         public WebViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
         }
     }
 
@@ -264,7 +264,6 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         public ProductViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
         }
     }
 
@@ -279,8 +278,6 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         public ShippingViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-
         }
     }
 
@@ -298,15 +295,12 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         @BindView(R.id.ship_to_label)
         TextView orderShipToLabel;
 
-
         @BindView(R.id.status_label)
         TextView orderStatusLabel;
 
         public OrderInfoViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-
         }
     }
 
@@ -320,8 +314,6 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
         public PaymentViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-
         }
     }
 
