@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -24,6 +25,8 @@ import com.petmeds1800.model.UpdateVetRequest;
 import com.petmeds1800.model.entities.Vet;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
 import com.petmeds1800.ui.vet.presenter.EditVetPresenter;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
@@ -188,13 +191,29 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
 
     @Override
     public void onClick(View v) {
-        RemoveVetRequest removeVetRequest=new RemoveVetRequest(mVetId,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        try {
-            ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mPresenter.removeVet(removeVetRequest);
+
+        final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment().newInstance(getString(R.string.areYouSure), getString(R.string.remove_vet_message), getString(R.string.action_remove), getString(R.string.cancelTextOnDialog));
+        okCancelDialogFragment.show(((AbstractActivity) getActivity()).getSupportFragmentManager());
+        okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
+            @Override
+            public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
+                RemoveVetRequest removeVetRequest=new RemoveVetRequest(mVetId,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                try {
+                    ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mPresenter.removeVet(removeVetRequest);
+
+            }
+        });
+        okCancelDialogFragment.setNegativeListener(new BaseDialogFragment.DialogButtonsListener() {
+            @Override
+            public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
+                okCancelDialogFragment.dismiss();
+            }
+        });
+
     }
 
     private void stopProgress(){

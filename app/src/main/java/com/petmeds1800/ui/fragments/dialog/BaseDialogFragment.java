@@ -66,6 +66,7 @@ public class BaseDialogFragment extends DialogFragment {
             mNegative = data.getString(SAVED_NEGATIVE);
         }
 
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         if (!mMessage.equals(DEFAULT_VALUE)) {
 

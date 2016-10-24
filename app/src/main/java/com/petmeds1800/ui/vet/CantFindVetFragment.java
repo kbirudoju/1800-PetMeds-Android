@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.vet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.entities.Vet;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.checkout.AddNewEntityActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
@@ -60,7 +62,7 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    private AddNewEntityActivity mCallback;
+    private Activity mCallback;
 
     @Nullable
     @Override
@@ -151,7 +153,13 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
         trans.remove(this);
         trans.commit();
         manager.popBackStack();
-        mCallback.setVet(vet);
+
+        if(mCallback instanceof AddNewEntityActivity) {
+            ((AddNewEntityActivity) mCallback).setVet(vet);
+        }else if(mCallback instanceof HomeActivity){
+            VetListFragment vetListFragment= (VetListFragment) ((HomeActivity) mCallback).getSupportFragmentManager().findFragmentByTag(VetListFragment.class.getName());
+            vetListFragment.setVet(vet);
+        }
     }
 
     @Override
@@ -175,6 +183,8 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
         try {
             if (context instanceof AddNewEntityActivity) {
                 mCallback = (AddNewEntityActivity) context;
+            }else if(context instanceof HomeActivity){
+                mCallback=(HomeActivity) context;
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()

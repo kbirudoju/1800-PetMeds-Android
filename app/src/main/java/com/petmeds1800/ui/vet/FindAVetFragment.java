@@ -262,5 +262,9 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
         }
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        locationRelatedStuff.disconnectGoogleApiClient();
+    }
 }

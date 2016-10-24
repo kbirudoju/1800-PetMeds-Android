@@ -79,6 +79,15 @@ public abstract class AbstractFragment extends Fragment {
         trans.addToBackStack(null);
         trans.commit();
     }
+    public void replaceAccountFragmentWithBundleTag(Fragment fragment, String tag,Bundle bundle) {
+        FragmentTransaction trans = getFragmentManager().beginTransaction();
+        trans.replace(R.id.account_root_fragment_container, fragment,tag);
+        fragment.setArguments(bundle);
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        trans.addToBackStack(null);
+        trans.commit();
+
+    }
 
     public void addAccountFragmentWithBundle(Fragment fragment, Bundle bundle) {
         FragmentTransaction trans = getFragmentManager().beginTransaction();

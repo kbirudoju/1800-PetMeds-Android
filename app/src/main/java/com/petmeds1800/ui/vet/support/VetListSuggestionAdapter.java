@@ -140,7 +140,7 @@ public class VetListSuggestionAdapter extends BaseAdapter implements Filterable,
         }
 
         // Get the result list
-        SearchVetByZipCodeResponse response = mPresenter.getVetList(mZipCode);
+        SearchVetByZipCodeResponse response = mPresenter.getVetList("02062");
         List<VetList> resultList=response.getVetList();
 
         // Apply the Max number of results

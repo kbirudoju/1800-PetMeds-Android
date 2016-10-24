@@ -141,7 +141,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                     case CustomOrderDetailRecyclerAdapter.CANCEL_ORDER_ROW_ID:
                         if (orderList.getIsCancellable().equals("true")) {
 
-                            final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment().newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(), getString(R.string.cancel_order_title));
+                            final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment().newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(), getString(R.string.cancel_order_title),getString(R.string.dialog_ok_button),getString(R.string.dialog_cancel_button));
                             okCancelDialogFragment.show(((AbstractActivity) getActivity()).getSupportFragmentManager());
                             okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
                                 @Override

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -17,6 +18,7 @@ import android.widget.ProgressBar;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.Vet;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.stepfour.PetVetInfoFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.vet.support.VetListAdapter;
 
@@ -38,12 +40,13 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     ProgressBar progressBar;
     @BindView(R.id.noVet_layout)
     LinearLayout noVetView;
-
+    private ArrayList <Vet> mVetList;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_vet_list,null);
         mPresenter=new VetListPresenter(this);
+        mVetList=new ArrayList<>();
         ButterKnife.bind(this,view);
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_my_vets));
         ((AbstractActivity) getActivity()).enableBackButton();
@@ -87,12 +90,25 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
+            Bundle codeBundle = new Bundle();
+            codeBundle.putString(PetVetInfoFragment.ZIPCODE_KEY, "02062");
+            replaceAccountFragmentWithBundleTag(new AddVetFragment(), AddVetFragment.class.getSimpleName(), codeBundle);
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean isActive() {
         return isAdded();
     }
 
     @Override
     public void onSuccess(ArrayList<Vet> vetList) {
+        mVetList=vetList;
         progressBar.setVisibility(View.GONE);
         if(vetList!=null && vetList.size()==0){
             noVetView.setVisibility(View.VISIBLE);
@@ -114,5 +130,10 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     @Override
     public void setPresenter(VetListContract.Presenter presenter) {
 
+    }
+
+    public void setVet(Vet vet) {
+        mVetList.add(vet);
+        mVetListAdapter.setData(mVetList);
     }
 }

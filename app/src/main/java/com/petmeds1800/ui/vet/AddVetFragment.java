@@ -1,16 +1,6 @@
 package com.petmeds1800.ui.vet;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.AddVetRequest;
-import com.petmeds1800.model.VetList;
-import com.petmeds1800.model.entities.Vet;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.checkout.AddNewEntityActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.vet.support.VetListSuggestionAdapter;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,6 +18,18 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.AddVetRequest;
+import com.petmeds1800.model.VetList;
+import com.petmeds1800.model.entities.Vet;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.AddNewEntityActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.vet.support.VetListSuggestionAdapter;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -47,9 +49,8 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
     private CantFindVetContract.Presenter mPresenter;
-    private AddNewEntityActivity mCallback;
+    private Activity mCallback;
     private String mZipCode;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,8 +112,8 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         mVetTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-             vetList = (VetList) adapterView.getItemAtPosition(position);
-                String vetDetail=vetList.getName()+'\n'+vetList.getAddress();
+                vetList = (VetList) adapterView.getItemAtPosition(position);
+                String vetDetail = vetList.getName() + '\n' + vetList.getAddress();
                 mVetTextView.setText(vetDetail);
                 hideSoftKeyBoard();
             }
@@ -123,7 +124,12 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
     public void onClick(View v) {
         //((AddNewEntityActivity)getActivity()).replaceFragment(new CantFindVetFragment(),CantFindVetFragment.class.getSimpleName());
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.add_entity_container, new CantFindVetFragment(), CantFindVetFragment.class.getSimpleName());
+        if(mCallback instanceof AddNewEntityActivity) {
+            fragmentTransaction.replace(R.id.add_entity_container, new CantFindVetFragment(), CantFindVetFragment.class.getSimpleName());
+        }else if(mCallback instanceof HomeActivity){
+            fragmentTransaction.replace(R.id.account_root_fragment_container, new CantFindVetFragment(), CantFindVetFragment.class.getSimpleName());
+
+        }
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
        // fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -151,7 +157,13 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         trans.remove(this);
         trans.commit();
         manager.popBackStack();
-        mCallback.setVet(vet);
+
+       if(mCallback instanceof AddNewEntityActivity) {
+           ((AddNewEntityActivity) mCallback).setVet(vet);
+       }else if(mCallback instanceof HomeActivity){
+           VetListFragment vetListFragment= (VetListFragment) ((HomeActivity) mCallback).getSupportFragmentManager().findFragmentByTag(VetListFragment.class.getName());
+           vetListFragment.setVet(vet);
+       }
     }
 
     @Override
@@ -175,6 +187,8 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         try {
             if (context instanceof AddNewEntityActivity) {
                 mCallback = (AddNewEntityActivity) context;
+            }else if(context instanceof HomeActivity){
+                mCallback = (HomeActivity) context;
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -182,4 +196,7 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         }
 
     }
+
+
+
 }

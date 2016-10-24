@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -52,7 +53,7 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
             CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private Context mContext;
     private ZipCodeListener mZipCodeListener;
-
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9001;
 
 
     public LocationRelatedStuff(Context mContext) {
@@ -64,9 +65,12 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
 
 
 
-public void initLocation(){
-    buildGoogleApiClient();}
-
+    public void initLocation() {
+        if (!checkPlayServices()) {
+           return;
+        }
+        buildGoogleApiClient();
+    }
 
 
 
@@ -78,46 +82,14 @@ public void initLocation(){
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(100); // Update location every second
 
-buildLocationSettingsRequest();
+        buildLocationSettingsRequest();
 
-
-
-
-      /*  if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // Check Permissions Now
-                ActivityCompat.requestPermissions((Activity)mContext,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        LOCATION_REQUEST);
-            } else {
-                // permission has been granted, continue as usual
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                        mGoogleApiClient);
-            }
-        }
-    else {//in case device does not support marshmallow
-
-
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
-    }
-
-
-        if (mLastLocation != null) {
-            lat = (mLastLocation.getLatitude());
-            lon = (mLastLocation.getLongitude());
-
-        }
-        updateUI();*/
     }
 
 
     protected void buildLocationSettingsRequest() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
+        builder.addLocationRequest(mLocationRequest).setAlwaysShow(true);
         mLocationSettingsRequest = builder.build();
         checkLocationSettings();
     }
@@ -138,7 +110,7 @@ buildLocationSettingsRequest();
     public void onLocationChanged(Location location) {
         lat = (location.getLatitude());
         lon = (location.getLongitude());
-       // getZipCode();
+        // getZipCode();
     }
 
     @Override
@@ -218,10 +190,12 @@ buildLocationSettingsRequest();
 
         }
 
-      //  buildGoogleApiClient();
+        //  buildGoogleApiClient();
     }
 
     synchronized void buildGoogleApiClient() {
+
+
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -232,11 +206,17 @@ buildLocationSettingsRequest();
     }
 
     public void connectGoogleApiClient() {
-        mGoogleApiClient.connect();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.connect();
+        }
+
     }
 
     public void disconnectGoogleApiClient() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.disconnect();
+        }
+
     }
 
 
@@ -307,7 +287,7 @@ buildLocationSettingsRequest();
         final Status status = locationSettingsResult.getStatus();
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
-                    checkMarshMallowPermissions();
+                checkMarshMallowPermissions();
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                 Log.i("TAG", "Location settings are not satisfied. Show the user a dialog to" +
@@ -330,13 +310,33 @@ buildLocationSettingsRequest();
                 break;
         }
     }
-//create an interface that will listen when zipcode has been fetched
-public interface ZipCodeListener {
-    void onZipCodeFetched(String zipCode);
-}
+    //create an interface that will listen when zipcode has been fetched
+    public interface ZipCodeListener {
+        void onZipCodeFetched(String zipCode);
+    }
 
     public void setZipCodeListener(ZipCodeListener zipCodeListener) {
         this.mZipCodeListener = zipCodeListener;
     }
 
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(mContext);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog((Activity)mContext, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i("TAG", "This device is not supported.");
+            }
+            return false;
+        }
+        return true;
+    }
 }

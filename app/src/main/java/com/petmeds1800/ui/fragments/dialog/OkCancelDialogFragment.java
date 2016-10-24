@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.petmeds1800.R;
-
 /**
  * Created by pooja on 10/12/2016.
  */
@@ -15,11 +13,13 @@ public class OkCancelDialogFragment extends BaseDialogFragment {
 
     public static final String TAG = BaseDialogFragment.class.getSimpleName();
 
-    public static OkCancelDialogFragment newInstance(String message,String title) {
+    public static OkCancelDialogFragment newInstance(String message,String title,String positiveBtn,String negativeBtn) {
         OkCancelDialogFragment fragment = new OkCancelDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString(SAVED_MESSAGE, message);
         bundle.putString(SAVED_TITLE, title);
+        bundle.putString(SAVED_POSITIVE,positiveBtn);
+        bundle.putString(SAVED_NEGATIVE,negativeBtn);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -41,13 +41,20 @@ public class OkCancelDialogFragment extends BaseDialogFragment {
         if(data.containsKey(SAVED_TITLE)){
             mTitle=data.getString(SAVED_TITLE);
         }
+        if(data.containsKey(SAVED_POSITIVE)){
+            mPositive=data.getString(SAVED_POSITIVE);
+        }
+        if(data.containsKey(SAVED_NEGATIVE)){
+            mNegative=data.getString(SAVED_NEGATIVE);
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         if (!mMessage.equals(DEFAULT_VALUE)) {
 
             builder.setMessage(mMessage);
             builder.setTitle(mTitle);
 
-            builder.setPositiveButton(R.string.dialog_ok_button, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(mPositive, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (mPositiveListener != null) {
@@ -56,7 +63,7 @@ public class OkCancelDialogFragment extends BaseDialogFragment {
                 }
             });
 
-            builder.setNegativeButton(R.string.dialog_cancel_button,new DialogInterface.OnClickListener(){
+            builder.setNegativeButton(mNegative,new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if (mNegativeListener != null) {
