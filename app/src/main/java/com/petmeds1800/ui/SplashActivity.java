@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static final long DEFAULT_TIMEOUT = 1600;
+    public static final long DEFAULT_TIMEOUT = 3000;
 
     public static final long DEBUG_TIMEOUT = DEFAULT_TIMEOUT / 2;
 
