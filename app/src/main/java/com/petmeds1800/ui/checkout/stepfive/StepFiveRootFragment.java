@@ -195,6 +195,8 @@ public class StepFiveRootFragment extends AbstractFragment
 
     private ReviewSubmitAdapter mReviewSubmitAdapter;
 
+    private final int ADD_ONE = 1;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -395,19 +397,15 @@ public class StepFiveRootFragment extends AbstractFragment
         CommitOrderRequest commitOrderRequest = new CommitOrderRequest();
         commitOrderRequest
                 .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        commitOrderRequest.setCommerceItemIds(new ArrayList<String>());
-        commitOrderRequest.setReminderMonths(new ArrayList<String>());
         commitOrderRequest.setCommerceItemIds(mReviewSubmitAdapter.getCommerceItemsIdList());
         commitOrderRequest.setReminderMonths(mReviewSubmitAdapter.getReorderMonthsIdList());
-        mPresenter.submitComittedOrderDetails(commitOrderRequest);
+         mPresenter.submitComittedOrderDetails(commitOrderRequest);
 
     }
 
     @Override
     public void openDailog(String[] data, int code, String title, int defaultValue, final TextView textview,
-            ArrayList<String> commerceItemIdsList, final ArrayList<String> reorderMonthsList) {
-
-        final int position = reorderMonthsList.indexOf(String.valueOf(defaultValue));
+           final int selectedPosition, final ArrayList<String> reorderMonthsList) {
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
                 .newInstance(data,
@@ -418,7 +416,7 @@ public class StepFiveRootFragment extends AbstractFragment
                 textview.setText(value);
                 int monthsId = new ArrayList<String>(
                         Arrays.asList(getActivity().getResources().getStringArray(R.array.month_names))).indexOf(value);
-                reorderMonthsList.set(position, String.valueOf(monthsId));
+                reorderMonthsList.set(selectedPosition, String.valueOf(monthsId + ADD_ONE));
             }
         });
         commonDialogFragment.show(fragManager);

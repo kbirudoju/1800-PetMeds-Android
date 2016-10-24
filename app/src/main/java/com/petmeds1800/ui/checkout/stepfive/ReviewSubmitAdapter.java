@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,6 +38,8 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int REQUEST_MONTHS = 1;
 
     private static int adpaterPosition = 0;
+
+    private static int FIRST_INDEX = 1;
 
     List<Item> mItems;
 
@@ -62,6 +63,8 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private ArrayList<String> reorderMonthsIdList = new ArrayList<>();
 
+    private String commerceItemId = null;
+
     public void setItems(ArrayList<Item> items) {
         mItems = items;
         notifyDataSetChanged();
@@ -70,7 +73,7 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public interface OpenDailogListener {
 
         void openDailog(String data[], int code, String title, int defaultValue, TextView textview,
-                ArrayList<String> commerceItemIdsList, ArrayList<String> reorderMonthsList);
+                int selectedPosition, ArrayList<String> reorderMonthsList);
 
     }
 
@@ -103,25 +106,28 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         final ReviewSubmitViewHolder reviewSubmitViewHolder = (ReviewSubmitViewHolder) holder;
         final Item item = (Item) getItemAt(position);
         if (item.isRxItem()) {
-
-            commerceItemsIdList.add(item.getCommerceItemId());
+            commerceItemId = item.getCommerceItemId();
+            commerceItemsIdList.add(commerceItemId);
             reorderMonthsIdList.add(item.getReOrderReminderMonth());
             reviewSubmitViewHolder.mRefillReminderContainer.setVisibility(View.VISIBLE);
             reviewSubmitViewHolder.mReminderMonth.setText(
                     mContext.getResources().getStringArray(R.array.month_names)[Integer
-                            .parseInt(item.getReOrderReminderMonth())]);
-            reviewSubmitViewHolder.mReminderMonthEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Calendar now = Calendar.getInstance();
-                    mOpenDailogListener
-                            .openDailog(mContext.getResources().getStringArray(R.array.month_names), REQUEST_MONTHS,
-                                    mContext.getString(R.string.reminder_title), Integer
-                                            .parseInt(item.getReOrderReminderMonth()),
-                                    reviewSubmitViewHolder.mReminderMonth, commerceItemsIdList, reorderMonthsIdList);
-                }
-            });
+                            .parseInt(item.getReOrderReminderMonth()) - FIRST_INDEX]);
+
         }
+        reviewSubmitViewHolder.mReminderMonthEdit.setTag(commerceItemId);
+        reviewSubmitViewHolder.mReminderMonthEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagValue = (String) v.getTag();
+                int selectedPosition = commerceItemsIdList.indexOf(tagValue);
+                mOpenDailogListener
+                        .openDailog(mContext.getResources().getStringArray(R.array.month_names), REQUEST_MONTHS,
+                                mContext.getString(R.string.reminder_title), Integer
+                                        .parseInt(item.getReOrderReminderMonth()),
+                                reviewSubmitViewHolder.mReminderMonth, selectedPosition, reorderMonthsIdList);
+            }
+        });
 
         reviewSubmitViewHolder.mProductNameLabel.setText(item.getProductName());
         reviewSubmitViewHolder.mQuantityLabel.setText(String.valueOf(item.getItemQuantity()));
