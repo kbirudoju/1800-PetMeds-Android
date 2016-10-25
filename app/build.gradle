@@ -157,6 +157,8 @@ android {
     }
 
     testBuildType "release"
+
+
 }
 
 def playServicesVersion = '9.4.0'
@@ -192,6 +194,7 @@ dependencies {
 
     //gson
     compile 'com.google.code.gson:gson:2.4'
+
 
     // Persistent cookie
     compile 'com.github.franmontiel:PersistentCookieJar:v0.9.3'

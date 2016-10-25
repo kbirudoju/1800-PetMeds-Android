@@ -4,9 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/rectangular_background"
     android:layout_marginTop="@dimen/dp_1"
-
   >
-
     <RelativeLayout
         android:id="@+id/row_pet_product"
         android:layout_width="match_parent"
@@ -16,7 +14,6 @@
         android:paddingRight="@dimen/dp_16"
         android:paddingBottom="@dimen/dp_23"
         android:paddingTop="@dimen/dp_13"
-
 
        >
         <ImageView
@@ -94,6 +91,111 @@
             android:padding="@dimen/dp_13"
             android:text="@string/add_cart_txt"
             android:layout_below="@+id/product_detail_layout"
+            style="@style/dialog_button_style"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/row_pet_product_coupons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_23"
+        android:paddingTop="@dimen/dp_13"
+        android:visibility="gone"
+
+        >
+        <ImageView
+            android:id="@+id/refill_view_product_image_coupons"
+            android:layout_width="@dimen/dp_62"
+            android:layout_height="@dimen/dp_62"
+            android:background="@drawable/circular_background"
+            android:layout_alignParentLeft="true"
+            />
+        <LinearLayout
+            android:id="@+id/product_detail_layout_coupons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/dp_23"
+            android:layout_toRightOf="@+id/refill_view_product_image_coupons"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/dp_11">
+            <TextView
+                android:id="@+id/refill_view_product_label_coupons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/styledefault_no_padding"
+                android:singleLine="true"
+                android:text="gjgjgjg"
+                />
+            <TextView
+                android:id="@+id/refill_view_date_label_coupons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/formlabel"
+                android:text="vvjv"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/formlabel"
+                    android:text="starts at"/>
+            <TextView
+                android:id="@+id/refill_view_start_label_coupons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/formlabel"
+                android:text="startsat"
+                android:layout_marginLeft="@dimen/dp_5"
+                />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp_3">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/starts_at_txt"
+                    style="@style/styledefault_no_padding"
+                    android:textColor="@color/crimson_red"
+                    />
+
+                <TextView
+                    android:id="@+id/refill_view_original_price_label_coupons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="fsdfsdf"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:textColor="@color/crimson_red"
+                    style="@style/styledefault_no_padding"/>
+               <!-- <TextView
+                    android:id="@+id/refill_view_sell_price_label_coupons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dsgsdg"
+                    android:layout_marginLeft="@dimen/dp_26"
+                    style="@style/styledefault_no_padding"
+                    android:textColor="@color/crimson_red"/>-->
+            </LinearLayout>
+            <include
+                layout="@layout/view_coupon"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/add_cart_button_coupons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/petmeds_blue"
+            android:padding="@dimen/dp_13"
+            android:text="@string/add_cart_txt"
+            android:layout_below="@+id/product_detail_layout_coupons"
             style="@style/dialog_button_style"
             android:textColor="@color/white"/>
     </RelativeLayout>

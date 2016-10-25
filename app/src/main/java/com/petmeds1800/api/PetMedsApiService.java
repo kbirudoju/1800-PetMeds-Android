@@ -4,6 +4,7 @@ import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.AddVetResponse;
 import com.petmeds1800.model.CountryListResponse;
+import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.model.ReOrderRequest;
 import com.petmeds1800.model.ReOrderResponse;
@@ -78,6 +79,7 @@ import com.petmeds1800.model.shoppingcart.response.Status;
 
 import java.util.HashMap;
 
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -340,6 +342,11 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/detailed")
     Observable<CardDetailResponse> getCardByPaymentCardKey(@Body CardDetailRequest request);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/checkout/CheckoutActor/payPalCheckoutRedirect")
+    Observable<Response<String>> payPalCheckout(@Body PayPalCheckoutRequest request);
+
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/content/ContentActor/educationCategories")

@@ -1,16 +1,13 @@
 package com.petmeds1800.ui.orders.presenter;
 
+import android.util.Log;
+
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.OrderFilterList;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
-import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment;
 import com.petmeds1800.ui.orders.OrderListContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
-
-import android.util.Log;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -77,7 +74,7 @@ public class OrderListPresenter implements OrderListContract.Presenter {
                         if (myOrder.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mOrderView.isActive()) {
                                 if (myOrder.getOrderList() != null) {
-                                    mOrderView.updateOrderList(myOrder.getOrderList(),mfilterList);
+                                    mOrderView.updateOrderList(myOrder.getOrderList(),mfilterList.getName());
                                 }
                             }
                         } else {
@@ -90,17 +87,7 @@ public class OrderListPresenter implements OrderListContract.Presenter {
                 });
     }
 
-    public void setFilterData() {
-        //hardcoded temporary data, will be removed after API Integration
-        ArrayList<ItemSelectionDialogFragment.Item> pickerItems = new ArrayList<>();
-        pickerItems.add(new ItemSelectionDialogFragment.Item("Month", true));
-        pickerItems.add(new ItemSelectionDialogFragment.Item("Year", false));
-        pickerItems.add(new ItemSelectionDialogFragment.Item("2 Years", false));
-        pickerItems.add(new ItemSelectionDialogFragment.Item("All", false));
-        if (mOrderView.isActive()) {
-            mOrderView.updateFilterList(pickerItems);
-        }
-    }
+
 
     @Override
     public void start() {
@@ -108,6 +95,7 @@ public class OrderListPresenter implements OrderListContract.Presenter {
     }
 
     private OrderFilterList getFilterCode(OrderHistoryFilter orderHistoryFilter) {
+        mOrderView.updateFilterList(orderHistoryFilter);
         for (OrderFilterList orderFilterList : orderHistoryFilter.getOrderFilterList()) {
             if (orderFilterList.isDefault()) {
                 return orderFilterList;
@@ -115,5 +103,41 @@ public class OrderListPresenter implements OrderListContract.Presenter {
             }
         }
         return null;
+    }
+
+    @Override
+    public void getFilteredOrderList(final String filterCode, final String filterTitle) {
+        mApiService.getOrderList(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(), filterCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<MyOrder>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mOrderView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(MyOrder myOrder) {
+                        Log.d("orderlist size", myOrder.getCount() + "");
+                        if (myOrder.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mOrderView.isActive()) {
+                                if (myOrder.getOrderList() != null) {
+                                    mOrderView.updateOrderList(myOrder.getOrderList(),filterTitle);
+                                }
+                            }
+                        } else {
+                            if (mOrderView.isActive()) {
+                                mOrderView.onError(myOrder.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
     }
 }

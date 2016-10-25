@@ -1,11 +1,15 @@
 package com.petmeds1800.ui.fragments.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -14,10 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.petmeds1800.R;
+import com.petmeds1800.ui.HomeActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,12 +35,16 @@ public class ItemSelectionDialogFragment extends DialogFragment {
     /**
      * An item that can be displayed and selected by the ItemSelectionDialogFragment
      */
+    private OnItemSelectedListener mOnItemSelectedListener;
     public static class Item {
         private String title;
         private boolean intValue;
+        private String code;
 
         private static final String KEY_TITLE        = "title";
         private static final String KEY_INT_VALUE    = "intValue";
+        private static final String KEY_CODE         = "code";
+
 
         /**
          * Construct with title and integer value
@@ -41,11 +52,12 @@ public class ItemSelectionDialogFragment extends DialogFragment {
          * @param title Name displayed in list
          * @param value Integer value associated with item
          */
-        public Item(String title, boolean value) {
+        public Item(String title, boolean value,String code) {
             assert(!TextUtils.isEmpty(title));
 
             this.title = title;
             this.intValue = value;
+            this.code=code;
         }
 
 
@@ -56,6 +68,7 @@ public class ItemSelectionDialogFragment extends DialogFragment {
         public Item(Bundle bundle) {
             title = bundle.getString(KEY_TITLE, null);
             intValue = bundle.getBoolean(KEY_INT_VALUE, false);
+            code=bundle.getString(KEY_CODE,null);
         }
 
         /**
@@ -69,7 +82,7 @@ public class ItemSelectionDialogFragment extends DialogFragment {
 
             bundle.putString(KEY_TITLE, title);
             bundle.putBoolean(KEY_INT_VALUE, intValue);
-
+            bundle.putString(KEY_CODE, code);
 
             return bundle;
         }
@@ -82,7 +95,9 @@ public class ItemSelectionDialogFragment extends DialogFragment {
             return intValue;
         }
 
-
+        public String getCode() {
+            return code;
+        }
 
         /**
          * Given a list of items, create a Bundle that can be passed to
@@ -143,6 +158,7 @@ public class ItemSelectionDialogFragment extends DialogFragment {
      * @return ItemSelectionDialogFragment
      */
     public static ItemSelectionDialogFragment newInstance(String title, ArrayList<Item> items, int selectedIndex) {
+
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
         args.putBundle(ARG_ITEMS, Item.bundleOfItems(items));
@@ -165,13 +181,13 @@ public class ItemSelectionDialogFragment extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putInt(ARG_SELECTED_INDEX, selectedIndex);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
+        final Activity activity = getActivity();
         if (args != null) {
             items = Item.itemsFromBundle(args.getBundle(ARG_ITEMS));
             selectedIndex = args.getInt(ARG_SELECTED_INDEX, -1);
@@ -184,27 +200,59 @@ public class ItemSelectionDialogFragment extends DialogFragment {
         String[] itemTitles = getItemTitlesArray();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Set the adapter
-        builder.setAdapter(
-                new ArrayAdapter<String>(getActivity(),
-                        R.layout.view_list_item_multiple_choice, itemTitles), null);
 
         AlertDialog alertDialog = builder.create();
-        final ListView listView = alertDialog.getListView();
-        listView.setAdapter(new ArrayAdapter<String>(getActivity(),
-                R.layout.view_list_item_multiple_choice, itemTitles));
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-     //   listView.setSelector(R.drawable.filter_background_selector);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        // create view for add item in dialog
+        View convertView = (View) inflater.inflate(R.layout.view_filter_list, null);
+
+        alertDialog.setView(convertView);
+        ListView lv = (ListView) convertView.findViewById(R.id.mylistview);
+        MyAdapter myadapter = new MyAdapter(getActivity(),
+                R.layout.view_list_item_multiple_choice, Arrays.asList(itemTitles));
+        lv.setAdapter(myadapter);
+        /*final ListView listView = alertDialog.getListView();
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String> (  getActivity(), R.layout.view_list_item_multiple_choice, itemTitles ) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if(selectedIndex!=-1){
+                    view.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.petmeds_blue));
+                }
+                return view;
+            }
+        };*/
+        //listView.setAdapter(arrayAdapter);
+
+      /*  listView.setAdapter(new ArrayAdapter<String>(getActivity(),
+                R.layout.view_list_item_multiple_choice, itemTitles));*/
+        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+       /* if(selectedIndex!=-1){
+
+            listView.setItemChecked(selectedIndex,true);
+        }
+*/
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckedTextView checkedTextView = (CheckedTextView) view;
-                    view.setSelected(true);
+                selectedIndex=position;
+                view.setSelected(true);
+                if (activity instanceof HomeActivity) {
+                    if ( selectedIndex >-1 && selectedIndex < items.size()) {
+                        Item item = items.get(selectedIndex);
+                        //OnItemSelectedListener listener = (OnItemSelectedListener)activity;
+                        mOnItemSelectedListener.onItemSelected(ItemSelectionDialogFragment.this, item, selectedIndex);
+                    }
+                }
+
             }
         });
-        listView.setDivider(null);
-        listView.setDividerHeight(-1);
+        lv.setDivider(null);
+        lv.setDividerHeight(-1);
 
         //code to set position of dialog
         Window window = alertDialog.getWindow();
@@ -230,5 +278,54 @@ public class ItemSelectionDialogFragment extends DialogFragment {
         }
         return itemTitles;
     }
+
+    public void setItemSelectionListener(OnItemSelectedListener onItemSelectedListener){
+        this.mOnItemSelectedListener=onItemSelectedListener;
+    }
+
+
+
+
+    private class ViewHolder {
+        TextView tvSname;
+
+    }
+    class MyAdapter extends ArrayAdapter<String> {
+        LayoutInflater inflater;
+        Context myContext;
+        List<String> newList;
+        public MyAdapter(Context context, int resource, List<String> list) {
+            super(context, resource, list);
+            // TODO Auto-generated constructor stub
+            myContext = context;
+            newList = list;
+            inflater = LayoutInflater.from(context);
+        }
+        @Override
+        public View getView(final int position, View view, ViewGroup parent) {
+            final ViewHolder holder;
+            if (view == null) {
+                holder = new ViewHolder();
+                view = inflater.inflate(R.layout.view_list_item_multiple_choice, null);
+                holder.tvSname = (CheckedTextView) view.findViewById(R.id.filterLabel);
+
+                view.setTag(holder);
+                if(selectedIndex!=-1 && position==selectedIndex){
+                    holder.tvSname.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pet_meds_blue_selected));
+                    holder.tvSname.setTextColor(ContextCompat.getColor(getActivity(),R.color.white));
+                }else{
+                    holder.tvSname.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.white));
+                    holder.tvSname.setTextColor(ContextCompat.getColor(getActivity(),R.color.petmeds_blue));
+
+                }
+            } else {
+                holder = (ViewHolder) view.getTag();
+            }
+            holder.tvSname.setText(newList.get(position).toString());
+
+            return view;
+        }
+    }
+
 }
 

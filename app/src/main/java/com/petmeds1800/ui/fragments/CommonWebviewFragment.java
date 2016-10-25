@@ -1,44 +1,43 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.SecurityStatusResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.webkit.ValueCallback;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
-
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.util.Constants;
 
 import java.util.Iterator;
 
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.OkHttpClient;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by pooja on 8/25/2016.
@@ -50,6 +49,9 @@ public class CommonWebviewFragment extends AbstractFragment {
     public static final String TITLE_KEY = "title";
 
     public static final String HTML_DATA = "html_data";
+    public static final String POST_DATA = "post_data";
+    public static final String CONF_DATA = "conf_data";
+    public static final String PAYPAL_DATA = "paypal_data";
 
     @BindView(R.id.webViewContainer)
     WebView mWebView;
@@ -62,6 +64,7 @@ public class CommonWebviewFragment extends AbstractFragment {
 
     @Inject
     PetMedsApiService mPetMedsApiService;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,19 +88,25 @@ public class CommonWebviewFragment extends AbstractFragment {
         String url = getArguments().getString(URL_KEY);
         String title = getArguments().getString(TITLE_KEY);
         String htmlData = getArguments().getString(HTML_DATA);
+        String paypalData = getArguments().getString(PAYPAL_DATA);
+
 
         if (title != null && !title.isEmpty()) {
             ((AbstractActivity) getActivity()).setToolBarTitle(title);
         }
         if(htmlData != null){
             loadFromHtmlData(htmlData);
-        }else{
+        }else if(paypalData!=null){
+            loadHtmlWithPostRequest(paypalData);
+        }
+        else{
             setUpWebView(url);
         }
 
         ((AbstractActivity)getActivity()).getToolbar().getMenu().clear();
         ((AbstractActivity)getActivity()).getToolbar().setLogo(null);
     }
+
 
     private void setUpWebView(final String url) {
 
@@ -146,12 +155,13 @@ public class CommonWebviewFragment extends AbstractFragment {
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
-
+        mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
         mWebView.loadUrl(url);
 
     }
 
     private void loadFromHtmlData(String htmlData){
+
         mWebView.loadData(htmlData, "text/html", "UTF-8");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
@@ -171,11 +181,37 @@ public class CommonWebviewFragment extends AbstractFragment {
         mWebView.setWebChromeClient(client);
     }
 
+
+    private void loadHtmlWithPostRequest( String postData){
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+        WebChromeClient client = new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                if (progress == 100) {
+                    mProgressBar.setVisibility(View.GONE);
+
+                }
+            }
+        };
+
+        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mWebView.setWebViewClient(new Callback());
+        mWebView.setWebChromeClient(client);
+        mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
+        mWebView.loadUrl(postData);
+
+
+
+    }
+
+
+
+
     private class Callback extends WebViewClient {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
+                Log.d("url is",url);
             if (url.contains("Add+To+Cart")){
                 getActivity().onBackPressed();
                 try {
@@ -186,6 +222,63 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
             return super.shouldOverrideUrlLoading(view, url);
         }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            if(url.contains("applyPayPalPaymentMethod")) {
+                mWebView.loadUrl("javascript:HtmlViewer.showHTML" +
+                        "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
+            }
+        }
+
+
     }
+
+    class MyJavaScriptInterface {
+
+        private Context ctx;
+        MyJavaScriptInterface(Context ctx) {
+            this.ctx = ctx;
+        }
+
+        @JavascriptInterface
+        public void showHTML(String html) {
+            String jsonString=(html.substring(html.indexOf("{"), html.lastIndexOf("}") + 1));
+            Gson gson=new GsonBuilder().create();
+            ShoppingCartListResponse shoppingCartListResponse =   gson.fromJson(jsonString, ShoppingCartListResponse.class);
+            if(shoppingCartListResponse.getShoppingCart()!=null){
+                Intent intent = new Intent(Constants.KEY_PAYMENT_INTENT_FILTER);
+                Bundle bundle = new Bundle();
+                bundle.putString("code", getString(R.string.succes_txt));
+                bundle.putSerializable("shoppingListResponse", shoppingCartListResponse);
+                intent.putExtras(bundle);
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                removeFragment();
+
+
+            }else{
+                Log.d("Error",shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                Intent intent = new Intent(Constants.KEY_PAYMENT_INTENT_FILTER);
+                Bundle bundle = new Bundle();
+                bundle.putString("code", getString(R.string.error_txt));
+                bundle.putString("errormessage", shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                intent.putExtras(bundle);
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                removeFragment();
+            }
+
+
+        }
+
+    }
+
+    private void removeFragment(){
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.remove(this);
+        trans.commit();
+        manager.popBackStack();
+    }
+
 }
 

@@ -628,6 +628,8 @@
     <string name="no_saved_refill_reminder_message">You have no refill reminders</string>
     <string name="refill_reminder_will_appear_automatically_message">Store an address for faster checkout.</string>
     <string name="shop_now_message">SHOP NOW</string>
+    <string name="error_txt">Error</string>
+    <string name="succes_txt">Success</string>
 
 </resources>
 

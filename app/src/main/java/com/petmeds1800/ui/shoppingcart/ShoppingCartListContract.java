@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.shoppingcart;
 
+import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
@@ -18,6 +19,7 @@ public interface ShoppingCartListContract {
         boolean isActive();
         boolean postGeneralPopulateShoppingCart(ShoppingCartListResponse shoppingCartListResponse);
         boolean onError(String errorMessage, String simpleName);
+        void onSuccess(String url);
     }
 
     interface Presenter extends BasePresenter {
@@ -26,5 +28,6 @@ public interface ShoppingCartListContract {
         void getRemoveItemShoppingCart(RemoveItemRequestShoppingCart removeItemRequestShoppingCart);
         void getApplyCouponShoppingCart(ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart);
         void getUpdateItemQuantityRequestShoppingCart(UpdateItemQuantityRequestShoppingCart updateItemQuantityRequestShoppingCart);
+        void checkoutPayPal(PayPalCheckoutRequest request);
     }
 }

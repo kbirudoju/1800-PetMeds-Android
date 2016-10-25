@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.petmeds1800.R;
 import com.petmeds1800.dagger.component.DaggerOrderComponent;
 import com.petmeds1800.dagger.module.OrderPresenterModule;
 import com.petmeds1800.model.entities.OrderFilterList;
+import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
@@ -76,6 +78,11 @@ public class MyOrderFragment extends AbstractFragment
     Button mShopNowButton;
 
 
+    private OrderHistoryFilter mOrderHistoryFilter;
+    private String filterApplied ;
+    private int mSelectedFilterIndex=-1;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,7 +130,7 @@ public class MyOrderFragment extends AbstractFragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.filter_button:
-                mOrderPresenter.setFilterData();
+                showFilterDialog();
                 break;
             case R.id.shopNow_button:
                 ((HomeActivity)getActivity()).getViewPager().setCurrentItem(0);
@@ -134,7 +141,12 @@ public class MyOrderFragment extends AbstractFragment
 
     @Override
     public void onItemSelected(ItemSelectionDialogFragment fragment, ItemSelectionDialogFragment.Item item, int index) {
-
+        Log.d("item code",item.getCode());
+        mSelectedFilterIndex=index;
+        fragment.dismiss();
+        progressBar.setVisibility(View.VISIBLE);
+        filterApplied=item.getTitle();
+        mOrderPresenter.getFilteredOrderList(item.getCode(),item.getTitle());
     }
 
     @Override
@@ -157,7 +169,7 @@ public class MyOrderFragment extends AbstractFragment
 
 
     @Override
-    public void updateOrderList(List<OrderList> orderList, OrderFilterList filterList) {
+    public void updateOrderList(List<OrderList> orderList, String filterApplied) {
         progressBar.setVisibility(View.GONE);
         mOrderList = orderList;
         if (orderList.size() > 0) {
@@ -166,7 +178,7 @@ public class MyOrderFragment extends AbstractFragment
             mOrderTitleLayout.setVisibility(View.VISIBLE);
             mOrderCountlabel
                     .setText(String.valueOf(orderList.size()) + " " + getActivity().getString(R.string.title_orders));
-            mFilterTitleLabel.setText(filterList.getName());
+            mFilterTitleLabel.setText(filterApplied);
             mOrderListAdapter.setData(orderList);
             mFilterButton.setVisibility(View.VISIBLE);
         } else {
@@ -178,13 +190,26 @@ public class MyOrderFragment extends AbstractFragment
 
     }
 
+
+
     @Override
-    public void updateFilterList(ArrayList<ItemSelectionDialogFragment.Item> pickerItems) {
+    public void updateFilterList(OrderHistoryFilter orderHistoryFilter) {
+        this.mOrderHistoryFilter=orderHistoryFilter;
+    }
+
+    private void showFilterDialog(){
+        ArrayList<ItemSelectionDialogFragment.Item> filterItems = new ArrayList<>();
+        for(OrderFilterList orderFilterList :mOrderHistoryFilter.getOrderFilterList()){
+            filterItems.add(new ItemSelectionDialogFragment.Item(orderFilterList.getName(), orderFilterList.isDefault(),orderFilterList.getCode()));
+
+        }
+
         ItemSelectionDialogFragment dialog = ItemSelectionDialogFragment.newInstance(
                 getActivity().getString(R.string.application_name),
-                pickerItems,
-                -1
+                filterItems,
+                mSelectedFilterIndex
         );
+        dialog.setItemSelectionListener(this);
         dialog.show(getFragmentManager(), "ItemPicker");
     }
 

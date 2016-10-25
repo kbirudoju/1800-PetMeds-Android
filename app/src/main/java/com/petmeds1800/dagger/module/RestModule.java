@@ -38,11 +38,12 @@ public class RestModule {
     @AppScope
     public OkHttpClient provideOkHttpClient(CookieJar cookieJar) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
+        builder.followRedirects(false);
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addNetworkInterceptor(interceptor);
+
         }
         return builder.cookieJar(cookieJar).build();
     }

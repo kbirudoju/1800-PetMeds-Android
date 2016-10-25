@@ -1,15 +1,15 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CommitOrderResponse;
-import com.petmeds1800.ui.checkout.confirmcheckout.ConfirmationReceiptRootFragment;
-import com.petmeds1800.util.Constants;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CommitOrderResponse;
+import com.petmeds1800.ui.checkout.confirmcheckout.ConfirmationReceiptRootFragment;
+import com.petmeds1800.util.Constants;
 
 /**
  * Created by Sarthak on 9/30/2016.
@@ -42,8 +42,8 @@ public class CartRootFragment extends AbstractFragment {
             bundle.putSerializable(Constants.CONFIRMATION_ORDER_RESPONSE, commitOrderResponse);
             confirmationReceiptRootFragment.setArguments(bundle);
             replaceCartFragment(confirmationReceiptRootFragment);
-        } else {
-            replaceCartFragment(new CartFragment());
+        } else{
+            replaceCartFragmentWithTag(new CartFragment(), CartFragment.class.getName());
         }
 
     }

@@ -37,6 +37,7 @@ import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
@@ -224,5 +225,6 @@ public interface Injector {
 
     void inject(EditReminderPresenter editReminderPresenter);
 
+    void inject(CartFragment cartFragment);
 }
 

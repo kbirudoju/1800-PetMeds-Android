@@ -115,4 +115,7 @@ public class Constants {
     public static final String KEY_SHOPPING_CART_ASYNC_SUCCESS = "shopping_cart_async_success";
 
     public static final String KEY_CART_FRAGMENT_INTENT_FILTER = "cart_fragment_intent_filter";
+
+    public static final String KEY_PAYMENT_INTENT_FILTER = "payment_intent_filter";
+
 }

@@ -1,7 +1,10 @@
 package com.petmeds1800.ui.shoppingcart.presenter;
 
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
@@ -12,6 +15,7 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
+import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -183,6 +187,41 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                 }
             }
         });
+    }
+
+    @Override
+    public void checkoutPayPal(PayPalCheckoutRequest request) {
+        mPetMedsApiService.payPalCheckout(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<String>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("error",e.getLocalizedMessage());
+                                              //  mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(Response<String> s) {
+                        Log.d("response", s + ">>>");
+                        String loactionHeader=s.headers().get("Location");
+
+
+                        if(loactionHeader.contains("requestid")){
+                            String url=loactionHeader.substring(0,loactionHeader.lastIndexOf("&"));
+                            mView.onSuccess(url);
+                        }
+
+
+
+                    }
+                });
     }
 
     @Override

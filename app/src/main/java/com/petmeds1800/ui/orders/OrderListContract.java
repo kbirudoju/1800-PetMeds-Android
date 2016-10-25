@@ -1,12 +1,10 @@
 package com.petmeds1800.ui.orders;
 
-import com.petmeds1800.model.entities.OrderFilterList;
+import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
-import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,8 +13,8 @@ import java.util.List;
 public interface OrderListContract {
 
     interface View extends BaseView<Presenter> {
-        void updateOrderList( List<OrderList> orderList,OrderFilterList filterList);
-        void updateFilterList(ArrayList<ItemSelectionDialogFragment.Item> pickerItems );
+        void updateOrderList( List<OrderList> orderList,String filterApplied);
+        void updateFilterList(OrderHistoryFilter orderHistoryFilter);
         boolean isActive();
         void onError(String errorMessage);
 
@@ -25,6 +23,6 @@ public interface OrderListContract {
     interface Presenter extends BasePresenter {
 
         void setOrderListData();
-        void setFilterData();
+         void getFilteredOrderList(String filterCode,String filterTitle);
     }
 }

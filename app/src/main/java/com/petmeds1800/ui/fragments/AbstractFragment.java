@@ -48,6 +48,12 @@ public abstract class AbstractFragment extends Fragment {
         transaction.commit();
     }
 
+    void replaceCartFragmentWithTag(Fragment fragment,String tag) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.cart_root_fragment_container, fragment,tag);
+        transaction.commit();
+    }
+
     void replaceHomeFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
