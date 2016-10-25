@@ -37,6 +37,7 @@ import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
 import com.petmeds1800.model.entities.PetBreedTypeListResponse;
+import com.petmeds1800.model.entities.PetEducationCategoriesResponse;
 import com.petmeds1800.model.entities.PetList;
 import com.petmeds1800.model.entities.PetMedicalConditionResponse;
 import com.petmeds1800.model.entities.PetMedicationResponse;
@@ -324,14 +325,15 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/vet/VetActor/remove")
     Observable<RemovePetResponse> removeVet(@Body RemoveVetRequest request);
 
-
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/vet/VetActor/notify")
-    Observable<RemovePetResponse> requestRefrral(@Body UpdateVetRequest request);
+    Observable<RemovePetResponse> requestReferral(@Body UpdateVetRequest request);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/detailed")
     Observable<CardDetailResponse> getCardByPaymentCardKey(@Body CardDetailRequest request);
 
-
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/content/ContentActor/educationCategories")
+    Observable<PetEducationCategoriesResponse> getPetEducationCategories();  
 }

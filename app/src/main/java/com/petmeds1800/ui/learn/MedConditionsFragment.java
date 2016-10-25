@@ -14,14 +14,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
-import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.model.entities.PetEducationCategory;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.util.Utils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +50,7 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
 
     private MedConditionsListAdapter mListAdapter;
 
-    private List<NameValueData> mMedConditionList = new ArrayList<>();
+    private List<PetEducationCategory> mMedConditionList = new ArrayList<>();
 
     private MedConditionsListContract.Presenter mPresenter;
 
@@ -97,7 +95,7 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
     }
 
     @Override
-    public void populateConditionsListView(List<NameValueData> medConditionList) {
+    public void populateConditionsListView(List<PetEducationCategory> medConditionList) {
         if (medConditionList != null) {
             mMedConditionList.clear();
             mMedConditionList.addAll(medConditionList);
@@ -117,16 +115,11 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
     }
 
     @Override
-    public void showWebViewFragment(String medConditionName) {
-        try {
-            Bundle bundle = new Bundle();
-            bundle.putString(CommonWebviewFragment.TITLE_KEY, medConditionName);
-            String encodedQuery = URLEncoder.encode(medConditionName, "utf-8");
-            bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.url_med_condition) + encodedQuery);
-            ((LearnFragment) getParentFragment()).addAskVetFragment(bundle);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+    public void showWebViewFragment(String categoryName, String categoryLink) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CommonWebviewFragment.TITLE_KEY, categoryName);
+        bundle.putString(CommonWebviewFragment.URL_KEY, categoryLink);
+        ((LearnFragment) getParentFragment()).addAskVetFragment(bundle);
     }
 
     @Override
@@ -149,6 +142,6 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
 
     @Override
     public void onItemClick(int position) {
-        showWebViewFragment(mMedConditionList.get(position).getName());
+        showWebViewFragment(mMedConditionList.get(position).getCategoryName(), mMedConditionList.get(position).getLink());
     }
 }

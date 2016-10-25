@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
-import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.model.entities.PetEducationCategory;
 
 import java.util.List;
 
@@ -20,11 +20,11 @@ import butterknife.ButterKnife;
 
 public class MedConditionsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<NameValueData> mMedConditionsList;
+    private List<PetEducationCategory> mMedConditionsList;
 
     private OnItemClickListener mOnItemClickListener;
 
-    public MedConditionsListAdapter(List<NameValueData> mMedConditionsList) {
+    public MedConditionsListAdapter(List<PetEducationCategory> mMedConditionsList) {
         this.mMedConditionsList = mMedConditionsList;
     }
 
@@ -39,8 +39,8 @@ public class MedConditionsListAdapter extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         MedConditionsListAdapter.ViewHolder viewHolder = (MedConditionsListAdapter.ViewHolder) holder;
         if (viewHolder != null) {
-            final NameValueData medCondition = mMedConditionsList.get(position);
-            viewHolder.medConditionName.setText(medCondition.getName());
+            final PetEducationCategory medCondition = mMedConditionsList.get(position);
+            viewHolder.medConditionName.setText(medCondition.getCategoryName());
         }
     }
 

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.PetMedicalConditionResponse;
+import com.petmeds1800.model.entities.PetEducationCategoriesResponse;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
 import javax.inject.Inject;
@@ -37,10 +37,10 @@ public class MedConditionsListPresenter implements MedConditionsListContract.Pre
     @Override
     public void getConditionsList() {
 
-        medsApiService.getPetPetMedicalConditions()
+        medsApiService.getPetEducationCategories()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<PetMedicalConditionResponse>() {
+                .subscribe(new Subscriber<PetEducationCategoriesResponse>() {
                     @Override
                     public void onCompleted() {
 
@@ -59,13 +59,13 @@ public class MedConditionsListPresenter implements MedConditionsListContract.Pre
                     }
 
                     @Override
-                    public void onNext(PetMedicalConditionResponse medConditionsResponse) {
-                        if (medConditionsResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                    public void onNext(PetEducationCategoriesResponse categoriesResponse) {
+                        if (categoriesResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             mView.hideProgress();
-                            mView.populateConditionsListView(medConditionsResponse.getMedicalConditions());
+                            mView.populateConditionsListView(categoriesResponse.getCategories());
                         } else {
                             mView.hideProgress();
-                            mView.showErrorCrouton(medConditionsResponse.getStatus().getErrorMessages().get(0), false);
+                            mView.showErrorCrouton(categoriesResponse.getStatus().getErrorMessages().get(0), false);
                         }
                     }
                 });

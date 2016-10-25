@@ -33,7 +33,7 @@ public class VetDetailPresenter implements Presenter {
     }
     @Override
     public void requestReferral(UpdateVetRequest request) {
-        mPetMedsApiService.requestRefrral(request)
+        mPetMedsApiService.requestReferral(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<RemovePetResponse>() {
