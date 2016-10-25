@@ -1,5 +1,9 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.R;
+import com.petmeds1800.ui.learn.FeaturedFragment;
+import com.petmeds1800.ui.learn.MedConditionsFragment;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -12,10 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.petmeds1800.R;
-import com.petmeds1800.ui.learn.MedConditionsFragment;
-import com.petmeds1800.ui.learn.FeaturedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class LearnFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_learn, container, false);
         ButterKnife.bind(this, view);
-        setHasOptionsMenu(true);
+       // setHasOptionsMenu(true);
         setUpViewPager(mLearnViewPager);
         mLearnTabs.setupWithViewPager(mLearnViewPager);
         return view;
