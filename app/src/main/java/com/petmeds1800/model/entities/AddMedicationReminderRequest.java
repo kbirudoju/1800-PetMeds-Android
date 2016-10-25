@@ -2,13 +2,16 @@ package com.petmeds1800.model.entities;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Sdixit on 14-10-2016.
  */
 
-public class AddMedicationReminderRequest {
+
+public class AddMedicationReminderRequest implements Serializable {
+
 
     private String reminderName;
 
@@ -27,6 +30,8 @@ public class AddMedicationReminderRequest {
     private String startDate;
 
     private Boolean disableReminder;
+
+    private String reminderId;
 
     @SerializedName("_dynSessConf")
     private String dynSessConf;
@@ -110,4 +115,13 @@ public class AddMedicationReminderRequest {
     public void setDynSessConf(String dynSessConf) {
         this.dynSessConf = dynSessConf;
     }
+
+    public String getReminderId() {
+        return reminderId;
+    }
+
+    public void setReminderId(String reminderId) {
+        this.reminderId = reminderId;
+    }
+
 }

@@ -3,7 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/dp_16"
-                android:background="@color/white"
+                android:background="@color/fingerprint_alert_title_background"
                 android:id="@+id/containerLayout">
 
     <ProgressBar android:id="@+id/progressBar"

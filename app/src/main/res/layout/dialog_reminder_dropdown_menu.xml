@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/containerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/picker_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:minHeight="?attr/actionBarSize">
+
+            <Spinner
+                    android:id="@+id/picker_reminder_options"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:drawSelectorOnTop="true"
+                    android:entries="@array/items_reminder_array"
+                    android:spinnerMode="dropdown"/>
+
+            <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_compat2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical|right"
+                    app:showText="false"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/picker_toolbar"
+            android:background="@color/pattern_light_blue"
+            android:layout_margin="@dimen/dp_2"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <FrameLayout
+                android:id="@+id/reminder_main_content_root_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_2"></FrameLayout>
+
+        <Button
+                android:id="@+id/done_button"
+                android:layout_marginTop="@dimen/dp_16"
+                style="@style/dialog_button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/action_done"/>
+
+    </LinearLayout>
+</RelativeLayout>

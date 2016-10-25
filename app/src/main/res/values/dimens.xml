@@ -94,6 +94,12 @@
     <dimen name="dp_239">239dp</dimen>
     <dimen name="dp_150">150dp</dimen>
     <dimen name="dp_52">52dp</dimen>
+
     <dimen name="dp_98">98dp</dimen>
+    <dimen name="dp_240">240dp</dimen>
+    <dimen name="dp_46">46dp</dimen>
+    <dimen name="dp_43">43dp</dimen>
+    <dimen name="dp_67">67dp</dimen>
+
 
 </resources>

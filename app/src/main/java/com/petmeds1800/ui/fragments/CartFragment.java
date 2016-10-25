@@ -1,11 +1,14 @@
 package com.petmeds1800.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,18 +19,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.CheckOutIntent;
+import com.petmeds1800.model.ReminderDialogData;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.dialog.ReminderDialogFragment;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
 import com.petmeds1800.util.Constants;
@@ -38,6 +44,11 @@ import com.petmeds1800.util.Utils;
 import java.util.HashMap;
 
 import javax.inject.Inject;
+
+import static com.petmeds1800.util.Constants.HIDE_PROGRESSBAR_OR_ANIMATION;
+import static com.petmeds1800.util.Constants.SHOW_PROGRESSBAR_OR_ANIMATION;
+import static com.petmeds1800.util.Utils.toggleGIFAnimantionVisibility;
+import static com.petmeds1800.util.Utils.toggleProgressDialogVisibility;
 
 /**
  * Created by pooja on 8/2/2016.
@@ -52,9 +63,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     private TextInputLayout mCouponCodeLayout;
     private LinearLayout mOfferCodeContainerLayout;
     private ProgressBar mProgressBar;
-    private static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
-    private static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
-
 
     public static int sPreviousScrollPosition = 0;
     public static final String SHOPPING_CART = "shoppingCart";
@@ -78,6 +86,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
         return view;
     }
+
+
 
     @Override
     public void onResume() {
@@ -107,8 +117,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         } else if (null == shoppingCartListResponse || shoppingCartListResponse.getItemCount() == 0){
             toggleVisibilityShoppingList(true);
         }
-        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
-        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
+        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
+        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
 
         return response;
     }
@@ -124,8 +134,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
         }
 
-        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
-        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
+        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
+        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
         return false;
     }
 
@@ -246,7 +256,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         }
         if (object == null)
         {
-            toggleProgressDialogVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
+            toggleProgressDialogVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,mProgressBar);
             mPresenter.getGeneralPopulateShoppingCart();
         } else
         if (object instanceof AddItemRequestShoppingCart)
@@ -255,17 +265,17 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         } else
         if (object instanceof RemoveItemRequestShoppingCart)
         {
-            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,getActivity());
             mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart)(object));
         } else
         if (object instanceof ApplyCouponRequestShoppingCart)
         {
-            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,getActivity());
             mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart)(object));
         } else
         if (object instanceof UpdateItemQuantityRequestShoppingCart)
         {
-            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,getActivity());
             mPresenter.getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart)(object));
         }
     }
@@ -286,40 +296,4 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             }
         }
     };
-
-    private void toggleProgressDialogVisibility(boolean showVisisble){
-        if (showVisisble){
-            if (mProgressBar != null && mProgressBar.getVisibility()==View.GONE){
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        } else {
-            if (mProgressBar != null && mProgressBar.getVisibility()==View.VISIBLE){
-                mProgressBar.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void toggleGIFAnimantionVisibility(boolean showVisible) {
-        if (showVisible) {
-            try {
-                ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
-            } catch (Exception e) {
-                try {
-                    ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        } else {
-            try {
-                ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
-            } catch (Exception e) {
-                try {
-                    ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-    }
 }

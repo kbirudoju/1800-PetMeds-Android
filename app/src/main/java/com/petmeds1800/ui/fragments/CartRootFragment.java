@@ -18,13 +18,14 @@ import android.view.ViewGroup;
 public class CartRootFragment extends AbstractFragment {
 
     public static CartRootFragment newInstance(int requestCode) {
-        
+
         Bundle args = new Bundle();
-        
+
         CartRootFragment fragment = new CartRootFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,15 +34,17 @@ public class CartRootFragment extends AbstractFragment {
         return view;
     }
 
-    public void replaceConfirmOrderFragment(CommitOrderResponse commitOrderResponse){
-        if(commitOrderResponse!=null) {
+
+    public void replaceConfirmOrderFragment(CommitOrderResponse commitOrderResponse) {
+        if (commitOrderResponse != null) {
             ConfirmationReceiptRootFragment confirmationReceiptRootFragment = new ConfirmationReceiptRootFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable(Constants.CONFIRMATION_ORDER_RESPONSE, commitOrderResponse);
             confirmationReceiptRootFragment.setArguments(bundle);
             replaceCartFragment(confirmationReceiptRootFragment);
-        }else{
+        } else {
             replaceCartFragment(new CartFragment());
         }
+
     }
 }

@@ -106,6 +106,7 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         final ReviewSubmitViewHolder reviewSubmitViewHolder = (ReviewSubmitViewHolder) holder;
         final Item item = (Item) getItemAt(position);
         if (item.isRxItem()) {
+
             commerceItemId = item.getCommerceItemId();
             commerceItemsIdList.add(commerceItemId);
             reorderMonthsIdList.add(item.getReOrderReminderMonth());
@@ -113,6 +114,7 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             reviewSubmitViewHolder.mReminderMonth.setText(
                     mContext.getResources().getStringArray(R.array.month_names)[Integer
                             .parseInt(item.getReOrderReminderMonth()) - FIRST_INDEX]);
+
 
         }
         reviewSubmitViewHolder.mReminderMonthEdit.setTag(commerceItemId);

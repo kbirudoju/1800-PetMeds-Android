@@ -161,6 +161,7 @@ public class StepFiveRootFragment extends AbstractFragment
 
     private Order mOrder;
 
+
     public static final String DOLLAR_SIGN = "$";
 
     private static final String MINUS_SIGN = "-";
@@ -285,7 +286,7 @@ public class StepFiveRootFragment extends AbstractFragment
                 case R.id.paymentMethodEdit:
                     markAsUnselected(CheckOutActivity.PAYMENT_METHOD, CheckOutActivity.SUBMIT_N_REVIEW);
                     activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PAYMENT_METHOD),
-                            mShoppingCartListResponse , true);
+                            mShoppingCartListResponse, true);
                     break;
                 case R.id.petVetEdit:
                     markAsUnselected(CheckOutActivity.SUBMIT_N_REVIEW, CheckOutActivity.SUBMIT_N_REVIEW);
@@ -307,7 +308,7 @@ public class StepFiveRootFragment extends AbstractFragment
     public void populateOrderReviewDetails(OrderReviewSubmitResponse response) {
         mProgressbar.setVisibility(View.GONE);
         CheckoutSteps checkoutSteps = response.getCheckoutSteps();
-        mOrder = response.getOrder();
+        Order mOrder = response.getOrder();
 
         if (checkoutSteps != null) {
             mApplicableSteps = checkoutSteps.getApplicableSteps();
@@ -399,13 +400,17 @@ public class StepFiveRootFragment extends AbstractFragment
                 .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         commitOrderRequest.setCommerceItemIds(mReviewSubmitAdapter.getCommerceItemsIdList());
         commitOrderRequest.setReminderMonths(mReviewSubmitAdapter.getReorderMonthsIdList());
-         mPresenter.submitComittedOrderDetails(commitOrderRequest);
+
+        mPresenter.submitComittedOrderDetails(commitOrderRequest);
+
+        mPresenter.submitComittedOrderDetails(commitOrderRequest);
 
     }
 
     @Override
     public void openDailog(String[] data, int code, String title, int defaultValue, final TextView textview,
-           final int selectedPosition, final ArrayList<String> reorderMonthsList) {
+            final int selectedPosition, final ArrayList<String> reorderMonthsList) {
+
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
                 .newInstance(data,
@@ -415,8 +420,10 @@ public class StepFiveRootFragment extends AbstractFragment
             public void onValueSelected(String value, int requestCode) {
                 textview.setText(value);
                 int monthsId = new ArrayList<String>(
-                        Arrays.asList(getActivity().getResources().getStringArray(R.array.month_names))).indexOf(value);
+                        Arrays.asList(getActivity().getResources().getStringArray(R.array.month_names)))
+                        .indexOf(value);
                 reorderMonthsList.set(selectedPosition, String.valueOf(monthsId + ADD_ONE));
+
             }
         });
         commonDialogFragment.show(fragManager);

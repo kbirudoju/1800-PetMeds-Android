@@ -11,6 +11,15 @@ public class OrderList implements Serializable{
     private String status;
     private String displayOrderId;
     private String submittedDate;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getIsCancellable() {
         return isCancellable;

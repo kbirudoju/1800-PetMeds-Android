@@ -9,6 +9,7 @@ import com.petmeds1800.util.Utils;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,9 +62,10 @@ public class MedicationReminderListFragment extends AbstractFragment
 
     private void setupCardsRecyclerView(ArrayList<MedicationReminderItem> items) {
         mMedicationsreminderRecyclerView.setVisibility(View.VISIBLE);
-        mMedicationRemindersAdapter = new MedicationRemindersAdapter(getContext());
+        mMedicationRemindersAdapter = new MedicationRemindersAdapter(getActivity());
         mMedicationRemindersAdapter.setListener(this);
         mMedicationRemindersAdapter.setItems(items);
+        mMedicationsreminderRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMedicationsreminderRecyclerView.setAdapter(mMedicationRemindersAdapter);
 
     }
@@ -114,8 +116,8 @@ public class MedicationReminderListFragment extends AbstractFragment
 
         switch (item.getItemId()) {
             case R.id.action_add:
-                replaceAccountAndAddToBackStack(AddEditMedicationReminders.newInstance(false, null),
-                        MedicationReminderListFragment.class.getName());
+                replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+                        AddEditMedicationRemindersFragment.class.getName());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -123,8 +125,8 @@ public class MedicationReminderListFragment extends AbstractFragment
 
     @Override
     public void OnClickMedicationEdit(MedicationReminderItem item) {
-        replaceAccountAndAddToBackStack(AddEditMedicationReminders.newInstance(true, item),
-                MedicationReminderListFragment.class.getName());
+        replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(true, item),
+                AddEditMedicationRemindersFragment.class.getName());
 
     }
 
@@ -162,7 +164,7 @@ public class MedicationReminderListFragment extends AbstractFragment
 
     @OnClick(R.id.addReminder_button)
     public void onClick() {
-        replaceAccountAndAddToBackStack(AddEditMedicationReminders.newInstance(false, null),
-                MedicationReminderListFragment.class.getName());
+        replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+                AddEditMedicationRemindersFragment.class.getName());
     }
 }

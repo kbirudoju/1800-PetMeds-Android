@@ -54,6 +54,7 @@ import com.petmeds1800.ui.checkout.AddNewEntityActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
+import com.petmeds1800.ui.medicationreminders.AddPetNameListener;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.support.AddPetContract;
 import com.petmeds1800.ui.pets.support.UpdateImageUtil;
@@ -258,9 +259,14 @@ public class AddPetFragment extends AbstractFragment
 
     private AddNewEntityActivity mCallback;
 
+    private AddPetNameListener mAddPetNameListener;
+
+    public void setAddPetNameListener(AddPetNameListener addPetNameListener) {
+        mAddPetNameListener = addPetNameListener;
+    }
+
     @Nullable
     @Override
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_pet, container, false);
         ButterKnife.bind(this, view);
@@ -698,6 +704,7 @@ public class AddPetFragment extends AbstractFragment
         trans.remove(this);
         trans.commit();
         manager.popBackStack();
+
     }
 
     @Override
@@ -819,7 +826,12 @@ public class AddPetFragment extends AbstractFragment
         trans.remove(this);
         trans.commit();
         manager.popBackStack();
-        mCallback.setPet(pet);
+        if (mCallback != null) {
+            mCallback.setPet(pet);
+        }
+        if (mAddPetNameListener != null) {
+            mAddPetNameListener.openAddPetDailog(pet.getPetName());
+        }
     }
 
     @Override

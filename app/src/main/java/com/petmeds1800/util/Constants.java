@@ -8,6 +8,14 @@ public class Constants {
     /*WidgetTypes Constant*/
     public static final String VIEW_TYPE_BANNER = "Banner";
 
+    public static enum RepeatFrequency {
+        REPEAT_DAILY, REPEAT_WEEKLY, REPEAT_MONTHLY
+    }
+
+    public static enum WeekDays {
+        SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURUSDAY, FRIDAY, SATURDAY
+    }
+
     /*ShoppingCart Constants*/
     public static final int DELETE_ITEM_REQUEST_SHOPPINGCART = 1268;
 
@@ -41,12 +49,59 @@ public class Constants {
 
     public static final int ADD_NEW_VET_REQUEST = 4;
 
-    public static final String IS_EDITABLE = "isEditable";
+
+
 
     public static final int SHOW_VET_ON_MAP=5;
     public static final int REFRESH_VET_DATA=6;
 
-    public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
 
     public static final int STORAGE_ACCESS_REQUEST_CODE = 111;
+
+    public static final int DIALOG_REMINDER_REQUEST = 5;
+
+    public static final int DIALOG_REMINDER_PET_NAME_REQUEST = 6;
+
+    public static final String DIALOG_DATA_TOKEN = "Dialog_data_token";
+
+    public static final String IS_EDITABLE = "isEditable";
+
+    public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
+    public static final String PET_NAME = "petName";
+    public static final String IS_CANCEL_ALARM = "isCancelAlarm";
+    public static final String MEDICATION_RESULT_RECEIVER = "medicationResultReceiver";
+    public static final String RESULT_VALUE = "resultValue";
+    public static final String SUCCESS = "success";
+
+
+//    Refill Reminder Constants
+
+    public static final int REFILL_LIST_PER_PET_SORT_COMPLETE = 1271;
+
+    public static final int REFILL_LIST_PER_PET_EDIT = 1272;
+
+    public static final String REFILL_LIST_PER_PET_SKUID = "refill_list_per_pet_skuid";
+
+    public static final String REFILL_LIST_PER_PET_IMAGE_URL = "refill_list_per_pet_image_url";
+
+    public static final String REFILL_LIST_PER_PET_PRICE = "refill_list_per_pet_price";
+
+    public static final String REFILL_LIST_PER_PET_MONTH = "refill_list_per_pet_month";
+
+    public static final String REFILL_LIST_PER_PET_NAME = "refill_list_per_pet_name";
+
+    public static final String REFILL_LIST_PER_PET_QUANTITY_REMAINING = "refill_list_per_pet_quantity_remaining";
+
+    public static final String REFILL_LIST_PER_PET_ORDER_ID = "refill_list_per_pet_order_id";
+
+    public static final String REFILL_LIST_PER_PET_ITEM_ID = "refill_list_per_pet_item_id";
+
+    public static final String REFILL_LIST_PER_PET_ = "refill_list_per_pet_";
+
+
+    public static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
+
+    public static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
+
+
 }

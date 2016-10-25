@@ -286,6 +286,14 @@
         <item name="android:fontFamily">@string/font_roboto_regular</item>
         <item name="android:textColor">@color/grey_text</item>
     </style>
+    <style name="TimePickerDialogTheme" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/circle_indicator_stroke</item> <!-- colorAccent here seems to work just fine? -->
+    </style>
+
+    <style name="radionbutton"
+        parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radio_button_selector</item>
+    </style>
 
     <style name="vet_name_title" >
         <item name="android:textSize">@dimen/sp_16</item>

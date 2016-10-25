@@ -3,7 +3,6 @@ package com.petmeds1800.api;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.AddVetResponse;
-import com.petmeds1800.model.Card;
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.model.ReOrderRequest;
@@ -16,6 +15,8 @@ import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.UpdateVetRequest;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddEditCardResponse;
+import com.petmeds1800.model.entities.AddMedicationReminderRequest;
+import com.petmeds1800.model.entities.AddMedicationReminderResponse;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
@@ -43,6 +44,8 @@ import com.petmeds1800.model.entities.PetMedicalConditionResponse;
 import com.petmeds1800.model.entities.PetMedicationResponse;
 import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.Profile;
+import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
+import com.petmeds1800.model.entities.RemoveMedicationReminderResponse;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.model.entities.SavePetVetRequest;
@@ -61,12 +64,17 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.model.entities.VetListResponse;
 import com.petmeds1800.model.entities.WidgetListResponse;
+import com.petmeds1800.model.refillreminder.request.RemoveRefillReminderRequest;
+import com.petmeds1800.model.refillreminder.request.UpdateRefillReminderRequest;
+import com.petmeds1800.model.refillreminder.response.MonthSelectListResponse;
+import com.petmeds1800.model.refillreminder.response.RefillReminderListResponse;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.CardDetailResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.model.shoppingcart.response.Status;
 
 import java.util.HashMap;
 
@@ -97,7 +105,7 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("rest/model/atg/userprofiling/ProfileActor/orderHistory")
     Observable<MyOrder> getOrderList(@Query("_dynSessConf") String sessionConfirmation,
-                                     @Query("filterId") String filterId);
+            @Query("filterId") String filterId);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("rest/model/atg/userprofiling/ProfileActor/orderHistoryFilterlist")
@@ -159,7 +167,7 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/contact/ContactActor/detailed")
     Observable<AddAddressResponse> getAddressById(@Query("_dynSessConf") String sessionConfirmation,
-                                                  @Query("addressId") String addressId);
+            @Query("addressId") String addressId);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/1800petmeds/payment/PaymentActor/update")
@@ -335,5 +343,36 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/content/ContentActor/educationCategories")
-    Observable<PetEducationCategoriesResponse> getPetEducationCategories();  
+    Observable<PetEducationCategoriesResponse> getPetEducationCategories();
+
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/createMedReminder")
+    Observable<AddMedicationReminderResponse> saveMedicationReminders(
+            @Body AddMedicationReminderRequest addMedicationReminderRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/updateMedReminder")
+    Observable<AddMedicationReminderResponse> updateMedicationReminders(
+            @Body AddMedicationReminderRequest addMedicationReminderRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/deleteMedReminder")
+    Observable<RemoveMedicationReminderResponse> removeMedicationReminders(
+            @Body RemoveMedicationReminderRequest removeMedicationReminderRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/reminder/ReminderActor/easyRefillReminder")
+    Observable<RefillReminderListResponse> getRefillReminderList(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/reminder/ReminderActor/monthOptions")
+    Observable<MonthSelectListResponse> getRefillReminderMonthList(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/updateRefillReminder")
+    Observable<Status> getUpdateRefillReminder(@Body UpdateRefillReminderRequest updateRefillReminderRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/removeRefillReminder")
+    Observable<Status> getRemoveRefillReminder(@Body RemoveRefillReminderRequest removeRefillReminderRequest);
+
 }

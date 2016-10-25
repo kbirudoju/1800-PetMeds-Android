@@ -9,6 +9,9 @@ import com.urbanairship.UAirship;
 
 import android.support.multidex.MultiDexApplication;
 
+
+import android.support.multidex.MultiDexApplication;
+
 public class PetMedsApplication extends MultiDexApplication {
 
     private static AppComponent mAppComponent;

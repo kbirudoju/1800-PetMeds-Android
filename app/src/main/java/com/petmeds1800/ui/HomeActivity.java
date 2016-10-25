@@ -1,5 +1,30 @@
 package com.petmeds1800.ui;
 
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.entities.CommitOrderResponse;
+import com.petmeds1800.model.entities.SecurityStatusResponse;
+import com.petmeds1800.ui.fragments.AccountRootFragment;
+import com.petmeds1800.ui.fragments.CartRootFragment;
+import com.petmeds1800.ui.fragments.HomeRootFragment;
+import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract;
+import com.petmeds1800.ui.payment.AddACardContract;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.ui.support.TabPagerAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,28 +43,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.entities.CommitOrderResponse;
-import com.petmeds1800.model.entities.SecurityStatusResponse;
-import com.petmeds1800.ui.fragments.AccountRootFragment;
-import com.petmeds1800.ui.fragments.CartRootFragment;
-import com.petmeds1800.ui.fragments.HomeRootFragment;
-import com.petmeds1800.ui.fragments.LearnRootFragment;
-import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
-import com.petmeds1800.ui.payment.AddACardContract;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
-import com.petmeds1800.ui.support.TabPagerAdapter;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +55,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class HomeActivity extends AbstractActivity
-        implements AddACardContract.AddressSelectionListener, DialogInterface.OnClickListener {
+        implements AddACardContract.AddressSelectionListener,
+        MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener {
 
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
@@ -132,7 +136,7 @@ public class HomeActivity extends AbstractActivity
             } else {
                 mPreferencesHelper.setIsFingerPrintEnabled(true);
             }
-            //startService(new AddUpdateMedicationRemindersIntent(this, false));
+            startService(new AddUpdateMedicationRemindersIntent(this, false));
 
         }
 
@@ -395,5 +399,19 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
+
+
+    @Override
+    public void setItemDescription(String productName, String description) {
+        AddEditMedicationRemindersFragment addEditMedicationRemindersFragment
+                = (AddEditMedicationRemindersFragment) getSupportFragmentManager()
+                .findFragmentByTag(AddEditMedicationRemindersFragment.class.getName());
+        if (addEditMedicationRemindersFragment != null) {
+            addEditMedicationRemindersFragment.displayItemText(productName, description);
+        } else {
+            replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+                    AddEditMedicationRemindersFragment.class.getName());
+        }
+    }
 
 }

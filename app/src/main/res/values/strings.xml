@@ -59,7 +59,7 @@
     <string name="title_manage_address">Manage addresses</string>
     <string name="title_my_pets">My Pets</string>
     <string name="title_my_vets">My Vets</string>
-    <string name="title_set_refill_schedule">Set your easy refill schedule</string>
+    <string name="title_set_refill_schedule">Refill Reminder</string>
     <string name="title_setting">SETTINGS</string>
     <string name="title_use_fingerprint">Use Fingerprint</string>
     <string name="title_push_notification">Push Notifications</string>
@@ -449,17 +449,10 @@
     <string name="cart_title">Cart</string>
     <string name="select_item_quantity">Select Item Quantity</string>
 
-    <string-array name="items_quantity_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10+</item>
+    <string-array name="items_reminder_array">
+        <item>REPEAT DAILY</item>
+        <item>REPEAT WEEKLY</item>
+        <item>REPEAT MONTHLY</item>
     </string-array>
 
     <!--Shipping Methods-->
@@ -550,11 +543,13 @@
     <!--Order Receipt-->
     <string name="quantity_formatter">Qty %d</string>
     <string name="items_formatter">Subtotal (%d Item)</string>
+
     <!--Vet-->
     <string name="action_call">CALL</string>
     <string name="add_vet_caps">ADD A VET</string>
     <string name="add_vet_description">Add a vet for easier  prescription ordering </string>
     <string name="no_vet_txt">You have no vets</string>
+
     <string name="medicationAlert">Medication Time</string>
     <!--Medication Reminders-->
     <string name="medicationreminders_title">Medication Reminders</string>
@@ -569,6 +564,7 @@
         your pet\'s medication.
     </string>
     <string name="add_reminder_txt">Add a Reminder</string>
+
 
     <string name="miles_txt">miles</string>
     <string name="referal_confirmation_txt">If you would like us to notify this clinic that you are interested in their services please ensure the information below is correct and tap Request Referral.</string>
@@ -590,6 +586,46 @@
     <string name="label_got_questions">Got Questions? Check Our Q&amp;A Directory</string>
     <string name="label_q_and_a_directory">Q &amp; A Directory</string>
     <string name="remove_vet_message">This vet will be removed from your account</string>
+=======
+    <string name="pet_name">PET NAME</string>
+    <string name="add_new_pet">+ Add New Pet</string>
+    <string name="error_empty_day_reminder">Day entry should not be empty</string>
+    <string name="error_empty_month_reminder">Month entry should not be empty</string>
+    <string name="error_empty_week_reminder">Week entry should not be empty</string>
+    <string name="day_sunday">SUN</string>
+    <string name="day_monday">MON</string>
+    <string name="day_tuesday">TUE</string>
+    <string name="day_wednesday">WED</string>
+    <string name="day_thursday">THU</string>
+    <string name="day_friday">FRI</string>
+    <string name="day_saturday">SAT</string>
+    <string name="medication_reminder_added_message">Medication reminder added successfully</string>
+    <string name="medication_reminder_removed_message">Medication reminder removed successfully</string>
+    <string name="medication_reminder_updated_message">Medication reminder updated successfully</string>
+    <string name="medication_reminder_status">Medication Reminder has been set</string>
+    <string name="no_pet_title">No Pet</string>
+    <string name="errorItemRequired">Item is required</string>
+    <string name="errorPetNameRequired">Pet Name is required</string>
+    <string name="errorRepeatTimeRequired">Repeat type is rquired</string>
+    <string name="errorInvalidTimeRequired">Time is required</string>
+    <string name="items_title">Items</string>
+    <string name="promptItemName">Type an item name</string>
+    <string name="item_selection_header_text">select an item from previous order</string>
+    <string name="reminder_removal_alert_msg">This reminder will be deleted from your profile.</string>
+    
+    <string name="refill_reminder">Refill Reminder</string>
+    <string name="for_tag_pet_name">For </string>
+    <string name="for_tag_pet_month">Month :  </string>
+    <string name="for_tag_pet_quantity_remaining">Quantity Remaining :  </string>
+    <string name="for_tag_pet_price">Price : $</string>
+    <string name="price">Price</string>
+    <string name="quantity_remaining">Quantity Remaining</string>
+    <string name="pet">Pet</string>
+    <string name="month">Month</string>
+    <string name="remove_reminder">REMOVE REMINDER</string>
+    <string name="set_reminder_date">SET REMINDER DATE</string>
+    <string name="confirm_reminder_deletion_message">This Refill Reminder will be deleted from your account</string>
+>>>>>>> reminder
 
 </resources>
 

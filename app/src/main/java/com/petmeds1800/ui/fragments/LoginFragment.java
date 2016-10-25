@@ -256,7 +256,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                 });
     }
 
+
     private void doTempHackForGettingSessionCookies(final boolean doLogin) {
+
         showProgress();
         //TODO: remove this temporary hack after backend resolves their problem of cookies
         mApiService.login(new LoginRequest("", "", "test"))

@@ -1,13 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -15,6 +7,14 @@ import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.intent.SignUpIntent;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 

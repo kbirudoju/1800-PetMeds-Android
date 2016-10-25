@@ -37,36 +37,45 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
     @Override
     public void getGeneralPopulateShoppingCart() {
-        mPetMedsApiService.getGeneralPopulateShoppingCart(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
-            @Override
-            public void onCompleted() {}
-
-            @Override
-            public void onError(Throwable e) {}
-
-            @Override
-            public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
-                if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
-                    if (mView.isActive()) {
-                        mView.postGeneralPopulateShoppingCart(shoppingCartListResponse);
+        mPetMedsApiService.getGeneralPopulateShoppingCart(
+                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber())
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ShoppingCartListResponse>() {
+                    @Override
+                    public void onCompleted() {
                     }
-                } else {
-                    if (mView.isActive()) {
-                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0), ApplyCouponRequestShoppingCart.class.getSimpleName());
+
+                    @Override
+                    public void onError(Throwable e) {
                     }
-                }
-            }
-        });
+
+                    @Override
+                    public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
+                        if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.postGeneralPopulateShoppingCart(shoppingCartListResponse);
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),
+                                        ApplyCouponRequestShoppingCart.class.getSimpleName());
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
     public void getAddItemShoppingCart(AddItemRequestShoppingCart addItemRequestShoppingCart) {
-        mPetMedsApiService.getAddItemShoppingCart(addItemRequestShoppingCart).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
+        mPetMedsApiService.getAddItemShoppingCart(addItemRequestShoppingCart).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
-            public void onError(Throwable e) {}
+            public void onError(Throwable e) {
+            }
 
             @Override
             public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
@@ -76,7 +85,8 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                     }
                 } else {
                     if (mView.isActive()) {
-                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0), AddItemRequestShoppingCart.class.getSimpleName());
+                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),
+                                AddItemRequestShoppingCart.class.getSimpleName());
                     }
                 }
             }
@@ -85,13 +95,17 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
     @Override
     public void getRemoveItemShoppingCart(RemoveItemRequestShoppingCart removeItemRequestShoppingCart) {
-        removeItemRequestShoppingCart.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        mPetMedsApiService.getRemoveItemShoppingCart(removeItemRequestShoppingCart).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
+        removeItemRequestShoppingCart
+                .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        mPetMedsApiService.getRemoveItemShoppingCart(removeItemRequestShoppingCart).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
-            public void onError(Throwable e) {}
+            public void onError(Throwable e) {
+            }
 
             @Override
             public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
@@ -101,7 +115,8 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                     }
                 } else {
                     if (mView.isActive()) {
-                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0), RemoveItemRequestShoppingCart.class.getSimpleName());
+                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),
+                                RemoveItemRequestShoppingCart.class.getSimpleName());
                     }
                 }
             }
@@ -110,13 +125,17 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
     @Override
     public void getApplyCouponShoppingCart(ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart) {
-        applyCouponRequestShoppingCart.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        mPetMedsApiService.getApplyCouponShoppingCart(applyCouponRequestShoppingCart).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
+        applyCouponRequestShoppingCart
+                .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        mPetMedsApiService.getApplyCouponShoppingCart(applyCouponRequestShoppingCart).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
-            public void onError(Throwable e) {}
+            public void onError(Throwable e) {
+            }
 
             @Override
             public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
@@ -126,7 +145,8 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                     }
                 } else {
                     if (mView.isActive()) {
-                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),ApplyCouponRequestShoppingCart.class.getSimpleName() );
+                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),
+                                ApplyCouponRequestShoppingCart.class.getSimpleName());
                     }
                 }
             }
@@ -134,14 +154,20 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
     }
 
     @Override
-    public void getUpdateItemQuantityRequestShoppingCart(UpdateItemQuantityRequestShoppingCart updateItemQuantityRequestShoppingCart) {
-        updateItemQuantityRequestShoppingCart.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        mPetMedsApiService.getUpdateItemQuantityRequestShoppingCart(updateItemQuantityRequestShoppingCart.getmCommerceIDQuantityMap()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
+    public void getUpdateItemQuantityRequestShoppingCart(
+            UpdateItemQuantityRequestShoppingCart updateItemQuantityRequestShoppingCart) {
+        updateItemQuantityRequestShoppingCart
+                .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        mPetMedsApiService.getUpdateItemQuantityRequestShoppingCart(
+                updateItemQuantityRequestShoppingCart.getmCommerceIDQuantityMap()).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
             @Override
-            public void onCompleted() {}
+            public void onCompleted() {
+            }
 
             @Override
-            public void onError(Throwable e) {}
+            public void onError(Throwable e) {
+            }
 
             @Override
             public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
@@ -151,7 +177,8 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                     }
                 } else {
                     if (mView.isActive()) {
-                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),UpdateItemQuantityRequestShoppingCart.class.getSimpleName() );
+                        mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),
+                                UpdateItemQuantityRequestShoppingCart.class.getSimpleName());
                     }
                 }
             }

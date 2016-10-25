@@ -1,6 +1,7 @@
 package com.petmeds1800.util;
 
 import com.petmeds1800.R;
+import com.petmeds1800.model.entities.NameValueData;
 
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
@@ -10,10 +11,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
+import com.petmeds1800.ui.AbstractActivity;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -28,7 +30,6 @@ public class Utils {
     private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
             "Jul", "Aug", "Sep", "Oct",
             "Nov", "Dec"};
-
     private static final int CREDIT_CARD_DIGITS_RULE_1 = 16;
 
     private static final int CREDIT_CARD_DIGITS_RULE_2 = 15;
@@ -37,6 +38,8 @@ public class Utils {
 
     private static final int CVV_DIGITS_RULE_2 = 4;
 
+    public  static final String [] WEEKDAYS_NAMES = new String[]{"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+    public  static final String reminderTypeArray[] = new String[]{"daily", "weekly", "monthly"};
     public static String changeDateFormat(long millisecond, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         String dateString = formatter.format(new Date(millisecond));
@@ -99,10 +102,6 @@ public class Utils {
         return PICKER_DISPLAY_MONTHS_NAMES[month - 1];
     }
 
-    public static Date getDate(String dateStr) throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("hh:mm:ss a");
-        return formatter.parse(dateStr);
-    }
 
     public static boolean isCreditCardNumberValid(String creditCardNumber) {
         if (creditCardNumber.length() == CREDIT_CARD_DIGITS_RULE_1
@@ -125,5 +124,83 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static Date getDate(String dateStr) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("h:mm a");
+        return formatter.parse(dateStr);
+    }
+    public static Date getReminderDate(String dateStr) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("MMM dd h:mm a");
+        return formatter.parse(dateStr);
+    }
+
+    public static String getDateInMM_DD_YYYY_Format(Date date){
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        return formatter.format(date);
+    }
+    public static Constants.RepeatFrequency getReminderTypeValue(String value) {
+        for (int i = 0; i < reminderTypeArray.length; i++) {
+            if (reminderTypeArray[i].equalsIgnoreCase(value)) {
+                switch (i) {
+                    case 0:
+                        return Constants.RepeatFrequency.REPEAT_DAILY;
+                    case 1:
+                        return Constants.RepeatFrequency.REPEAT_WEEKLY;
+                    case 2:
+                        return Constants.RepeatFrequency.REPEAT_MONTHLY;
+                }
+            }
+        }
+        return Constants.RepeatFrequency.REPEAT_DAILY;
+    }
+
+    public static ArrayList<String> populateDaysOfWeeks(ArrayList<NameValueData> nameValueDatas) {
+        ArrayList<String> weeksList = new ArrayList<String>();
+        if (nameValueDatas != null) {
+            for (NameValueData value : nameValueDatas) {
+                weeksList.add(value.getValue());
+            }
+        }
+
+        return weeksList;
+
+    }
+	
+	
+    public static void toggleGIFAnimantionVisibility(boolean showVisible, Activity activity) {
+        if (showVisible) {
+            try {
+                ((AbstractActivity) activity).startLoadingGif(activity);
+            } catch (Exception e) {
+                try {
+                    ((AbstractActivity) activity).stopLoadingGif(activity);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } else {
+            try {
+                ((AbstractActivity) activity).stopLoadingGif(activity);
+            } catch (Exception e) {
+                try {
+                    ((AbstractActivity) activity).stopLoadingGif(activity);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void toggleProgressDialogVisibility(boolean showVisisble, View mProgressBar){
+        if (showVisisble){
+            if (mProgressBar != null && mProgressBar.getVisibility()==View.GONE){
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mProgressBar != null && mProgressBar.getVisibility()==View.VISIBLE){
+                mProgressBar.setVisibility(View.GONE);
+            }
+        }
     }
 }
