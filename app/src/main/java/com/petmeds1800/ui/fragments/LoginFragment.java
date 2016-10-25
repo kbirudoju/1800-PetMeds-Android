@@ -28,6 +28,7 @@ import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.mvp.LoginTask.LoginContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.GetSessionCookiesHack;
 import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
@@ -76,6 +77,8 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
     private LoginContract.Presenter mPresenter;
 
+    private GetSessionCookiesHack mGetSessionCookiesHack;
+
     public static LoginFragment newInstance() {
         return new LoginFragment();
     }
@@ -104,6 +107,40 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         super.onViewCreated(view, savedInstanceState);
         mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_GO);
         mPasswordEdit.setOnEditorActionListener(this);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //Temp Hack for login
+        mGetSessionCookiesHack = new GetSessionCookiesHack() {
+            @Override
+            public void getSessionCookiesOnFinish(boolean doLogin, Throwable e) {
+                int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                if (errorId == R.string.noInternetConnection) {
+                    showErrorCrouton(getString(errorId), false);
+                    hideProgress();
+                } else {
+                    if(doLogin){
+                        doLogin();
+                    }
+                    else {
+                        initializeSessionConfirmationNumber();
+                    }
+
+                }
+            }
+
+            @Override
+            public void getSessionCookiesShowProgress() {
+                showProgress();
+            }
+
+            @Override
+            public void getSessionCookiesHideProgress() {
+                hideProgress();
+            }
+        };
     }
 
     @Override
@@ -178,7 +215,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             return;
         }
 
-        doTempHackForGettingSessionCookies(true);
+        mGetSessionCookiesHack.doHackForGettingSessionCookies(true, mApiService);
     }
 
     private void doLogin() {
@@ -302,7 +339,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             navigateToHome();
         } else {
             showProgress();
-            doTempHackForGettingSessionCookies(false);
+            mGetSessionCookiesHack.doHackForGettingSessionCookies(false, mApiService);
         }
 
     }
