@@ -61,10 +61,15 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.model.entities.VetListResponse;
 import com.petmeds1800.model.entities.WidgetListResponse;
+import com.petmeds1800.model.refillreminder.request.RemoveRefillReminderRequest;
+import com.petmeds1800.model.refillreminder.request.UpdateRefillReminderRequest;
+import com.petmeds1800.model.refillreminder.response.MonthSelectListResponse;
+import com.petmeds1800.model.refillreminder.response.RefillReminderListResponse;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.model.shoppingcart.response.Status;
 
 import java.util.HashMap;
 
@@ -329,5 +334,21 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/reminder/ReminderActor/deleteMedReminder")
     Observable<RemoveMedicationReminderResponse> removeMedicationReminders(
             @Body RemoveMedicationReminderRequest removeMedicationReminderRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/reminder/ReminderActor/easyRefillReminder")
+    Observable<RefillReminderListResponse> getRefillReminderList(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/reminder/ReminderActor/monthOptions")
+    Observable<MonthSelectListResponse> getRefillReminderMonthList(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/updateRefillReminder")
+    Observable<Status> getUpdateRefillReminder(@Body UpdateRefillReminderRequest updateRefillReminderRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/1800petmeds/reminder/ReminderActor/removeRefillReminder")
+    Observable<Status> getRemoveRefillReminder(@Body RemoveRefillReminderRequest removeRefillReminderRequest);
 
 }

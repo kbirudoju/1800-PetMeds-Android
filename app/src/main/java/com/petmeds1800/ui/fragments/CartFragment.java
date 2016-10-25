@@ -45,6 +45,11 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import static com.petmeds1800.util.Constants.HIDE_PROGRESSBAR_OR_ANIMATION;
+import static com.petmeds1800.util.Constants.SHOW_PROGRESSBAR_OR_ANIMATION;
+import static com.petmeds1800.util.Utils.toggleGIFAnimantionVisibility;
+import static com.petmeds1800.util.Utils.toggleProgressDialogVisibility;
+
 /**
  * Created by pooja on 8/2/2016.
  */
@@ -58,8 +63,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     private TextInputLayout mCouponCodeLayout;
     private LinearLayout mOfferCodeContainerLayout;
     private ProgressBar mProgressBar;
-    private static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
-    private static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
 
     public static int sPreviousScrollPosition = 0;
     public static final String SHOPPING_CART = "shoppingCart";
@@ -114,8 +117,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         } else if (null == shoppingCartListResponse || shoppingCartListResponse.getItemCount() == 0){
             toggleVisibilityShoppingList(true);
         }
-        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
-        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
+        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
+        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
 
         return response;
     }
@@ -131,8 +134,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
         }
 
-        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
-        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION);
+        toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
+        toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
         return false;
     }
 
@@ -253,7 +256,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         }
         if (object == null)
         {
-            toggleProgressDialogVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
+            toggleProgressDialogVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,mProgressBar);
             mPresenter.getGeneralPopulateShoppingCart();
         } else
         if (object instanceof AddItemRequestShoppingCart)
@@ -262,17 +265,17 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         } else
         if (object instanceof RemoveItemRequestShoppingCart)
         {
-            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,getActivity());
             mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart)(object));
         } else
         if (object instanceof ApplyCouponRequestShoppingCart)
         {
-            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,getActivity());
             mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart)(object));
         } else
         if (object instanceof UpdateItemQuantityRequestShoppingCart)
         {
-            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION);
+            toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,getActivity());
             mPresenter.getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart)(object));
         }
     }
@@ -293,40 +296,4 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             }
         }
     };
-
-    private void toggleProgressDialogVisibility(boolean showVisisble){
-        if (showVisisble){
-            if (mProgressBar != null && mProgressBar.getVisibility()==View.GONE){
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        } else {
-            if (mProgressBar != null && mProgressBar.getVisibility()==View.VISIBLE){
-                mProgressBar.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void toggleGIFAnimantionVisibility(boolean showVisible) {
-        if (showVisible) {
-            try {
-                ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
-            } catch (Exception e) {
-                try {
-                    ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        } else {
-            try {
-                ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
-            } catch (Exception e) {
-                try {
-                    ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-    }
 }

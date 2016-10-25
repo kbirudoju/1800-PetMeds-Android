@@ -15,7 +15,6 @@ import com.petmeds1800.ui.medicationreminders.service.MedicationReminderResultRe
 import com.petmeds1800.ui.orders.MyOrderFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
-import com.petmeds1800.ui.refillreminder.ReminderListFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -117,6 +116,7 @@ public class AccountFragment extends AbstractFragment
         mPetsLabel.setOnClickListener(this);
         signOut.setOnClickListener(this);
         mMedicationReminderLabel.setOnClickListener(this);
+        mRefillReminderLabel.setOnClickListener(this);
         fillWindow();
     }
 

@@ -50,6 +50,8 @@ import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.presenter.PetListPresenter;
+import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
+import com.petmeds1800.ui.refillreminder.presenter.ReminderListPresenter;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
 import com.petmeds1800.ui.vet.AddVetFragment;
 import com.petmeds1800.ui.vet.AddVetPresenter;
@@ -148,20 +150,37 @@ public interface Injector {
     void inject(StepFiveRootFragment stepFiveRootFragment);
 
     void inject(StepThreeRootPresentor stepThreeRootPresentor);
+
     void inject(CantFindVetPresenter cantFindVetPresenter);
+
     void inject(CantFindVetFragment cantFindVetFragment);
+
     void inject (AddVetPresenter addVetPresenter);
+
     void inject(AddVetFragment addVetFragment);
+
     void inject(OrderDetailPresenter orderDetailPresenter);
+
     void inject(OrderDetailFragment orderDetailFragment);
+
     void inject (WidgetListFragment widgetListFragment);
 
     void inject(GuestStepOneRootPresentor guestStepOneRootPresentor);
+
     void inject(MedicationReminderListPresentor medicationReminderListPresentor);
+
     void inject(AddEditMedicationRemindersPresentor addEditMedicationRemindersPresentor);
+
     void inject(AddEditMedicationRemindersFragment addEditMedicationRemindersFragment);
+   
     void inject(MedicationReminderItemsListPresentor medicationReminderItemsListPresentor);
-    void inject(UpdateMedicationRemindersAlarmService updateMedicationRemindersAlarmService);
-    void inject(BootReceiver bootReceiver);
+    
+	void inject(UpdateMedicationRemindersAlarmService updateMedicationRemindersAlarmService);
+    
+	void inject(BootReceiver bootReceiver);
+	
+	void inject(ReminderListPresenter reminderListPresenter);
+
+    void inject(EditReminderPresenter editReminderPresenter);
 
 }

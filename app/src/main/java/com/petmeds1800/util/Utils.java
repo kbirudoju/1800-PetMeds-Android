@@ -11,7 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
+import com.petmeds1800.ui.AbstractActivity;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -132,5 +132,42 @@ public class Utils {
 
         return weeksList;
 
+    }
+	
+	
+    public static void toggleGIFAnimantionVisibility(boolean showVisible, Activity activity) {
+        if (showVisible) {
+            try {
+                ((AbstractActivity) activity).startLoadingGif(activity);
+            } catch (Exception e) {
+                try {
+                    ((AbstractActivity) activity).stopLoadingGif(activity);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } else {
+            try {
+                ((AbstractActivity) activity).stopLoadingGif(activity);
+            } catch (Exception e) {
+                try {
+                    ((AbstractActivity) activity).stopLoadingGif(activity);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void toggleProgressDialogVisibility(boolean showVisisble, View mProgressBar){
+        if (showVisisble){
+            if (mProgressBar != null && mProgressBar.getVisibility()==View.GONE){
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mProgressBar != null && mProgressBar.getVisibility()==View.VISIBLE){
+                mProgressBar.setVisibility(View.GONE);
+            }
+        }
     }
 }

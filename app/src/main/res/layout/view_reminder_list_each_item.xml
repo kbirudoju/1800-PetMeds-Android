@@ -1,0 +1,17 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="@dimen/dp_1"
+    android:layout_marginTop="@dimen/dp_1"
+    android:background="@drawable/rectangular_background"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/reminder_each_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"></LinearLayout>
+</android.support.v7.widget.CardView>

@@ -1,0 +1,93 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/dp_3"
+    android:background="@color/petmeds_blue"
+    android:elevation="@dimen/dp_1"
+    android:orientation="horizontal"
+    android:padding="@dimen/dp_2"
+    app:cardElevation="@dimen/dp_1">
+
+    <RelativeLayout
+        android:id="@+id/reminder_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/dp_20">
+
+        <ImageView
+            android:id="@+id/image_medication"
+            android:layout_width="@dimen/dp_62"
+            android:layout_height="@dimen/dp_62"
+            android:background="@drawable/circular_background"
+            android:padding="1dp"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/text_medication_description"
+            style="@style/cart_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_21"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_toRightOf="@+id/image_medication" />
+
+        <TextView
+            android:id="@+id/text_medication_month"
+            style="@style/rounded_button_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_medication_description"
+            android:layout_marginLeft="@dimen/dp_21"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_toRightOf="@+id/image_medication" />
+
+        <TextView
+            android:id="@+id/text_medication_quantity"
+            style="@style/rounded_button_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_medication_month"
+            android:layout_marginLeft="@dimen/dp_21"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_toRightOf="@+id/image_medication" />
+
+        <TextView
+            android:id="@+id/text_medication_price"
+            style="@style/rounded_button_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_medication_quantity"
+            android:layout_marginLeft="@dimen/dp_21"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_toRightOf="@+id/image_medication"
+            android:textColor="@color/crimson_red" />
+
+        <FrameLayout
+            android:id="@+id/frame_edit"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@+id/text_medication_price"
+            android:layout_marginTop="@dimen/dp_13"
+            android:background="@drawable/rectangular_round_corner_background">
+
+            <TextView
+                style="@style/cart_button_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:drawableLeft="@drawable/ic_small_edit"
+                android:drawablePadding="5dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="@string/action_edit"
+                android:textAllCaps="true" />
+        </FrameLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

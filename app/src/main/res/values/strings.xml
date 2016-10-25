@@ -59,7 +59,7 @@
     <string name="title_manage_address">Manage addresses</string>
     <string name="title_my_pets">My Pets</string>
     <string name="title_my_vets">My Vets</string>
-    <string name="title_set_refill_schedule">Set your easy refill schedule</string>
+    <string name="title_set_refill_schedule">Refill Reminder</string>
     <string name="title_setting">SETTINGS</string>
     <string name="title_use_fingerprint">Use Fingerprint</string>
     <string name="title_push_notification">Push Notifications</string>
@@ -582,6 +582,19 @@
     <string name="promptItemName">Type an item name</string>
     <string name="item_selection_header_text">select an item from previous order</string>
     <string name="reminder_removal_alert_msg">This reminder will be deleted from your profile.</string>
+    
+    <string name="refill_reminder">Refill Reminder</string>
+    <string name="for_tag_pet_name">For </string>
+    <string name="for_tag_pet_month">Month :  </string>
+    <string name="for_tag_pet_quantity_remaining">Quantity Remaining :  </string>
+    <string name="for_tag_pet_price">Price : $</string>
+    <string name="price">Price</string>
+    <string name="quantity_remaining">Quantity Remaining</string>
+    <string name="pet">Pet</string>
+    <string name="month">Month</string>
+    <string name="remove_reminder">REMOVE REMINDER</string>
+    <string name="set_reminder_date">SET REMINDER DATE</string>
+    <string name="confirm_reminder_deletion_message">This Refill Reminder will be deleted from your account</string>
 
 </resources>
 

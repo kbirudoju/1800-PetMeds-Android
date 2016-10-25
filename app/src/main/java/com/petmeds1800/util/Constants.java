@@ -65,4 +65,35 @@ public class Constants {
     public static final String SUCCESS = "success";
 
 
+//    Refill Reminder Constants
+
+    public static final int REFILL_LIST_PER_PET_SORT_COMPLETE = 1271;
+
+    public static final int REFILL_LIST_PER_PET_EDIT = 1272;
+
+    public static final String REFILL_LIST_PER_PET_SKUID = "refill_list_per_pet_skuid";
+
+    public static final String REFILL_LIST_PER_PET_IMAGE_URL = "refill_list_per_pet_image_url";
+
+    public static final String REFILL_LIST_PER_PET_PRICE = "refill_list_per_pet_price";
+
+    public static final String REFILL_LIST_PER_PET_MONTH = "refill_list_per_pet_month";
+
+    public static final String REFILL_LIST_PER_PET_NAME = "refill_list_per_pet_name";
+
+    public static final String REFILL_LIST_PER_PET_QUANTITY_REMAINING = "refill_list_per_pet_quantity_remaining";
+
+    public static final String REFILL_LIST_PER_PET_ORDER_ID = "refill_list_per_pet_order_id";
+
+    public static final String REFILL_LIST_PER_PET_ITEM_ID = "refill_list_per_pet_item_id";
+
+    public static final String REFILL_LIST_PER_PET_ = "refill_list_per_pet_";
+
+
+
+
+    public static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
+
+    public static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
+
 }
