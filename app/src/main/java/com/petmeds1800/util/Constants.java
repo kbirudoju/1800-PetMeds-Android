@@ -99,9 +99,20 @@ public class Constants {
     public static final String REFILL_LIST_PER_PET_ = "refill_list_per_pet_";
 
 
+//	General Keys for Animation or Progress Dialog Visibility Control
+
     public static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
 
     public static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
 
 
+//  Keys for Async Update of Shopping Cart Icon Count
+
+    public static final int KEY_COMPLETED_ASYN_COUNT_FETCH = 1268;
+
+    public static final String KEY_SHOPPING_CART_ICON_VALUE = "shopping_cart_icon_value";
+
+    public static final String KEY_SHOPPING_CART_ASYNC_SUCCESS = "shopping_cart_async_success";
+
+    public static final String KEY_CART_FRAGMENT_INTENT_FILTER = "cart_fragment_intent_filter";
 }

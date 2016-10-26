@@ -1,14 +1,15 @@
 package com.petmeds1800.ui.fragments;
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,21 +20,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.CheckOutIntent;
-import com.petmeds1800.model.ReminderDialogData;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.dialog.ReminderDialogFragment;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
 import com.petmeds1800.util.Constants;
@@ -84,6 +83,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mEmptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(CartFragmentReceiver,new IntentFilter(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+
         return view;
     }
 
@@ -103,6 +104,12 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(CartFragmentReceiver);
+    }
+
+    @Override
     public boolean isActive() {
         return isAdded();
     }
@@ -111,12 +118,14 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     public boolean postGeneralPopulateShoppingCart(ShoppingCartListResponse shoppingCartListResponse) {
 
         boolean response = false;
+        UpdateValueThreadResponse();
         if (null != shoppingCartListResponse && shoppingCartListResponse.getItemCount() > 0){
             response = initializeShoppingCartPage(shoppingCartListResponse);
             toggleVisibilityShoppingList(false);
         } else if (null == shoppingCartListResponse || shoppingCartListResponse.getItemCount() == 0){
             toggleVisibilityShoppingList(true);
         }
+
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
 
@@ -280,7 +289,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         }
     }
 
-    private final Handler CartFragmentMessageHandler = new Handler(){
+    public final Handler CartFragmentMessageHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -293,6 +302,23 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
                 CommonWebviewFragment commonWebviewFragment = new CommonWebviewFragment();
                 commonWebviewFragment.setArguments(msg.getData());
                 addStepRootChildFragment(commonWebviewFragment,R.id.cart_root_fragment_container);
+            }
+        }
+    };
+
+    public void UpdateValueThreadResponse(){
+        try {
+            ((HomeActivity)getActivity()).updateCartTabItemCount();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public BroadcastReceiver CartFragmentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() == Constants.KEY_CART_FRAGMENT_INTENT_FILTER){
+                callmShoppingCartAPI(null);
             }
         }
     };

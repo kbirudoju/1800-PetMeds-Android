@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.petmeds1800.R;
@@ -19,6 +21,7 @@ import com.petmeds1800.model.RefillReminderSortingperPet;
 import com.petmeds1800.model.refillreminder.response.EasyRefillReminder;
 import com.petmeds1800.model.refillreminder.response.OrderItems;
 import com.petmeds1800.model.refillreminder.response.RefillReminderListResponse;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.refillreminder.ReminderListContract;
 import com.petmeds1800.ui.refillreminder.presenter.ReminderListPresenter;
 import com.petmeds1800.util.Constants;
@@ -27,6 +30,7 @@ import com.petmeds1800.util.ReminderListRecyclerViewAdapter;
 import java.util.ArrayList;
 
 import static com.petmeds1800.util.Constants.HIDE_PROGRESSBAR_OR_ANIMATION;
+import static com.petmeds1800.util.Constants.SHOW_PROGRESSBAR_OR_ANIMATION;
 import static com.petmeds1800.util.Utils.toggleGIFAnimantionVisibility;
 import static com.petmeds1800.util.Utils.toggleProgressDialogVisibility;
 
@@ -38,8 +42,9 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
     private RecyclerView mReminderMainList;
     private ReminderListContract.Presenter mPresenter;
     private ProgressBar mProgressBar;
-    private ArrayList<RefillReminderSortingperPet> refillReminderSortingperPets;
     private ReminderListRecyclerViewAdapter mReminderListRecyclerViewAdapter;
+    private LinearLayout mReminderListContainer;
+    private LinearLayout mNoReminderListContainer;
 
     @Nullable
     @Override
@@ -47,6 +52,8 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
         View view = inflater.inflate(R.layout.fragment_reminder_list,null);
         mReminderMainList = (RecyclerView) view.findViewById(R.id.reminder_list);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mReminderListContainer = (LinearLayout) view.findViewById(R.id.reminer_list_container);
+        mNoReminderListContainer = (LinearLayout) view.findViewById(R.id.no_reminder_container);
         mReminderMainList.setLayoutManager(mLayoutManager);
         mReminderMainList.setItemAnimator(new DefaultItemAnimator());
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
@@ -56,6 +63,12 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((Button)mNoReminderListContainer.findViewById(R.id.shop_now_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)getActivity()).scrollViewPager(0);
+            }
+        });
         callReminderAPI(null);
     }
 
@@ -66,12 +79,16 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
 
     @Override
     public boolean postGeneralPopulateRefillReminderList(RefillReminderListResponse refillReminderListResponse) {
-
+        if (refillReminderListResponse.getEasyRefillReminder().isEmpty()){
+            mNoReminderListContainer.setVisibility(View.VISIBLE);
+            mReminderListContainer.setVisibility(View.GONE);
+        } else {
+            mNoReminderListContainer.setVisibility(View.GONE);
+            mReminderListContainer.setVisibility(View.VISIBLE);
+        }
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
-
         new Thread(new ReminderListSorterRunnable(refillReminderListResponse.getEasyRefillReminder(),RefillListMessageHandler)).start();
-
         return false;
     }
 
@@ -93,7 +110,7 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
         }
         if (object == null)
         {
-            toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
+            toggleProgressDialogVisibility(SHOW_PROGRESSBAR_OR_ANIMATION,mProgressBar);
             mPresenter.getGeneralPopulateRefillReminderList();
         }
     }

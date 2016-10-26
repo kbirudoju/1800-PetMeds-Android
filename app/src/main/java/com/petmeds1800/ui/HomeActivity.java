@@ -9,6 +9,7 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
@@ -20,6 +21,7 @@ import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.support.TabPagerAdapter;
 import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.AsyncUpdateShoppingCartIconCountThread;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
@@ -30,8 +32,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -41,6 +47,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -154,8 +161,7 @@ public class HomeActivity extends AbstractActivity
         mHomeTab.setupWithViewPager(mViewPager);
 
         for (int i = 0; i < mHomeTab.getTabCount(); i++) {
-            View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.custom_tab_image_overlay, null, false);
+            View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_tab_image_overlay, null, false);
             mTabLayoutArray.add(i, v);
             mHomeTab.getTabAt(i).setCustomView(mTabLayoutArray.get(i));
         }
@@ -166,18 +172,7 @@ public class HomeActivity extends AbstractActivity
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
                         int numTab = tab.getPosition();
-                       /* if(numTab==0){
-                          *//*  HomeRootFragment fragment = (HomeRootFragment) getSupportFragmentManager().findFragmentByTag(HomeRootFragment.class.getSimpleName());
-                            fragment.addHomeFragment();*//*
-                            FragmentManager fm = getSupportFragmentManager();
-                            Fragment fr = mAdapter.getItem(numTab);
-                            if(fr instanceof HomeRootFragment){
-                                ((HomeRootFragment)fr).addHomeFragment();
-
-                            }
-                        }*/
                         Log.d("ontabselected", numTab + ">>>>");
-
                     }
 
                     @Override
@@ -185,12 +180,10 @@ public class HomeActivity extends AbstractActivity
                         super.onTabUnselected(tab);
                         //TODO: could not understand the purpose of this code so removed. If still needed please justify
                         removeAllFragment();
-
                     }
                 });
 
         ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
-
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -414,4 +407,48 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
+    public void updateCartTabItemCount(){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                new AsyncUpdateShoppingCartIconCountThread(mApiService,mPreferencesHelper,HomeActivityMessageHandler).startAsyncUpdateShoppingCartIconCountThread();
+            }
+        };
+        new Handler().postDelayed(runnable,1000);
+    }
+
+    public void updateCartMenuItemCount(){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+            }
+        };
+        new Handler().postDelayed(runnable,1000);
+    }
+
+    public final Handler HomeActivityMessageHandler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if (msg.what == Constants.KEY_COMPLETED_ASYN_COUNT_FETCH) {
+                if (msg.getData().getBoolean(Constants.KEY_SHOPPING_CART_ASYNC_SUCCESS)){
+                    mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image_container).setVisibility(View.VISIBLE);
+                    ((TextView)mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setText(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE));
+                } else {
+                    Snackbar.make(mContainerLayout,msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE), Snackbar.LENGTH_LONG).show();
+                }
+            }
+        }
+    };
+
+    /**
+     * Move View Pager Externaly via programtically assigning selection number
+     * @param pageNo
+     */
+    public void scrollViewPager(int pageNo){
+        mViewPager.setCurrentItem(pageNo);
+    }
 }

@@ -550,8 +550,8 @@
     <string name="add_vet_description">Add a vet for easier  prescription ordering </string>
     <string name="no_vet_txt">You have no vets</string>
 
-    <string name="medicationAlert">Medication Time</string>
     <!--Medication Reminders-->
+    <string name="medicationAlert">Medication Time</string>
     <string name="medicationreminders_title">Medication Reminders</string>
     <string name="hint_item">Item</string>
     <string name="hint_time">Time</string>
@@ -586,7 +586,7 @@
     <string name="label_got_questions">Got Questions? Check Our Q&amp;A Directory</string>
     <string name="label_q_and_a_directory">Q &amp; A Directory</string>
     <string name="remove_vet_message">This vet will be removed from your account</string>
-=======
+
     <string name="pet_name">PET NAME</string>
     <string name="add_new_pet">+ Add New Pet</string>
     <string name="error_empty_day_reminder">Day entry should not be empty</string>
@@ -625,7 +625,9 @@
     <string name="remove_reminder">REMOVE REMINDER</string>
     <string name="set_reminder_date">SET REMINDER DATE</string>
     <string name="confirm_reminder_deletion_message">This Refill Reminder will be deleted from your account</string>
->>>>>>> reminder
+    <string name="no_saved_refill_reminder_message">You have no refill reminders</string>
+    <string name="refill_reminder_will_appear_automatically_message">Store an address for faster checkout.</string>
+    <string name="shop_now_message">SHOP NOW</string>
 
 </resources>
 
