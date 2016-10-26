@@ -42,7 +42,7 @@ public abstract class AbstractFragment extends Fragment {
 
     void replaceCartFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.cart_root_fragment_container, fragment);
+        transaction.replace(R.id.cart_root_fragment_container, fragment , fragment.getClass().getSimpleName());
         transaction.commit();
     }
 

@@ -4,9 +4,11 @@
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/reminer_list_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reminder_list"
@@ -21,6 +23,50 @@
             android:footerDividersEnabled="true"
             android:textFilterEnabled="true" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/no_reminder_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_menu_cart_large" />
+
+        <TextView
+            style="@style/styledefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_13"
+            android:text="@string/no_saved_refill_reminder_message" />
+
+        <TextView
+            style="@style/paragraph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/refill_reminder_will_appear_automatically_message" />
+
+        <Button
+            android:id="@+id/shop_now_button"
+            style="@style/label"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_42"
+            android:background="@color/petmeds_blue"
+            android:text="@string/shop_now_message"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <ProgressBar

@@ -4,6 +4,7 @@ import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -177,6 +178,11 @@ public class CommonWebviewFragment extends AbstractFragment {
 
             if (url.contains("Add+To+Cart")){
                 getActivity().onBackPressed();
+                try {
+                    ((HomeActivity)getActivity()).updateCartMenuItemCount();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             return super.shouldOverrideUrlLoading(view, url);
         }
