@@ -110,8 +110,10 @@ public class HomeActivity extends AbstractActivity
         setIntent(intent);
         commitOrderResponse = (CommitOrderResponse) getIntent().getSerializableExtra(
                 Constants.CONFIRMATION_ORDER_RESPONSE);
-        mCartRootFragment = ((CartRootFragment) mAdapter.getItem(1));
-        mCartRootFragment.replaceConfirmOrderFragment(commitOrderResponse);
+        if (commitOrderResponse != null) {
+            mCartRootFragment = ((CartRootFragment) mAdapter.getItem(1));
+            mCartRootFragment.replaceConfirmOrderFragment(commitOrderResponse);
+        }
 
     }
 
@@ -123,11 +125,13 @@ public class HomeActivity extends AbstractActivity
 
         }
     }
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         onCreate(savedInstanceState);
     }
+
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
@@ -147,7 +151,9 @@ public class HomeActivity extends AbstractActivity
 
         }
 
+        if(getIntent().getStringExtra("screenFromPush").equals("order details")){
 
+        }
         //initialize fragment list
         List<Fragment> fragmentList = new ArrayList<>();
         HomeRootFragment mHomeRootFragment = new HomeRootFragment();
@@ -172,7 +178,7 @@ public class HomeActivity extends AbstractActivity
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
                         int numTab = tab.getPosition();
-                        if(mViewPager.getCurrentItem()!=numTab){
+                        if (mViewPager.getCurrentItem() != numTab) {
                             mViewPager.setCurrentItem(numTab);
                             invalidateOptionsMenu();
                         }
@@ -420,7 +426,6 @@ public class HomeActivity extends AbstractActivity
                 break;
         }
     }
-
 
 
     @Override

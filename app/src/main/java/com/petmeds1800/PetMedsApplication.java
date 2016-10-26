@@ -9,9 +9,6 @@ import com.urbanairship.UAirship;
 
 import android.support.multidex.MultiDexApplication;
 
-
-import android.support.multidex.MultiDexApplication;
-
 public class PetMedsApplication extends MultiDexApplication {
 
     private static AppComponent mAppComponent;
@@ -23,7 +20,6 @@ public class PetMedsApplication extends MultiDexApplication {
         UAirship.takeOff(this, new UAirship.OnReadyCallback() {
             @Override
             public void onAirshipReady(UAirship airship) {
-
                 // Enable user notifications
                 airship.getPushManager().setUserNotificationsEnabled(true);
             }

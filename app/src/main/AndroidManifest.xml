@@ -127,6 +127,20 @@
         <receiver android:name=".util.alarm.MedicationAlarmReceiver"/>
         <service android:name=".util.alarm.MedicationSchedulingService"/>
         <service android:name=".ui.medicationreminders.service.UpdateMedicationRemindersAlarmService"/>
+        <!-- OPTIONAL, if you want to receive push, push opened and registration completed intents -->
+        <!-- Replace the receiver below with your package and class name -->
+        <receiver android:name=".util.PetMedsAirShipReceiver"
+                  android:exported="false">
+
+            <intent-filter>
+                <action android:name="com.urbanairship.push.CHANNEL_UPDATED" />
+                <action android:name="com.urbanairship.push.OPENED" />
+                <action android:name="com.urbanairship.push.RECEIVED" />
+                <action android:name="com.urbanairship.push.DISMISSED" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
