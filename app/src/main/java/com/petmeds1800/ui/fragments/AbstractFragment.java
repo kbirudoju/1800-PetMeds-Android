@@ -1,6 +1,9 @@
 package com.petmeds1800.ui.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -30,8 +34,6 @@ public abstract class AbstractFragment extends Fragment {
         trans.addToBackStack(null);
         trans.commit();
     }
-
-
 
     void replaceAccountFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager()
@@ -209,4 +211,44 @@ public abstract class AbstractFragment extends Fragment {
         //void onPermanentlyDenied(List<String> permissionsDenied);
     }
 
+    /**
+     * Register Intent to receive BroadCast in the onReceivedBroadCast Method
+     * @param intentFilter
+     * @param context
+     * @return
+     */
+    protected boolean registerIntent(IntentFilter intentFilter, Context context){
+        LocalBroadcastManager.getInstance(context).registerReceiver(abstractBroadcastReceiver,intentFilter);
+        return true;
+    }
+
+    /**
+     * De Register Intent to stop receiving broadcasts in onBroadCastReceived Method
+     * Should run in onDestroyView atleasr
+     * @param context
+     * @return
+     */
+    protected boolean deregisterIntent(Context context){
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(abstractBroadcastReceiver);
+        return true;
+    }
+
+    /**
+     * OverRide this method in Fragment to receive broadcasts for the intent filtered registered in registerIntent
+     * @param context
+     * @param intent
+     */
+    protected void onReceivedBroadcast(Context context, Intent intent){
+    }
+
+    /**
+     * Implicit Implementation, by default initialized in AbstractFragment
+     * comprehensive method to receive broadcasts without multiple handling of Receiver instances
+     */
+    BroadcastReceiver abstractBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onReceivedBroadcast(context,intent);
+        }
+    };
 }

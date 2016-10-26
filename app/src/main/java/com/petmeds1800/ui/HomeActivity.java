@@ -407,6 +407,11 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
+    /**
+     * For updating BOTH contents of Shopping Cart and Tab Layout Quantity.
+     * Internally calls updateCartMenuItemCount
+     * called when contents are altered in Shopping Cart from Outside {@link CartFragment}
+     */
     public void updateCartTabItemCount(){
         Runnable runnable = new Runnable() {
             @Override
@@ -417,6 +422,10 @@ public class HomeActivity extends AbstractActivity
         new Handler().postDelayed(runnable,1000);
     }
 
+    /**
+     * For updating the TAB LAyout count for Shopping Cart ONLY. Does not call other APIs internally
+     * Only TAB layout count changes. NOT content of ShoppingCart iteslf
+     */
     public void updateCartMenuItemCount(){
         Runnable runnable = new Runnable() {
             @Override

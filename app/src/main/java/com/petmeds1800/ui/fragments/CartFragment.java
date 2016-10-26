@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.CheckOutIntent;
@@ -83,18 +84,23 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mEmptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(CartFragmentReceiver,new IntentFilter(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+        registerIntent(new IntentFilter(Constants.KEY_CART_FRAGMENT_INTENT_FILTER),getActivity());
 
         return view;
     }
-
-
 
     @Override
     public void onResume() {
         super.onResume();
         callmShoppingCartAPI(null);
         ((AbstractActivity)getActivity()).setToolBarTitle(getString(R.string.cart_title));
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        if (intent.getAction() == Constants.KEY_CART_FRAGMENT_INTENT_FILTER){
+            callmShoppingCartAPI(null);
+        }
     }
 
     @Override
@@ -106,7 +112,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(CartFragmentReceiver);
+        deregisterIntent(getActivity());
     }
 
     @Override
@@ -145,11 +151,12 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
+
         return false;
     }
 
     @Override
-    public void setPresenter(ShoppingCartListContract.Presenter presenter) {    }
+    public void setPresenter(ShoppingCartListContract.Presenter presenter) { mPresenter = presenter;  }
 
     private View createFooter(final View footerView,ShoppingCartListResponse shoppingCartListResponse){
         mOfferCodeContainerLayout = (LinearLayout) footerView.findViewById(R.id.cart_each_item_container);
@@ -313,13 +320,4 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             e.printStackTrace();
         }
     }
-
-    public BroadcastReceiver CartFragmentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == Constants.KEY_CART_FRAGMENT_INTENT_FILTER){
-                callmShoppingCartAPI(null);
-            }
-        }
-    };
 }
