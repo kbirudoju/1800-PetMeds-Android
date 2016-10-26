@@ -1,8 +1,23 @@
 package com.petmeds1800.ui.fragments;
 
+
+import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import com.petmeds1800.R;
+import com.petmeds1800.intent.CheckOutIntent;
+import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.ShoppingCartRecyclerViewAdapter;
+import com.petmeds1800.util.Utils;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.CheckOutIntent;
@@ -36,13 +52,8 @@ import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
+
 import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
-import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.ShoppingCartRecyclerViewAdapter;
-import com.petmeds1800.util.Utils;
 
 import java.util.HashMap;
 
@@ -107,7 +118,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     public void onResume() {
         super.onResume();
         callmShoppingCartAPI(null);
-        ((AbstractActivity)getActivity()).setToolBarTitle(getString(R.string.cart_title));
     }
 
     @Override

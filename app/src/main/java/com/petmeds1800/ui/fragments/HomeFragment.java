@@ -63,9 +63,6 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Log.d("HomeFragment", "onCreateView>>>>>");
         ButterKnife.bind(this, view);
-        ((AbstractActivity) getActivity()).getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
-        ((AbstractActivity) getActivity()).setToolBarTitle("");
-        setHasOptionsMenu(true);
         setUpViewPager(homeViewPager);
         homeTabs.setupWithViewPager(homeViewPager);
         return view;

@@ -113,7 +113,6 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
         ((AbstractActivity) getActivity()).disableBackButton();
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
@@ -177,9 +176,7 @@ public class AccountFragment extends AbstractFragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.bind(this, view);
         PetMedsApplication.getAppComponent().inject(this);
-
         mPresenter = new SignOutPresenter(this);
-        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
         ((AbstractActivity) getActivity()).disableBackButton();
         return view;
 

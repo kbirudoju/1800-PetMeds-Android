@@ -172,6 +172,35 @@ public class HomeActivity extends AbstractActivity
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
                         int numTab = tab.getPosition();
+                        if(mViewPager.getCurrentItem()!=numTab){
+                            mViewPager.setCurrentItem(numTab);
+                            invalidateOptionsMenu();
+                        }
+                        switch (numTab) {
+                            case 0:
+                                setToolBarTitle("");
+                                break;
+                            case 1:
+                                setToolBarTitle("Cart");
+                                break;
+                            case 2:
+                                setToolBarTitle("Learn");
+                                break;
+                            case 3:
+                                setToolBarTitle("Account");
+                                break;
+
+                        }
+                       /* if(numTab==0){
+                          *//*  HomeRootFragment fragment = (HomeRootFragment) getSupportFragmentManager().findFragmentByTag(HomeRootFragment.class.getSimpleName());
+                            fragment.addHomeFragment();*//*
+                            FragmentManager fm = getSupportFragmentManager();
+                            Fragment fr = mAdapter.getItem(numTab);
+                            if(fr instanceof HomeRootFragment){
+                                ((HomeRootFragment)fr).addHomeFragment();
+
+                            }
+                        }*/
                         Log.d("ontabselected", numTab + ">>>>");
                     }
 
