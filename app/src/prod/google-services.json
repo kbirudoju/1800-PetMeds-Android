@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "191451529182",
+    "project_id": "petmeds-debug"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191451529182:android:17105fa6b5cb9b33",
+        "android_client_info": {
+          "package_name": "com.petmeds1800"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKFPVTyAcdvtNmwmf-JXA3PjVCOr0XOxY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-37875464-2"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
