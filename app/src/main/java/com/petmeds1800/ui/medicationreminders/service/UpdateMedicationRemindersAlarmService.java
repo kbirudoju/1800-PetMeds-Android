@@ -92,11 +92,12 @@ public class UpdateMedicationRemindersAlarmService extends Service {
                             stopSelf();
                             return null;
                         } else {
+
                             if (medicationReminderListResponse.getStatus().getErrorMessages().get(0)
                                     .contains("logged in")) {
                                 //TODO Input the email and password from shared preference
-                                return mPetMedsApiService.login(new LoginRequest("sdixit@dminc.com",
-                                        "Test1234", mPreferencesHelper.getSessionConfirmationResponse()
+                                return mPetMedsApiService.login(new LoginRequest( mPreferencesHelper.getLoginEmail(),
+                                        mPreferencesHelper.getLoginPassword(), mPreferencesHelper.getSessionConfirmationResponse()
                                         .getSessionConfirmationNumber()))
                                         .subscribeOn(Schedulers.io());
                             } else {

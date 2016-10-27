@@ -102,6 +102,17 @@ public class HomeActivity extends AbstractActivity
 
     private CartRootFragment mCartRootFragment;
 
+    private final String CART = "Cart";
+
+    private final String LEARN = "Learn";
+
+    private final String ACCOUNT = "Account";
+
+    private final String OFFER_ALERT = "offer alert";
+
+    private final String ORDER_ALERT = "order alert";
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         // TODO Auto-generated method stub
@@ -134,26 +145,12 @@ public class HomeActivity extends AbstractActivity
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String screenFromPush = null;
         ButterKnife.bind(this);
         mAnalyticsUtil = new AnalyticsUtil();
         PetMedsApplication.getAppComponent().inject(this);
-
-        if (getIntent().getBooleanExtra(IS_FROM_HOME_ACTIVITY, false) && mPreferencesHelper.getIsUserLoggedIn()) {
-            showPushPermissionDailog();
-            if (!RxFingerprint.isHardwareDetected(this)) {
-                mPreferencesHelper.setIsFingerPrintEnabled(false);
-            } else if (!RxFingerprint.hasEnrolledFingerprints(this)) {
-                mPreferencesHelper.setIsFingerPrintEnabled(false);
-            } else {
-                mPreferencesHelper.setIsFingerPrintEnabled(true);
-            }
-            startService(new AddUpdateMedicationRemindersIntent(this, false));
-
-        }
-
-        if(getIntent().getStringExtra("screenFromPush").equals("order details")){
-
-        }
+        //Perform operation on the first time loading of home screen
+        performOperationOnFirstLoad();
         //initialize fragment list
         List<Fragment> fragmentList = new ArrayList<>();
         HomeRootFragment mHomeRootFragment = new HomeRootFragment();
@@ -165,13 +162,14 @@ public class HomeActivity extends AbstractActivity
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(mAdapter);
         mHomeTab.setupWithViewPager(mViewPager);
-
         for (int i = 0; i < mHomeTab.getTabCount(); i++) {
             View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_tab_image_overlay, null, false);
             mTabLayoutArray.add(i, v);
             mHomeTab.getTabAt(i).setCustomView(mTabLayoutArray.get(i));
         }
-
+        if (getIntent() != null) {
+            screenFromPush = getIntent().getStringExtra("screenFromPush");
+        }
         mHomeTab.setOnTabSelectedListener(
                 new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
                     @Override
@@ -187,13 +185,13 @@ public class HomeActivity extends AbstractActivity
                                 setToolBarTitle("");
                                 break;
                             case 1:
-                                setToolBarTitle("Cart");
+                                setToolBarTitle(CART);
                                 break;
                             case 2:
-                                setToolBarTitle("Learn");
+                                setToolBarTitle(LEARN);
                                 break;
                             case 3:
-                                setToolBarTitle("Account");
+                                setToolBarTitle(ACCOUNT);
                                 break;
 
                         }
@@ -260,7 +258,6 @@ public class HomeActivity extends AbstractActivity
         };
 
         //code to set default first tab selected
-        mViewPager.addOnPageChangeListener(pageChangeListener);
 
       /*  if (commitOrderResponse != null) {
             mViewPager.setCurrentItem(1);
@@ -271,6 +268,46 @@ public class HomeActivity extends AbstractActivity
         // Instead of initializing it in onResume for many times we initialize it in onCreate
         mProgressDialog = new ProgressDialog();
         mAuthenticationDialog = new FingerprintAuthenticationDialog();
+        mViewPager.addOnPageChangeListener(pageChangeListener);
+        navigateOnReceivedNotification(screenFromPush);
+    }
+
+    private void navigateOnReceivedNotification(final String screenFromPush) {
+
+        if (screenFromPush != null) {
+            //Delay applied in order to get rid of Illegal argument exception as fingerprintauth dailog
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    switch (screenFromPush) {
+                        case ORDER_ALERT:
+                            mViewPager.setCurrentItem(3);
+                            break;
+                        case OFFER_ALERT:
+                            mViewPager.setCurrentItem(1);
+                            break;
+                    }
+                }
+            }, 200);
+
+        }
+    }
+
+
+
+    private void performOperationOnFirstLoad() {
+        if (getIntent().getBooleanExtra(IS_FROM_HOME_ACTIVITY, false) && mPreferencesHelper.getIsUserLoggedIn()) {
+            showPushPermissionDailog();
+            if (!RxFingerprint.isHardwareDetected(this)) {
+                mPreferencesHelper.setIsFingerPrintEnabled(false);
+            } else if (!RxFingerprint.hasEnrolledFingerprints(this)) {
+                mPreferencesHelper.setIsFingerPrintEnabled(false);
+            } else {
+                mPreferencesHelper.setIsFingerPrintEnabled(true);
+            }
+            startService(new AddUpdateMedicationRemindersIntent(this, false));
+
+        }
     }
 
     @Override
@@ -319,8 +356,10 @@ public class HomeActivity extends AbstractActivity
     }
 
     private void showFingerprintDialog() {
-        mAuthenticationDialog.setCancelable(false);
-        mAuthenticationDialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+        if (!mAuthenticationDialog.isAdded()) {
+            mAuthenticationDialog.setCancelable(false);
+            mAuthenticationDialog.show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+        }
     }
 
     public void removeAllFragment() {

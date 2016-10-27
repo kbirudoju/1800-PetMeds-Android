@@ -63,10 +63,10 @@ public class PetMedsAirShipReceiver extends AirshipReceiver {
         Log.i(TAG, "Notification opened. Alert: " + notificationInfo.getMessage().getAlert() + ". NotificationId: "
                 + notificationInfo.getNotificationId());
         Intent homeIntent = new HomeIntent(context);
-        homeIntent.putExtra("screenFromPush", "order details");
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        homeIntent.putExtra("screenFromPush", notificationInfo.getMessage().getAlert());
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(homeIntent);
-        return false;
+        return true;
     }
 
     @Override

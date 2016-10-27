@@ -111,7 +111,6 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
     private ReminderDialogData mReminderDialogData;
 
 
-
     private ArrayList<String> mDayOfWeeks;
 
     private final String MMM_DD_DATE_FORMAT = "MMM dd";
@@ -219,7 +218,6 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
     }
 
 
-
     private void populateMedicalReminderData(MedicationReminderItem item) {
         mRemovePetButton.setVisibility(View.VISIBLE);
         Date date = new Date();
@@ -301,7 +299,9 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
                 .setReminderType(reminderTypeArray[mReminderDialogData.getRepeatFrequency().ordinal()]);
         addMedicationReminderRequest
                 .setStartDate(startDate);
-        addMedicationReminderRequest.setTimeHourMin(mTimeEdit.getText().toString());
+        addMedicationReminderRequest.setTimeHourMin(
+                mTimeEdit.getText().toString().trim().contains(".") ? mTimeEdit.getText().toString().trim()
+                        .replace(".", "").trim() : mTimeEdit.getText().toString().trim());
         addMedicationReminderRequest.setRepeatInterval(String.valueOf(mReminderDialogData.getmRepeatValue()));
         addMedicationReminderRequest.setShortDescription((mItemDescription != null) ? mItemDescription : "");
         if (isEditable) {
@@ -436,11 +436,12 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
                 weeksList = populateDaysOfWeeks(medicationReminderItem.getDaysOfWeek());
                 ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDataArrayList
                         = new ArrayList<MedicationRemindersAlarmData>();
-                medicationRemindersAlarmDataArrayList.add(new MedicationRemindersAlarmData(medicationReminderItem.getReminderName(),
-                        Integer.valueOf(medicationReminderItem.getRepeatInterval()),
-                        getReminderTypeValue(medicationReminderItem.getReminderType()),
-                        Integer.valueOf(medicationReminderItem.getReminderId()), weeksList,
-                        medicationReminderItem.getTimeHourMin(), medicationReminderItem.getStartDate()));
+                medicationRemindersAlarmDataArrayList
+                        .add(new MedicationRemindersAlarmData(medicationReminderItem.getReminderName(),
+                                Integer.valueOf(medicationReminderItem.getRepeatInterval()),
+                                getReminderTypeValue(medicationReminderItem.getReminderType()),
+                                Integer.valueOf(medicationReminderItem.getReminderId()), weeksList,
+                                medicationReminderItem.getTimeHourMin(), medicationReminderItem.getStartDate()));
                 new MedicationAlarmReceiver().addMultipleAlarms(getContext(), medicationRemindersAlarmDataArrayList);
                 Snackbar.make(mContainerLayout, R.string.medication_reminder_status, Snackbar.LENGTH_LONG).show();
             } else {

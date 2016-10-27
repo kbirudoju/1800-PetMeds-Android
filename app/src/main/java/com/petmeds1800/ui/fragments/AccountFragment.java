@@ -110,10 +110,11 @@ public class AccountFragment extends AbstractFragment
     private MedicationReminderResultReceiver mMedicationReminderResultReceiver;
 
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AbstractActivity) getActivity()).disableBackButton();
+
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
         mManagePaymentLabel.setOnClickListener(this);
@@ -123,8 +124,30 @@ public class AccountFragment extends AbstractFragment
         signOut.setOnClickListener(this);
         mMedicationReminderLabel.setOnClickListener(this);
         mRefillReminderLabel.setOnClickListener(this);
-
         fillWindow();
+       // navigateOnOrderScreen();
+    }
+
+
+    public void navigateOnOrderScreen() {
+        String screenFromPush = null;
+        if (((HomeActivity)getActivity()).getIntent() != null) {
+            screenFromPush = ((HomeActivity)getActivity()).getIntent().getStringExtra("screenFromPush");
+        }
+        if (screenFromPush != null && screenFromPush.equals("order alert")) {
+            screenFromPush = null;
+            ((HomeActivity)getActivity()).getIntent().putExtra("screenFromPush", screenFromPush);
+            replaceAccountAndAddToBackStack(new MyOrderFragment(), MyOrderFragment.class.getName());
+        }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void fillWindow() {
@@ -362,4 +385,6 @@ public class AccountFragment extends AbstractFragment
 
         }
     }
+
+
 }
