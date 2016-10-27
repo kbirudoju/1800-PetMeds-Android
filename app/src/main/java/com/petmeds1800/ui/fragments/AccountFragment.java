@@ -297,6 +297,8 @@ public class AccountFragment extends AbstractFragment
                             .putExtra("medicationResultReceiver", mMedicationReminderResultReceiver);
                     getContext().startService(addUpdateMedicationRemindersIntent);
 
+//                    Update the count on Shpooing Cart TAB since user has logged out
+                    ((HomeActivity) getActivity()).updateCartTabItemCount();
                 }
                 break;
         }

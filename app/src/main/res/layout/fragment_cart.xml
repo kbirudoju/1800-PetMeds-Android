@@ -179,6 +179,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/total_checkout_container"
+        android:layout_alignParentTop="true"
         android:background="@drawable/rectangular_background"
         android:orientation="vertical"
         android:visibility="gone">

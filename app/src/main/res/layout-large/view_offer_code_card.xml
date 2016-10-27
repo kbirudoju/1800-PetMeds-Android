@@ -60,8 +60,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/coupon_code_input_layout_container"
-                android:layout_marginBottom="13dp">
+                android:layout_marginBottom="13dp"
+                android:layout_below="@+id/coupon_code_input_layout_container">
 
                 <Button
                     android:id="@+id/order_status_label"
@@ -73,7 +73,6 @@
                     android:background="@drawable/green_rounded_button"
                     android:drawableLeft="@drawable/i_c_n_status_ic_status_completed"
                     android:drawablePadding="4dp"
-                    android:minHeight="@dimen/dp_23"
                     android:text="@string/offer_code_applied" />
             </RelativeLayout>
         </RelativeLayout>
