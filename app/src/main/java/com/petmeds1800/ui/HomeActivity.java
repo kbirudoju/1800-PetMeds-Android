@@ -1,5 +1,33 @@
 package com.petmeds1800.ui;
 
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.entities.CommitOrderResponse;
+import com.petmeds1800.model.entities.MedicationReminderItem;
+import com.petmeds1800.model.entities.SecurityStatusResponse;
+import com.petmeds1800.ui.fragments.AccountRootFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CartRootFragment;
+import com.petmeds1800.ui.fragments.HomeRootFragment;
+import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract;
+import com.petmeds1800.ui.payment.AddACardContract;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.ui.support.TabPagerAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.AsyncUpdateShoppingCartIconCountThread;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,33 +50,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.entities.CommitOrderResponse;
-import com.petmeds1800.model.entities.SecurityStatusResponse;
-import com.petmeds1800.ui.fragments.AccountRootFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.fragments.CartRootFragment;
-import com.petmeds1800.ui.fragments.HomeRootFragment;
-import com.petmeds1800.ui.fragments.LearnRootFragment;
-import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
-import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
-import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract;
-import com.petmeds1800.ui.payment.AddACardContract;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
-import com.petmeds1800.ui.support.TabPagerAdapter;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.AsyncUpdateShoppingCartIconCountThread;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +113,10 @@ public class HomeActivity extends AbstractActivity
 
     private final String ORDER_ALERT = "order alert";
 
+    //TODO chnage when push payload is appropriate
+    private final String MEDICATION_REMINDER__ALERT = "52015";
+
+    private String screenFromPush = null;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -145,7 +150,7 @@ public class HomeActivity extends AbstractActivity
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String screenFromPush = null;
+
         ButterKnife.bind(this);
         mAnalyticsUtil = new AnalyticsUtil();
         PetMedsApplication.getAppComponent().inject(this);
@@ -163,7 +168,8 @@ public class HomeActivity extends AbstractActivity
         mViewPager.setAdapter(mAdapter);
         mHomeTab.setupWithViewPager(mViewPager);
         for (int i = 0; i < mHomeTab.getTabCount(); i++) {
-            View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_tab_image_overlay, null, false);
+            View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                    .inflate(R.layout.custom_tab_image_overlay, null, false);
             mTabLayoutArray.add(i, v);
             mHomeTab.getTabAt(i).setCustomView(mTabLayoutArray.get(i));
         }
@@ -195,16 +201,6 @@ public class HomeActivity extends AbstractActivity
                                 break;
 
                         }
-                       /* if(numTab==0){
-                          *//*  HomeRootFragment fragment = (HomeRootFragment) getSupportFragmentManager().findFragmentByTag(HomeRootFragment.class.getSimpleName());
-                            fragment.addHomeFragment();*//*
-                            FragmentManager fm = getSupportFragmentManager();
-                            Fragment fr = mAdapter.getItem(numTab);
-                            if(fr instanceof HomeRootFragment){
-                                ((HomeRootFragment)fr).addHomeFragment();
-
-                            }
-                        }*/
                         Log.d("ontabselected", numTab + ">>>>");
                     }
 
@@ -237,7 +233,9 @@ public class HomeActivity extends AbstractActivity
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
                     Log.v("test", "from scroll tab>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                    checkLoginStatus();
+                    if (screenFromPush == null) {
+                        checkLoginStatus();
+                    }
                 }
 
                 if (position == 0) {
@@ -280,19 +278,22 @@ public class HomeActivity extends AbstractActivity
                 @Override
                 public void run() {
                     switch (screenFromPush) {
+                        case MEDICATION_REMINDER__ALERT:
+
                         case ORDER_ALERT:
                             mViewPager.setCurrentItem(3);
                             break;
                         case OFFER_ALERT:
                             mViewPager.setCurrentItem(1);
                             break;
+
+
                     }
                 }
             }, 200);
 
         }
     }
-
 
 
     private void performOperationOnFirstLoad() {
@@ -319,7 +320,10 @@ public class HomeActivity extends AbstractActivity
     protected void onResume() {
         super.onResume();
         if (mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
-            checkLoginStatus();
+            if (screenFromPush == null) {
+                checkLoginStatus();
+            }
+            // checkLoginStatus();
         }
         invalidateOptionsMenu();
     }
@@ -475,52 +479,56 @@ public class HomeActivity extends AbstractActivity
         if (addEditMedicationRemindersFragment != null) {
             addEditMedicationRemindersFragment.displayItemText(productName, description);
         } else {
-            replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+            replaceAccountAndAddToBackStack(
+                    AddEditMedicationRemindersFragment.newInstance(false, (MedicationReminderItem) null),
                     AddEditMedicationRemindersFragment.class.getName());
         }
     }
 
     /**
-     * For updating BOTH contents of Shopping Cart and Tab Layout Quantity.
-     * Internally calls updateCartMenuItemCount
+     * For updating BOTH contents of Shopping Cart and Tab Layout Quantity. Internally calls updateCartMenuItemCount
      * called when contents are altered in Shopping Cart from Outside {@link CartFragment}
      */
-    public void updateCartTabItemCount(){
+    public void updateCartTabItemCount() {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                new AsyncUpdateShoppingCartIconCountThread(mApiService,mPreferencesHelper,HomeActivityMessageHandler).startAsyncUpdateShoppingCartIconCountThread();
+                new AsyncUpdateShoppingCartIconCountThread(mApiService, mPreferencesHelper, HomeActivityMessageHandler)
+                        .startAsyncUpdateShoppingCartIconCountThread();
             }
         };
-        new Handler().postDelayed(runnable,1000);
+        new Handler().postDelayed(runnable, 1000);
     }
 
     /**
-     * For updating the TAB LAyout count for Shopping Cart ONLY. Does not call other APIs internally
-     * Only TAB layout count changes. NOT content of ShoppingCart iteslf
+     * For updating the TAB LAyout count for Shopping Cart ONLY. Does not call other APIs internally Only TAB layout
+     * count changes. NOT content of ShoppingCart iteslf
      */
-    public void updateCartMenuItemCount(){
+    public void updateCartMenuItemCount() {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+                LocalBroadcastManager.getInstance(getApplicationContext())
+                        .sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
             }
         };
-        new Handler().postDelayed(runnable,1000);
+        new Handler().postDelayed(runnable, 1000);
     }
 
-    public final Handler HomeActivityMessageHandler = new Handler(){
+    public final Handler HomeActivityMessageHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
             if (msg.what == Constants.KEY_COMPLETED_ASYN_COUNT_FETCH) {
-                if (msg.getData().getBoolean(Constants.KEY_SHOPPING_CART_ASYNC_SUCCESS)){
+                if (msg.getData().getBoolean(Constants.KEY_SHOPPING_CART_ASYNC_SUCCESS)) {
                     mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image_container).setVisibility(View.VISIBLE);
-                    ((TextView)mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setText(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE));
+                    ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image))
+                            .setText(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE));
                 } else {
-                    Snackbar.make(mContainerLayout,msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(mContainerLayout, msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE),
+                            Snackbar.LENGTH_LONG).show();
                 }
             }
         }
@@ -528,9 +536,12 @@ public class HomeActivity extends AbstractActivity
 
     /**
      * Move View Pager Externaly via programtically assigning selection number
-     * @param pageNo
      */
-    public void scrollViewPager(int pageNo){
+    public void scrollViewPager(int pageNo) {
         mViewPager.setCurrentItem(pageNo);
     }
+
 }
+
+
+

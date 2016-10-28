@@ -50,10 +50,9 @@ public class Constants {
     public static final int ADD_NEW_VET_REQUEST = 4;
 
 
+    public static final int SHOW_VET_ON_MAP = 5;
 
-
-    public static final int SHOW_VET_ON_MAP=5;
-    public static final int REFRESH_VET_DATA=6;
+    public static final int REFRESH_VET_DATA = 6;
 
 
     public static final int STORAGE_ACCESS_REQUEST_CODE = 111;
@@ -66,13 +65,19 @@ public class Constants {
 
     public static final String IS_EDITABLE = "isEditable";
 
-    public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
-    public static final String PET_NAME = "petName";
-    public static final String IS_CANCEL_ALARM = "isCancelAlarm";
-    public static final String MEDICATION_RESULT_RECEIVER = "medicationResultReceiver";
-    public static final String RESULT_VALUE = "resultValue";
-    public static final String SUCCESS = "success";
+    public static final String FROM_PUSH = "fromPush";
 
+    public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
+
+    public static final String PET_NAME = "petName";
+
+    public static final String IS_CANCEL_ALARM = "isCancelAlarm";
+
+    public static final String MEDICATION_RESULT_RECEIVER = "medicationResultReceiver";
+
+    public static final String RESULT_VALUE = "resultValue";
+
+    public static final String SUCCESS = "success";
 
 //    Refill Reminder Constants
 
@@ -98,13 +103,11 @@ public class Constants {
 
     public static final String REFILL_LIST_PER_PET_ = "refill_list_per_pet_";
 
-
 //	General Keys for Animation or Progress Dialog Visibility Control
 
     public static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
 
     public static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
-
 
 //  Keys for Async Update of Shopping Cart Icon Count
 
@@ -116,6 +119,10 @@ public class Constants {
 
     public static final String KEY_CART_FRAGMENT_INTENT_FILTER = "cart_fragment_intent_filter";
 
+
     public static final String KEY_PAYMENT_INTENT_FILTER = "payment_intent_filter";
+
+    public static final String KEY_AUTHENTICATION_SUCCESS = "authentication_success_event";
+
 
 }

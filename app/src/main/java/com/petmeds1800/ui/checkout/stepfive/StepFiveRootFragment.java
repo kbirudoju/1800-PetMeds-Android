@@ -400,11 +400,7 @@ public class StepFiveRootFragment extends AbstractFragment
                 .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         commitOrderRequest.setCommerceItemIds(mReviewSubmitAdapter.getCommerceItemsIdList());
         commitOrderRequest.setReminderMonths(mReviewSubmitAdapter.getReorderMonthsIdList());
-
         mPresenter.submitComittedOrderDetails(commitOrderRequest);
-
-        mPresenter.submitComittedOrderDetails(commitOrderRequest);
-
     }
 
     @Override

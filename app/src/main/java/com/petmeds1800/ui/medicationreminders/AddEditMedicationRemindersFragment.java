@@ -5,11 +5,13 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.ReminderDialogData;
 import com.petmeds1800.model.entities.AddMedicationReminderRequest;
 import com.petmeds1800.model.entities.AddMedicationReminderResponse;
+import com.petmeds1800.model.entities.MedicationReminderDetailsRequest;
 import com.petmeds1800.model.entities.MedicationReminderItem;
 import com.petmeds1800.model.entities.MedicationRemindersAlarmData;
 import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.fragments.dialog.PetNameDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.ReminderDialogFragment;
 import com.petmeds1800.ui.pets.AddPetFragment;
@@ -20,8 +22,10 @@ import com.petmeds1800.util.alarm.MedicationAlarmReceiver;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -67,6 +71,16 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, AddEditMedicationRemindersContract.View,
         AddPetNameListener, DialogInterface.OnClickListener {
 
+    public static final String FROM_PUSH = "fromPush";
+
+    private static final String IS_EDITABLE = "isEditable";
+
+    private static final String REMINDER_ID = "reminderId";
+
+    private static final String FINGERPRINT_AUTHENTICATION_DIALOG = "FingerprintAuthenticationDialog";
+
+    private static final String LOGGED_IN = "logged in";
+
     @BindView(R.id.item_edit)
     EditText mItemEdit;
 
@@ -110,6 +124,7 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
 
     private ReminderDialogData mReminderDialogData;
 
+    private FingerprintAuthenticationDialog mAuthenticationDialog;
 
     private ArrayList<String> mDayOfWeeks;
 
@@ -125,6 +140,7 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
 
     private final int INCREMENT_FACTOR = 10;
 
+
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
@@ -138,16 +154,27 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         return addEditMedicationRemindersFragment;
     }
 
+    public static AddEditMedicationRemindersFragment newInstance(boolean isEditable, String reminderId) {
+        AddEditMedicationRemindersFragment addEditMedicationRemindersFragment
+                = new AddEditMedicationRemindersFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Constants.IS_EDITABLE, isEditable);
+        args.putString(REMINDER_ID, reminderId);
+        addEditMedicationRemindersFragment.setArguments(args);
+        return addEditMedicationRemindersFragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Date date = new Date();
+        registerIntent(new IntentFilter(Constants.KEY_AUTHENTICATION_SUCCESS), getActivity());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
+        String reminderIdFromPush = null;
         View view = inflater.inflate(R.layout.fragment_add_edit_medication_reminders, container, false);
         mDayOfWeeks = new ArrayList<String>();
         PetMedsApplication.getAppComponent().inject(this);
@@ -155,12 +182,27 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         ButterKnife.bind(this, view);
         Bundle bundle = getArguments();
         isEditable = bundle.getBoolean(Constants.IS_EDITABLE);
+        reminderIdFromPush = bundle.getString(REMINDER_ID);
         if (isEditable) {
-            populateMedicalReminderData(
-                    (MedicationReminderItem) bundle.getSerializable(Constants.MEDICATION_REMINDER_INFO));
+            if (reminderIdFromPush != null) {
+                updateMedicationReminderDetails(reminderIdFromPush);
+            } else {
+                populateMedicalReminderData(
+                        (MedicationReminderItem) bundle.getSerializable(Constants.MEDICATION_REMINDER_INFO));
+            }
+
         }
 
         return view;
+    }
+
+    private void updateMedicationReminderDetails(String reminderFromPush) {
+        MedicationReminderDetailsRequest medicationReminderDetailsRequest
+                = new MedicationReminderDetailsRequest();
+        medicationReminderDetailsRequest.setReminderId(Integer.valueOf(reminderFromPush));
+        medicationReminderDetailsRequest.setSessionConfNumber(
+                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        mPresenter.getMedicationReminderDetails(medicationReminderDetailsRequest);
     }
 
     @Override
@@ -195,6 +237,13 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         }
     }
 
+    private void showFingerprintDialog() {
+        mAuthenticationDialog = new FingerprintAuthenticationDialog();
+        if (!mAuthenticationDialog.isAdded()) {
+            mAuthenticationDialog.setCancelable(false);
+            mAuthenticationDialog.show(getActivity().getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+        }
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -457,6 +506,11 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
     }
 
     @Override
+    public void updateMedicationDetails(AddMedicationReminderResponse response) {
+        populateMedicalReminderData((MedicationReminderItem) response.getMedicationReminder().get(ZERO_INDEX));
+    }
+
+    @Override
     public void onRemoveSuccess() {
         Snackbar.make(mContainerLayout, R.string.medication_reminder_removed_message, Snackbar.LENGTH_LONG).show();
         if (weeksList != null && weeksList.size() > 0) {
@@ -484,6 +538,23 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+
+    }
+
+    @Override
+    public void showErrorOnUpdateMedicationDetails(CharSequence message, boolean span) {
+        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+        if (message.toString().contains(LOGGED_IN)) {
+            FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FROM_PUSH, true);
+            mAuthenticationDialog.setArguments(bundle);
+            if (!mAuthenticationDialog.isAdded()) {
+                mAuthenticationDialog.setCancelable(false);
+                mAuthenticationDialog
+                        .show(getActivity().getSupportFragmentManager(), FINGERPRINT_AUTHENTICATION_DIALOG);
+            }
+        }
     }
 
     @Override
@@ -494,7 +565,7 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
     @Override
     public void openAddPetScreen() {
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isEditable", false);
+        bundle.putBoolean(IS_EDITABLE, false);
         AddPetFragment addPetFragment = new AddPetFragment();
         addPetFragment.setAddPetNameListener(this);
         replaceAccountFragmentWithBundle(addPetFragment, bundle);
@@ -533,4 +604,15 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         }
     }
 
+    @Override
+    public void onDestroy() {
+        deregisterIntent(getActivity());
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        updateMedicationReminderDetails(getArguments().getString(REMINDER_ID));
+        super.onReceivedBroadcast(context, intent);
+    }
 }

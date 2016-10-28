@@ -116,7 +116,7 @@ public class MedicationReminderListFragment extends AbstractFragment
 
         switch (item.getItemId()) {
             case R.id.action_add:
-                replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+                replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, (MedicationReminderItem)null),
                         AddEditMedicationRemindersFragment.class.getName());
                 break;
         }
@@ -164,7 +164,7 @@ public class MedicationReminderListFragment extends AbstractFragment
 
     @OnClick(R.id.addReminder_button)
     public void onClick() {
-        replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, null),
+        replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, (MedicationReminderItem) null),
                 AddEditMedicationRemindersFragment.class.getName());
     }
 }

@@ -10,6 +10,7 @@ import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.account.SignOutContract;
 import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
 import com.petmeds1800.ui.medicationreminders.service.MedicationReminderResultReceiver;
 import com.petmeds1800.ui.orders.MyOrderFragment;
@@ -110,7 +111,6 @@ public class AccountFragment extends AbstractFragment
     private MedicationReminderResultReceiver mMedicationReminderResultReceiver;
 
 
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -125,21 +125,25 @@ public class AccountFragment extends AbstractFragment
         mMedicationReminderLabel.setOnClickListener(this);
         mRefillReminderLabel.setOnClickListener(this);
         fillWindow();
-       // navigateOnOrderScreen();
+        navigateOnOrderScreen();
     }
 
 
     public void navigateOnOrderScreen() {
         String screenFromPush = null;
-        if (((HomeActivity)getActivity()).getIntent() != null) {
-            screenFromPush = ((HomeActivity)getActivity()).getIntent().getStringExtra("screenFromPush");
+        //TODO Reminder Id is hardcoded which is done when push payload inplemented
+        String reminderId = "52015";
+        if (((HomeActivity) getActivity()).getIntent() != null) {
+            screenFromPush = ((HomeActivity) getActivity()).getIntent().getStringExtra("screenFromPush");
         }
-        if (screenFromPush != null && screenFromPush.equals("order alert")) {
+        if (screenFromPush != null && screenFromPush.equals("52015")) {
             screenFromPush = null;
-            ((HomeActivity)getActivity()).getIntent().putExtra("screenFromPush", screenFromPush);
-            replaceAccountAndAddToBackStack(new MyOrderFragment(), MyOrderFragment.class.getName());
+            ((HomeActivity) getActivity()).getIntent().putExtra("screenFromPush", screenFromPush);
+            replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(true, reminderId),
+                    AddEditMedicationRemindersFragment.class.getName());
         }
     }
+
     @Override
     public void onPause() {
         super.onPause();

@@ -382,4 +382,9 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/reminder/ReminderActor/removeRefillReminder")
     Observable<Status> getRemoveRefillReminder(@Body RemoveRefillReminderRequest removeRefillReminderRequest);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/reminder/ReminderActor/medReminderDetails")
+    Observable<AddMedicationReminderResponse> getMedicationReminderDetails(
+            @Query("_dynSessConf") String sessionConfirmation, @Query("reminderId") int reminderId);
+
 }

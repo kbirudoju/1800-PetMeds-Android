@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.AddMedicationReminderRequest;
 import com.petmeds1800.model.entities.AddMedicationReminderResponse;
+import com.petmeds1800.model.entities.MedicationReminderDetailsRequest;
 import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
 import com.petmeds1800.model.entities.RemoveMedicationReminderResponse;
 
@@ -17,16 +18,18 @@ import rx.schedulers.Schedulers;
  * Created by Sdixit on 14-10-2016.
  */
 
-public class AddEditMedicationRemindersPresentor implements AddEditMedicationRemindersContract.Presenter{
+public class AddEditMedicationRemindersPresentor implements AddEditMedicationRemindersContract.Presenter {
+
     @Inject
     PetMedsApiService mPetMedsApiService;
+
     private final AddEditMedicationRemindersContract.View mView;
-    public AddEditMedicationRemindersPresentor(AddEditMedicationRemindersContract.View view){
+
+    public AddEditMedicationRemindersPresentor(AddEditMedicationRemindersContract.View view) {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
     }
-
 
 
     @Override
@@ -53,14 +56,15 @@ public class AddEditMedicationRemindersPresentor implements AddEditMedicationRem
                     }
 
                     @Override
-                    public void onNext(AddMedicationReminderResponse addMedicationReminderResponse ) {
+                    public void onNext(AddMedicationReminderResponse addMedicationReminderResponse) {
                         if (addMedicationReminderResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.onAddEditSuccess(addMedicationReminderResponse);
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.showErrorCrouton(addMedicationReminderResponse.getStatus().getErrorMessages().get(0),false);
+                                mView.showErrorCrouton(
+                                        addMedicationReminderResponse.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 
@@ -85,21 +89,60 @@ public class AddEditMedicationRemindersPresentor implements AddEditMedicationRem
                         mView.onError(e.getLocalizedMessage());
 
                     }
+
                     @Override
-                    public void onNext(AddMedicationReminderResponse addMedicationReminderResponse ) {
+                    public void onNext(AddMedicationReminderResponse addMedicationReminderResponse) {
                         if (addMedicationReminderResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.onAddEditSuccess(addMedicationReminderResponse);
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.showErrorCrouton(addMedicationReminderResponse.getStatus().getErrorMessages().get(0),false);
+                                mView.showErrorCrouton(
+                                        addMedicationReminderResponse.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 
                     }
                 });
     }
+
+    @Override
+    public void getMedicationReminderDetails(MedicationReminderDetailsRequest medicationReminderDetailsRequest) {
+        mPetMedsApiService.getMedicationReminderDetails(medicationReminderDetailsRequest.getSessionConfNumber(),medicationReminderDetailsRequest.getReminderId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddMedicationReminderResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(AddMedicationReminderResponse addMedicationReminderResponse) {
+                        if (addMedicationReminderResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.updateMedicationDetails(addMedicationReminderResponse);
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.showErrorOnUpdateMedicationDetails(
+                                        addMedicationReminderResponse.getStatus().getErrorMessages().get(0), false);
+                            }
+                        }
+
+                    }
+                });
+
+    }
+
 
     @Override
     public void removeMedicationReminders(RemoveMedicationReminderRequest removeMedicationReminderRequest) {
@@ -120,14 +163,15 @@ public class AddEditMedicationRemindersPresentor implements AddEditMedicationRem
                     }
 
                     @Override
-                    public void onNext(RemoveMedicationReminderResponse RemoveMedicationReminderResponse ) {
+                    public void onNext(RemoveMedicationReminderResponse RemoveMedicationReminderResponse) {
                         if (RemoveMedicationReminderResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.onRemoveSuccess();
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.showErrorCrouton(RemoveMedicationReminderResponse.getStatus().getErrorMessages().get(0),false);
+                                mView.showErrorCrouton(
+                                        RemoveMedicationReminderResponse.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 

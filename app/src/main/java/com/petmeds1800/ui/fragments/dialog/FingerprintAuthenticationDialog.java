@@ -1,11 +1,29 @@
 package com.petmeds1800.ui.fragments.dialog;
 
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ForgotPasswordRequest;
+import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -20,21 +38,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ForgotPasswordRequest;
-import com.petmeds1800.model.entities.ForgotPasswordResponse;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -53,6 +56,8 @@ import rx.schedulers.Schedulers;
  * Created by Digvijay on 8/24/2016.
  */
 public class FingerprintAuthenticationDialog extends DialogFragment implements EditText.OnEditorActionListener {
+
+    private static final String FROM_PUSH = "fromPush";
 
     @BindView(R.id.txv_fingerprint_status)
     TextView mFingerprintStatus;
@@ -129,7 +134,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fingerprint_container, container, false);
         ButterKnife.bind(this, view);
         mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -485,6 +490,9 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                                     mPreferencesHelper.setIsUserLoggedIn(true);
                                     mPreferencesHelper.setLoginEmail(loginResponse.getProfile().getEmail());
                                     mPreferencesHelper.setLoginPassword(passwordText);
+                                    if (getArguments() != null&& getArguments().getBoolean(FROM_PUSH)) {
+                                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_AUTHENTICATION_SUCCESS));
+                                    }
                                     dismiss();
                                 } else {
                                     showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),
