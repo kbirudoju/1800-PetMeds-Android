@@ -1,9 +1,9 @@
 package com.petmeds1800.util;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.NameValueData;
-
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -11,7 +11,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.NameValueData;
 import com.petmeds1800.ui.AbstractActivity;
+
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +36,7 @@ public class Utils {
     private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
             "Jul", "Aug", "Sep", "Oct",
             "Nov", "Dec"};
+
     private static final int CREDIT_CARD_DIGITS_RULE_1 = 16;
 
     private static final int CREDIT_CARD_DIGITS_RULE_2 = 15;
@@ -38,8 +45,9 @@ public class Utils {
 
     private static final int CVV_DIGITS_RULE_2 = 4;
 
-    public  static final String [] WEEKDAYS_NAMES = new String[]{"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
-    public  static final String reminderTypeArray[] = new String[]{"daily", "weekly", "monthly"};
+    public static final String[] WEEKDAYS_NAMES = new String[]{"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+    public static final String reminderTypeArray[] = new String[]{"daily", "weekly", "monthly"};
+
     public static String changeDateFormat(long millisecond, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         String dateString = formatter.format(new Date(millisecond));
@@ -56,15 +64,17 @@ public class Utils {
     }
 
     public static AlertDialog.Builder showAlertDailogListView(Activity activity, View view,
-            int theme) {
+                                                              int theme) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, theme);
         builder.setView(view);
         return builder;
 
     }
-    public static boolean checkConfirmFields(EditText enteredText,EditText confirmedText){
-        return TextUtils.equals(enteredText.getText().toString(),confirmedText.getText().toString());
+
+    public static boolean checkConfirmFields(EditText enteredText, EditText confirmedText) {
+        return TextUtils.equals(enteredText.getText().toString(), confirmedText.getText().toString());
     }
+
     public static void displayCrouton(Activity activity, Spanned messageString, ViewGroup attachToView) {
         Crouton.makeText(activity,
                 messageString,
@@ -130,15 +140,17 @@ public class Utils {
         DateFormat formatter = new SimpleDateFormat("h:mm a");
         return formatter.parse(dateStr);
     }
+
     public static Date getReminderDate(String dateStr) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("MMM dd h:mm a");
         return formatter.parse(dateStr);
     }
 
-    public static String getDateInMM_DD_YYYY_Format(Date date){
+    public static String getDateInMM_DD_YYYY_Format(Date date) {
         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         return formatter.format(date);
     }
+
     public static Constants.RepeatFrequency getReminderTypeValue(String value) {
         for (int i = 0; i < reminderTypeArray.length; i++) {
             if (reminderTypeArray[i].equalsIgnoreCase(value)) {
@@ -166,8 +178,8 @@ public class Utils {
         return weeksList;
 
     }
-	
-	
+
+
     public static void toggleGIFAnimantionVisibility(boolean showVisible, Activity activity) {
         if (showVisible) {
             try {
@@ -192,15 +204,40 @@ public class Utils {
         }
     }
 
-    public static void toggleProgressDialogVisibility(boolean showVisisble, View mProgressBar){
-        if (showVisisble){
-            if (mProgressBar != null && mProgressBar.getVisibility()==View.GONE){
+    public static void toggleProgressDialogVisibility(boolean showVisisble, View mProgressBar) {
+        if (showVisisble) {
+            if (mProgressBar != null && mProgressBar.getVisibility() == View.GONE) {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
         } else {
-            if (mProgressBar != null && mProgressBar.getVisibility()==View.VISIBLE){
+            if (mProgressBar != null && mProgressBar.getVisibility() == View.VISIBLE) {
                 mProgressBar.setVisibility(View.GONE);
             }
+        }
+    }
+
+    public static void sendEmail(Context context, String emailAddress, String emailSubject, String emailBody, File attachmentFile, String attachmentName) {
+        Intent email = new Intent(Intent.ACTION_SEND);
+        email.setType("text/plain");
+        if (emailAddress != null && !emailAddress.isEmpty()) {
+            email.putExtra(Intent.EXTRA_EMAIL, emailAddress);
+        }
+        if (emailSubject != null && !emailSubject.isEmpty()) {
+            email.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
+        }
+        if (emailBody != null && !emailBody.isEmpty()) {
+            email.putExtra(Intent.EXTRA_TEXT, emailBody);
+        }
+        if (attachmentFile != null) {
+            Uri uri = Uri.fromFile(new File(attachmentFile, attachmentName + ".pdf"));
+            email.putExtra(Intent.EXTRA_STREAM, uri);
+            email.setType("application/pdf");
+        }
+        email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(email);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(context, "There are no email applications installed.", Toast.LENGTH_SHORT).show();
         }
     }
 }

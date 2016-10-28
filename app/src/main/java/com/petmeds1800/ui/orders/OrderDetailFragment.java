@@ -2,14 +2,11 @@ package com.petmeds1800.ui.orders;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -53,11 +50,12 @@ import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
 import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
 import com.petmeds1800.ui.orders.support.CustomOrderDetailRecyclerAdapter;
 import com.petmeds1800.ui.orders.support.OrderDetailAdapter;
-import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.LayoutPrintingUtils;
+import com.petmeds1800.util.Utils;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -141,7 +139,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                     case CustomOrderDetailRecyclerAdapter.CANCEL_ORDER_ROW_ID:
                         if (orderList.getIsCancellable().equals("true")) {
 
-                            final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment().newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(), getString(R.string.cancel_order_title),getString(R.string.dialog_ok_button),getString(R.string.dialog_cancel_button));
+                            final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment().newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(), getString(R.string.cancel_order_title), getString(R.string.dialog_ok_button), getString(R.string.dialog_cancel_button));
                             okCancelDialogFragment.show(((AbstractActivity) getActivity()).getSupportFragmentManager());
                             okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
                                 @Override
@@ -292,28 +290,20 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         int hasStorageAccessPermission = ContextCompat
                 .checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (hasStorageAccessPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat
-                    .requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            Constants.STORAGE_ACCESS_REQUEST_CODE);
-            return;
-        }
-        showShareOptions();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case Constants.STORAGE_ACCESS_REQUEST_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
+            checkRequiredPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionRequested() {
+                @Override
+                public void onPermissionGranted() {
                     showShareOptions();
-                } else {
+                }
+
+                @Override
+                public void onPermissionDenied(HashMap<String, Boolean> deniedPermissions) {
                     // Permission Denied
                     Toast.makeText(getActivity(), "Storage access denied", Toast.LENGTH_SHORT).show();
                 }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            });
+        } else {
+            showShareOptions();
         }
     }
 
@@ -337,15 +327,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     }
 
     public void shareFile(File pdfFile, String pdfName) {
-        Intent email = new Intent(Intent.ACTION_SEND);
-        email.putExtra(Intent.EXTRA_EMAIL, "receiver_email_address");
-        email.putExtra(Intent.EXTRA_SUBJECT, "subject");
-        email.putExtra(Intent.EXTRA_TEXT, "email body");
-        Uri uri = Uri.fromFile(new File(pdfFile, pdfName + ".pdf"));
-        email.putExtra(Intent.EXTRA_STREAM, uri);
-        email.setType("application/pdf");
-        email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getActivity().startActivity(email);
+        Utils.sendEmail(getActivity(), null, null, null, pdfFile, pdfName);
     }
 
     private LinearLayout prepareListViewContentForPrinting(List<Object> data) {

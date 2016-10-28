@@ -1,22 +1,5 @@
 package com.petmeds1800.ui.address;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.RemoveAddressRequest;
-import com.petmeds1800.model.entities.AddressRequest;
-import com.petmeds1800.model.entities.ShippingAddressRequest;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
-import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
-import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootContract;
-import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
-import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +23,23 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.RemoveAddressRequest;
+import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.model.entities.ShippingAddressRequest;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootContract;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -52,7 +52,7 @@ import static com.petmeds1800.R.id.firstNameLayout;
  */
 public class AddEditAddressFragment extends AbstractFragment
         implements AddEditAddressContract.View, View.OnClickListener, CommonDialogFragment.ValueSelectedListener,
-        DialogInterface.OnClickListener, Switch.OnCheckedChangeListener ,
+        DialogInterface.OnClickListener, Switch.OnCheckedChangeListener,
         GuestStepThreeRootContract.AddAddressInteractionListener {
 
     public static final int ADD_ADDRESS_REQUEST = 3;
@@ -236,7 +236,7 @@ public class AddEditAddressFragment extends AbstractFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_address, container, false);
         ButterKnife.bind(this, view);
 
@@ -265,8 +265,7 @@ public class AddEditAddressFragment extends AbstractFragment
                 intitalizeViewsForCheckOutBillingAddress();
                 mAddress = (Address) mBundle.getSerializable(ADDRESS);
                 populateData(mAddress);
-            }
-            else {
+            } else {
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
             }
         } else {
@@ -449,7 +448,7 @@ public class AddEditAddressFragment extends AbstractFragment
     }
 
     public ShippingAddressRequest getShippingAddressAttribute() {
-        ShippingAddressRequest shippingAddressRequest =new ShippingAddressRequest();
+        ShippingAddressRequest shippingAddressRequest = new ShippingAddressRequest();
         shippingAddressRequest.setDynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         shippingAddressRequest.setShippingAddress1(mAddressLine1Edit.getText().toString());
         shippingAddressRequest.setShippingAddressFirstName(mFirstNameEdit.getText().toString());
@@ -512,7 +511,7 @@ public class AddEditAddressFragment extends AbstractFragment
         mProgressBar.setVisibility(View.GONE);
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
-        }else {
+        } else {
             Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
     }
@@ -636,13 +635,12 @@ public class AddEditAddressFragment extends AbstractFragment
                     } else {
                         populateData(null);
 
-                        if(mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
+                        if (mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
                             buttonView.setEnabled(false);
                             if (getParentFragment() != null) {
                                 ((StepThreeRootFragment) getParentFragment()).getBillingAddressId();
                             }
-                        }
-                        else if(mRequestCode == GuestStepThreeRootFragment.REQUEST_CODE) {
+                        } else if (mRequestCode == GuestStepThreeRootFragment.REQUEST_CODE) {
                             // do nothing . We only need to make all the address fields as blank
                         }
                     }

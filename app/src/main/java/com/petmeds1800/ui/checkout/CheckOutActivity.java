@@ -8,6 +8,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -28,8 +30,6 @@ import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -283,16 +283,15 @@ public class CheckOutActivity extends AbstractActivity
 
             case 0: //step 1 "Select Shipping Address"
                 //check if the user is logged-in
-                if ( mPreferencesHelper.getIsUserLoggedIn() ) {
+                if (mPreferencesHelper.getIsUserLoggedIn()) {
                     replaceCheckOutFragment(StepOneRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepOneRootFragment.class.getName(), false);
-                }
-                else {
+                } else {
                     replaceCheckOutFragment(GuestStepOneRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             GuestStepOneRootFragment.class.getName(), false);
                 }
 
-                break;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                break;
 
             case 1: //step 2 "Select Shipping method"
                 replaceCheckOutFragment(StepTwoRootFragment.newInstance(mShoppingCartListResponse, stepName),
@@ -301,9 +300,9 @@ public class CheckOutActivity extends AbstractActivity
                 break;
 
             case 2: //step 3 "Select Payment method"
-                if ( mPreferencesHelper.getIsUserLoggedIn()) {
+                if (mPreferencesHelper.getIsUserLoggedIn()) {
                     replaceCheckOutFragment(StepThreeRootFragment
-                                    .newInstance(mShoppingCartListResponse, stepName , StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
+                                    .newInstance(mShoppingCartListResponse, stepName, StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                             StepThreeRootFragment.class.getName(),
                             false);
                 }
@@ -332,7 +331,7 @@ public class CheckOutActivity extends AbstractActivity
                             StepFourRootFragment.class.getName(), false);
                 } else if (mApplicableSteps.size() == 4) {
                     //TODO start the PETVet step
-                  replaceCheckOutFragment(
+                    replaceCheckOutFragment(
                             StepFiveRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepFiveRootFragment.class.getName(), false);
 
@@ -445,6 +444,6 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     public void startNextStep(String stepName, ShoppingCartListResponse shoppingCartListResponse, boolean isReviewOn) {
         mIsReviewOn = isReviewOn;
-        startNextStep(stepName,shoppingCartListResponse);
+        startNextStep(stepName, shoppingCartListResponse);
     }
 }

@@ -565,7 +565,6 @@
     </string>
     <string name="add_reminder_txt">Add a Reminder</string>
 
-
     <string name="miles_txt">miles</string>
     <string name="referal_confirmation_txt">If you would like us to notify this clinic that you are interested in their services please ensure the information below is correct and tap Request Referral.</string>
     <string name="request_referral_txt">REQUEST REFERRAL</string>
@@ -612,7 +611,8 @@
     <string name="promptItemName">Type an item name</string>
     <string name="item_selection_header_text">select an item from previous order</string>
     <string name="reminder_removal_alert_msg">This reminder will be deleted from your profile.</string>
-    
+
+    <!--Reminder-->
     <string name="refill_reminder">Refill Reminder</string>
     <string name="for_tag_pet_name">For </string>
     <string name="for_tag_pet_month">Month :  </string>
@@ -630,6 +630,14 @@
     <string name="shop_now_message">SHOP NOW</string>
     <string name="error_txt">Error</string>
     <string name="succes_txt">Success</string>
+
+    <string name="title_live_chat">Live Chat</string>
+    <string name="label_facebook">Facebook</string>
+    <string name="label_twitter">Twitter</string>
+    <string name="label_google">Google</string>
+    <string name="label_linkedin">Linkedin</string>
+    <string name="label_instagram">Instagram</string>
+    <string name="label_youtube">Youtube</string>
 
 </resources>
 

@@ -6,7 +6,6 @@ import com.petmeds1800.model.Card;
 import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
 import com.petmeds1800.model.shoppingcart.response.CardDetailResponse;
-import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.support.annotation.NonNull;

@@ -61,6 +61,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
+                android:id="@+id/imv_facebook"
                 android:src="@drawable/ic_facebook"/>
         </LinearLayout>
         <LinearLayout
@@ -71,6 +72,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
+                android:id="@+id/imv_twitter"
                 android:src="@drawable/ic_twitter"/>
         </LinearLayout>
         <LinearLayout
@@ -81,6 +83,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
+                android:id="@+id/imv_google"
                 android:src="@drawable/ic_google"/>
         </LinearLayout>
         <LinearLayout
@@ -91,6 +94,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
+                android:id="@+id/imv_linkedin"
                 android:src="@drawable/ic_linked"/>
         </LinearLayout>
         <LinearLayout
@@ -101,6 +105,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
+                android:id="@+id/imv_instagram"
                 android:src="@drawable/ic_instagram"/>
         </LinearLayout>
         <LinearLayout
@@ -111,6 +116,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
+                android:id="@+id/imv_youtube"
                 android:src="@drawable/ic_youtube"/>
         </LinearLayout>
     </LinearLayout>

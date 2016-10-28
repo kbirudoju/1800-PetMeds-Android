@@ -1,10 +1,8 @@
-package com.petmeds1800.ui.checkout.confirmcheckout;
+package com.petmeds1800.ui.checkout.confirmreceipt;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +25,7 @@ import com.petmeds1800.model.entities.Item;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.LayoutPrintingUtils;
+import com.petmeds1800.util.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,7 +76,6 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     private ReceiptItemsListAdapter mListAdapter;
 
     protected List<Item> mReceiptItemList = new ArrayList<>();
-
 
     public static ConfirmationReceiptFragment newInstance(CommitOrderResponse commitOrderResponse) {
 
@@ -136,15 +134,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     }
 
     public void shareFile(File pdfFile, String pdfName) {
-        Intent email = new Intent(Intent.ACTION_SEND);
-        email.putExtra(Intent.EXTRA_EMAIL, "receiver_email_address");
-        email.putExtra(Intent.EXTRA_SUBJECT, "subject");
-        email.putExtra(Intent.EXTRA_TEXT, "email body");
-        Uri uri = Uri.fromFile(new File(pdfFile, pdfName + ".pdf"));
-        email.putExtra(Intent.EXTRA_STREAM, uri);
-        email.setType("application/pdf");
-        email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getActivity().startActivity(email);
+        Utils.sendEmail(getActivity(), null, null, null, pdfFile, pdfName);
     }
 
     private void initStoragePermissionsWrapper() {

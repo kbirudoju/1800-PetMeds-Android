@@ -1,11 +1,5 @@
 package com.petmeds1800.ui;
 
-import com.journeyapps.barcodescanner.CaptureManager;
-import com.journeyapps.barcodescanner.CompoundBarcodeView;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.util.PermissionUtils;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,7 +13,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import javax.inject.Inject;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.petmeds1800.R;
 
 /**
  * Created by Digvijay on 9/20/2016.
@@ -34,14 +30,9 @@ public class BarcodeScannerActivity extends AbstractActivity {
 
     private final int CAMERA_ACCESS_REQUEST_CODE = 101;
 
-    @Inject
-    PermissionUtils mPermissionUtils;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PetMedsApplication.getAppComponent().inject(this);
-
         mSavedInstanceState = savedInstanceState;
         setToolBarTitle(getString(R.string.label_scan_barcode));
         enableBackButton();
@@ -141,7 +132,7 @@ public class BarcodeScannerActivity extends AbstractActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             super.onBackPressed();
         }
         return super.onOptionsItemSelected(item);

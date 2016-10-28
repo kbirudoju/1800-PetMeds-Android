@@ -1,5 +1,7 @@
 package com.petmeds1800.ui.dashboard.presenter;
 
+import android.os.Bundle;
+
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
@@ -17,6 +19,7 @@ public interface WidgetContract {
         void onError(String errorMessage);
         void onAddCartError(String errorMessage);
         void addToCartSuccess();
+        void startWebView(Bundle bundle);
     }
 
     interface Presenter extends BasePresenter {

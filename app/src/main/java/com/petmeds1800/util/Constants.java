@@ -49,13 +49,13 @@ public class Constants {
 
     public static final int ADD_NEW_VET_REQUEST = 4;
 
-
     public static final int SHOW_VET_ON_MAP = 5;
 
     public static final int REFRESH_VET_DATA = 6;
 
-
     public static final int STORAGE_ACCESS_REQUEST_CODE = 111;
+
+    public static final int CALL_PHONE_REQUEST_CODE = 222;
 
     public static final int DIALOG_REMINDER_REQUEST = 5;
 

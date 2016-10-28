@@ -6,7 +6,7 @@
               android:orientation="vertical"
               android:paddingTop="@dimen/activity_vertical_margin"
               android:background="@color/pattern_light_blue"
-              tools:context="com.petmeds1800.ui.checkout.stepthreefragment.AddGuestCard"
+              tools:context="com.petmeds1800.ui.checkout.stepthree.AddGuestCard"
               android:id="@+id/containerLayout">
 
     <android.support.design.widget.TextInputLayout

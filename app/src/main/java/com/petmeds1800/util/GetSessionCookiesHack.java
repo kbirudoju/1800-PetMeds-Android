@@ -36,7 +36,7 @@ public abstract class GetSessionCookiesHack {
                     @Override
                     public void onNext(LoginResponse loginResponse) {
                         getSessionCookiesHideProgress();
-                        Log.v("temporary hack response", loginResponse.getStatus().getCode());
+                        Log.v("get cookies response", loginResponse.getStatus().getCode());
                     }
                 });
     }

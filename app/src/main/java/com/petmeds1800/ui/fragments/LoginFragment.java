@@ -285,49 +285,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                                 mPreferencesHelper.setLoginPassword(passwordText);
                                 navigateToHome();
                             } else {
-                                showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),
-                                        true);
+                                showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)), true);
                             }
                         }
-                    }
-                });
-    }
-
-
-    private void doTempHackForGettingSessionCookies(final boolean doLogin) {
-
-        showProgress();
-        //TODO: remove this temporary hack after backend resolves their problem of cookies
-        mApiService.login(new LoginRequest("", "", "test"))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<LoginResponse>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
-                        if (errorId == R.string.noInternetConnection) {
-                            showErrorCrouton(getString(errorId), false);
-                            hideProgress();
-                        } else {
-                            if(doLogin){
-                                doLogin();
-                            }
-                            else {
-                                initializeSessionConfirmationNumber();
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onNext(LoginResponse loginResponse) {
-                        hideProgress();
-                        Log.v("login response", loginResponse.getStatus().getCode());
                     }
                 });
     }
