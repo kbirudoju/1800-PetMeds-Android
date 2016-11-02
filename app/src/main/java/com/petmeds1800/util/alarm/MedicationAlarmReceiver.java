@@ -87,23 +87,7 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
         long millis = now.getTimeInMillis();
         String currentDate = Utils.changeDateFormat(millis, "yyyy/MM/dd");
         SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy/MM/dd h:mm a");
-
-        if (medicationRemindersAlarmDatas != null && medicationRemindersAlarmDatas.size() > 0 && medicationRemindersAlarmDatas
-                .get(ZERO_INDEX).getRepeatFrequency() == Constants.RepeatFrequency.REPEAT_MONTHLY) {
-            Calendar calendar = Calendar.getInstance();
-            try {
-                DateFormat formatter = new SimpleDateFormat("MMM dd");
-                Date date = formatter.parse(medicationRemindersAlarmDatas
-                        .get(ZERO_INDEX).getStartdate());
-                calendar.setTime(date);
-                calendar.set(Calendar.YEAR, year);
-                currentDate = Utils.changeDateFormat(calendar.getTimeInMillis(), "yyyy/MM/dd");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-        }
-
+        currentDate = setCurrentdate(medicationRemindersAlarmDatas, year, currentDate);
         {
             for (MedicationRemindersAlarmData medicationRemindersAlarmData : medicationRemindersAlarmDatas) {
                 //get the hour and minutes
@@ -122,30 +106,7 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
                     if (days != null && days.size() > 0) {
                         int reminderIdIncremnetFactor = DAILY_INTERVAL;
                         for (String eachDay : days) {
-                            switch (eachDay) {
-                                case "SUN":
-                                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                                    break;
-                                case "MON":
-                                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                                    break;
-                                case "TUE":
-                                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-                                    break;
-                                case "WED":
-                                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-                                    break;
-                                case "THU":
-                                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-                                    break;
-                                case "FRI":
-                                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                                    break;
-                                case "SAT":
-                                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-                                    break;
-
-                            }
+                            setDayOfweek(calendar, eachDay);
                             //TODO We need a ask backend for unique ID for a medication reminder
                             setAlarm(context, calendar, medicationRemindersAlarmData.getRepeatFrequency().ordinal(),
                                     medicationRemindersAlarmData.getRepeatValue(),
@@ -167,6 +128,53 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
 
             }
         }
+    }
+
+    private void setDayOfweek(Calendar calendar, String eachDay) {
+        switch (eachDay) {
+            case "SUN":
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                break;
+            case "MON":
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                break;
+            case "TUE":
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+                break;
+            case "WED":
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+                break;
+            case "THU":
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+                break;
+            case "FRI":
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+                break;
+            case "SAT":
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                break;
+
+        }
+    }
+
+    private String setCurrentdate(ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDatas, int year,
+            String currentDate) {
+        if (medicationRemindersAlarmDatas != null && medicationRemindersAlarmDatas.size() > 0 && medicationRemindersAlarmDatas
+                .get(ZERO_INDEX).getRepeatFrequency() == Constants.RepeatFrequency.REPEAT_MONTHLY) {
+            Calendar calendar = Calendar.getInstance();
+            try {
+                DateFormat formatter = new SimpleDateFormat("MMM dd");
+                Date date = formatter.parse(medicationRemindersAlarmDatas
+                        .get(ZERO_INDEX).getStartdate());
+                calendar.setTime(date);
+                calendar.set(Calendar.YEAR, year);
+                currentDate = Utils.changeDateFormat(calendar.getTimeInMillis(), "yyyy/MM/dd");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return currentDate;
     }
 
     public void cancelAlarm(Context context, int reminderId, String notificationMessage) {

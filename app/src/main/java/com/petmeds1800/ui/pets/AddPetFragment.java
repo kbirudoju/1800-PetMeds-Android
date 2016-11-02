@@ -1,34 +1,5 @@
 package com.petmeds1800.ui.pets;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -63,6 +34,35 @@ import com.petmeds1800.util.AlertRecyclerViewAdapter;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -965,18 +965,7 @@ public class AddPetFragment extends AbstractFragment
             list = pet.getMedications();
         } else {
             list = mAlertRecyclerViewAdapter.getCheckedItems();
-            switch (fromPicker) {
-                case IS_MEDICATIONS_ALLERGY_DAILOG:
-                    petMedicationAlleryList = mAlertRecyclerViewAdapter.getItems();
-                    break;
-                case IS_MEDICATIONS_CONDITIONS_DAILOG:
-                    petMedicationConditionList = mAlertRecyclerViewAdapter.getItems();
-                    break;
-                case IS_CURRENT_MEDICATIONS_DAILOG:
-                    petCurrentMedicationList = mAlertRecyclerViewAdapter.getItems();
-                    break;
-
-            }
+            populateMedicationLists(fromPicker);
         }
         int size = list.size();
         for (int i = 0; i < size; i++) {
@@ -986,22 +975,26 @@ public class AddPetFragment extends AbstractFragment
         updateValues(fromPicker, size, value, list);
     }
 
+    private void populateMedicationLists(int fromPicker) {
+        switch (fromPicker) {
+            case IS_MEDICATIONS_ALLERGY_DAILOG:
+                petMedicationAlleryList = mAlertRecyclerViewAdapter.getItems();
+                break;
+            case IS_MEDICATIONS_CONDITIONS_DAILOG:
+                petMedicationConditionList = mAlertRecyclerViewAdapter.getItems();
+                break;
+            case IS_CURRENT_MEDICATIONS_DAILOG:
+                petCurrentMedicationList = mAlertRecyclerViewAdapter.getItems();
+                break;
+
+        }
+    }
+
     @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
-                switch (fromWhichDailog) {
-                    case IS_MEDICATIONS_ALLERGY_DAILOG:
-                        updateAllergiesDetails(null, IS_MEDICATIONS_ALLERGY_DAILOG);
-                        break;
-                    case IS_MEDICATIONS_CONDITIONS_DAILOG:
-                        updateAllergiesDetails(null, IS_MEDICATIONS_CONDITIONS_DAILOG);
-                        break;
-                    case IS_CURRENT_MEDICATIONS_DAILOG:
-                        updateAllergiesDetails(null, IS_CURRENT_MEDICATIONS_DAILOG);
-                        break;
-                }
-
+                updateAllergiesDetails(null, fromWhichDailog);
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
 
