@@ -1,11 +1,15 @@
 package com.petmeds1800.ui.dashboard;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +21,9 @@ import android.widget.TextView;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.ProductCategory;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
 import com.petmeds1800.util.Utils;
 
@@ -74,6 +80,10 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
 
         showProgress();
         mPresenter.getProductCategories();
+
+        setHasOptionsMenu(true);
+        //start listening for optionsMenuAction
+        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
 
         return view;
     }
@@ -148,5 +158,19 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
     @Override
     public void setPresenter(ProductCategoryListContract.Presenter presenter) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+
+
+        deregisterIntent(getContext());
+        super.onDestroyView();
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        checkAndSetHasOptionsMenu(intent , HomeRootFragment.class.getName());
+        super.onReceivedBroadcast(context, intent);
     }
 }

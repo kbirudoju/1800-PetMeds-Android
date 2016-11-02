@@ -1,5 +1,21 @@
 package com.petmeds1800.ui.dashboard;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.AddToCartRequest;
+import com.petmeds1800.model.entities.PetItemList;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.dashboard.presenter.WidgetContract;
+import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
+import com.petmeds1800.ui.dashboard.support.WidgetListAdapter;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.HomeRootFragment;
+import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -68,7 +84,12 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                 Log.d("cart detail", petItem.getRefillQuantity() + ">>>" + petItem.getSku().getParentProduct().getProductId() + ">>>" + petItem.getSku().getSkuId());
             }
         });
-        mPresenter = new WidgetPresenter(this);
+
+        mPresenter=new WidgetPresenter(this);
+
+        setHasOptionsMenu(true);
+        //start listening for optionsMenuAction
+        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
         return view;
     }
 
@@ -136,5 +157,17 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     @Override
     public void setPresenter(WidgetContract.Presenter presenter) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        deregisterIntent(getContext());
+        super.onDestroyView();
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        checkAndSetHasOptionsMenu(intent , HomeRootFragment.class.getName());
+        super.onReceivedBroadcast(context, intent);
     }
 }

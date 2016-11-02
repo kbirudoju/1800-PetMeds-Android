@@ -1,10 +1,14 @@
 package com.petmeds1800.ui.learn;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +19,11 @@ import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.PetEducationCategory;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
+import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
@@ -65,6 +71,9 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_conditions, container, false);
         ButterKnife.bind(this, view);
+        setHasOptionsMenu(false);
+        //start listening for optionsMenuAction
+        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
         return view;
     }
 
@@ -143,5 +152,17 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
     @Override
     public void onItemClick(int position) {
         showWebViewFragment(mMedConditionList.get(position).getCategoryName(), mMedConditionList.get(position).getLink());
+    }
+
+    @Override
+    public void onDestroyView() {
+        deregisterIntent(getContext());
+        super.onDestroyView();
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        checkAndSetHasOptionsMenu(intent , LearnRootFragment.class.getName());
+        super.onReceivedBroadcast(context, intent);
     }
 }

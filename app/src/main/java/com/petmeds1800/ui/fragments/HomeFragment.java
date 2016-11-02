@@ -4,12 +4,15 @@ import com.petmeds1800.R;
 import com.petmeds1800.intent.BarcodeScannerIntent;
 import com.petmeds1800.model.ProductCategory;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.dashboard.CategoryListFragment;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -66,6 +69,11 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         ButterKnife.bind(this, view);
         setUpViewPager(homeViewPager);
         homeTabs.setupWithViewPager(homeViewPager);
+
+        setHasOptionsMenu(true);
+        //start listening for optionsMenuAction
+        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
+
         return view;
     }
 
@@ -125,15 +133,6 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         inflater.inflate(R.menu.menu_home, menu);
         barcodeMenuItem = menu.findItem(R.id.action_barcode);
         searchMenuItem = menu.findItem(R.id.action_search);
-
-       /*This will show the option menu only for homefragmnet*/
-        ViewPager vp = (ViewPager) getActivity().findViewById(R.id.viewpager_fragments);
-        int position = vp.getCurrentItem();
-        if (position == 0) {
-            showOptionMenuItem(true);
-        } else {
-            showOptionMenuItem(false);
-        }
 
         MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
@@ -196,6 +195,19 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         }
         return super.onOptionsItemSelected(menuItem);
     }
+
+    @Override
+    public void onDestroyView() {
+        deregisterIntent(getContext());
+        super.onDestroyView();
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        checkAndSetHasOptionsMenu(intent , HomeRootFragment.class.getName());
+        super.onReceivedBroadcast(context, intent);
+    }
+
 }
 
 

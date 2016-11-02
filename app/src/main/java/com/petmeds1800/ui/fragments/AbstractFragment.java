@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.petmeds1800.R;
+import com.petmeds1800.ui.HomeActivity;
 
 import java.util.HashMap;
 
@@ -257,4 +258,23 @@ public abstract class AbstractFragment extends Fragment {
             onReceivedBroadcast(context,intent);
         }
     };
+
+    /**
+     * This method would check if the provided intent and the rootFragment have the similar names.
+     * If yes- setHasOptionsMenu as true
+     * else - setHasOptionsMenu as false
+     * @param intent
+     * @param rootFragmentName
+     */
+    protected void checkAndSetHasOptionsMenu(Intent intent , String rootFragmentName) {
+        if(intent.getAction().equals(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION)) {
+            String pareamentFragmentName = intent.getStringExtra(HomeActivity.FRAGMENT_NAME_KEY);
+            if(pareamentFragmentName != null && pareamentFragmentName.equals(rootFragmentName)) {
+                setHasOptionsMenu(true);
+            }
+            else {
+                setHasOptionsMenu(false);
+            }
+        }
+    }
 }

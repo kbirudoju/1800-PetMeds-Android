@@ -20,12 +20,16 @@ import com.petmeds1800.ui.vet.VetListFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +113,6 @@ public class AccountFragment extends AbstractFragment
     private SignOutContract.Presenter mPresenter;
 
     private MedicationReminderResultReceiver mMedicationReminderResultReceiver;
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -205,6 +208,11 @@ public class AccountFragment extends AbstractFragment
         PetMedsApplication.getAppComponent().inject(this);
         mPresenter = new SignOutPresenter(this);
         ((AbstractActivity) getActivity()).disableBackButton();
+
+        setHasOptionsMenu(false);
+        //start listening for optionsMenuAction
+        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
+
         return view;
 
     }
@@ -390,5 +398,16 @@ public class AccountFragment extends AbstractFragment
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        deregisterIntent(getContext());
+        super.onDestroyView();
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        checkAndSetHasOptionsMenu(intent , AccountRootFragment.class.getName());
+        super.onReceivedBroadcast(context, intent);
+    }
 
 }

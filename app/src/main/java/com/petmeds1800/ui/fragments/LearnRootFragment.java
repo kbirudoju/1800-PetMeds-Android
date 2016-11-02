@@ -17,8 +17,9 @@ public class LearnRootFragment extends AbstractFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_learn_container, container, false);
         replaceFragment(new LearnFragment(), LearnFragment.class.getSimpleName(), R.id.container_fragment_learn);
-        return inflater.inflate(R.layout.fragment_learn_container, container, false);
+        return view;
     }
 
 }

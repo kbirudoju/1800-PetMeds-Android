@@ -1,5 +1,17 @@
 package com.petmeds1800.ui.fragments;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.util.Constants;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,17 +31,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.util.Constants;
 
 import java.util.Iterator;
 
@@ -53,6 +54,8 @@ public class CommonWebviewFragment extends AbstractFragment {
     public static final String CONF_DATA = "conf_data";
     public static final String PAYPAL_DATA = "paypal_data";
 
+    public static final String DISABLE_BACK_BUTTON = "disableBackButton";
+
     @BindView(R.id.webViewContainer)
     WebView mWebView;
 
@@ -65,11 +68,29 @@ public class CommonWebviewFragment extends AbstractFragment {
     @Inject
     PetMedsApiService mPetMedsApiService;
 
+    private boolean mDisableBackButton;
+
+
+    public static CommonWebviewFragment newInstance(boolean disableBackButton) {
+
+        Bundle args = new Bundle();
+        args.putBoolean(DISABLE_BACK_BUTTON, disableBackButton);
+        CommonWebviewFragment fragment = new CommonWebviewFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
+
+        Bundle bundle = getArguments();
+
+
+        if(bundle != null) {
+            mDisableBackButton = bundle.getBoolean(DISABLE_BACK_BUTTON);
+        }
 
     }
 
@@ -78,7 +99,18 @@ public class CommonWebviewFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_common_webview, container, false);
         ButterKnife.bind(this, rootView);
-        ((AbstractActivity) getActivity()).enableBackButton();
+
+        //check if back button needs to be enabled
+        if(mDisableBackButton) {
+            ((AbstractActivity) getActivity()).disableBackButton();
+        }
+        else {
+            ((AbstractActivity) getActivity()).enableBackButton();
+        }
+
+
+        setHasOptionsMenu(true);
+
         return rootView;
     }
 
@@ -205,7 +237,11 @@ public class CommonWebviewFragment extends AbstractFragment {
     }
 
 
-
+    @Override
+    public void onDestroyView() {
+        deregisterIntent(getContext());
+        super.onDestroyView();
+    }
 
     private class Callback extends WebViewClient {
 

@@ -1,15 +1,20 @@
 package com.petmeds1800.ui.fragments;
 
 import com.petmeds1800.R;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.learn.FeaturedFragment;
 import com.petmeds1800.ui.learn.MedConditionsFragment;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,9 +46,11 @@ public class LearnFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_learn, container, false);
         ButterKnife.bind(this, view);
-       // setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
         setUpViewPager(mLearnViewPager);
         mLearnTabs.setupWithViewPager(mLearnViewPager);
+        //start listening for optionsMenuAction
+        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
         return view;
     }
 
@@ -95,5 +102,17 @@ public class LearnFragment extends AbstractFragment {
 
     public void addAskVetFragment(Bundle bundle){
         addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
+    }
+
+    @Override
+    public void onDestroyView() {
+        deregisterIntent(getContext());
+        super.onDestroyView();
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        checkAndSetHasOptionsMenu(intent , LearnRootFragment.class.getName());
+        super.onReceivedBroadcast(context, intent);
     }
 }

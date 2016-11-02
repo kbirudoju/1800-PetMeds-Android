@@ -9,6 +9,7 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.MedicationReminderItem;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
+import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
@@ -65,6 +66,10 @@ import rx.schedulers.Schedulers;
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
         MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener {
+
+    public static final String SETUP_HAS_OPTIONS_MENU_ACTION = "setupHasOptionsMenuAction";
+
+    public static final String FRAGMENT_NAME_KEY = "fragmentName";
 
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
@@ -166,6 +171,8 @@ public class HomeActivity extends AbstractActivity
         fragmentList.add(new AccountRootFragment());
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(mAdapter);
+        //we need to set the offset to 3 otherwise options menu cant be managed.
+        mViewPager.setOffscreenPageLimit(3);
         mHomeTab.setupWithViewPager(mViewPager);
         for (int i = 0; i < mHomeTab.getTabCount(); i++) {
             View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
@@ -245,7 +252,7 @@ public class HomeActivity extends AbstractActivity
                     getToolbar().setLogo(null);
                 }
 
-                invalidateOptionsMenu();
+                invalidateOptionsMenu(position);
                 setToolBarTitle((getResources().getStringArray(R.array.tab_title)[position]));
             }
 
@@ -257,12 +264,15 @@ public class HomeActivity extends AbstractActivity
 
         //code to set default first tab selected
 
-      /*  if (commitOrderResponse != null) {
+
+        if (commitOrderResponse != null) {
             mViewPager.setCurrentItem(1);
         } else {
             mViewPager.setCurrentItem(0);
-        }*/
+        }
+
         pageChangeListener.onPageSelected(0);
+        invalidateOptionsMenu(0);
         // Instead of initializing it in onResume for many times we initialize it in onCreate
         mProgressDialog = new ProgressDialog();
         mAuthenticationDialog = new FingerprintAuthenticationDialog();
@@ -311,6 +321,16 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
+    public void invalidateOptionsMenu(int position) {
+        Fragment fragment = mAdapter.getItem(position);
+        Intent intent = new Intent(SETUP_HAS_OPTIONS_MENU_ACTION);
+        intent.putExtra(FRAGMENT_NAME_KEY,fragment.getClass().getName());
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
+        invalidateOptionsMenu();
+    }
+
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_home;
@@ -325,7 +345,6 @@ public class HomeActivity extends AbstractActivity
             }
             // checkLoginStatus();
         }
-        invalidateOptionsMenu();
     }
 
     @Override
