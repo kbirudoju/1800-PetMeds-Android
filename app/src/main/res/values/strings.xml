@@ -412,7 +412,7 @@
     <string name="copyright_txt">Copyright 2016 PetMed Express, Inc. All Rights Reserved</string>
 
     <!--Check out Process-->
-    <string name="shipment_address">Shipment Address</string>
+    <string name="shipment_address">Shipping Address</string>
     <string name="shipping_navigator_button_title">CONTINUE TO SHIPPING METHOD</string>
     <string name="payment_navigator_button_title">CONTINUE TO PET &amp;VET INFORMATION</string>
     <string name="email_us">EMAIL US</string>

@@ -114,7 +114,7 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setToolBarTitle(getString(R.string.shipment_address));
+
         mProgressDialog = new ProgressDialog();
         mShoppingCartListResponse = (ShoppingCartListResponse) getIntent()
                 .getSerializableExtra(CartFragment.SHOPPING_CART);

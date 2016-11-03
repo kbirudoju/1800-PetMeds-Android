@@ -57,6 +57,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
 
     private ShoppingCartListResponse mShoppingCartListResponse;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +104,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
             ((CheckOutActivity) getActivity()).setActiveStep(mStepName);
+            ((CheckOutActivity) getActivity()).setToolBarTitle(getString(R.string.shipment_address));
         }
     }
 
