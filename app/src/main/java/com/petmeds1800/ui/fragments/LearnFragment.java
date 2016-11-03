@@ -1,10 +1,6 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.learn.FeaturedFragment;
-import com.petmeds1800.ui.learn.MedConditionsFragment;
-
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,15 +9,25 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
+import com.petmeds1800.R;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.learn.FeaturedFragment;
+import com.petmeds1800.ui.learn.MedConditionsFragment;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +45,7 @@ public class LearnFragment extends AbstractFragment {
     @BindView(R.id.learn_viewpager)
     ViewPager mLearnViewPager;
 
-    MenuItem mAboutMenuItem;
+    MenuItem mAboutMenuItem, mSearchMenuItem;
 
     @Nullable
     @Override
@@ -57,9 +63,72 @@ public class LearnFragment extends AbstractFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_learn, menu);
-        mAboutMenuItem = menu.findItem(R.id.action_barcode);
-        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        mAboutMenuItem = menu.findItem(R.id.action_about);
+        mSearchMenuItem = menu.findItem(R.id.action_search);
+
+        MenuItemCompat.setOnActionExpandListener(mSearchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                mAboutMenuItem.setVisible(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                mAboutMenuItem.setVisible(true);
+                return true;
+            }
+        });
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
+        searchView.setQueryHint(getString(R.string.label_search));
+        searchView.setIconifiedByDefault(false);
+        EditText searchEdit = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEdit.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+        searchEdit.setHintTextColor(ContextCompat.getColor(getActivity(), R.color.hint_color));
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                try {
+                    String encodedQuery = URLEncoder.encode(query, "utf-8");
+                    String url = getString(R.string.server_endpoint) + "/search.jsp?Ns=product.salesvolume%7C1&Ntt="
+                            + encodedQuery;
+                    Bundle bundle = new Bundle();
+                    bundle.putString(CommonWebviewFragment.TITLE_KEY, query);
+                    bundle.putString(CommonWebviewFragment.URL_KEY, url);
+                    // getToolbar().setLogo(null);
+                    MenuItemCompat.collapseActionView(mSearchMenuItem);
+                    addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    //Toast.makeText(HomeActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String searchText) {
+                return false;
+            }
+        });
+
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.action_about) {
+            Bundle bundle = new Bundle();
+            bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_about));
+            bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.url_learn_about));
+            addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 
     private void setUpViewPager(ViewPager viewPager) {
@@ -100,7 +169,7 @@ public class LearnFragment extends AbstractFragment {
         }
     }
 
-    public void addAskVetFragment(Bundle bundle){
+    public void addAskVetFragment(Bundle bundle) {
         addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
     }
 
@@ -112,7 +181,7 @@ public class LearnFragment extends AbstractFragment {
 
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
-        checkAndSetHasOptionsMenu(intent , LearnRootFragment.class.getName());
+        checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
         super.onReceivedBroadcast(context, intent);
     }
 }

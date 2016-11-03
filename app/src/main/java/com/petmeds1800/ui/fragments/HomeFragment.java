@@ -123,11 +123,6 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         }
     }
 
-    public void showOptionMenuItem(boolean isVisible) {
-        barcodeMenuItem.setVisible(isVisible);
-        searchMenuItem.setVisible(isVisible);
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_home, menu);
