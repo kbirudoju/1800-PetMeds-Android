@@ -115,5 +115,15 @@ public class RecommendedProducts implements Serializable {
     private String group;
     private String displayName;
     private String productImageUrl;
+
+    public String getPromoText() {
+        return promoText;
+    }
+
+    public void setPromoText(String promoText) {
+        this.promoText = promoText;
+    }
+
+    private String promoText;
 }
 

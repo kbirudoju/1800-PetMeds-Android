@@ -9,7 +9,7 @@ public class PriceInfo implements Serializable{
     private String sellingPrice;
     private String listPrice;
     private String salePrice;
-    private String promotText;
+    private String promoText;
 
     public String getSellingPrice() {
         return sellingPrice;
@@ -35,11 +35,11 @@ public class PriceInfo implements Serializable{
         this.salePrice = salePrice;
     }
 
-    public String getPromotText() {
-        return promotText;
+    public String getPromoText() {
+        return promoText;
     }
 
-    public void setPromotText(String promotText) {
-        this.promotText = promotText;
+    public void setPromoText(String promoText) {
+        this.promoText = promoText;
     }
 }

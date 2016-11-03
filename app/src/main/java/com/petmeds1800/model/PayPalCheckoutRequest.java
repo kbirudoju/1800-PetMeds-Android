@@ -5,9 +5,8 @@ package com.petmeds1800.model;
  */
 public class PayPalCheckoutRequest {
 
-    public PayPalCheckoutRequest(String source, String _dynSessConf) {
+    public PayPalCheckoutRequest(String source) {
         this.source = source;
-        this._dynSessConf = _dynSessConf;
     }
 
     public String getSource() {
@@ -18,13 +17,6 @@ public class PayPalCheckoutRequest {
         this.source = source;
     }
 
-    public String get_dynSessConf() {
-        return _dynSessConf;
-    }
-
-    public void set_dynSessConf(String _dynSessConf) {
-        this._dynSessConf = _dynSessConf;
-    }
 
     private String source;
     private String _dynSessConf;

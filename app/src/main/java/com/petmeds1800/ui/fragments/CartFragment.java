@@ -1,22 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.intent.CheckOutIntent;
-import com.petmeds1800.model.PayPalCheckoutRequest;
-import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
-import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
-import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
-import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
-import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.ShoppingCartRecyclerViewAdapter;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,8 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +23,24 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.intent.CheckOutIntent;
+import com.petmeds1800.model.PayPalCheckoutRequest;
+import com.petmeds1800.model.PaypalResponse;
+import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
+import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.ShoppingCartRecyclerViewAdapter;
+import com.petmeds1800.util.Utils;
 
 import java.util.HashMap;
 
@@ -123,7 +122,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constants.KEY_CART_FRAGMENT_INTENT_FILTER);
-        intentFilter.addAction(Constants.KEY_PAYMENT_INTENT_FILTER);
         intentFilter.addAction(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION);
         registerIntent(intentFilter, getActivity());
 
@@ -145,19 +143,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         } else if (intent.getAction().equals(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION)) {
             checkAndSetHasOptionsMenu(intent , CartRootFragment.class.getName());
         }
-        if(intent.getAction() == Constants.KEY_PAYMENT_INTENT_FILTER){
-            Bundle bundle = intent.getExtras();
-            String code=bundle.getString("code");
-            if(code.equals(getString(R.string.succes_txt))) {
-                ShoppingCartListResponse shoppingCartListResponse = (ShoppingCartListResponse) bundle.getSerializable("shoppingListResponse");
-                Log.d("shoppingCartRepsone", shoppingCartListResponse.getShoppingCart().getTotalCommerceItemCount());
-            }else{
-                String errorMsg=bundle.getString("errormessage");
-                Utils.displayCrouton(getActivity(), errorMsg, mItemListtContainer);
-            }
-        }
 
         super.onReceivedBroadcast(context, intent);
+
     }
 
     @Override
@@ -217,15 +205,24 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     public void setPresenter(ShoppingCartListContract.Presenter presenter) { mPresenter = presenter;  }
 
     public void onSuccess(String url) {
+        mProgressBar.setVisibility(View.GONE);
         Bundle bundle = new Bundle();
-        bundle.putString(CommonWebviewFragment.URL_KEY, url);
-        CommonWebviewFragment webViewFragment = new CommonWebviewFragment();
+        bundle.putString(CommonWebviewFragment.PAYPAL_DATA, url);
+        replaceCartFragmentWithBackStack(new CommonWebviewFragment(), CommonWebviewFragment.class.getName(), bundle);
+       /* CommonWebviewFragment webViewFragment = new CommonWebviewFragment();
         webViewFragment.setArguments(bundle);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.cart_root_fragment_container, webViewFragment);
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commit();*/
+    }
+
+    @Override
+    public void onPayPalError(String errorMsg) {
+        mProgressBar.setVisibility(View.GONE);
+        Utils.displayCrouton(getActivity(), errorMsg, mItemListtContainer);
+
     }
 
 
@@ -386,11 +383,19 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     @Override
     public void onClick(View v) {
-
-        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("cart", mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+      mProgressBar.setVisibility(View.VISIBLE);
+        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("cart");
         mPresenter.checkoutPayPal(payPalCheckoutRequest);
 
 
     }
 
+    public void startCheckoutAfterPayment(PaypalResponse response){
+        if(response.getShoppingCart()!=null) {
+            Log.d("response in cart", response.getShoppingCart().getTotalCommerceItemCount() + ">>>" + response.getCheckoutSteps().getApplicableSteps());
+        }else{
+            Log.d("response in cart", response.getStatus().getErrorMessages().get(0));
+
+        }
+    }
 }

@@ -55,6 +55,20 @@ public abstract class AbstractFragment extends Fragment {
         transaction.commit();
     }
 
+    void replaceCartFragmentWithBundle(Fragment fragment,String tag,Bundle  bundle) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.cart_root_fragment_container, fragment,tag);
+        fragment.setArguments(bundle);
+        transaction.commit();
+    }
+    void replaceCartFragmentWithBackStack(Fragment fragment,String tag,Bundle  bundle) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.cart_root_fragment_container, fragment,tag);
+        transaction.addToBackStack(null);
+        fragment.setArguments(bundle);
+        transaction.commit();
+    }
+
     void replaceHomeFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
@@ -71,7 +85,7 @@ public abstract class AbstractFragment extends Fragment {
     }
 
     //TODO: can be replaced with replaceFragmentWithBundle
-    void replaceHomeFragmentWithBundle(Fragment fragment, Bundle bundle) {
+    protected void replaceHomeFragmentWithBundle(Fragment fragment, Bundle bundle) {
         FragmentTransaction trans = getFragmentManager()
                 .beginTransaction();
         trans.replace(R.id.home_root_fragment_container, fragment);

@@ -1,36 +1,29 @@
 package com.petmeds1800.ui.fragments;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.util.Constants;
-
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.PaypalResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
 
 import java.util.Iterator;
 
@@ -69,7 +62,7 @@ public class CommonWebviewFragment extends AbstractFragment {
     PetMedsApiService mPetMedsApiService;
 
     private boolean mDisableBackButton;
-
+    private OnPaymentCompletedListener onPaymnetSelectedListener;
 
     public static CommonWebviewFragment newInstance(boolean disableBackButton) {
 
@@ -79,6 +72,7 @@ public class CommonWebviewFragment extends AbstractFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -187,7 +181,6 @@ public class CommonWebviewFragment extends AbstractFragment {
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
-        mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
         mWebView.loadUrl(url);
 
     }
@@ -215,6 +208,39 @@ public class CommonWebviewFragment extends AbstractFragment {
 
 
     private void loadHtmlWithPostRequest( String postData){
+        final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            //removeSessionCookies seems the only working option.removeAllCookie didn't clear all the cookies in this case.
+
+            CookieManager.getInstance().removeSessionCookies(null);
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+        } else {
+            CookieManager.getInstance().removeSessionCookie();
+            CookieManager.getInstance().setAcceptCookie(true);
+        }
+
+        String cookieString = null;
+        for (Iterator<Cookie> iterator = mCookieCache.iterator() ; iterator.hasNext();) {
+            Cookie cookie = iterator.next();
+            if(cookie.name().equals("JSESSIONID")) {
+                cookieString = "JSESSIONID=" + cookie.value() + "; ";
+            }
+            else if(cookie.name().equals("SITESERVER")) {
+                cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
+            }
+        }
+       // cookieString = cookieString + "app=true; ";
+        CookieManager.getInstance().setCookie(postData, cookieString);
+
+        if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().flush();
+        }
+        else {
+            CookieSyncManager.getInstance().sync();
+        }
+
+
+
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
         WebChromeClient client = new WebChromeClient() {
@@ -226,10 +252,10 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         };
 
-        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        //mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
-        mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
+      //  mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
         mWebView.loadUrl(postData);
 
 
@@ -247,7 +273,7 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d("url is",url);
+                Log.d("url is", url);
             if (url.contains("Add+To+Cart")){
                 getActivity().onBackPressed();
                 try {
@@ -259,18 +285,19 @@ public class CommonWebviewFragment extends AbstractFragment {
             return super.shouldOverrideUrlLoading(view, url);
         }
 
-        @Override
+        /*@Override
         public void onPageFinished(WebView view, String url) {
             if(url.contains("applyPayPalPaymentMethod")) {
                 mWebView.loadUrl("javascript:HtmlViewer.showHTML" +
                         "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
+
             }
-        }
+        }*/
 
 
     }
 
-    class MyJavaScriptInterface {
+  /*  class MyJavaScriptInterface {
 
         private Context ctx;
         MyJavaScriptInterface(Context ctx) {
@@ -281,32 +308,13 @@ public class CommonWebviewFragment extends AbstractFragment {
         public void showHTML(String html) {
             String jsonString=(html.substring(html.indexOf("{"), html.lastIndexOf("}") + 1));
             Gson gson=new GsonBuilder().create();
-            ShoppingCartListResponse shoppingCartListResponse =   gson.fromJson(jsonString, ShoppingCartListResponse.class);
-            if(shoppingCartListResponse.getShoppingCart()!=null){
-                Intent intent = new Intent(Constants.KEY_PAYMENT_INTENT_FILTER);
-                Bundle bundle = new Bundle();
-                bundle.putString("code", getString(R.string.succes_txt));
-                bundle.putSerializable("shoppingListResponse", shoppingCartListResponse);
-                intent.putExtras(bundle);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+            PaypalResponse paypalResponse =   gson.fromJson(jsonString, PaypalResponse.class);
+                onPaymnetSelectedListener.onPaymentCompleted(paypalResponse);
                 removeFragment();
-
-
-            }else{
-                Log.d("Error",shoppingCartListResponse.getStatus().getErrorMessages().get(0));
-                Intent intent = new Intent(Constants.KEY_PAYMENT_INTENT_FILTER);
-                Bundle bundle = new Bundle();
-                bundle.putString("code", getString(R.string.error_txt));
-                bundle.putString("errormessage", shoppingCartListResponse.getStatus().getErrorMessages().get(0));
-                intent.putExtras(bundle);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-                removeFragment();
-            }
-
 
         }
 
-    }
+    }*/
 
     private void removeFragment(){
         FragmentManager manager = getActivity().getSupportFragmentManager();
@@ -315,6 +323,22 @@ public class CommonWebviewFragment extends AbstractFragment {
         trans.commit();
         manager.popBackStack();
     }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
 
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            onPaymnetSelectedListener = (OnPaymentCompletedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement onPaymnetSelectedListener");
+        }
+    }
+
+    public interface OnPaymentCompletedListener {
+        public void onPaymentCompleted(PaypalResponse paypalResponse);
+    }
 }
 

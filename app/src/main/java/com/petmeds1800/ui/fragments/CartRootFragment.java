@@ -43,7 +43,7 @@ public class CartRootFragment extends AbstractFragment {
             confirmationReceiptRootFragment.setArguments(bundle);
             replaceCartFragment(confirmationReceiptRootFragment);
         } else{
-            replaceCartFragmentWithTag(new CartFragment(), CartFragment.class.getName());
+            replaceCartFragmentWithTag(new CartFragment(), CartFragment.class.getSimpleName());
         }
 
     }

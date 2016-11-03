@@ -29,6 +29,8 @@ import android.widget.ProgressBar;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeFragment;
 
+import com.petmeds1800.ui.support.HomeFragmentContract;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,6 +53,8 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    private HomeFragmentContract.ProductCategoryInteractionListener mWidgetListener;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,19 +63,26 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
         mWidgetListAdapter = new WidgetListAdapter(this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PetItemList petItem = (PetItemList) v.getTag();
-                String productId = petItem.getSku().getParentProduct().getProductId();
-                String skuId = petItem.getSku().getSkuId();
-                int quantity = petItem.getRefillQuantity();
-                try {
-                    ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(v.getTag() instanceof PetItemList) {
+                    PetItemList petItem = (PetItemList) v.getTag();
+                    String productId = petItem.getSku().getParentProduct().getProductId();
+                    String skuId = petItem.getSku().getSkuId();
+                    int quantity = petItem.getRefillQuantity();
+                    try {
+                        ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    AddToCartRequest addToCartRequest = new AddToCartRequest(skuId, productId, quantity, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                    mPresenter.addToCart(addToCartRequest);
+                    Log.d("cart detail", petItem.getRefillQuantity() + ">>>" + petItem.getSku().getParentProduct().getProductId() + ">>>" + petItem.getSku().getSkuId());
+                }else{
+
+                        ((HomeFragmentContract.ProductCategoryInteractionListener)getParentFragment()).replaceWebViewFragment(String.valueOf(v.getTag()));
+
+
                 }
-                AddToCartRequest addToCartRequest = new AddToCartRequest(skuId, productId, quantity, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-                mPresenter.addToCart(addToCartRequest);
-                Log.d("cart detail", petItem.getRefillQuantity() + ">>>" + petItem.getSku().getParentProduct().getProductId() + ">>>" + petItem.getSku().getSkuId());
-            }
+                }
         });
 
         mPresenter=new WidgetPresenter(this);
@@ -89,6 +100,8 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
         setUpWidgetList();
         mPresenter.start();
     }
+
+
 
     private void setUpWidgetList() {
         mWidgetRecyclerView.setAdapter(mWidgetListAdapter);

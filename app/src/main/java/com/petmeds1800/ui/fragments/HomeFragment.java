@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
 import com.petmeds1800.R;
 import com.petmeds1800.intent.BarcodeScannerIntent;
 import com.petmeds1800.model.ProductCategory;
@@ -29,6 +30,7 @@ import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.dashboard.CategoryListFragment;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -87,6 +89,15 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         bundle.putString(CommonWebviewFragment.TITLE_KEY, productCategory.getName());
         bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.server_endpoint) + productCategory.getUrl());
         replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
+    }
+
+    @Override
+    public void replaceWebViewFragment(String url) {
+        Bundle bundle = new Bundle();
+      //  bundle.putString(CommonWebviewFragment.TITLE_KEY, productCategory.getName());
+        bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.server_endpoint) + url);
+        replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
+
     }
 
     static class Adapter extends FragmentPagerAdapter {

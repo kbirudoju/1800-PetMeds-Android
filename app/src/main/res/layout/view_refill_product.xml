@@ -103,7 +103,7 @@
         android:paddingRight="@dimen/dp_16"
         android:paddingBottom="@dimen/dp_23"
         android:paddingTop="@dimen/dp_13"
-        android:visibility="gone"
+        android:visibility="visible"
 
         >
         <ImageView
@@ -161,6 +161,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/dp_3">
                 <TextView
+                    android:id="@+id/refill_view_original_price_label_coupons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/starts_at_txt"
@@ -169,7 +170,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/refill_view_original_price_label_coupons"
+                    android:id="@+id/promotext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="fsdfsdf"

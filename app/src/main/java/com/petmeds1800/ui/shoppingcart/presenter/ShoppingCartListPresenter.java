@@ -203,7 +203,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                     @Override
                     public void onError(Throwable e) {
                         Log.d("error",e.getLocalizedMessage());
-                                              //  mView.onError(e.getLocalizedMessage());
+                        mView.onPayPalError(e.getLocalizedMessage());
 
                     }
 
@@ -211,15 +211,12 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                     public void onNext(Response<String> s) {
                         Log.d("response", s + ">>>");
                         String loactionHeader=s.headers().get("Location");
-
-
-                        if(loactionHeader.contains("requestid")){
+                       /* if(loactionHeader.contains("requestid")){
                             String url=loactionHeader.substring(0,loactionHeader.lastIndexOf("&"));
                             mView.onSuccess(url);
-                        }
-
-
-
+                        }else{*/
+                            mView.onSuccess(loactionHeader);
+                        //}
                     }
                 });
     }

@@ -59,6 +59,7 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         mCantFindVetButton.setOnClickListener(this);
         PetMedsApplication.getAppComponent().inject(this);
         mPresenter=new CantFindVetPresenter(this);
+
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.add_vet_header));
         ((AbstractActivity) getActivity()).enableBackButton();
 

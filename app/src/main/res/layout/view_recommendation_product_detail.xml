@@ -34,6 +34,63 @@
             android:layout_toLeftOf="@+id/arrow_image"
             style="@style/styledefault_no_padding"/>
         <LinearLayout
+            android:id="@+id/promotext_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_23"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_toRightOf="@+id/product_image"
+            android:layout_below="@+id/product_title_label"
+            android:layout_marginBottom="@dimen/dp_23"
+            android:orientation="vertical"
+            android:visibility="visible">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                android:id="@+id/starts_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/formlabel"
+                android:text="startsat"
+                android:layout_marginLeft="@dimen/dp_5"/>
+                <TextView
+                    android:id="@+id/list_price_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/formlabel"
+                    android:text="234"
+                    android:layout_marginLeft="@dimen/dp_5"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp_6">
+                <TextView
+                    android:id="@+id/selling_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/starts_at_txt"
+                    style="@style/styledefault_no_padding"
+                    android:textColor="@color/crimson_red"
+                    />
+
+                <TextView
+                    android:id="@+id/promotext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="fsdfsdf"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:textColor="@color/crimson_red"
+                    style="@style/styledefault_no_padding"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/noPromo_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -42,6 +99,7 @@
             android:layout_toRightOf="@+id/product_image"
             android:layout_below="@+id/product_title_label"
             android:layout_marginBottom="@dimen/dp_23"
+            android:visibility="gone"
 
             >
             <TextView

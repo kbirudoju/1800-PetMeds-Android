@@ -14,6 +14,15 @@ public class Products implements Serializable{
     private String sellingPrice;
     private String productPageUrl;
     private String listPrice;
+    private String promoText;
+
+    public String getPromoText() {
+        return promoText;
+    }
+
+    public void setPromoText(String promoText) {
+        this.promoText = promoText;
+    }
 
     public String getPriceLabel() {
         return priceLabel;

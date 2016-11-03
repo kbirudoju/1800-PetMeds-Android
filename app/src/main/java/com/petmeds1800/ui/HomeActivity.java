@@ -6,12 +6,14 @@ import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
 import com.petmeds1800.model.Address;
+import com.petmeds1800.model.PaypalResponse;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.MedicationReminderItem;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
@@ -64,7 +66,7 @@ import rx.schedulers.Schedulers;
 
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
-        MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener {
+        MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,CommonWebviewFragment.OnPaymentCompletedListener {
 
     public static final String SETUP_HAS_OPTIONS_MENU_ACTION = "setupHasOptionsMenuAction";
 
@@ -554,6 +556,15 @@ public class HomeActivity extends AbstractActivity
         mViewPager.setCurrentItem(pageNo);
     }
 
+
+
+    @Override
+    public void onPaymentCompleted(PaypalResponse paypalResponse) {
+        CartFragment cartFragment=(CartFragment)getSupportFragmentManager().findFragmentByTag(CartFragment.class.getSimpleName());
+        if(cartFragment!=null){
+            cartFragment.startCheckoutAfterPayment(paypalResponse);
+        }
+    }
 }
 
 

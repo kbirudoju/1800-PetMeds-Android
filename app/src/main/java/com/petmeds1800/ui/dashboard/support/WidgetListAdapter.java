@@ -1,6 +1,5 @@
 package com.petmeds1800.ui.dashboard.support;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -35,7 +34,6 @@ import com.petmeds1800.model.entities.SalePitch;
 import com.petmeds1800.model.entities.WhatsNextCategory;
 import com.petmeds1800.model.entities.WidgetData;
 import com.petmeds1800.model.entities.WidgetFooter;
-import com.petmeds1800.ui.CommonWebViewActivity;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 
@@ -107,6 +105,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             int resource = R.layout.view_more_recommendation;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new RecommendationMoreViewHolder(v);
+            v.setOnClickListener(listener);
         } else if (viewType == TIP_VIEW_TYPE) {
             int resource = R.layout.view_tip;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -270,20 +269,42 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case REFILL_PRODUCT_VIEW_TYPE:
                 final RefillViewHolder refillHolder = (RefillViewHolder) holder;
                 PetItemList petItem = (PetItemList) getItemAt(position);
-                refillHolder.refillProductTitleLabel.setText(petItem.getSku().getDisplayName());
-                refillHolder.refillOriginalPriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
-                refillHolder.refillOriginalPriceLabel.setPaintFlags(refillHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                refillHolder.refillSellingpriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
-                refillHolder.refillDateLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
-                Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillProductImage) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        refillHolder.refillProductImage.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+                if(petItem.getSku().getPriceInfo().getPromoText()!=null && !petItem.getSku().getPriceInfo().getPromoText().isEmpty()){
+                   refillHolder.row_coupons_layout.setVisibility(View.VISIBLE);
+                    refillHolder.noCouponRefillLayout.setVisibility(View.GONE);
+                    refillHolder.refillProductCouponsLabel.setText(petItem.getSku().getDisplayName());
+                    refillHolder.refillDateCouponLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
+                    refillHolder.refillStartCouponLabel.setPaintFlags(refillHolder.refillStartCouponLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    refillHolder.refillOriginalPriceCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
+                    refillHolder.refillStartCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
+                    refillHolder.refillPromoLabel.setText(petItem.getSku().getPriceInfo().getPromoText());
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillCouponProductImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            refillHolder.refillCouponProductImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                }else {
+                    refillHolder.row_coupons_layout.setVisibility(View.GONE);
+                    refillHolder.noCouponRefillLayout.setVisibility(View.VISIBLE);
+                    refillHolder.refillProductTitleLabel.setText(petItem.getSku().getDisplayName());
+                    refillHolder.refillOriginalPriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
+                    refillHolder.refillOriginalPriceLabel.setPaintFlags(refillHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    refillHolder.refillSellingpriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
+                    refillHolder.refillDateLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillProductImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            refillHolder.refillProductImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                }
                 refillHolder.refillAddCartButton.setTag(petItem);
                 break;
             case RECOMENDATION_HEADER_VIEW_TYPE:
@@ -325,14 +346,28 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 });
                 recommendationProductViewHolder.recommendationProductLabel.setText(recommendedProducts.getDisplayName());
-                recommendationProductViewHolder.recommendationPriceLabel.setText(" $" + recommendedProducts.getListPrice());
-                recommendationProductViewHolder.recommendationPriceLabel.setPaintFlags(recommendationProductViewHolder.recommendationPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                recommendationProductViewHolder.recommendationSellingPriceLabel.setText(" $" + recommendedProducts.getSellingPrice());
+                //show layout as per promotext
+                if(recommendedProducts.getPromoText()!=null && !recommendedProducts.getPromoText().isEmpty()){
+                    recommendationProductViewHolder.promoViewlayout.setVisibility(View.VISIBLE);
+                    recommendationProductViewHolder.noPromoViewLayout.setVisibility(View.GONE);
+                    recommendationProductViewHolder.promoTextLabel.setText(recommendedProducts.getPromoText());
+                    recommendationProductViewHolder.listPriceLabel.setText(" $" + recommendedProducts.getListPrice());
+                    recommendationProductViewHolder.listPriceLabel.setPaintFlags(recommendationProductViewHolder.recommendationPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    recommendationProductViewHolder.startsAtLabel.setText(recommendedProducts.getPriceLabel());
+                    recommendationProductViewHolder.sellingPriceLabel.setText(" $" +recommendedProducts.getSellingPrice());
+                }else {
+                    recommendationProductViewHolder.promoViewlayout.setVisibility(View.GONE);
+                    recommendationProductViewHolder.noPromoViewLayout.setVisibility(View.VISIBLE);
+                    recommendationProductViewHolder.recommendationPriceLabel.setText(" $" + recommendedProducts.getListPrice());
+                    recommendationProductViewHolder.recommendationPriceLabel.setPaintFlags(recommendationProductViewHolder.recommendationPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    recommendationProductViewHolder.recommendationSellingPriceLabel.setText(" $" + recommendedProducts.getSellingPrice());
+                }
                 break;
             case RECOMMENDATION_VIEW_MORE_PRODUCT:
                 RecommendationMoreViewHolder moreViewHolder = (RecommendationMoreViewHolder) holder;
                 Category category = (Category) getItemAt(position);
                 moreViewHolder.seeMoreLabel.setText(mContext.getString(R.string.see_all_txt) + category.getDisplayName() + " " + mContext.getString(R.string.products_txt));
+               moreViewHolder.seeMoreLabel.setTag(category.getCategoryPageUrl());
                 break;
             case TIP_VIEW_TYPE:
                 final TipViewHolder tipViewHolder = (TipViewHolder) holder;
@@ -384,11 +419,25 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case BROWSE_HISTORY_VIEW_TYPE:
                 final BrowseHistoryViewHolder browseHistoryViewHolder = (BrowseHistoryViewHolder) holder;
                 Products shoppingProducts = (Products) getItemAt(position);
-                browseHistoryViewHolder.productPriceLabel.setText(" $" + shoppingProducts.getListPrice());
-                browseHistoryViewHolder.productPriceLabel.setPaintFlags(browseHistoryViewHolder.productPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-                browseHistoryViewHolder.productSellingPriceLabel.setText(" $" + shoppingProducts.getSellingPrice());
                 browseHistoryViewHolder.productTitlelabel.setText(shoppingProducts.getDisplayName());
+                if(shoppingProducts.getPromoText()!=null && !shoppingProducts.getPromoText().isEmpty()){
+                    browseHistoryViewHolder.promoViewlayout.setVisibility(View.VISIBLE);
+                    browseHistoryViewHolder.noPromoViewLayout.setVisibility(View.GONE);
+                    browseHistoryViewHolder.promoTextLabel.setText(shoppingProducts.getPromoText());
+                    browseHistoryViewHolder.listPriceLabel.setText(" $" + shoppingProducts.getListPrice());
+                    browseHistoryViewHolder.listPriceLabel.setPaintFlags(browseHistoryViewHolder.listPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    browseHistoryViewHolder.startsAtLabel.setText(shoppingProducts.getPriceLabel());
+                    browseHistoryViewHolder.sellingPriceLabel.setText(" $" +shoppingProducts.getSellingPrice());
+                } else {
+                    browseHistoryViewHolder.promoViewlayout.setVisibility(View.GONE);
+                    browseHistoryViewHolder.noPromoViewLayout.setVisibility(View.VISIBLE);
+                    browseHistoryViewHolder.productPriceLabel.setText(" $" + shoppingProducts.getListPrice());
+                    browseHistoryViewHolder.productPriceLabel.setPaintFlags(browseHistoryViewHolder.productPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    browseHistoryViewHolder.productSellingPriceLabel.setText(" $" + shoppingProducts.getSellingPrice());
+
+
+                }
+
                 Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + shoppingProducts.getProductImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(browseHistoryViewHolder.productImage) {
                     @Override
                     protected void setResource(Bitmap resource) {
@@ -449,7 +498,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static class RefillViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.row_pet_product)
-        RelativeLayout petProductRow;
+        RelativeLayout noCouponRefillLayout;
 
         @BindView(R.id.refill_view_product_image)
         ImageView refillProductImage;
@@ -465,6 +514,23 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView refillSellingpriceLabel;
         @BindView(R.id.add_cart_button)
         Button refillAddCartButton;
+
+        @BindView(R.id.row_pet_product_coupons)
+        RelativeLayout row_coupons_layout;
+        @BindView(R.id.refill_view_product_label_coupons)
+        TextView refillProductCouponsLabel;
+        @BindView(R.id.refill_view_date_label_coupons)
+        TextView refillDateCouponLabel;
+        @BindView(R.id.refill_view_start_label_coupons)
+        TextView refillStartCouponLabel;
+        @BindView(R.id.refill_view_original_price_label_coupons)
+        TextView  refillOriginalPriceCouponLabel;
+        @BindView(R.id.promotext)
+        TextView refillPromoLabel;
+        @BindView(R.id.refill_view_product_image_coupons)
+        ImageView refillCouponProductImage;
+
+
 
 
         public RefillViewHolder(View v) {
@@ -529,6 +595,25 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @BindView(R.id.product_selling_price_label)
         TextView recommendationSellingPriceLabel;
+
+        @BindView(R.id.starts_label)
+        TextView startsAtLabel;
+
+        @BindView(R.id.promotext_view)
+        LinearLayout promoViewlayout;
+
+        @BindView(R.id.noPromo_view)
+        LinearLayout noPromoViewLayout;
+
+        @BindView(R.id.promotext)
+        TextView promoTextLabel;
+
+        @BindView(R.id.selling_price)
+        TextView sellingPriceLabel;
+
+        @BindView(R.id.list_price_label)
+        TextView listPriceLabel;
+
 
 
         public RecommendationProductViewHolder(View v) {
@@ -616,6 +701,24 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView productTitlelabel;
         @BindView(R.id.product_image)
         ImageView productImage;
+
+        @BindView(R.id.starts_label)
+        TextView startsAtLabel;
+
+        @BindView(R.id.promotext_view)
+        LinearLayout promoViewlayout;
+
+        @BindView(R.id.noPromo_view)
+        LinearLayout noPromoViewLayout;
+
+        @BindView(R.id.promotext)
+        TextView promoTextLabel;
+
+        @BindView(R.id.selling_price)
+        TextView sellingPriceLabel;
+
+        @BindView(R.id.list_price_label)
+        TextView listPriceLabel;
 
         public BrowseHistoryViewHolder(View v) {
             super(v);

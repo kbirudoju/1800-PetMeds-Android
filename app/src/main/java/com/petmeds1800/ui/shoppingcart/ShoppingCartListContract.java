@@ -20,6 +20,7 @@ public interface ShoppingCartListContract {
         boolean postGeneralPopulateShoppingCart(ShoppingCartListResponse shoppingCartListResponse);
         boolean onError(String errorMessage, String simpleName);
         void onSuccess(String url);
+        void onPayPalError(String errorMsg);
     }
 
     interface Presenter extends BasePresenter {
