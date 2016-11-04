@@ -68,7 +68,7 @@ public class CommunicationFragment extends AbstractFragment {
 
     @OnClick(R.id.btn_email_us)
     public void emailUs() {
-        Utils.sendEmail(getActivity(), null, null, null, null, null);
+        Utils.sendEmail(getActivity(), getString(R.string.email_contact_us), null, null);
     }
 
     @OnClick(R.id.btn_call_us)

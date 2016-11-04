@@ -42,6 +42,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
 import static com.petmeds1800.util.Constants.RESULT_VALUE;
@@ -349,6 +350,11 @@ public class AccountFragment extends AbstractFragment
                 break;
 
         }
+    }
+
+    @OnClick(R.id.txv_contact_us)
+    public void contactUs(){
+        replaceAccountAndAddToBackStack(new ContactUsFragment(), ContactUsFragment.class.getSimpleName());
     }
 
     @Override

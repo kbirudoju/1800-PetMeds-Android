@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pattern_light_blue"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_call_toll_free"
+                android:padding="@dimen/xlarge_margin">
+
+                <TextView
+                    android:id="@+id/txv_label_toll_free"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_2"
+                    android:layout_toLeftOf="@+id/imv_call_toll_free"
+                    android:text="@string/label_toll_free_number"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txv_label_toll_free"
+                    android:layout_toLeftOf="@+id/imv_call_toll_free"
+                    android:text="@string/phone_toll_free"
+                    android:textColor="@color/hint_color"
+                    android:textSize="@dimen/sp_14" />
+
+                <ImageView
+                    android:id="@+id/imv_call_toll_free"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_phone" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/pattern_blue" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_call_main"
+                android:padding="@dimen/xlarge_margin">
+
+                <TextView
+                    android:id="@+id/txv_label_main_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_2"
+                    android:layout_toLeftOf="@+id/imv_call_main"
+                    android:text="@string/label_main_phone_number"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txv_label_main_phone"
+                    android:layout_toLeftOf="@+id/imv_call_main"
+                    android:text="@string/phone_main"
+                    android:textColor="@color/hint_color"
+                    android:textSize="@dimen/sp_14" />
+
+                <ImageView
+                    android:id="@+id/imv_call_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_phone" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/pattern_blue" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_call_pharmacy"
+                android:padding="@dimen/xlarge_margin">
+
+                <TextView
+                    android:id="@+id/txv_label_pharmacy_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_2"
+                    android:layout_toLeftOf="@+id/imv_call_pharmacy_phone"
+                    android:text="@string/label_pharmacy_phone_number"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txv_label_pharmacy_phone"
+                    android:layout_toLeftOf="@+id/imv_call_pharmacy_phone"
+                    android:text="@string/phone_pharmacy"
+                    android:textColor="@color/hint_color"
+                    android:textSize="@dimen/sp_14" />
+
+                <ImageView
+                    android:id="@+id/imv_call_pharmacy_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_phone" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/pattern_blue" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_fax_pharmacy"
+                android:padding="@dimen/xlarge_margin">
+
+                <TextView
+                    android:id="@+id/txv_label_pharmacy_fax"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_2"
+                    android:text="@string/label_pharmacy_fax_number"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txv_label_pharmacy_fax"
+                    android:text="@string/fax_pharmacy"
+                    android:textColor="@color/hint_color"
+                    android:textSize="@dimen/sp_14" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/pattern_blue" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_email_address"
+            android:layout_marginTop="@dimen/xlarge_margin"
+            android:background="@color/white"
+            android:padding="@dimen/xlarge_margin">
+
+            <TextView
+                android:id="@+id/txv_label_email_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_2"
+                android:layout_toLeftOf="@+id/imv_email"
+                android:text="@string/label_email_address"
+                android:textColor="@color/grey_text"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txv_label_email_address"
+                android:layout_toLeftOf="@+id/imv_email"
+                android:text="@string/email_contact_us"
+                android:textColor="@color/grey_text"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:id="@+id/imv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_email" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingBottom="@dimen/xlarge_margin"
+            android:paddingLeft="@dimen/xlarge_margin"
+            android:paddingRight="@dimen/xlarge_margin"
+            android:text="@string/description_email_address"
+            android:textColor="@color/hint_color" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xlarge_margin"
+            android:background="@color/white"
+            android:padding="@dimen/xlarge_margin">
+
+            <TextView
+                android:id="@+id/txv_label_mailing_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_2"
+                android:layout_toLeftOf="@+id/imv_map"
+                android:text="@string/label_mailing_address"
+                android:textColor="@color/grey_text"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txv_label_mailing_address"
+                android:layout_toLeftOf="@+id/imv_map"
+                android:text="@string/mailing_address"
+                android:textColor="@color/hint_color"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:id="@+id/imv_map"
+                android:layout_width="98dp"
+                android:layout_height="98dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/xlarge_margin"
+            android:paddingLeft="@dimen/xlarge_margin"
+            android:paddingRight="@dimen/xlarge_margin">
+
+            <include layout="@layout/view_widget_footer" />
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>

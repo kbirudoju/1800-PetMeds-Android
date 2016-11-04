@@ -216,28 +216,38 @@ public class Utils {
         }
     }
 
-    public static void sendEmail(Context context, String emailAddress, String emailSubject, String emailBody, File attachmentFile, String attachmentName) {
-        Intent email = new Intent(Intent.ACTION_SEND);
-        email.setType("text/plain");
-        if (emailAddress != null && !emailAddress.isEmpty()) {
-            email.putExtra(Intent.EXTRA_EMAIL, emailAddress);
-        }
-        if (emailSubject != null && !emailSubject.isEmpty()) {
-            email.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
-        }
-        if (emailBody != null && !emailBody.isEmpty()) {
-            email.putExtra(Intent.EXTRA_TEXT, emailBody);
-        }
+    public static void shareFile(Context context, File attachmentFile, String attachmentName) {
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
         if (attachmentFile != null) {
             Uri uri = Uri.fromFile(new File(attachmentFile, attachmentName + ".pdf"));
-            email.putExtra(Intent.EXTRA_STREAM, uri);
-            email.setType("application/pdf");
+            sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            sendIntent.setType("application/pdf");
         }
-        email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
-            context.startActivity(email);
+            context.startActivity(sendIntent);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(context, "There are no email applications installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void sendEmail(Context context, String receiverEmail, String subject, String body) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        if (receiverEmail != null && !receiverEmail.isEmpty()) {
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, receiverEmail);
+        }
+        if (subject != null && !subject.isEmpty()) {
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        }
+        if (body != null && !body.isEmpty()) {
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+        }
+        emailIntent.setType("message/rfc822");
+        try {
+            context.startActivity(Intent.createChooser(emailIntent, context.getResources().getString(R.string.choose_email_client)));
+        } catch (android.content.ActivityNotFoundException ex) {
+            ex.printStackTrace();
         }
     }
 }

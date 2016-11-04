@@ -45,13 +45,13 @@ public abstract class AbstractFragment extends Fragment {
 
     void replaceCartFragment(Fragment fragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.cart_root_fragment_container, fragment , fragment.getClass().getSimpleName());
+        transaction.replace(R.id.cart_root_fragment_container, fragment, fragment.getClass().getSimpleName());
         transaction.commit();
     }
 
-    void replaceCartFragmentWithTag(Fragment fragment,String tag) {
+    void replaceCartFragmentWithTag(Fragment fragment, String tag) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.cart_root_fragment_container, fragment,tag);
+        transaction.replace(R.id.cart_root_fragment_container, fragment, tag);
         transaction.commit();
     }
 
@@ -90,9 +90,10 @@ public abstract class AbstractFragment extends Fragment {
         trans.addToBackStack(null);
         trans.commit();
     }
-    public void replaceAccountFragmentWithBundleTag(Fragment fragment, String tag,Bundle bundle) {
+
+    public void replaceAccountFragmentWithBundleTag(Fragment fragment, String tag, Bundle bundle) {
         FragmentTransaction trans = getFragmentManager().beginTransaction();
-        trans.replace(R.id.account_root_fragment_container, fragment,tag);
+        trans.replace(R.id.account_root_fragment_container, fragment, tag);
         fragment.setArguments(bundle);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.addToBackStack(null);
@@ -135,19 +136,13 @@ public abstract class AbstractFragment extends Fragment {
         trans.commit();
     }
 
-    public void addOrReplaceFragmentWithBackStack(Fragment fragment, Bundle bundle, int containerId) {
+    public void replaceFragmentWithBackStack(Fragment fragment, Bundle bundle, int containerId) {
         if (fragment != null) {
             fragment.setArguments(bundle);
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            if (fragmentManager.getBackStackEntryCount() == 0) {
-                transaction.replace(containerId, fragment);
-                transaction.addToBackStack(fragment.getClass().getSimpleName());
-            } else {
-                fragmentManager.popBackStack();
-                transaction.replace(containerId, fragment);
-                transaction.addToBackStack(null);
-            }
+            transaction.replace(containerId, fragment);
+            transaction.addToBackStack(fragment.getClass().getSimpleName());
             transaction.commit();
         }
     }
@@ -220,32 +215,35 @@ public abstract class AbstractFragment extends Fragment {
 
     /**
      * Register Intent to receive BroadCast in the onReceivedBroadCast Method
+     *
      * @param intentFilter
      * @param context
      * @return
      */
-    protected boolean registerIntent(IntentFilter intentFilter, Context context){
-        LocalBroadcastManager.getInstance(context).registerReceiver(abstractBroadcastReceiver,intentFilter);
+    protected boolean registerIntent(IntentFilter intentFilter, Context context) {
+        LocalBroadcastManager.getInstance(context).registerReceiver(abstractBroadcastReceiver, intentFilter);
         return true;
     }
 
     /**
      * De Register Intent to stop receiving broadcasts in onBroadCastReceived Method
      * Should run in onDestroyView atleasr
+     *
      * @param context
      * @return
      */
-    protected boolean deregisterIntent(Context context){
+    protected boolean deregisterIntent(Context context) {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(abstractBroadcastReceiver);
         return true;
     }
 
     /**
      * OverRide this method in Fragment to receive broadcasts for the intent filtered registered in registerIntent
+     *
      * @param context
      * @param intent
      */
-    protected void onReceivedBroadcast(Context context, Intent intent){
+    protected void onReceivedBroadcast(Context context, Intent intent) {
     }
 
     /**
@@ -255,7 +253,7 @@ public abstract class AbstractFragment extends Fragment {
     BroadcastReceiver abstractBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onReceivedBroadcast(context,intent);
+            onReceivedBroadcast(context, intent);
         }
     };
 
@@ -263,16 +261,16 @@ public abstract class AbstractFragment extends Fragment {
      * This method would check if the provided intent and the rootFragment have the similar names.
      * If yes- setHasOptionsMenu as true
      * else - setHasOptionsMenu as false
+     *
      * @param intent
      * @param rootFragmentName
      */
-    protected void checkAndSetHasOptionsMenu(Intent intent , String rootFragmentName) {
-        if(intent.getAction().equals(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION)) {
+    protected void checkAndSetHasOptionsMenu(Intent intent, String rootFragmentName) {
+        if (intent.getAction().equals(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION)) {
             String pareamentFragmentName = intent.getStringExtra(HomeActivity.FRAGMENT_NAME_KEY);
-            if(pareamentFragmentName != null && pareamentFragmentName.equals(rootFragmentName)) {
+            if (pareamentFragmentName != null && pareamentFragmentName.equals(rootFragmentName)) {
                 setHasOptionsMenu(true);
-            }
-            else {
+            } else {
                 setHasOptionsMenu(false);
             }
         }

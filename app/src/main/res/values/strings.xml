@@ -69,6 +69,14 @@
     <string name="push_notification_desc">Allow notification for order status, vet contact, refill reminder, offer, and
         product recall
     </string>
+    <string name="label_toll_free_number">Toll Free Number</string>
+    <string name="label_main_phone_number">Main Phone Number</string>
+    <string name="label_pharmacy_phone_number">Pharmacy Phone Number</string>
+    <string name="label_pharmacy_fax_number">Pharmacy Fax Number</string>
+    <string name="label_email_address">Email Address</string>
+    <string name="description_email_address">Emails received after normal business hours (see below) are answered the next day. If an immediate answer is required or if your pet is in need of urgent or emergency care, contact your pet/’s veterinary immediately.</string>
+    <string name="title_contact_us_caps">Contact Us</string>
+    <string name="label_mailing_address">Mailing Address</string>
 
     <!--Orders-->
     <string name="order_txt">Order</string>

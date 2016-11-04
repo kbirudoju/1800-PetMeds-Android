@@ -11,7 +11,6 @@ import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
 import com.petmeds1800.ui.dashboard.support.WidgetListAdapter;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
-import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import android.content.Context;
 import android.content.Intent;
@@ -27,18 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.AddToCartRequest;
-import com.petmeds1800.model.entities.PetItemList;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.dashboard.presenter.WidgetContract;
-import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
-import com.petmeds1800.ui.dashboard.support.WidgetListAdapter;
-import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeFragment;
-import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import java.util.List;
 
@@ -151,7 +140,7 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     @Override
     public void startWebView(Bundle bundle) {
         HomeFragment homeFragment = (HomeFragment) getParentFragment();
-        homeFragment.addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.home_root_fragment_container);
+        homeFragment.replaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.home_root_fragment_container);
     }
 
     @Override

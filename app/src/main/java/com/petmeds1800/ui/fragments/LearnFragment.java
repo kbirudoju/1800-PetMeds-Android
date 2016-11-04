@@ -102,7 +102,7 @@ public class LearnFragment extends AbstractFragment {
                     bundle.putString(CommonWebviewFragment.URL_KEY, url);
                     // getToolbar().setLogo(null);
                     MenuItemCompat.collapseActionView(mSearchMenuItem);
-                    addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
+                    replaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
 
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -126,7 +126,7 @@ public class LearnFragment extends AbstractFragment {
             Bundle bundle = new Bundle();
             bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_about));
             bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.url_learn_about));
-            addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
+            replaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
         }
         return super.onOptionsItemSelected(menuItem);
     }
@@ -170,7 +170,7 @@ public class LearnFragment extends AbstractFragment {
     }
 
     public void addAskVetFragment(Bundle bundle) {
-        addOrReplaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
+        replaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.container_fragment_learn);
     }
 
     @Override

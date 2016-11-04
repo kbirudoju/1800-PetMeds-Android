@@ -134,7 +134,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     }
 
     public void shareFile(File pdfFile, String pdfName) {
-        Utils.sendEmail(getActivity(), null, null, null, pdfFile, pdfName);
+        Utils.shareFile(getActivity(), pdfFile, pdfName);
     }
 
     private void initStoragePermissionsWrapper() {
