@@ -44,6 +44,9 @@ public class PetMedsAirShipReceiver extends AirshipReceiver {
     protected void onPushReceived(@NonNull Context context, @NonNull PushMessage message, boolean notificationPosted) {
         message.getPublicNotificationPayload();
         Bundle bundle = message.getPushBundle();
+        String id = (String) bundle.get("id");
+        String screeName = (String) bundle.get("target");
+        int type = Integer.valueOf((String)bundle.get("type"));
         message.getMetadata();
 
         Log.i(TAG,

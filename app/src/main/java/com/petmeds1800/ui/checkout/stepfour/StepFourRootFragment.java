@@ -1,14 +1,5 @@
 package com.petmeds1800.ui.checkout.stepfour;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.SavePetVetRequest;
@@ -20,8 +11,18 @@ import com.petmeds1800.ui.checkout.stepfour.presenter.StepFourRootContract;
 import com.petmeds1800.ui.checkout.stepfour.presenter.StepFourRootPresenter;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -94,6 +95,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AnalyticsUtil().trackScreen(getString(R.string.label_pet_vet_title));
         Bundle bundle = getArguments();
         if (bundle != null) {
             shoppingCartObj = (ShoppingCartListResponse) bundle.getSerializable(CartFragment.SHOPPING_CART);

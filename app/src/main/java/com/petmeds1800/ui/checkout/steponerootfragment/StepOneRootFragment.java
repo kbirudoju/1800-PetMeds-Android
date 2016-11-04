@@ -10,6 +10,7 @@ import com.petmeds1800.ui.address.AddressSelectionListFragment;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -61,6 +62,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AnalyticsUtil().trackScreen(getString(R.string.shipment_address));
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);

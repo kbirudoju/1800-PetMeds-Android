@@ -1,5 +1,14 @@
 package com.petmeds1800.ui.checkout.confirmcheckout;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CommitOrder;
+import com.petmeds1800.model.entities.CommitOrderResponse;
+import com.petmeds1800.model.entities.Item;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.LayoutPrintingUtils;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,14 +28,6 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CommitOrder;
-import com.petmeds1800.model.entities.CommitOrderResponse;
-import com.petmeds1800.model.entities.Item;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.LayoutPrintingUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -89,10 +90,15 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_confirmation_receipt, container, false);
         ButterKnife.bind(this, view);
@@ -151,18 +157,19 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         int hasStorageAccessPermission = ContextCompat
                 .checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (hasStorageAccessPermission != PackageManager.PERMISSION_GRANTED) {
-            checkRequiredPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionRequested() {
-                @Override
-                public void onPermissionGranted() {
-                    showShareOptions();
-                }
+            checkRequiredPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    new PermissionRequested() {
+                        @Override
+                        public void onPermissionGranted() {
+                            showShareOptions();
+                        }
 
-                @Override
-                public void onPermissionDenied(HashMap<String, Boolean> deniedPermissions) {
-                    // Permission Denied
-                    Toast.makeText(getActivity(), "Storage access denied", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        @Override
+                        public void onPermissionDenied(HashMap<String, Boolean> deniedPermissions) {
+                            // Permission Denied
+                            Toast.makeText(getActivity(), "Storage access denied", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         } else {
             showShareOptions();
         }
@@ -175,9 +182,16 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         }
     }
 
+    private void sendAnalyticsData(CommitOrder commitOrder) {
+        new AnalyticsUtil()
+                .trackScreenForProductTransaction(getString(R.string.label_confirmation_and_receipt), commitOrder,
+                        getActivity().getApplicationContext());
+    }
+
     private void populateReceiptData() {
 
-        CommitOrderResponse commitOrderResponse = (CommitOrderResponse) getArguments().getSerializable(Constants.CONFIRMATION_ORDER_RESPONSE);
+        CommitOrderResponse commitOrderResponse = (CommitOrderResponse) getArguments()
+                .getSerializable(Constants.CONFIRMATION_ORDER_RESPONSE);
 
         CommitOrder order = null;
         if (commitOrderResponse != null) {
@@ -191,6 +205,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
             mTaxes.setText(String.valueOf(order.getTaxTotal()));
             mTotal.setText(String.valueOf(order.getOrderTotal()));
             mSubtotalLabel.setText(getString(R.string.items_formatter, order.getItems().size()));
+            sendAnalyticsData(order);
             updateRecyclerView(order.getItems());
         } else {
 

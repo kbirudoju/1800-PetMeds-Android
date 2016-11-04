@@ -9,7 +9,6 @@ import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.MedicationReminderItem;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
-import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
@@ -70,6 +69,8 @@ public class HomeActivity extends AbstractActivity
     public static final String SETUP_HAS_OPTIONS_MENU_ACTION = "setupHasOptionsMenuAction";
 
     public static final String FRAGMENT_NAME_KEY = "fragmentName";
+
+    private static final int OFFSCREEN_PAGE_LIMIT = 3;
 
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
@@ -155,9 +156,10 @@ public class HomeActivity extends AbstractActivity
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
         ButterKnife.bind(this);
         mAnalyticsUtil = new AnalyticsUtil();
+
         PetMedsApplication.getAppComponent().inject(this);
         //Perform operation on the first time loading of home screen
         performOperationOnFirstLoad();
@@ -172,7 +174,7 @@ public class HomeActivity extends AbstractActivity
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(mAdapter);
         //we need to set the offset to 3 otherwise options menu cant be managed.
-        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setOffscreenPageLimit(OFFSCREEN_PAGE_LIMIT);
         mHomeTab.setupWithViewPager(mViewPager);
         for (int i = 0; i < mHomeTab.getTabCount(); i++) {
             View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
@@ -188,27 +190,6 @@ public class HomeActivity extends AbstractActivity
                     @Override
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
-                        int numTab = tab.getPosition();
-                        if (mViewPager.getCurrentItem() != numTab) {
-                            mViewPager.setCurrentItem(numTab);
-                            invalidateOptionsMenu();
-                        }
-                        switch (numTab) {
-                            case 0:
-                                setToolBarTitle("");
-                                break;
-                            case 1:
-                                setToolBarTitle(CART);
-                                break;
-                            case 2:
-                                setToolBarTitle(LEARN);
-                                break;
-                            case 3:
-                                setToolBarTitle(ACCOUNT);
-                                break;
-
-                        }
-                        Log.d("ontabselected", numTab + ">>>>");
                     }
 
                     @Override
@@ -244,14 +225,13 @@ public class HomeActivity extends AbstractActivity
                         checkLoginStatus();
                     }
                 }
-
+                //Send analytics
+                sendAnalytics(position);
                 if (position == 0) {
                     getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
-
                 } else {
                     getToolbar().setLogo(null);
                 }
-
                 invalidateOptionsMenu(position);
                 setToolBarTitle((getResources().getStringArray(R.array.tab_title)[position]));
             }
@@ -263,21 +243,36 @@ public class HomeActivity extends AbstractActivity
         };
 
         //code to set default first tab selected
-
-
         if (commitOrderResponse != null) {
             mViewPager.setCurrentItem(1);
         } else {
             mViewPager.setCurrentItem(0);
+
         }
 
         pageChangeListener.onPageSelected(0);
         invalidateOptionsMenu(0);
+
         // Instead of initializing it in onResume for many times we initialize it in onCreate
         mProgressDialog = new ProgressDialog();
         mAuthenticationDialog = new FingerprintAuthenticationDialog();
         mViewPager.addOnPageChangeListener(pageChangeListener);
         navigateOnReceivedNotification(screenFromPush);
+    }
+
+    private void sendAnalytics(int position) {
+        switch (position) {
+            case 0:
+                mAnalyticsUtil.trackScreen(getString(R.string.home_title));
+                break;
+            case 1:
+                mAnalyticsUtil.trackScreen(getString(R.string.cart_title));
+                break;
+            case 3:
+                mAnalyticsUtil.trackScreen(getString(R.string.title_account));
+                break;
+
+        }
     }
 
     private void navigateOnReceivedNotification(final String screenFromPush) {
@@ -289,7 +284,6 @@ public class HomeActivity extends AbstractActivity
                 public void run() {
                     switch (screenFromPush) {
                         case MEDICATION_REMINDER__ALERT:
-
                         case ORDER_ALERT:
                             mViewPager.setCurrentItem(3);
                             break;

@@ -31,6 +31,7 @@ import com.petmeds1800.ui.pets.support.AddPetContract;
 import com.petmeds1800.ui.pets.support.UpdateImageUtil;
 import com.petmeds1800.util.AlertRecyclerView;
 import com.petmeds1800.util.AlertRecyclerViewAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
@@ -265,6 +266,7 @@ public class AddPetFragment extends AbstractFragment
         mAddPetNameListener = addPetNameListener;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -276,8 +278,8 @@ public class AddPetFragment extends AbstractFragment
         if (isEditable) {
             if (mPet != null) {
                 ((AbstractActivity) getActivity()).setToolBarTitle(mPet.getPetName());
-
             }
+            new AnalyticsUtil().trackScreen(getString(R.string.label_edit_pet));
             editPetImageView.setVisibility(view.VISIBLE);
             addPetImageView.setVisibility(view.GONE);
             removePetButton.setVisibility(View.VISIBLE);
@@ -285,8 +287,8 @@ public class AddPetFragment extends AbstractFragment
             enableViews(false);
 
         } else {
-
             ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_add_pet));
+            new AnalyticsUtil().trackScreen(getString(R.string.label_add_pet));
             addPetImageView.setVisibility(view.VISIBLE);
             editPetImageView.setVisibility(view.GONE);
             removePetButton.setVisibility(View.GONE);

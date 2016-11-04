@@ -1,21 +1,5 @@
 package com.petmeds1800.ui.orders;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.dagger.component.DaggerOrderComponent;
@@ -31,6 +15,23 @@ import com.petmeds1800.ui.fragments.dialog.ItemSelectionDialogFragment.OnItemSel
 import com.petmeds1800.ui.orders.presenter.OrderListPresenter;
 import com.petmeds1800.ui.orders.support.DividerItemDecoration;
 import com.petmeds1800.ui.orders.support.MyOrderAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,11 @@ public class MyOrderFragment extends AbstractFragment
     private String filterApplied ;
     private int mSelectedFilterIndex=-1;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        new AnalyticsUtil().trackScreen(getString(R.string.label_order_history));
+    }
 
     @Nullable
     @Override

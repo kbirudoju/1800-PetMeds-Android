@@ -2,11 +2,17 @@ package com.petmeds1800.util;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CommitOrder;
+import com.petmeds1800.model.entities.Item;
 
 import android.content.Context;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -38,42 +44,36 @@ public class AnalyticsUtil {
                 .build());
     }
 
-    public static enum ScreenName {
-
-        SPLASH(R.string.activity_splash),
-        HOME(R.string.activity_home),
-        LOREM(R.string.fragment_lorem);
-
-        private final int mScreenNameRef;
-
-        private ScreenName(final int resourceId) {
-            mScreenNameRef = resourceId;
-        }
-
-        public int getScreenNameRef() {
-            return mScreenNameRef;
-        }
-    }
-
-    public static enum Event {
-
-        LINK_CLICK(R.string.link_article, R.string.link_action);
-
-        private final int mCategoryRef;
-
-        private final int mActionRef;
-
-        private Event(final int categoryRef, final int actionRef) {
-            mCategoryRef = categoryRef;
-            mActionRef = actionRef;
-        }
-
-        public int getCategoryRef() {
-            return mCategoryRef;
-        }
-
-        public int getActionRef() {
-            return mActionRef;
+    public void trackScreenForProductTransaction(String screenName, CommitOrder commitOrder, Context context) {
+        if (commitOrder != null) {
+            List<Item> commitOrderItems = commitOrder.getItems();
+            HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder();
+            mTracker.setScreenName(screenName);
+            mTracker.set("&cu", "USD");
+            builder.set("state", "California");
+            builder.set("city", "");
+            builder.set("country", "U.S.A");
+            ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
+                    .setTransactionId(commitOrder.getOrderId())
+                    .setTransactionAffiliation(context.getString(R.string.application_name))
+                    .setTransactionRevenue(commitOrder.getOrderTotal())
+                    .setTransactionTax(commitOrder.getTaxTotal())
+                    .setTransactionShipping(commitOrder.getShippingTotal());
+            builder.setProductAction(productAction);
+            if (commitOrderItems != null) {
+                for (Item item : commitOrderItems) {
+                    Product product = new Product()
+                            .setId(item.getCommerceItemId())
+                            .setCategory("Medications")
+                            .setName(item.getProductName())
+                            .setPrice(item.getSellingPrice())
+                            .setQuantity(item.getItemQuantity());
+                    builder.addProduct(product);
+                }
+            }
+            mTracker.send(builder.build());
         }
     }
+
+
 }

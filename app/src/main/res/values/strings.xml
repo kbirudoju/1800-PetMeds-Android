@@ -647,5 +647,9 @@
     <string name="label_instagram">Instagram</string>
     <string name="label_youtube">Youtube</string>
 
+    <string name="label_edit_pet">Edit Pet</string>
+    <string name="label_add_pet">Add Pet</string>
+    <string name="label_order_history">Order History</string>
+
 </resources>
 

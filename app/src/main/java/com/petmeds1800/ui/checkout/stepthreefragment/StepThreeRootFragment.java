@@ -14,6 +14,7 @@ import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
@@ -111,6 +112,7 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AnalyticsUtil().trackScreen(getString(R.string.payment_method_header));
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);

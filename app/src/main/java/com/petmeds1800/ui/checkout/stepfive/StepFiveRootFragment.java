@@ -18,6 +18,7 @@ import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
@@ -201,6 +202,7 @@ public class StepFiveRootFragment extends AbstractFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new AnalyticsUtil().trackScreen(getString(R.string.review_submit_order_title));
         commerceItemIds = new ArrayList<String>();
         reminderMonths = new ArrayList<Integer>();
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
