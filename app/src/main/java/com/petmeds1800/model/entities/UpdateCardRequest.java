@@ -7,6 +7,10 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UpdateCardRequest {
 
+    private String cardNumber;
+
+    private String cvv;
+
     private String exprMonth;
 
     private String exprYear;
@@ -28,5 +32,17 @@ public class UpdateCardRequest {
         this.cardKey = cardKey;
         this.billingAddressId = billingAddressId;
         this.sessionConfNumber = sessionConfNumber;
+    }
+
+    public void setBillingAddressId(String billingAddressId) {
+        this.billingAddressId = billingAddressId;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
     }
 }

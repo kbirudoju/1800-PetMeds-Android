@@ -2,8 +2,12 @@ package com.petmeds1800.ui.checkout.steponerootfragment;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.LoginIntent;
+import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.ShippingAddressRequest;
+import com.petmeds1800.model.shoppingcart.response.ShippingAddress;
+import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.LoginActivity;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
@@ -24,6 +28,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,6 +93,8 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     private GuestStepOneRootContract.Presenter mPresentor;
 
+    private Address mAddress;
+
     public boolean validateEmail(EditText auditEditText, TextInputLayout auditTextInputLayout) {
         if (!Patterns.EMAIL_ADDRESS.matcher(auditEditText.getText().toString()).matches()) {
             auditTextInputLayout.setError(getContext().getString(R.string.error_invalid_email));
@@ -138,6 +146,9 @@ public class GuestStepOneRootFragment extends AbstractFragment
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mPresentor = new GuestStepOneRootPresentor(this);
+
+        //start address extraction
+        mPresentor.extractAddress(mShoppingCartListResponse.getShoppingCart().getShippingGroups());
     }
 
     @Nullable
@@ -147,8 +158,32 @@ public class GuestStepOneRootFragment extends AbstractFragment
         View view = inflater.inflate(R.layout.fragment_guest_step_one_fragment, container, false);
         ((CheckOutActivity) getActivity()).setActiveStep(mStepName);
         ButterKnife.bind(this, view);
+
+        populateEmail();
+
         return view;
     }
+
+    private void populateEmail() {
+        ArrayList<ShippingGroups> shippingGroups = mShoppingCartListResponse.getShoppingCart().getShippingGroups();
+        if(shippingGroups != null || shippingGroups.size() > 0) {
+
+            ShippingAddress shippingAddress = shippingGroups.get(0)
+                    .getShippingAddress();
+
+            if(shippingAddress != null) {
+
+                if(shippingAddress.getEmail() != null) {
+                    mEmailEdit.setText(
+                            shippingAddress.getEmail());
+                    mConfirmEmailEdit.setText(
+                            shippingAddress.getEmail());
+                }
+
+            }
+        }
+    }
+
 
     private AddEditAddressFragment getFragmentReference() {
         return (AddEditAddressFragment) getChildFragmentManager().findFragmentById(R.id.billingAddressfragment);
@@ -201,7 +236,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        replaceStepRootChildFragment(AddEditAddressFragment.newInstance(null, GuestStepOneRootFragment.REQUEST_CODE),
+        replaceStepRootChildFragment(AddEditAddressFragment.newInstance(mAddress, GuestStepOneRootFragment.REQUEST_CODE),
                 R.id.billingAddressfragment);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
@@ -227,8 +262,11 @@ public class GuestStepOneRootFragment extends AbstractFragment
         boolean isValidateFromFragment = getFragmentReference().validateFields();
         switch (view.getId()) {
             case R.id.login_navigator:
-                startActivity(new LoginIntent(getActivity()));
-                getActivity().finishAffinity();
+                LoginIntent loginIntent = new LoginIntent(getActivity());
+                loginIntent.setAction(LoginActivity.START_CHECKOUT);
+                loginIntent.putExtra(CartFragment.SHOPPING_CART,mShoppingCartListResponse);
+                startActivity(loginIntent);
+//                getActivity().finishAffinity();
                 break;
             case R.id.shippingNavigator:
                 if (!isValidateFromActivity || !isValidateFromFragment) {
@@ -260,6 +298,14 @@ public class GuestStepOneRootFragment extends AbstractFragment
     public void showErrorCrouton(CharSequence message, boolean span) {
         ((CheckOutActivity) getActivity()).hideProgress();
         Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+    }
+
+    @Override
+    public void setAddress(Address address) {
+        mAddress = address;
+        if(getFragmentReference() != null && address != null) {
+            getFragmentReference().populateData(address);
+        }
     }
 
     @Override

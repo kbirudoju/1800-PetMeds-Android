@@ -1,12 +1,17 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.GuestCheckoutPaymentReuest;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.UpdateCardRequest;
+import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
+
+import java.util.ArrayList;
 
 /**
  * Created by Sdixit on 29-09-2016.
@@ -27,11 +32,16 @@ public class GuestStepThreeRootContract {
         void showErrorCrouton(CharSequence message, boolean span);
 
         void onSuccessCreditCardPayment(ShoppingCartListResponse response);
+
+//        void setAddress(Address address);
     }
 
     interface Presenter extends BasePresenter{
 
-        void applyCreditCardPaymentMethod(AddressRequest addressRequest, CardRequest cardRequest);
+        void applyCreditCardPaymentMethod(AddressRequest addressRequest, CardRequest cardRequest,
+                UpdateCardRequest updateCardRequest);
+
+//        void extractAddress(ArrayList<ShippingGroups> shippingGroupses);
     }
     /**
      * This interface should be implemented by the child AddGuestCardFragment
@@ -49,6 +59,7 @@ public class GuestStepThreeRootContract {
 
         CardRequest getCard();
 
+        UpdateCardRequest getUpdatedCard(String cardKey);
     }
 
     public interface AddAddressInteractionListener {

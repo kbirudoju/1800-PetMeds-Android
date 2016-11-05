@@ -84,7 +84,9 @@
 
         <activity
             android:name=".ui.checkout.CheckOutActivity"
-            android:screenOrientation="portrait" />
+            android:parentActivityName=".ui.HomeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <activity
             android:name=".ui.vet.ShowVetOnMapActivity"

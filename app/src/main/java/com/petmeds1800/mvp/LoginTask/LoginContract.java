@@ -20,7 +20,7 @@ public interface LoginContract {
 
         void showErrorCrouton(CharSequence message, boolean span);
 
-        void navigateToHome();
+        void navigateToHomeOrCheckout();
     }
 
     interface Presenter extends BasePresenter {

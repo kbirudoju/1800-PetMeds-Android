@@ -1,9 +1,12 @@
 package com.petmeds1800.ui.checkout;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
@@ -247,9 +250,19 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            super.onBackPressed();
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            //create a new task
+            // when navigating up, with a synthesized back stack.
+            TaskStackBuilder.create(this)
+                    // Add all of this activity's parents to the back stack
+                    .addNextIntentWithParentStack(upIntent)
+                            // Navigate up to the closest parent
+                    .startActivities();
+
+            return true;
         }
-        return super.onOptionsItemSelected(item);
+
+            return super.onOptionsItemSelected(item);
     }
 
     @Override

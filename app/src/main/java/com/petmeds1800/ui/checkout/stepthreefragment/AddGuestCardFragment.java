@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.PaymentGroup;
+import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.model.shoppingcart.response.PaymentGroups;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.MonthYearPicker;
@@ -102,7 +103,6 @@ public class AddGuestCardFragment extends AbstractFragment implements
                         populateCardData(paymentGroups);
             }
         }
-        setHasOptionsMenu(true);
         PetMedsApplication.getAppComponent().inject(this);
     }
 
@@ -215,5 +215,20 @@ public class AddGuestCardFragment extends AbstractFragment implements
     @Override
     public CardRequest getCard() {
         return mCardRequest;
+    }
+
+    @Override
+    public UpdateCardRequest getUpdatedCard(String cardKey) {
+        UpdateCardRequest updateCardRequest = new UpdateCardRequest(
+                String.valueOf(mSelectedExpirationMonth)
+                , String.valueOf(mSelectedExpirationYear)
+                , true, cardKey
+                , ""  //TODO we should attach the addressID once a billing address has been added
+                , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+
+        updateCardRequest.setCardNumber(mCardNumberEdit.getText().toString());
+        updateCardRequest.setCvv(mCvvEdit.getText().toString());
+
+        return updateCardRequest;
     }
 }

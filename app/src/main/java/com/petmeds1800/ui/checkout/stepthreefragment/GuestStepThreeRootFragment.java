@@ -7,6 +7,7 @@ import com.petmeds1800.model.Card;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.model.shoppingcart.response.PaymentGroups;
 import com.petmeds1800.model.shoppingcart.response.ShippingAddress;
 import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
@@ -215,11 +216,10 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
         activity.showProgress();
         //TODO call the presenter to first save the address and then card and then apply both of them
         AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager().findFragmentById(R.id.creditCardDetailFragment);
-        CardRequest cardRequest;
+
         AddressRequest addressRequest;
         if(addGuestCardFragment != null) {
             if( addGuestCardFragment.checkAndShowError()) {
-                cardRequest = addGuestCardFragment.getCard();
 
                 AddEditAddressFragment addEditAddressFragment = (AddEditAddressFragment) getChildFragmentManager().findFragmentById(R.id.billingAddressfragment);
                 if(addEditAddressFragment != null) {
@@ -227,7 +227,21 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
                         addEditAddressFragment.initializeGuestAddressRequest();
                         addressRequest = addEditAddressFragment.getAddressRequest();
 
-                        mPresenter.applyCreditCardPaymentMethod(addressRequest , cardRequest);
+                        //check if its a addCard request or update card depending on the availablity of the paymentCardKey
+                        if(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey() == null ||
+                                mShoppingCartListResponse.getShoppingCart().getPaymentCardKey().isEmpty()) {
+
+                            CardRequest cardRequest = addGuestCardFragment.getCard();
+
+                            mPresenter.applyCreditCardPaymentMethod(addressRequest , cardRequest , null);
+                        }
+                        else {
+                            //pass the cardKey and get the updated card request
+                            UpdateCardRequest updateCardRequest = addGuestCardFragment.getUpdatedCard(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey());
+
+                            mPresenter.applyCreditCardPaymentMethod(addressRequest , null , updateCardRequest);
+                        }
+
                     }
                 }
             }

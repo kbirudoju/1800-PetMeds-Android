@@ -227,7 +227,8 @@ public class AddEditAddressFragment extends AbstractFragment
         }
         if (mRequestCode != StepThreeRootFragment.LOGGED_IN_REQUEST_CODE
                 && mRequestCode != StepThreeRootFragment.GUEST_REQUEST_CODE
-                && mRequestCode != GuestStepOneRootFragment.REQUEST_CODE) {
+                && mRequestCode != GuestStepOneRootFragment.REQUEST_CODE
+                && mRequestCode != GuestStepThreeRootFragment.REQUEST_CODE) {
             setHasOptionsMenu(true);
         }
         PetMedsApplication.getAppComponent().inject(this);

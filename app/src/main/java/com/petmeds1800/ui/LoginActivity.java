@@ -18,6 +18,8 @@ import javax.inject.Inject;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String START_CHECKOUT = "start_checkout";
+
     @Inject
     LoginPresenter mLoginPresenter;
 
