@@ -1,11 +1,13 @@
 package com.petmeds1800.ui.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.petmeds1800.PetMedsApplication;
@@ -24,7 +27,17 @@ import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.PaypalResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.util.Constants;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Iterator;
 
 import javax.inject.Inject;
@@ -229,7 +242,7 @@ public class CommonWebviewFragment extends AbstractFragment {
                 cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
             }
         }
-       // cookieString = cookieString + "app=true; ";
+        // cookieString = cookieString + "app=true; ";
         CookieManager.getInstance().setCookie(postData, cookieString);
 
         if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -255,7 +268,7 @@ public class CommonWebviewFragment extends AbstractFragment {
         //mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
-      //  mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
+        //  mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
         mWebView.loadUrl(postData);
 
 
@@ -271,18 +284,108 @@ public class CommonWebviewFragment extends AbstractFragment {
 
     private class Callback extends WebViewClient {
 
+        private void finalyClose(){
+            Log.w("OverrideUrlLoading", "finalyClose Enter");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getActivity().onBackPressed();
+                }
+            });
+            Log.w("OverrideUrlLoading", "finalyClose Enter");
+        }
+
+        private void SuccessResponse(final WebView view, final String url){
+            Log.w("OverrideUrlLoading", "SuccessResponse Enter");
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(),"200 OK Response", Toast.LENGTH_LONG).show();
+                    try {
+                        ((HomeActivity)getActivity()).updateCartMenuItemCount();
+                    } catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            Log.w("OverrideUrlLoading", "SuccessResponse Exit");
+        }
+
+        private void FailureResponse(final WebView view, final String url, final String responseCode){
+            Log.w("OverrideUrlLoading", "FailureResponse Enter");
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(),responseCode, Toast.LENGTH_LONG).show();
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_HOME_ROOT_SESSION_CONFIRMATION));
+                }
+            });
+            Log.w("OverrideUrlLoading", "FailureResponse Exit");
+        }
+
+        private void Thread_URL_Call_Cart(final WebView view, final String url){
+            Log.w("OverrideUrlLoading", "Thread_URL_Call_Cart Enter");
+
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    Log.w("OverrideUrlLoading", "Thread_URL_Call_Cart Thread Enter");
+
+                    try {
+                        URL url1 = new URL(url);
+                        URLConnection conexion = url1.openConnection();
+                        conexion.setConnectTimeout(3000);
+                        conexion.connect();
+                        HttpGet httpGet = new HttpGet(url);
+
+                        //************************
+                        String cookieString = null;
+                        for (Iterator<Cookie> iterator = mCookieCache.iterator() ; iterator.hasNext();) {
+                            Cookie cookie = iterator.next();
+                            if(cookie.name().equals("JSESSIONID")) {
+                                cookieString = "JSESSIONID=" + cookie.value() + "; ";
+                            }
+                            else if(cookie.name().equals("SITESERVER")) {
+                                cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
+                            }
+                        }
+                        cookieString = cookieString + "app=true; ";
+
+                        httpGet.setHeader("Cookie",cookieString);
+                        HttpResponse response = response = new DefaultHttpClient().execute(httpGet);
+                        if (response.getStatusLine().getStatusCode() == 200) {
+                            SuccessResponse(view,url);
+                        } else {
+                            FailureResponse(view,url, String.valueOf(response.getStatusLine().getStatusCode()));
+                        }
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        finalyClose();
+                    }
+                    Log.w("OverrideUrlLoading", "Thread_URL_Call_Cart Thread Exit");
+                }
+            };
+            new Thread(runnable).start();
+            Log.w("OverrideUrlLoading", "Thread_URL_Call_Cart Exit");
+        }
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.d("url is", url);
+            Log.d("url is", url);
+
             if (url.contains("Add+To+Cart")){
-                getActivity().onBackPressed();
-                try {
-                    ((HomeActivity)getActivity()).updateCartMenuItemCount();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+                Log.w("OverrideUrlLoading", "Contains Cart");
+                Thread_URL_Call_Cart(view,url);
+                return true;
+            } else {
+                return super.shouldOverrideUrlLoading(view, url);
             }
-            return super.shouldOverrideUrlLoading(view, url);
         }
 
         /*@Override

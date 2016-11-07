@@ -46,6 +46,8 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import static com.petmeds1800.util.Constants.HIDE_PROGRESSBAR_OR_ANIMATION;
+import static com.petmeds1800.util.Constants.SHOW_PROGRESSBAR_OR_ANIMATION;
 import static com.petmeds1800.util.Utils.toggleGIFAnimantionVisibility;
 import static com.petmeds1800.util.Utils.toggleProgressDialogVisibility;
 
@@ -76,8 +78,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     private LinearLayout mOfferCodeContainerLayout;
 
     private ProgressBar mProgressBar;
-    private static boolean SHOW_PROGRESSBAR_OR_ANIMATION = true;
-    private static boolean HIDE_PROGRESSBAR_OR_ANIMATION = false;
+
     private ImageButton mPayPalCheckoutButton;
 
 
@@ -87,12 +88,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             super.handleMessage(msg);
 
             if (msg.what == Constants.DELETE_ITEM_REQUEST_SHOPPINGCART) {
-                callmShoppingCartAPI(
-                        new RemoveItemRequestShoppingCart(msg.getData().get(Constants.COMMERCE_ITEM_ID).toString(),
-                                null));
+                callmShoppingCartAPI(new RemoveItemRequestShoppingCart(msg.getData().get(Constants.COMMERCE_ITEM_ID).toString(),null));
             } else if (msg.what == Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART) {
-                callmShoppingCartAPI(new UpdateItemQuantityRequestShoppingCart(
-                        ((HashMap<String, String>) msg.getData().getSerializable(Constants.QUANTITY_MAP))));
+                callmShoppingCartAPI(new UpdateItemQuantityRequestShoppingCart(((HashMap<String, String>) msg.getData().getSerializable(Constants.QUANTITY_MAP))));
             } else if (msg.what == Constants.CLICK_ITEM_UPDATE_SHOPPINGCART) {
                 CommonWebviewFragment commonWebviewFragment = new CommonWebviewFragment();
                 commonWebviewFragment.setArguments(msg.getData());
@@ -130,6 +128,17 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((Button)mEmptyCheckoutContainer.findViewById(R.id.editCard_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity)getActivity()).scrollViewPager(0);
+            }
+        });
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         callmShoppingCartAPI(null);
@@ -143,7 +152,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         } else if (intent.getAction().equals(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION)) {
             checkAndSetHasOptionsMenu(intent , CartRootFragment.class.getName());
         }
-
         super.onReceivedBroadcast(context, intent);
 
     }
@@ -153,8 +161,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         super.onPause();
         mPresenter = null;
     }
-
-
 
     @Override
     public void onDestroyView() {
@@ -386,8 +392,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
       mProgressBar.setVisibility(View.VISIBLE);
         PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("cart");
         mPresenter.checkoutPayPal(payPalCheckoutRequest);
-
-
     }
 
     public void startCheckoutAfterPayment(PaypalResponse response){

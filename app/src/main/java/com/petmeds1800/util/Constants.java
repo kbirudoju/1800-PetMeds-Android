@@ -119,11 +119,11 @@ public class Constants {
 
     public static final String KEY_CART_FRAGMENT_INTENT_FILTER = "cart_fragment_intent_filter";
 
-
     public static final String KEY_PAYMENT_INTENT_FILTER = "payment_intent_filter";
 
-
     public static final String KEY_AUTHENTICATION_SUCCESS = "authentication_success_event";
+
+    public static final String KEY_HOME_ROOT_SESSION_CONFIRMATION = "session_confirmation";
 
 
 }

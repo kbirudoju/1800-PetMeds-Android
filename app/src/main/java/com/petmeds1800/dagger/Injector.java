@@ -39,6 +39,7 @@ import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
+import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.SignUpFragment;
@@ -223,5 +224,7 @@ public interface Injector {
     void inject(EditReminderPresenter editReminderPresenter);
 
     void inject(CartFragment cartFragment);
+
+    void inject(HomeRootFragment homeRootFragment);
 }
 

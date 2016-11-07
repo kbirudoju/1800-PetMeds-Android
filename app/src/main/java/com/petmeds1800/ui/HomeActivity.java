@@ -515,7 +515,7 @@ public class HomeActivity extends AbstractActivity
                         .startAsyncUpdateShoppingCartIconCountThread();
             }
         };
-        new Handler().postDelayed(runnable, 1000);
+        new Handler().postDelayed(runnable, 1);
     }
 
     /**
@@ -530,7 +530,7 @@ public class HomeActivity extends AbstractActivity
                         .sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
             }
         };
-        new Handler().postDelayed(runnable, 1000);
+        new Handler().postDelayed(runnable, 1);
     }
 
     public final Handler HomeActivityMessageHandler = new Handler() {
