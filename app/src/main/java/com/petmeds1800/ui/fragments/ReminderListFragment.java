@@ -79,7 +79,7 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
 
     @Override
     public boolean postGeneralPopulateRefillReminderList(RefillReminderListResponse refillReminderListResponse) {
-        if (refillReminderListResponse.getEasyRefillReminder().isEmpty()){
+        if (null == refillReminderListResponse || null == refillReminderListResponse.getEasyRefillReminder() || refillReminderListResponse.getEasyRefillReminder().isEmpty()){
             mNoReminderListContainer.setVisibility(View.VISIBLE);
             mReminderListContainer.setVisibility(View.GONE);
         } else {
@@ -161,10 +161,10 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
                 for (int j = 0 ; j < orderItems.size(); j++){
 
                     if (null == orderItems.get(j).getPetId()){
-                        orderItems.get(j).setPetId("null");
+                        orderItems.get(j).setPetId("");
                     }
                     if (null == orderItems.get(j).getPetName()){
-                        orderItems.get(j).setPetName("null");
+                        orderItems.get(j).setPetName("");
                     }
 
                     int index = getindex(refillReminderSortingperPets,orderItems.get(j).getPetId());

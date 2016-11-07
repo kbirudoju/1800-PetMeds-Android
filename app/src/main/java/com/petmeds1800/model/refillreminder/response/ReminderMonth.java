@@ -7,6 +7,13 @@ import java.io.Serializable;
  */
 
 public class ReminderMonth implements Serializable {
+
+    public ReminderMonth(String name, String value, String shortName) {
+        this.name = name;
+        this.value = value;
+        this.shortName = shortName;
+    }
+
     private String name;
 
     private String value;

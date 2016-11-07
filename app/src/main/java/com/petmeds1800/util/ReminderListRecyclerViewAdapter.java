@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
 import com.petmeds1800.model.RefillReminderSortingperPet;
 import com.petmeds1800.model.refillreminder.response.OrderItems;
+import com.petmeds1800.model.refillreminder.response.ReminderMonth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +74,14 @@ public class ReminderListRecyclerViewAdapter extends RecyclerView.Adapter<Remind
                     ((ImageView)v.findViewById(R.id.image_medication)).setImageDrawable(circularBitmapDrawable);
                 }
             });
+
+            //*******************************************If NULL is as Reminder Month***********************************
+
+            if (null == mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().getReminderMonth()){
+                mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().setReminderMonth(new ReminderMonth("","",""));
+            }
+
+            //*******************************************If NULL is as Reminder Month***********************************
 
             ((TextView)v.findViewById(R.id.text_medication_description)).setText(mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().getSkuDisplayName());
             ((TextView)v.findViewById(R.id.text_medication_month)).setText(mContext.getString(R.string.for_tag_pet_month) + " " + mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().getReminderMonth().getName());
