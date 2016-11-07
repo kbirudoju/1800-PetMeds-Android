@@ -1,17 +1,5 @@
 package com.petmeds1800.ui.dashboard;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.AddToCartRequest;
-import com.petmeds1800.model.entities.PetItemList;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.dashboard.presenter.WidgetContract;
-import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
-import com.petmeds1800.ui.dashboard.support.WidgetListAdapter;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.HomeRootFragment;
-import com.petmeds1800.util.GeneralPreferencesHelper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,10 +14,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.AddToCartRequest;
+import com.petmeds1800.model.entities.Category;
+import com.petmeds1800.model.entities.PetItemList;
+import com.petmeds1800.model.entities.WhatsNextCategory;
+import com.petmeds1800.model.entities.WidgetData;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.dashboard.presenter.WidgetContract;
+import com.petmeds1800.ui.dashboard.presenter.WidgetPresenter;
+import com.petmeds1800.ui.dashboard.support.WidgetListAdapter;
+import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeFragment;
-
+import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import java.util.List;
 
@@ -76,13 +78,21 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                     AddToCartRequest addToCartRequest = new AddToCartRequest(skuId, productId, quantity, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                     mPresenter.addToCart(addToCartRequest);
                     Log.d("cart detail", petItem.getRefillQuantity() + ">>>" + petItem.getSku().getParentProduct().getProductId() + ">>>" + petItem.getSku().getSkuId());
-                }else{
+                }else if(v.getTag() instanceof Category){
+                 Category category =(Category)v.getTag();
+                  ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(category.getCategoryPageUrl(), getString(R.string.recommendation_title));
 
-                        ((HomeFragmentContract.ProductCategoryInteractionListener)getParentFragment()).replaceWebViewFragment(String.valueOf(v.getTag()));
 
+                }else if(v.getTag() instanceof WhatsNextCategory){
+                    WhatsNextCategory whatsNextCategory = (WhatsNextCategory) v.getTag();
+                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(whatsNextCategory.getCategoryPageUrl(), getString(R.string.whats_next_title));
+
+                }else if(v.getTag() instanceof WidgetData){
+                    WidgetData widgetData = (WidgetData) v.getTag();
+                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(widgetData.getLearnMoreUrl(), getString(R.string.tip_title));
 
                 }
-                }
+            }
         });
 
         mPresenter=new WidgetPresenter(this);

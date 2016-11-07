@@ -1,5 +1,7 @@
 package com.petmeds1800.model.shoppingcart.response;
 
+import com.petmeds1800.model.entities.CheckoutSteps;
+
 import java.io.Serializable;
 
 /**
@@ -15,6 +17,16 @@ public class ShoppingCartListResponse implements Serializable {
     private int itemCount;
 
     private ShippingMessageInfo shippingMessageInfo;
+
+    public CheckoutSteps getCheckoutSteps() {
+        return checkoutSteps;
+    }
+
+    public void setCheckoutSteps(CheckoutSteps checkoutSteps) {
+        this.checkoutSteps = checkoutSteps;
+    }
+
+    private CheckoutSteps checkoutSteps;
 
     public ShoppingCart getShoppingCart ()
     {

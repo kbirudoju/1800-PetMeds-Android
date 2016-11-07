@@ -49,6 +49,7 @@ public class Utils {
     public static final String reminderTypeArray[] = new String[]{"daily", "weekly", "monthly"};
 
     public static String changeDateFormat(long millisecond, String dateFormat) {
+
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         String dateString = formatter.format(new Date(millisecond));
         return dateString;

@@ -61,7 +61,7 @@ public abstract class AbstractFragment extends Fragment {
         fragment.setArguments(bundle);
         transaction.commit();
     }
-    void replaceCartFragmentWithBackStack(Fragment fragment,String tag,Bundle  bundle) {
+   protected void replaceCartFragmentWithBackStack(Fragment fragment,String tag,Bundle  bundle) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.cart_root_fragment_container, fragment,tag);
         transaction.addToBackStack(null);

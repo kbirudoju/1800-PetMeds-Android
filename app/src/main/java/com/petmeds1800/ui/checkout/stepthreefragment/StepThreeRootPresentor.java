@@ -1,15 +1,17 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
+import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -101,6 +103,39 @@ public class StepThreeRootPresentor implements StepThreeRootContract.Presenter {
                                 mView.errorOnUpdateAddress();
                             }
                         }
+
+                    }
+                });
+    }
+
+
+    @Override
+    public void checkoutPayPal(PayPalCheckoutRequest request) {
+        mPetMedsApiService.payPalCheckout(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<String>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("error",e.getLocalizedMessage());
+                        mView.onPayPalError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(Response<String> s) {
+                        Log.d("response", s + ">>>");
+                        String loactionHeader=s.headers().get("Location");
+                       if(loactionHeader==null || loactionHeader.isEmpty()){
+                           mView.onPayPalError("");
+                       }else{
+                           mView.onSuccess(loactionHeader);
+                       }
 
                     }
                 });

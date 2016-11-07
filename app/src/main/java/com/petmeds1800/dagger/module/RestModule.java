@@ -35,8 +35,8 @@ public class RestModule {
     }
 
     @Provides
-    @AppScope
-    public OkHttpClient provideOkHttpClient(CookieJar cookieJar) {
+     @AppScope
+     public OkHttpClient provideOkHttpClient(CookieJar cookieJar) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
        // builder.followRedirects(false);
         if (BuildConfig.DEBUG) {
@@ -47,6 +47,20 @@ public class RestModule {
         }
         return builder.cookieJar(cookieJar).build();
     }
+
+   /* @Provides
+    @AppScope
+    public OkHttpClient provideOkHttpClientRedirect(CookieJar cookieJar) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.followRedirects(false);
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addNetworkInterceptor(interceptor);
+
+        }
+        return builder.cookieJar(cookieJar).build();
+    }*/
 
     @Provides
     @AppScope

@@ -1,9 +1,11 @@
 package com.petmeds1800.model.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by Abhinav on 24/9/16.
  */
-public class StepState {
+public class StepState implements Serializable{
 
     private boolean reviewComplete;
     private String lastCompletedStep;

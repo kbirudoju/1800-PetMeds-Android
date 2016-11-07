@@ -1,36 +1,5 @@
 package com.petmeds1800.ui;
 
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.PaypalResponse;
-import com.petmeds1800.model.entities.CommitOrderResponse;
-import com.petmeds1800.model.entities.MedicationReminderItem;
-import com.petmeds1800.model.entities.SecurityStatusResponse;
-import com.petmeds1800.ui.fragments.AccountRootFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.fragments.CartRootFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.ui.fragments.HomeRootFragment;
-import com.petmeds1800.ui.fragments.LearnRootFragment;
-import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
-import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
-import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract;
-import com.petmeds1800.ui.payment.AddACardContract;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
-import com.petmeds1800.ui.support.TabPagerAdapter;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.AsyncUpdateShoppingCartIconCountThread;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
-import com.urbanairship.UAirship;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,6 +22,37 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.entities.CommitOrderResponse;
+import com.petmeds1800.model.entities.MedicationReminderItem;
+import com.petmeds1800.model.entities.SecurityStatusResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.fragments.AccountRootFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CartRootFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.fragments.HomeRootFragment;
+import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract;
+import com.petmeds1800.ui.payment.AddACardContract;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.ui.support.TabPagerAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.AsyncUpdateShoppingCartIconCountThread;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
+import com.urbanairship.UAirship;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -574,12 +574,16 @@ public class HomeActivity extends AbstractActivity
 
 
     @Override
-    public void onPaymentCompleted(PaypalResponse paypalResponse) {
-        CartFragment cartFragment = (CartFragment) getSupportFragmentManager()
-                .findFragmentByTag(CartFragment.class.getSimpleName());
-        if (cartFragment != null) {
+    public void onPaymentCompleted(ShoppingCartListResponse paypalResponse) {
+        CartFragment cartFragment=(CartFragment)getSupportFragmentManager().findFragmentByTag(CartFragment.class.getSimpleName());
+        if(cartFragment!=null){
             cartFragment.startCheckoutAfterPayment(paypalResponse);
         }
+    }
+
+    @Override
+    public void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName) {
+
     }
 }
 

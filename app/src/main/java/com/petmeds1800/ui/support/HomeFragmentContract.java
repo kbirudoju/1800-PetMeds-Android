@@ -21,7 +21,7 @@ public interface HomeFragmentContract {
 
     interface ProductCategoryInteractionListener {
         void startWebViewFragment(ProductCategory productCategory);
-        void replaceWebViewFragment(String url);
+        void replaceWebViewFragment(String url,String title);
     }
 
 }

@@ -43,6 +43,7 @@
             android:paddingBottom="@dimen/dp_25"
             style="@style/rounded_button_text"/>
         <RelativeLayout
+            android:id="@+id/learnMoreView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/petmeds_blue"

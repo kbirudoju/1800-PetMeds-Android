@@ -19,5 +19,4 @@ public class PayPalCheckoutRequest {
 
 
     private String source;
-    private String _dynSessConf;
 }

@@ -650,6 +650,10 @@
     <string name="label_edit_pet">Edit Pet</string>
     <string name="label_add_pet">Add Pet</string>
     <string name="label_order_history">Order History</string>
+    <string name="unexpected_error_label">Unexpected Error</string>
+    <string name="tip_title">Tip</string>
+    <string name="recommendation_title">Recommendation</string>
+    <string name="whats_next_title">WhatsNext</string>
 
 </resources>
 

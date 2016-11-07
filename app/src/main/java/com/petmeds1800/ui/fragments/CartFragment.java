@@ -28,7 +28,6 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.CheckOutIntent;
 import com.petmeds1800.model.PayPalCheckoutRequest;
-import com.petmeds1800.model.PaypalResponse;
 import com.petmeds1800.model.shoppingcart.request.AddItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
@@ -57,6 +56,7 @@ import static com.petmeds1800.util.Utils.toggleProgressDialogVisibility;
 public class CartFragment extends AbstractFragment implements ShoppingCartListContract.View,View.OnClickListener {
 
     public static final String SHOPPING_CART = "shoppingCart";
+    public static final String CHECKOUT_STEPS="checkoutSteps";
 
     public static int sPreviousScrollPosition = 0;
 
@@ -214,6 +214,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mProgressBar.setVisibility(View.GONE);
         Bundle bundle = new Bundle();
         bundle.putString(CommonWebviewFragment.PAYPAL_DATA, url);
+        bundle.putBoolean(CommonWebviewFragment.ISCHECKOUT,false);
         replaceCartFragmentWithBackStack(new CommonWebviewFragment(), CommonWebviewFragment.class.getName(), bundle);
        /* CommonWebviewFragment webViewFragment = new CommonWebviewFragment();
         webViewFragment.setArguments(bundle);
@@ -226,8 +227,15 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     @Override
     public void onPayPalError(String errorMsg) {
+        if(errorMsg.isEmpty()){
+            Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label), mItemListtContainer);
+
+        }else{
+            Utils.displayCrouton(getActivity(), errorMsg, mItemListtContainer);
+
+        }
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), errorMsg, mItemListtContainer);
+
 
     }
 
@@ -394,10 +402,24 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mPresenter.checkoutPayPal(payPalCheckoutRequest);
     }
 
-    public void startCheckoutAfterPayment(PaypalResponse response){
+    public void startCheckoutAfterPayment(final ShoppingCartListResponse response){
         if(response.getShoppingCart()!=null) {
-            Log.d("response in cart", response.getShoppingCart().getTotalCommerceItemCount() + ">>>" + response.getCheckoutSteps().getApplicableSteps());
-        }else{
+            //start the checkoutActitiy
+            CheckOutIntent checkOutIntent = new CheckOutIntent(getContext());
+            checkOutIntent.putExtra(SHOPPING_CART, response);
+            checkOutIntent.putExtra(CHECKOUT_STEPS,response.getCheckoutSteps());
+            startActivity(checkOutIntent);
+            Log.d("response in cart", response.getShoppingCart().getTotalCommerceItemCount() + ">>>" + response.getCheckoutSteps().getStepState().getNextCheckoutStep());
+
+        } else {
+            final String errormsg=response.getStatus().getErrorMessages().get(0);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.displayCrouton(getActivity(), errormsg, mItemListtContainer);
+                }
+            }, 500);
             Log.d("response in cart", response.getStatus().getErrorMessages().get(0));
 
         }

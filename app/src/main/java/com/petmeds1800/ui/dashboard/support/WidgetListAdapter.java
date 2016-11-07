@@ -105,14 +105,19 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             int resource = R.layout.view_more_recommendation;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new RecommendationMoreViewHolder(v);
-            v.setOnClickListener(listener);
+            TextView moreRecommendationLabel=(TextView)v.findViewById(R.id.see_product_label);
+            moreRecommendationLabel.setOnClickListener(listener);
         } else if (viewType == TIP_VIEW_TYPE) {
             int resource = R.layout.view_tip;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new TipViewHolder(v);
+            RelativeLayout learnMoreLayout=(RelativeLayout)v.findViewById(R.id.learnMoreView);
+            learnMoreLayout.setOnClickListener(listener);
         } else if (viewType == WHATS_NEXT_VIEW_TYPE) {
             int resource = R.layout.view_whats_next;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+            RelativeLayout exploreMoreLayout=(RelativeLayout)v.findViewById(R.id.exploreMoreView);
+            exploreMoreLayout.setOnClickListener(listener);
             viewHolder = new WhatsNextViewHolder(v);
         } else if (viewType == SALES_PITCH_VIEW_TYPE) {
             int resource = R.layout.view_sales_pitch;
@@ -367,7 +372,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 RecommendationMoreViewHolder moreViewHolder = (RecommendationMoreViewHolder) holder;
                 Category category = (Category) getItemAt(position);
                 moreViewHolder.seeMoreLabel.setText(mContext.getString(R.string.see_all_txt) + category.getDisplayName() + " " + mContext.getString(R.string.products_txt));
-               moreViewHolder.seeMoreLabel.setTag(category.getCategoryPageUrl());
+                moreViewHolder.seeMoreLabel.setTag(category);
                 break;
             case TIP_VIEW_TYPE:
                 final TipViewHolder tipViewHolder = (TipViewHolder) holder;
@@ -384,6 +389,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         tipViewHolder.tipDoctorImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
+                tipViewHolder.learnViewLayout.setTag(widgetData);
+
                 break;
             case SALES_PITCH_VIEW_TYPE:
                 final SalesPitchViewHolder salesPitchViewHolder = (SalesPitchViewHolder) holder;
@@ -396,7 +403,6 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         salesPitchViewHolder.salesPitchImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
-
 
                 break;
             case WHATS_NEXT_VIEW_TYPE:
@@ -415,6 +421,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         }
                     });
                 }
+                whatsNextViewHolder.exploreMoreLayout.setTag(whatsNextCategory);
                 break;
             case BROWSE_HISTORY_VIEW_TYPE:
                 final BrowseHistoryViewHolder browseHistoryViewHolder = (BrowseHistoryViewHolder) holder;
@@ -653,6 +660,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.tip_doctor_image)
         ImageView tipDoctorImage;
 
+        @BindView(R.id.learnMoreView)
+        RelativeLayout learnViewLayout;
+
         public TipViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
@@ -667,6 +677,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ImageView whatsNextImage;
         @BindView(R.id.subtitle_whats_next)
         TextView subtitleWhatsNext;
+        @BindView(R.id.exploreMoreView)
+        RelativeLayout exploreMoreLayout;
 
         public WhatsNextViewHolder(View v) {
             super(v);

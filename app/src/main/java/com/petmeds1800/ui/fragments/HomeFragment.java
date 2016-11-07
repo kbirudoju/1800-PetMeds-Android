@@ -92,10 +92,11 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
     }
 
     @Override
-    public void replaceWebViewFragment(String url) {
+    public void replaceWebViewFragment(String url,String title) {
         Bundle bundle = new Bundle();
       //  bundle.putString(CommonWebviewFragment.TITLE_KEY, productCategory.getName());
         bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.server_endpoint) + url);
+        bundle.putString(CommonWebviewFragment.TITLE_KEY,title);
         replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
 
     }

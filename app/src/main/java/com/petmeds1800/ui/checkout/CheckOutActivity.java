@@ -29,6 +29,7 @@ import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
@@ -42,7 +43,7 @@ import butterknife.BindView;
 
 
 public class CheckOutActivity extends AbstractActivity
-        implements CheckoutActivityContract.View, CheckoutActivityContract.StepsFragmentInteractionListener {
+        implements CheckoutActivityContract.View, CheckoutActivityContract.StepsFragmentInteractionListener,CommonWebviewFragment.OnPaymentCompletedListener {
 
     public static final String ITEMS_DETAIL = "itemsDetail";
 
@@ -114,6 +115,8 @@ public class CheckOutActivity extends AbstractActivity
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    private CheckoutSteps mCheckoutSteps;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +124,7 @@ public class CheckOutActivity extends AbstractActivity
         mProgressDialog = new ProgressDialog();
         mShoppingCartListResponse = (ShoppingCartListResponse) getIntent()
                 .getSerializableExtra(CartFragment.SHOPPING_CART);
+        mCheckoutSteps=(CheckoutSteps)getIntent().getSerializableExtra(CartFragment.CHECKOUT_STEPS);
         enableBackButton();
 
         PetMedsApplication.getAppComponent().inject(this);
@@ -140,9 +144,14 @@ public class CheckOutActivity extends AbstractActivity
                     itemDetails.put(commerceItem.getCommerceItemId(), commerceItem.getQuantity());
                 }
             }
-            if (itemDetails != null && itemDetails.size() > 0) {
-                //show the progress
-                mCheckoutPresenter.initializeCheckout(itemDetails);
+            if(mCheckoutSteps!=null){
+                setCheckoutSteps(mCheckoutSteps);
+                startNextStep(mCheckoutSteps.getStepState().getNextCheckoutStep());
+            }else {
+                if (itemDetails != null && itemDetails.size() > 0) {
+                    //show the progress
+                    mCheckoutPresenter.initializeCheckout(itemDetails);
+                }
             }
         }
 
@@ -245,7 +254,16 @@ public class CheckOutActivity extends AbstractActivity
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
-
+    public void replaceCheckOutFragmentWithBundle(Fragment fragment, String tag, boolean isBackStackEnable,Bundle bundle) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.step_one_root_fragment, fragment, tag);
+        if (isBackStackEnable) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragment.setArguments(bundle);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -313,20 +331,17 @@ public class CheckOutActivity extends AbstractActivity
                 break;
 
             case 2: //step 3 "Select Payment method"
-                if (mPreferencesHelper.getIsUserLoggedIn()) {
+                if(mApplicableSteps.size()==3){
+                    replaceCheckOutFragment(StepFiveRootFragment.newInstance(mShoppingCartListResponse, stepName),
+                            StepFiveRootFragment.class.getName(), false);
+                }
+                else if(mPreferencesHelper.getIsUserLoggedIn()) {
                     replaceCheckOutFragment(StepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName, StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                             StepThreeRootFragment.class.getName(),
                             false);
                 }
-                //TODO need a new design for this specific case
-//                else if( ! mPreferencesHelper.getIsUserLoggedIn() && mIsReviewOn) {  //Guest user reviewing payment
-//                    replaceCheckOutFragment(StepThreeRootFragment
-//                                    .newInstance(mShoppingCartListResponse, stepName , StepThreeRootFragment.GUEST_REQUEST_CODE , mIsReviewOn),
-//                            StepThreeRootFragment.class.getName(),
-//                            false);
-//                }
-                else { //guest user adding payment for first time
+                             else { //guest user adding payment for first time
                     replaceCheckOutFragment(GuestStepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName),
                             GuestStepThreeRootFragment.class.getName(),
@@ -458,5 +473,23 @@ public class CheckOutActivity extends AbstractActivity
     public void startNextStep(String stepName, ShoppingCartListResponse shoppingCartListResponse, boolean isReviewOn) {
         mIsReviewOn = isReviewOn;
         startNextStep(stepName, shoppingCartListResponse);
+    }
+
+    @Override
+    public void onPaymentCompleted(ShoppingCartListResponse paypalResponse) {
+
+
+    }
+
+    @Override
+    public void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName) {
+        if(paypalResponse.getShoppingCart()!=null){
+            moveToNext(stepName,paypalResponse);
+        }else{
+            StepThreeRootFragment stepThreeRootFragment=(StepThreeRootFragment)getSupportFragmentManager().findFragmentByTag(StepThreeRootFragment.class.getSimpleName());
+            if(stepThreeRootFragment!=null){
+                stepThreeRootFragment.onPayPalError(paypalResponse.getStatus().getErrorMessages().get(0));
+            }
+        }
     }
 }

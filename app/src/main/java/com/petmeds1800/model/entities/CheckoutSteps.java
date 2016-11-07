@@ -1,11 +1,12 @@
 package com.petmeds1800.model.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Abhinav on 24/9/16.
  */
-public class CheckoutSteps {
+public class CheckoutSteps implements Serializable{
 
     private StepState stepState;
     private ArrayList<String> applicableSteps;
