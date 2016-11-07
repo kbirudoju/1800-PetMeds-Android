@@ -29,6 +29,7 @@ import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
+import com.urbanairship.UAirship;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -472,12 +473,14 @@ public class HomeActivity extends AbstractActivity
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
                 mPreferencesHelper.setIsPushNotificationEnableFlag(true);
+                UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
                 mAnalyticsUtil.trackEvent(getString(R.string.push_notifications_category),
                         getString(R.string.push_notifications_enability),
                         getString(R.string.push_notifications_enable_label));
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 mPreferencesHelper.setIsPushNotificationEnableFlag(false);
+                UAirship.shared().getPushManager().setUserNotificationsEnabled(false);
                 mAnalyticsUtil.trackEvent(getString(R.string.push_notifications_category),
                         getString(R.string.push_notifications_disability),
                         getString(R.string.push_notification_disability));

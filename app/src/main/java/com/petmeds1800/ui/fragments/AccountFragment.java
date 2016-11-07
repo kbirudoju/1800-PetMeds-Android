@@ -19,6 +19,7 @@ import com.petmeds1800.ui.pets.PetListFragment;
 import com.petmeds1800.ui.vet.VetListFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+import com.urbanairship.UAirship;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,7 +30,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -269,11 +269,13 @@ public class AccountFragment extends AbstractFragment
             case R.id.notificationStatus:
                 fromWhichAlert = FROM_NOTIFICATION;
                 mPreferencesHelper.setIsPushNotificationEnableFlag(isChecked);
+                UAirship.shared().getPushManager().setUserNotificationsEnabled(isChecked);
                 if (isChecked) {
                     ((HomeActivity) getActivity()).getAnalyticsRef()
                             .trackEvent(getString(R.string.push_notifications_category),
                                     getString(R.string.push_notifications_enability),
                                     getString(R.string.push_notifications_enable_label));
+
                 } else {
                     ((HomeActivity) getActivity()).getAnalyticsRef()
                             .trackEvent(getString(R.string.push_notifications_category),
