@@ -65,9 +65,12 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.petmeds1800.util.Constants.PUSH_SCREEN_TYPE;
+
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
-        MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,CommonWebviewFragment.OnPaymentCompletedListener {
+        MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,
+        CommonWebviewFragment.OnPaymentCompletedListener {
 
     public static final String SETUP_HAS_OPTIONS_MENU_ACTION = "setupHasOptionsMenuAction";
 
@@ -112,20 +115,22 @@ public class HomeActivity extends AbstractActivity
 
     private CartRootFragment mCartRootFragment;
 
-    private final String CART = "Cart";
-
-    private final String LEARN = "Learn";
-
-    private final String ACCOUNT = "Account";
-
-    private final String OFFER_ALERT = "offer alert";
-
-    private final String ORDER_ALERT = "order alert";
-
     //TODO chnage when push payload is appropriate
-    private final String MEDICATION_REMINDER__ALERT = "52015";
+    private final int TYPE_MEDICATION_REMINDER__ALERT = 1;
 
-    private String screenFromPush = null;
+    private final int TYPE_OFFER__ALERT = 2;
+
+    private final int TYPE_ORDER_SHIPPED__ALERT = 3;
+
+    private final int TYPE_PRESCRIPTION_REFILL_DUE_ALERT = 4;
+
+    private final int TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT = 5;
+
+    private final int TYPE_QUESTION_ANSWER_ALERT = 6;
+
+    private final int TYPE_VET_VERIFY_RX_ALERT = 7;
+
+    private int screenType;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -186,7 +191,7 @@ public class HomeActivity extends AbstractActivity
             mHomeTab.getTabAt(i).setCustomView(mTabLayoutArray.get(i));
         }
         if (getIntent() != null) {
-            screenFromPush = getIntent().getStringExtra("screenFromPush");
+            screenType = getIntent().getIntExtra("screenType", 0);
         }
         mHomeTab.setOnTabSelectedListener(
                 new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
@@ -224,7 +229,8 @@ public class HomeActivity extends AbstractActivity
                 if (position == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
                     //TODO: code improvement, We can create constants for the pages
                     Log.v("test", "from scroll tab>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                    if (screenFromPush == null) {
+
+                    if (screenType == 0 || screenType == TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT) {
                         checkLoginStatus();
                     }
                 }
@@ -232,6 +238,7 @@ public class HomeActivity extends AbstractActivity
                 sendAnalytics(position);
                 if (position == 0) {
                     getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
+                    screenType = getIntent().getIntExtra("screenType", 0);
                 } else {
                     getToolbar().setLogo(null);
                 }
@@ -260,7 +267,7 @@ public class HomeActivity extends AbstractActivity
         mProgressDialog = new ProgressDialog();
         mAuthenticationDialog = new FingerprintAuthenticationDialog();
         mViewPager.addOnPageChangeListener(pageChangeListener);
-        navigateOnReceivedNotification(screenFromPush);
+        navigateOnReceivedNotification(screenType);
     }
 
     private void sendAnalytics(int position) {
@@ -278,28 +285,36 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
-    private void navigateOnReceivedNotification(final String screenFromPush) {
+    private void navigateOnReceivedNotification(final int screenType) {
+        //Delay applied in order to get rid of Illegal argument exception as fingerprintauth dailog
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch (screenType) {
+                    case TYPE_MEDICATION_REMINDER__ALERT:
+                    case TYPE_ORDER_SHIPPED__ALERT:
+                    case TYPE_VET_VERIFY_RX_ALERT:
+                    case TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT:
+                        mViewPager.setCurrentItem(3);
+                        break;
+                    case TYPE_OFFER__ALERT:
+                    case TYPE_PRESCRIPTION_REFILL_DUE_ALERT:
+                        HomeActivity.this.getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
+                        HomeActivity.this.screenType = 0;
+                        mViewPager.setCurrentItem(0);
+                        break;
+                    case TYPE_QUESTION_ANSWER_ALERT:
+                        HomeActivity.this.getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
+                        HomeActivity.this.screenType = 0;
+                        mViewPager.setCurrentItem(2);
+                        break;
 
-        if (screenFromPush != null) {
-            //Delay applied in order to get rid of Illegal argument exception as fingerprintauth dailog
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    switch (screenFromPush) {
-                        case MEDICATION_REMINDER__ALERT:
-                        case ORDER_ALERT:
-                            mViewPager.setCurrentItem(3);
-                            break;
-                        case OFFER_ALERT:
-                            mViewPager.setCurrentItem(1);
-                            break;
 
-
-                    }
                 }
-            }, 200);
+            }
+        }, 200);
 
-        }
+
     }
 
 
@@ -321,7 +336,7 @@ public class HomeActivity extends AbstractActivity
     public void invalidateOptionsMenu(int position) {
         Fragment fragment = mAdapter.getItem(position);
         Intent intent = new Intent(SETUP_HAS_OPTIONS_MENU_ACTION);
-        intent.putExtra(FRAGMENT_NAME_KEY,fragment.getClass().getName());
+        intent.putExtra(FRAGMENT_NAME_KEY, fragment.getClass().getName());
 
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
@@ -337,7 +352,7 @@ public class HomeActivity extends AbstractActivity
     protected void onResume() {
         super.onResume();
         if (mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
-            if (screenFromPush == null) {
+            if (screenType == 0 || screenType == TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT) {
                 checkLoginStatus();
             }
             // checkLoginStatus();
@@ -560,11 +575,11 @@ public class HomeActivity extends AbstractActivity
     }
 
 
-
     @Override
     public void onPaymentCompleted(PaypalResponse paypalResponse) {
-        CartFragment cartFragment=(CartFragment)getSupportFragmentManager().findFragmentByTag(CartFragment.class.getSimpleName());
-        if(cartFragment!=null){
+        CartFragment cartFragment = (CartFragment) getSupportFragmentManager()
+                .findFragmentByTag(CartFragment.class.getSimpleName());
+        if (cartFragment != null) {
             cartFragment.startCheckoutAfterPayment(paypalResponse);
         }
     }

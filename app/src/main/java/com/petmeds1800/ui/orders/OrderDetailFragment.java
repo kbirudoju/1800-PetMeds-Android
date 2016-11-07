@@ -1,7 +1,36 @@
 package com.petmeds1800.ui.orders;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.AddToCartRequest;
+import com.petmeds1800.model.ReOrderRequest;
+import com.petmeds1800.model.entities.CommerceItems;
+import com.petmeds1800.model.entities.OrderDetailHeader;
+import com.petmeds1800.model.entities.OrderList;
+import com.petmeds1800.model.entities.PaymentGroup;
+import com.petmeds1800.model.entities.ShippingGroup;
+import com.petmeds1800.model.entities.WebViewHeader;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
+import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
+import com.petmeds1800.ui.orders.support.CustomOrderDetailRecyclerAdapter;
+import com.petmeds1800.ui.orders.support.OrderDetailAdapter;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.LayoutPrintingUtils;
+import com.petmeds1800.util.Utils;
+
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -23,36 +52,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.AddToCartRequest;
-import com.petmeds1800.model.ReOrderRequest;
-import com.petmeds1800.model.entities.CommerceItems;
-import com.petmeds1800.model.entities.OrderDetailHeader;
-import com.petmeds1800.model.entities.OrderList;
-import com.petmeds1800.model.entities.PaymentGroup;
-import com.petmeds1800.model.entities.ShippingGroup;
-import com.petmeds1800.model.entities.WebViewHeader;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
-import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
-import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
-import com.petmeds1800.ui.orders.support.CustomOrderDetailRecyclerAdapter;
-import com.petmeds1800.ui.orders.support.OrderDetailAdapter;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.LayoutPrintingUtils;
-import com.petmeds1800.util.Utils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -62,6 +67,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.petmeds1800.util.Constants.ORDER_ID_KEY;
 
 /**
  * Created by pooja on 8/19/2016.
@@ -77,6 +84,9 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     @BindView(R.id.order_detail_recycler_view)
     RecyclerView mOrderDetailRecyclerView;
 
+    @BindView(R.id.containerLayout)
+    FrameLayout mContainerLayout;
+
     private OrderDetailAdapter mOrderDetailAdapter;
 
     private OrderDetailContract.Presenter mPresenter;
@@ -85,6 +95,14 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     GeneralPreferencesHelper mPreferencesHelper;
 
     private OrderList orderList;
+
+    private String orderId;
+
+    public static final String FROM_PUSH = "fromPush";
+
+    private static final String FINGERPRINT_AUTHENTICATION_DIALOG = "FingerprintAuthenticationDialog";
+
+    private static final String LOGGED_IN = "logged in";
 
     @Nullable
     @Override
@@ -99,11 +117,23 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((AbstractActivity) getActivity()).setToolBarTitle("");
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             orderList = (OrderList) bundle.getSerializable("orderlist");
-
         }
+        if (orderList != null) {
+            populateOrderDetail();
+        } else {
+            orderId = bundle.getString(ORDER_ID_KEY);
+            mPresenter
+                    .getOrderDetail(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                            orderId);
+        }
+
+    }
+
+    private void populateOrderDetail() {
         mOrderDetailAdapter = new OrderDetailAdapter(getActivity(), orderList, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +146,9 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                         String productId = webviewRow.getProductId();
                         Bundle bundle = new Bundle();
                         bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.title_my_orders));
-                        bundle.putString(CommonWebviewFragment.URL_KEY, getActivity().getString(R.string.server_endpoint) + "/product.jsp?id=" + productId + "&sku=" + skuId + "&review=write");
+                        bundle.putString(CommonWebviewFragment.URL_KEY,
+                                getActivity().getString(R.string.server_endpoint) + "/product.jsp?id=" + productId
+                                        + "&sku=" + skuId + "&review=write");
                         replaceAccountFragmentWithBundle(new CommonWebviewFragment(), bundle);
                         break;
                     case CustomOrderDetailRecyclerAdapter.TRACK_ROW_ID:
@@ -128,7 +160,8 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                         replaceAccountFragmentWithBundle(new TrackShipmentFragment(), shippingBundle);
                         break;
                     case CustomOrderDetailRecyclerAdapter.REORDER_ENTIRE_ORDER_ROW_ID:
-                        ReOrderRequest reOrderRequest = new ReOrderRequest(orderList.getOrderId(), mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                        ReOrderRequest reOrderRequest = new ReOrderRequest(orderList.getOrderId(),
+                                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                         try {
                             ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
                         } catch (Exception e) {
@@ -139,12 +172,18 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                     case CustomOrderDetailRecyclerAdapter.CANCEL_ORDER_ROW_ID:
                         if (orderList.getIsCancellable().equals("true")) {
 
-                            final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment().newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(), getString(R.string.cancel_order_title), getString(R.string.dialog_ok_button), getString(R.string.dialog_cancel_button));
+                            final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment()
+                                    .newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(),
+                                            getString(R.string.cancel_order_title),
+                                            getString(R.string.dialog_ok_button),
+                                            getString(R.string.dialog_cancel_button));
                             okCancelDialogFragment.show(((AbstractActivity) getActivity()).getSupportFragmentManager());
                             okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
                                 @Override
                                 public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
-                                    ReOrderRequest cancelOrderRequest = new ReOrderRequest(orderList.getOrderId(), mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                                    ReOrderRequest cancelOrderRequest = new ReOrderRequest(orderList.getOrderId(),
+                                            mPreferencesHelper.getSessionConfirmationResponse()
+                                                    .getSessionConfirmationNumber());
                                     try {
                                         ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
                                     } catch (Exception e) {
@@ -162,7 +201,8 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                             });
 
                         } else {
-                            Snackbar.make(mOrderDetailRecyclerView, getString(R.string.cancel_order_error_msg), Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(mOrderDetailRecyclerView, getString(R.string.cancel_order_error_msg),
+                                    Snackbar.LENGTH_LONG).show();
                         }
                         break;
                     case CustomOrderDetailRecyclerAdapter.REORDER_ITEM_ROW_ID:
@@ -174,7 +214,9 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                         String reOrderProductId = webviewRow.getProductId();
                         String reOrderSkuId = webviewRow.getItemId();
                         int quantity = webviewRow.getQuantity();
-                        AddToCartRequest addToCartRequest = new AddToCartRequest(reOrderSkuId, reOrderProductId, quantity, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                        AddToCartRequest addToCartRequest = new AddToCartRequest(reOrderSkuId, reOrderProductId,
+                                quantity,
+                                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                         mPresenter.addToCart(addToCartRequest);
                         break;
                 }
@@ -183,6 +225,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         });
         setRecyclerView();
         setTitle();
+        ((AbstractActivity) getActivity()).enableBackButton();
         List<Object> mData = mOrderDetailAdapter.setData(orderList);
         prepareListViewContentForPrinting(mData);
     }
@@ -204,6 +247,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        registerIntent(new IntentFilter(Constants.KEY_AUTHENTICATION_SUCCESS), getActivity());
     }
 
     @Override
@@ -221,8 +265,10 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     }
 
     private void setTitle() {
-        if (orderList != null)
-            ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.order_txt) + " #" + orderList.getOrderId());
+        if (orderList != null) {
+            ((AbstractActivity) getActivity())
+                    .setToolBarTitle(getActivity().getString(R.string.order_txt) + " #" + orderList.getOrderId());
+        }
     }
 
     private void setRecyclerView() {
@@ -282,6 +328,28 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     }
 
     @Override
+    public void onOrderDetailSuccess(OrderList orderList) {
+        this.orderList = orderList;
+        populateOrderDetail();
+    }
+
+    @Override
+    public void onOrderDetailError(String errorMessage) {
+        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
+        if (errorMessage.toString().contains(LOGGED_IN)) {
+            FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FROM_PUSH, true);
+            mAuthenticationDialog.setArguments(bundle);
+            if (!mAuthenticationDialog.isAdded()) {
+                mAuthenticationDialog.setCancelable(false);
+                mAuthenticationDialog
+                        .show(getActivity().getSupportFragmentManager(), FINGERPRINT_AUTHENTICATION_DIALOG);
+            }
+        }
+    }
+
+    @Override
     public void setPresenter(OrderDetailContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -290,18 +358,19 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         int hasStorageAccessPermission = ContextCompat
                 .checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (hasStorageAccessPermission != PackageManager.PERMISSION_GRANTED) {
-            checkRequiredPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionRequested() {
-                @Override
-                public void onPermissionGranted() {
-                    showShareOptions();
-                }
+            checkRequiredPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    new PermissionRequested() {
+                        @Override
+                        public void onPermissionGranted() {
+                            showShareOptions();
+                        }
 
-                @Override
-                public void onPermissionDenied(HashMap<String, Boolean> deniedPermissions) {
-                    // Permission Denied
-                    Toast.makeText(getActivity(), "Storage access denied", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        @Override
+                        public void onPermissionDenied(HashMap<String, Boolean> deniedPermissions) {
+                            // Permission Denied
+                            Toast.makeText(getActivity(), "Storage access denied", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         } else {
             showShareOptions();
         }
@@ -337,21 +406,27 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
             int viewType = mOrderDetailAdapter.getItemViewType(i);
             switch (viewType) {
                 case OrderDetailAdapter.VIEW_TYPE_HEADER:
-                    LinearLayout headerView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_header_row, null);
+                    LinearLayout headerView = (LinearLayout) layoutInflater
+                            .inflate(R.layout.view_order_detail_header_row, null);
                     OrderDetailHeader header = (OrderDetailHeader) data.get(i);
                     ((TextView) headerView.getChildAt(0)).setText(header.getHeader());
                     mPrintViewsLinearLayout.addView(headerView);
                     break;
 
                 case OrderDetailAdapter.VIEW_TYPE_PRODUCT:
-                    LinearLayout productView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_product_row, null);
+                    LinearLayout productView = (LinearLayout) layoutInflater
+                            .inflate(R.layout.view_order_detail_product_row, null);
                     CommerceItems commerceItem = (CommerceItems) data.get(i);
-                    ((TextView) productView.findViewById(R.id.product_price_label)).setText("$" + commerceItem.getAmount());
-                    ((TextView) productView.findViewById(R.id.product_name_label)).setText(commerceItem.getProductName());
-                    ((TextView) productView.findViewById(R.id.quantity_label)).setText(getString(R.string.quantity_txt) + commerceItem.getQuantity());
+                    ((TextView) productView.findViewById(R.id.product_price_label))
+                            .setText("$" + commerceItem.getAmount());
+                    ((TextView) productView.findViewById(R.id.product_name_label))
+                            .setText(commerceItem.getProductName());
+                    ((TextView) productView.findViewById(R.id.quantity_label))
+                            .setText(getString(R.string.quantity_txt) + commerceItem.getQuantity());
                     ((TextView) productView.findViewById(R.id.item_description)).setText(commerceItem.getSkuName());
                     final ImageView productImage = (ImageView) productView.findViewById(R.id.product_image);
-                    Glide.with(this).load(getString(R.string.server_endpoint) + commerceItem.getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(productImage) {
+                    Glide.with(this).load(getString(R.string.server_endpoint) + commerceItem.getSkuImageUrl())
+                            .asBitmap().centerCrop().into(new BitmapImageViewTarget(productImage) {
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
@@ -377,9 +452,11 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                     break;
 
                 case OrderDetailAdapter.VIEW_TYPE_SHIPPING:
-                    LinearLayout shippingView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_shipping_row, null);
+                    LinearLayout shippingView = (LinearLayout) layoutInflater
+                            .inflate(R.layout.view_order_detail_shipping_row, null);
                     ShippingGroup shippingDetail = (ShippingGroup) data.get(i);
-                    ((TextView) shippingView.findViewById(R.id.shipping_method_label)).setText(shippingDetail.getShippingMethod());
+                    ((TextView) shippingView.findViewById(R.id.shipping_method_label))
+                            .setText(shippingDetail.getShippingMethod());
 
                     TextView shippingAddressLabel = ((TextView) shippingView.findViewById(R.id.shipping_address_label));
                     if (shippingDetail.getAddress2() != null && !shippingDetail.getAddress2().isEmpty()) {
@@ -391,14 +468,17 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                     break;
 
                 case OrderDetailAdapter.VIEW_TYPE_FIXED:
-                    LinearLayout fixedView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_webview_row, null);
+                    LinearLayout fixedView = (LinearLayout) layoutInflater
+                            .inflate(R.layout.view_order_detail_webview_row, null);
                     WebViewHeader webViewHeader = (WebViewHeader) data.get(i);
-                    ((TextView) fixedView.findViewById(R.id.webview_header_label)).setText(webViewHeader.getWebviewHeader());
+                    ((TextView) fixedView.findViewById(R.id.webview_header_label))
+                            .setText(webViewHeader.getWebviewHeader());
                     mPrintViewsLinearLayout.addView(fixedView);
                     break;
 
                 case OrderDetailAdapter.VIEW_TYPE_PAYMENT:
-                    LinearLayout paymentView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_payment_row, null);
+                    LinearLayout paymentView = (LinearLayout) layoutInflater
+                            .inflate(R.layout.view_order_detail_payment_row, null);
                     PaymentGroup paymentInfo = (PaymentGroup) data.get(i);
                     TextView billingAddressLabel = ((TextView) paymentView.findViewById(R.id.billing_address_label));
                     if (paymentInfo.getAddress2() != null && !paymentInfo.getAddress2().isEmpty()) {
@@ -406,27 +486,32 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                     } else {
                         billingAddressLabel.setText(paymentInfo.getAddress1());
                     }
-                    ((TextView) paymentView.findViewById(R.id.payment_method_label)).setText(paymentInfo.getPaymentMethod());
+                    ((TextView) paymentView.findViewById(R.id.payment_method_label))
+                            .setText(paymentInfo.getPaymentMethod());
                     mPrintViewsLinearLayout.addView(paymentView);
                     break;
 
                 case OrderDetailAdapter.VIEW_TYPE_INFO:
-                    LinearLayout infoView = (LinearLayout) layoutInflater.inflate(R.layout.view_order_detail_info_row, null);
+                    LinearLayout infoView = (LinearLayout) layoutInflater
+                            .inflate(R.layout.view_order_detail_info_row, null);
                     OrderList orderInfo = (OrderList) data.get(i);
                     ((TextView) infoView.findViewById(R.id.order_no_label)).setText(orderInfo.getOrderId());
                     ((TextView) infoView.findViewById(R.id.order_date_label)).setText(orderInfo.getSubmittedDate());
                     ((TextView) infoView.findViewById(R.id.ship_to_label)).setText(orderInfo.getShipTo());
-                    ((TextView) infoView.findViewById(R.id.order_total_label)).setText("$" + String.valueOf(orderInfo.getTotal()));
+                    ((TextView) infoView.findViewById(R.id.order_total_label))
+                            .setText("$" + String.valueOf(orderInfo.getTotal()));
                     TextView orderStatusLabel = ((TextView) infoView.findViewById(R.id.status_label));
                     orderStatusLabel.setText(orderInfo.getStatus());
 
                     //temporary hardcoded value to check layout, it will be changed after confirmation from backend
                     if (orderInfo.getStatus().equalsIgnoreCase("PROCESSING")) {
-                        ((TextView) infoView.findViewById(R.id.status_label)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
+                        ((TextView) infoView.findViewById(R.id.status_label))
+                                .setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
                         orderStatusLabel.setBackgroundResource(R.drawable.yellow_rounded_button);
                     } else if (orderInfo.getStatus().equalsIgnoreCase("Cancelled")) {
                         orderStatusLabel.setBackgroundResource(R.drawable.red_rounded_button);
-                        orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
+                        orderStatusLabel
+                                .setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
                     } else {
                         orderStatusLabel.setBackgroundResource(R.drawable.green_rounded_button);
                     }
@@ -439,5 +524,18 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         mPrintViewsLinearLayout.setPadding(0, 0, 0, 20);
 
         return mPrintViewsLinearLayout;
+    }
+
+    @Override
+    public void onDestroy() {
+        deregisterIntent(getActivity());
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        mPresenter.getOrderDetail(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                orderId);
+        super.onReceivedBroadcast(context, intent);
     }
 }

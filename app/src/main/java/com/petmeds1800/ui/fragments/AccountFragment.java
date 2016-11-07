@@ -14,6 +14,7 @@ import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
 import com.petmeds1800.ui.medicationreminders.service.MedicationReminderResultReceiver;
 import com.petmeds1800.ui.orders.MyOrderFragment;
+import com.petmeds1800.ui.orders.OrderDetailFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
 import com.petmeds1800.ui.vet.VetListFragment;
@@ -45,6 +46,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static com.petmeds1800.util.Constants.ORDER_ID_KEY;
+import static com.petmeds1800.util.Constants.PUSH_EXTRA_ID;
+import static com.petmeds1800.util.Constants.PUSH_SCREEN_TYPE;
 import static com.petmeds1800.util.Constants.RESULT_VALUE;
 import static com.petmeds1800.util.Constants.SUCCESS;
 
@@ -115,6 +119,13 @@ public class AccountFragment extends AbstractFragment
 
     private MedicationReminderResultReceiver mMedicationReminderResultReceiver;
 
+    private final int TYPE_MEDICATION_REMINDER__ALERT = 1;
+
+    private final int TYPE_ORDER_SHIPPED__ALERT = 3;
+
+    private final int TYPE_VET_VERIFY_RX_ALERT = 7;
+
+    private final int TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT = 5;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -128,21 +139,43 @@ public class AccountFragment extends AbstractFragment
         signOut.setOnClickListener(this);
         mMedicationReminderLabel.setOnClickListener(this);
         mRefillReminderLabel.setOnClickListener(this);
-        fillWindow();
-        navigateOnOrderScreen();
+
+
     }
 
 
-    public void navigateOnOrderScreen() {
-        String screenFromPush = null;
+    public void navigateOnPush() {
+        int screenType = 0;
+        String id = null;
         //TODO Reminder Id is hardcoded which is done when push payload inplemented
-        String reminderId = "52015";
-        if (((HomeActivity) getActivity()).getIntent() != null) {
-            screenFromPush = ((HomeActivity) getActivity()).getIntent().getStringExtra("screenFromPush");
+        String reminderId = null;
+        screenType = ((HomeActivity) getActivity()).getIntent().getIntExtra(PUSH_SCREEN_TYPE, 0);
+        ((HomeActivity) getActivity()).getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
+        id = ((HomeActivity) getActivity()).getIntent().getStringExtra(PUSH_EXTRA_ID);
+        switch (screenType) {
+            case TYPE_MEDICATION_REMINDER__ALERT:
+                navigateOnEditMedicationReminderScreen(id);
+                break;
+            case TYPE_ORDER_SHIPPED__ALERT:
+            case TYPE_VET_VERIFY_RX_ALERT:
+                navigateOnOrderDetailScreen(id);
+                break;
+            case TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT:
+                replaceAccountAndAddToBackStack(new ContactUsFragment(), ContactUsFragment.class.getSimpleName());
+                break;
+
         }
-        if (screenFromPush != null && screenFromPush.equals("52015")) {
-            screenFromPush = null;
-            ((HomeActivity) getActivity()).getIntent().putExtra("screenFromPush", screenFromPush);
+
+    }
+
+    private void navigateOnOrderDetailScreen(String orderId) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ORDER_ID_KEY, orderId);
+        replaceAccountFragmentWithBundle(new OrderDetailFragment(), bundle);
+    }
+
+    private void navigateOnEditMedicationReminderScreen(String reminderId) {
+        if (reminderId != null) {
             replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(true, reminderId),
                     AddEditMedicationRemindersFragment.class.getName());
         }
@@ -156,6 +189,7 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
+        ((AbstractActivity)getActivity()).setToolBarTitle("Account");
     }
 
     private void fillWindow() {
@@ -355,7 +389,7 @@ public class AccountFragment extends AbstractFragment
     }
 
     @OnClick(R.id.txv_contact_us)
-    public void contactUs(){
+    public void contactUs() {
         replaceAccountAndAddToBackStack(new ContactUsFragment(), ContactUsFragment.class.getSimpleName());
     }
 
@@ -414,7 +448,11 @@ public class AccountFragment extends AbstractFragment
 
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
-        checkAndSetHasOptionsMenu(intent , AccountRootFragment.class.getName());
+        checkAndSetHasOptionsMenu(intent, AccountRootFragment.class.getName());
+        fillWindow();
+        if (((HomeActivity) getActivity()).getIntent() != null) {
+            navigateOnPush();
+        }
         super.onReceivedBroadcast(context, intent);
     }
 

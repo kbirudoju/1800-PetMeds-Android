@@ -50,9 +50,9 @@ public class AnalyticsUtil {
             HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder();
             mTracker.setScreenName(screenName);
             mTracker.set("&cu", "USD");
-            builder.set("state", "California");
-            builder.set("city", "");
-            builder.set("country", "U.S.A");
+            builder.set("state", commitOrder.getShippingState());
+            builder.set("city", commitOrder.getShippingCity());
+            builder.set("country", commitOrder.getShippingCountry());
             ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
                     .setTransactionId(commitOrder.getOrderId())
                     .setTransactionAffiliation(context.getString(R.string.application_name))
@@ -64,7 +64,7 @@ public class AnalyticsUtil {
                 for (Item item : commitOrderItems) {
                     Product product = new Product()
                             .setId(item.getCommerceItemId())
-                            .setCategory("Medications")
+                            .setCategory(item.getParentCategory())
                             .setName(item.getProductName())
                             .setPrice(item.getSellingPrice())
                             .setQuantity(item.getItemQuantity());

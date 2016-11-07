@@ -20,6 +20,7 @@ public class Item implements Serializable{
     private String commerceItemId;
     private String productName;
     private boolean isRxItem;
+    private String parentCategory;
     public boolean isRxItem() {
         return isRxItem;
     }
@@ -94,5 +95,13 @@ public class Item implements Serializable{
     public void setProductName(String productName) {
         this.productName = productName;
     }
+    public String getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(String parentCategory) {
+        this.parentCategory = parentCategory;
+    }
+
 
 }

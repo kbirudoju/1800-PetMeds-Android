@@ -1,13 +1,13 @@
 package com.petmeds1800.dagger.module;
 
-import android.content.Context;
-
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.dagger.scopes.AppScope;
+
+import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
@@ -38,7 +38,7 @@ public class RestModule {
     @AppScope
     public OkHttpClient provideOkHttpClient(CookieJar cookieJar) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.followRedirects(false);
+       // builder.followRedirects(false);
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

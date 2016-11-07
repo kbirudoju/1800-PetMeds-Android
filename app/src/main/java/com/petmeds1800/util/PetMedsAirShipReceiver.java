@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import static com.petmeds1800.util.Constants.PUSH_TARGET;
+import static com.petmeds1800.util.Constants.PUSH_TYPE;
+
 /**
  * Created by Sdixit on 26-10-2016.
  */
@@ -42,12 +45,6 @@ public class PetMedsAirShipReceiver extends AirshipReceiver {
 
     @Override
     protected void onPushReceived(@NonNull Context context, @NonNull PushMessage message, boolean notificationPosted) {
-        message.getPublicNotificationPayload();
-        Bundle bundle = message.getPushBundle();
-        String id = (String) bundle.get("id");
-        String screeName = (String) bundle.get("target");
-        int type = Integer.valueOf((String)bundle.get("type"));
-        message.getMetadata();
 
         Log.i(TAG,
                 "Received push message. Alert: " + message.getAlert() + ". posted notification: " + notificationPosted);
@@ -63,13 +60,23 @@ public class PetMedsAirShipReceiver extends AirshipReceiver {
 
     @Override
     protected boolean onNotificationOpened(@NonNull Context context, @NonNull NotificationInfo notificationInfo) {
+
         Log.i(TAG, "Notification opened. Alert: " + notificationInfo.getMessage().getAlert() + ". NotificationId: "
                 + notificationInfo.getNotificationId());
-        Intent homeIntent = new HomeIntent(context);
-        homeIntent.putExtra("screenFromPush", notificationInfo.getMessage().getAlert());
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(homeIntent);
-        return true;
+        boolean openDefaultScreen = false;
+        Bundle bundle = notificationInfo.getMessage().getPushBundle();
+        String id = (String) bundle.get(Constants.PUSH_EXTRA_ID);
+        String screeName = (String) bundle.get(PUSH_TARGET);
+        int type = Integer.valueOf(((String) bundle.get(PUSH_TYPE) != null) ? (String) bundle.get(PUSH_TYPE) : "0");
+        openDefaultScreen = (type != 0);
+        if (openDefaultScreen) {
+            Intent homeIntent = new HomeIntent(context);
+            homeIntent.putExtra(Constants.PUSH_SCREEN_TYPE, type);
+            homeIntent.putExtra(Constants.PUSH_EXTRA_ID, id);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(homeIntent);
+        }
+        return openDefaultScreen;
     }
 
     @Override

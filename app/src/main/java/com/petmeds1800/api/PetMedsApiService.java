@@ -36,6 +36,7 @@ import com.petmeds1800.model.entities.MedicationReminderListResponse;
 import com.petmeds1800.model.entities.MyOrder;
 import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.model.entities.MySavedCard;
+import com.petmeds1800.model.entities.OrderDetailResponse;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
 import com.petmeds1800.model.entities.PetBreedTypeListResponse;
@@ -386,5 +387,11 @@ public interface PetMedsApiService {
     @GET("/rest/model/1800petmeds/reminder/ReminderActor/medReminderDetails")
     Observable<AddMedicationReminderResponse> getMedicationReminderDetails(
             @Query("_dynSessConf") String sessionConfirmation, @Query("reminderId") int reminderId);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/atg/userprofiling/ProfileActor/orderDetails")
+    Observable<OrderDetailResponse> getOrderDetail(
+            @Query("_dynSessConf") String sessionConfirmation, @Query("orderId") String orderId);
+
 
 }

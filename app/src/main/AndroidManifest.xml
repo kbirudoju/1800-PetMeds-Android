@@ -24,7 +24,7 @@
     <application
         android:name=".PetMedsApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/application.name"
         android:theme="@style/application.theme">
 

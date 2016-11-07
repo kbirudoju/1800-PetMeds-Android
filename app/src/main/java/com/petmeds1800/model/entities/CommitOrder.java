@@ -20,6 +20,10 @@ public class CommitOrder implements Serializable {
     private String firstName;
     private String orderId;
     private double discount;
+    private String shippingState;
+    private String shippingCountry;
+    private String shippingCity;
+
 
     public double getOrderSubTotal() {
         return orderSubTotal;
@@ -95,5 +99,28 @@ public class CommitOrder implements Serializable {
     }
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+    public String getShippingCity() {
+        return shippingCity;
+    }
+
+    public void setShippingCity(String shippingCity) {
+        this.shippingCity = shippingCity;
+    }
+
+    public String getShippingCountry() {
+        return shippingCountry;
+    }
+
+    public void setShippingCountry(String shippingCountry) {
+        this.shippingCountry = shippingCountry;
+    }
+
+    public String getShippingState() {
+        return shippingState;
+    }
+
+    public void setShippingState(String shippingState) {
+        this.shippingState = shippingState;
     }
 }

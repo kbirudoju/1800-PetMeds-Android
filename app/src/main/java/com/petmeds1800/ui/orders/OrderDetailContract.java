@@ -2,6 +2,7 @@ package com.petmeds1800.ui.orders;
 
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.ReOrderRequest;
+import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
@@ -15,6 +16,8 @@ public interface OrderDetailContract {
         void onSuccess();
         void addToCartSuccess();
         void onCancelSuccess();
+        void onOrderDetailSuccess(OrderList orderList);
+        void onOrderDetailError(String errorMessage);
 
     }
 
@@ -22,5 +25,6 @@ public interface OrderDetailContract {
         void reOrder(ReOrderRequest reOrderRequest);
         void cancelOrder(ReOrderRequest reOrderRequest);
         void addToCart(AddToCartRequest addToCartRequest);
+        void getOrderDetail(String sessionConfig,String orderId);
     }
 }

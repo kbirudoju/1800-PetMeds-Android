@@ -122,6 +122,11 @@ public class Constants {
     public static final String KEY_PAYMENT_INTENT_FILTER = "payment_intent_filter";
 
     public static final String KEY_AUTHENTICATION_SUCCESS = "authentication_success_event";
+    public static final String PUSH_EXTRA_ID = "id";
+    public static final String PUSH_SCREEN_TYPE = "screenType";
+    public static final String PUSH_TYPE = "type";
+    public static final String PUSH_TARGET = "target";
+    public static final String ORDER_ID_KEY = "orderId";
 
     public static final String KEY_HOME_ROOT_SESSION_CONFIRMATION = "session_confirmation";
 
