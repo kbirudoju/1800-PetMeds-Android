@@ -85,7 +85,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         enableEditTexts(false);
 
         //handle keyboard input
-        mPasswordText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mConfirmPasswordEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
