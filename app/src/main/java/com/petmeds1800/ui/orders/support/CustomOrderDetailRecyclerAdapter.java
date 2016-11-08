@@ -41,6 +41,8 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
         int commerceItemSize= orderList.getCommerceItems().size();
         mData.add(orderList);
         //Add webview Items
+        //Cancel row will be shown only if iscancelleble is true
+        if(orderList.getIsCancellable().equals("true"))
         mData.add(new WebViewHeader(context.getString(R.string.cancel_order_header),CANCEL_ORDER_ROW_ID,orderList.getOrderId(),orderList.getDisplayOrderId(),0));
         mData.add(new WebViewHeader(context.getString(R.string.reorder_entire),REORDER_ENTIRE_ORDER_ROW_ID,orderList.getOrderId(),orderList.getDisplayOrderId(),0));
 
