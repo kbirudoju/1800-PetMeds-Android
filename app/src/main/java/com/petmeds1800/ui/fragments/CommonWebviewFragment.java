@@ -308,7 +308,7 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        if(activity instanceof HomeActivity || activity instanceof CheckOutActivity) {
+        if(activity instanceof HomeActivity) {
             try {
                 onPaymnetSelectedListener = (OnPaymentCompletedListener) activity;
             } catch (ClassCastException e) {
