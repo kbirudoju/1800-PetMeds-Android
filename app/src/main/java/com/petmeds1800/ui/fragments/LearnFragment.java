@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.learn.FeaturedFragment;
 import com.petmeds1800.ui.learn.MedConditionsFragment;
@@ -177,6 +178,12 @@ public class LearnFragment extends AbstractFragment {
     public void onDestroyView() {
         deregisterIntent(getContext());
         super.onDestroyView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[2]));
     }
 
     @Override

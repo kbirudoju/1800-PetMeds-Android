@@ -33,6 +33,7 @@ import com.petmeds1800.model.shoppingcart.request.ApplyCouponRequestShoppingCart
 import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
@@ -142,6 +143,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     public void onResume() {
         super.onResume();
         callmShoppingCartAPI(null);
+        ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[1]));
     }
 
     @Override

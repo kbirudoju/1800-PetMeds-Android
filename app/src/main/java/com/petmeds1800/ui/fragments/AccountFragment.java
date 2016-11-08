@@ -177,7 +177,7 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
-        ((AbstractActivity)getActivity()).setToolBarTitle("Account");
+        ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[3]));
     }
 
     private void fillWindow() {

@@ -58,6 +58,7 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
     public void onResume() {
         super.onResume();
         ((AbstractActivity) getActivity()).disableBackButton();
+        ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[0]));
     }
 
     @Nullable

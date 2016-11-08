@@ -18,7 +18,7 @@ public class Order implements Serializable {
 
     private ArrayList<Item> items;
 
-    private int taxTotal;
+    private float taxTotal;
 
     private float shippingTotal;
 
@@ -56,7 +56,7 @@ public class Order implements Serializable {
         this.items = items;
     }
 
-    public Integer getTaxTotal() {
+    public float getTaxTotal() {
         return taxTotal;
     }
 
