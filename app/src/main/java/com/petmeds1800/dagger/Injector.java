@@ -73,6 +73,7 @@ import com.petmeds1800.ui.vet.presenter.FindVetPresenter;
 import com.petmeds1800.ui.vet.presenter.VetDetailPresenter;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.BootReceiver;
+import com.petmeds1800.util.PetMedWebViewClient;
 
 /**
  * Specifies the injection places. Utility interface, to separate from the {@link AppComponent}.
@@ -226,5 +227,7 @@ public interface Injector {
     void inject(CartFragment cartFragment);
 
     void inject(HomeRootFragment homeRootFragment);
+
+    void inject(PetMedWebViewClient petMedWebViewClient);
 }
 

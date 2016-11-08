@@ -494,8 +494,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_AUTHENTICATION_SUCCESS));
                                     }
 
-                                    // Update the count on Shpooing Cart TAB since user has logged out
-                                    ((HomeActivity) getActivity()).updateCartTabItemCount();
+                                    // Update the count on Shopping Cart TAB since user has logged out
+                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
 
                                     dismiss();
                                 } else {

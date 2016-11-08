@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,14 @@ import com.petmeds1800.ui.refillreminder.ReminderListContract;
 import com.petmeds1800.ui.refillreminder.presenter.ReminderListPresenter;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.ReminderListRecyclerViewAdapter;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static com.petmeds1800.util.Constants.HIDE_PROGRESSBAR_OR_ANIMATION;
 import static com.petmeds1800.util.Constants.SHOW_PROGRESSBAR_OR_ANIMATION;
@@ -85,15 +92,18 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
         } else {
             mNoReminderListContainer.setVisibility(View.GONE);
             mReminderListContainer.setVisibility(View.VISIBLE);
+            sortReminders(refillReminderListResponse.getEasyRefillReminder());
         }
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
-        new Thread(new ReminderListSorterRunnable(refillReminderListResponse.getEasyRefillReminder(),RefillListMessageHandler)).start();
+
         return false;
     }
 
     @Override
     public boolean onError(String errorMessage) {
+        Utils.displayCrouton(getActivity(), (String) errorMessage, mReminderMainList);
+
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
         return false;
@@ -131,68 +141,92 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
         }
     };
 
-    private class ReminderListSorterRunnable implements Runnable {
-        private ArrayList<EasyRefillReminder> easyRefillReminders;
-        private Handler postbackHandler;
-        private ArrayList<RefillReminderSortingperPet> refillReminderSortingperPets ;
+    //****************************************************Callable Implelemtation for sorting Reminders***********
 
-        public ReminderListSorterRunnable(ArrayList<EasyRefillReminder> easyRefillReminders, Handler postbackHandler) {
-            this.easyRefillReminders = easyRefillReminders;
-            this.postbackHandler = postbackHandler;
-        }
+    public void sortReminders(final ArrayList<EasyRefillReminder> easyRefillReminders) {
 
-        private int getindex(ArrayList<RefillReminderSortingperPet> local_refillReminderSortingperPets, String petId){
-            int retValue = -1;
+        Observable.create(new Observable.OnSubscribe<ArrayList<RefillReminderSortingperPet>>() {
 
-            for (int l = 0 ; l < local_refillReminderSortingperPets.size() ; l++){
-                if (petId.equalsIgnoreCase(local_refillReminderSortingperPets.get(l).getPetId())){
-                    retValue = l;
-                    break;
-                }
-            }
-            return retValue;
-        }
+            private int getIndex(ArrayList<RefillReminderSortingperPet> local_refillReminderSortingperPets, String petId){
+                int retValue = -1;
 
-        @Override
-        public void run() {
-            refillReminderSortingperPets = new ArrayList<>();
-            for (int i = 0 ; i < easyRefillReminders.size() ; i++){
-                ArrayList<OrderItems> orderItems = easyRefillReminders.get(i).getOrderItems();
-                for (int j = 0 ; j < orderItems.size(); j++){
-
-                    if (null == orderItems.get(j).getPetId()){
-                        orderItems.get(j).setPetId("");
-                    }
-                    if (null == orderItems.get(j).getPetName()){
-                        orderItems.get(j).setPetName("");
-                    }
-
-                    int index = getindex(refillReminderSortingperPets,orderItems.get(j).getPetId());
-                    if (index == -1){
-                        ArrayList<RefillReminderSortingPetcompOrder> local_refillReminderSortingPetcompOrderArraylist = new ArrayList<>();
-                        local_refillReminderSortingPetcompOrderArraylist.add(new RefillReminderSortingPetcompOrder(orderItems.get(j),easyRefillReminders.get(i)));
-                        refillReminderSortingperPets.add(new RefillReminderSortingperPet(orderItems.get(j).getPetId(),orderItems.get(j).getPetName(),orderItems.get(j).getPetImageUrl(),local_refillReminderSortingPetcompOrderArraylist));
-                    } else{
-                        RefillReminderSortingperPet local_refillReminderSortingperPet = new RefillReminderSortingperPet(refillReminderSortingperPets.get(index).getPetId(),refillReminderSortingperPets.get(index).getPetName(),refillReminderSortingperPets.get(index).getPetImageURL(),refillReminderSortingperPets.get(index).getRefillReminderSortingPetcompOrderArraylist());
-                        refillReminderSortingperPets.remove(index);
-                        local_refillReminderSortingperPet.getRefillReminderSortingPetcompOrderArraylist().add(new RefillReminderSortingPetcompOrder(orderItems.get(j),easyRefillReminders.get(i)));
-                        refillReminderSortingperPets.add(local_refillReminderSortingperPet);
+                for (int l = 0 ; l < local_refillReminderSortingperPets.size() ; l++){
+                    if (petId.equalsIgnoreCase(local_refillReminderSortingperPets.get(l).getPetId())){
+                        retValue = l;
+                        break;
                     }
                 }
+                return retValue;
             }
 
-            Message msg = Message.obtain(null, Constants.REFILL_LIST_PER_PET_SORT_COMPLETE);
-            Bundle b = new Bundle();
-            b.putSerializable(Constants.REFILL_LIST_PER_PET_,refillReminderSortingperPets);
-            msg.setData(b);
+            @Override
+            public void call(Subscriber<? super ArrayList<RefillReminderSortingperPet>> subscriber) {
 
-            try {
-                postbackHandler.sendMessage(msg);
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
+                try{
+                    if (easyRefillReminders == null || easyRefillReminders.size() == 0 || easyRefillReminders.isEmpty()) {
+                        subscriber.onError(new Exception("Empty ReminderList"));
+                    }
+                    else {
+                        ArrayList<RefillReminderSortingperPet> refillReminderSortingperPets = new ArrayList<>();
+
+                        for (int i = 0 ; i < easyRefillReminders.size() ; i++){
+                            ArrayList<OrderItems> orderItems = easyRefillReminders.get(i).getOrderItems();
+                            for (int j = 0 ; j < orderItems.size(); j++){
+
+                                if (null == orderItems.get(j).getPetId()){
+                                    orderItems.get(j).setPetId("");
+                                }
+                                if (null == orderItems.get(j).getPetName()){
+                                    orderItems.get(j).setPetName("");
+                                }
+
+                                int index = getIndex(refillReminderSortingperPets,orderItems.get(j).getPetId());
+                                if (index == -1){
+                                    ArrayList<RefillReminderSortingPetcompOrder> local_refillReminderSortingPetcompOrderArraylist = new ArrayList<>();
+                                    local_refillReminderSortingPetcompOrderArraylist.add(new RefillReminderSortingPetcompOrder(orderItems.get(j),easyRefillReminders.get(i)));
+                                    refillReminderSortingperPets.add(new RefillReminderSortingperPet(orderItems.get(j).getPetId(),orderItems.get(j).getPetName(),orderItems.get(j).getPetImageUrl(),local_refillReminderSortingPetcompOrderArraylist));
+                                } else{
+                                    RefillReminderSortingperPet local_refillReminderSortingperPet = new RefillReminderSortingperPet(refillReminderSortingperPets.get(index).getPetId(),refillReminderSortingperPets.get(index).getPetName(),refillReminderSortingperPets.get(index).getPetImageURL(),refillReminderSortingperPets.get(index).getRefillReminderSortingPetcompOrderArraylist());
+                                    refillReminderSortingperPets.remove(index);
+                                    local_refillReminderSortingperPet.getRefillReminderSortingPetcompOrderArraylist().add(new RefillReminderSortingPetcompOrder(orderItems.get(j),easyRefillReminders.get(i)));
+                                    refillReminderSortingperPets.add(local_refillReminderSortingperPet);
+                                }
+                            }
+                        }
+                        subscriber.onNext(refillReminderSortingperPets);
+                    }
+                } catch (Exception e){
+                    subscriber.onError(e);
+                } finally {
+                    subscriber.onCompleted();
+                }
             }
-        }
+        }).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ArrayList<RefillReminderSortingperPet>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("sortReminders", e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<RefillReminderSortingperPet> refillReminderSortingperPets) {
+                        Message msg = Message.obtain(null, Constants.REFILL_LIST_PER_PET_SORT_COMPLETE);
+                        Bundle b = new Bundle();
+                        b.putSerializable(Constants.REFILL_LIST_PER_PET_,refillReminderSortingperPets);
+                        msg.setData(b);
+
+                        try {
+                            RefillListMessageHandler.sendMessage(msg);
+                        } catch (ClassCastException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
+    //**************************************************************************************
 }
