@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -30,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 10/12/2016.
  */
-public class VetListFragment extends AbstractFragment implements VetListContract.View{
+public class VetListFragment extends AbstractFragment implements VetListContract.View,View.OnClickListener{
     @BindView(R.id.vet_recycler_view)
     RecyclerView mVetRecyclerView;
 
@@ -41,6 +42,8 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     @BindView(R.id.noVet_layout)
     LinearLayout noVetView;
     private ArrayList <Vet> mVetList;
+    @BindView(R.id.addVet_button)
+    Button mAddVetButton;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class VetListFragment extends AbstractFragment implements VetListContract
         ButterKnife.bind(this,view);
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_my_vets));
         ((AbstractActivity) getActivity()).enableBackButton();
+        mAddVetButton.setOnClickListener(this);
         return view;
     }
 
@@ -135,5 +139,13 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     public void setVet(Vet vet) {
         mVetList.add(vet);
         mVetListAdapter.setData(mVetList);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Bundle codeBundle = new Bundle();
+        codeBundle.putString(PetVetInfoFragment.ZIPCODE_KEY, "02062");
+        replaceAccountFragmentWithBundleTag(new AddVetFragment(), AddVetFragment.class.getSimpleName(), codeBundle);
+
     }
 }

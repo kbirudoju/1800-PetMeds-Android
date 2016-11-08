@@ -132,7 +132,7 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
 
         }
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-       // fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

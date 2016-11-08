@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+
+    >
     <LinearLayout
         android:id="@+id/noVet_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:background="@color/white"
         android:orientation="vertical"
+        android:gravity="center"
         android:visibility="gone">
 
         <ImageView
@@ -36,7 +40,7 @@
             android:layout_marginRight="@dimen/dp_57"/>
 
         <Button
-            android:id="@+id/addPet_button"
+            android:id="@+id/addVet_button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45"
             style="@style/label"
