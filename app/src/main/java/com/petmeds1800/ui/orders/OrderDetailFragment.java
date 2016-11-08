@@ -310,6 +310,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ((HomeActivity) getActivity()).getViewPager().setCurrentItem(1);
     }
 
     @Override
