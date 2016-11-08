@@ -2,6 +2,7 @@ package com.petmeds1800.util;
 
 import com.petmeds1800.intent.HomeIntent;
 import com.urbanairship.AirshipReceiver;
+import com.urbanairship.UAirship;
 import com.urbanairship.push.PushMessage;
 
 import android.content.Context;
@@ -29,13 +30,13 @@ public class PetMedsAirShipReceiver extends AirshipReceiver {
     @Override
     protected void onChannelCreated(@NonNull Context context, @NonNull String channelId) {
         Log.i(TAG, "Channel created. Channel Id:" + channelId + ".");
-
+        UAirship.shared().getNamedUser().setId("ATGID");
     }
 
     @Override
     protected void onChannelUpdated(@NonNull Context context, @NonNull String channelId) {
         Log.i(TAG, "Channel updated. Channel Id:" + channelId + ".");
-
+        UAirship.shared().getNamedUser().setId("ATGID");
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.account.SignOutContract;
 import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
-import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
 import com.petmeds1800.ui.medicationreminders.service.MedicationReminderResultReceiver;
 import com.petmeds1800.ui.orders.MyOrderFragment;
@@ -90,8 +89,6 @@ public class AccountFragment extends AbstractFragment
 
     private final static int FROM_SIGNOUT_OPTION = 2;
 
-    private final static int FROM_FINGERPRINT_OPTION = 3;
-
     private final static int IS_HARDWARE_DETECTED = 4;
 
     private final static int HAS_ENROLLED_FINGERPRINTS = 5;
@@ -153,9 +150,6 @@ public class AccountFragment extends AbstractFragment
         ((HomeActivity) getActivity()).getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
         id = ((HomeActivity) getActivity()).getIntent().getStringExtra(PUSH_EXTRA_ID);
         switch (screenType) {
-            case TYPE_MEDICATION_REMINDER__ALERT:
-                navigateOnEditMedicationReminderScreen(id);
-                break;
             case TYPE_ORDER_SHIPPED__ALERT:
             case TYPE_VET_VERIFY_RX_ALERT:
                 navigateOnOrderDetailScreen(id);
@@ -174,12 +168,6 @@ public class AccountFragment extends AbstractFragment
         replaceAccountFragmentWithBundle(new OrderDetailFragment(), bundle);
     }
 
-    private void navigateOnEditMedicationReminderScreen(String reminderId) {
-        if (reminderId != null) {
-            replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(true, reminderId),
-                    AddEditMedicationRemindersFragment.class.getName());
-        }
-    }
 
     @Override
     public void onPause() {
@@ -448,6 +436,7 @@ public class AccountFragment extends AbstractFragment
 
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
+        //  Added below lines in order to create UI after account fragment added into viewpager
         checkAndSetHasOptionsMenu(intent, AccountRootFragment.class.getName());
         fillWindow();
         if (((HomeActivity) getActivity()).getIntent() != null) {

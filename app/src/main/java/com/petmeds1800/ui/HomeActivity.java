@@ -78,6 +78,8 @@ public class HomeActivity extends AbstractActivity
 
     private static final int OFFSCREEN_PAGE_LIMIT = 3;
 
+    private static final String SCREEN_TYPE = "screenType";
+
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
 
@@ -116,7 +118,7 @@ public class HomeActivity extends AbstractActivity
     private CartRootFragment mCartRootFragment;
 
     //TODO chnage when push payload is appropriate
-    private final int TYPE_MEDICATION_REMINDER__ALERT = 1;
+
 
     private final int TYPE_OFFER__ALERT = 2;
 
@@ -191,7 +193,7 @@ public class HomeActivity extends AbstractActivity
             mHomeTab.getTabAt(i).setCustomView(mTabLayoutArray.get(i));
         }
         if (getIntent() != null) {
-            screenType = getIntent().getIntExtra("screenType", 0);
+            screenType = getIntent().getIntExtra(SCREEN_TYPE, 0);
         }
         mHomeTab.setOnTabSelectedListener(
                 new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
@@ -291,7 +293,6 @@ public class HomeActivity extends AbstractActivity
             @Override
             public void run() {
                 switch (screenType) {
-                    case TYPE_MEDICATION_REMINDER__ALERT:
                     case TYPE_ORDER_SHIPPED__ALERT:
                     case TYPE_VET_VERIFY_RX_ALERT:
                     case TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT:
@@ -487,20 +488,17 @@ public class HomeActivity extends AbstractActivity
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
-                mPreferencesHelper.setIsPushNotificationEnableFlag(true);
-                UAirship.shared().getPushManager().setUserNotificationsEnabled(true);
-                mAnalyticsUtil.trackEvent(getString(R.string.push_notifications_category),
-                        getString(R.string.push_notifications_enability),
-                        getString(R.string.push_notifications_enable_label));
+                setPushNotificationEnability(true);
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
-                mPreferencesHelper.setIsPushNotificationEnableFlag(false);
-                UAirship.shared().getPushManager().setUserNotificationsEnabled(false);
-                mAnalyticsUtil.trackEvent(getString(R.string.push_notifications_category),
-                        getString(R.string.push_notifications_disability),
-                        getString(R.string.push_notification_disability));
+                setPushNotificationEnability(false);
                 break;
         }
+    }
+
+    private void setPushNotificationEnability(boolean value) {
+        mPreferencesHelper.setIsPushNotificationEnableFlag(value);
+        UAirship.shared().getPushManager().setUserNotificationsEnabled(value);
     }
 
 

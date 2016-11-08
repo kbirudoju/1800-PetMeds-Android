@@ -5,7 +5,6 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.ReminderDialogData;
 import com.petmeds1800.model.entities.AddMedicationReminderRequest;
 import com.petmeds1800.model.entities.AddMedicationReminderResponse;
-import com.petmeds1800.model.entities.MedicationReminderDetailsRequest;
 import com.petmeds1800.model.entities.MedicationReminderItem;
 import com.petmeds1800.model.entities.MedicationRemindersAlarmData;
 import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
@@ -22,7 +21,6 @@ import com.petmeds1800.util.alarm.MedicationAlarmReceiver;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -184,26 +182,15 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         isEditable = bundle.getBoolean(Constants.IS_EDITABLE);
         reminderIdFromPush = bundle.getString(REMINDER_ID);
         if (isEditable) {
-            if (reminderIdFromPush != null) {
-                updateMedicationReminderDetails(reminderIdFromPush);
-            } else {
                 populateMedicalReminderData(
                         (MedicationReminderItem) bundle.getSerializable(Constants.MEDICATION_REMINDER_INFO));
-            }
 
         }
 
         return view;
     }
 
-    private void updateMedicationReminderDetails(String reminderFromPush) {
-        MedicationReminderDetailsRequest medicationReminderDetailsRequest
-                = new MedicationReminderDetailsRequest();
-        medicationReminderDetailsRequest.setReminderId(Integer.valueOf(reminderFromPush));
-        medicationReminderDetailsRequest.setSessionConfNumber(
-                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-        mPresenter.getMedicationReminderDetails(medicationReminderDetailsRequest);
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -237,13 +224,6 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         }
     }
 
-    private void showFingerprintDialog() {
-        mAuthenticationDialog = new FingerprintAuthenticationDialog();
-        if (!mAuthenticationDialog.isAdded()) {
-            mAuthenticationDialog.setCancelable(false);
-            mAuthenticationDialog.show(getActivity().getSupportFragmentManager(), "FingerprintAuthenticationDialog");
-        }
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -506,11 +486,6 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
     }
 
     @Override
-    public void updateMedicationDetails(AddMedicationReminderResponse response) {
-        populateMedicalReminderData((MedicationReminderItem) response.getMedicationReminder().get(ZERO_INDEX));
-    }
-
-    @Override
     public void onRemoveSuccess() {
         Snackbar.make(mContainerLayout, R.string.medication_reminder_removed_message, Snackbar.LENGTH_LONG).show();
         if (weeksList != null && weeksList.size() > 0) {
@@ -541,21 +516,7 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
 
     }
 
-    @Override
-    public void showErrorOnUpdateMedicationDetails(CharSequence message, boolean span) {
-        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
-        if (message.toString().contains(LOGGED_IN)) {
-            FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(FROM_PUSH, true);
-            mAuthenticationDialog.setArguments(bundle);
-            if (!mAuthenticationDialog.isAdded()) {
-                mAuthenticationDialog.setCancelable(false);
-                mAuthenticationDialog
-                        .show(getActivity().getSupportFragmentManager(), FINGERPRINT_AUTHENTICATION_DIALOG);
-            }
-        }
-    }
+
 
     @Override
     public void setPresenter(AddEditMedicationRemindersContract.Presenter presenter) {
@@ -606,13 +567,8 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
 
     @Override
     public void onDestroy() {
-        deregisterIntent(getActivity());
         super.onDestroy();
     }
 
-    @Override
-    protected void onReceivedBroadcast(Context context, Intent intent) {
-        updateMedicationReminderDetails(getArguments().getString(REMINDER_ID));
-        super.onReceivedBroadcast(context, intent);
-    }
+
 }

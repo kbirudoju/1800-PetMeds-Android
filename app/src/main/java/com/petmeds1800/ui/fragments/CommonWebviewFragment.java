@@ -27,6 +27,7 @@ import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.PaypalResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.util.Constants;
 
 import org.apache.http.HttpResponse;
@@ -45,6 +46,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Cookie;
+
+import static com.google.android.gms.analytics.internal.zzy.c;
+import static com.petmeds1800.R.string.checkout;
 
 /**
  * Created by pooja on 8/25/2016.
@@ -432,11 +436,13 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        try {
-            onPaymnetSelectedListener = (OnPaymentCompletedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement onPaymnetSelectedListener");
+        if(activity instanceof HomeActivity || activity instanceof CheckOutActivity) {
+            try {
+                onPaymnetSelectedListener = (OnPaymentCompletedListener) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement onPaymnetSelectedListener");
+            }
         }
     }
 
