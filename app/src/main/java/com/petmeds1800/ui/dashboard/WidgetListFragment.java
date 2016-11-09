@@ -19,6 +19,7 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.entities.Category;
 import com.petmeds1800.model.entities.PetItemList;
+import com.petmeds1800.model.entities.SalePitch;
 import com.petmeds1800.model.entities.WhatsNextCategory;
 import com.petmeds1800.model.entities.WidgetData;
 import com.petmeds1800.ui.AbstractActivity;
@@ -90,6 +91,10 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                 }else if(v.getTag() instanceof WidgetData){
                     WidgetData widgetData = (WidgetData) v.getTag();
                     ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(widgetData.getLearnMoreUrl(), getString(R.string.tip_title));
+
+                }else if(v.getTag() instanceof SalePitch){
+                    SalePitch salePitch=(SalePitch)v.getTag();
+                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(salePitch.getLinkUrl(), getString(R.string.sales_pitch_title));
 
                 }
             }

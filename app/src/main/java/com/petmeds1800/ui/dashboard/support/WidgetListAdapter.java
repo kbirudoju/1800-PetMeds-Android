@@ -122,6 +122,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else if (viewType == SALES_PITCH_VIEW_TYPE) {
             int resource = R.layout.view_sales_pitch;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+            ImageView salesPitchView=(ImageView)v.findViewById(R.id.sales_pitch_image);
+            salesPitchView.setOnClickListener(listener);
             viewHolder = new SalesPitchViewHolder(v);
         } else if (viewType == BROWSE_HISTORY_VIEW_TYPE) {
             int resource = R.layout.view_shopping_history;
@@ -403,7 +405,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         salesPitchViewHolder.salesPitchImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
-
+                salesPitchViewHolder.salesPitchImage.setTag(salesPitch);
                 break;
             case WHATS_NEXT_VIEW_TYPE:
                 final WhatsNextViewHolder whatsNextViewHolder = (WhatsNextViewHolder) holder;

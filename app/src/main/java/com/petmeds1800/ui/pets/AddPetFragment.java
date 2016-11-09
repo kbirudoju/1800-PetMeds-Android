@@ -436,12 +436,7 @@ public class AddPetFragment extends AbstractFragment
             case R.id.breed_type_edit:
                 //  ((HomeActivity) getActivity()).showProgress();
                 mSelectedPetType=mPetTypeText.getText().toString();
-                if(mSelectedPetType==null || mSelectedPetType.isEmpty()){
-
-                }else{
                     mPresenter.pouplatePetBreedTypeList();
-                }
-
                 break;
         }
     }

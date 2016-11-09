@@ -654,6 +654,17 @@
     <string name="tip_title">Tip</string>
     <string name="recommendation_title">Recommendation</string>
     <string name="whats_next_title">WhatsNext</string>
+    <string name="sales_pitch_title">SalesPitch</string>
+    <!--Order status-->
+    <string name="OrderStatus_delivered">DELIVERED</string>
+    <string name="OrderStatus_shipping">SHIPPING</string>
+    <string name="OrderStatus_processing">PROCESSING</string>
+    <string name="OrderStatus_cancelled">CANCELLED</string>
+    <string name="OrderStatus_notavetph">NOT A VET PH#/DISCONNECTED</string>
+    <string name="OrderStatus_rx">RX REQUIRED</string>
+    <string name="OrderStatus_OrderGone">Order Gone</string>
+    <string name="OrderStatus_unknown">Status Unknown</string>
+
 
 </resources>
 

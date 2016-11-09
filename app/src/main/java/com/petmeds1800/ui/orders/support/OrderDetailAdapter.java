@@ -189,16 +189,41 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                 orderInfoViewHolder.orderTotalLabel.setText("$" + String.valueOf(orderInfo.getTotal()));
                 orderInfoViewHolder.orderStatusLabel.setText(orderInfo.getStatus());
 
-                //temporary hardcoded value to check layout, it will be changed after confirmation from backend
-                if (orderInfo.getStatus().equalsIgnoreCase("PROCESSING")) {
+
+                if (orderInfo.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_processing))) {
                     orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
                     orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.yellow_rounded_button);
-                } else if (orderInfo.getStatus().equalsIgnoreCase("Cancelled")) {
+                } else if (orderInfo.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_cancelled))) {
                     orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.red_rounded_button);
                     orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
 
-                } else {
+                } else if(orderInfo.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_delivered))){
                     orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.green_rounded_button);
+                    orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.i_c_n_status_ic_status_completed, 0, 0, 0);
+                }else if(orderInfo.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_shipping))){
+                    orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
+                    orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.yellow_rounded_button);
+                }else if(orderInfo.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_OrderGone))){
+                    orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.green_rounded_button);
+                    orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.i_c_n_status_ic_status_completed, 0, 0, 0);
+
+                }else if(orderInfo.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_notavetph))){
+                    orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.red_rounded_button);
+                    orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
+
+                }else if(orderInfo.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_rx))){
+                    orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.red_rounded_button);
+                    orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
+
+                }else if(orderInfo.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_unknown))){
+                    orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.red_rounded_button);
+                    orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
+
+                }
+                else {
+                    orderInfoViewHolder.orderStatusLabel.setBackgroundResource(R.drawable.green_rounded_button);
+                    orderInfoViewHolder.orderStatusLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.i_c_n_status_ic_status_completed, 0, 0, 0);
+
                 }
                 break;
         }

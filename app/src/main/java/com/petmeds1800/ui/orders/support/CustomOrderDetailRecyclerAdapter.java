@@ -65,6 +65,7 @@ public abstract class CustomOrderDetailRecyclerAdapter extends RecyclerView.Adap
             ShippingGroup shippingGroup=orderList.getShippingGroups().get(shippingItemCount);
             mData.add(shippingGroup);
         }
+        if(orderList.getStatus().equalsIgnoreCase(context.getString(R.string.OrderStatus_shipping))&&orderList.getShippingGroups().get(0).getTrackingNumber()!=null && !orderList.getShippingGroups().get(0).getTrackingNumber().isEmpty() )
         mData.add(new WebViewHeader(context.getString(R.string.track_shipment),TRACK_ROW_ID,orderList.getShippingGroups().get(0).getTrackingNumber(),orderList.getShippingGroups().get(0).getCompanyName(),0));
 
         //Add payment header
