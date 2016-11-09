@@ -22,6 +22,7 @@ import com.petmeds1800.model.RefillReminderSortingperPet;
 import com.petmeds1800.model.refillreminder.response.EasyRefillReminder;
 import com.petmeds1800.model.refillreminder.response.OrderItems;
 import com.petmeds1800.model.refillreminder.response.RefillReminderListResponse;
+import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.refillreminder.ReminderListContract;
 import com.petmeds1800.ui.refillreminder.presenter.ReminderListPresenter;
@@ -64,6 +65,10 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
         mReminderMainList.setLayoutManager(mLayoutManager);
         mReminderMainList.setItemAnimator(new DefaultItemAnimator());
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+
+        ((AbstractActivity) getActivity())
+                .setToolBarTitle(getActivity().getString(R.string.refill_reminder));
+        ((AbstractActivity) getActivity()).enableBackButton();
         return view;
     }
 
