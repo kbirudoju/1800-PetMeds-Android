@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.fragments;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.util.PetMedWebViewClient;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,18 +32,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.util.PetMedWebViewClient;
-
 import java.util.Iterator;
 
 import javax.inject.Inject;
@@ -49,9 +50,12 @@ public class CommonWebviewFragment extends AbstractFragment {
     public static final String TITLE_KEY = "title";
 
     public static final String HTML_DATA = "html_data";
+
     public static final String PAYPAL_DATA = "paypal_data";
-    public static final String  ISCHECKOUT = "ischeckout";
-    public static final String  STEPNAME = "stepname";
+
+    public static final String ISCHECKOUT = "ischeckout";
+
+    public static final String STEPNAME = "stepname";
 
 
     public static final String DISABLE_BACK_BUTTON = "disableBackButton";
@@ -69,8 +73,11 @@ public class CommonWebviewFragment extends AbstractFragment {
     PetMedsApiService mPetMedsApiService;
 
     private boolean mDisableBackButton;
+
     private OnPaymentCompletedListener onPaymnetSelectedListener;
-    private boolean isCheckout=false;
+
+    private boolean isCheckout = false;
+
     private String mStepName;
 
     public static CommonWebviewFragment newInstance(boolean disableBackButton) {
@@ -90,8 +97,7 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         Bundle bundle = getArguments();
 
-
-        if(bundle != null) {
+        if (bundle != null) {
             mDisableBackButton = bundle.getBoolean(DISABLE_BACK_BUTTON);
         }
 
@@ -104,13 +110,11 @@ public class CommonWebviewFragment extends AbstractFragment {
         ButterKnife.bind(this, rootView);
 
         //check if back button needs to be enabled
-        if(mDisableBackButton) {
+        if (mDisableBackButton) {
             ((AbstractActivity) getActivity()).disableBackButton();
-        }
-        else {
+        } else {
             ((AbstractActivity) getActivity()).enableBackButton();
         }
-
 
         setHasOptionsMenu(true);
 
@@ -124,24 +128,22 @@ public class CommonWebviewFragment extends AbstractFragment {
         String title = getArguments().getString(TITLE_KEY);
         String htmlData = getArguments().getString(HTML_DATA);
         String paypalData = getArguments().getString(PAYPAL_DATA);
-        isCheckout=getArguments().getBoolean(ISCHECKOUT);
-        mStepName=getArguments().getString(STEPNAME);
-
+        isCheckout = getArguments().getBoolean(ISCHECKOUT);
+        mStepName = getArguments().getString(STEPNAME);
 
         if (title != null && !title.isEmpty()) {
             ((AbstractActivity) getActivity()).setToolBarTitle(title);
         }
-        if(htmlData != null){
+        if (htmlData != null) {
             loadFromHtmlData(htmlData);
-        }else if(paypalData!=null){
+        } else if (paypalData != null) {
             loadHtmlWithPostRequest(paypalData);
-        }
-        else{
+        } else {
             setUpWebView(url);
         }
 
-        ((AbstractActivity)getActivity()).getToolbar().getMenu().clear();
-        ((AbstractActivity)getActivity()).getToolbar().setLogo(null);
+        ((AbstractActivity) getActivity()).getToolbar().getMenu().clear();
+        ((AbstractActivity) getActivity()).getToolbar().setLogo(null);
     }
 
 
@@ -158,12 +160,11 @@ public class CommonWebviewFragment extends AbstractFragment {
         }
 
         String cookieString = null;
-        for (Iterator<Cookie> iterator = mCookieCache.iterator() ; iterator.hasNext();) {
+        for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
             Cookie cookie = iterator.next();
-            if(cookie.name().equals("JSESSIONID")) {
+            if (cookie.name().equals("JSESSIONID")) {
                 cookieString = "JSESSIONID=" + cookie.value() + "; ";
-            }
-            else if(cookie.name().equals("SITESERVER")) {
+            } else if (cookie.name().equals("SITESERVER")) {
                 cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
             }
         }
@@ -172,8 +173,7 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().flush();
-        }
-        else {
+        } else {
             CookieSyncManager.getInstance().sync();
         }
 
@@ -196,7 +196,7 @@ public class CommonWebviewFragment extends AbstractFragment {
 
     }
 
-    private void loadFromHtmlData(String htmlData){
+    private void loadFromHtmlData(String htmlData) {
 
         mWebView.loadData(htmlData, "text/html", "UTF-8");
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -218,13 +218,12 @@ public class CommonWebviewFragment extends AbstractFragment {
     }
 
 
-    private void loadHtmlWithPostRequest( String postData){
+    private void loadHtmlWithPostRequest(String postData) {
 
         final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().flush();
-        }
-        else {
+        } else {
             CookieSyncManager.getInstance().sync();
         }
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -237,11 +236,10 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         };
 
-
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
-       mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
+        mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
         mWebView.loadUrl(postData);
     }
 
@@ -252,7 +250,7 @@ public class CommonWebviewFragment extends AbstractFragment {
         super.onDestroyView();
     }
 
-/*This Webview client will be used to capture the paypal response*/
+    /*This Webview client will be used to capture the paypal response*/
     private class Callback extends WebViewClient {
 
         @Override
@@ -262,7 +260,7 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            if(url.contains("applyPayPalPaymentMethod")) {
+            if (url.contains("applyPayPalPaymentMethod")) {
                 mWebView.loadUrl("javascript:HtmlViewer.showHTML" +
                         "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
 
@@ -272,43 +270,45 @@ public class CommonWebviewFragment extends AbstractFragment {
 
     }
 
-  class MyJavaScriptInterface {
+    class MyJavaScriptInterface {
 
         private Context ctx;
+
         MyJavaScriptInterface(Context ctx) {
             this.ctx = ctx;
         }
 
         @JavascriptInterface
         public void showHTML(String html) {
-            String jsonString=(html.substring(html.indexOf("{"), html.lastIndexOf("}") + 1));
-            Gson gson=new GsonBuilder().create();
-            ShoppingCartListResponse paypalResponse =   gson.fromJson(jsonString, ShoppingCartListResponse.class);
-            if(isCheckout) {
-                onPaymnetSelectedListener.onCheckoutPaymentCompleted(paypalResponse,mStepName);
-            }else{
+            String jsonString = (html.substring(html.indexOf("{"), html.lastIndexOf("}") + 1));
+            Gson gson = new GsonBuilder().create();
+            ShoppingCartListResponse paypalResponse = gson.fromJson(jsonString, ShoppingCartListResponse.class);
+            if (isCheckout) {
+                onPaymnetSelectedListener.onCheckoutPaymentCompleted(paypalResponse, mStepName);
+            } else {
                 onPaymnetSelectedListener.onPaymentCompleted(paypalResponse);
             }
-                removeFragment();
+            removeFragment();
 
         }
 
     }
 
-    private void removeFragment(){
+    private void removeFragment() {
         FragmentManager manager = getActivity().getSupportFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.remove(this);
         trans.commit();
         manager.popBackStack();
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        if(activity instanceof HomeActivity) {
+        if (activity instanceof HomeActivity || activity instanceof CheckOutActivity) {
             try {
                 onPaymnetSelectedListener = (OnPaymentCompletedListener) activity;
             } catch (ClassCastException e) {
@@ -319,8 +319,10 @@ public class CommonWebviewFragment extends AbstractFragment {
     }
 
     public interface OnPaymentCompletedListener {
-         void onPaymentCompleted(ShoppingCartListResponse paypalResponse);
-        void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse,String stepName);
+
+        void onPaymentCompleted(ShoppingCartListResponse paypalResponse);
+
+        void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName);
     }
 }
 

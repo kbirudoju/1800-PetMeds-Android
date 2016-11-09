@@ -709,15 +709,13 @@ public class AddPetFragment extends AbstractFragment
     @Override
     public void onUpdateSuccess(Pets pet) {
         //TODO Uncommet it when the reponse from the server is OK
-       /* if (finalUri != null) {
-            mPresenter.uploadPetImage(createPartFromString(pet.getPetId()),prepareFilePart("uploadfile", finalUri)) ;
+        if (finalUri != null) {
+            mPresenter.uploadPetImage(createPartFromString(pet.getPetId()), prepareFilePart("uploadfile", finalUri));
         } else {
             progressBar.setVisibility(View.GONE);
             closeWindow();
-        }*/
+        }
 
-        progressBar.setVisibility(View.GONE);
-        closeWindow();
     }
 
     private void closeWindow() {
@@ -843,12 +841,12 @@ public class AddPetFragment extends AbstractFragment
     public void onPetAddSuccess(Pets pet) {
         mPets = pet;
         //TODO uncomment it when repsonse from server is OK
-       /* if (finalUri != null) {
+        if (finalUri != null) {
             mPresenter.uploadPetImage(createPartFromString(pet.getPetId()), prepareFilePart("uploadfile", finalUri));
         } else {
             onAddPetSuccess(mPets);
-        }*/
-        onAddPetSuccess(mPets);
+        }
+
     }
 
     private void onAddPetSuccess(Pets pet) {
@@ -871,17 +869,18 @@ public class AddPetFragment extends AbstractFragment
 
     @Override
     public void onImageUplaodSuccess() {
-        if (isEditable) {
-            onAddPetSuccess(mPets);
-        } else {
-            progressBar.setVisibility(View.GONE);
-            closeWindow();
-        }
+
     }
 
     @Override
     public void onImgaeUploadError() {
-        progressBar.setVisibility(View.GONE);
+        if (isEditable) {
+            progressBar.setVisibility(View.GONE);
+            closeWindow();
+        } else {
+            onAddPetSuccess(mPets);
+        }
+
     }
 
     public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,
@@ -1067,7 +1066,7 @@ public class AddPetFragment extends AbstractFragment
     @NonNull
     private RequestBody createPartFromString(String descriptionString) {
         return RequestBody.create(
-                MediaType.parse(MULTIPART_FORM_DATA), descriptionString);
+                MediaType.parse("text/plain"), descriptionString);
     }
 
     @NonNull
@@ -1077,7 +1076,7 @@ public class AddPetFragment extends AbstractFragment
         File file = new File(fileUri.getPath());
         // create RequestBody instance from file
         RequestBody requestFile =
-                RequestBody.create(MediaType.parse(MULTIPART_FORM_DATA), file);
+                RequestBody.create(MediaType.parse("image/*"), file);
 
         // MultipartBody.Part is used to send also the actual file name
         MultipartBody.Part body =

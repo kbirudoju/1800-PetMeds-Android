@@ -339,16 +339,22 @@ public class AddPetPresenter implements AddPetContract.Presenter {
 
                     @Override
                     public void onNext(Status status) {
-                        if (status.getCode().equals(API_SUCCESS_CODE)) {
-                            if (mView.isActive()) {
-                                mView.onImageUplaodSuccess();
+                        if (status != null) {
+                            if (status.getCode() != null && status.getCode().equals(API_SUCCESS_CODE)) {
+                                if (mView.isActive()) {
+                                    mView.onImageUplaodSuccess();
+                                }
+                            } else {
+                                if (mView.isActive()) {
+                                    mView.onImgaeUploadError();
+                                }
                             }
+
                         } else {
                             if (mView.isActive()) {
                                 mView.onImgaeUploadError();
                             }
                         }
-
                     }
                 });
     }

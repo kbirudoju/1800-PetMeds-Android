@@ -392,7 +392,6 @@ public interface PetMedsApiService {
     Observable<OrderDetailResponse> getOrderDetail(
             @Query("_dynSessConf") String sessionConfirmation, @Query("orderId") String orderId);
 
-    @Headers({"Content-Type: multipart/form-data; boundary=WebKitFormBoundary7MA4YWxkTrZu0gW", "Request-Credential: pmdevrestapi"})
     @Multipart
     @POST("/petImageUpload.jsp")
     Observable<Status> uploadPetImage( @Part("petid") RequestBody id,@Part MultipartBody.Part file);
