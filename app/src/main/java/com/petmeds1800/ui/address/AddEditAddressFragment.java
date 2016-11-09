@@ -279,6 +279,8 @@ public class AddEditAddressFragment extends AbstractFragment
     }
 
     public void populateData(Address address) {
+        mAddress = address;
+
         mUseMyShippingAddressSwitch.setEnabled(true);
         mFirstNameEdit.setText(address != null ? address.getFirstName() : "");
         mLastNameEdit.setText(address != null ? address.getLastName() : "");
@@ -461,8 +463,8 @@ public class AddEditAddressFragment extends AbstractFragment
         shippingAddressRequest.setShippingAddressCity(mCityEdit.getText().toString());
         shippingAddressRequest.setShippingAddressPostalCode(mZipCodeEdit.getText().toString());
         shippingAddressRequest.setShippingAddressPhoneNumber(mPhoneNumberEdit.getText().toString());
-        shippingAddressRequest.setShippingAddressCountry(mCountryCode);
-        shippingAddressRequest.setShippingAddressState(mUsaStateCode);
+        shippingAddressRequest.setShippingAddressCountry(mCountryCode == null ? mAddress.getCountry() : mCountryCode);
+        shippingAddressRequest.setShippingAddressState(mCountryCode == null ? mAddress.getState() : mUsaStateCode);
         return shippingAddressRequest;
     }
 

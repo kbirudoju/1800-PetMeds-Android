@@ -268,6 +268,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                 mPetList.put(pet.getPetId(), pet.getPetName());
                 mPetList.put("-1", getActivity().getString(R.string.add_new_pet_txt));
                 mCommerceItem.get(mPosition - 1).setPetName(pet.getPetName());
+                mCommerceItem.get(mPosition-1).setPetId(pet.getPetId());
                 parentFragment.isEmpty=false;
                // mAdapter.notifyItemChanged(mPosition);
                 mAdapter.notifyDataSetChanged();
@@ -283,6 +284,7 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
                 mVetList.put(vet.getId(), vet.getName());
                 mVetList.put("-1", getActivity().getString(R.string.add_new_vet_txt));
                 mCommerceItem.get(mPosition - 1).setVetClinic(vet.getName());
+                mCommerceItem.get(mPosition-1).setVetId(vet.getId());
                 parentFragment.isEmpty=false;
                // mAdapter.notifyItemChanged(mPosition);
                 mAdapter.notifyDataSetChanged();

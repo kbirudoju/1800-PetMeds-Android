@@ -56,7 +56,6 @@ public class PetMedWebViewClient extends WebViewClient {
         mContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(mContext,"200 OK Response", Toast.LENGTH_LONG).show();
                 try {
                     ((HomeActivity)mContext).updateCartMenuItemCount();
                 } catch (Exception ex){

@@ -737,7 +737,10 @@ public class AddPetFragment extends AbstractFragment
     }
 
     public void showPetMedicalData(String title, List list) {
-        ((HomeActivity) getActivity()).hideProgress();
+        //two activities HomeActivity and AddNewEntity are
+        if(getActivity() instanceof HomeActivity){
+            ((HomeActivity) getActivity()).hideProgress();
+        }
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.dailog_recyclerview_layout, null);
         ((TextView) view.findViewById(R.id.titleText)).setText(title);
