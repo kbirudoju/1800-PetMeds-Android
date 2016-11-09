@@ -1,5 +1,24 @@
 package com.petmeds1800.ui.medicationreminders;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.ReminderDialogData;
+import com.petmeds1800.model.entities.AddMedicationReminderRequest;
+import com.petmeds1800.model.entities.AddMedicationReminderResponse;
+import com.petmeds1800.model.entities.MedicationReminderItem;
+import com.petmeds1800.model.entities.MedicationRemindersAlarmData;
+import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.PetNameDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.ReminderDialogFragment;
+import com.petmeds1800.ui.pets.AddPetFragment;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
+import com.petmeds1800.util.alarm.MedicationAlarmReceiver;
+
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -23,25 +42,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.ReminderDialogData;
-import com.petmeds1800.model.entities.AddMedicationReminderRequest;
-import com.petmeds1800.model.entities.AddMedicationReminderResponse;
-import com.petmeds1800.model.entities.MedicationReminderItem;
-import com.petmeds1800.model.entities.MedicationRemindersAlarmData;
-import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.fragments.dialog.PetNameDialogFragment;
-import com.petmeds1800.ui.fragments.dialog.ReminderDialogFragment;
-import com.petmeds1800.ui.pets.AddPetFragment;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-import com.petmeds1800.util.alarm.MedicationAlarmReceiver;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -189,6 +189,7 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
 
         return view;
     }
+
 
 
     @Override
@@ -506,14 +507,16 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
 
     @Override
     public void onError(String errorMessage) {
-        Utils.displayCrouton(getActivity(), errorMessage);
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
     }
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
-        Utils.displayCrouton(getActivity(), message.toString());
+        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
 
     }
+
+
 
     @Override
     public void setPresenter(AddEditMedicationRemindersContract.Presenter presenter) {

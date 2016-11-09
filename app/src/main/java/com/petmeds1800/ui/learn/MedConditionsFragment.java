@@ -8,11 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.petmeds1800.R;
@@ -45,6 +47,9 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.container_layout)
+    RelativeLayout mContainerLayout;
 
     @BindView(R.id.recycler_med_conditions)
     RecyclerView mRecyclerMedConditions;
@@ -112,9 +117,9 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
         message = message.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : message;
         mProgressBar.setVisibility(View.GONE);
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message);
+            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
         } else {
-            Utils.displayCrouton(getActivity(), (String) message);
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
     }
 
@@ -157,7 +162,7 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
 
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
-        checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
+        checkAndSetHasOptionsMenu(intent , LearnRootFragment.class.getName());
         super.onReceivedBroadcast(context, intent);
     }
 }

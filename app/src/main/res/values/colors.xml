@@ -27,8 +27,8 @@
     <color name="fingerprint_success_color">#009688</color>
     <color name="fingerprint_alert_title_background">#f8fafc</color>
     <color name="radio_text_selected">#09304e</color>
-    <color name="color_snackbar">@color/crimson_red</color>
-    <color name="color_snackbar_text">@color/white</color>
+    <color name="color_crouton">@color/crimson_red</color>
+    <color name="color_crouton_text">@color/white</color>
     <color name="circle_indicator">#1a458b</color>
     <color name="circle_indicator_stroke">#0060a9</color>
     <color name="transparent_100_percent">#00000000</color>

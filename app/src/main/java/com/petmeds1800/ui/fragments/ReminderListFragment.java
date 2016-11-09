@@ -102,7 +102,7 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
 
     @Override
     public boolean onError(String errorMessage) {
-        Utils.displayCrouton(getActivity(), (String) errorMessage);
+        Utils.displayCrouton(getActivity(), (String) errorMessage, mReminderMainList);
 
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());
@@ -202,31 +202,31 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
                 }
             }
         }).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ArrayList<RefillReminderSortingperPet>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+            @Override
+            public void onCompleted() {
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("sortReminders", e.getLocalizedMessage());
-                    }
+            @Override
+            public void onError(Throwable e) {
+                Log.d("sortReminders", e.getLocalizedMessage());
+            }
 
-                    @Override
-                    public void onNext(ArrayList<RefillReminderSortingperPet> refillReminderSortingperPets) {
-                        Message msg = Message.obtain(null, Constants.REFILL_LIST_PER_PET_SORT_COMPLETE);
-                        Bundle b = new Bundle();
-                        b.putSerializable(Constants.REFILL_LIST_PER_PET_,refillReminderSortingperPets);
-                        msg.setData(b);
+            @Override
+            public void onNext(ArrayList<RefillReminderSortingperPet> refillReminderSortingperPets) {
+                Message msg = Message.obtain(null, Constants.REFILL_LIST_PER_PET_SORT_COMPLETE);
+                Bundle b = new Bundle();
+                b.putSerializable(Constants.REFILL_LIST_PER_PET_,refillReminderSortingperPets);
+                msg.setData(b);
 
-                        try {
-                            RefillListMessageHandler.sendMessage(msg);
-                        } catch (ClassCastException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                try {
+                    RefillListMessageHandler.sendMessage(msg);
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
     //**************************************************************************************
 }

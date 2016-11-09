@@ -200,7 +200,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             mCouponCodeLayout.setError(errorMessage);
             mOfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
         } else if (simpleName.equalsIgnoreCase(UpdateItemQuantityRequestShoppingCart.class.getSimpleName())) {
-            Utils.displayCrouton(getActivity(), (String) errorMessage);
+            Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
         }
 
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION, mProgressBar);
@@ -230,10 +230,10 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @Override
     public void onPayPalError(String errorMsg) {
         if(errorMsg.isEmpty()){
-            Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label));
+            Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label), mItemListtContainer);
 
         }else{
-            Utils.displayCrouton(getActivity(), errorMsg);
+            Utils.displayCrouton(getActivity(), errorMsg, mItemListtContainer);
 
         }
         mProgressBar.setVisibility(View.GONE);
@@ -419,7 +419,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.displayCrouton(getActivity(), errormsg);
+                    Utils.displayCrouton(getActivity(), errormsg, mItemListtContainer);
                 }
             }, 500);
             Log.d("response in cart", response.getStatus().getErrorMessages().get(0));

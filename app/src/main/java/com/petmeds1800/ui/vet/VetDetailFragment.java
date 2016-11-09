@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,7 +43,7 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 10/18/2016.
  */
-public class VetDetailFragment extends AbstractFragment implements View.OnClickListener, VetDetailContract.View, NoTitleOkDialogFragment.DialogButtonsListener {
+public class VetDetailFragment extends AbstractFragment implements View.OnClickListener,VetDetailContract.View,NoTitleOkDialogFragment.DialogButtonsListener{
     private VetList mVetDetail;
     @BindView(R.id.clinicNameLabel)
 
@@ -78,6 +79,9 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
     @BindView(R.id.userNameInputLayout)
     TextInputLayout mUserNameInputLayout;
 
+    @BindView(R.id.containerLayout)
+    LinearLayout mContainerLayout;
+
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
     private VetDetailContract.Presenter mPresenter;
@@ -85,39 +89,40 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_vet_detail, null);
+        View view =inflater.inflate(R.layout.fragment_vet_detail, null);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(false);
         mRequestReferralButton.setOnClickListener(this);
         mMapImage.setOnClickListener(this);
-        mPresenter = new VetDetailPresenter(this);
+        mPresenter=new VetDetailPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
         return view;
     }
 
 
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        MenuItem item = menu.findItem(R.id.action_map);
+        MenuItem item=menu.findItem(R.id.action_map);
         item.setVisible(false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mVetDetail = (VetList) getArguments().getSerializable("vet_detail");
+        mVetDetail=(VetList)getArguments().getSerializable("vet_detail");
         ((AbstractActivity) getActivity()).enableBackButton();
-        if (mVetDetail != null) {
+        if(mVetDetail!=null){
             ((AbstractActivity) getActivity()).setToolBarTitle(getString(R.string.near_vet_txt) + mVetDetail.getZip());
             mClinicNameLabel.setText(mVetDetail.getClinic());
             mAddressLine1label.setText(mVetDetail.getAddress());
-            mAddressLine2Label.setText(mVetDetail.getCity() + " , " + mVetDetail.getState());
-            mPhoneNumberLabel.setText(getString(R.string.phone_title_txt) + mVetDetail.getPhone());
+            mAddressLine2Label.setText(mVetDetail.getCity()+" , "+mVetDetail.getState());
+            mPhoneNumberLabel.setText(getString(R.string.phone_title_txt)+mVetDetail.getPhone());
             mDistanceLabel.setText(mVetDetail.getDistanceFromZip() + " " + getString(R.string.miles_txt) + " " + getString(R.string.from_txt) + " " + mVetDetail.getZip());
 
             String latVet = String.valueOf(mVetDetail.getLatitude());
-            String lngVet = String.valueOf(mVetDetail.getLongitude());
+            String lngVet =  String.valueOf(mVetDetail.getLongitude());
             String url = "http://maps.google.com/maps/api/staticmap?center=" + latVet + "," + lngVet + "&zoom=10&size=200x200&markers=color:blue%7Clabel:S%7C11211%7C11206%7C11222&sensor=false";
 
             Glide.with(this).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(mMapImage) {
@@ -135,7 +140,7 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch(v.getId()){
             case R.id.request_referral_button:
 
                 boolean isValidVetName;
@@ -147,12 +152,12 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
                 if (isValidVetName ||
                         isValidPhoneNumber
                         ) {
-                    Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail));
-                    return;
+                    Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail), mContainerLayout);
+                    return ;
                 }
 
 
-                UpdateVetRequest updateVetRequest = new UpdateVetRequest(mVetDetail.getId(), mPhoneNumberEdit.getText().toString(), mVetNameEdit.getText().toString(), mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                UpdateVetRequest updateVetRequest=new UpdateVetRequest(mVetDetail.getId(),mPhoneNumberEdit.getText().toString(),mVetNameEdit.getText().toString(),mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
 
                 try {
                     ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
@@ -162,7 +167,7 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
                 mPresenter.requestReferral(updateVetRequest);
                 break;
             case R.id.map_view:
-                if (mVetDetail != null) {
+                if(mVetDetail!=null){
                     double latitude = mVetDetail.getLatitude();
                     double longitude = mVetDetail.getLongitude();
                     String label = mVetDetail.getClinic();
@@ -172,7 +177,7 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
                     String uriString = uriBegin + "?q=" + encodedQuery + "&z=16";
                     Uri uri = Uri.parse(uriString);
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
-                    getActivity().startActivity(intent);
+                    getActivity(). startActivity(intent);
 
                 }
                 break;
@@ -200,20 +205,20 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
     @Override
     public void onSuccess() {
         try {
-            ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        NoTitleOkDialogFragment dialogFragment = NoTitleOkDialogFragment.newInstance(String.format(getString(R.string.requestReferralMsg), mVetDetail.getClinic()));
+        NoTitleOkDialogFragment dialogFragment = NoTitleOkDialogFragment.newInstance(String.format(getString(R.string.requestReferralMsg),mVetDetail.getClinic()));
         dialogFragment.setPositiveListener(this);
         dialogFragment.show(getActivity().getSupportFragmentManager());
     }
 
     @Override
     public void onError(String errorMessage) {
-        Utils.displayCrouton(getActivity(), errorMessage);
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
         try {
-            ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
         }

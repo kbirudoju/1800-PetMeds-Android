@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -60,6 +61,8 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
     private MenuItem mEditMenuItem;
 
     private MenuItem mDoneMenuItem;
+    @BindView(R.id.containerlayout)
+    LinearLayout mContainerLayout;
 
     private EditVetContract.Presenter mPresenter;
     private String mVetId;
@@ -69,13 +72,14 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
     Button mRemoveVetButton;
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_vet, null);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        mPresenter = new EditVetPresenter(this);
+        mPresenter=new EditVetPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
         mRemoveVetButton.setOnClickListener(this);
         return view;
@@ -84,10 +88,10 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Vet vet = (Vet) getArguments().getSerializable("vet_info");
-        if (vet != null) {
+        Vet vet=(Vet)getArguments().getSerializable("vet_info");
+        if(vet!=null){
             ((AbstractActivity) getActivity()).setToolBarTitle((vet.getName()));
-            mVetId = vet.getId();
+            mVetId=vet.getId();
             mVetNameEdit.setText(vet.getName());
             mClinicNameEdit.setText(vet.getClinic());
             mPhoneNumberEdit.setText(vet.getPhoneNumber());
@@ -122,12 +126,12 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
                     isValidClinicName ||
                     isValidPhoneNumber
                     ) {
-                Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail));
+                Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail), mContainerLayout);
                 return super.onOptionsItemSelected(item);
             }
 
         }
-        UpdateVetRequest updateVetRequest = new UpdateVetRequest(mVetId, mClinicNameEdit.getText().toString(), mPhoneNumberEdit.getText().toString(), mVetNameEdit.getText().toString(), mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+        UpdateVetRequest updateVetRequest=new UpdateVetRequest(mVetId,mClinicNameEdit.getText().toString(),mPhoneNumberEdit.getText().toString(),mVetNameEdit.getText().toString(),mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         try {
             ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
         } catch (Exception e) {
@@ -193,7 +197,7 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
         okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
             @Override
             public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
-                RemoveVetRequest removeVetRequest = new RemoveVetRequest(mVetId, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                RemoveVetRequest removeVetRequest=new RemoveVetRequest(mVetId,mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                 try {
                     ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
                 } catch (Exception e) {
@@ -212,9 +216,9 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
 
     }
 
-    private void stopProgress() {
+    private void stopProgress(){
         try {
-            ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
+            ((AbstractActivity)getActivity()).stopLoadingGif(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
         }

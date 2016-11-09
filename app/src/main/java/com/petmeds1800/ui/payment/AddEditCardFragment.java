@@ -122,6 +122,9 @@ public class AddEditCardFragment extends AbstractFragment
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    @BindView(R.id.containerLayout)
+    LinearLayout mContainerLayout;
+
     private AddACardContract.Presenter mPresenter;
 
     private AlertDialog mAlertDialog;
@@ -500,9 +503,9 @@ public class AddEditCardFragment extends AbstractFragment
         message = message.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : message;
         mProgressBar.setVisibility(View.GONE);
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message);
+            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
         } else {
-            Utils.displayCrouton(getActivity(), (String) message);
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
     }
 

@@ -9,11 +9,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.petmeds1800.PetMedsApplication;
@@ -45,6 +47,9 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
 
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
 
     @BindView(R.id.productCategories_recyclerView)
     RecyclerView mProductsCategoriesRecyclerView;
@@ -117,9 +122,9 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
         message = message.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : message;
         mProgressBar.setVisibility(View.GONE);
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message);
+            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
         } else {
-            Utils.displayCrouton(getActivity(), (String) message);
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
     }
 
@@ -165,7 +170,7 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
 
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
-        checkAndSetHasOptionsMenu(intent, HomeRootFragment.class.getName());
+        checkAndSetHasOptionsMenu(intent , HomeRootFragment.class.getName());
         super.onReceivedBroadcast(context, intent);
     }
 }

@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Card;
@@ -20,6 +10,17 @@ import com.petmeds1800.ui.payment.SavedCardsListContract;
 import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -42,6 +43,9 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
 
     @BindView(R.id.progressbar)
     ProgressBar mProgressbar;
+
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
 
     private SavedCardsListContract.Presenter mPresenter;
 
@@ -66,7 +70,7 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
         return fragment;
     }
 
-    public static PaymentSelectionListFragment newInstance(int requestCode, String paymentCardKey, boolean isReviewOn) {
+    public static PaymentSelectionListFragment newInstance(int requestCode , String paymentCardKey , boolean isReviewOn) {
         Bundle args = new Bundle();
         args.putInt(AddEditCardFragment.REQUEST_CODE, requestCode);
         args.putString(AddEditCardFragment.FIRST_ARG, paymentCardKey);
@@ -81,8 +85,8 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getArguments();
-        if (bundle != null) {
-            mRequestCode = bundle.getInt(AddEditCardFragment.REQUEST_CODE);
+        if(bundle != null) {
+            mRequestCode =  bundle.getInt(AddEditCardFragment.REQUEST_CODE);
             mPaymentCardKey = bundle.getString(AddEditCardFragment.FIRST_ARG);
             mReviewOn = bundle.getBoolean(REVIEW_ON_KEY);
 
@@ -131,10 +135,11 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
     @Override
     public void onResume() {
         super.onResume();
-        if (mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
+        if(mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
             mPresenter.getSavedCards();
-        } else { //for guest user we would get the data from paymentActor/Detail API
-            mPresenter.getCardDetaiBypaymentCardKey(new CardDetailRequest(mPaymentCardKey, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
+        }
+        else { //for guest user we would get the data from paymentActor/Detail API
+            mPresenter.getCardDetaiBypaymentCardKey(new CardDetailRequest(mPaymentCardKey , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
         }
 
     }
@@ -157,7 +162,7 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
     public void showErrorMessage(String errorMessage) {
         mProgressbar.setVisibility(View.GONE);
         errorMessage = errorMessage.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
-        Utils.displayCrouton(getActivity(), errorMessage);
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
     }
 
     @Override

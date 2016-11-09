@@ -1,5 +1,11 @@
 package com.petmeds1800.ui.payment;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.Card;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.Utils;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,12 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
-import com.petmeds1800.R;
-import com.petmeds1800.model.Card;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.util.Utils;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -44,6 +45,9 @@ public class SavedCardsListFragment extends AbstractFragment
 
     @BindView(R.id.addCard_button)
     Button mAddCardButton;
+
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
 
     private SavedCardsListContract.Presenter mPresenter;
 
@@ -123,7 +127,7 @@ public class SavedCardsListFragment extends AbstractFragment
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
         errorMessage = errorMessage.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
-        Utils.displayCrouton(getActivity(), errorMessage);
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
 
     }
 

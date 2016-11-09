@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 /**
@@ -48,9 +50,9 @@ public class Utils {
     public static final String reminderTypeArray[] = new String[]{"daily", "weekly", "monthly"};
 
     public static String changeDateFormat(long millisecond, String dateFormat) {
-         if(millisecond == 0){
-             return "";
-         }
+        if (millisecond == 0) {
+            return "";
+        }
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         String dateString = formatter.format(new Date(millisecond));
         return dateString;
@@ -77,20 +79,24 @@ public class Utils {
         return TextUtils.equals(enteredText.getText().toString(), confirmedText.getText().toString());
     }
 
-    public static void displayCrouton(Activity activity, Spanned messageString) {
+    public static void displayCrouton(Activity activity, Spanned messageString, ViewGroup attachToView) {
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.view_crouton, null);
         TextView textView = (TextView) customView.findViewById(R.id.txv_crouton);
         textView.setText(messageString);
-        Crouton.show(activity, customView);
+        final Configuration configuration = new Configuration.Builder().setDuration(Configuration.DURATION_LONG).build();
+        final Crouton crouton = Crouton.make(activity, customView, attachToView.getId(), configuration);
+        crouton.show();
     }
 
-    public static void displayCrouton(Activity activity, String messageString) {
+    public static void displayCrouton(Activity activity, String messageString, ViewGroup attachToView) {
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.view_crouton, null);
         TextView textView = (TextView) customView.findViewById(R.id.txv_crouton);
         textView.setText(messageString);
-        Crouton.show(activity, customView);
+        final Configuration configuration = new Configuration.Builder().setDuration(Configuration.DURATION_LONG).build();
+        final Crouton crouton = Crouton.make(activity, customView, attachToView.getId(), configuration);
+        crouton.show();
     }
 
     public static String getShortMonthName(int month) {

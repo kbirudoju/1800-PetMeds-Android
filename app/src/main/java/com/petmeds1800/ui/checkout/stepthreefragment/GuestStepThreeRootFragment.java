@@ -1,13 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
@@ -20,13 +12,23 @@ import com.petmeds1800.model.shoppingcart.response.PaymentGroups;
 import com.petmeds1800.model.shoppingcart.response.ShippingAddress;
 import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -49,6 +51,9 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
+
+    @BindView(R.id.containerLayout)
+    RelativeLayout mContainerLayout;
 
     private ShoppingCartListResponse mShoppingCartListResponse;
 
@@ -157,11 +162,12 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
         //add the creditCardFragment
         //check if a payment method is present
-        if (mPaymentGroup == null) {
+        if(mPaymentGroup == null) {
             replaceStepRootChildFragment(
                     AddGuestCardFragment.newInstance(),
                     R.id.creditCardDetailFragment);
-        } else {
+        }
+        else {
             replaceStepRootChildFragment(
                     AddGuestCardFragment.newInstance(mPaymentGroup),
                     R.id.creditCardDetailFragment);
@@ -201,8 +207,9 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         activity.hideProgress();
-        Utils.displayCrouton(getActivity(), message.toString());
+        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
     }
+
 
     @OnClick(R.id.shippingNavigator)
     public void onShippingNavigatorClick() {
@@ -211,27 +218,28 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
         AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager().findFragmentById(R.id.creditCardDetailFragment);
 
         AddressRequest addressRequest;
-        if (addGuestCardFragment != null) {
-            if (addGuestCardFragment.checkAndShowError()) {
+        if(addGuestCardFragment != null) {
+            if( addGuestCardFragment.checkAndShowError()) {
 
                 AddEditAddressFragment addEditAddressFragment = (AddEditAddressFragment) getChildFragmentManager().findFragmentById(R.id.billingAddressfragment);
-                if (addEditAddressFragment != null) {
-                    if (addEditAddressFragment.validateFields()) {
+                if(addEditAddressFragment != null) {
+                    if(addEditAddressFragment.validateFields()) {
                         addEditAddressFragment.initializeGuestAddressRequest();
                         addressRequest = addEditAddressFragment.getAddressRequest();
 
                         //check if its a addCard request or update card depending on the availablity of the paymentCardKey
-                        if (mShoppingCartListResponse.getShoppingCart().getPaymentCardKey() == null ||
+                        if(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey() == null ||
                                 mShoppingCartListResponse.getShoppingCart().getPaymentCardKey().isEmpty()) {
 
                             CardRequest cardRequest = addGuestCardFragment.getCard();
 
-                            mPresenter.applyCreditCardPaymentMethod(addressRequest, cardRequest, null);
-                        } else {
+                            mPresenter.applyCreditCardPaymentMethod(addressRequest , cardRequest , null);
+                        }
+                        else {
                             //pass the cardKey and get the updated card request
                             UpdateCardRequest updateCardRequest = addGuestCardFragment.getUpdatedCard(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey());
 
-                            mPresenter.applyCreditCardPaymentMethod(addressRequest, null, updateCardRequest);
+                            mPresenter.applyCreditCardPaymentMethod(addressRequest , null , updateCardRequest);
                         }
 
                     }
