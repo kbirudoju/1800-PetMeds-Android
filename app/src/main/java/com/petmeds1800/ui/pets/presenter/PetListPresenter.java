@@ -1,11 +1,11 @@
 package com.petmeds1800.ui.pets.presenter;
 
-import android.support.annotation.NonNull;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.PetList;
 import com.petmeds1800.ui.pets.support.PetListContract;
+
+import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 

@@ -1,8 +1,5 @@
 package com.petmeds1800.ui.pets.presenter;
 
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.AddPetRequest;
@@ -14,10 +11,16 @@ import com.petmeds1800.model.entities.PetMedicationResponse;
 import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
+import com.petmeds1800.model.shoppingcart.response.Status;
 import com.petmeds1800.ui.pets.support.AddPetContract;
+
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import javax.inject.Inject;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -100,7 +103,7 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                     public void onNext(AddPetResponse s) {
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
-                                mView.onSuccess();
+                                mView.onUpdateSuccess(s.getPet());
                             }
                         } else {
                             if (mView.isActive()) {
@@ -309,6 +312,40 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                         } else {
                             if (mView.isActive()) {
                                 mView.onError(response.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+    }
+
+    @Override
+    public void uploadPetImage(RequestBody petId, MultipartBody.Part imageBody) {
+        mPetMedsApiService.uploadPetImage(petId, imageBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Status>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(Status status) {
+                        if (status.getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.onImageUplaodSuccess();
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.onImgaeUploadError();
                             }
                         }
 

@@ -1,5 +1,9 @@
 package com.petmeds1800.util;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.ui.AbstractActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,16 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.NameValueData;
-import com.petmeds1800.ui.AbstractActivity;
-
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -50,10 +51,10 @@ public class Utils {
     public static final String reminderTypeArray[] = new String[]{"daily", "weekly", "monthly"};
 
     public static String changeDateFormat(long millisecond, String dateFormat) {
-        if (millisecond == 0) {
-            return "";
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+         if(millisecond == 0){
+             return "";
+         }
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
         String dateString = formatter.format(new Date(millisecond));
         return dateString;
     }
@@ -132,17 +133,17 @@ public class Utils {
     }
 
     public static Date getDate(String dateStr) throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("h:mm a");
+        DateFormat formatter = new SimpleDateFormat("h:mm a",Locale.ENGLISH);
         return formatter.parse(dateStr);
     }
 
     public static Date getReminderDate(String dateStr) throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("MMM dd h:mm a");
+        DateFormat formatter = new SimpleDateFormat("MMM dd h:mm a",Locale.ENGLISH);
         return formatter.parse(dateStr);
     }
 
     public static String getDateInMM_DD_YYYY_Format(Date date) {
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
         return formatter.format(date);
     }
 

@@ -43,6 +43,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -75,6 +76,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static com.petmeds1800.R.id.fromGallery;
 
@@ -91,6 +95,7 @@ public class AddPetFragment extends AbstractFragment
 
     private static final int TYPE_REQUEST = 3;
 
+    public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     @BindView(R.id.pet_gender_edit)
     EditText mPetGenderText;
@@ -261,6 +266,10 @@ public class AddPetFragment extends AbstractFragment
     private AddNewEntityActivity mCallback;
 
     private AddPetNameListener mAddPetNameListener;
+
+    private Uri finalUri;
+
+    private Pets mPets;
 
     public void setAddPetNameListener(AddPetNameListener addPetNameListener) {
         mAddPetNameListener = addPetNameListener;
@@ -518,9 +527,8 @@ public class AddPetFragment extends AbstractFragment
 
     protected void handleCrop(int resultCode, Intent result) {
         if (resultCode == Activity.RESULT_OK) {
-            Uri finalUri = Crop.getOutput(result);
+            finalUri = Crop.getOutput(result);
             if (finalUri != null) {
-
                 if (!isEditable) {
                     Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
@@ -699,14 +707,25 @@ public class AddPetFragment extends AbstractFragment
     }
 
     @Override
-    public void onSuccess() {
+    public void onUpdateSuccess(Pets pet) {
+        //TODO Uncommet it when the reponse from the server is OK
+       /* if (finalUri != null) {
+            mPresenter.uploadPetImage(createPartFromString(pet.getPetId()),prepareFilePart("uploadfile", finalUri)) ;
+        } else {
+            progressBar.setVisibility(View.GONE);
+            closeWindow();
+        }*/
+
         progressBar.setVisibility(View.GONE);
+        closeWindow();
+    }
+
+    private void closeWindow() {
         FragmentManager manager = getActivity().getSupportFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.remove(this);
         trans.commit();
         manager.popBackStack();
-
     }
 
     @Override
@@ -822,12 +841,19 @@ public class AddPetFragment extends AbstractFragment
 
     @Override
     public void onPetAddSuccess(Pets pet) {
+        mPets = pet;
+        //TODO uncomment it when repsonse from server is OK
+       /* if (finalUri != null) {
+            mPresenter.uploadPetImage(createPartFromString(pet.getPetId()), prepareFilePart("uploadfile", finalUri));
+        } else {
+            onAddPetSuccess(mPets);
+        }*/
+        onAddPetSuccess(mPets);
+    }
+
+    private void onAddPetSuccess(Pets pet) {
         progressBar.setVisibility(View.GONE);
-        FragmentManager manager = getActivity().getSupportFragmentManager();
-        FragmentTransaction trans = manager.beginTransaction();
-        trans.remove(this);
-        trans.commit();
-        manager.popBackStack();
+        closeWindow();
         if (mCallback != null) {
             mCallback.setPet(pet);
         }
@@ -840,11 +866,22 @@ public class AddPetFragment extends AbstractFragment
     public void onPetRemoved() {
         progressBar.setVisibility(View.GONE);
         Snackbar.make(mPetWeight, getActivity().getString(R.string.pet_removed_msg), Snackbar.LENGTH_LONG).show();
-        FragmentManager manager = getActivity().getSupportFragmentManager();
-        FragmentTransaction trans = manager.beginTransaction();
-        trans.remove(this);
-        trans.commit();
-        manager.popBackStack();
+        closeWindow();
+    }
+
+    @Override
+    public void onImageUplaodSuccess() {
+        if (isEditable) {
+            onAddPetSuccess(mPets);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            closeWindow();
+        }
+    }
+
+    @Override
+    public void onImgaeUploadError() {
+        progressBar.setVisibility(View.GONE);
     }
 
     public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,
@@ -1025,6 +1062,27 @@ public class AddPetFragment extends AbstractFragment
                     + " must implement AddACardContract.AddressSelectionListener");
         }
 
+    }
+
+    @NonNull
+    private RequestBody createPartFromString(String descriptionString) {
+        return RequestBody.create(
+                MediaType.parse(MULTIPART_FORM_DATA), descriptionString);
+    }
+
+    @NonNull
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
+        // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+        // use the FileUtils to get the actual file by uri
+        File file = new File(fileUri.getPath());
+        // create RequestBody instance from file
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse(MULTIPART_FORM_DATA), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("uploadfile", file.getName(), requestFile);
+        return body;
     }
 
 }

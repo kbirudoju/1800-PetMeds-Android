@@ -255,7 +255,7 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         try {
             date = (item.getStartDate() == null) ? Utils
                     .getReminderDate(
-                            new SimpleDateFormat(MMM_DD_DATE_FORMAT, Locale.getDefault()).format(new Date()) + " "
+                            new SimpleDateFormat(MMM_DD_DATE_FORMAT, Locale.ENGLISH).format(new Date()) + " "
                                     + item.getTimeHourMin())
                     : Utils.getReminderDate(item.getStartDate() + " " + item.getTimeHourMin());
             calendar.setTime(date);
@@ -436,7 +436,7 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
-        SimpleDateFormat dateFormat = new SimpleDateFormat(TIME_FORMAT_AMPM, Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat(TIME_FORMAT_AMPM, Locale.ENGLISH);
         mTimeEdit.setText(dateFormat.format(calendar.getTime()));
     }
 

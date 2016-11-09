@@ -140,13 +140,17 @@ public class HomeActivity extends AbstractActivity
         Log.v("on new intent fired", "on new intent fired");
         super.onNewIntent(intent);
         setIntent(intent);
+        replaceCommitOrderFragment();
+
+    }
+
+    private void replaceCommitOrderFragment() {
         commitOrderResponse = (CommitOrderResponse) getIntent().getSerializableExtra(
                 Constants.CONFIRMATION_ORDER_RESPONSE);
         if (commitOrderResponse != null) {
             mCartRootFragment = ((CartRootFragment) mAdapter.getItem(1));
             mCartRootFragment.replaceConfirmOrderFragment(commitOrderResponse);
         }
-
     }
 
     //Call to replace receipt fragment on page listener
@@ -218,8 +222,9 @@ public class HomeActivity extends AbstractActivity
 
             @Override
             public void onPageSelected(int position) {
-
-                replaceFragmentOnConfirmReceipt();
+                if (position != 1) {
+                    replaceFragmentOnConfirmReceipt();
+                }
                 Log.d("onPageSelected", ">>>>>>");
                 mTabIndex = position;
                 for (int i = 0; i < mHomeTab.getTabCount(); ++i) {
@@ -253,14 +258,20 @@ public class HomeActivity extends AbstractActivity
             }
 
         };
-
         //code to set default first tab selected
-        if (commitOrderResponse != null) {
-            mViewPager.setCurrentItem(1);
-        } else {
-            mViewPager.setCurrentItem(0);
 
-        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                replaceCommitOrderFragment();
+                if (commitOrderResponse != null) {
+                    mViewPager.setCurrentItem(1);
+                } else {
+                    mViewPager.setCurrentItem(0);
+
+                }
+            }
+        }, 500);
 
         pageChangeListener.onPageSelected(0);
         invalidateOptionsMenu(0);

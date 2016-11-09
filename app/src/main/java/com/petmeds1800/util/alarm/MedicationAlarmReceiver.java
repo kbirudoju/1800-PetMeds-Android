@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
@@ -63,6 +64,8 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
         alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval,
                 alarmIntent);
+
+
     }
 
     public long getInterval(int value) {
@@ -79,14 +82,15 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
 
     // END_INCLUDE(set_alarm)
 
-    public void addMultipleAlarms(Context context, ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDatas) {
+    public void addMultipleAlarms(Context context,
+            ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDatas) {
 
 //        String currentDayFormatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         Calendar now = Calendar.getInstance();
         int year = now.get(Calendar.YEAR);
         long millis = now.getTimeInMillis();
         String currentDate = Utils.changeDateFormat(millis, "yyyy/MM/dd");
-        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy/MM/dd h:mm a");
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy/MM/dd h:mm a", Locale.ENGLISH);
         currentDate = setCurrentdate(medicationRemindersAlarmDatas, year, currentDate);
         {
             for (MedicationRemindersAlarmData medicationRemindersAlarmData : medicationRemindersAlarmDatas) {
@@ -117,7 +121,8 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
                         }
                     } else {
                         setAlarm(context, calendar, medicationRemindersAlarmData.getRepeatFrequency().ordinal(),
-                                medicationRemindersAlarmData.getRepeatValue(), medicationRemindersAlarmData.getReminderId(),
+                                medicationRemindersAlarmData.getRepeatValue(),
+                                medicationRemindersAlarmData.getReminderId(),
                                 medicationRemindersAlarmData.getNotificationMessage());
                     }
 
@@ -159,11 +164,12 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
 
     private String setCurrentdate(ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDatas, int year,
             String currentDate) {
-        if (medicationRemindersAlarmDatas != null && medicationRemindersAlarmDatas.size() > 0 && medicationRemindersAlarmDatas
+        if (medicationRemindersAlarmDatas != null && medicationRemindersAlarmDatas.size() > 0
+                && medicationRemindersAlarmDatas
                 .get(ZERO_INDEX).getRepeatFrequency() == Constants.RepeatFrequency.REPEAT_MONTHLY) {
             Calendar calendar = Calendar.getInstance();
             try {
-                DateFormat formatter = new SimpleDateFormat("MMM dd");
+                DateFormat formatter = new SimpleDateFormat("MMM dd",Locale.ENGLISH);
                 Date date = formatter.parse(medicationRemindersAlarmDatas
                         .get(ZERO_INDEX).getStartdate());
                 calendar.setTime(date);
@@ -192,7 +198,8 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
      * Cancels the alarm.
      */
     // BEGIN_INCLUDE(cancel_alarm)
-    public void cancelAllAlarms(Context context, ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDatas) {
+    public void cancelAllAlarms(Context context,
+            ArrayList<MedicationRemindersAlarmData> medicationRemindersAlarmDatas) {
         // If the alarm has been set, cancel it.
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, MedicationAlarmReceiver.class);

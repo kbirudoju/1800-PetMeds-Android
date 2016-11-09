@@ -40,7 +40,7 @@ public class MedicationSchedulingService extends IntentService {
                 new Intent(this, HomeActivity.class), 0);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_logout)
+                        .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(getString(R.string.application_name))
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(notificationMessage+""+notificationId))

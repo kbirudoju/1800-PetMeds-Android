@@ -126,7 +126,7 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ((AbstractActivity)getActivity()).setToolBarTitle("Account");
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
         mManagePaymentLabel.setOnClickListener(this);
