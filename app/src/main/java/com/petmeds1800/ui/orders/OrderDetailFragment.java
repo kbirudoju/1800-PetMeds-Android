@@ -84,9 +84,6 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     @BindView(R.id.order_detail_recycler_view)
     RecyclerView mOrderDetailRecyclerView;
 
-    @BindView(R.id.containerLayout)
-    FrameLayout mContainerLayout;
-
     private OrderDetailAdapter mOrderDetailAdapter;
 
     private OrderDetailContract.Presenter mPresenter;
@@ -336,7 +333,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
 
     @Override
     public void onOrderDetailError(String errorMessage) {
-        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), errorMessage.toString());
         if (errorMessage.toString().contains(LOGGED_IN)) {
             FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
             Bundle bundle = new Bundle();

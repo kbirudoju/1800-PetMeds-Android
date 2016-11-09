@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.medicationreminders;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CommerceItems;
-import com.petmeds1800.model.entities.MedicationReminderCommerceItem;
-import com.petmeds1800.model.entities.OrderList;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.orders.support.DividerItemDecoration;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,8 +16,17 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CommerceItems;
+import com.petmeds1800.model.entities.MedicationReminderCommerceItem;
+import com.petmeds1800.model.entities.OrderList;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.orders.support.DividerItemDecoration;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +39,13 @@ import butterknife.ButterKnife;
  */
 
 public class MedicationReminderItemsListFragment extends AbstractFragment
-        implements MedicationReminderItemListContract.View, Runnable ,EditText.OnEditorActionListener{
+        implements MedicationReminderItemListContract.View, Runnable, EditText.OnEditorActionListener {
 
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
 
     @BindView(R.id.medicationsreminderitems_recyclerView)
     RecyclerView mMedicationsreminderitemsRecyclerView;
-
-    @BindView(R.id.containerLayout)
-    RelativeLayout mContainerLayout;
 
     @BindView(R.id.itemName_edit)
     EditText mItemNameEdit;
@@ -114,7 +110,7 @@ public class MedicationReminderItemsListFragment extends AbstractFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_medication_reminder_items_list, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -174,13 +170,13 @@ public class MedicationReminderItemsListFragment extends AbstractFragment
     @Override
     public void onError(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), errorMessage.toString());
     }
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), message.toString());
     }
 
 

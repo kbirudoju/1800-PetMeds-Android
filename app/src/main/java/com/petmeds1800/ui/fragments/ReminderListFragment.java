@@ -102,7 +102,7 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
 
     @Override
     public boolean onError(String errorMessage) {
-        Utils.displayCrouton(getActivity(), (String) errorMessage, mReminderMainList);
+        Utils.displayCrouton(getActivity(), (String) errorMessage);
 
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION,getActivity());

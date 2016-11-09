@@ -200,7 +200,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             mCouponCodeLayout.setError(errorMessage);
             mOfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
         } else if (simpleName.equalsIgnoreCase(UpdateItemQuantityRequestShoppingCart.class.getSimpleName())) {
-            Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
+            Utils.displayCrouton(getActivity(), (String) errorMessage);
         }
 
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION, mProgressBar);
@@ -230,10 +230,10 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @Override
     public void onPayPalError(String errorMsg) {
         if(errorMsg.isEmpty()){
-            Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label), mItemListtContainer);
+            Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label));
 
         }else{
-            Utils.displayCrouton(getActivity(), errorMsg, mItemListtContainer);
+            Utils.displayCrouton(getActivity(), errorMsg);
 
         }
         mProgressBar.setVisibility(View.GONE);
@@ -399,7 +399,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     @Override
     public void onClick(View v) {
-      mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
         PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("cart");
         mPresenter.checkoutPayPal(payPalCheckoutRequest);
     }
@@ -419,7 +419,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.displayCrouton(getActivity(), errormsg, mItemListtContainer);
+                    Utils.displayCrouton(getActivity(), errormsg);
                 }
             }, 500);
             Log.d("response in cart", response.getStatus().getErrorMessages().get(0));

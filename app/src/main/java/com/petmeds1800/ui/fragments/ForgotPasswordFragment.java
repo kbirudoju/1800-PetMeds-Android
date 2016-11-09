@@ -51,9 +51,6 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.container_forgot_password)
-    FrameLayout mContainerLayout;
-
     @BindView(R.id.email_input)
     TextInputLayout mEmailInput;
 
@@ -144,9 +141,9 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (Spanned) message);
         } else {
-            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (String) message);
         }
     }
 

@@ -7,10 +7,10 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.petmeds1800.R;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * Created by pooja on 8/27/2016.
@@ -78,34 +77,21 @@ public class Utils {
         return TextUtils.equals(enteredText.getText().toString(), confirmedText.getText().toString());
     }
 
-    public static void displayCrouton(Activity activity, Spanned messageString, ViewGroup attachToView) {
-        Crouton.makeText(activity,
-                messageString,
-                new Style.Builder()
-                        .setBackgroundColor(R.color.color_snackbar)
-                        .setTextAppearance(R.style.StyleCrouton)
-                        .setTextColor(R.color.color_snackbar_text)
-                        .setHeight(activity.getResources().getDimensionPixelSize(R.dimen.height_snackbar))
-                        .setGravity(Gravity.CENTER)
-                        .setTextColor(android.R.color.white)
-                        .build(),
-                attachToView).show();
+    public static void displayCrouton(Activity activity, Spanned messageString) {
+        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.view_crouton, null);
+        TextView textView = (TextView) customView.findViewById(R.id.txv_crouton);
+        textView.setText(messageString);
+        Crouton.show(activity, customView);
     }
 
-    public static void displayCrouton(Activity activity, String messageString, ViewGroup attachToView) {
-        Crouton.makeText(activity,
-                messageString,
-                new Style.Builder()
-                        .setBackgroundColor(R.color.color_snackbar)
-                        .setTextAppearance(R.style.StyleCrouton)
-                        .setTextColor(R.color.color_snackbar_text)
-                        .setHeight(activity.getResources().getDimensionPixelSize(R.dimen.height_snackbar))
-                        .setGravity(Gravity.CENTER)
-                        .setTextColor(android.R.color.white)
-                        .build(),
-                attachToView).show();
+    public static void displayCrouton(Activity activity, String messageString) {
+        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.view_crouton, null);
+        TextView textView = (TextView) customView.findViewById(R.id.txv_crouton);
+        textView.setText(messageString);
+        Crouton.show(activity, customView);
     }
-
 
     public static String getShortMonthName(int month) {
         if (month < 1 && month > 12) {

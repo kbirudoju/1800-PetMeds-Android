@@ -1,26 +1,25 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.entities.SavedShippingAddressRequest;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.ui.address.AddressSelectionListFragment;
-import com.petmeds1800.ui.checkout.CommunicationFragment;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.entities.SavedShippingAddressRequest;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.address.AddressSelectionListFragment;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.ui.checkout.CommunicationFragment;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -40,9 +39,6 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
 
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
-
-    @BindView(R.id.containerLayout)
-    RelativeLayout mContainerLayout;
 
     private Address mAddress;
 
@@ -81,7 +77,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_checkout, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -101,6 +97,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
                 R.id.communicationfragment);
 
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -151,7 +148,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         ((CheckOutActivity) getActivity()).hideProgress();
-        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), message.toString());
     }
 
 

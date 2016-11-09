@@ -1,17 +1,5 @@
 package com.petmeds1800.ui.address;
 
-import com.petmeds1800.R;
-import com.petmeds1800.intent.AddNewEntityIntent;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.AddNewEntityActivity;
-import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +17,18 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.petmeds1800.R;
+import com.petmeds1800.intent.AddNewEntityIntent;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.AddNewEntityActivity;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.Utils;
 
 import java.util.List;
 
@@ -212,9 +212,7 @@ public class AddressSelectionListFragment extends AbstractFragment
         mProgressBar.setVisibility(View.GONE);
         errorMessage = errorMessage.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), (String) errorMessage, mContainerLayout);
-
-
+        Utils.displayCrouton(getActivity(), (String) errorMessage);
     }
 
     @Override

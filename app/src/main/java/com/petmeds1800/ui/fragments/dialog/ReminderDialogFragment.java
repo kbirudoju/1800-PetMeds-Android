@@ -1,13 +1,5 @@
 package com.petmeds1800.ui.fragments.dialog;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.ReminderDialogData;
-import com.petmeds1800.ui.fragments.reminder.DailyReminderDialogSubFragment;
-import com.petmeds1800.ui.fragments.reminder.MonthlyReminderDialogSubFragment;
-import com.petmeds1800.ui.fragments.reminder.WeeklyReminderDialogSubFragment;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.Utils;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -24,8 +16,15 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.ReminderDialogData;
+import com.petmeds1800.ui.fragments.reminder.DailyReminderDialogSubFragment;
+import com.petmeds1800.ui.fragments.reminder.MonthlyReminderDialogSubFragment;
+import com.petmeds1800.ui.fragments.reminder.WeeklyReminderDialogSubFragment;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 
@@ -51,9 +50,6 @@ public class ReminderDialogFragment extends DialogFragment
     @BindView(R.id.done_button)
     Button mOKButton;
 
-    @BindView(R.id.containerLayout)
-    RelativeLayout mContainerLayout;
-
     private boolean isFirstTime = true;
 
     private ReminderDialogData reminderDialogState;
@@ -61,7 +57,7 @@ public class ReminderDialogFragment extends DialogFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_reminder_dropdown_menu, container, false);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -170,13 +166,13 @@ public class ReminderDialogFragment extends DialogFragment
         if (childFragment instanceof DailyReminderDialogSubFragment) {
             qtyValue = ((DailyReminderDialogSubFragment) childFragment).getRepeatQuantity();
             if (qtyValue.isEmpty()) {
-                Utils.displayCrouton(getActivity(), getString(R.string.error_empty_day_reminder), mContainerLayout);
+                Utils.displayCrouton(getActivity(), getString(R.string.error_empty_day_reminder));
                 return;
             }
         } else if (childFragment instanceof WeeklyReminderDialogSubFragment) {
             qtyValue = ((WeeklyReminderDialogSubFragment) childFragment).getRepeatQuantity();
             if (qtyValue.isEmpty()) {
-                Utils.displayCrouton(getActivity(), getString(R.string.error_empty_week_reminder), mContainerLayout);
+                Utils.displayCrouton(getActivity(), getString(R.string.error_empty_week_reminder));
                 return;
             }
             daysOfWeek = ((WeeklyReminderDialogSubFragment) childFragment).getWeekDays();
@@ -185,7 +181,7 @@ public class ReminderDialogFragment extends DialogFragment
         } else if (childFragment instanceof MonthlyReminderDialogSubFragment) {
             qtyValue = ((MonthlyReminderDialogSubFragment) childFragment).getRepeatQuantity();
             if (qtyValue.isEmpty()) {
-                Utils.displayCrouton(getActivity(), getString(R.string.error_empty_month_reminder), mContainerLayout);
+                Utils.displayCrouton(getActivity(), getString(R.string.error_empty_month_reminder));
                 return;
             }
             reminderDialogState.setmStartDate(

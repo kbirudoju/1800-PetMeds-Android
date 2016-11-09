@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Sdixit on 10-10-2016.
@@ -41,5 +42,10 @@ public class ConfirmationReceiptRootFragment extends AbstractFragment {
         if (savedInstanceState == null) {
             ((HomeActivity)getActivity()).setToolBarTitle(getString(R.string.label_confirmation_and_receipt));
         }
+    }
+
+    @OnClick(R.id.btn_start_new_order)
+    public void startNewOrder(){
+
     }
 }

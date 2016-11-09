@@ -36,7 +36,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 
@@ -136,9 +135,6 @@ public class AddEditAddressFragment extends AbstractFragment
 
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
-
-    @BindView(R.id.addEditAddress_container)
-    LinearLayout mContainerLayout;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
@@ -515,9 +511,9 @@ public class AddEditAddressFragment extends AbstractFragment
     public void showErrorCrouton(CharSequence message, boolean span) {
         mProgressBar.setVisibility(View.GONE);
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (Spanned) message);
         } else {
-            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (String) message);
         }
     }
 

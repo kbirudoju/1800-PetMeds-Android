@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.checkout;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -13,20 +26,6 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +41,6 @@ import butterknife.OnClick;
  */
 public class StepTwoRootFragment extends AbstractFragment
         implements StepTwoContract.View, ShippingMethodsListAdapter.OnItemClickListener {
-
-    @BindView(R.id.fragment_container)
-    RelativeLayout mContainerLayout;
 
     @BindView(R.id.recycler_shipping_methods)
     RecyclerView mRecyclerShippingMethods;
@@ -188,7 +184,7 @@ public class StepTwoRootFragment extends AbstractFragment
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
-        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), message.toString());
     }
 
     @Override
@@ -230,7 +226,7 @@ public class StepTwoRootFragment extends AbstractFragment
 
     @Override
     public void onErrorShippingMethodsApplied(String error) {
-        showErrorCrouton(error , false);
+        showErrorCrouton(error, false);
     }
 
     @Override
@@ -245,9 +241,8 @@ public class StepTwoRootFragment extends AbstractFragment
             ((CheckOutActivity) getActivity()).showProgress();
             mPresenter.applyShippingMethods(new ShippingMethodsRequest(mShippingMethod.getShippingMethod(),
                     mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
-        }
-        else {
-            showErrorCrouton("You must have a shipping method",false);
+        } else {
+            showErrorCrouton("You must have a shipping method", false);
         }
     }
 }

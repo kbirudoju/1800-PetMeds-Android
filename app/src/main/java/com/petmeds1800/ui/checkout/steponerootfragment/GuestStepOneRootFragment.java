@@ -1,5 +1,17 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
+
 import com.petmeds1800.R;
 import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.model.Address;
@@ -15,19 +27,6 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.InputValidationUtil;
 import com.petmeds1800.util.Utils;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.util.Patterns;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -80,9 +79,6 @@ public class GuestStepOneRootFragment extends AbstractFragment
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
 
-    @BindView(R.id.containerLayout)
-    RelativeLayout mContainerLayout;
-
     private String mStepName;
 
     public static final int REQUEST_CODE = 7;
@@ -118,7 +114,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
     }
 
     public boolean confirmValidation(EditText auditEditText, EditText confirmEditText,
-            TextInputLayout auditTextInputLayout, int errorStringId) {
+                                     TextInputLayout auditTextInputLayout, int errorStringId) {
         if (!Utils.checkConfirmFields(auditEditText, confirmEditText)) {
             auditTextInputLayout.setError(getContext().getString(errorStringId));
             return true;
@@ -130,7 +126,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
     }
 
     public static GuestStepOneRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
-            String stepName) {
+                                                       String stepName) {
         GuestStepOneRootFragment f = new GuestStepOneRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
@@ -154,7 +150,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_guest_step_one_fragment, container, false);
         ((CheckOutActivity) getActivity()).setActiveStep(mStepName);
         ButterKnife.bind(this, view);
@@ -166,14 +162,14 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     private void populateEmail() {
         ArrayList<ShippingGroups> shippingGroups = mShoppingCartListResponse.getShoppingCart().getShippingGroups();
-        if(shippingGroups != null || shippingGroups.size() > 0) {
+        if (shippingGroups != null || shippingGroups.size() > 0) {
 
             ShippingAddress shippingAddress = shippingGroups.get(0)
                     .getShippingAddress();
 
-            if(shippingAddress != null) {
+            if (shippingAddress != null) {
 
-                if(shippingAddress.getEmail() != null) {
+                if (shippingAddress.getEmail() != null) {
                     mEmailEdit.setText(
                             shippingAddress.getEmail());
                     mConfirmEmailEdit.setText(
@@ -264,7 +260,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
             case R.id.login_navigator:
                 LoginIntent loginIntent = new LoginIntent(getActivity());
                 loginIntent.setAction(LoginActivity.START_CHECKOUT);
-                loginIntent.putExtra(CartFragment.SHOPPING_CART,mShoppingCartListResponse);
+                loginIntent.putExtra(CartFragment.SHOPPING_CART, mShoppingCartListResponse);
                 startActivity(loginIntent);
 //                getActivity().finishAffinity();
                 break;
@@ -297,13 +293,13 @@ public class GuestStepOneRootFragment extends AbstractFragment
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         ((CheckOutActivity) getActivity()).hideProgress();
-        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), message.toString());
     }
 
     @Override
     public void setAddress(Address address) {
         mAddress = address;
-        if(getFragmentReference() != null && address != null) {
+        if (getFragmentReference() != null && address != null) {
             getFragmentReference().populateData(address);
         }
     }

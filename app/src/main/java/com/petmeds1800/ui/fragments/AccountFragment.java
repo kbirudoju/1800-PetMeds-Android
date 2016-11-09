@@ -1,5 +1,21 @@
 package com.petmeds1800.ui.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
+
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -20,23 +36,6 @@ import com.petmeds1800.ui.vet.VetListFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.urbanairship.UAirship;
-
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -101,13 +100,7 @@ public class AccountFragment extends AbstractFragment
     @BindView(R.id.medication_reminder_label)
     TextView mMedicationReminderLabel;
 
-
-    @BindView(R.id.containerLayout)
-    LinearLayout mContainerLayout;
-
-
     private int fromWhichAlert = 0;
-
 
     @BindView(R.id.refill_reminder_label)
     TextView mRefillReminderLabel;
@@ -123,6 +116,7 @@ public class AccountFragment extends AbstractFragment
     private final int TYPE_VET_VERIFY_RX_ALERT = 7;
 
     private final int TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT = 5;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -177,7 +171,7 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
-        ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[3]));
+        ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[3]));
     }
 
     private void fillWindow() {
@@ -422,7 +416,7 @@ public class AccountFragment extends AbstractFragment
                 mPresenter.sendDataToServer(
                         mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             } else {
-                Utils.displayCrouton(getActivity(), resultValue, mContainerLayout);
+                Utils.displayCrouton(getActivity(), resultValue);
             }
 
         }

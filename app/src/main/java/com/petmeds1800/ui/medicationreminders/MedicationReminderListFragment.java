@@ -1,12 +1,5 @@
 package com.petmeds1800.ui.medicationreminders;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.MedicationReminderItem;
-import com.petmeds1800.model.entities.MedicationReminderListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.util.Utils;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +13,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.MedicationReminderItem;
+import com.petmeds1800.model.entities.MedicationReminderListResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 
@@ -41,9 +40,6 @@ public class MedicationReminderListFragment extends AbstractFragment
 
     @BindView(R.id.medicationsreminder_recyclerView)
     RecyclerView mMedicationsreminderRecyclerView;
-
-    @BindView(R.id.containerLayout)
-    RelativeLayout mContainerLayout;
 
     MedicationRemindersAdapter mMedicationRemindersAdapter;
 
@@ -81,7 +77,7 @@ public class MedicationReminderListFragment extends AbstractFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_medication_reminder_list, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -116,7 +112,7 @@ public class MedicationReminderListFragment extends AbstractFragment
 
         switch (item.getItemId()) {
             case R.id.action_add:
-                replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, (MedicationReminderItem)null),
+                replaceAccountAndAddToBackStack(AddEditMedicationRemindersFragment.newInstance(false, (MedicationReminderItem) null),
                         AddEditMedicationRemindersFragment.class.getName());
                 break;
         }
@@ -148,13 +144,13 @@ public class MedicationReminderListFragment extends AbstractFragment
     @Override
     public void onError(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), errorMessage.toString());
     }
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), message.toString());
     }
 
     @Override

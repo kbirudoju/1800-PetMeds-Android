@@ -54,9 +54,6 @@ public class SignUpFragment extends AbstractFragment
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.container_sign_up)
-    FrameLayout mContainerLayout;
-
     @BindView(R.id.email_input)
     TextInputLayout mEmailInput;
 
@@ -284,9 +281,9 @@ public class SignUpFragment extends AbstractFragment
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (Spanned) message);
         } else {
-            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (String) message);
         }
     }
 

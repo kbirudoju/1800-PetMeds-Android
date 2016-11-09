@@ -33,7 +33,6 @@ import rx.schedulers.Schedulers;
  */
 public class HomeRootFragment extends AbstractFragment {
 
-    private FrameLayout mContainerLayout;
     IntentFilter intentFilter = new IntentFilter(Constants.KEY_HOME_ROOT_SESSION_CONFIRMATION);
 
     @Inject
@@ -52,7 +51,6 @@ public class HomeRootFragment extends AbstractFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_container, container, false);
-        mContainerLayout = (FrameLayout) view.findViewById(R.id.home_root_fragment_container);
         addHomeFragment();
         registerIntent(intentFilter,getActivity());
         return view;
@@ -75,9 +73,9 @@ public class HomeRootFragment extends AbstractFragment {
 
     public void showErrorCrouton(CharSequence message, boolean span) {
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (Spanned) message);
         } else {
-            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (String) message);
         }
     }
 

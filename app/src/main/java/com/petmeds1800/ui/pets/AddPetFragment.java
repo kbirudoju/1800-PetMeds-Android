@@ -142,9 +142,6 @@ public class AddPetFragment extends AbstractFragment
     @BindView(R.id.medication_conditions_details)
     TextView mMedicationConditionsDetails;
 
-    @BindView(R.id.containerLayout)
-    RelativeLayout mContainerLayout;
-
     @BindView(R.id.current_medications_title)
     TextView mCurrentMedicationsTitle;
 
@@ -598,7 +595,7 @@ public class AddPetFragment extends AbstractFragment
                     isValidGender ||
                     isValidWeight ||
                     isValidAge) {
-                Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail), mContainerLayout);
+                Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail));
                 return super.onOptionsItemSelected(item);
             }
         }

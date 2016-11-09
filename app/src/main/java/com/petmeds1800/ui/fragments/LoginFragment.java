@@ -1,24 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.CheckOutIntent;
-import com.petmeds1800.intent.ForgotPasswordIntent;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.intent.SignUpIntent;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.mvp.LoginTask.LoginContract;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.LoginActivity;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.GetSessionCookiesHack;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -33,8 +14,25 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.CheckOutIntent;
+import com.petmeds1800.intent.ForgotPasswordIntent;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.intent.SignUpIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.mvp.LoginTask.LoginContract;
+import com.petmeds1800.ui.LoginActivity;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.GetSessionCookiesHack;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -68,9 +66,6 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
     @BindView(R.id.password_edit)
     EditText mPasswordEdit;
-
-    @BindView(R.id.container_login)
-    RelativeLayout mContainerLayout;
 
     @Inject
     PetMedsApiService mApiService;
@@ -127,10 +122,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                     showErrorCrouton(getString(errorId), false);
                     hideProgress();
                 } else {
-                    if(doLogin){
+                    if (doLogin) {
                         doLogin();
-                    }
-                    else {
+                    } else {
                         initializeSessionConfirmationNumber();
                     }
 
@@ -178,9 +172,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (Spanned) message);
         } else {
-            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
+            Utils.displayCrouton(getActivity(), (String) message);
         }
     }
 
@@ -190,14 +184,13 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
 
         //check if we need to start the checkout activity and home activity in a task builder
         Intent loginIntent = getActivity().getIntent();
-        if(loginIntent != null) { //check if the intent is to start the checkout flow
-            if(loginIntent.getAction() != null && loginIntent.getAction().equals(LoginActivity.START_CHECKOUT)) {
+        if (loginIntent != null) { //check if the intent is to start the checkout flow
+            if (loginIntent.getAction() != null && loginIntent.getAction().equals(LoginActivity.START_CHECKOUT)) {
                 CheckOutIntent checkOutIntent = new CheckOutIntent(getActivity());
-                checkOutIntent.putExtra(CartFragment.SHOPPING_CART,loginIntent.getSerializableExtra(CartFragment.SHOPPING_CART));
+                checkOutIntent.putExtra(CartFragment.SHOPPING_CART, loginIntent.getSerializableExtra(CartFragment.SHOPPING_CART));
                 startActivity(checkOutIntent);
                 getActivity().finishAffinity();
-            }
-            else {
+            } else {
                 HomeIntent intent = new HomeIntent(getActivity());
                 intent.putExtra(IS_FROM_HOME_ACTIVITY, true);
                 startActivity(intent);

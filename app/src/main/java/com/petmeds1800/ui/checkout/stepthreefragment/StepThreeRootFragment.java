@@ -60,9 +60,6 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
 
-    @BindView(R.id.containerLayout)
-    RelativeLayout mContainerLayout;
-
     private ShoppingCartListResponse mShoppingCartListResponse;
 
     private Address mAddress;
@@ -88,18 +85,18 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     private boolean mReviewOn;
 
     public static StepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
-            String stepName , int requestCode) {
+                                                    String stepName, int requestCode) {
         StepThreeRootFragment f = new StepThreeRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
         args.putString(CheckOutActivity.STEP_NAME, stepName);
-        args.putInt(REQUEST_CODE_KEY , requestCode);
+        args.putInt(REQUEST_CODE_KEY, requestCode);
         f.setArguments(args);
         return f;
     }
 
     public static StepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
-            String stepName , int requestCode , boolean mReviewIsOn) {
+                                                    String stepName, int requestCode, boolean mReviewIsOn) {
         StepThreeRootFragment f = new StepThreeRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
@@ -126,7 +123,7 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
 
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             mRequestCode = bundle.getInt(REQUEST_CODE_KEY);
             mReviewOn = bundle.getBoolean(REVIEW_ON_KEY);
         }
@@ -137,7 +134,7 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step_three_checkout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
         ButterKnife.bind(this, view);
@@ -195,17 +192,15 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
         super.onViewCreated(view, savedInstanceState);
         mPresenter = new StepThreeRootPresentor(this);
 
-        if(mRequestCode == LOGGED_IN_REQUEST_CODE) {
+        if (mRequestCode == LOGGED_IN_REQUEST_CODE) {
             replaceStepRootChildFragment(
                     PaymentSelectionListFragment.newInstance(LOGGED_IN_REQUEST_CODE),
                     R.id.creditCardDetailFragment);
-        }
-        else if(mRequestCode == GUEST_REQUEST_CODE && mReviewOn) {
+        } else if (mRequestCode == GUEST_REQUEST_CODE && mReviewOn) {
             replaceStepRootChildFragment(
-                    PaymentSelectionListFragment.newInstance(GUEST_REQUEST_CODE , mShoppingCartListResponse.getShoppingCart().getPaymentCardKey(), mReviewOn),
+                    PaymentSelectionListFragment.newInstance(GUEST_REQUEST_CODE, mShoppingCartListResponse.getShoppingCart().getPaymentCardKey(), mReviewOn),
                     R.id.creditCardDetailFragment);
-        }
-        else {
+        } else {
             //qwe can ignore it as first time filling of payment for an anonymous is being handled by the GuestStepThreeFragment
         }
 
@@ -242,7 +237,7 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
         activity.hideProgress();
-        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), message.toString());
     }
 
     @Override
@@ -272,10 +267,10 @@ public class StepThreeRootFragment extends AbstractFragment implements StepThree
     @Override
     public void onPayPalError(String errorMsg) {
         if(errorMsg.isEmpty()){
-            Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label), mContainerLayout);
+            Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label));
 
         }else{
-            Utils.displayCrouton(getActivity(), errorMsg, mContainerLayout);
+            Utils.displayCrouton(getActivity(), errorMsg);
 
         }
     }
