@@ -1,5 +1,7 @@
 package com.petmeds1800.ui.vet;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -65,9 +67,15 @@ public class VetListFragment extends AbstractFragment implements VetListContract
             public void onClick(View v) {
                 Log.d("tag",v.getTag()+">>>>");
                 if(v.getTag()!=null){
-                    Bundle bundle= new Bundle();
-                    bundle.putSerializable("vet_info",(Vet)v.getTag());
-                    replaceAccountFragmentWithBundle(new EditVetFragment(), bundle);
+                    if(v.getTag() instanceof Vet) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("vet_info", (Vet) v.getTag());
+                        replaceAccountFragmentWithBundle(new EditVetFragment(), bundle);
+                    }else{
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + v.getTag()));
+                        startActivity(intent);
+
+                    }
                 }else{
                     replaceAccountAndAddToBackStack(new FindAVetFragment(), FindAVetFragment.class.getName());
 

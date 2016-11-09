@@ -40,6 +40,8 @@ public class VetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder = new VetItemViewHolder(v);
             LinearLayout editLayout=(LinearLayout)v.findViewById(R.id.edit_action_view);
             editLayout.setOnClickListener(onClickListener);
+            LinearLayout callLayout=(LinearLayout)v.findViewById(R.id.action_call_view);
+            callLayout.setOnClickListener(onClickListener);
         } else {
             int resource = R.layout.view_find_a_vet;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -60,6 +62,7 @@ public class VetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             vetViewHolder.vet_name_label.setText(vet.getName());
             vetViewHolder.phone_number_label.setText(vet.getPhoneNumber());
             vetViewHolder.edit_action_view.setTag(vet);
+            vetViewHolder.call_action_view.setTag(vet.getPhoneNumber());
 
         }
     }
