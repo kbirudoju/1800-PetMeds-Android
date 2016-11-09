@@ -1,5 +1,34 @@
 package com.petmeds1800.ui.pets;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -36,35 +65,7 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -266,6 +267,7 @@ public class AddPetFragment extends AbstractFragment
     private AddNewEntityActivity mCallback;
 
     private AddPetNameListener mAddPetNameListener;
+    private String mSelectedPetType;
 
     private Uri finalUri;
 
@@ -433,7 +435,13 @@ public class AddPetFragment extends AbstractFragment
                 break;
             case R.id.breed_type_edit:
                 //  ((HomeActivity) getActivity()).showProgress();
-                mPresenter.pouplatePetBreedTypeList();
+                mSelectedPetType=mPetTypeText.getText().toString();
+                if(mSelectedPetType==null || mSelectedPetType.isEmpty()){
+
+                }else{
+                    mPresenter.pouplatePetBreedTypeList();
+                }
+
                 break;
         }
     }
@@ -810,11 +818,19 @@ public class AddPetFragment extends AbstractFragment
     @Override
     public void populatePetBreedTypeData(PetBreedTypeListResponse response) {
         ArrayList<String> list = new ArrayList<String>();
-        for (BreedItem data : response.getBreeds()) {
-            list.add(data.getValue());
+        if(mSelectedPetType==null ||mSelectedPetType.isEmpty()){
+            for (BreedItem data : response.getBreeds()) {
+                    list.add(data.getValue());
+            }
+        }else {
+            for (BreedItem data : response.getBreeds()) {
+                if (data.getType().equalsIgnoreCase(mSelectedPetType))
+                    list.add(data.getValue());
+            }
         }
         String dataArray[] = new String[list.size()];
-        openDailog(list.toArray(dataArray), BREED_REQUEST, getActivity().getString(R.string.choose_breed_title));
+        if(dataArray.length>0)
+            openDailog(list.toArray(dataArray), BREED_REQUEST, getActivity().getString(R.string.choose_breed_title));
     }
 
     @Override
