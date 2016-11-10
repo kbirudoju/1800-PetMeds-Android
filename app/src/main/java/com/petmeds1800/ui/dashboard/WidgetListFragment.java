@@ -19,6 +19,8 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.entities.Category;
 import com.petmeds1800.model.entities.PetItemList;
+import com.petmeds1800.model.entities.Products;
+import com.petmeds1800.model.entities.RecommendedProducts;
 import com.petmeds1800.model.entities.SalePitch;
 import com.petmeds1800.model.entities.WhatsNextCategory;
 import com.petmeds1800.model.entities.WidgetData;
@@ -95,6 +97,14 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                 }else if(v.getTag() instanceof SalePitch){
                     SalePitch salePitch=(SalePitch)v.getTag();
                     ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(salePitch.getLinkUrl(), getString(R.string.sales_pitch_title));
+
+                }else if(v.getTag() instanceof RecommendedProducts){
+                    RecommendedProducts recommendedProducts=(RecommendedProducts)v.getTag();
+                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(recommendedProducts.getProductPageUrl(), recommendedProducts.getDisplayName());
+
+                }else if(v.getTag() instanceof Products){
+                    Products shoppingProducts=(Products)v.getTag();
+                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(shoppingProducts.getProductPageUrl(), shoppingProducts.getDisplayName());
 
                 }
             }

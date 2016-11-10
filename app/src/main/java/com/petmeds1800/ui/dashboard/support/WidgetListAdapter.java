@@ -101,6 +101,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             int resource = R.layout.view_recommendation_product_detail;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new RecommendationProductViewHolder(v);
+            RelativeLayout recommendationView=(RelativeLayout)v.findViewById(R.id.recommendationView);
+            recommendationView.setOnClickListener(listener);
         } else if (viewType == RECOMMENDATION_VIEW_MORE_PRODUCT) {
             int resource = R.layout.view_more_recommendation;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -122,13 +124,15 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else if (viewType == SALES_PITCH_VIEW_TYPE) {
             int resource = R.layout.view_sales_pitch;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
-            ImageView salesPitchView=(ImageView)v.findViewById(R.id.sales_pitch_image);
+            RelativeLayout salesPitchView=(RelativeLayout)v.findViewById(R.id.sales_pitch_layout);
             salesPitchView.setOnClickListener(listener);
             viewHolder = new SalesPitchViewHolder(v);
         } else if (viewType == BROWSE_HISTORY_VIEW_TYPE) {
             int resource = R.layout.view_shopping_history;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new BrowseHistoryViewHolder(v);
+            RelativeLayout shoppingHistoryLayout=(RelativeLayout) v.findViewById(R.id.shoppingHistorylayout);
+            shoppingHistoryLayout.setOnClickListener(listener);
         } else if (viewType == BROWSE_HISTORY_HEADER_VIEW_TYPE) {
             int resource = R.layout.view_shopping_history_header;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -369,6 +373,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recommendationProductViewHolder.recommendationPriceLabel.setPaintFlags(recommendationProductViewHolder.recommendationPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     recommendationProductViewHolder.recommendationSellingPriceLabel.setText(" $" + recommendedProducts.getSellingPrice());
                 }
+               recommendationProductViewHolder.recommendationView.setTag(recommendedProducts);
                 break;
             case RECOMMENDATION_VIEW_MORE_PRODUCT:
                 RecommendationMoreViewHolder moreViewHolder = (RecommendationMoreViewHolder) holder;
@@ -405,7 +410,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         salesPitchViewHolder.salesPitchImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
-                salesPitchViewHolder.salesPitchImage.setTag(salesPitch);
+                salesPitchViewHolder.salesPitchlayout.setTag(salesPitch);
                 break;
             case WHATS_NEXT_VIEW_TYPE:
                 final WhatsNextViewHolder whatsNextViewHolder = (WhatsNextViewHolder) holder;
@@ -456,7 +461,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         browseHistoryViewHolder.productImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
-
+browseHistoryViewHolder.shoppingHistoryLayout.setTag(shoppingProducts);
                 break;
             case BROWSE_HISTORY_HEADER_VIEW_TYPE:
                 final BrowseHistoryHeaderViewHolder browseHistoryHeaderViewHolder = (BrowseHistoryHeaderViewHolder) holder;
@@ -623,6 +628,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.list_price_label)
         TextView listPriceLabel;
 
+        @BindView(R.id.recommendationView)
+        RelativeLayout recommendationView;
+
 
 
         public RecommendationProductViewHolder(View v) {
@@ -693,6 +701,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.sales_pitch_image)
         ImageView salesPitchImage;
 
+        @BindView(R.id.sales_pitch_layout)
+        RelativeLayout salesPitchlayout;
+
       /*  @BindView(R.id.title_sales_pitch_label)
         TextView salesPitchTitle;*/
 
@@ -733,6 +744,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @BindView(R.id.list_price_label)
         TextView listPriceLabel;
+
+        @BindView(R.id.shoppingHistorylayout)
+        RelativeLayout shoppingHistoryLayout;
 
         public BrowseHistoryViewHolder(View v) {
             super(v);
