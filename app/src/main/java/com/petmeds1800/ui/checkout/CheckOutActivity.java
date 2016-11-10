@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.checkout;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -33,6 +19,20 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -491,7 +491,9 @@ public class CheckOutActivity extends AbstractActivity
 
 
     }
-
+    public int getApplicableSteps() {
+        return mApplicableSteps.size();
+    }
     @Override
     public void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName) {
         if(paypalResponse.getShoppingCart()!=null){

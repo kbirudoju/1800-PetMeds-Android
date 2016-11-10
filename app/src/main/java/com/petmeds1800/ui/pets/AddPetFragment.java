@@ -615,7 +615,7 @@ public class AddPetFragment extends AbstractFragment
         //Todo Remove all hardcoded value after api integration
         progressBar.setVisibility(View.VISIBLE);
         for (int i = 0; nameValueDetailsForMedicalallergy != null && i < nameValueDetailsForMedicalallergy.size();
-             i++) {
+                i++) {
             if (i < 4) {
                 medicationAllergyArray[i] = nameValueDetailsForMedicalallergy.get(i).getName();
             } else {
@@ -623,8 +623,8 @@ public class AddPetFragment extends AbstractFragment
             }
         }
         for (int i = 0;
-             nameValueDetailsForCurrentMedications != null && i < nameValueDetailsForCurrentMedications.size();
-             i++) {
+                nameValueDetailsForCurrentMedications != null && i < nameValueDetailsForCurrentMedications.size();
+                i++) {
             if (i < 4) {
                 currentMedicationArray[i] = nameValueDetailsForCurrentMedications.get(i).getName();
             } else {
@@ -758,7 +758,7 @@ public class AddPetFragment extends AbstractFragment
     }
 
     private void executeCommonLogic(PetMedicationResponse response, String title,
-                                    ArrayList<AlertDailogMultipleChoice> list, ArrayList<NameValueData> nameValuelist) {
+            ArrayList<AlertDailogMultipleChoice> list, ArrayList<NameValueData> nameValuelist) {
         list = new ArrayList<AlertDailogMultipleChoice>();
         for (MedAllergy medication : response.getMedications()) {
             AlertDailogMultipleChoice alertDailogMultipleChoice = new AlertDailogMultipleChoice();
@@ -897,7 +897,7 @@ public class AddPetFragment extends AbstractFragment
     }
 
     public boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,
-                                     EditText birthdayText) {
+            EditText birthdayText) {
         if (auditEditText.getText().toString().isEmpty() && birthdayText.getText().toString().isEmpty()) {
             auditTextInputLayout.setError(getContext().getString(errorStringId));
             return true;
@@ -1099,5 +1099,6 @@ public class AddPetFragment extends AbstractFragment
                 MultipartBody.Part.createFormData("uploadfile", file.getName(), requestFile);
         return body;
     }
+
 
 }

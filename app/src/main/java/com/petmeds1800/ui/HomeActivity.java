@@ -1,28 +1,5 @@
 package com.petmeds1800.ui;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -53,6 +30,29 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 import com.urbanairship.UAirship;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -258,17 +258,13 @@ public class HomeActivity extends AbstractActivity
             }
 
         };
-        //code to set default first tab selected
-
+        //code to replace fragment when commit order response comes in anonymous case
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 replaceCommitOrderFragment();
                 if (commitOrderResponse != null) {
                     mViewPager.setCurrentItem(1);
-                } else {
-                    mViewPager.setCurrentItem(0);
-
                 }
             }
         }, 500);
@@ -586,8 +582,9 @@ public class HomeActivity extends AbstractActivity
 
     @Override
     public void onPaymentCompleted(ShoppingCartListResponse paypalResponse) {
-        CartFragment cartFragment=(CartFragment)getSupportFragmentManager().findFragmentByTag(CartFragment.class.getSimpleName());
-        if(cartFragment!=null){
+        CartFragment cartFragment = (CartFragment) getSupportFragmentManager()
+                .findFragmentByTag(CartFragment.class.getSimpleName());
+        if (cartFragment != null) {
             cartFragment.startCheckoutAfterPayment(paypalResponse);
         }
     }

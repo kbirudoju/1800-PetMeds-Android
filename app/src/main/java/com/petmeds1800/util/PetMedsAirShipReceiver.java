@@ -65,19 +65,17 @@ public class PetMedsAirShipReceiver extends AirshipReceiver {
         Log.i(TAG, "Notification opened. Alert: " + notificationInfo.getMessage().getAlert() + ". NotificationId: "
                 + notificationInfo.getNotificationId());
         boolean openDefaultScreen = false;
+        Intent homeIntent = new HomeIntent(context);
         Bundle bundle = notificationInfo.getMessage().getPushBundle();
         String id = (String) bundle.get(Constants.PUSH_EXTRA_ID);
         String screeName = (String) bundle.get(PUSH_TARGET);
         int type = Integer.valueOf(((String) bundle.get(PUSH_TYPE) != null) ? (String) bundle.get(PUSH_TYPE) : "0");
         openDefaultScreen = (type != 0);
-        if (openDefaultScreen) {
-            Intent homeIntent = new HomeIntent(context);
-            homeIntent.putExtra(Constants.PUSH_SCREEN_TYPE, type);
-            homeIntent.putExtra(Constants.PUSH_EXTRA_ID, id);
-            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(homeIntent);
-        }
-        return openDefaultScreen;
+        homeIntent.putExtra(Constants.PUSH_SCREEN_TYPE, (openDefaultScreen) ? type : -1);
+        homeIntent.putExtra(Constants.PUSH_EXTRA_ID, id);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(homeIntent);
+        return true;
     }
 
     @Override
