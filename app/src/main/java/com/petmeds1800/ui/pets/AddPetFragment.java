@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -64,8 +65,6 @@ import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
-
-import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -935,7 +934,7 @@ public class AddPetFragment extends AbstractFragment
         mPetBirthdayText.setEnabled(isEnable);
         removePetButton.setEnabled(isEnable);
         mEditPetImage.setEnabled(isEnable);
-        mPetAgeText.setEnabled(isEnable);
+      //  mPetAgeText.setEnabled(isEnable);
         mAddEditMedicationAllergies.setEnabled(isEnable);
         mAddEditMedicationConditions.setEnabled(isEnable);
         mAddEditCurrentMedications.setEnabled(isEnable);
@@ -950,8 +949,11 @@ public class AddPetFragment extends AbstractFragment
             mPetGenderText.setText(pet.getGender());
             mPetWeight.setText(pet.getWeight());
             mPetBirthdayText.setText(pet.getBirthday());
-            age = pet.getPetAge().getValue();
-            mPetAgeText.setText(pet.getPetAge().getName());
+            if(pet.getPetAge()!= null){
+                age = pet.getPetAge().getValue();
+                mPetAgeText.setText(pet.getPetAge().getName());
+            }
+
             updateAllergiesDetails(pet, IS_MEDICATIONS_ALLERGY_DAILOG);
             updateAllergiesDetails(pet, IS_MEDICATIONS_CONDITIONS_DAILOG);
             updateAllergiesDetails(pet, IS_CURRENT_MEDICATIONS_DAILOG);

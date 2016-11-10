@@ -168,7 +168,8 @@
                         android:hint="@string/hint_pet_age"
                         android:focusableInTouchMode="false"
                         android:singleLine="true"
-                        style="@style/StyledEditText"/>
+                        style="@style/StyledEditText"
+                    android:textColor="@color/edittext_selector"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
                     android:id="@+id/weightInputLayout"
