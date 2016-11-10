@@ -161,6 +161,8 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
         populateEmail();
 
+        ((CheckOutActivity) getActivity()).setToolBarTitle(getString(R.string.shipment_address));
+
         return view;
     }
 

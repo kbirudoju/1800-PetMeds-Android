@@ -1,11 +1,13 @@
 package com.petmeds1800.ui.checkout;
 
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.InitCheckoutResponse;
+import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import android.util.Log;
 
@@ -13,11 +15,8 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -59,7 +58,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                     @Override
                     public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
 
-                        if(!sessionConfNumberResponse.getSessionConfirmationNumber().isEmpty()){
+                        if (!sessionConfNumberResponse.getSessionConfirmationNumber().isEmpty()) {
                             mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
                             initializeCheckout(mItemDetail);
                         }
@@ -71,7 +70,6 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
     @Override
     public void initializeCheckout(HashMap<String, String> itemsDetail) {
         mItemDetail = itemsDetail;
-        //TODO need to handle the 409 conflict error
         //attach the session confirmation number
         itemsDetail.put("_dynSessConf",
                 mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
@@ -126,6 +124,48 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
 
 
     }
+
+    @Override
+    public void checkSecurityStatus() {
+        mView.showProgress();
+
+        mPetMedsApiService.getSecurityStatus()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<SecurityStatusResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (mView.isActive()) {
+                            //hide the progress
+                            mView.hideProgress();
+                            //show the retry view
+                            if (errorId == R.string.noInternetConnection || errorId == R.string.connectionTimeout) {
+//                                mView.showRetryView(mContext.getString(errorId));
+                            }
+
+                            mView.showErrorCrouton(e.getMessage(), false);
+                        }
+
+                    }
+
+                    @Override
+                    public void onNext(SecurityStatusResponse securityStatusResponse) {
+                        int securityStatus = securityStatusResponse.getSecurityStatus();
+                        Log.i("security status:", securityStatus + "");
+                        mView.hideProgress();
+                        //pass on security status
+                        mView.setSecurityStatus(securityStatus);
+                    }
+                });
+
+    }
+
 
     @Override
     public void start() {

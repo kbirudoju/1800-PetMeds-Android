@@ -14,6 +14,8 @@ public interface CheckoutActivityContract {
 
     interface View extends BaseView<Presenter> {
 
+        void hideProgress();
+
         void showProgress();
 
         //TODO once Sarthak done with CartFragment implementation.We will define this method.
@@ -35,11 +37,15 @@ public interface CheckoutActivityContract {
         boolean isActive();
 
         void startNextStep(String stepName, ShoppingCartListResponse shoppingCartListResponse, boolean isReviewOn);
+
+        void setSecurityStatus(int securityStatus);
     }
 
     interface Presenter extends BasePresenter {
 
         void initializeCheckout(HashMap<String, String> itemsDetail);
+
+        void checkSecurityStatus();
     }
 
     interface StepsFragmentInteractionListener {

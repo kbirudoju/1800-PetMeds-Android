@@ -117,6 +117,8 @@ public class CheckOutActivity extends AbstractActivity
 
     private CheckoutSteps mCheckoutSteps;
 
+    private int mSecurityStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +132,9 @@ public class CheckOutActivity extends AbstractActivity
         PetMedsApplication.getAppComponent().inject(this);
 
         mCheckoutPresenter = new CheckoutActivityPresenter(this);
+
+        //first set the mSecurityStatus to know if a user is logged-in or not
+        mCheckoutPresenter.checkSecurityStatus();
 
         //check if we have the valid items in the shopping cart
         if (getIntent() != null && mShoppingCartListResponse != null) {
@@ -159,6 +164,7 @@ public class CheckOutActivity extends AbstractActivity
     }
 
 
+    @Override
     public void hideProgress() {
         mProgressDialog.dismiss();
     }
@@ -314,7 +320,7 @@ public class CheckOutActivity extends AbstractActivity
 
             case 0: //step 1 "Select Shipping Address"
                 //check if the user is logged-in
-                if (mPreferencesHelper.getIsUserLoggedIn()) {
+                if (mSecurityStatus == 4 || mSecurityStatus == 5) {
                     replaceCheckOutFragment(StepOneRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepOneRootFragment.class.getName(), false);
                 } else {
@@ -335,7 +341,7 @@ public class CheckOutActivity extends AbstractActivity
                     replaceCheckOutFragment(StepFiveRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepFiveRootFragment.class.getName(), false);
                 }
-                else if(mPreferencesHelper.getIsUserLoggedIn()) {
+                else if(mSecurityStatus == 4 || mSecurityStatus == 5) {
                     replaceCheckOutFragment(StepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName, StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                             StepThreeRootFragment.class.getName(),
@@ -473,6 +479,11 @@ public class CheckOutActivity extends AbstractActivity
     public void startNextStep(String stepName, ShoppingCartListResponse shoppingCartListResponse, boolean isReviewOn) {
         mIsReviewOn = isReviewOn;
         startNextStep(stepName, shoppingCartListResponse);
+    }
+
+    @Override
+    public void setSecurityStatus(int securityStatus) {
+        mSecurityStatus = securityStatus;
     }
 
     @Override

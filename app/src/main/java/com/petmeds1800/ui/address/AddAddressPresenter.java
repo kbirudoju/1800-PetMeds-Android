@@ -13,7 +13,10 @@ import com.petmeds1800.util.RetrofitErrorHandler;
 
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.LinearLayout;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
@@ -32,7 +35,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
 
     private final AddEditAddressContract.View mView;
     private TreeMap<String , String> usaStatedHashMap;
-    private TreeMap<String, String> countryHashMap;
+    private LinkedHashMap<String, String> countryHashMap;
 
     public AddAddressPresenter(AddEditAddressContract.View view){
         mView = view;
@@ -164,11 +167,25 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         if(s.getStatus().getCode().equals(API_SUCCESS_CODE)){
                             if(mView.isActive()){
                                 //StateName would be treated as key while stateCode would be treated as a key so that we could get the code as user selects one name
-                                countryHashMap = new TreeMap<String ,String>();
+                                TreeMap treeMap = new TreeMap<String, String>();
                                 for(Country eachCountry : s.getCountryList()) {
-                                    countryHashMap.put(eachCountry.getDisplayName(), eachCountry.getCode());
+                                    treeMap.put(eachCountry.getDisplayName(), eachCountry.getCode());
                                 }
-                                mView.countryListReceived(countryHashMap.keySet().toArray(new String[countryHashMap.size()]));
+
+                                //unfortunaltely we need to show the "United States Of America" on top of the list.
+                                //so, first we need to remove it
+                                treeMap.remove("United States Of America");
+
+                                //then create a new has map and insert it at the first position
+                                countryHashMap = new LinkedHashMap<String, String>();
+                                countryHashMap.put("United States Of America" , "USA");
+                                countryHashMap.putAll(treeMap);
+
+                                String[] countryArray = countryHashMap.keySet()
+                                        .toArray(new String[countryHashMap.size()]);
+
+                                mView.countryListReceived(
+                                        countryArray);
                             }
                         }
                         else{
