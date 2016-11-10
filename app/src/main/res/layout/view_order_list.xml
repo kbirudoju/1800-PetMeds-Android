@@ -40,6 +40,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="@dimen/dp_40"
             android:layout_marginLeft="@dimen/dp_40"
+            android:padding="@dimen/dp_1"
             android:background="@drawable/circular_background"
             android:visibility="visible"
 
