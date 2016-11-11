@@ -195,18 +195,20 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     @Override
     public boolean onError(String errorMessage, String simpleName) {
-
-        if (simpleName.equalsIgnoreCase(ApplyCouponRequestShoppingCart.class.getSimpleName())) {
-            mCouponCodeLayout.setError(errorMessage);
-            mOfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
-        } else if (simpleName.equalsIgnoreCase(UpdateItemQuantityRequestShoppingCart.class.getSimpleName())) {
-            Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
-        }
-
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION, mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION, getActivity());
 
-        return false;
+        if(errorMessage != null && !errorMessage.isEmpty()){
+            if (simpleName != null && simpleName.equalsIgnoreCase(ApplyCouponRequestShoppingCart.class.getSimpleName())) {
+                mCouponCodeLayout.setError(errorMessage);
+                mOfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
+            } else  {
+                Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -374,18 +376,18 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         }
         if (object == null) {
             toggleProgressDialogVisibility(SHOW_PROGRESSBAR_OR_ANIMATION, mProgressBar);
-            mPresenter.getGeneralPopulateShoppingCart();
+            mPresenter.getGeneralPopulateShoppingCart(false);
         } else if (object instanceof AddItemRequestShoppingCart) {
-            mPresenter.getAddItemShoppingCart((AddItemRequestShoppingCart) (object));
+            mPresenter.getAddItemShoppingCart((AddItemRequestShoppingCart) (object),false);
         } else if (object instanceof RemoveItemRequestShoppingCart) {
             toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION, getActivity());
-            mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart) (object));
+            mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart) (object),false);
         } else if (object instanceof ApplyCouponRequestShoppingCart) {
             toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION, getActivity());
-            mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart) (object));
+            mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart) (object),false);
         } else if (object instanceof UpdateItemQuantityRequestShoppingCart) {
             toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION, getActivity());
-            mPresenter.getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart) (object));
+            mPresenter.getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart) (object),false);
         }
     }
 
