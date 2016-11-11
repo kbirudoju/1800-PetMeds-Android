@@ -9,7 +9,7 @@
         style="@style/dialog_button_style"
         android:textColor="@color/battleship_grey"
         android:background="@color/pattern_light_blue"
-        android:text="WILL YOU BE MAILING IN A PRESCRIPTION"
+        android:text="@string/mailing_prescription_txt"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp_16"/>
     <RelativeLayout

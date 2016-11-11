@@ -667,6 +667,8 @@
     <string name="OrderStatus_unknown">Status Unknown</string>
     <string name="breed_type_cat">cat</string>
     <string name="breed_type_dog">dog</string>
+    <string name="mailing_prescription_txt">WILL YOU BE MAILING IN A PRESCRIPTION?</string>
+    <string name="review_and_submit_txt">CONTINUE TO REVIEW &amp; SUBMIT ORDER</string>
 
 
 </resources>
