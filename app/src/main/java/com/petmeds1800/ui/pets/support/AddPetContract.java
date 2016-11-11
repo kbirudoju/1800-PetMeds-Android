@@ -1,5 +1,8 @@
 package com.petmeds1800.ui.pets.support;
 
+import android.support.design.widget.TextInputLayout;
+import android.widget.EditText;
+
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AgeListResponse;
 import com.petmeds1800.model.entities.PetBreedTypeListResponse;
@@ -10,9 +13,6 @@ import com.petmeds1800.model.entities.Pets;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
-
-import android.support.design.widget.TextInputLayout;
-import android.widget.EditText;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -49,6 +49,8 @@ public interface AddPetContract {
         void onImageUplaodSuccess();
 
         void onImgaeUploadError();
+        boolean checkAndShowBreedError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,String petType);
+
 
 
     }

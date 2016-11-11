@@ -596,7 +596,7 @@ public class AddPetFragment extends AbstractFragment
             isValidPetName = checkAndShowError(mPetNameText, mPetNameInputLayout, R.string.error_petname);
             isValidOwnerName = checkAndShowError(mOwnerNameText, mOwnerNameInputLayout, R.string.error_petowner);
             isValidPetType = checkAndShowError(mPetTypeText, mPetTypeInputLayout, R.string.error_pettype);
-            isValidBreedType = checkAndShowError(mBreedTypeText, mBreedInputLayout, R.string.error_petbreed);
+            isValidBreedType = checkAndShowBreedError(mBreedTypeText, mBreedInputLayout, R.string.error_petbreed,mPetTypeText.getText().toString());
             isValidGender = checkAndShowError(mPetGenderText, mGenderInputLayout, R.string.error_petgender);
             isValidWeight = checkAndShowError(mPetWeight, mWeightInputLayout, R.string.error_validweight);
             isValidAge = checkAndShowError(mPetAgeText, mAgeInputLayout, R.string.error_petage, mPetBirthdayText);
@@ -893,6 +893,23 @@ public class AddPetFragment extends AbstractFragment
         } else {
             onAddPetSuccess(mPets);
         }
+
+    }
+
+    @Override
+    public boolean checkAndShowBreedError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,String petType) {
+       if(petType.equalsIgnoreCase(getString(R.string.breed_type_cat))||petType.equalsIgnoreCase(getString(R.string.breed_type_dog))){
+           if (auditEditText.getText().toString().isEmpty()) {
+               auditTextInputLayout.setError(getContext().getString(errorStringId));
+               return true;
+           } else {
+               auditTextInputLayout.setError(null);
+               auditTextInputLayout.setErrorEnabled(false);
+               return false;
+           }
+       }else{
+           return false;
+       }
 
     }
 

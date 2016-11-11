@@ -665,6 +665,8 @@
     <string name="OrderStatus_rx">RX REQUIRED</string>
     <string name="OrderStatus_OrderGone">Order Gone</string>
     <string name="OrderStatus_unknown">Status Unknown</string>
+    <string name="breed_type_cat">cat</string>
+    <string name="breed_type_dog">dog</string>
 
 
 </resources>
