@@ -19,7 +19,6 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -149,6 +148,8 @@ public class CheckOutActivity extends AbstractActivity
                     itemDetails.put(commerceItem.getCommerceItemId(), commerceItem.getQuantity());
                 }
             }
+
+            //checkout steps would be available if a user starts checkout after completion of paypal step
             if(mCheckoutSteps!=null){
                 setCheckoutSteps(mCheckoutSteps);
                 startNextStep(mCheckoutSteps.getStepState().getNextCheckoutStep());

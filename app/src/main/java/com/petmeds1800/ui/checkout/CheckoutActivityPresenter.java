@@ -86,7 +86,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        Log.e("AddACard", e.getMessage());
+                        Log.e("InitCheckout", e.getMessage());
                         if(e.getMessage().contains("Conflict")) { //TODO need to change it
                             renewSessionConfirmationNumber();
                         }
