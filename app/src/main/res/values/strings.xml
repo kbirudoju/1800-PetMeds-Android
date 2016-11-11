@@ -127,6 +127,7 @@
     <string name="error_phone_required">Phone number is required</string>
     <string name="error_phone_invalid">Phone number invalid</string>
     <string name="error_country_required">Country is required</string>
+    <string name="label_unable_to_update_password">Unable to update your password</string>
 
     <!--Finger Print Dialog-->
     <string name="title.fingerprint_login">FINGERPRINT LOGIN</string>

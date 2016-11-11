@@ -6,7 +6,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,10 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -33,7 +31,6 @@ import com.petmeds1800.mvp.SignupTask.SignUpContract;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -54,9 +51,6 @@ public class SignUpFragment extends AbstractFragment
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
-
-    @BindView(R.id.container_sign_up)
-    FrameLayout mContainerLayout;
 
     @BindView(R.id.email_input)
     TextInputLayout mEmailInput;
@@ -196,6 +190,9 @@ public class SignUpFragment extends AbstractFragment
     @BindView(R.id.country_shipping_edit)
     EditText mCountryShippingEdit;
 
+    @BindView(R.id.view_error)
+    View mErrorView;
+
     @Inject
     PetMedsApiService mApiService;
 
@@ -284,11 +281,11 @@ public class SignUpFragment extends AbstractFragment
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
-        if (span) {
-            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
-        } else {
-            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
-        }
+        mErrorView.setVisibility(View.VISIBLE);
+        TextView title = (TextView) mErrorView.findViewById(R.id.txv_error_title);
+        TextView description = (TextView) mErrorView.findViewById(R.id.txv_error_message);
+        title.setText(getString(R.string.label_unable_to_update_password));
+        description.setText(message);
     }
 
     @Override
@@ -334,6 +331,7 @@ public class SignUpFragment extends AbstractFragment
     private void signUp() {
 
         clearErrorsOnInputs();
+        mErrorView.setVisibility(View.GONE);
 
         emailText = mEmailEdit.getText().toString().trim();
         if (emailText.isEmpty()) {
