@@ -7,14 +7,21 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.petmeds1800.R;
 import com.petmeds1800.ui.HomeActivity;
@@ -24,8 +31,25 @@ import java.util.HashMap;
 public abstract class AbstractFragment extends Fragment {
 
     private static final int PERMISSIONS_REQUEST_CODE = 1001;
+    private View mErrorLayoutView;
+    private Button mErrorButton;
+    private View mParentContainerView;
 
     private PermissionRequested permissionRequested;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.w("AbstractFragment", "onCreateView Enter");
+        Log.w("AbstractFragment", "onCreateView Exit");
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mParentContainerView = view;
+        super.onViewCreated(view, savedInstanceState);
+    }
 
     public void replaceAccountAndAddToBackStack(Fragment fragment, String tag) {
         FragmentTransaction trans = getFragmentManager()
@@ -61,7 +85,7 @@ public abstract class AbstractFragment extends Fragment {
         fragment.setArguments(bundle);
         transaction.commit();
     }
-   protected void replaceCartFragmentWithBackStack(Fragment fragment,String tag,Bundle  bundle) {
+    protected void replaceCartFragmentWithBackStack(Fragment fragment,String tag,Bundle  bundle) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.cart_root_fragment_container, fragment,tag);
         transaction.addToBackStack(null);
@@ -288,5 +312,60 @@ public abstract class AbstractFragment extends Fragment {
                 setHasOptionsMenu(false);
             }
         }
+    }
+
+    protected boolean showErrorLayout(){
+        Log.w("AbstractFragment", "showErrorLayout Enter");
+
+        if (mParentContainerView != null && mErrorLayoutView == null){
+            mErrorLayoutView = getActivity().getLayoutInflater().inflate(R.layout.error_retry_layout,null);
+            mErrorButton = (Button) mErrorLayoutView.findViewById(R.id.retry_Button);
+
+            mErrorButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    onRetryButtonClicked(v);
+                }
+            });
+
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            if (mParentContainerView instanceof LinearLayout) {
+                ((LinearLayout) mParentContainerView).addView(mErrorLayoutView);
+            } else if (mParentContainerView instanceof RelativeLayout){
+                ((RelativeLayout) mParentContainerView).addView(mErrorLayoutView, params);
+            }
+            mErrorLayoutView.setVisibility(View.VISIBLE);
+
+            Log.w("AbstractFragment", "showErrorLayout Exit");
+            return true;
+        } else if (mParentContainerView != null && mErrorLayoutView != null){
+            mErrorLayoutView.setVisibility(View.VISIBLE);
+            Log.w("AbstractFragment", "showErrorLayout Exit");
+            return true;
+        } else {
+            Log.w("AbstractFragment", "showErrorLayout Exit");
+            return false;
+        }
+    }
+
+    protected boolean hideErrorLayout(){
+        if (mParentContainerView != null && mErrorLayoutView != null){
+            mErrorLayoutView.setVisibility(View.GONE);
+            if (mParentContainerView instanceof LinearLayout) {
+                ((LinearLayout) mParentContainerView).removeView(mErrorLayoutView);
+            } else if (mParentContainerView instanceof RelativeLayout){
+                ((RelativeLayout) mParentContainerView).removeView(mErrorLayoutView);
+            }
+            mErrorLayoutView = null;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected void onRetryButtonClicked(View view){
+        Log.w("AbstractFragment", "onErrorButtonClicker Enter");
+        Log.w("AbstractFragment", "onErrorButtonClicker Exit");
     }
 }

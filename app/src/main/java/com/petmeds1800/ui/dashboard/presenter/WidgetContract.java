@@ -20,6 +20,8 @@ public interface WidgetContract {
         void onAddCartError(String errorMessage);
         void addToCartSuccess();
         void startWebView(Bundle bundle);
+        void showRetryView();
+        void hideRetryView();
     }
 
     interface Presenter extends BasePresenter {

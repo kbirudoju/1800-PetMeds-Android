@@ -148,6 +148,7 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     public void onSuccess(List<Object> widgetData) {
         mProgressBar.setVisibility(View.GONE);
         updateWidgetData(widgetData);
+        hideRetryView();
     }
 
     @Override
@@ -196,5 +197,33 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent , HomeRootFragment.class.getName());
         super.onReceivedBroadcast(context, intent);
+    }
+
+    @Override
+    protected boolean showErrorLayout() {
+        return super.showErrorLayout();
+    }
+
+    @Override
+    protected boolean hideErrorLayout() {
+        return super.hideErrorLayout();
+    }
+
+    @Override
+    protected void onRetryButtonClicked(View view) {
+        super.onRetryButtonClicked(view);
+        if (mPresenter != null){
+            mPresenter.start();
+        }
+    }
+
+    @Override
+    public void showRetryView() {
+        showErrorLayout();
+    }
+
+    @Override
+    public void hideRetryView() {
+        hideErrorLayout();
     }
 }

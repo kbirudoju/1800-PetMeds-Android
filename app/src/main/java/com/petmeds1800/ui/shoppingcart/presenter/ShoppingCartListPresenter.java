@@ -3,6 +3,7 @@ package com.petmeds1800.ui.shoppingcart.presenter;
 import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
@@ -13,6 +14,7 @@ import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShopp
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import javax.inject.Inject;
 
@@ -54,6 +56,11 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                 if (e.getMessage().contains("Conflict")) {
                     if (!isRepeat){
                         renewSessionConfirmationNumber(null);
+                    }
+                } else if (RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection || RetrofitErrorHandler.getErrorMessage(e) == R.string.connectionTimeout) {
+                    if (mView.isActive()) {
+                        mView.showRetryView();
+                        mView.onError(e.getMessage(),null);
                     }
                 } else {
                     if (mView.isActive()) {

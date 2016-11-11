@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.dashboard.presenter;
 
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.entities.BrowsingHistory;
@@ -16,6 +17,7 @@ import com.petmeds1800.model.entities.WidgetFooter;
 import com.petmeds1800.model.entities.WidgetListResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import android.support.annotation.NonNull;
 
@@ -63,6 +65,11 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                         //error handling would be implemented once we get the details from backend team
                         mView.onError(e.getLocalizedMessage());
 
+                        if (RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection || RetrofitErrorHandler.getErrorMessage(e) == R.string.connectionTimeout) {
+                            if (mView.isActive()) {
+                                mView.showRetryView();
+                            }
+                        }
                     }
 
                     @Override

@@ -100,7 +100,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         }
     };
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -180,6 +179,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
         boolean response = false;
         UpdateValueThreadResponse();
+        hideErrorLayout();
         if (null != shoppingCartListResponse && shoppingCartListResponse.getItemCount() > 0) {
             response = initializeShoppingCartPage(shoppingCartListResponse);
             toggleVisibilityShoppingList(false);
@@ -243,6 +243,15 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     }
 
+    @Override
+    public void showRetryView() {
+        showErrorLayout();
+    }
+
+    @Override
+    public void hideRetryView() {
+        hideErrorLayout();
+    }
 
     private View createFooter(final View footerView, ShoppingCartListResponse shoppingCartListResponse) {
         mOfferCodeContainerLayout = (LinearLayout) footerView.findViewById(R.id.cart_each_item_container);
@@ -334,8 +343,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
         if (null != shoppingCartListResponse.getShoppingCart()) {
             ((TextView) mTotalCheckOutContainer.findViewById(R.id.offer_code_value_txt)).setText(
-                    getActivity().getResources().getString(R.string.dollar_placeholder) + Float
-                            .toString(shoppingCartListResponse.getShoppingCart().getDiscountAmount()));
+                    getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getDiscountAmount()));
         } else {
             ((TextView) mTotalCheckOutContainer.findViewById(R.id.offer_code_value_txt)).setText("-");
         }
@@ -425,7 +433,12 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
                 }
             }, 500);
             Log.d("response in cart", response.getStatus().getErrorMessages().get(0));
-
         }
+    }
+
+    @Override
+    protected void onRetryButtonClicked(View view) {
+        super.onRetryButtonClicked(view);
+        callmShoppingCartAPI(null);
     }
 }
