@@ -108,6 +108,7 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
         if (medConditionList != null) {
             mMedConditionList.clear();
             mMedConditionList.addAll(medConditionList);
+            mRecyclerMedConditions.setVisibility(View.VISIBLE);
             mListAdapter.notifyDataSetChanged();
         }
     }
@@ -135,6 +136,8 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
     public void showRetryView(String errorMessage) {
         mErrorLayout.setVisibility(View.VISIBLE);
         mErrorLabel.setText(errorMessage);
+        //hide recycler view
+        mRecyclerMedConditions.setVisibility(View.GONE);
     }
 
     @Override
