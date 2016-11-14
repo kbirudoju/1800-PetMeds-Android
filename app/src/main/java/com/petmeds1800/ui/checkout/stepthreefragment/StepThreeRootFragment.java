@@ -125,7 +125,7 @@ public class StepThreeRootFragment extends AbstractFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new AnalyticsUtil().trackScreen(getString(R.string.payment_method_header));
+        new AnalyticsUtil().trackScreen(getString(R.string.label_payment_method_analytics_title));
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);

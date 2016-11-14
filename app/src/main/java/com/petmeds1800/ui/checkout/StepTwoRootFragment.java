@@ -89,7 +89,7 @@ public class StepTwoRootFragment extends AbstractFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new AnalyticsUtil().trackScreen(getString(R.string.shipping_method_title));
+        new AnalyticsUtil().trackScreen(getString(R.string.label_shipping_method_analytics_title));
         mPresenter = new StepTwoPresenter(this);
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);

@@ -66,7 +66,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new AnalyticsUtil().trackScreen(getString(R.string.shipment_address));
+        new AnalyticsUtil().trackScreen(getString(R.string.label_shipping_analytics_title));
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);

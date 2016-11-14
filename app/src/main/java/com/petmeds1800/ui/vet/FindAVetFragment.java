@@ -1,5 +1,16 @@
 package com.petmeds1800.ui.vet;
 
+import com.petmeds1800.R;
+import com.petmeds1800.intent.ShowVetOnMapIntent;
+import com.petmeds1800.model.VetList;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.vet.presenter.FindVetPresenter;
+import com.petmeds1800.ui.vet.support.LocationRelatedStuff;
+import com.petmeds1800.ui.vet.support.SearchVetAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -43,28 +54,35 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 10/18/2016.
  */
-public class FindAVetFragment extends AbstractFragment implements FindVetContract.View,LocationRelatedStuff.ZipCodeListener {
+public class FindAVetFragment extends AbstractFragment
+        implements FindVetContract.View, LocationRelatedStuff.ZipCodeListener {
+
     @BindView(R.id.vet_recycler_view)
     RecyclerView mVetListRecyclerView;
 
     private SearchVetAdapter mVetListAdapter;
+
     private FindVetContract.Presenter mPresenter;
+
     @BindView(R.id.zipCodeEdit)
     EditText mZipCodeEdit;
+
     private ArrayList<VetList> mVetList;
+
     private String mZipCode;
+
     @BindView(R.id.location_icon)
     ImageView mLocationImage;
-    private LocationRelatedStuff locationRelatedStuff;
     @BindView(R.id.top_layout)
     LinearLayout mContainer;
-
+    private LocationRelatedStuff locationRelatedStuff;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_find_vet, container, false);
+        new AnalyticsUtil().trackScreen(getString(R.string.label_locate_vet_analytics_title));
         ButterKnife.bind(this, view);
         mPresenter = new FindVetPresenter(this);
         setHasOptionsMenu(true);
@@ -118,7 +136,6 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
     }
 
 
-
     private void performSearch(String zipCode) {
         mPresenter.getVetList(zipCode);
     }
@@ -128,18 +145,16 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
         super.onViewCreated(view, savedInstanceState);
         setUpVetList();
         Log.d("mZipCode", mZipCode + ">>>>");
-            if (mZipCode != null && !mZipCode.isEmpty()) {
-                Log.d("zipcode is", mZipCode);
-                try {
-                    ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                performSearch(mZipCode);
+        if (mZipCode != null && !mZipCode.isEmpty()) {
+            Log.d("zipcode is", mZipCode);
+            try {
+                ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            performSearch(mZipCode);
         }
-
-
+    }
 
 
     private void setUpVetList() {
@@ -157,6 +172,9 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
     public void onSuccess(ArrayList<VetList> vetList) {
         mVetList = new ArrayList<>();
         mVetList = vetList;
+        if (mVetList.size() > 0) {
+            new AnalyticsUtil().trackScreen(getString(R.string.label_vet_search_results_analytics_title));
+        }
         try {
             ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
         } catch (Exception e) {
@@ -191,7 +209,7 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_map) {
-            ShowVetOnMapIntent showVetOnMapIntent = new ShowVetOnMapIntent(getActivity(), mVetList,mZipCode);
+            ShowVetOnMapIntent showVetOnMapIntent = new ShowVetOnMapIntent(getActivity(), mVetList, mZipCode);
             startActivityForResult(showVetOnMapIntent, Constants.REFRESH_VET_DATA);
         }
         return super.onOptionsItemSelected(item);
@@ -211,21 +229,20 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
             trans.remove(this);
             trans.commit();
             manager.popBackStack();
-        }else if(requestCode==Constants.REFRESH_VET_DATA){
+        } else if (requestCode == Constants.REFRESH_VET_DATA) {
             //Reload data of vet
-            if(data!=null){
-                Log.d("zipCode",mZipCode+">>");
-                Bundle b=data.getExtras();
-                String currentZipCode=b.getString("zipCode");
-                if(currentZipCode!=null && !currentZipCode.isEmpty()) {
-                    mZipCode=currentZipCode;
+            if (data != null) {
+                Log.d("zipCode", mZipCode + ">>");
+                Bundle b = data.getExtras();
+                String currentZipCode = b.getString("zipCode");
+                if (currentZipCode != null && !currentZipCode.isEmpty()) {
+                    mZipCode = currentZipCode;
                     mZipCodeEdit.setText(mZipCode);
                     ArrayList<VetList> vetList = (ArrayList<VetList>) b.getSerializable("vetList");
                     onSuccess(vetList);
                 }
             }
-        }
-        else if(requestCode== LocationRelatedStuff.REQUEST_CHECK_SETTINGS) {
+        } else if (requestCode == LocationRelatedStuff.REQUEST_CHECK_SETTINGS) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
                     locationRelatedStuff.checkMarshMallowPermissions();
@@ -263,7 +280,6 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
 
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -271,7 +287,8 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationRelatedStuff.getLocationUpdate();
                 } else {
-                    Toast.makeText(getActivity(), "Permission Denied, You cannot access location data.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Permission Denied, You cannot access location data.",
+                            Toast.LENGTH_LONG).show();
                 }
                 break;
         }

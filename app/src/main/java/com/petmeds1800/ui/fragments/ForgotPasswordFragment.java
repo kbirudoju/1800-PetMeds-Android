@@ -77,7 +77,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
-        new AnalyticsUtil().trackScreen(getString(R.string.label_login_forgot_password));
+        new AnalyticsUtil().trackScreen(getString(R.string.label_forgot_password_analytics_title));
     }
 
     @Nullable

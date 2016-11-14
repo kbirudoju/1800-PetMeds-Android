@@ -95,7 +95,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new AnalyticsUtil().trackScreen(getString(R.string.label_pet_vet_title));
+        new AnalyticsUtil().trackScreen(getString(R.string.label_pet_vet_analytics_title));
         Bundle bundle = getArguments();
         if (bundle != null) {
             shoppingCartObj = (ShoppingCartListResponse) bundle.getSerializable(CartFragment.SHOPPING_CART);

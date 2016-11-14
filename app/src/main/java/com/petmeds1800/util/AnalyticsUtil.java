@@ -50,6 +50,7 @@ public class AnalyticsUtil {
             HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder();
             mTracker.setScreenName(screenName);
             mTracker.set("&cu", "USD");
+            //TODO we need to look at the state,city and country mapping
             builder.set("state", commitOrder.getShippingState());
             builder.set("city", commitOrder.getShippingCity());
             builder.set("country", commitOrder.getShippingCountry());

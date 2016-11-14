@@ -6,6 +6,7 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.User;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.os.Bundle;
@@ -78,6 +79,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_settings, container, false);
+        new AnalyticsUtil().trackScreen(getString(R.string.label_edit_email_password_analytics_title));
         ButterKnife.bind(this, view);
         ((AbstractActivity) getActivity()).enableBackButton();
         ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.accountSettingsTitle));

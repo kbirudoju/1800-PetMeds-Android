@@ -190,7 +190,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
 
     private void sendAnalyticsData(CommitOrder commitOrder) {
         new AnalyticsUtil()
-                .trackScreenForProductTransaction(getString(R.string.label_confirmation_and_receipt), commitOrder,
+                .trackScreenForProductTransaction(getString(R.string.label_order_receipt_analytics_title), commitOrder,
                         getActivity().getApplicationContext());
     }
 

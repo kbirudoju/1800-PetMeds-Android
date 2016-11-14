@@ -1,5 +1,19 @@
 package com.petmeds1800.ui.fragments;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.R;
+import com.petmeds1800.model.refillreminder.request.RemoveRefillReminderRequest;
+import com.petmeds1800.model.refillreminder.request.UpdateRefillReminderRequest;
+import com.petmeds1800.model.refillreminder.response.MonthSelectListResponse;
+import com.petmeds1800.model.shoppingcart.response.Status;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.ui.refillreminder.EditReminderContract;
+import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.Utils;
+
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -21,23 +35,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.R;
-import com.petmeds1800.model.refillreminder.request.RemoveRefillReminderRequest;
-import com.petmeds1800.model.refillreminder.request.UpdateRefillReminderRequest;
-import com.petmeds1800.model.refillreminder.response.MonthSelectListResponse;
-import com.petmeds1800.model.shoppingcart.response.Status;
-import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
-import com.petmeds1800.ui.refillreminder.EditReminderContract;
-import com.petmeds1800.ui.refillreminder.ReminderListContract;
-import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.Utils;
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,6 +98,7 @@ public class EditReminderFragment extends AbstractFragment implements View.OnTou
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_reminder, container, false);
+        new AnalyticsUtil().trackScreen(getString(R.string.label_edit_refill_reminder_analytics_title));
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         ButterKnife.bind(this, view);
         return view;

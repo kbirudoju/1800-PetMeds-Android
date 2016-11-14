@@ -202,7 +202,7 @@ public class StepFiveRootFragment extends AbstractFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new AnalyticsUtil().trackScreen(getString(R.string.review_submit_order_title));
+        new AnalyticsUtil().trackScreen(getString(R.string.label_order_review_analytics_title));
         commerceItemIds = new ArrayList<String>();
         reminderMonths = new ArrayList<Integer>();
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()

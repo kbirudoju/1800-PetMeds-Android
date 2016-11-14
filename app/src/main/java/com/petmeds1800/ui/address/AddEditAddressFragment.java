@@ -14,6 +14,7 @@ import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -256,6 +257,7 @@ public class AddEditAddressFragment extends AbstractFragment
                 //show the remove button
                 mRemoveAddressButton.setVisibility(View.VISIBLE);
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.editAddressTitle));
+                new AnalyticsUtil().trackScreen(getString(R.string.label_update_shipping_analytics_title));
             } else if (mRequestCode == StepThreeRootFragment.LOGGED_IN_REQUEST_CODE) {
                 intitalizeViewsForCheckOutBillingAddress();
                 mAddress = (Address) mBundle.getSerializable(ADDRESS);

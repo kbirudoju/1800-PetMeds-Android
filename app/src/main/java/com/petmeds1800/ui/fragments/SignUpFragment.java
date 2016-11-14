@@ -1,5 +1,23 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.mvp.SignupTask.SignUpContract;
+
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.model.entities.SignUpRequest;
+import com.petmeds1800.model.entities.SignUpResponse;
+import com.petmeds1800.mvp.SignupTask.SignUpContract;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -236,6 +254,7 @@ public class SignUpFragment extends AbstractFragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        new AnalyticsUtil().trackScreen(getString(R.string.label_create_account_analytics_title));
         ButterKnife.bind(this, view);
         return view;
     }

@@ -74,7 +74,10 @@
     <string name="label_pharmacy_phone_number">Pharmacy Phone Number</string>
     <string name="label_pharmacy_fax_number">Pharmacy Fax Number</string>
     <string name="label_email_address">Email Address</string>
-    <string name="description_email_address">Emails received after normal business hours (see below) are answered the next day. If an immediate answer is required or if your pet is in need of urgent or emergency care, contact your pet/’s veterinary immediately.</string>
+    <string name="description_email_address">Emails received after normal business hours (see below) are answered the
+        next day. If an immediate answer is required or if your pet is in need of urgent or emergency care, contact your
+        pet/’s veterinary immediately.
+    </string>
     <string name="title_contact_us_caps">Contact Us</string>
     <string name="label_mailing_address">Mailing Address</string>
 
@@ -385,7 +388,7 @@
     <string name="home_screen_name">HOME SCREEN</string>
 
     <!--Home Screen-->
-    <string name="home_title">HOME</string>
+    <string name="home_title">Home</string>
     <string name="shop_category_title">SHOP CATEGORIES</string>
     <string name="label_barcode">Barcode</string>
     <string name="label_search">Search...</string>
@@ -567,7 +570,7 @@
     <!--Vet-->
     <string name="action_call">CALL</string>
     <string name="add_vet_caps">ADD A VET</string>
-    <string name="add_vet_description">Add a vet for easier  prescription ordering </string>
+    <string name="add_vet_description">Add a vet for easier prescription ordering</string>
     <string name="no_vet_txt">You have no vets</string>
 
     <!--Medication Reminders-->
@@ -586,7 +589,9 @@
     <string name="add_reminder_txt">Add a Reminder</string>
 
     <string name="miles_txt">miles</string>
-    <string name="referal_confirmation_txt">If you would like us to notify this clinic that you are interested in their services please ensure the information below is correct and tap Request Referral.</string>
+    <string name="referal_confirmation_txt">If you would like us to notify this clinic that you are interested in their
+        services please ensure the information below is correct and tap Request Referral.
+    </string>
     <string name="request_referral_txt">REQUEST REFERRAL</string>
     <string name="hint_your_name">Your Name</string>
     <string name="hint_phone_number">Your Phone Number</string>
@@ -634,9 +639,9 @@
 
     <!--Reminder-->
     <string name="refill_reminder">Refill Reminder</string>
-    <string name="for_tag_pet_name">For </string>
-    <string name="for_tag_pet_month">Month :  </string>
-    <string name="for_tag_pet_quantity_remaining">Quantity Remaining :  </string>
+    <string name="for_tag_pet_name">For</string>
+    <string name="for_tag_pet_month">Month :</string>
+    <string name="for_tag_pet_quantity_remaining">Quantity Remaining :</string>
     <string name="for_tag_pet_price">Price : $</string>
     <string name="price">Price</string>
     <string name="quantity_remaining">Quantity Remaining</string>
@@ -668,6 +673,7 @@
     <string name="OrderStatus_rx">RX REQUIRED</string>
     <string name="OrderStatus_OrderGone">Order Gone</string>
     <string name="OrderStatus_unknown">Status Unknown</string>
+
     <string name="breed_type_cat">cat</string>
     <string name="breed_type_dog">dog</string>
     <string name="mailing_prescription_txt">WILL YOU BE MAILING IN A PRESCRIPTION?</string>
@@ -676,7 +682,24 @@
     <string name="location_not_found_error">Unable to find location. Please try again.</string>
     <string name="zipcode_not_found_error">Unable to find zipCode. Please try again.</string>
     <string name="no_internet_caps">No Internet Connection</string>
-
-
+    <!--Analytics -->
+    <string name="label_login_analytics_title">Login</string>
+    <string name="label_forgot_password_analytics_title">Forgot Password</string>
+    <string name="label_shipping_method_analytics_title">Shipping Method</string>
+    <string name="label_payment_method_analytics_title">Payment</string>
+    <string name="label_pet_vet_analytics_title">Vet Info</string>
+    <string name="label_order_receipt_analytics_title">Order Receipt</string>
+    <string name="label_order_review_analytics_title">Order Review</string>
+    <string name="label_edit_refill_reminder_analytics_title">Edit Refill Reminder</string>
+    <string name="label_add_vet_analytics_title">Add Vet</string>
+    <string name="label_edit_vet_analytics_title">Edit Vet</string>
+    <string name="label_edit_email_password_analytics_title">Edit Email/Password</string>
+    <string name="label_update_shipping_analytics_title">Update Shipping</string>
+    <string name="label_create_account_analytics_title">Create Account</string>
+    <string name="label_update_billing_analytics_title">Update Billing</string>
+    <string name="label_locate_vet_analytics_title">Locate Vet</string>
+    <string name="label_vet_search_results_analytics_title">Vet Search Results</string>
+    <string name="label_education_home_analytics_title">Education Home</string>
+    <string name="label_shipping_analytics_title">Shipping</string>
 </resources>
 

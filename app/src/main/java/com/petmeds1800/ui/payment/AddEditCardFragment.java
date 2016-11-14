@@ -37,6 +37,7 @@ import com.petmeds1800.ui.checkout.AddNewEntityActivity;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.MonthYearPicker;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -230,6 +231,7 @@ public class AddEditCardFragment extends AbstractFragment
             mRequestCode = bundle.getInt(REQUEST_CODE);
 
             if (mRequestCode == EDIT_CARD_REQUEST) {
+                new AnalyticsUtil().trackScreen(getString(R.string.label_update_billing_analytics_title));
                 //hide the cardNumber and CVV view as it card number,CVV can not be edited
                 mCardNumberLayout.setVisibility(View.GONE);
                 mCvvInputLayout.setVisibility(View.GONE);
