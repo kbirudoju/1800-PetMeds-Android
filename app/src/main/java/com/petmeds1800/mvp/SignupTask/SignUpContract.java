@@ -14,9 +14,13 @@ public interface SignUpContract {
 
         void hideProgress();
 
-        void setErrorOnView(String errorString, int viewId);
+        void setErrorOnInput(String errorString, int viewId);
 
         void showErrorCrouton(CharSequence message, boolean span);
+
+        void showWarningView(CharSequence message);
+
+        void hideWarningView();
 
         void navigateToHome();
 

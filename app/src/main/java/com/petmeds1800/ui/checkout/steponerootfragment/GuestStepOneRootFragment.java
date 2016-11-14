@@ -1,5 +1,19 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.text.Spanned;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
+import android.widget.TextView;
+
 import com.petmeds1800.R;
 import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.model.Address;
@@ -15,19 +29,6 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.InputValidationUtil;
 import com.petmeds1800.util.Utils;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.util.Patterns;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -82,6 +83,9 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     @BindView(R.id.containerLayout)
     RelativeLayout mContainerLayout;
+
+    @BindView(R.id.view_error)
+    View mErrorView;
 
     private String mStepName;
 
@@ -168,14 +172,14 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     private void populateEmail() {
         ArrayList<ShippingGroups> shippingGroups = mShoppingCartListResponse.getShoppingCart().getShippingGroups();
-        if(shippingGroups != null || shippingGroups.size() > 0) {
+        if (shippingGroups != null || shippingGroups.size() > 0) {
 
             ShippingAddress shippingAddress = shippingGroups.get(0)
                     .getShippingAddress();
 
-            if(shippingAddress != null) {
+            if (shippingAddress != null) {
 
-                if(shippingAddress.getEmail() != null) {
+                if (shippingAddress.getEmail() != null) {
                     mEmailEdit.setText(
                             shippingAddress.getEmail());
                     mConfirmEmailEdit.setText(
@@ -266,7 +270,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
             case R.id.login_navigator:
                 LoginIntent loginIntent = new LoginIntent(getActivity());
                 loginIntent.setAction(LoginActivity.START_CHECKOUT);
-                loginIntent.putExtra(CartFragment.SHOPPING_CART,mShoppingCartListResponse);
+                loginIntent.putExtra(CartFragment.SHOPPING_CART, mShoppingCartListResponse);
                 startActivity(loginIntent);
 //                getActivity().finishAffinity();
                 break;
@@ -298,14 +302,32 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
+        if (span) {
+            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+        } else {
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
+        }
+    }
+
+    @Override
+    public void showWarningView(CharSequence message) {
         ((CheckOutActivity) getActivity()).hideProgress();
-        Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+        mErrorView.setVisibility(View.VISIBLE);
+        TextView title = (TextView) mErrorView.findViewById(R.id.txv_error_title);
+        TextView description = (TextView) mErrorView.findViewById(R.id.txv_error_message);
+        title.setText(getString(R.string.label_error_with_address));
+        description.setText(message);
+    }
+
+    @Override
+    public void hideWarningView() {
+        mErrorView.setVisibility(View.GONE);
     }
 
     @Override
     public void setAddress(Address address) {
         mAddress = address;
-        if(getFragmentReference() != null && address != null) {
+        if (getFragmentReference() != null && address != null) {
             getFragmentReference().populateData(address);
         }
     }

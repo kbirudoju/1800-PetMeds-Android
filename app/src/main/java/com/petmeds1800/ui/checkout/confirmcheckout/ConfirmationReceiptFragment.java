@@ -1,14 +1,5 @@
 package com.petmeds1800.ui.checkout.confirmcheckout;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CommitOrder;
-import com.petmeds1800.model.entities.CommitOrderResponse;
-import com.petmeds1800.model.entities.Item;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.LayoutPrintingUtils;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +20,16 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CommitOrder;
+import com.petmeds1800.model.entities.CommitOrderResponse;
+import com.petmeds1800.model.entities.Item;
+import com.petmeds1800.mvp.BasePresenter;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.LayoutPrintingUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,6 +77,9 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     @BindView(R.id.recycler_items)
     RecyclerView mRecyclerReceiptItems;
 
+    @BindView(R.id.view_error)
+    View mErrorView;
+
     private ReceiptItemsListAdapter mListAdapter;
 
     protected List<Item> mReceiptItemList = new ArrayList<>();
@@ -98,7 +103,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_confirmation_receipt, container, false);
         ButterKnife.bind(this, view);
@@ -176,6 +181,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     }
 
     private void showShareOptions() {
+        hideErrorView();
         File pdfFile = generatePdf();
         if (pdfFile != null) {
             shareFile(pdfFile, "receipt");
@@ -195,20 +201,23 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
 
         CommitOrder order = null;
         if (commitOrderResponse != null) {
-            order = commitOrderResponse.getOrder();
-            mFirstName.setText(order.getFirstName());
-            mOrderId.setText(order.getOrderId());
-            mEmail.setText(order.getEmail());
-            mSubtotal.setText(String.valueOf(order.getOrderSubTotal()));
-            mDiscount.setText(String.valueOf(order.getDiscount()));
-            mShipping.setText(String.valueOf(order.getShippingTotal()));
-            mTaxes.setText(String.valueOf(order.getTaxTotal()));
-            mTotal.setText(String.valueOf(order.getOrderTotal()));
-            mSubtotalLabel.setText(getString(R.string.items_formatter, order.getItems().size()));
-            sendAnalyticsData(order);
-            updateRecyclerView(order.getItems());
-        } else {
-
+            String errorCode = commitOrderResponse.getStatus().getCode();
+            if (errorCode.equals(BasePresenter.API_SUCCESS_CODE)) {
+                order = commitOrderResponse.getOrder();
+                mFirstName.setText(order.getFirstName());
+                mOrderId.setText(order.getOrderId());
+                mEmail.setText(order.getEmail());
+                mSubtotal.setText(String.valueOf(order.getOrderSubTotal()));
+                mDiscount.setText(String.valueOf(order.getDiscount()));
+                mShipping.setText(String.valueOf(order.getShippingTotal()));
+                mTaxes.setText(String.valueOf(order.getTaxTotal()));
+                mTotal.setText(String.valueOf(order.getOrderTotal()));
+                mSubtotalLabel.setText(getString(R.string.items_formatter, order.getItems().size()));
+                sendAnalyticsData(order);
+                updateRecyclerView(order.getItems());
+            } else if (errorCode.equals(BasePresenter.API_WARNING_CODE)) {
+                showErrorView(Html.fromHtml(commitOrderResponse.getStatus().getErrorMessages().get(0)));
+            }
         }
     }
 
@@ -218,5 +227,17 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
             mReceiptItemList.addAll(itemList);
             mListAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void showErrorView(CharSequence message) {
+        mErrorView.setVisibility(View.VISIBLE);
+        TextView title = (TextView) mErrorView.findViewById(R.id.txv_error_title);
+        TextView description = (TextView) mErrorView.findViewById(R.id.txv_error_message);
+        title.setText(getString(R.string.label_unable_to_update_password));
+        description.setText(message);
+    }
+
+    private void hideErrorView() {
+        mErrorView.setVisibility(View.GONE);
     }
 }

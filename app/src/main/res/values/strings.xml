@@ -245,6 +245,7 @@
     <string name="choose_city_txt">Choose city</string>
     <string name="choose_country_txt">Choose country</string>
     <string name="choose_state_txt">Choose state</string>
+    <string name="label_error_with_address">Error with your address</string>
 
     <!--Add pet-->
     <string name="hint_pet_name">Pet Name</string>

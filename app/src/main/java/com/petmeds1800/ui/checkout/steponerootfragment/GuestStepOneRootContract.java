@@ -28,6 +28,10 @@ public interface GuestStepOneRootContract {
 
         void showErrorCrouton(CharSequence message, boolean span);
 
+        void showWarningView(CharSequence message);
+
+        void hideWarningView();
+
         void setAddress(Address address);
     }
 

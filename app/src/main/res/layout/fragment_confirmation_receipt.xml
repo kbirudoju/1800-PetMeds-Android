@@ -257,6 +257,14 @@
 
         </LinearLayout>
 
+        <include
+            layout="@layout/view_error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:id="@+id/view_error"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
 </ScrollView>

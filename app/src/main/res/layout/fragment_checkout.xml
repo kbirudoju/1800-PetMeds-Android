@@ -1,46 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/containerLayout"
-        android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/containerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/view_error"
+        layout="@layout/view_error_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/dp_16"
+        android:visibility="gone" />
 
     <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scrollerView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="@dimen/dp_50">
+        android:id="@+id/scrollerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/shippingNavigator"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/view_error"
+        android:layout_marginBottom="@dimen/dp_50">
 
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/detailFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" />
 
-            <FrameLayout android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:layout_alignParentTop="true"
-                         android:layout_alignParentLeft="true"
-                         android:id="@+id/detailFragment"/>
-
-            <FrameLayout android:layout_margin="16dp"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:id="@+id/communicationfragment"
-                         android:layout_below="@+id/detailFragment"
-                         android:layout_alignLeft="@+id/detailFragment"/>
+            <FrameLayout
+                android:id="@+id/communicationfragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/detailFragment"
+                android:layout_below="@+id/detailFragment"
+                android:layout_margin="16dp" />
 
         </RelativeLayout>
     </ScrollView>
 
     <Button
-            style="@style/dialog_button_style_blue"
-            android:text="@string/shipping_navigator_button_title"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_44"
-            android:id="@+id/shippingNavigator"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"/>
+        android:id="@+id/shippingNavigator"
+        style="@style/dialog_button_style_blue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/shipping_navigator_button_title" />
 
 </RelativeLayout>

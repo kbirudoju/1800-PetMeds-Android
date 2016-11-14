@@ -1,192 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/containerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fingerprint_alert_title_background"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/view_error"
+        layout="@layout/view_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/dp_16"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/scrollerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/containerLayout"
-        android:background="@color/fingerprint_alert_title_background"
->
-    <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scrollerView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="@dimen/dp_50">
+        android:layout_above="@+id/shippingNavigator"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/view_error"
+        android:layout_marginBottom="@dimen/dp_50">
 
         <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
             <Button
-                    android:textAllCaps="false"
-                    android:drawableRight="@drawable/ic_arrow"
-                    android:paddingRight="@dimen/dp_24"
-                    android:layout_marginTop="@dimen/dp_10"
-                    style="@style/login_navigator"
-                    android:text="Returning customer? Log In here"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_52"
-                    android:id="@+id/login_navigator"
-                    android:gravity="left|center_vertical"
-                    android:background="@color/white"
-                    android:paddingLeft="@dimen/dp_16"
-                    android:elevation="0dp"/>
+                android:id="@+id/login_navigator"
+                style="@style/login_navigator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_52"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:drawableRight="@drawable/ic_arrow"
+                android:elevation="0dp"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_24"
+                android:text="Returning customer? Log In here"
+                android:textAllCaps="false" />
+
             <TextView
-                    android:layout_below="@+id/login_navigator"
-                    android:id="@+id/headerText"
-                    android:text="@string/shipping_address_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    style="@style/StyleForMultiChoiceDailog"
-                    android:paddingLeft="@dimen/dp_16"
-                    android:gravity="center_vertical"
-                    android:fontFamily="@string/font_roboto_medium"
-            ></TextView>
+                android:id="@+id/headerText"
+                style="@style/StyleForMultiChoiceDailog"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_below="@+id/login_navigator"
+                android:fontFamily="@string/font_roboto_medium"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dp_16"
+                android:text="@string/shipping_address_title"></TextView>
+
             <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/billingAddressfragment"
-                    android:layout_below="@+id/headerText"
-                    android:layout_alignLeft="@+id/headerText">
-            </FrameLayout>
+                android:id="@+id/billingAddressfragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/headerText"
+                android:layout_below="@+id/headerText"></FrameLayout>
 
             <LinearLayout
-                    android:id="@+id/passwordcontainer"
-                    android:orientation="vertical"
+                android:id="@+id/passwordcontainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/billingAddressfragment"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/emailInputLayout"
+                    style="@style/StyledEditTextHintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/billingAddressfragment"
-                    android:background="@color/white"
-            >
-                <android.support.design.widget.TextInputLayout
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:layout_marginRight="@dimen/dp_16"
-                        android:id="@+id/emailInputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        style="@style/StyledEditTextHintLayout"
-                        app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                     <EditText
-                            android:id="@+id/email_edit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_email"
-                            android:inputType="textEmailAddress"
-                            style="@style/StyledEditText"/>
-                </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:layout_marginRight="@dimen/dp_16"
-                        android:id="@+id/confirmEmailInputLayout"
+                        android:id="@+id/email_edit"
+                        style="@style/StyledEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        style="@style/StyledEditTextHintLayout"
-                        app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/confirmEmailInputLayout"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                     <EditText
-                            android:id="@+id/confirm_email_edit"
-                            android:inputType="textEmailAddress"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_confirm_email"
-                            style="@style/StyledEditText"/>
+                        android:id="@+id/confirm_email_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_confirm_email"
+                        android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
+
                 <TextView
-                        android:id="@+id/createpasswordHeader"
-                        android:text="CREATE A PASSWORD (OPTIONAL)"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_50"
-                        style="@style/StyleForMultiChoiceDailog"
-                        android:paddingLeft="@dimen/dp_16"
-                        android:gravity="center_vertical"
-                        android:fontFamily="@string/font_roboto_medium"
-                ></TextView>
+                    android:id="@+id/createpasswordHeader"
+                    style="@style/StyleForMultiChoiceDailog"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:fontFamily="@string/font_roboto_medium"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dp_16"
+                    android:text="CREATE A PASSWORD (OPTIONAL)"></TextView>
+
                 <android.support.design.widget.TextInputLayout
 
-                        android:id="@+id/passwordInputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:layout_marginRight="@dimen/dp_16"
-                        style="@style/StyledEditTextHintLayout"
-                        app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+                    android:id="@+id/passwordInputLayout"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                     <EditText
-                            android:id="@+id/password_edit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_password"
-                            android:inputType="textPassword"
-                            android:singleLine="true"
-                            style="@style/StyledEditText"
-                            android:maxLength="@integer/characterLimit_40"/>
+                        android:id="@+id/password_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_password"
+                        android:inputType="textPassword"
+                        android:maxLength="@integer/characterLimit_40"
+                        android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
+
                 <android.support.design.widget.TextInputLayout
-                        android:id="@+id/confirmPasswordInputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:layout_marginRight="@dimen/dp_16"
-                        style="@style/StyledEditTextHintLayout"
-                        app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+                    android:id="@+id/confirmPasswordInputLayout"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
 
                     <EditText
-                            android:inputType="textPassword"
-                            android:id="@+id/confirm_password_edit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_confirm_password"
-                            android:singleLine="true"
-                            style="@style/StyledEditText"
-                            android:maxLength="@integer/characterLimit_40"/>
+                        android:id="@+id/confirm_password_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_confirm_password"
+                        android:inputType="textPassword"
+                        android:maxLength="@integer/characterLimit_40"
+                        android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
+
                 <Switch
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:layout_marginRight="@dimen/dp_16"
-                        android:id="@+id/defaultShippingAddress_switch"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_48"
-                        android:layout_marginTop="@dimen/dp_18"
-                        android:paddingLeft="@dimen/dp_4"
-                        android:background="@color/white"
-                        android:text="@string/myBillingAddress"
-                        android:textSize="@dimen/sp_16"
-                        android:fontFamily="@string/font_roboto_regular"
-                        android:textColor="@color/black"/>
+                    android:id="@+id/defaultShippingAddress_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_48"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_18"
+                    android:background="@color/white"
+                    android:fontFamily="@string/font_roboto_regular"
+                    android:paddingLeft="@dimen/dp_4"
+                    android:text="@string/myBillingAddress"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16" />
 
                 <View
-                        android:layout_marginLeft="@dimen/dp_16"
-                        android:layout_marginRight="@dimen/dp_16"
-                        android:id="@+id/defaultShippingAddress_switchview"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/petmeds_blue"/>
+                    android:id="@+id/defaultShippingAddress_switchview"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:background="@color/petmeds_blue" />
             </LinearLayout>
 
             <FrameLayout
-                    android:layout_margin="@dimen/dp_16"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/communicationfragment"
-                    android:layout_below="@+id/passwordcontainer"
-            />
+                android:id="@+id/communicationfragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/passwordcontainer"
+                android:layout_margin="@dimen/dp_16" />
 
 
         </RelativeLayout>
     </ScrollView>
+
     <Button
-            style="@style/dialog_button_style_blue"
-            android:text="@string/shipping_navigator_button_title"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_44"
-            android:id="@+id/shippingNavigator"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"/>
+        android:id="@+id/shippingNavigator"
+        style="@style/dialog_button_style_blue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/shipping_navigator_button_title" />
 </RelativeLayout>

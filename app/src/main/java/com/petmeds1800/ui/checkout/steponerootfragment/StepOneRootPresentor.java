@@ -22,6 +22,7 @@ public class StepOneRootPresentor implements StepOneRootContract.Presenter {
     private StepOneRootContract.View mView;
     @Inject
     PetMedsApiService mPetMedsApiService;
+
     public StepOneRootPresentor(@NonNull StepOneRootContract.View view) {
         mView = view;
         mView.setPresenter(this);
@@ -36,6 +37,7 @@ public class StepOneRootPresentor implements StepOneRootContract.Presenter {
 
     @Override
     public void saveShippingAddress(SavedShippingAddressRequest request) {
+        mView.hideWarningView();
         mPetMedsApiService.saveShippingAddress(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -53,14 +55,16 @@ public class StepOneRootPresentor implements StepOneRootContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(ShoppingCartListResponse shoppingCartListResponse ) {
+                    public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
                         if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.onSuccess(shoppingCartListResponse);
                             }
+                        } else if (shoppingCartListResponse.getStatus().getCode().equals(API_WARNING_CODE)) {
+                            mView.showWarningView(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
                         } else {
                             if (mView.isActive()) {
-                                mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0),false);
+                                mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0), true);
                             }
                         }
 
