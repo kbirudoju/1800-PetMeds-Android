@@ -80,6 +80,7 @@ public class GuestStepOneRootPresentor implements GuestStepOneRootContract.Prese
                                            mView.navigateOnSuccess(shoppingCartListResponse);
                                        }
                                    } else if (shoppingCartListResponse.getStatus().getCode().equals(API_WARNING_CODE)) {
+                                       mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0), false);
                                        mView.showWarningView(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
                                    } else {
                                        if (mView.isActive()) {
