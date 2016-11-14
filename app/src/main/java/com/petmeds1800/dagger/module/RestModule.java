@@ -9,6 +9,8 @@ import com.petmeds1800.dagger.scopes.AppScope;
 
 import android.content.Context;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.CookieJar;
@@ -38,7 +40,6 @@ public class RestModule {
      @AppScope
      public OkHttpClient provideOkHttpClient(CookieJar cookieJar) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-       // builder.followRedirects(false);
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -48,7 +49,8 @@ public class RestModule {
         return builder.cookieJar(cookieJar).build();
     }
 
-   /* @Provides
+    @Provides
+    @Named("redirectOff")
     @AppScope
     public OkHttpClient provideOkHttpClientRedirect(CookieJar cookieJar) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -60,11 +62,25 @@ public class RestModule {
 
         }
         return builder.cookieJar(cookieJar).build();
-    }*/
+    }
 
     @Provides
     @AppScope
     public Retrofit provideRetrofit(final OkHttpClient client) {
+        final Retrofit.Builder builder = new Retrofit.Builder()
+                .client(client)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(mEndpoint);
+
+        return builder.build();
+    }
+
+    @Provides
+    @Named("redirectOff")
+    @AppScope
+    public Retrofit provideRetrofitForRedirectOffClient(@Named("redirectOff") final OkHttpClient client) {
         final Retrofit.Builder builder = new Retrofit.Builder()
                 .client(client)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -85,6 +101,13 @@ public class RestModule {
     @AppScope
     public SetCookieCache provideCookieCache() {
         return mSessionCookie;
+    }
+
+    @Provides
+    @Named("redirectOff")
+    @AppScope
+    public PetMedsApiService provideApiServiceForRedirectOffRetrofit(@Named("redirectOff") Retrofit retrofit) {
+        return retrofit.create(PetMedsApiService.class);
     }
 
     @Provides

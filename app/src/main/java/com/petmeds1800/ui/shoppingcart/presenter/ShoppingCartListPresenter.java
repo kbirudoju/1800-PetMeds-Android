@@ -17,6 +17,7 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import retrofit2.Response;
 import rx.Subscriber;
@@ -33,6 +34,10 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
     @Inject
     PetMedsApiService mPetMedsApiService;
+
+    @Inject
+            @Named("redirectOff")
+    PetMedsApiService mPetMedsApiServiceRedrirectOff;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;

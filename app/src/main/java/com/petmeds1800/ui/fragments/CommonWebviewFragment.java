@@ -35,10 +35,12 @@ import android.widget.ProgressBar;
 import java.util.Iterator;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Cookie;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by pooja on 8/25/2016.
@@ -72,7 +74,13 @@ public class CommonWebviewFragment extends AbstractFragment {
     @Inject
     PetMedsApiService mPetMedsApiService;
 
+    @Inject
+    @Named("redirectOff")
+    OkHttpClient mOkHttpClient;
+
     private boolean mDisableBackButton;
+
+
 
     private OnPaymentCompletedListener onPaymnetSelectedListener;
 
