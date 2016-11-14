@@ -6,5 +6,6 @@ package com.petmeds1800.mvp;
 public interface BasePresenter {
     String API_SUCCESS_CODE = "SUCCESS";
     String API_ERROR_CODE = "ERROR";
+    String API_WARNING_CODE = "WARN";
     void start();
 }

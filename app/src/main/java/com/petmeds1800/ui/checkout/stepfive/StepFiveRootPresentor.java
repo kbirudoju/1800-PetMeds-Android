@@ -87,7 +87,8 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
 
                     @Override
                     public void onNext(CommitOrderResponse commitOrderResponse) {
-                        if (commitOrderResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                        if (commitOrderResponse.getStatus().getCode().equals(API_SUCCESS_CODE) ||
+                                commitOrderResponse.getStatus().getCode().equals(API_WARNING_CODE)) {
                             if (mView.isActive()) {
                                 mView.navigateOnOrderConfirmation(commitOrderResponse);
                             }
