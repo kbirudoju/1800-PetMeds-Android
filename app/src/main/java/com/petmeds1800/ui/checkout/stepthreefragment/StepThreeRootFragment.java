@@ -316,6 +316,10 @@ public class StepThreeRootFragment extends AbstractFragment
                     , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.applyCreditCardPaymentMethod(request);
         }
+        else {
+            activity.hideProgress();
+            showErrorCrouton(getString(R.string.noSavedCardsAvailableMessage),false);
+        }
 
     }
 
