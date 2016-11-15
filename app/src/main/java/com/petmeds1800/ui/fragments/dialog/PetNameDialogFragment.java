@@ -44,6 +44,8 @@ import static com.petmeds1800.util.Constants.PET_NAME;
 
 public class PetNameDialogFragment extends DialogFragment implements PetListContract.View, View.OnClickListener {
 
+    private static final String NO_PET = "No Pet";
+
     @BindView(R.id.cancel_button)
     Button mCancelButton;
 
@@ -95,6 +97,7 @@ public class PetNameDialogFragment extends DialogFragment implements PetListCont
             @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_pet_name_layout, container, false);
         mPresenter = new PetListPresenter(this);
+        mPetName = NO_PET;
         ButterKnife.bind(this, rootView);
         return rootView;
     }
@@ -141,13 +144,9 @@ public class PetNameDialogFragment extends DialogFragment implements PetListCont
                     .setText(listOfValues.get(position).getPetDetails().getPetName());
 
             if (listOfValues.get(position).isSelected()) {
-                ((RadioButton) rowView.findViewById(R.id.rb_Choice)).setChecked(true);
-                ((TextView) rowView.findViewById(R.id.tv_Main_Pet_Name))
-                        .setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                setWidgetProperties(rowView, true, ContextCompat.getColor(getActivity(), R.color.black));
             } else {
-                ((RadioButton) rowView.findViewById(R.id.rb_Choice)).setChecked(false);
-                ((TextView) rowView.findViewById(R.id.tv_Main_Pet_Name))
-                        .setTextColor(ContextCompat.getColor(getActivity(), R.color.petmeds_blue));
+                setWidgetProperties(rowView, false, ContextCompat.getColor(getActivity(), R.color.petmeds_blue));
             }
 
             petNameContainer.setOnClickListener(new View.OnClickListener() {
@@ -164,6 +163,12 @@ public class PetNameDialogFragment extends DialogFragment implements PetListCont
                 }
             });
             return rowView;
+        }
+
+        private void setWidgetProperties(View rowView, boolean checked, int color) {
+            ((RadioButton) rowView.findViewById(R.id.rb_Choice)).setChecked(checked);
+            ((TextView) rowView.findViewById(R.id.tv_Main_Pet_Name))
+                    .setTextColor(color);
         }
     }
 
@@ -184,7 +189,7 @@ public class PetNameDialogFragment extends DialogFragment implements PetListCont
             }
         }
         Pets pets = new Pets();
-        pets.setPetName(getString(R.string.no_pet_title));
+        pets.setPetName(NO_PET);
         if (petName == null) {
             listofpets.add(0, new PetNameSelectionList(pets, true));
         }
