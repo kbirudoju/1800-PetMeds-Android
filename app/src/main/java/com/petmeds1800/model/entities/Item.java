@@ -21,6 +21,34 @@ public class Item implements Serializable{
     private String productName;
     private boolean isRxItem;
     private String parentCategory;
+    private String itemClinicName;
+    private String itemPetName;
+    private String itemDrName;
+
+    public String getItemDrName() {
+        return itemDrName;
+    }
+
+    public void setItemDrName(String itemDrName) {
+        this.itemDrName = itemDrName;
+    }
+
+    public String getItemPetName() {
+        return itemPetName;
+    }
+
+    public void setItemPetName(String itemPetName) {
+        this.itemPetName = itemPetName;
+    }
+
+    public String getItemClinicName() {
+        return itemClinicName;
+    }
+
+    public void setItemClinicName(String itemClinicName) {
+        this.itemClinicName = itemClinicName;
+    }
+
     public boolean isRxItem() {
         return isRxItem;
     }

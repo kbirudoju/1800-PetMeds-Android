@@ -124,6 +124,9 @@ public class StepTwoRootFragment extends AbstractFragment
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
         ButterKnife.bind(this, view);
+        if (((CheckOutActivity) getActivity()).getApplicableSteps() == 3) {
+            mShippingNavigator.setText(getString(R.string.reviewsubmit_navigator_button_title));
+        }
         return view;
     }
 

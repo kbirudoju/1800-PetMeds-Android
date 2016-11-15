@@ -4,10 +4,16 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
+import com.petmeds1800.model.entities.Item;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
+
+import android.util.Log;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -102,5 +108,48 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
                     }
                 });
     }
+
+    @Override
+    public void populatePetVetInfo(final ArrayList<Item> items, final ArrayList<String> applicableSteps) {
+        //we need to perform this unnecessary conversion into Address model as reusable 'AddEditFragment' only knows about Address model
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+
+                String petVetInfo = "";
+                if (applicableSteps != null && applicableSteps.size() == 5 && items != null) {
+                    for (Item item : items) {
+                        if (item.isRxItem()) {
+                            petVetInfo = petVetInfo + item.getItemPetName() + "," + item.getItemDrName();
+                        }
+                    }
+                }
+                subscriber.onNext(petVetInfo);
+
+            }
+        })
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("StepFive", e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onNext(String petVetInfo) {
+                        if (mView.isActive()) {
+                            mView.setPetVetInfo(petVetInfo);
+                        }
+                    }
+                });
+
+    }
 }
+
 

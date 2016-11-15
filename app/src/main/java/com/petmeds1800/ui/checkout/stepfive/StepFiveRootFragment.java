@@ -175,6 +175,7 @@ public class StepFiveRootFragment extends AbstractFragment
 
     private static final int SIZE_FOUR = 4;
 
+    private static final int SIZE_FIVE = 5;
 
     private ShippingAddress mShippingAddress;
 
@@ -226,7 +227,7 @@ public class StepFiveRootFragment extends AbstractFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step_five_checkout, container, false);
         ButterKnife.bind(this, view);
 
@@ -308,6 +309,7 @@ public class StepFiveRootFragment extends AbstractFragment
 
     @Override
     public void populateOrderReviewDetails(OrderReviewSubmitResponse response) {
+
         mProgressbar.setVisibility(View.GONE);
         CheckoutSteps checkoutSteps = response.getCheckoutSteps();
         Order mOrder = response.getOrder();
@@ -317,6 +319,8 @@ public class StepFiveRootFragment extends AbstractFragment
         }
         if (mApplicableSteps != null && mApplicableSteps.size() == SIZE_FOUR) {
             mPetVetContainer.setVisibility(View.GONE);
+        } else {
+            mPresenter.populatePetVetInfo((ArrayList<Item>) mOrder.getItems(), mApplicableSteps);
         }
         if (mOrder != null) {
             mSubTotalValue.setText(DOLLAR_SIGN + String.valueOf(mOrder.getOrderSubTotal()));
@@ -330,6 +334,7 @@ public class StepFiveRootFragment extends AbstractFragment
             mShippingAddress = mOrder.getShippingAddress();
             mShippingMethod = mOrder.getShippingMethod();
             mPaymentMethod = mOrder.getPaymentMethod();
+
             if (mShippingAddress != null) {
                 mShippingAddressDetailsText.setText(
                         mShippingAddress.getAddress1() + BLANK_SPACE + mShippingAddress.getAddress2() + BLANK_SPACE
@@ -352,6 +357,7 @@ public class StepFiveRootFragment extends AbstractFragment
 
 
     }
+
 
     @Override
     public void onError(String errorMessage) {
@@ -382,6 +388,11 @@ public class StepFiveRootFragment extends AbstractFragment
     }
 
     @Override
+    public void setPetVetInfo(String petVetInfo) {
+        mPetVetDetailsText.setText(petVetInfo);
+    }
+
+    @Override
     public void setPresenter(StepFiveRootContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -407,7 +418,7 @@ public class StepFiveRootFragment extends AbstractFragment
 
     @Override
     public void openDailog(String[] data, int code, String title, int defaultValue, final TextView textview,
-                           final int selectedPosition, final ArrayList<String> reorderMonthsList) {
+            final int selectedPosition, final ArrayList<String> reorderMonthsList) {
 
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment commonDialogFragment = CommonDialogFragment
