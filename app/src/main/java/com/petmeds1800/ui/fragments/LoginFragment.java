@@ -17,6 +17,7 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.GetSessionCookiesHack;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
+import com.urbanairship.UAirship;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -101,7 +102,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         return view;
@@ -126,10 +127,9 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                     showErrorCrouton(getString(errorId), false);
                     hideProgress();
                 } else {
-                    if(doLogin){
+                    if (doLogin) {
                         doLogin();
-                    }
-                    else {
+                    } else {
                         initializeSessionConfirmationNumber();
                     }
 
@@ -186,17 +186,16 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
     @Override
     public void navigateToHomeOrCheckout() {
 
-
         //check if we need to start the checkout activity and home activity in a task builder
         Intent loginIntent = getActivity().getIntent();
-        if(loginIntent != null) { //check if the intent is to start the checkout flow
-            if(loginIntent.getAction() != null && loginIntent.getAction().equals(LoginActivity.START_CHECKOUT)) {
+        if (loginIntent != null) { //check if the intent is to start the checkout flow
+            if (loginIntent.getAction() != null && loginIntent.getAction().equals(LoginActivity.START_CHECKOUT)) {
                 CheckOutIntent checkOutIntent = new CheckOutIntent(getActivity());
-                checkOutIntent.putExtra(CartFragment.SHOPPING_CART,loginIntent.getSerializableExtra(CartFragment.SHOPPING_CART));
+                checkOutIntent.putExtra(CartFragment.SHOPPING_CART,
+                        loginIntent.getSerializableExtra(CartFragment.SHOPPING_CART));
                 startActivity(checkOutIntent);
                 getActivity().finishAffinity();
-            }
-            else {
+            } else {
                 HomeIntent intent = new HomeIntent(getActivity());
                 intent.putExtra(IS_FROM_HOME_ACTIVITY, true);
                 startActivity(intent);
@@ -299,12 +298,14 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                         if (loginResponse != null) {
                             Log.v("login response", loginResponse.getStatus().getCode());
                             if (loginResponse.getStatus().getCode().equals("SUCCESS")) {
+                                UAirship.shared().getNamedUser().setId(loginResponse.getProfile().getUserId());
                                 mPreferencesHelper.setIsUserLoggedIn(true);
                                 mPreferencesHelper.setLoginEmail(loginResponse.getProfile().getEmail());
                                 mPreferencesHelper.setLoginPassword(passwordText);
                                 navigateToHomeOrCheckout();
                             } else {
-                                showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)), true);
+                                showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),
+                                        true);
                             }
                         }
                     }
