@@ -145,7 +145,7 @@ public class StepThreeRootFragment extends AbstractFragment
         PetMedsApplication.getAppComponent().inject(this);
         ButterKnife.bind(this, view);
         if (((CheckOutActivity) getActivity()).getApplicableSteps() == 4) {
-            mShippingNavigator.setText(getString(R.string.reviewsubmit_navigator_button_title));
+            mShippingNavigator.setText(getString(R.string.review_submit_navigator_button_title));
         }
         populateAddress();
         Log.d("oncreateview", "STEPTHREEROOTFRAGMENT");

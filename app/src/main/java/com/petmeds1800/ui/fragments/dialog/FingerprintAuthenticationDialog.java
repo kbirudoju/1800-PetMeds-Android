@@ -151,6 +151,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
             return;
         } else if (mStage == Stage.FINGERPRINT) {
             navigateToHome();
+        } else if (mStage == Stage.LOGIN && mPreferencesHelper.getLoginEmail() == null) {
+            navigateToHome();
         } else if (mStage == Stage.LOGIN && mPreferencesHelper.getIsFingerPrintEnabled()) {
             mStage = Stage.FINGERPRINT;
             updateStage();
@@ -177,7 +179,19 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
 
     @OnClick(R.id.btn_forgot_password)
     void onForgotPasswordClick() {
-        gotoForgotPassword();
+        mEmailInput.setError(null);
+        String emailText = mPreferencesHelper.getLoginEmail();
+        if(emailText == null){
+            emailText = mEmailEdit.getText().toString().trim();
+        }
+        if (emailText.isEmpty()) {
+            setEmailError(getString(R.string.accountSettingsEmailEmptyError));
+        } else if (validateEmail(emailText)) {
+            gotoForgotPassword();
+        } else {
+            setEmailError(getString(R.string.accountSettingsEmailInvalidError));
+        }
+
     }
 
     @Override
@@ -192,13 +206,12 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
 
     private void authenticateFingerprint() {
 
-        setStatusText();
-        if (RxFingerprint.isUnavailable(getActivity()) || !mPreferencesHelper.getIsFingerPrintEnabled()) {
+        if (RxFingerprint.isUnavailable(getActivity()) || !mPreferencesHelper.getIsFingerPrintEnabled() || mPreferencesHelper.getLoginEmail() == null) {
             mStage = Stage.LOGIN;
             updateStage();
             return;
         }
-
+        setStatusText();
         fingerprintSubscription = RxFingerprint.authenticate(getActivity())
                 .subscribe(new Subscriber<FingerprintAuthenticationResult>() {
                     @Override
@@ -244,7 +257,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
             return;
         }
         if (mPreferencesHelper.getIsFingerPrintEnabled()) {
-            Toast.makeText(getActivity(), "Touch the sensor!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Touch the sensor", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -499,10 +512,10 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
 
                                     dismiss();
                                 } else {
-                                    showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),
-                                            true);
+                                    showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)), true);
                                     if (isLoginAfterFingerprintAuth) {
                                         mPreferencesHelper.setLoginEmail(null);
+                                        mPreferencesHelper.setLoginPassword(null);
                                         mStage = Stage.LOGIN;
                                         updateStage();
                                     }
