@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.checkout;
 
 import com.petmeds1800.model.entities.CheckoutSteps;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
@@ -22,6 +23,8 @@ public interface CheckoutActivityContract {
 //        void setShoppingCart(ShoppingCart shoppingCart);
 
         void setCheckoutSteps(CheckoutSteps checkoutSteps);
+
+        void updateShoppingCartInShoppingCartListResponse(ShoppingCart shoppingCart);
 
         /**
          * It should be used to start the next step by making the appropiate fragment transaction

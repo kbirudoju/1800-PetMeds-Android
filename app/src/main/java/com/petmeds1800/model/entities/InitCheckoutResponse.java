@@ -1,11 +1,13 @@
 package com.petmeds1800.model.entities;
 
+import com.petmeds1800.model.shoppingcart.response.ShoppingCart;
+
 /**
  * Created by Abhinav on 24/9/16.
  */
 public class InitCheckoutResponse {
 
-    //TODO add a shopping cart object as well
+    private ShoppingCart shoppingCart;
 
     private CheckoutSteps checkoutSteps;
 
@@ -25,5 +27,9 @@ public class InitCheckoutResponse {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
     }
 }

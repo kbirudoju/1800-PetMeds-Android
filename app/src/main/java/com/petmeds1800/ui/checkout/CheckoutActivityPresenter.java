@@ -110,7 +110,9 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                         }
                         if (mView.isActive()) {
                             if (s != null) {
-                                //TODO Shopping Cart object needs to pass on to the ShoppingCartActivity once Sarthak has done with Cart fragment implementation
+                                if(s.getShoppingCart() != null) {
+                                    mView.updateShoppingCartInShoppingCartListResponse(s.getShoppingCart());
+                                }
                                 if (s.getCheckoutSteps() != null) {
                                     mView.setCheckoutSteps(s.getCheckoutSteps());
                                     mView.startNextStep(s.getCheckoutSteps().getStepState().getNextCheckoutStep());

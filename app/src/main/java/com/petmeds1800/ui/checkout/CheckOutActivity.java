@@ -6,6 +6,7 @@ import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.StepState;
 import com.petmeds1800.model.shoppingcart.response.CommerceItems;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.checkout.stepfive.StepFiveRootFragment;
@@ -306,6 +307,13 @@ public class CheckOutActivity extends AbstractActivity
             hideStepContainer();
         }
         mStepStates = checkoutSteps.getStepState();
+    }
+
+    @Override
+    public void updateShoppingCartInShoppingCartListResponse(ShoppingCart shoppingCart) {
+        mShoppingCartListResponse.setShoppingCart(shoppingCart);
+        //update the item count as well since we dont have the itemCount field in the initCheckoutAPI response but number of items could change
+        mShoppingCartListResponse.setItemCount(shoppingCart.getCommerceItems().size());
     }
 
     private void hideStepContainer() {
