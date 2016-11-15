@@ -11,7 +11,7 @@
         android:layout_height="@dimen/dp_44"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/payment_navigator_button_title" />
+        android:text="@string/shipping_method_navigator_button_title" />
 
     <ScrollView
         android:id="@+id/scrollerView"
@@ -33,7 +33,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/pattern_light_blue"
                 android:orientation="vertical">
-
+$id65949204
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
