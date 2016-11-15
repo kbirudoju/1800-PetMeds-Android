@@ -291,7 +291,7 @@ public class StepFiveRootFragment extends AbstractFragment
                             mShoppingCartListResponse, true);
                     break;
                 case R.id.petVetEdit:
-                    markAsUnselected(CheckOutActivity.SUBMIT_N_REVIEW, CheckOutActivity.SUBMIT_N_REVIEW);
+                    markAsUnselected(CheckOutActivity.PET_VET_INFORMATION, CheckOutActivity.SUBMIT_N_REVIEW);
                     activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PET_VET_INFORMATION),
                             mShoppingCartListResponse);
                     break;

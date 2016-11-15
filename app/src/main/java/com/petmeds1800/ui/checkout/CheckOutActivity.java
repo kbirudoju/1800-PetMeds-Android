@@ -1,20 +1,5 @@
 package com.petmeds1800.ui.checkout;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -36,6 +21,21 @@ import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -45,7 +45,9 @@ import butterknife.BindView;
 
 
 public class CheckOutActivity extends AbstractActivity
-        implements CheckoutActivityContract.View, CheckoutActivityContract.StepsFragmentInteractionListener, CommonWebviewFragment.OnPaymentCompletedListener {
+
+        implements CheckoutActivityContract.View, CheckoutActivityContract.StepsFragmentInteractionListener,
+        CommonWebviewFragment.OnPaymentCompletedListener {
 
     public static final String ITEMS_DETAIL = "itemsDetail";
 
@@ -97,6 +99,9 @@ public class CheckOutActivity extends AbstractActivity
     @BindView(R.id.shipmentOrdersNumberLayout)
     RelativeLayout mCheckOutBoxContainer;
 
+    @BindView(R.id.thirdContainer)
+    LinearLayout mThirdContainer;
+
     private ArrayList<String> mApplicableSteps;
 
     private StepState mStepStates;
@@ -123,8 +128,6 @@ public class CheckOutActivity extends AbstractActivity
 
     PaypalErrorListener paypalErrorListener;
 
-    @BindView(R.id.thirdContainer)
-    LinearLayout mThirdContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,8 +159,6 @@ public class CheckOutActivity extends AbstractActivity
                     itemDetails.put(commerceItem.getCommerceItemId(), commerceItem.getQuantity());
                 }
             }
-
-            //checkout steps would be available if a user starts checkout after completion of paypal step
             if (mCheckoutSteps != null) {
                 setCheckoutSteps(mCheckoutSteps);
                 startNextStep(mCheckoutSteps.getStepState().getNextCheckoutStep());
@@ -270,71 +271,75 @@ public class CheckOutActivity extends AbstractActivity
         fragmentTransaction.commit();
     }
 
-    public void replaceCheckOutFragmentWithBundle(Fragment fragment, String tag, boolean isBackStackEnable, Bundle bundle) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.step_one_root_fragment, fragment, tag);
-        if (isBackStackEnable) {
-            fragmentTransaction.addToBackStack(null);
-        }
-        fragment.setArguments(bundle);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            Intent upIntent = NavUtils.getParentActivityIntent(this);
-            //create a new task
-            // when navigating up, with a synthesized back stack.
-            TaskStackBuilder.create(this)
-                    // Add all of this activity's parents to the back stack
-                    .addNextIntentWithParentStack(upIntent)
-                            // Navigate up to the closest parent
-                    .startActivities();
 
-            return true;
+
+        public void replaceCheckOutFragmentWithBundle (Fragment fragment, String tag,boolean isBackStackEnable, Bundle bundle){
+
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.step_one_root_fragment, fragment, tag);
+            if (isBackStackEnable) {
+                fragmentTransaction.addToBackStack(null);
+            }
+            fragment.setArguments(bundle);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.commit();
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        @Override
+        public boolean onOptionsItemSelected (MenuItem item){
+            if (item.getItemId() == android.R.id.home) {
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                //create a new task
+                // when navigating up, with a synthesized back stack.
+                TaskStackBuilder.create(this)
+                        // Add all of this activity's parents to the back stack
+                        .addNextIntentWithParentStack(upIntent)
+                        // Navigate up to the closest parent
+                        .startActivities();
 
-    @Override
-    public void showProgress() {
-        mProgressDialog.setCancelable(false);
-        if (!mProgressDialog.isAdded()) {
-            mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
+                return true;
+            }
+
+            return super.onOptionsItemSelected(item);
         }
-    }
 
-    @Override
-    public void setCheckoutSteps(CheckoutSteps checkoutSteps) {
-        mApplicableSteps = checkoutSteps.getApplicableSteps();
-        mCheckOutBoxContainer.setVisibility(View.VISIBLE);
-        if (mApplicableSteps != null && mApplicableSteps.size() == 4) {
-            hideStepFiveContainer(getResources().getString(R.string.numeric_four));
-        } else if (mApplicableSteps != null && mApplicableSteps.size() == 3) {
-            hideStepContainers();
+        @Override
+        public void showProgress () {
+            mProgressDialog.setCancelable(false);
+            if (!mProgressDialog.isAdded()) {
+                mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
+            }
         }
-        mStepStates = checkoutSteps.getStepState();
-    }
 
-    @Override
-    public void updateShoppingCartInShoppingCartListResponse(ShoppingCart shoppingCart) {
-        mShoppingCartListResponse.setShoppingCart(shoppingCart);
-        //update the item count as well since we dont have the itemCount field in the initCheckoutAPI response but number of items could change
-        mShoppingCartListResponse.setItemCount(shoppingCart.getCommerceItems().size());
-    }
+        @Override
+        public void setCheckoutSteps (CheckoutSteps checkoutSteps){
+            mApplicableSteps = checkoutSteps.getApplicableSteps();
+            mCheckOutBoxContainer.setVisibility(View.VISIBLE);
+            if (mApplicableSteps != null && mApplicableSteps.size() == 4) {
+                hideStepFiveContainer(getResources().getString(R.string.numeric_four));
+            } else if (mApplicableSteps != null && mApplicableSteps.size() == 3) {
+                hideStepContainers();
+            }
+            mStepStates = checkoutSteps.getStepState();
+        }
 
+        @Override
+        public void updateShoppingCartInShoppingCartListResponse (ShoppingCart shoppingCart){
+            mShoppingCartListResponse.setShoppingCart(shoppingCart);
+            //update the item count as well since we dont have the itemCount field in the initCheckoutAPI response but number of items could change
+            mShoppingCartListResponse.setItemCount(shoppingCart.getCommerceItems().size());
+        }
 
-    //Hide in case of four steps
-    private void hideStepFiveContainer(String textString) {
-        mFourthContainer.setVisibility(View.GONE);
-        mFifthShipmentAdressButton.setText(textString);
+        //Hide in case of four steps
+        private void hideStepFiveContainer (String textString){
+            mFourthContainer.setVisibility(View.GONE);
+            mFifthShipmentAdressButton.setText(textString);
 
-    }
+        }
 
-    //Hide in case of five steps
+        //Hide in case of five steps
+
     private void hideStepContainers() {
         hideStepFiveContainer(getResources().getString(R.string.numeric_3));
         mThirdContainer.setVisibility(View.GONE);
@@ -369,7 +374,8 @@ public class CheckOutActivity extends AbstractActivity
                             StepFiveRootFragment.class.getName(), false);
                 } else if (mSecurityStatus == 4 || mSecurityStatus == 5) {
                     replaceCheckOutFragment(StepThreeRootFragment
-                                    .newInstance(mShoppingCartListResponse, stepName, StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
+                                    .newInstance(mShoppingCartListResponse, stepName,
+                                            StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                             StepThreeRootFragment.class.getName(),
                             false);
                 } else { //guest user adding payment for first time
@@ -517,7 +523,6 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     public void onPaymentCompleted(ShoppingCartListResponse paypalResponse) {
 
-
     }
 
     public int getApplicableSteps() {
@@ -527,28 +532,38 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     public void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName) {
 
-        if(paypalResponse.getShoppingCart()!=null){
-            moveToNext(stepName,paypalResponse);
-            Log.d("response in cart", paypalResponse.getCheckoutSteps().getApplicableSteps() + ">>>" + paypalResponse.getCheckoutSteps().getStepState().getNextCheckoutStep()+"stepname"+stepName);
+        if (paypalResponse.getShoppingCart() != null) {
+            moveToNext(stepName, paypalResponse);
+            Log.d("response in cart",
+                    paypalResponse.getCheckoutSteps().getApplicableSteps() + ">>>" + paypalResponse.getCheckoutSteps()
+                            .getStepState().getNextCheckoutStep() + "stepname" + stepName);
 
-        }
-        else {
+        } else {
             Log.d("response in cart", paypalResponse.getStatus().getErrorMessages().get(0));
-            if(paypalErrorListener!=null){
+            if (paypalErrorListener != null) {
                 paypalErrorListener.onPayPal(paypalResponse.getStatus().getErrorMessages().get(0));
-            }
+                if (paypalResponse.getShoppingCart() != null) {
+                    moveToNext(stepName, paypalResponse);
+                } else {
+                    StepThreeRootFragment stepThreeRootFragment = (StepThreeRootFragment) getSupportFragmentManager()
+                            .findFragmentByTag(StepThreeRootFragment.class.getSimpleName());
+                    if (stepThreeRootFragment != null) {
+                        stepThreeRootFragment.onPayPalError(paypalResponse.getStatus().getErrorMessages().get(0));
 
+                    }
+
+                }
+            }
         }
     }
 
+        public void addListener (StepThreeRootFragment stepThreeRootFragment){
+            paypalErrorListener = stepThreeRootFragment;
+        }
 
+        public interface PaypalErrorListener {
 
-    public void addListener(StepThreeRootFragment stepThreeRootFragment) {
-        paypalErrorListener = stepThreeRootFragment;
+            public void onPayPal(String errorMsg);
+        }
+
     }
-
-    public interface PaypalErrorListener{
-        public void onPayPal(String errorMsg);
-    }
-
-}

@@ -37,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -138,7 +139,7 @@ public class AddEditAddressFragment extends AbstractFragment
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.addEditAddress_container)
+    @BindView(R.id.containerLayout)
     LinearLayout mContainerLayout;
 
     @Inject
@@ -152,6 +153,8 @@ public class AddEditAddressFragment extends AbstractFragment
 
     @BindView(R.id.defaultShippingAddress_switchview)
     View mDefaultShippingAddressSwitchview;
+
+
 
 
     private AddEditAddressContract.Presenter mPresenter;
@@ -235,10 +238,9 @@ public class AddEditAddressFragment extends AbstractFragment
         PetMedsApplication.getAppComponent().inject(this);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_address, container, false);
         ButterKnife.bind(this, view);
 
