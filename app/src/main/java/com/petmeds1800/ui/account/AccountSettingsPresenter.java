@@ -96,7 +96,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     }
 
     @Override
-    public void saveSettings(UpdateAccountSettingsRequest updateAccountSettingsRequest) {
+    public void saveSettings(final UpdateAccountSettingsRequest updateAccountSettingsRequest) {
 
         mPetMedsApiService.updateAccountSettings(updateAccountSettingsRequest)
                 .subscribeOn(Schedulers.io())
@@ -121,6 +121,8 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
+                                mPreferencesHelper.setLoginEmail(updateAccountSettingsRequest.getEmail());
+                                mPreferencesHelper.setLoginPassword(updateAccountSettingsRequest.getPassword());
                                 mView.showSuccess();
                             }
                         } else {
