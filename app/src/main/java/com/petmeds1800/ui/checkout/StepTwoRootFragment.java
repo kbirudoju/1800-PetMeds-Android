@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.checkout;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ShippingMethod;
-import com.petmeds1800.model.entities.ShippingMethodsRequest;
-import com.petmeds1800.model.entities.ShippingMethodsResponse;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +13,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ShippingMethod;
+import com.petmeds1800.model.entities.ShippingMethodsRequest;
+import com.petmeds1800.model.entities.ShippingMethodsResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,8 +146,11 @@ public class StepTwoRootFragment extends AbstractFragment
 
     @Override
     public void onItemClick(int position) {
+        for (int i = 0; i < mShippingMethodList.size(); i++) {
+            ShippingMethodsListAdapter.ViewHolder holder = (ShippingMethodsListAdapter.ViewHolder) mRecyclerShippingMethods.findViewHolderForAdapterPosition(i);
+            holder.selectionImage.setImageResource(R.drawable.ic_radio_button_off);
+        }
         mShippingMethod = mShippingMethodList.get(position);
-
     }
 
     private void updateRecyclerView(List<ShippingMethod> shippingMethodList) {
@@ -230,7 +233,7 @@ public class StepTwoRootFragment extends AbstractFragment
 
     @Override
     public void onErrorShippingMethodsApplied(String error) {
-        showErrorCrouton(error , false);
+        showErrorCrouton(error, false);
     }
 
     @Override
@@ -245,9 +248,8 @@ public class StepTwoRootFragment extends AbstractFragment
             ((CheckOutActivity) getActivity()).showProgress();
             mPresenter.applyShippingMethods(new ShippingMethodsRequest(mShippingMethod.getShippingMethod(),
                     mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
-        }
-        else {
-            showErrorCrouton("You must have a shipping method",false);
+        } else {
+            showErrorCrouton("You must have a shipping method", false);
         }
     }
 }

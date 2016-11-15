@@ -12,12 +12,12 @@
 
         <TextView
             android:id="@+id/txv_error_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_15"
             android:drawableLeft="@drawable/ic_text_warning"
             android:drawablePadding="@dimen/medium_margin"
-            android:gravity="center"
+            android:gravity="start"
             android:text="Error with address"
             android:textColor="@color/crimson_red"
             android:textSize="@dimen/sp_16" />
