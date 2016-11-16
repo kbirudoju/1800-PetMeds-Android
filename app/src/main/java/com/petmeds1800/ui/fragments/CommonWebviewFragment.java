@@ -1,18 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.util.PetMedWebViewClient;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -32,15 +19,25 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.util.PetMedWebViewClient;
+
 import java.util.Iterator;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Cookie;
-import okhttp3.OkHttpClient;
 
 /**
  * Created by pooja on 8/25/2016.
@@ -74,9 +71,7 @@ public class CommonWebviewFragment extends AbstractFragment {
     @Inject
     PetMedsApiService mPetMedsApiService;
 
-    @Inject
-    @Named("redirectOff")
-    OkHttpClient mOkHttpClient;
+
 
     private boolean mDisableBackButton;
 
@@ -296,13 +291,14 @@ public class CommonWebviewFragment extends AbstractFragment {
             } else {
                 onPaymnetSelectedListener.onPaymentCompleted(paypalResponse);
             }
-            removeFragment();
 
+            removeFragment();
         }
 
     }
 
     private void removeFragment() {
+        Log.d("Remove Fragment","CommonWebViewFragment");
         FragmentManager manager = getActivity().getSupportFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.remove(this);

@@ -8,8 +8,10 @@ import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.util.Constants;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import retrofit2.Response;
 import rx.Subscriber;
@@ -26,6 +28,10 @@ public class StepThreeRootPresentor implements StepThreeRootContract.Presenter {
 
     @Inject
     PetMedsApiService mPetMedsApiService;
+
+    @Inject
+    @Named(Constants.TAG_REDIRECT_OFF)
+    PetMedsApiService mPetMedsApiServiceRedrirectOff;
 
     public StepThreeRootPresentor(StepThreeRootContract.View view) {
         mView = view;
@@ -111,7 +117,7 @@ public class StepThreeRootPresentor implements StepThreeRootContract.Presenter {
 
     @Override
     public void checkoutPayPal(PayPalCheckoutRequest request) {
-        mPetMedsApiService.payPalCheckout(request)
+        mPetMedsApiServiceRedrirectOff.payPalCheckout(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Response<String>>() {

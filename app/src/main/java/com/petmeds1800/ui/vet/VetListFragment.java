@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.Vet;
@@ -24,6 +24,7 @@ import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.checkout.stepfour.PetVetInfoFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.vet.support.VetListAdapter;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,9 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     private ArrayList <Vet> mVetList;
     @BindView(R.id.addVet_button)
     Button mAddVetButton;
+
+    @BindView(R.id.container_layout)
+    RelativeLayout mContainer;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,10 +109,8 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            Bundle codeBundle = new Bundle();
-            codeBundle.putString(PetVetInfoFragment.ZIPCODE_KEY, "02062");
-            replaceAccountFragmentWithBundleTag(new AddVetFragment(), AddVetFragment.class.getSimpleName(), codeBundle);
 
+      getUserDefaultZipCode();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -136,7 +138,23 @@ public class VetListFragment extends AbstractFragment implements VetListContract
     @Override
     public void onError(String errorMessage) {
         progressBar.setVisibility(View.GONE);
-        Snackbar.make(mVetRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+        Utils.displayCrouton(getActivity(), errorMessage, mContainer);
+        //Snackbar.make(mVetRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onZipCodeSuccess(String postalCode) {
+        progressBar.setVisibility(View.GONE);
+        Bundle codeBundle = new Bundle();
+        codeBundle.putString(PetVetInfoFragment.ZIPCODE_KEY, postalCode);
+        replaceAccountFragmentWithBundleTag(new AddVetFragment(), AddVetFragment.class.getSimpleName(), codeBundle);
+
+    }
+
+    @Override
+    public void onZipCodeError() {
+        progressBar.setVisibility(View.GONE);
+        Utils.displayCrouton(getActivity(), getString(R.string.add_zip_code_msg), mContainer);
     }
 
     @Override
@@ -151,9 +169,11 @@ public class VetListFragment extends AbstractFragment implements VetListContract
 
     @Override
     public void onClick(View v) {
-        Bundle codeBundle = new Bundle();
-        codeBundle.putString(PetVetInfoFragment.ZIPCODE_KEY, "02062");
-        replaceAccountFragmentWithBundleTag(new AddVetFragment(), AddVetFragment.class.getSimpleName(), codeBundle);
+        getUserDefaultZipCode();
 
+    }
+    private void getUserDefaultZipCode(){
+        progressBar.setVisibility(View.VISIBLE);
+        mPresenter.getZipCode();
     }
 }

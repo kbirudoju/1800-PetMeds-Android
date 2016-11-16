@@ -1,13 +1,14 @@
 package com.petmeds1800.dagger.module;
 
+import android.content.Context;
+
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.dagger.scopes.AppScope;
-
-import android.content.Context;
+import com.petmeds1800.util.Constants;
 
 import javax.inject.Named;
 
@@ -50,7 +51,7 @@ public class RestModule {
     }
 
     @Provides
-    @Named("redirectOff")
+    @Named(Constants.TAG_REDIRECT_OFF)
     @AppScope
     public OkHttpClient provideOkHttpClientRedirect(CookieJar cookieJar) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -78,9 +79,9 @@ public class RestModule {
     }
 
     @Provides
-    @Named("redirectOff")
+    @Named(Constants.TAG_REDIRECT_OFF)
     @AppScope
-    public Retrofit provideRetrofitForRedirectOffClient(@Named("redirectOff") final OkHttpClient client) {
+    public Retrofit provideRetrofitForRedirectOffClient(@Named(Constants.TAG_REDIRECT_OFF) final OkHttpClient client) {
         final Retrofit.Builder builder = new Retrofit.Builder()
                 .client(client)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -104,9 +105,9 @@ public class RestModule {
     }
 
     @Provides
-    @Named("redirectOff")
+    @Named(Constants.TAG_REDIRECT_OFF)
     @AppScope
-    public PetMedsApiService provideApiServiceForRedirectOffRetrofit(@Named("redirectOff") Retrofit retrofit) {
+    public PetMedsApiService provideApiServiceForRedirectOffRetrofit(@Named(Constants.TAG_REDIRECT_OFF) Retrofit retrofit) {
         return retrofit.create(PetMedsApiService.class);
     }
 

@@ -421,7 +421,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             checkOutIntent.putExtra(SHOPPING_CART, response);
             checkOutIntent.putExtra(CHECKOUT_STEPS,response.getCheckoutSteps());
             startActivity(checkOutIntent);
-            Log.d("response in cart", response.getShoppingCart().getTotalCommerceItemCount() + ">>>" + response.getCheckoutSteps().getStepState().getNextCheckoutStep());
+            Log.d("response in cart", response.getCheckoutSteps().getApplicableSteps() + ">>>" + response.getCheckoutSteps().getStepState().getNextCheckoutStep());
 
         } else {
             final String errormsg=response.getStatus().getErrorMessages().get(0);

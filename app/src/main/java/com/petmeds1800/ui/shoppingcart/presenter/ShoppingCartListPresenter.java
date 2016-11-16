@@ -13,6 +13,7 @@ import com.petmeds1800.model.shoppingcart.request.RemoveItemRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.request.UpdateItemQuantityRequestShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
@@ -36,7 +37,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
     PetMedsApiService mPetMedsApiService;
 
     @Inject
-            @Named("redirectOff")
+     @Named(Constants.TAG_REDIRECT_OFF)
     PetMedsApiService mPetMedsApiServiceRedrirectOff;
 
     @Inject
@@ -250,7 +251,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
     @Override
     public void checkoutPayPal(PayPalCheckoutRequest request) {
-        mPetMedsApiService.payPalCheckout(request)
+        mPetMedsApiServiceRedrirectOff.payPalCheckout(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Response<String>>() {

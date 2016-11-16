@@ -18,8 +18,12 @@ public interface VetListContract {
         void onSuccess(ArrayList<Vet> vetList);
 
         void onError(String errorMessage);
+
+        void onZipCodeSuccess(String postalCode);
+        void onZipCodeError();
     }
     interface Presenter extends BasePresenter {
         void getVetListData();
+        void getZipCode();
     }
 }

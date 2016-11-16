@@ -130,5 +130,7 @@ public class Constants {
 
     public static final String KEY_HOME_ROOT_SESSION_CONFIRMATION = "session_confirmation";
 
+    public static final String TAG_REDIRECT_OFF = "redirectOff";
+
 
 }

@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
@@ -21,18 +34,6 @@ import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
-
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -46,7 +47,7 @@ import butterknife.OnClick;
  */
 
 public class StepThreeRootFragment extends AbstractFragment
-        implements StepThreeRootContract.View, CompoundButton.OnCheckedChangeListener {
+        implements StepThreeRootContract.View, CompoundButton.OnCheckedChangeListener, CheckOutActivity.PaypalErrorListener {
 
 
     @BindView(R.id.newPaymentMethod)
@@ -90,8 +91,9 @@ public class StepThreeRootFragment extends AbstractFragment
 
     private boolean mReviewOn;
 
+
     public static StepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
-            String stepName, int requestCode) {
+                                                    String stepName, int requestCode) {
         StepThreeRootFragment f = new StepThreeRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
@@ -102,7 +104,7 @@ public class StepThreeRootFragment extends AbstractFragment
     }
 
     public static StepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
-            String stepName, int requestCode, boolean mReviewIsOn) {
+                                                    String stepName, int requestCode, boolean mReviewIsOn) {
         StepThreeRootFragment f = new StepThreeRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
@@ -133,14 +135,14 @@ public class StepThreeRootFragment extends AbstractFragment
             mRequestCode = bundle.getInt(REQUEST_CODE_KEY);
             mReviewOn = bundle.getBoolean(REVIEW_ON_KEY);
         }
-
+        ((CheckOutActivity)getActivity()).addListener(this);
 
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step_three_checkout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
         ButterKnife.bind(this, view);
@@ -267,6 +269,7 @@ public class StepThreeRootFragment extends AbstractFragment
     @Override
     public void onSuccess(String url) {
         //  mProgressBar.setVisibility(View.GONE);
+        activity.hideProgress();
         Bundle bundle = new Bundle();
         bundle.putString(CommonWebviewFragment.PAYPAL_DATA, url);
         bundle.putBoolean(CommonWebviewFragment.ISCHECKOUT, true);
@@ -279,6 +282,7 @@ public class StepThreeRootFragment extends AbstractFragment
 
     @Override
     public void onPayPalError(String errorMsg) {
+        activity.hideProgress();
         if (errorMsg.isEmpty()) {
             Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label), mContainerLayout);
 
@@ -326,7 +330,21 @@ public class StepThreeRootFragment extends AbstractFragment
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Log.d("oncheckchange", isChecked + ">>>");
+        activity.showProgress();
         PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout");
         mPresenter.checkoutPayPal(payPalCheckoutRequest);
+    }
+
+
+    @Override
+    public void onPayPal(final String errorMsg) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onPayPalError(errorMsg);
+            }
+        }, 500);
+
     }
 }

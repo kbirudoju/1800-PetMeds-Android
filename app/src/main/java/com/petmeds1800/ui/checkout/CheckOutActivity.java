@@ -1,5 +1,20 @@
 package com.petmeds1800.ui.checkout;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -20,19 +35,6 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ import butterknife.BindView;
 
 
 public class CheckOutActivity extends AbstractActivity
-        implements CheckoutActivityContract.View, CheckoutActivityContract.StepsFragmentInteractionListener,CommonWebviewFragment.OnPaymentCompletedListener {
+        implements CheckoutActivityContract.View, CheckoutActivityContract.StepsFragmentInteractionListener, CommonWebviewFragment.OnPaymentCompletedListener {
 
     public static final String ITEMS_DETAIL = "itemsDetail";
 
@@ -119,6 +121,11 @@ public class CheckOutActivity extends AbstractActivity
 
     private int mSecurityStatus;
 
+    PaypalErrorListener paypalErrorListener;
+
+    @BindView(R.id.thirdContainer)
+    LinearLayout mThirdContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +133,7 @@ public class CheckOutActivity extends AbstractActivity
         mProgressDialog = new ProgressDialog();
         mShoppingCartListResponse = (ShoppingCartListResponse) getIntent()
                 .getSerializableExtra(CartFragment.SHOPPING_CART);
-        mCheckoutSteps=(CheckoutSteps)getIntent().getSerializableExtra(CartFragment.CHECKOUT_STEPS);
+        mCheckoutSteps = (CheckoutSteps) getIntent().getSerializableExtra(CartFragment.CHECKOUT_STEPS);
         enableBackButton();
 
         PetMedsApplication.getAppComponent().inject(this);
@@ -151,10 +158,10 @@ public class CheckOutActivity extends AbstractActivity
             }
 
             //checkout steps would be available if a user starts checkout after completion of paypal step
-            if(mCheckoutSteps!=null){
+            if (mCheckoutSteps != null) {
                 setCheckoutSteps(mCheckoutSteps);
                 startNextStep(mCheckoutSteps.getStepState().getNextCheckoutStep());
-            }else {
+            } else {
                 if (itemDetails != null && itemDetails.size() > 0) {
                     //show the progress
                     mCheckoutPresenter.initializeCheckout(itemDetails);
@@ -262,7 +269,8 @@ public class CheckOutActivity extends AbstractActivity
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
-    public void replaceCheckOutFragmentWithBundle(Fragment fragment, String tag, boolean isBackStackEnable,Bundle bundle) {
+
+    public void replaceCheckOutFragmentWithBundle(Fragment fragment, String tag, boolean isBackStackEnable, Bundle bundle) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.step_one_root_fragment, fragment, tag);
         if (isBackStackEnable) {
@@ -288,7 +296,7 @@ public class CheckOutActivity extends AbstractActivity
             return true;
         }
 
-            return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -303,8 +311,10 @@ public class CheckOutActivity extends AbstractActivity
     public void setCheckoutSteps(CheckoutSteps checkoutSteps) {
         mApplicableSteps = checkoutSteps.getApplicableSteps();
         mCheckOutBoxContainer.setVisibility(View.VISIBLE);
-        if (mApplicableSteps.size() == 4) {
-            hideStepContainer();
+        if (mApplicableSteps != null && mApplicableSteps.size() == 4) {
+            hideStepFiveContainer(getResources().getString(R.string.numeric_four));
+        } else if (mApplicableSteps != null && mApplicableSteps.size() == 3) {
+            hideStepContainers();
         }
         mStepStates = checkoutSteps.getStepState();
     }
@@ -316,10 +326,18 @@ public class CheckOutActivity extends AbstractActivity
         mShoppingCartListResponse.setItemCount(shoppingCart.getCommerceItems().size());
     }
 
-    private void hideStepContainer() {
-        mFourthContainer.setVisibility(View.GONE);
-        mFifthShipmentAdressButton.setText(getResources().getString(R.string.numeric_four));
 
+    //Hide in case of four steps
+    private void hideStepFiveContainer(String textString) {
+        mFourthContainer.setVisibility(View.GONE);
+        mFifthShipmentAdressButton.setText(textString);
+
+    }
+
+    //Hide in case of five steps
+    private void hideStepContainers() {
+        hideStepFiveContainer(getResources().getString(R.string.numeric_3));
+        mThirdContainer.setVisibility(View.GONE);
     }
 
     @Override
@@ -346,17 +364,15 @@ public class CheckOutActivity extends AbstractActivity
                 break;
 
             case 2: //step 3 "Select Payment method"
-                if(mApplicableSteps.size()==3){
+                if (mApplicableSteps.size() == 3) {
                     replaceCheckOutFragment(StepFiveRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepFiveRootFragment.class.getName(), false);
-                }
-                else if(mSecurityStatus == 4 || mSecurityStatus == 5) {
+                } else if (mSecurityStatus == 4 || mSecurityStatus == 5) {
                     replaceCheckOutFragment(StepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName, StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                             StepThreeRootFragment.class.getName(),
                             false);
-                }
-                             else { //guest user adding payment for first time
+                } else { //guest user adding payment for first time
                     replaceCheckOutFragment(GuestStepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName),
                             GuestStepThreeRootFragment.class.getName(),
@@ -445,19 +461,22 @@ public class CheckOutActivity extends AbstractActivity
                                         R.drawable.check_out_blue_circle_drawable));
                 break;
             case PAYMENT_METHOD:
-                mThirdShipmentAdressButton.setTextColor(Color.WHITE);
-                mThirdShipmentAdressButton
-                        .setBackground(ContextCompat
-                                .getDrawable(getApplicationContext(),
-                                        R.drawable.check_out_blue_circle_drawable));
-                break;
+                if (mApplicableSteps.size() == 4 || mApplicableSteps.size() == 5) {
+                    mThirdShipmentAdressButton.setTextColor(Color.WHITE);
+                    mThirdShipmentAdressButton
+                            .setBackground(ContextCompat
+                                    .getDrawable(getApplicationContext(),
+                                            R.drawable.check_out_blue_circle_drawable));
+                    break;
+                }
             case PET_VET_INFORMATION:
-                mFourthShipmentAdressButton.setTextColor(Color.WHITE);
-                mFourthShipmentAdressButton
-                        .setBackground(ContextCompat
-                                .getDrawable(getApplicationContext(),
-                                        R.drawable.check_out_blue_circle_drawable));
                 if (mApplicableSteps.size() == 5) {
+                    mFourthShipmentAdressButton.setTextColor(Color.WHITE);
+                    mFourthShipmentAdressButton
+                            .setBackground(ContextCompat
+                                    .getDrawable(getApplicationContext(),
+                                            R.drawable.check_out_blue_circle_drawable));
+
                     break;
                 }
 
@@ -500,18 +519,36 @@ public class CheckOutActivity extends AbstractActivity
 
 
     }
+
     public int getApplicableSteps() {
         return mApplicableSteps.size();
     }
+
     @Override
     public void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName) {
+
         if(paypalResponse.getShoppingCart()!=null){
             moveToNext(stepName,paypalResponse);
-        }else{
-            StepThreeRootFragment stepThreeRootFragment=(StepThreeRootFragment)getSupportFragmentManager().findFragmentByTag(StepThreeRootFragment.class.getSimpleName());
-            if(stepThreeRootFragment!=null){
-                stepThreeRootFragment.onPayPalError(paypalResponse.getStatus().getErrorMessages().get(0));
+            Log.d("response in cart", paypalResponse.getCheckoutSteps().getApplicableSteps() + ">>>" + paypalResponse.getCheckoutSteps().getStepState().getNextCheckoutStep()+"stepname"+stepName);
+
+        }
+        else {
+            Log.d("response in cart", paypalResponse.getStatus().getErrorMessages().get(0));
+            if(paypalErrorListener!=null){
+                paypalErrorListener.onPayPal(paypalResponse.getStatus().getErrorMessages().get(0));
             }
+
         }
     }
+
+
+
+    public void addListener(StepThreeRootFragment stepThreeRootFragment) {
+        paypalErrorListener = stepThreeRootFragment;
+    }
+
+    public interface PaypalErrorListener{
+        public void onPayPal(String errorMsg);
+    }
+
 }
