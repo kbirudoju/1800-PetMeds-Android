@@ -1,13 +1,10 @@
 package com.petmeds1800.util;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
@@ -15,14 +12,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,7 +27,6 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.RunnableFuture;
 
 /**
  * Created by Sarthak on 9/26/2016.
@@ -123,7 +115,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                     Message msg = Message.obtain(null, Constants.CLICK_ITEM_UPDATE_SHOPPINGCART);
                     Bundle b = new Bundle();
                     b.putString(CommonWebviewFragment.TITLE_KEY, mCommerceItemsesCollection.get(position).getProductDisplayName());
-                    b.putString(CommonWebviewFragment.URL_KEY, mContext.getString(R.string.server_endpoint) + mCommerceItemsesCollection.get(position).getProductPageUrl() + "&review=write");
+                    b.putString(CommonWebviewFragment.URL_KEY, mContext.getString(R.string.server_endpoint) + mCommerceItemsesCollection.get(position).getProductPageUrl());
                     msg.setData(b);
 
                     try {
