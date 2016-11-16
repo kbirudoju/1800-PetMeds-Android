@@ -245,12 +245,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     @Override
     public void showRetryView() {
+        hideAllShoppingListView();
         showErrorLayout();
-    }
-
-    @Override
-    public void hideRetryView() {
-        hideErrorLayout();
     }
 
     private View createFooter(final View footerView, ShoppingCartListResponse shoppingCartListResponse) {
@@ -375,6 +371,12 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             mItemListtContainer.setVisibility(View.GONE);
             mEmptyCheckoutContainer.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void hideAllShoppingListView() {
+            mTotalCheckOutContainer.setVisibility(View.GONE);
+            mItemListtContainer.setVisibility(View.GONE);
+            mEmptyCheckoutContainer.setVisibility(View.GONE);
     }
 
     private void callmShoppingCartAPI(Object object) {

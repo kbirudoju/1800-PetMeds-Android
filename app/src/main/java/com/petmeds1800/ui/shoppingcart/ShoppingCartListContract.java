@@ -22,7 +22,6 @@ public interface ShoppingCartListContract {
         void onSuccess(String url);
         void onPayPalError(String errorMsg);
         void showRetryView();
-        void hideRetryView();
     }
 
     interface Presenter extends BasePresenter {
