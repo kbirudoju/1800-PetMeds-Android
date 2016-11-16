@@ -78,6 +78,7 @@ public class CustomValuePicker extends NumberPicker {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension((widthMeasureSpec - getResources().getDimensionPixelSize(R.dimen.dp_30)), getResources().getDimensionPixelSize(R.dimen.dp_170));
+//        setMeasuredDimension((widthMeasureSpec - getResources().getDimensionPixelSize(R.dimen.dp_30)), getResources().getDimensionPixelSize(R.dimen.dp_170));
+        setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
     }
 }

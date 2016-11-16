@@ -20,7 +20,6 @@
         android:layout_height="@dimen/dp_160"
         android:layout_below="@+id/title_label"
         android:layout_centerHorizontal="true"
-
         android:theme="@style/AppTheme.Picker" />
 
     <LinearLayout

@@ -217,8 +217,7 @@ public class SignUpFragment extends AbstractFragment
 
     private static final int COUNTRY_LIST_REQUEST = 2;
 
-    private static EditText mCurrentListDialogInput;
-    //TODO: this variable need not be static, please verify
+    private EditText mCurrentListDialogInput;
 
     public SignUpFragment() {
     }
