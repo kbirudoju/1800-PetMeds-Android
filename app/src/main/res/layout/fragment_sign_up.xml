@@ -245,7 +245,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_zipcode"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:maxLength="@integer/characterLimit_5"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -444,7 +445,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_zipcode"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:maxLength="@integer/characterLimit_5"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout

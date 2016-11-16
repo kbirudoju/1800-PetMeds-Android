@@ -218,6 +218,7 @@ public class SignUpFragment extends AbstractFragment
     private static final int COUNTRY_LIST_REQUEST = 2;
 
     private static EditText mCurrentListDialogInput;
+    //TODO: this variable need not be static, please verify
 
     public SignUpFragment() {
     }
@@ -351,117 +352,119 @@ public class SignUpFragment extends AbstractFragment
 
     private void signUp() {
 
+        boolean proceedSignUp = true;
+
         clearErrorsOnInputs();
 
         emailText = mEmailEdit.getText().toString().trim();
         if (emailText.isEmpty()) {
             setErrorOnInput(getString(R.string.accountSettingsEmailEmptyError), mEmailInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validateEmail(emailText)) {
             setErrorOnInput(getString(R.string.accountSettingsEmailInvalidError), mEmailInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         confirmEmailText = mConfirmEmailEdit.getText().toString().trim();
         if (confirmEmailText.isEmpty()) {
             setErrorOnInput(getString(R.string.accountSettingsEmailEmptyError), mConfirmEmailInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!emailText.equals(confirmEmailText)) {
             setErrorOnInput(getString(R.string.error_confirm_email_must_match), mConfirmEmailInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         passwordText = mPasswordEdit.getText().toString().trim();
         if (passwordText.isEmpty()) {
             setErrorOnInput(getString(R.string.accountSettingsPasswordEmptyError), mPasswordInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validatePassword(passwordText)) {
             setErrorOnInput(getString(R.string.accountSettingsPasswordInvalidError), mPasswordInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         confirmPasswordText = mConfirmPasswordEdit.getText().toString().trim();
         if (confirmPasswordText.isEmpty()) {
             setErrorOnInput(getString(R.string.accountSettingsPasswordEmptyError), mConfirmPasswordInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!passwordText.equals(confirmPasswordText)) {
             setErrorOnInput(getString(R.string.error_confirm_password_must_match), mConfirmPasswordInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         firstNameText = mFirstNameEdit.getText().toString().trim();
         if (firstNameText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validateUserName(firstNameText)) {
             setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         lastNameText = mLastNameEdit.getText().toString().trim();
         if (lastNameText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_last_name_required), mLastNameInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validateUserName(lastNameText)) {
             setErrorOnInput(getString(R.string.error_last_name_invalid), mLastNameInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         addressText = mAddressLine1Edit.getText().toString().trim();
         if (addressText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_address_required), mAddressLine1Input.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validateAddress(addressText)) {
             setErrorOnInput(getString(R.string.error_address_invalid), mAddressLine1Input.getId());
-            return;
+            proceedSignUp = false;
         }
 
         apartmentText = mApartmentEdit.getText().toString().trim();
         if (apartmentText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_apartment_required), mApartmentInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validateAddress(apartmentText)) {
             setErrorOnInput(getString(R.string.error_apartment_invalid), mApartmentInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         cityText = mCityEdit.getText().toString().trim();
         if (cityText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_city_required), mCityInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validateCity(cityText)) {
             setErrorOnInput(getString(R.string.error_city_invalid), mCityInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         stateText = mStateEdit.getText().toString().trim();
         if (stateText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_state_required), mStateInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         zipText = mZipEdit.getText().toString().trim();
         if (zipText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_zip_required), mZipInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validatePostalCode(zipText)) {
             setErrorOnInput(getString(R.string.error_zip_invalid), mZipInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         phoneText = mPhoneEdit.getText().toString().trim();
         if (phoneText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_phone_required), mPhoneInput.getId());
-            return;
+            proceedSignUp = false;
         } else if (!mPresenter.validatePhoneNumber(phoneText)) {
             setErrorOnInput(getString(R.string.error_phone_invalid), mPhoneInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         countryText = mCountryEdit.getText().toString().trim();
         if (countryText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_country_required), mCountryInput.getId());
-            return;
+            proceedSignUp = false;
         }
 
         if (mShippingViewsContainer.getVisibility() == View.VISIBLE) {
@@ -469,108 +472,110 @@ public class SignUpFragment extends AbstractFragment
             firstNameShippingText = mFirstNameShippingEdit.getText().toString().trim();
             if (firstNameShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameShippingInput.getId());
-                return;
+                proceedSignUp = false;
             } else if (!mPresenter.validateUserName(firstNameShippingText)) {
                 setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
 
             lastNameShippingText = mLastNameShippingEdit.getText().toString().trim();
             if (lastNameShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_last_name_required), mLastNameShippingInput.getId());
-                return;
+                proceedSignUp = false;
             } else if (!mPresenter.validateUserName(lastNameShippingText)) {
                 setErrorOnInput(getString(R.string.error_last_name_invalid), mLastNameShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
 
             addressShippingText = mAddressLine1ShippingEdit.getText().toString().trim();
             if (addressShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_address_required), mAddressLine1ShippingInput.getId());
-                return;
+                proceedSignUp = false;
             } else if (!mPresenter.validateAddress(addressShippingText)) {
                 setErrorOnInput(getString(R.string.error_address_invalid), mAddressLine1ShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
 
             apartmentShippingText = mApartmentShippingEdit.getText().toString().trim();
             if (apartmentShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_apartment_required), mApartmentShippingInput.getId());
-                return;
+                proceedSignUp = false;
             } else if (!mPresenter.validateAddress(apartmentShippingText)) {
                 setErrorOnInput(getString(R.string.error_apartment_invalid), mApartmentShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
 
             cityShippingText = mCityShippingEdit.getText().toString().trim();
             if (cityShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_city_required), mCityShippingInput.getId());
-                return;
+                proceedSignUp = false;
             } else if (!mPresenter.validateCity(cityShippingText)) {
                 setErrorOnInput(getString(R.string.error_city_invalid), mCityShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
 
             stateShippingText = mStateShippingEdit.getText().toString().trim();
             if (stateShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_state_required), mStateShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
 
             zipShippingText = mZipShippingEdit.getText().toString().trim();
             if (zipShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_zip_required), mZipShippingInput.getId());
-                return;
+                proceedSignUp = false;
             } else if (!mPresenter.validatePostalCode(zipShippingText)) {
                 setErrorOnInput(getString(R.string.error_zip_invalid), mZipShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
 
             phoneShippingText = mPhoneShippingEdit.getText().toString().trim();
             if (phoneShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_phone_required), mPhoneShippingInput.getId());
-                return;
+                proceedSignUp = false;
             } else if (!mPresenter.validatePhoneNumber(phoneShippingText)) {
                 setErrorOnInput(getString(R.string.error_phone_invalid), mPhoneShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
 
             countryShippingText = mCountryEdit.getText().toString().trim();
             if (countryShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_country_required), mCountryShippingInput.getId());
-                return;
+                proceedSignUp = false;
             }
         }
 
-        showProgress();
+        if (proceedSignUp) {
+            showProgress();
 
-        //TODO: remove this temporary hack after backend resolves their problem of cookies
-        mApiService.login(new LoginRequest(mEmailEdit.getText().toString(),
-                mPasswordEdit.getText().toString(), "test_test"))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<LoginResponse>() {
-                    @Override
-                    public void onCompleted() {
+            //TODO: remove this temporary hack after backend resolves their problem of cookies
+            mApiService.login(new LoginRequest(mEmailEdit.getText().toString(),
+                    mPasswordEdit.getText().toString(), "test_test"))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<LoginResponse>() {
+                        @Override
+                        public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
-                        if (errorId == R.string.noInternetConnection) {
-                            showErrorCrouton(getString(errorId), false);
-                            hideProgress();
-                        } else {
-                            doSignUp();
                         }
-                    }
 
-                    @Override
-                    public void onNext(LoginResponse loginResponse) {
-                        Log.v("login response", loginResponse.getStatus().getCode());
-                    }
-                });
+                        @Override
+                        public void onError(Throwable e) {
+                            int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                            if (errorId == R.string.noInternetConnection) {
+                                showErrorCrouton(getString(errorId), false);
+                                hideProgress();
+                            } else {
+                                doSignUp();
+                            }
+                        }
+
+                        @Override
+                        public void onNext(LoginResponse loginResponse) {
+                            Log.v("login response", loginResponse.getStatus().getCode());
+                        }
+                    });
+        }
     }
 
     private void doSignUp() {
