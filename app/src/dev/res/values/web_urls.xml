@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="url_live_chat">http://dev.1800petmeds.com/popup/webchat.jsp</string>
+    <string name="url_med_condition">http://dev.1800petmeds.com/peteducation/search.jsp?Ntt=</string>
+    <string name="url_share_your_feedback">http://dev.1800petmeds.com/app_feedback.jsp</string>
+</resources>

@@ -172,6 +172,16 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             });
 
+            (v.findViewById(R.id.feedback_button)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(CommonWebviewFragment.TITLE_KEY, mContext.getString(R.string.label_share_your_feedback));
+                    bundle.putString(CommonWebviewFragment.URL_KEY, mContext.getString(R.string.url_share_your_feedback));
+                    mContext.startWebView(bundle);
+                }
+            });
+
             (v.findViewById(R.id.chat_button)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

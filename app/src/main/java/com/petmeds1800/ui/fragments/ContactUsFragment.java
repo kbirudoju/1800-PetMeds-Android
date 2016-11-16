@@ -86,7 +86,10 @@ public class ContactUsFragment extends AbstractFragment {
 
     @OnClick(R.id.feedback_button)
     public void shareFeedback() {
-
+        Bundle bundle = new Bundle();
+        bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_share_your_feedback));
+        bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.url_share_your_feedback));
+        replaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.account_root_fragment_container);
     }
 
     @OnClick(R.id.imv_facebook)
