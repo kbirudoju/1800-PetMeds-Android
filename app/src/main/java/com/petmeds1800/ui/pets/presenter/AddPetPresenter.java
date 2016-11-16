@@ -1,6 +1,11 @@
 package com.petmeds1800.ui.pets.presenter;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
@@ -13,9 +18,7 @@ import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.model.shoppingcart.response.Status;
 import com.petmeds1800.ui.pets.support.AddPetContract;
-
-import android.support.annotation.NonNull;
-import android.util.Log;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import javax.inject.Inject;
 
@@ -34,11 +37,13 @@ public class AddPetPresenter implements AddPetContract.Presenter {
     PetMedsApiService mPetMedsApiService;
 
     private AddPetContract.View mView;
+    private Context mContext;
 
-    public AddPetPresenter(@NonNull AddPetContract.View view) {
+    public AddPetPresenter(@NonNull AddPetContract.View view,Context context) {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
+        this.mContext=context;
 
     }
 
@@ -57,7 +62,11 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        mView.onError(e.getLocalizedMessage());
+                        if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
+                            mView.onError(mContext.getString(R.string.no_internet_caps));
+                        }else {
+                            mView.onError(e.getLocalizedMessage());
+                        }
 
                     }
 
@@ -95,7 +104,13 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
-                        mView.onError(e.getLocalizedMessage());
+                        if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
+                                mView.onError(mContext.getString(R.string.no_internet_caps));
+                            }else {
+                                mView.onError(e.getLocalizedMessage());
+                            }
+
+
 
                     }
 

@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -272,6 +273,9 @@ public class AddPetFragment extends AbstractFragment
 
     private Pets mPets;
 
+    @BindView(R.id.container_layout)
+    LinearLayout mViewContainer;
+
     public void setAddPetNameListener(AddPetNameListener addPetNameListener) {
         mAddPetNameListener = addPetNameListener;
     }
@@ -314,7 +318,7 @@ public class AddPetFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter = new AddPetPresenter(this);
+        mPresenter = new AddPetPresenter(this,getActivity());
         setHasOptionsMenu(true);
         PetMedsApplication.getAppComponent().inject(this);
         mPetGenderText.setOnClickListener(this);
@@ -729,9 +733,13 @@ public class AddPetFragment extends AbstractFragment
     }
 
     @Override
-    public void onError(String errorMessage) {
+    public void onError(final String errorMessage) {
         progressBar.setVisibility(View.GONE);
-        Snackbar.make(mPetWeight, errorMessage, Snackbar.LENGTH_LONG).show();
+        Utils.displayCrouton(getActivity(), errorMessage, mViewContainer);
+
+
+
+     //   Snackbar.make(mPetWeight, errorMessage, Snackbar.LENGTH_LONG).show();
 
     }
 

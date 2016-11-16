@@ -25,8 +25,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.petmeds1800.R;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -227,15 +227,20 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
         geocoder = new Geocoder(mContext, Locale.getDefault());
         try {
             addresses = geocoder.getFromLocation(lat, lon, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-        } catch (IOException e) {
+           if(addresses!=null){
+               String postalCode = addresses.get(0).getPostalCode();
+               Log.d("zipcode", postalCode + ">>>>");
+               if(postalCode!=null){
+                   mZipCodeListener.onZipCodeFetched(postalCode);
+               }
+           }
+            else{
+                mZipCodeListener.onZipCodeError(mContext.getString(R.string.location_not_found_error));
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-        String postalCode = addresses.get(0).getPostalCode();
-        Log.d("zipcode", postalCode + ">>>>");
-        if(postalCode!=null){
-            mZipCodeListener.onZipCodeFetched(postalCode);
-        }
+
     }
 
     public void checkMarshMallowPermissions(){
@@ -276,6 +281,7 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
                 lat = (mLastLocation.getLatitude());
                 lon = (mLastLocation.getLongitude());
             }
+            Log.d("latitude and longitude",lat+">>>>"+lon);
             getZipCode();
         }catch (SecurityException e){
             e.printStackTrace();
@@ -313,6 +319,7 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
     //create an interface that will listen when zipcode has been fetched
     public interface ZipCodeListener {
         void onZipCodeFetched(String zipCode);
+        void onZipCodeError(String error);
     }
 
     public void setZipCodeListener(ZipCodeListener zipCodeListener) {

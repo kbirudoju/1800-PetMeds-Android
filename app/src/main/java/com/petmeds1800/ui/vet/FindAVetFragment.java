@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +33,7 @@ import com.petmeds1800.ui.vet.presenter.FindVetPresenter;
 import com.petmeds1800.ui.vet.support.LocationRelatedStuff;
 import com.petmeds1800.ui.vet.support.SearchVetAdapter;
 import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 
@@ -55,6 +56,8 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
     @BindView(R.id.location_icon)
     ImageView mLocationImage;
     private LocationRelatedStuff locationRelatedStuff;
+    @BindView(R.id.top_layout)
+    LinearLayout mContainer;
 
 
 
@@ -166,7 +169,8 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
 
     @Override
     public void onError(String errorMessage) {
-        Snackbar.make(mVetListRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+       // Snackbar.make(mVetListRecyclerView, , Snackbar.LENGTH_LONG).show();
+        Utils.displayCrouton(getActivity(), errorMessage, mContainer);
 
         try {
             ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
@@ -246,7 +250,10 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
         }
     }
 
-
+    @Override
+    public void onZipCodeError(String error) {
+        Utils.displayCrouton(getActivity(), error, mContainer);
+    }
 
 
     @Override

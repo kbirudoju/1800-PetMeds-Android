@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -16,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +39,7 @@ import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.vet.presenter.FindVetPresenter;
 import com.petmeds1800.ui.vet.support.LocationRelatedStuff;
 import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -81,7 +82,8 @@ public class ShowVetOnMapActivity extends AbstractActivity implements OnMapReady
     ImageView mArrowImage;
     @BindView(R.id.loaction_image)
     ImageView mLocationIcon;
-
+@BindView(R.id.container_layout)
+    FrameLayout mContainer;
 
 
 
@@ -374,7 +376,7 @@ public class ShowVetOnMapActivity extends AbstractActivity implements OnMapReady
 
     @Override
     public void onError(String errorMessage) {
-        Snackbar.make(mZipCodeEdit, errorMessage, Snackbar.LENGTH_LONG).show();
+        Utils.displayCrouton(this, errorMessage, mContainer);
         try {
             stopLoadingGif(ShowVetOnMapActivity.this);
         } catch (Exception e) {
@@ -447,5 +449,10 @@ public class ShowVetOnMapActivity extends AbstractActivity implements OnMapReady
             mZipCode = zipCode;
             performSearch(mZipCode);
         }
+    }
+
+    @Override
+    public void onZipCodeError(String errorMessage) {
+        Utils.displayCrouton(this, errorMessage, mContainer);
     }
 }
