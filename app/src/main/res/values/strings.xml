@@ -469,7 +469,7 @@
     <string name="your_order_qualifies_for_free_standard_shipping">Your order qualifies for FREE STANDARD SHIPPING!
     </string>
     <string name="checkout">Checkout</string>
-    <string name="your_cart_is_empty">Your Cart is Empty. \n Let\'s find the medications you need !</string>
+    <string name="your_cart_is_empty">Your Cart is Empty.</string>
     <string name="dollar_placeholder">$</string>
     <string name="cart_title">Cart</string>
     <string name="select_item_quantity">Select Item Quantity</string>

@@ -162,11 +162,11 @@ public class CommonWebviewFragment extends AbstractFragment {
             CookieManager.getInstance().setAcceptCookie(true);
         }
 
-        String cookieString = null;
+        String cookieString = "";
         for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
             Cookie cookie = iterator.next();
             if (cookie.name().equals("JSESSIONID")) {
-                cookieString = "JSESSIONID=" + cookie.value() + "; ";
+                cookieString = cookieString + "JSESSIONID=" + cookie.value() + "; ";
             } else if (cookie.name().equals("SITESERVER")) {
                 cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
             }
@@ -193,7 +193,7 @@ public class CommonWebviewFragment extends AbstractFragment {
         };
 
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        mWebView.setWebViewClient(new PetMedWebViewClient(getActivity()));
+        mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(),mWebView,url,false));
         mWebView.setWebChromeClient(client);
         mWebView.loadUrl(url);
 
@@ -216,7 +216,7 @@ public class CommonWebviewFragment extends AbstractFragment {
         };
 
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        mWebView.setWebViewClient(new PetMedWebViewClient(getActivity()));
+        mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(),mWebView,htmlData,true));
         mWebView.setWebChromeClient(client);
     }
 

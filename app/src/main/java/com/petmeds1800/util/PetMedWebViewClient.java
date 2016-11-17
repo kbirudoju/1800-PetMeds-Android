@@ -2,19 +2,26 @@ package com.petmeds1800.util;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import okhttp3.Cookie;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -30,50 +37,91 @@ import rx.schedulers.Schedulers;
 public class PetMedWebViewClient extends WebViewClient {
 
     private Activity mContext;
+    private WebView mWebView;
+    private String mUrl;
+    private boolean shouldloaddata = false;
+
+    @Inject
+    PetMedsApiService mPetMedsApiService;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
+    @Inject
+    SetCookieCache mCookieCache;
 
     @Inject
     OkHttpClient okHttpClient;
 
-    public PetMedWebViewClient(Activity mContext) {
+    public PetMedWebViewClient(Activity mContext, WebView mWebView, String mUrl, boolean shouldloaddata) {
         this.mContext = mContext;
+        this.mWebView = mWebView;
+        this.mUrl = mUrl;
+        this.shouldloaddata = shouldloaddata;
         PetMedsApplication.getAppComponent().inject(this);
     }
 
     private void finalyClose(){
         Log.w("OverrideUrlLoading", "finalyClose Enter");
-        mContext.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mContext.onBackPressed();
+
+        if (((AppCompatActivity)mContext).getSupportFragmentManager().getBackStackEntryCount()<=0){
+            if (shouldloaddata){
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadData(mUrl, "text/html", "UTF-8");
+                    }
+                });
+            } else {
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl(mUrl);
+                    }
+                });
             }
-        });
+
+        } else {
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mContext.onBackPressed();
+                }
+            });
+        }
         Log.w("OverrideUrlLoading", "finalyClose Enter");
     }
 
-    private void onSuccessResponse(final WebView view, final String url){
+    private void onSuccessResponse(final WebView view, String url){
         Log.w("OverrideUrlLoading", "onSuccessResponse Enter");
 
         mContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    ((HomeActivity)mContext).updateCartMenuItemCount();
-                } catch (Exception ex){
-                    ex.printStackTrace();
-                }
+                Log.w("onSuccessResponse", "onSuccessResponse postdelayed Enter");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+                    }
+                },2000);
+                Log.w("onSuccessResponse", "onSuccessResponse postdelayed Exit");
             }
         });
         Log.w("OverrideUrlLoading", "onSuccessResponse Exit");
     }
 
-    private void onFailureResponse(final WebView view, final String url, final String responseCode){
+    private void onFailureResponse(final WebView view, String url, final String responseCode){
         Log.w("OverrideUrlLoading", "FailureResponse Enter");
 
         mContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(mContext,responseCode, Toast.LENGTH_LONG).show();
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_HOME_ROOT_SESSION_CONFIRMATION));
+                if (responseCode.contains("Conflict")) {
+                    Toast.makeText(mContext,"Item Added Successfully",Toast.LENGTH_SHORT).show();
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_HOME_ROOT_SESSION_CONFIRMATION));
+                }
             }
         });
         Log.w("OverrideUrlLoading", "FailureResponse Exit");
@@ -85,21 +133,32 @@ public class PetMedWebViewClient extends WebViewClient {
 
         if (url.contains("Add+To+Cart")){
             Log.w("OverrideUrlLoading", "Contains Cart");
-            syncCallWebViewResponse(view,url);
+            Log.w("URL HANDLING PRIOR", url);
+
+            syncCallWebViewResponse(view,url,false);
             return true;
         } else {
             return super.shouldOverrideUrlLoading(view, url);
         }
     }
 
-    private void syncCallWebViewResponse(final WebView view, final String url){
+    private void syncCallWebViewResponse(final WebView view,final String url,final boolean isRepeat){
         Log.w("OverrideUrlLoading", "Thread_URL_Call_Cart Enter");
 
         Observable.create(new Observable.OnSubscribe<Response>() {
             @Override
             public void call(Subscriber<? super Response> subscriber) {
                 try {
-                    Response response = okHttpClient.newCall(new Request.Builder().url(url).build()).execute();
+                    Log.w("URL HANDLING", url);
+                    Response response;
+                    if (url.toString().contains("jsessionid")) {
+                        Log.w("URL HANDLING", "in new okhttpclient");
+                         response = new OkHttpClient().newCall(new Request.Builder().url(url).build()).execute();
+                    }
+                    else {
+                        Log.w("URL HANDLING", "in mokhttpclient");
+                         response = okHttpClient.newCall(new Request.Builder().url(url).build()).execute();
+                    }
                     subscriber.onNext(response);
                     subscriber.onCompleted();
                     if (!response.isSuccessful()) subscriber.onError(new Exception("error"));
@@ -120,9 +179,44 @@ public class PetMedWebViewClient extends WebViewClient {
 
                     @Override
                     public void onNext(Response response) {
-                        onSuccessResponse(view,url);
+                        Log.w("URL HANDLING Response", response.toString());
+                        if (response.toString().contains("Conflict") && !isRepeat){
+                            renewSessionConfirmationNumber(view,url,true);
+
+                        } else if (response.toString().contains("Conflict")){
+                            Log.w("URL HANDLING Response","Conflict Still Remains : " + response.toString());
+                        } else {
+                            onSuccessResponse(view,url);
+                        }
                     }
                 });
         Log.w("OverrideUrlLoading", "Thread_URL_Call_Cart Exit");
+    }
+
+    /**
+     * Renew Session Confirmation number in case it has expired
+     * This is intrinsic call and does not effect overall cart fragment APIs
+     * @param
+     */
+    private void renewSessionConfirmationNumber(final WebView view, final String url, boolean repeat) {
+        Log.w("ShoppingCartListPresntr", "renewSessionConfirmationNumber Enter");
+
+        mPetMedsApiService.getSessionConfirmationNumber().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<SessionConfNumberResponse>() {
+
+            @Override
+            public void onCompleted() {}
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(mContext,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
+                syncCallWebViewResponse(view,url,true);
+            }
+        });
+        Log.w("ShoppingCartListPresntr", "renewSessionConfirmationNumber Exit");
     }
 }

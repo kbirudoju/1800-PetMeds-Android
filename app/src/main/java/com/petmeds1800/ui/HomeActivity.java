@@ -35,6 +35,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -562,11 +563,16 @@ public class HomeActivity extends AbstractActivity
             if (msg.what == Constants.KEY_COMPLETED_ASYN_COUNT_FETCH) {
                 if (msg.getData().getBoolean(Constants.KEY_SHOPPING_CART_ASYNC_SUCCESS)) {
                     mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image_container).setVisibility(View.VISIBLE);
-                    ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image))
-                            .setText(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE));
+                    if ((Integer.parseInt(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE)))>0){
+                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setBackgroundResource(R.drawable.ball_red);
+                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setTextColor(Color.WHITE);
+                    } else {
+                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setBackgroundResource(R.drawable.ball_white);
+                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setTextColor(getResources().getColor(R.color.petmeds_blue));
+                    }
+                    ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setText(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE));
                 } else {
-                    Snackbar.make(mContainerLayout, msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE),
-                            Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(mContainerLayout, msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE),Snackbar.LENGTH_LONG).show();
                 }
             }
         }
