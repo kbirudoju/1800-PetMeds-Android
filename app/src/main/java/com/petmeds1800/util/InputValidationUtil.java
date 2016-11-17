@@ -5,5 +5,5 @@ package com.petmeds1800.util;
  */
 public class InputValidationUtil {
 
-    public static final String passwordPattern = "^(?=.*[0-9])(?=.*[a-z]).{8,}$";
+    public static final String passwordPattern = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,}$";
 }

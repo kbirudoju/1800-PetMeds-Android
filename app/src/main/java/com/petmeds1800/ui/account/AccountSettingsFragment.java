@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -143,76 +142,52 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     }
 
     private void validateAndUpdate() {
-        boolean invalidEmail;
-        boolean invalidPassword;
 
-        ///// Negative flow /////
-        //email validation
-        if (mEmailText.getText().toString().isEmpty()) {
-            mEmailInputLayout.setError(getContext().getString(R.string.accountSettingsEmailEmptyError));
-            invalidEmail = true;
-        } else if (!mPresenter.validateEmail(mEmailText.getText().toString())) {
-            mEmailInputLayout.setError(getContext().getString(R.string.accountSettingsEmailInvalidError));
-            invalidEmail = true;
-        } else {
-            mEmailInputLayout.setError(null);
-            mEmailInputLayout.setErrorEnabled(false);
-            invalidEmail = false;
+        boolean proceedUpdate = true;
+
+        mEmailInputLayout.setError(null);
+        mPasswordInputLayout.setError(null);
+        mConfirmPasswordInputLayout.setError(null);
+
+        String emailText = mEmailText.getText().toString().trim();
+        if (emailText.isEmpty()) {
+            mEmailInputLayout.setError(getString(R.string.accountSettingsEmailEmptyError));
+            proceedUpdate = false;
+        } else if (!mPresenter.validateEmail(emailText)) {
+            mEmailInputLayout.setError(getString(R.string.accountSettingsEmailInvalidError));
+            proceedUpdate = false;
         }
 
-        //password validation
-        mPasswordInputLayout.setEnabled(true);
-        mConfirmPasswordInputLayout.setEnabled(true);
-        if (TextUtils.isEmpty(mPasswordText.getText()) && TextUtils.isEmpty(mConfirmPasswordEdit.getText())) {
-            mConfirmPasswordInputLayout
-                    .setError(getContext().getString(R.string.accountSettingsConfirmPasswordEmptyError));
-            mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordEmptyError));
-            invalidPassword = true;
-        } else if (TextUtils.isEmpty(mPasswordText.getText())) {
-            mConfirmPasswordInputLayout.setError(null);
-            mConfirmPasswordInputLayout.setEnabled(false);
-            mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordEmptyError));
-            invalidPassword = true;
-        } else if (TextUtils.isEmpty(mConfirmPasswordEdit.getText())) {
-            mPasswordInputLayout.setError(null);
-            mPasswordInputLayout.setEnabled(false);
-            mConfirmPasswordInputLayout.getEditText().requestFocus();
-            invalidPassword = true;
-        } else if (!mPresenter.validatePassword(mPasswordText.getText().toString())) {
-            mConfirmPasswordInputLayout.setError(null);
-            mConfirmPasswordInputLayout.setEnabled(false);
-            mPasswordInputLayout.setError(getContext().getString(R.string.accountSettingsPasswordInvalidError));
-            invalidPassword = true;
-        } else if (!mPresenter.validateConfirmPassword(mPasswordText.getText().toString(),
-                mConfirmPasswordEdit.getText().toString())) {
-            mPasswordInputLayout.setError(null);
-            mPasswordInputLayout.setEnabled(false);
-            mConfirmPasswordInputLayout
-                    .setError(getContext().getString(R.string.accountSettingsConfirmPasswordInvalidError));
-            invalidPassword = true;
-        } else {
-            mPasswordInputLayout.setError(null);
-            mPasswordInputLayout.setErrorEnabled(false);
-            mConfirmPasswordInputLayout.setError(null);
-            mConfirmPasswordInputLayout.setEnabled(false);
-            invalidPassword = false;
+        String passwordText = mPasswordText.getText().toString().trim();
+        if (passwordText.isEmpty()) {
+            mPasswordInputLayout.setError(getString(R.string.accountSettingsPasswordEmptyError));
+            proceedUpdate = false;
+        } else if (!mPresenter.validatePassword(passwordText)) {
+            mPasswordInputLayout.setError(getString(R.string.accountSettingsPasswordInvalidError));
+            proceedUpdate = false;
         }
-        //return if needed
-        if (invalidEmail || invalidPassword) {
-            // do nothing as we have already prompted for the errors
-        } else {
-            //// Start the Positve flow ////
+
+        String confirmPasswordText = mConfirmPasswordEdit.getText().toString().trim();
+        if (confirmPasswordText.isEmpty()) {
+            mConfirmPasswordInputLayout.setError(getString(R.string.accountSettingsPasswordEmptyError));
+            proceedUpdate = false;
+        } else if (!passwordText.equals(confirmPasswordText)) {
+            mConfirmPasswordInputLayout.setError(getString(R.string.error_confirm_password_must_match));
+            proceedUpdate = false;
+        }
+
+        if(proceedUpdate){
             mProgressBar.setVisibility(View.VISIBLE);
             //following should be executable after validation success
             enableEditTexts(false);
             enableEditAction();
             mPresenter.saveSettings(new UpdateAccountSettingsRequest(
-                    mEmailText.getText().toString()
+                    emailText
                     , mUserId
-                    , mPasswordText.getText().toString()
+                    , passwordText
                     , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
-
         }
+
     }
 
     @Override
