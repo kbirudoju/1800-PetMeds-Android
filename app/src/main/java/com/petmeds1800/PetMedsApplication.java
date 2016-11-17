@@ -12,7 +12,7 @@ import android.support.multidex.MultiDexApplication;
 public class PetMedsApplication extends MultiDexApplication {
 
     private static AppComponent mAppComponent;
-
+    public static boolean menuItemsClicked = false;
     @Override
     public void onCreate() {
         super.onCreate();

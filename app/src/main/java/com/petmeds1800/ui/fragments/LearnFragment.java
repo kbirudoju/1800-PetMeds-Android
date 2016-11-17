@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
@@ -45,15 +46,16 @@ public class LearnFragment extends AbstractFragment {
 
     @BindView(R.id.learn_viewpager)
     ViewPager mLearnViewPager;
+
     MenuItem mAboutMenuItem, mSearchMenuItem;
-    public static boolean menuItemsClicked;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_learn, container, false);
         ButterKnife.bind(this, view);
-        setHasOptionsMenu(menuItemsClicked ? true : false);
-        menuItemsClicked = false;
+        setHasOptionsMenu(PetMedsApplication.menuItemsClicked ? true : false);
+        PetMedsApplication.menuItemsClicked = false;
         setUpViewPager(mLearnViewPager);
         mLearnTabs.setupWithViewPager(mLearnViewPager);
         //start listening for optionsMenuAction
@@ -95,7 +97,7 @@ public class LearnFragment extends AbstractFragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 try {
-                    menuItemsClicked = true;
+                    PetMedsApplication.menuItemsClicked = true;
                     String encodedQuery = URLEncoder.encode(query, "utf-8");
                     String url = getString(R.string.server_endpoint) + "/search.jsp?Ns=product.salesvolume%7C1&Ntt="
                             + encodedQuery;
@@ -125,7 +127,7 @@ public class LearnFragment extends AbstractFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.action_about) {
-            menuItemsClicked = true;
+            PetMedsApplication.menuItemsClicked = true;
             Bundle bundle = new Bundle();
             bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_about));
             bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.url_learn_about));

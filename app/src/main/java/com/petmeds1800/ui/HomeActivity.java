@@ -81,6 +81,8 @@ public class HomeActivity extends AbstractActivity
 
     private static final String SCREEN_TYPE = "screenType";
 
+    private static final String NAVIGATE_TO_CART = "navigateToCart";
+
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
 
@@ -269,7 +271,11 @@ public class HomeActivity extends AbstractActivity
                 }
             }
         }, 500);
-
+        //To scroll to cart fragment in case of anonymous checkout process
+        if (getIntent() != null && getIntent().getBooleanExtra(NAVIGATE_TO_CART, false)) {
+            getIntent().putExtra(NAVIGATE_TO_CART, false);
+            mViewPager.setCurrentItem(1);
+        }
         pageChangeListener.onPageSelected(0);
         invalidateOptionsMenu(0);
 
@@ -464,7 +470,8 @@ public class HomeActivity extends AbstractActivity
                         if (securityStatus == 0 || securityStatus
                                 == 2) {  // We need to treat security status 2 same as 0 as all the API on AccountSection stopped working if we would treat 2 same as 4
                             showFingerprintDialog();
-                        } else if (securityStatus == 4 || securityStatus == 5) { //As per backend team, security status 4 or 5 should be treated similarly
+                        } else if (securityStatus == 4 || securityStatus
+                                == 5) { //As per backend team, security status 4 or 5 should be treated similarly
                             //TODO: research more into silent sign in logic
                         }
                     }

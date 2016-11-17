@@ -139,7 +139,7 @@ public class AddEditAddressFragment extends AbstractFragment
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.addEditAddress_container)
     LinearLayout mContainerLayout;
 
     @Inject

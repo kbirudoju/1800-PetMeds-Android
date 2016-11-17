@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.learn;
 
+import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.PetEducationCategory;
 import com.petmeds1800.ui.HomeActivity;
@@ -157,6 +158,7 @@ public class MedConditionsFragment extends AbstractFragment
 
     @Override
     public void onItemClick(int position) {
+        PetMedsApplication.menuItemsClicked = true;
         showWebViewFragment(mMedConditionList.get(position).getCategoryName(),
                 mMedConditionList.get(position).getLink());
     }

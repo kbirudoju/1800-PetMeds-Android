@@ -250,7 +250,6 @@ public class CommonWebviewFragment extends AbstractFragment {
     @Override
     public void onDestroyView() {
         deregisterIntent(getContext());
-        LearnFragment.menuItemsClicked = true;
         super.onDestroyView();
     }
 

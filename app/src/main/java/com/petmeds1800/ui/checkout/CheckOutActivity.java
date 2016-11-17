@@ -63,6 +63,8 @@ public class CheckOutActivity extends AbstractActivity
 
     public static final String STEP_NAME = "stepName";
 
+    private static final String NAVIGATE_TO_CART = "navigateToCart";
+
     @BindView(R.id.firstShipmentAdressButton)
     Button mFirstShipmentAdressButton;
 
@@ -290,6 +292,7 @@ public class CheckOutActivity extends AbstractActivity
         public boolean onOptionsItemSelected (MenuItem item){
             if (item.getItemId() == android.R.id.home) {
                 Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.putExtra(NAVIGATE_TO_CART,true);
                 //create a new task
                 // when navigating up, with a synthesized back stack.
                 TaskStackBuilder.create(this)
