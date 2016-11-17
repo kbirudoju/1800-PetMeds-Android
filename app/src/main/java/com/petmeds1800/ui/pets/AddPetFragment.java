@@ -148,7 +148,7 @@ public class AddPetFragment extends AbstractFragment
     @BindView(R.id.medication_conditions_details)
     TextView mMedicationConditionsDetails;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.petContainerLayout)
     RelativeLayout mContainerLayout;
 
     @BindView(R.id.current_medications_title)
