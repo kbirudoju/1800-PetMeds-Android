@@ -47,6 +47,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.R.id.message;
+
 /**
  * Created by Abhinav on 13/8/16.
  */
@@ -123,7 +125,7 @@ public class AddEditCardFragment extends AbstractFragment
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.addCardContainerLayout)
     LinearLayout mContainerLayout;
 
     private AddACardContract.Presenter mPresenter;
@@ -332,6 +334,7 @@ public class AddEditCardFragment extends AbstractFragment
             } else {
                 //return if needed
                 if (invalidCreditCardNumber || invalidExpirationDate || invalidCvv) {
+                    Utils.displayCrouton(getActivity(), getString(R.string.errorMsgForEmail), mContainerLayout);
                     return super.onOptionsItemSelected(item);
                 }
 

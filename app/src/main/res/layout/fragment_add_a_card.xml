@@ -7,7 +7,7 @@
               android:paddingTop="@dimen/activity_vertical_margin"
               android:background="@color/pattern_light_blue"
               tools:context="com.petmeds1800.ui.payment.AddEditCardFragment"
-              android:id="@+id/containerLayout">
+              android:id="@+id/addCardContainerLayout">
 
     <include
             layout="@layout/error_retry_layout">

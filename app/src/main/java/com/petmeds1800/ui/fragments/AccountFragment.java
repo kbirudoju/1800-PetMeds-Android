@@ -231,7 +231,6 @@ public class AccountFragment extends AbstractFragment
         PetMedsApplication.getAppComponent().inject(this);
         mPresenter = new SignOutPresenter(this);
         ((AbstractActivity) getActivity()).disableBackButton();
-
         setHasOptionsMenu(false);
         //start listening for optionsMenuAction
         registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());

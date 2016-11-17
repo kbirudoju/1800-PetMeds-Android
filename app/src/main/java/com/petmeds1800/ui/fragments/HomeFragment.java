@@ -69,8 +69,8 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         ButterKnife.bind(this, view);
         setUpViewPager(homeViewPager);
         homeTabs.setupWithViewPager(homeViewPager);
-
         setHasOptionsMenu(true);
+        ((AbstractActivity) getActivity()).getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
         //start listening for optionsMenuAction
         registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
 

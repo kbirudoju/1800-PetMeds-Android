@@ -1,22 +1,5 @@
 package com.petmeds1800.ui.learn;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Spanned;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.PetEducationCategory;
 import com.petmeds1800.ui.HomeActivity;
@@ -25,6 +8,22 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.util.Utils;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Spanned;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,8 @@ import butterknife.OnClick;
  * Created by Digvijay on 10/18/2016.
  */
 
-public class MedConditionsFragment extends AbstractFragment implements MedConditionsListContract.View, MedConditionsListAdapter.OnItemClickListener {
+public class MedConditionsFragment extends AbstractFragment
+        implements MedConditionsListContract.View, MedConditionsListAdapter.OnItemClickListener {
 
     @BindView(R.id.error_layout)
     LinearLayout mErrorLayout;
@@ -60,6 +60,8 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
 
     private MedConditionsListContract.Presenter mPresenter;
 
+    public static final String MEDCONDITIONS_LIST_ITEMS_CLICK_ACTION="medConditionsItemsClickedAction";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mPresenter = new MedConditionsListPresenter(this, getContext());
@@ -68,7 +70,8 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_conditions, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(false);
@@ -154,7 +157,8 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
 
     @Override
     public void onItemClick(int position) {
-        showWebViewFragment(mMedConditionList.get(position).getCategoryName(), mMedConditionList.get(position).getLink());
+        showWebViewFragment(mMedConditionList.get(position).getCategoryName(),
+                mMedConditionList.get(position).getLink());
     }
 
     @Override
@@ -162,10 +166,9 @@ public class MedConditionsFragment extends AbstractFragment implements MedCondit
         deregisterIntent(getContext());
         super.onDestroyView();
     }
-
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
-        checkAndSetHasOptionsMenu(intent , LearnRootFragment.class.getName());
+        checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
         super.onReceivedBroadcast(context, intent);
     }
 }
