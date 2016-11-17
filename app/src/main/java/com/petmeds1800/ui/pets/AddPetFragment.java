@@ -735,7 +735,7 @@ public class AddPetFragment extends AbstractFragment
     @Override
     public void onError(final String errorMessage) {
         progressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), errorMessage, mViewContainer);
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
 
 
 

@@ -673,7 +673,8 @@
     <string name="mailing_prescription_txt">WILL YOU BE MAILING IN A PRESCRIPTION?</string>
     <string name="review_and_submit_txt">CONTINUE TO REVIEW &amp; SUBMIT ORDER</string>
     <string name="add_zip_code_msg">Please add a valid zipcode in your default address.</string>
-    <string name="location_not_found_error">Some Error Occured. Please try again.</string>
+    <string name="location_not_found_error">Unable to find location. Please try again.</string>
+    <string name="zipcode_not_found_error">Unable to find zipCode. Please try again.</string>
     <string name="no_internet_caps">No Internet Connection</string>
 
 

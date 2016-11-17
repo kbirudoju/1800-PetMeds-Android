@@ -172,6 +172,7 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
        // Snackbar.make(mVetListRecyclerView, , Snackbar.LENGTH_LONG).show();
         Utils.displayCrouton(getActivity(), errorMessage, mContainer);
 
+
         try {
             ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
         } catch (Exception e) {
@@ -240,11 +241,11 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
     @Override
     public void onZipCodeFetched(String zipCode) {
         if (zipCode != null) {
-            try {
+           /* try {
                 ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
             mZipCode = zipCode;
             performSearch(mZipCode);
         }
@@ -252,7 +253,14 @@ public class FindAVetFragment extends AbstractFragment implements FindVetContrac
 
     @Override
     public void onZipCodeError(String error) {
+        Log.d("onError", error);
+        try {
+            ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Utils.displayCrouton(getActivity(), error, mContainer);
+
     }
 
 

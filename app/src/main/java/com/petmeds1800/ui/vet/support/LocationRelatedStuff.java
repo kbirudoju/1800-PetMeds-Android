@@ -26,6 +26,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
 
 import java.util.List;
 import java.util.Locale;
@@ -80,8 +81,8 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
 
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(100); // Update location every second
-
+        mLocationRequest.setInterval(1000); // Update location every second
+        mLocationRequest.setNumUpdates(1);
         buildLocationSettingsRequest();
 
     }
@@ -108,11 +109,17 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d("Inside","onLocationChanged"+">>>>>>");
+        stopLocationUpdate();
         lat = (location.getLatitude());
         lon = (location.getLongitude());
-        // getZipCode();
+        getZipCode();
     }
-
+    public void stopLocationUpdate(){
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    mGoogleApiClient, this);
+    }
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         try {
@@ -227,17 +234,21 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
         geocoder = new Geocoder(mContext, Locale.getDefault());
         try {
             addresses = geocoder.getFromLocation(lat, lon, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-           if(addresses!=null){
+           Log.d("address is",addresses+">>");
+           if(addresses!=null && addresses.size()>0){
                String postalCode = addresses.get(0).getPostalCode();
                Log.d("zipcode", postalCode + ">>>>");
                if(postalCode!=null){
                    mZipCodeListener.onZipCodeFetched(postalCode);
+               }else{
+                   mZipCodeListener.onZipCodeError(mContext.getString(R.string.zipcode_not_found_error));
                }
            }
             else{
                 mZipCodeListener.onZipCodeError(mContext.getString(R.string.location_not_found_error));
             }
         } catch (Exception e) {
+            mZipCodeListener.onZipCodeError(mContext.getString(R.string.location_not_found_error));
             e.printStackTrace();
         }
 
@@ -262,28 +273,25 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
             getLocationUpdate();
         }
 
-
-       /* if (mLastLocation != null) {
-            lat = (mLastLocation.getLatitude());
-            lon = (mLastLocation.getLongitude());
-
-        }
-        updateUI();*/
     }
 
 
     public void getLocationUpdate(){
+        Log.d("Inside","getLocationUpdate"+">>>>>>");
         try {
+           ((AbstractActivity) mContext).startLoadingGif(mContext);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+           mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
             if(mLastLocation!=null){
                 lat = (mLastLocation.getLatitude());
                 lon = (mLastLocation.getLongitude());
             }
-            Log.d("latitude and longitude",lat+">>>>"+lon);
-            getZipCode();
+            Log.d("latitude and longitude", lat + ">>>>" + lon);
+         //   getZipCode();
         }catch (SecurityException e){
+          e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
