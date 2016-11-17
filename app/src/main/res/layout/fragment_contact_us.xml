@@ -154,6 +154,13 @@
                     android:text="@string/fax_pharmacy"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
+                <ImageView
+                    android:id="@+id/pharmacy_call_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_phone" />
 
             </RelativeLayout>
 

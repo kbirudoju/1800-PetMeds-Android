@@ -1,9 +1,5 @@
 package com.petmeds1800.util;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.NameValueData;
-import com.petmeds1800.ui.AbstractActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.ui.AbstractActivity;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -231,7 +231,7 @@ public class Utils {
     public static void sendEmail(Context context, String receiverEmail, String subject, String body) {
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         if (receiverEmail != null && !receiverEmail.isEmpty()) {
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, receiverEmail);
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{receiverEmail});
         }
         if (subject != null && !subject.isEmpty()) {
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);

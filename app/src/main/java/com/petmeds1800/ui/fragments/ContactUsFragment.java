@@ -161,7 +161,7 @@ public class ContactUsFragment extends AbstractFragment {
 
     @OnClick(R.id.view_call_toll_free)
     public void callPhoneTollFree() {
-        initCallPhonePermissionsWrapper(getString(R.string.phone_toll_free));
+        initCallPhonePermissionsWrapper(getString(R.string.phone_toll_free_number));
     }
 
     @OnClick(R.id.view_call_main)
@@ -171,12 +171,12 @@ public class ContactUsFragment extends AbstractFragment {
 
     @OnClick(R.id.view_call_pharmacy)
     public void callPhonePharmacy() {
-        initCallPhonePermissionsWrapper(getString(R.string.phone_pharmacy));
+        initCallPhonePermissionsWrapper(getString(R.string.phone_pharmacy_number));
     }
 
-    @OnClick(R.id.view_fax_pharmacy)
+    @OnClick(R.id.pharmacy_call_main)
     public void faxPharmacy() {
-
+        initCallPhonePermissionsWrapper(getString(R.string.fax_pharmacy));
     }
 
     private void initCallPhonePermissionsWrapper(final String phoneNumber) {
