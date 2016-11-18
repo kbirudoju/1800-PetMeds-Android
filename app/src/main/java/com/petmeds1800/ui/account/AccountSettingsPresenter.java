@@ -1,16 +1,19 @@
 package com.petmeds1800.ui.account;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.Profile;
 import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.UpdateAccountSettingsResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.InputValidationUtil;
-
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.util.Log;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import javax.inject.Inject;
 
@@ -33,10 +36,11 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
-
-    AccountSettingsPresenter(AccountSettingsContract.View settingsView) {
+    private Context mContext;
+    AccountSettingsPresenter(AccountSettingsContract.View settingsView,  Context context) {
         mView = settingsView;
         PetMedsApplication.getAppComponent().inject(this);
+        this.mContext=context;
     }
 
     @Override
@@ -78,9 +82,14 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AccountSettings", e.getLocalizedMessage());
-                        if (mView.isActive()) {
+                        if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
+                            if(mView.isActive())
+                            mView.showError(mContext.getString(R.string.no_internet_caps));
+                        }else {
+                            if(mView.isActive())
                             mView.showError(e.getLocalizedMessage());
                         }
+
                     }
 
                     @Override
@@ -111,7 +120,11 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("AccountSettings", e.getLocalizedMessage());
-                        if (mView.isActive()) {
+                        if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
+                            if(mView.isActive())
+                            mView.showError(mContext.getString(R.string.no_internet_caps));
+                        }else {
+                            if(mView.isActive())
                             mView.showError(e.getLocalizedMessage());
                         }
                     }

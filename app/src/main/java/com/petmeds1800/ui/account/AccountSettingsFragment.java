@@ -1,14 +1,5 @@
 package com.petmeds1800.ui.account;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
-import com.petmeds1800.model.entities.User;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -22,8 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
+import com.petmeds1800.model.entities.User;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -67,11 +69,14 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
     private static final String BLANK = "";
 
+    @BindView(R.id.account_setting_container)
+    LinearLayout mAccountSettingContainer;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mPresenter = new AccountSettingsPresenter(this);
+        mPresenter = new AccountSettingsPresenter(this,getActivity());
         PetMedsApplication.getAppComponent().inject(this);
     }
 
@@ -244,7 +249,8 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @Override
     public void showError(String error) {
         mProgressBar.setVisibility(View.GONE);
-        Snackbar.make(mPasswordText, error, Snackbar.LENGTH_SHORT).show();
+        Utils.displayCrouton(getActivity(),error,mAccountSettingContainer);
+      //  Snackbar.make(mPasswordText, error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
