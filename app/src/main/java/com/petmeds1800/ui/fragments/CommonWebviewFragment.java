@@ -198,7 +198,7 @@ public class CommonWebviewFragment extends AbstractFragment {
         };
 
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(),mWebView,url,false));
+        mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(),mWebView,url,false,mProgressBar));
         mWebView.setWebChromeClient(client);
         mWebView.loadUrl(url);
 
@@ -212,16 +212,17 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         WebChromeClient client = new WebChromeClient() {
 
+            @Override
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
                     mProgressBar.setVisibility(View.GONE);
-
                 }
+                super.onProgressChanged(view, progress);
             }
         };
 
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(),mWebView,htmlData,true));
+        mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(),mWebView,htmlData,true,mProgressBar));
         mWebView.setWebChromeClient(client);
     }
 
@@ -237,10 +238,13 @@ public class CommonWebviewFragment extends AbstractFragment {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
         WebChromeClient client = new WebChromeClient() {
+
+            @Override
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
                     mProgressBar.setVisibility(View.GONE);
                 }
+                super.onProgressChanged(view, progress);
             }
         };
 

@@ -6,9 +6,12 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
@@ -40,6 +43,7 @@ public class PetMedWebViewClient extends WebViewClient {
     private WebView mWebView;
     private String mUrl;
     private boolean shouldloaddata = false;
+    private ProgressBar mProgressBar;
 
     @Inject
     PetMedsApiService mPetMedsApiService;
@@ -53,16 +57,22 @@ public class PetMedWebViewClient extends WebViewClient {
     @Inject
     OkHttpClient okHttpClient;
 
-    public PetMedWebViewClient(Activity mContext, WebView mWebView, String mUrl, boolean shouldloaddata) {
+    public PetMedWebViewClient(Activity mContext, WebView mWebView, String mUrl, boolean shouldloaddata,ProgressBar mProgressBar) {
         this.mContext = mContext;
         this.mWebView = mWebView;
         this.mUrl = mUrl;
         this.shouldloaddata = shouldloaddata;
+        this.mProgressBar = mProgressBar;
         PetMedsApplication.getAppComponent().inject(this);
     }
 
     private void finalyClose(){
         Log.w("OverrideUrlLoading", "finalyClose Enter");
+
+//        Hide Progress Dialog
+        if (mProgressBar != null){
+            mProgressBar.setVisibility(View.GONE);
+        }
 
         if (((AppCompatActivity)mContext).getSupportFragmentManager().getBackStackEntryCount()<=0){
             if (shouldloaddata){
@@ -80,7 +90,6 @@ public class PetMedWebViewClient extends WebViewClient {
                     }
                 });
             }
-
         } else {
             mContext.runOnUiThread(new Runnable() {
                 @Override
@@ -98,14 +107,8 @@ public class PetMedWebViewClient extends WebViewClient {
         mContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.w("onSuccessResponse", "onSuccessResponse postdelayed Enter");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
-                    }
-                },2000);
-                Log.w("onSuccessResponse", "onSuccessResponse postdelayed Exit");
+                Toast.makeText(mContext, "Item Added Successfully", Toast.LENGTH_SHORT).show();
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
             }
         });
         Log.w("OverrideUrlLoading", "onSuccessResponse Exit");
@@ -119,7 +122,7 @@ public class PetMedWebViewClient extends WebViewClient {
             public void run() {
                 Toast.makeText(mContext,responseCode, Toast.LENGTH_LONG).show();
                 if (responseCode.contains("Conflict")) {
-                    Toast.makeText(mContext,"Item Added Successfully",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,responseCode,Toast.LENGTH_SHORT).show();
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_HOME_ROOT_SESSION_CONFIRMATION));
                 }
             }
@@ -131,6 +134,37 @@ public class PetMedWebViewClient extends WebViewClient {
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         Log.d("url is", url);
 
+        if (CookieManager.getInstance().getCookie(url)!= null && !CookieManager.getInstance().getCookie(url).toString().contains("JSESSIONID")) {
+
+            final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+            if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                //removeSessionCookies seems the only working option.removeAllCookie didn't clear all the cookies in this case.
+                CookieManager.getInstance().removeSessionCookies(null);
+                CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+            } else {
+                CookieManager.getInstance().removeSessionCookie();
+                CookieManager.getInstance().setAcceptCookie(true);
+            }
+
+            String cookieString = "";
+            for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
+                Cookie cookie = iterator.next();
+                if (cookie.name().equals("JSESSIONID")) {
+                    cookieString = cookieString + "JSESSIONID=" + cookie.value() + "; ";
+                } else if (cookie.name().equals("SITESERVER")) {
+                    cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
+                }
+            }
+            cookieString = cookieString + "app=true; ";
+            CookieManager.getInstance().setCookie(url, cookieString);
+
+            if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().flush();
+            } else {
+                CookieSyncManager.getInstance().sync();
+            }
+        }
+
         if (url.contains("Add+To+Cart")){
             Log.w("OverrideUrlLoading", "Contains Cart");
             Log.w("URL HANDLING PRIOR", url);
@@ -138,7 +172,8 @@ public class PetMedWebViewClient extends WebViewClient {
             syncCallWebViewResponse(view,url,false);
             return true;
         } else {
-            return super.shouldOverrideUrlLoading(view, url);
+            mWebView.loadUrl(url);
+            return true;
         }
     }
 
@@ -149,6 +184,12 @@ public class PetMedWebViewClient extends WebViewClient {
             @Override
             public void call(Subscriber<? super Response> subscriber) {
                 try {
+
+//                    Show Progress Dialog
+                    if (mProgressBar != null){
+                        mProgressBar.setVisibility(View.VISIBLE);
+                    }
+
                     Log.w("URL HANDLING", url);
                     Response response;
                     if (url.toString().contains("jsessionid")) {
