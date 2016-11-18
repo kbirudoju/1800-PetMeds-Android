@@ -150,6 +150,7 @@ public class StepThreeRootFragment extends AbstractFragment
             mShippingNavigator.setText(getString(R.string.review_submit_navigator_button_title));
         }
         populateAddress();
+        mPaypalCheckbox.setOnCheckedChangeListener(this);
         Log.d("oncreateview", "STEPTHREEROOTFRAGMENT");
         return view;
 
@@ -164,7 +165,7 @@ public class StepThreeRootFragment extends AbstractFragment
             activity.setLastCompletedSteps(mStepName);
             activity.setActiveStep(mStepName);
         }
-        mPaypalCheckbox.setOnCheckedChangeListener(this);
+
     }
 
 

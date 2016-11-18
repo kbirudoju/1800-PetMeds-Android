@@ -1,5 +1,20 @@
 package com.petmeds1800.ui.checkout;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -20,21 +35,6 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
-
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -374,13 +374,19 @@ public class CheckOutActivity extends AbstractActivity
                 if (mApplicableSteps.size() == 3) {
                     replaceCheckOutFragment(StepFiveRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepFiveRootFragment.class.getName(), false);
-                } else if (mSecurityStatus == 4 || mSecurityStatus == 5) {
+                }else if(mApplicableSteps.size()==4 && stepName.equals("PETVET")){
+                    replaceCheckOutFragment(
+                            StepFourRootFragment.newInstance(mShoppingCartListResponse, stepName),
+                            StepFourRootFragment.class.getName(), false);
+                }
+                else if (mSecurityStatus == 4 || mSecurityStatus == 5) {
                     replaceCheckOutFragment(StepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName,
                                             StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                             StepThreeRootFragment.class.getName(),
                             false);
-                } else { //guest user adding payment for first time
+                }
+                else { //guest user adding payment for first time
                     replaceCheckOutFragment(GuestStepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName),
                             GuestStepThreeRootFragment.class.getName(),

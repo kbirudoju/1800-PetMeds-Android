@@ -258,8 +258,9 @@ public class StepTwoRootFragment extends AbstractFragment
 
         if (mShippingMethod != null) {
             ((CheckOutActivity) getActivity()).showProgress();
-            mPresenter.applyShippingMethods(new ShippingMethodsRequest(mShippingMethod.getShippingMethod(),
+            mPresenter.initializeShippingMethod(new ShippingMethodsRequest(mShippingMethod.getShippingMethod(),
                     mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
+            mPresenter.applyShippingMethods();
         } else {
             showErrorCrouton("You must have a shipping method", false);
         }

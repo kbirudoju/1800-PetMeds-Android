@@ -26,6 +26,7 @@ import com.petmeds1800.model.entities.CommitOrder;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.Item;
 import com.petmeds1800.mvp.BasePresenter;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.Constants;
@@ -107,6 +108,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_confirmation_receipt, container, false);
         ButterKnife.bind(this, view);
+        ((HomeActivity)getActivity()).updateCartTabItemCount();
         return view;
     }
 

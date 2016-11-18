@@ -228,8 +228,39 @@ public class CommonWebviewFragment extends AbstractFragment {
 
 
     private void loadHtmlWithPostRequest(String postData) {
-
         final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            //removeSessionCookies seems the only working option.removeAllCookie didn't clear all the cookies in this case.
+            CookieManager.getInstance().removeSessionCookies(null);
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+        } else {
+            CookieManager.getInstance().removeSessionCookie();
+            CookieManager.getInstance().setAcceptCookie(true);
+        }
+
+        String cookieString = null;
+        for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
+            Cookie cookie = iterator.next();
+            if (cookie.name().equals("JSESSIONID")) {
+                cookieString = "JSESSIONID=" + cookie.value() + "; ";
+            } else if (cookie.name().equals("SITESERVER")) {
+                cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
+            }
+        }
+     //   cookieString = cookieString + "app=true; ";
+        CookieManager.getInstance().setCookie(postData, cookieString);
+
+        if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().flush();
+        } else {
+            CookieSyncManager.getInstance().sync();
+        }
+
+        Log.d("URL", postData + ">>>>>");
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+
+
         if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().flush();
         } else {
@@ -267,12 +298,26 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return super.shouldOverrideUrlLoading(view, url);
+             //this is controversial - see comments and other answers
+            String cookieString = null;
+            for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
+                Cookie cookie = iterator.next();
+                if (cookie.name().equals("JSESSIONID")) {
+                    cookieString = "JSESSIONID=" + cookie.value() + "; ";
+                } else if (cookie.name().equals("SITESERVER")) {
+                    cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
+                }
+            }
+            //   cookieString = cookieString + "app=true; ";
+            CookieManager.getInstance().setCookie(url, cookieString);
+           CookieManager.getInstance().getCookie(url);
+            view.loadUrl(url);
+            return true;
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            if (url.contains("applyPayPalPaymentMethod")) {
+           if (url.contains("applyPayPalPaymentMethod")) {
                 mWebView.loadUrl("javascript:HtmlViewer.showHTML" +
                         "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
 

@@ -42,6 +42,7 @@ public interface StepTwoContract {
 
         void showShippingOptions();
 
-        void applyShippingMethods(ShippingMethodsRequest shippingMethodsRequest);
+        void applyShippingMethods();
+        void initializeShippingMethod(ShippingMethodsRequest shippingMethodsRequest);
     }
 }

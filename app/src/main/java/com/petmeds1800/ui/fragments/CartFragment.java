@@ -429,15 +429,30 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             Log.d("response in cart", response.getCheckoutSteps().getApplicableSteps() + ">>>" + response.getCheckoutSteps().getStepState().getNextCheckoutStep());
 
         } else {
+            Log.d("response in cart", response.getStatus().getErrorMessages().get(0));
             final String errormsg=response.getStatus().getErrorMessages().get(0);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+
+            Thread thread = new Thread() {
                 @Override
                 public void run() {
-                    Utils.displayCrouton(getActivity(), errormsg, mItemListtContainer);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.displayCrouton(getActivity(), errormsg, mItemListtContainer);
+                        }
+                    });
                 }
-            }, 500);
-            Log.d("response in cart", response.getStatus().getErrorMessages().get(0));
+            };
+            thread.start();
+
+
+
+
         }
     }
 
