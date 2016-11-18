@@ -64,6 +64,15 @@ public class LearnFragment extends AbstractFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        //we should set the title only if current selected tab is not the first home tab
+        if(((HomeActivity)getActivity()).getCurrentSelectedTab() == 2) {
+            ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[2]));
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_learn, menu);
         mAboutMenuItem = menu.findItem(R.id.action_about);
@@ -182,12 +191,6 @@ public class LearnFragment extends AbstractFragment {
     public void onDestroyView() {
         deregisterIntent(getContext());
         super.onDestroyView();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[2]));
     }
 
     @Override

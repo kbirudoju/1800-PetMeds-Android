@@ -58,7 +58,15 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
     public void onResume() {
         super.onResume();
         ((AbstractActivity) getActivity()).disableBackButton();
-        ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[0]));
+
+        if(((HomeActivity)getActivity()).getCurrentSelectedTab() == 0) {
+            ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[0]));
+            ((AbstractActivity) getActivity()).getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
+            setHasOptionsMenu(true);
+        }
+        else {
+            ((AbstractActivity) getActivity()).getToolbar().setLogo(null);
+        }
     }
 
     @Nullable
@@ -69,8 +77,6 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         ButterKnife.bind(this, view);
         setUpViewPager(homeViewPager);
         homeTabs.setupWithViewPager(homeViewPager);
-        setHasOptionsMenu(true);
-        ((AbstractActivity) getActivity()).getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
         //start listening for optionsMenuAction
         registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
 

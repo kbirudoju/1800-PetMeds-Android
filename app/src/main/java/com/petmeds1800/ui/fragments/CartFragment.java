@@ -142,7 +142,10 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     public void onResume() {
         super.onResume();
         callmShoppingCartAPI(null);
-        ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[1]));
+        //we should set the title only if current selected tab is not the first home tab
+        if(((HomeActivity)getActivity()).getCurrentSelectedTab() == 1) {
+            ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[1]));
+        }
     }
 
     @Override

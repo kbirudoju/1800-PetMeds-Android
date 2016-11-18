@@ -29,6 +29,7 @@ import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.ui.learn.FeaturedFragment;
 import com.petmeds1800.util.PetMedWebViewClient;
 
 import java.util.Iterator;
@@ -146,7 +147,11 @@ public class CommonWebviewFragment extends AbstractFragment {
         }
 
         ((AbstractActivity) getActivity()).getToolbar().getMenu().clear();
-        ((AbstractActivity) getActivity()).getToolbar().setLogo(null);
+
+        if(title != null && ! title.equals(getString(R.string.label_q_and_a_directory))) {
+            ((AbstractActivity) getActivity()).getToolbar().setLogo(null);
+        }
+
     }
 
 

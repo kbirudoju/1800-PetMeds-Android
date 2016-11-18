@@ -593,6 +593,14 @@ public class HomeActivity extends AbstractActivity
         mViewPager.setCurrentItem(pageNo);
     }
 
+    public int getCurrentSelectedTab() {
+        if(mViewPager != null) {
+            return  mViewPager.getCurrentItem();
+        }
+
+        return -1;
+    }
+
 
     @Override
     public void onPaymentCompleted(ShoppingCartListResponse paypalResponse) {

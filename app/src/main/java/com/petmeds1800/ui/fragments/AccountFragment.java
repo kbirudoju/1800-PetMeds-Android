@@ -128,7 +128,7 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AbstractActivity) getActivity()).setToolBarTitle("Account");
+
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
         mManagePaymentLabel.setOnClickListener(this);
@@ -183,7 +183,10 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
-        ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[3]));
+        //we should set the title only if current selected tab is not the first home tab
+        if(((HomeActivity)getActivity()).getCurrentSelectedTab() == 3) {
+            ((AbstractActivity)getActivity()).setToolBarTitle(getResources().getStringArray(R.array.tab_title)[3]);
+        }
     }
 
     private void fillWindow() {
