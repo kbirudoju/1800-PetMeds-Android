@@ -344,14 +344,15 @@ public class CommonWebviewFragment extends AbstractFragment {
                 onPaymnetSelectedListener.onCheckoutPaymentCompleted(paypalResponse, mStepName);
             } else {
                 onPaymnetSelectedListener.onPaymentCompleted(paypalResponse);
+                //removeFragment();
             }
 
-            removeFragment();
+          removeFragment();
         }
 
     }
 
-    private void removeFragment() {
+    public void removeFragment() {
         Log.d("Remove Fragment","CommonWebViewFragment");
         FragmentManager manager = getActivity().getSupportFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();

@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
@@ -338,14 +351,27 @@ public class StepThreeRootFragment extends AbstractFragment
 
 
     @Override
-    public void onPayPal(final String errorMsg) {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+    public void onPayPal( final String errorMsg) {
+
+
+        Thread thread = new Thread() {
             @Override
             public void run() {
-                onPayPalError(errorMsg);
-            }
-        }, 500);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                }
 
-    }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utils.displayCrouton(getActivity(), errorMsg, mContainerLayout);
+                    }
+                });
+            }
+        };
+        thread.start();
+            }
+
+
 }

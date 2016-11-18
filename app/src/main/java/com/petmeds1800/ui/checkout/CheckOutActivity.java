@@ -545,9 +545,11 @@ public class CheckOutActivity extends AbstractActivity
 
     @Override
     public void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName) {
+   /*  CommonWebviewFragment fragment= (CommonWebviewFragment)getSupportFragmentManager().findFragmentByTag(CommonWebviewFragment.class.getName());
+     fragment.removeFragment();
+*/        if (paypalResponse.getShoppingCart() != null) {
 
-        if (paypalResponse.getShoppingCart() != null) {
-            moveToNext(stepName, paypalResponse);
+         moveToNext(stepName, paypalResponse);
             Log.d("response in cart",
                     paypalResponse.getCheckoutSteps().getApplicableSteps() + ">>>" + paypalResponse.getCheckoutSteps()
                             .getStepState().getNextCheckoutStep() + "stepname" + stepName);
@@ -556,17 +558,7 @@ public class CheckOutActivity extends AbstractActivity
             Log.d("response in cart", paypalResponse.getStatus().getErrorMessages().get(0));
             if (paypalErrorListener != null) {
                 paypalErrorListener.onPayPal(paypalResponse.getStatus().getErrorMessages().get(0));
-                if (paypalResponse.getShoppingCart() != null) {
-                    moveToNext(stepName, paypalResponse);
-                } else {
-                    StepThreeRootFragment stepThreeRootFragment = (StepThreeRootFragment) getSupportFragmentManager()
-                            .findFragmentByTag(StepThreeRootFragment.class.getSimpleName());
-                    if (stepThreeRootFragment != null) {
-                        stepThreeRootFragment.onPayPalError(paypalResponse.getStatus().getErrorMessages().get(0));
 
-                    }
-
-                }
             }
         }
     }
@@ -576,8 +568,9 @@ public class CheckOutActivity extends AbstractActivity
     }
 
     public interface PaypalErrorListener {
+             void onPayPal(String errorMsg);
+        }
 
-        public void onPayPal(String errorMsg);
     }
 
-}
+
