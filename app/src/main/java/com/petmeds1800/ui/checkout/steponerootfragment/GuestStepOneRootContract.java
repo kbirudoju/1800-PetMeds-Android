@@ -24,7 +24,7 @@ public interface GuestStepOneRootContract {
 
         void navigateOnSuccess(ShoppingCartListResponse response);
 
-        void onError(String errorMessage);
+        void hideProgress();
 
         void showErrorCrouton(CharSequence message, boolean span);
 

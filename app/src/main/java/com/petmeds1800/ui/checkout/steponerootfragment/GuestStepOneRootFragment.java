@@ -296,7 +296,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
     }
 
     @Override
-    public void onError(String errorMessage) {
+    public void hideProgress() {
         ((CheckOutActivity) getActivity()).hideProgress();
     }
 

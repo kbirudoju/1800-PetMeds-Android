@@ -64,11 +64,13 @@ public class GuestStepOneRootPresentor implements GuestStepOneRootContract.Prese
                                    if (errorId != 0) {
                                        if (mView.isActive()) {
                                            mView.showErrorCrouton(((Fragment) mView).getString(errorId), false);
+                                           mView.hideProgress();
                                        }
 
                                    } else {
                                        if (mView.isActive()) {
                                            mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                                           mView.hideProgress();
                                        }
                                    }
                                }
@@ -84,7 +86,7 @@ public class GuestStepOneRootPresentor implements GuestStepOneRootContract.Prese
                                        mView.showWarningView(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
                                    } else {
                                        if (mView.isActive()) {
-                                           mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0), true);
+                                           mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0), false);
                                        }
                                    }
 
