@@ -10,6 +10,7 @@ import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.account.SignOutContract;
 import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
 import com.petmeds1800.ui.medicationreminders.service.MedicationReminderResultReceiver;
 import com.petmeds1800.ui.orders.MyOrderFragment;
@@ -123,10 +124,11 @@ public class AccountFragment extends AbstractFragment
     private final int TYPE_VET_VERIFY_RX_ALERT = 7;
 
     private final int TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT = 5;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AbstractActivity)getActivity()).setToolBarTitle("Account");
+        ((AbstractActivity) getActivity()).setToolBarTitle("Account");
         myOrderView.setOnClickListener(this);
         mAccountSettings.setOnClickListener(this);
         mManagePaymentLabel.setOnClickListener(this);
@@ -144,12 +146,16 @@ public class AccountFragment extends AbstractFragment
     public void navigateOnPush() {
         int screenType = 0;
         String id = null;
-        //TODO Reminder Id is hardcoded which is done when push payload inplemented
-        String reminderId = null;
+        //TODO Reminder Id is hardcoded which is done when push payload inplementeid
         screenType = ((HomeActivity) getActivity()).getIntent().getIntExtra(PUSH_SCREEN_TYPE, 0);
         ((HomeActivity) getActivity()).getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
         id = ((HomeActivity) getActivity()).getIntent().getStringExtra(PUSH_EXTRA_ID);
         switch (screenType) {
+            case TYPE_MEDICATION_REMINDER__ALERT:
+                replaceAccountAndAddToBackStack(
+                        AddEditMedicationRemindersFragment.newInstance(true, (String) id),
+                        AddEditMedicationRemindersFragment.class.getName());
+                break;
             case TYPE_ORDER_SHIPPED__ALERT:
             case TYPE_VET_VERIFY_RX_ALERT:
                 navigateOnOrderDetailScreen(id);
@@ -177,7 +183,7 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
-        ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[3]));
+        ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[3]));
     }
 
     private void fillWindow() {

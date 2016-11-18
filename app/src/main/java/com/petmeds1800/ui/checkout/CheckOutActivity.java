@@ -274,74 +274,73 @@ public class CheckOutActivity extends AbstractActivity
     }
 
 
+    public void replaceCheckOutFragmentWithBundle(Fragment fragment, String tag, boolean isBackStackEnable,
+            Bundle bundle) {
 
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.step_one_root_fragment, fragment, tag);
+        if (isBackStackEnable) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragment.setArguments(bundle);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+    }
 
-        public void replaceCheckOutFragmentWithBundle (Fragment fragment, String tag,boolean isBackStackEnable, Bundle bundle){
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            upIntent.putExtra(NAVIGATE_TO_CART, true);
+            //create a new task
+            // when navigating up, with a synthesized back stack.
+            TaskStackBuilder.create(this)
+                    // Add all of this activity's parents to the back stack
+                    .addNextIntentWithParentStack(upIntent)
+                    // Navigate up to the closest parent
+                    .startActivities();
 
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.step_one_root_fragment, fragment, tag);
-            if (isBackStackEnable) {
-                fragmentTransaction.addToBackStack(null);
-            }
-            fragment.setArguments(bundle);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
+            return true;
         }
 
-        @Override
-        public boolean onOptionsItemSelected (MenuItem item){
-            if (item.getItemId() == android.R.id.home) {
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                upIntent.putExtra(NAVIGATE_TO_CART,true);
-                //create a new task
-                // when navigating up, with a synthesized back stack.
-                TaskStackBuilder.create(this)
-                        // Add all of this activity's parents to the back stack
-                        .addNextIntentWithParentStack(upIntent)
-                        // Navigate up to the closest parent
-                        .startActivities();
+        return super.onOptionsItemSelected(item);
+    }
 
-                return true;
-            }
-
-            return super.onOptionsItemSelected(item);
+    @Override
+    public void showProgress() {
+        mProgressDialog.setCancelable(false);
+        if (!mProgressDialog.isAdded()) {
+            mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
         }
+    }
 
-        @Override
-        public void showProgress () {
-            mProgressDialog.setCancelable(false);
-            if (!mProgressDialog.isAdded()) {
-                mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
-            }
+    @Override
+    public void setCheckoutSteps(CheckoutSteps checkoutSteps) {
+        mApplicableSteps = checkoutSteps.getApplicableSteps();
+        mCheckOutBoxContainer.setVisibility(View.VISIBLE);
+        if (mApplicableSteps != null && mApplicableSteps.size() == 4) {
+            hideStepFiveContainer(getResources().getString(R.string.numeric_four));
+        } else if (mApplicableSteps != null && mApplicableSteps.size() == 3) {
+            hideStepContainers();
         }
+        mStepStates = checkoutSteps.getStepState();
+    }
 
-        @Override
-        public void setCheckoutSteps (CheckoutSteps checkoutSteps){
-            mApplicableSteps = checkoutSteps.getApplicableSteps();
-            mCheckOutBoxContainer.setVisibility(View.VISIBLE);
-            if (mApplicableSteps != null && mApplicableSteps.size() == 4) {
-                hideStepFiveContainer(getResources().getString(R.string.numeric_four));
-            } else if (mApplicableSteps != null && mApplicableSteps.size() == 3) {
-                hideStepContainers();
-            }
-            mStepStates = checkoutSteps.getStepState();
-        }
+    @Override
+    public void updateShoppingCartInShoppingCartListResponse(ShoppingCart shoppingCart) {
+        mShoppingCartListResponse.setShoppingCart(shoppingCart);
+        //update the item count as well since we dont have the itemCount field in the initCheckoutAPI response but number of items could change
+        mShoppingCartListResponse.setItemCount(shoppingCart.getCommerceItems().size());
+    }
 
-        @Override
-        public void updateShoppingCartInShoppingCartListResponse (ShoppingCart shoppingCart){
-            mShoppingCartListResponse.setShoppingCart(shoppingCart);
-            //update the item count as well since we dont have the itemCount field in the initCheckoutAPI response but number of items could change
-            mShoppingCartListResponse.setItemCount(shoppingCart.getCommerceItems().size());
-        }
+    //Hide in case of four steps
+    private void hideStepFiveContainer(String textString) {
+        mFourthContainer.setVisibility(View.GONE);
+        mFifthShipmentAdressButton.setText(textString);
 
-        //Hide in case of four steps
-        private void hideStepFiveContainer (String textString){
-            mFourthContainer.setVisibility(View.GONE);
-            mFifthShipmentAdressButton.setText(textString);
+    }
 
-        }
-
-        //Hide in case of five steps
+    //Hide in case of five steps
 
     private void hideStepContainers() {
         hideStepFiveContainer(getResources().getString(R.string.numeric_3));
@@ -509,7 +508,6 @@ public class CheckOutActivity extends AbstractActivity
         } else {
             startNextStep(mApplicableSteps.get(lastCompletedStep + 1));
         }
-
     }
 
     @Override
@@ -530,6 +528,13 @@ public class CheckOutActivity extends AbstractActivity
 
     public int getApplicableSteps() {
         return mApplicableSteps.size();
+    }
+
+    public String getNextApplicableSteps() {
+        if (mShoppingCartListResponse.getCheckoutSteps() != null) {
+            return mShoppingCartListResponse.getCheckoutSteps().getStepState().getNextCheckoutStep();
+        }
+        return null;
     }
 
     @Override
@@ -560,13 +565,13 @@ public class CheckOutActivity extends AbstractActivity
         }
     }
 
-        public void addListener (StepThreeRootFragment stepThreeRootFragment){
-            paypalErrorListener = stepThreeRootFragment;
-        }
-
-        public interface PaypalErrorListener {
-
-            public void onPayPal(String errorMsg);
-        }
-
+    public void addListener(StepThreeRootFragment stepThreeRootFragment) {
+        paypalErrorListener = stepThreeRootFragment;
     }
+
+    public interface PaypalErrorListener {
+
+        public void onPayPal(String errorMsg);
+    }
+
+}

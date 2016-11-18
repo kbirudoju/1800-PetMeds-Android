@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.Spanned;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
@@ -23,6 +13,16 @@ import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.text.Spanned;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -46,7 +46,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
     @BindView(R.id.view_error)
     View mErrorView;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.stpeOneContainerLayout)
     RelativeLayout mContainerLayout;
 
     private Address mAddress;

@@ -703,5 +703,7 @@
     <string name="label_vet_search_results_analytics_title">Vet Search Results</string>
     <string name="label_education_home_analytics_title">Education Home</string>
     <string name="label_shipping_analytics_title">Shipping</string>
+    <string name="label_paypal">PayPal</string>
+    <string name="label_credit_card">CreditCard</string>
 </resources>
 

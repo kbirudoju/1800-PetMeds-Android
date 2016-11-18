@@ -45,7 +45,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.stepFourContainerLayout)
     RelativeLayout mContainerLayout;
 
     private StepFourRootContract.Presenter mPresenter;

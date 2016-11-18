@@ -78,7 +78,6 @@ import com.petmeds1800.model.shoppingcart.response.CardDetailResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.model.shoppingcart.response.Status;
 
-
 import java.util.HashMap;
 
 import okhttp3.MultipartBody;
@@ -397,5 +396,7 @@ public interface PetMedsApiService {
     @POST("/petImageUpload.jsp")
     Observable<Status> uploadPetImage( @Part("petid") RequestBody id,@Part MultipartBody.Part file);
 
-
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/reminder/ReminderActor/medReminderDetails")
+    Observable<AddMedicationReminderResponse> getMedicationReminderDetails(@Query("_dynSessConf") String sessionConfNumber, @Query("reminderId")int reminderId);
 }

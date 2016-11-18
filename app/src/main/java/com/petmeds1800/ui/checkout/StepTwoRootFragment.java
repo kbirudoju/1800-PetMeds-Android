@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.checkout;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -27,6 +13,20 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,14 +119,21 @@ public class StepTwoRootFragment extends AbstractFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shipping_methods, container, false);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
         ButterKnife.bind(this, view);
+        if (((CheckOutActivity) getActivity()).getApplicableSteps() == 4
+                && ((CheckOutActivity) getActivity()).getNextApplicableSteps() != null) {
+            if (((CheckOutActivity) getActivity()).getNextApplicableSteps().equalsIgnoreCase("PETVET")) {
+                mShippingNavigator.setText(getString(R.string.payment_navigator_button_title));
+            }
+        }
         if (((CheckOutActivity) getActivity()).getApplicableSteps() == 3) {
             mShippingNavigator.setText(getString(R.string.reviewsubmit_navigator_button_title));
         }
+
         return view;
     }
 
@@ -150,7 +157,9 @@ public class StepTwoRootFragment extends AbstractFragment
     @Override
     public void onItemClick(int position) {
         for (int i = 0; i < mShippingMethodList.size(); i++) {
-            ShippingMethodsListAdapter.ViewHolder holder = (ShippingMethodsListAdapter.ViewHolder) mRecyclerShippingMethods.findViewHolderForAdapterPosition(i);
+            ShippingMethodsListAdapter.ViewHolder holder
+                    = (ShippingMethodsListAdapter.ViewHolder) mRecyclerShippingMethods
+                    .findViewHolderForAdapterPosition(i);
             holder.selectionImage.setImageResource(R.drawable.ic_radio_button_off);
         }
         mShippingMethod = mShippingMethodList.get(position);

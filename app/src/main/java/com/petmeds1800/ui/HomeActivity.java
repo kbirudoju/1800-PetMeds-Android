@@ -122,7 +122,7 @@ public class HomeActivity extends AbstractActivity
 
     //TODO chnage when push payload is appropriate
 
-
+    private final int TYPE_MEDICATION_REMINDER__ALERT = 1;
     private final int TYPE_OFFER__ALERT = 2;
 
     private final int TYPE_ORDER_SHIPPED__ALERT = 3;
@@ -307,6 +307,7 @@ public class HomeActivity extends AbstractActivity
             @Override
             public void run() {
                 switch (screenType) {
+                    case TYPE_MEDICATION_REMINDER__ALERT:
                     case TYPE_ORDER_SHIPPED__ALERT:
                     case TYPE_VET_VERIFY_RX_ALERT:
                     case TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT:

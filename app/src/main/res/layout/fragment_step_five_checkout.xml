@@ -4,7 +4,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/containerLayout"
+        android:id="@+id/stepFiveRootContainer"
         android:background="@color/fingerprint_alert_title_background"
 >
 
@@ -25,7 +25,6 @@
                 android:layout_alignParentLeft="true">
             <TextView
                     android:id="@+id/headerText"
-                    android:text="@string/shipping_method_title"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_50"
                     style="@style/StyleForMultiChoiceDailog"

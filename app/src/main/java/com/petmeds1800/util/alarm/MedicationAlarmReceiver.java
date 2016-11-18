@@ -31,6 +31,8 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
 
     public static final String NOTIFICATION_MESSAGE = "notificationMessage";
 
+    public static final String REMINDER_ID = "reminderId";
+
     // The app's AlarmManager, which provides access to the system alarm services.
     private AlarmManager alarmMgr;
 
@@ -48,15 +50,17 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent service = new Intent(context, MedicationSchedulingService.class);
         service.putExtra(ALARM_ID, intent.getIntExtra(ALARM_ID, 0));
+        service.putExtra(REMINDER_ID, intent.getStringExtra(REMINDER_ID));
         service.putExtra(NOTIFICATION_MESSAGE, intent.getStringExtra(NOTIFICATION_MESSAGE));
         startWakefulService(context, service);
     }
 
     public void setAlarm(Context context, Calendar calendar, int reminderTypeValue,
-            int reminderFrequency, int reminderId, String notificationMessage) {
+            int reminderFrequency, int reminderId, String notificationMessage, String medicationReminderId) {
         AlarmIntent intent = new AlarmIntent(context, MedicationAlarmReceiver.class);
         intent.putExtra(ALARM_ID, reminderId);
         intent.putExtra(NOTIFICATION_MESSAGE, notificationMessage);
+        intent.putExtra(REMINDER_ID, medicationReminderId);
         PendingIntent alarmIntent = PendingIntent
                 .getBroadcast(context, reminderId, intent,
                         FLAG_UPDATE_CURRENT);
@@ -116,14 +120,16 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
                                     medicationRemindersAlarmData.getRepeatValue(),
                                     medicationRemindersAlarmData.getReminderId() * INCREMENT_FACTOR
                                             + reminderIdIncremnetFactor,
-                                    medicationRemindersAlarmData.getNotificationMessage());
+                                    medicationRemindersAlarmData.getNotificationMessage(),
+                                    medicationRemindersAlarmData.getReminderId() + "");
                             reminderIdIncremnetFactor++;
                         }
                     } else {
                         setAlarm(context, calendar, medicationRemindersAlarmData.getRepeatFrequency().ordinal(),
                                 medicationRemindersAlarmData.getRepeatValue(),
                                 medicationRemindersAlarmData.getReminderId(),
-                                medicationRemindersAlarmData.getNotificationMessage());
+                                medicationRemindersAlarmData.getNotificationMessage(),
+                                medicationRemindersAlarmData.getReminderId() + "");
                     }
 
 
@@ -169,7 +175,7 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
                 .get(ZERO_INDEX).getRepeatFrequency() == Constants.RepeatFrequency.REPEAT_MONTHLY) {
             Calendar calendar = Calendar.getInstance();
             try {
-                DateFormat formatter = new SimpleDateFormat("MMM dd",Locale.ENGLISH);
+                DateFormat formatter = new SimpleDateFormat("MMM dd", Locale.ENGLISH);
                 Date date = formatter.parse(medicationRemindersAlarmDatas
                         .get(ZERO_INDEX).getStartdate());
                 calendar.setTime(date);
@@ -183,11 +189,13 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
         return currentDate;
     }
 
-    public void cancelAlarm(Context context, int reminderId, String notificationMessage) {
+    public void cancelAlarm(Context context, int reminderId, String notificationMessage, String medicationReminderId) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         AlarmIntent intent = new AlarmIntent(context, MedicationAlarmReceiver.class);
         intent.putExtra(ALARM_ID, reminderId);
+        intent.putExtra(REMINDER_ID, medicationReminderId);
         intent.putExtra(NOTIFICATION_MESSAGE, notificationMessage);
+
         PendingIntent addedIntent = PendingIntent
                 .getBroadcast(context, reminderId, intent,
                         FLAG_UPDATE_CURRENT);

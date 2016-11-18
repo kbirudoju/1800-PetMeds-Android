@@ -92,7 +92,7 @@ public class StepFiveRootFragment extends AbstractFragment
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.stepFiveRootContainer)
     RelativeLayout mContainerLayout;
 
     @BindView(R.id.shippingAddressEdit)
@@ -345,10 +345,17 @@ public class StepFiveRootFragment extends AbstractFragment
                 mShippingMethodDetailsText.setText(mShippingMethod.getDescription());
             }
             if (mPaymentMethod != null) {
-                mPaymentMethodDetailsText.setText(
-                        mPaymentMethod.getCardType() + BLANK_SPACE + mPaymentMethod.getCardNumber() + BLANK_SPACE
-                                + mPaymentMethod.getExpirationMonth() + FORWARD_SLASH + mPaymentMethod
-                                .getExpirationyear());
+                if (mPaymentMethod.getPaymentType().equalsIgnoreCase(getString(R.string.label_credit_card))) {
+                    mPaymentMethodDetailsText.setText(
+                            mPaymentMethod.getCardType() + BLANK_SPACE + mPaymentMethod.getCardNumber() + BLANK_SPACE
+                                    + mPaymentMethod.getExpirationMonth() + FORWARD_SLASH + mPaymentMethod
+                                    .getExpirationyear());
+                } else {
+                    mPaymentMethodDetailsText.setText(R.string.label_paypal);
+                    mPaymentMethodEdit.setVisibility(View.GONE);
+                }
+
+
             }
 
         }

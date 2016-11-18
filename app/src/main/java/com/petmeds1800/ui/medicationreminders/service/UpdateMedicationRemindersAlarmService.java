@@ -96,9 +96,10 @@ public class UpdateMedicationRemindersAlarmService extends Service {
                             if (medicationReminderListResponse.getStatus().getErrorMessages().get(0)
                                     .contains("logged in")) {
                                 //TODO Input the email and password from shared preference
-                                return mPetMedsApiService.login(new LoginRequest( mPreferencesHelper.getLoginEmail(),
-                                        mPreferencesHelper.getLoginPassword(), mPreferencesHelper.getSessionConfirmationResponse()
-                                        .getSessionConfirmationNumber()))
+                                return mPetMedsApiService.login(new LoginRequest(mPreferencesHelper.getLoginEmail(),
+                                        mPreferencesHelper.getLoginPassword(),
+                                        mPreferencesHelper.getSessionConfirmationResponse()
+                                                .getSessionConfirmationNumber()))
                                         .subscribeOn(Schedulers.io());
                             } else {
                                 return null;
@@ -225,12 +226,13 @@ public class UpdateMedicationRemindersAlarmService extends Service {
                 new MedicationAlarmReceiver()
                         .cancelAlarm(getBaseContext().getApplicationContext(),
                                 Integer.valueOf(reminderId) * INCREMENT_FACTOR + counter,
-                                reminderName);
+                                reminderName, String.valueOf(reminderId));
                 counter++;
             }
         } else {
             new MedicationAlarmReceiver()
-                    .cancelAlarm(getBaseContext().getApplicationContext(), Integer.valueOf(reminderId), reminderName);
+                    .cancelAlarm(getBaseContext().getApplicationContext(), Integer.valueOf(reminderId), reminderName,
+                            String.valueOf(reminderId));
         }
     }
 

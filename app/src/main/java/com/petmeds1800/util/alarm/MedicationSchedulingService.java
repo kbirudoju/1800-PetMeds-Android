@@ -1,7 +1,8 @@
 package com.petmeds1800.util.alarm;
 
 import com.petmeds1800.R;
-import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.intent.HomeIntent;
+import com.petmeds1800.util.Constants;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -25,26 +26,34 @@ public class MedicationSchedulingService extends IntentService {
 
     NotificationCompat.Builder builder;
 
+    private final int TYPE_MEDICATION_REMINDER__ALERT = 1;
+
     @Override
     protected void onHandleIntent(Intent intent) {
-        sendNotification("Test", intent.getIntExtra(MedicationAlarmReceiver.ALARM_ID, 0),
-                intent.getStringExtra(MedicationAlarmReceiver.NOTIFICATION_MESSAGE));
+        sendNotification(intent.getIntExtra(MedicationAlarmReceiver.ALARM_ID, 0),
+                intent.getStringExtra(MedicationAlarmReceiver.NOTIFICATION_MESSAGE),
+                intent.getStringExtra(MedicationAlarmReceiver.REMINDER_ID));
         MedicationAlarmReceiver.completeWakefulIntent(intent);
     }
 
     // Post a notification indicating whether a doodle was found.
-    private void sendNotification(String msg, int notificationId, String notificationMessage) {
+    private void sendNotification(int notificationId, String notificationMessage, String reminderId) {
+        Intent homeIntent = new HomeIntent(getApplicationContext());
+        homeIntent.putExtra(Constants.PUSH_SCREEN_TYPE, TYPE_MEDICATION_REMINDER__ALERT);
+        homeIntent.putExtra(Constants.PUSH_EXTRA_ID, reminderId);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent contentIntent = PendingIntent.getActivity(this, notificationId,
-                new Intent(this, HomeActivity.class), 0);
+                homeIntent,  0);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
+                        .setAutoCancel(true)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(getString(R.string.application_name))
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(notificationMessage+""+notificationId))
-                        .setContentText(notificationMessage+""+notificationId);
+                                .bigText(notificationMessage + "" + notificationId))
+                        .setContentText(notificationMessage + "" + notificationId);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(notificationId, mBuilder.build());
     }

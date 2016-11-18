@@ -1,18 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.AddNewEntityIntent;
@@ -33,6 +20,19 @@ import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -64,7 +64,7 @@ public class StepThreeRootFragment extends AbstractFragment
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.stepThreeContainerLayout)
     RelativeLayout mContainerLayout;
 
     private ShoppingCartListResponse mShoppingCartListResponse;

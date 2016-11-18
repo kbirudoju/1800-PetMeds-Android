@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.AddMedicationReminderRequest;
 import com.petmeds1800.model.entities.AddMedicationReminderResponse;
+import com.petmeds1800.model.entities.MedicationReminderDetailsRequest;
 import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
 import com.petmeds1800.model.entities.RemoveMedicationReminderResponse;
 
@@ -106,7 +107,41 @@ public class AddEditMedicationRemindersPresentor implements AddEditMedicationRem
                 });
     }
 
+    @Override
+    public void getMedicationReminderDetails(MedicationReminderDetailsRequest medicationReminderDetailsRequest) {
+        mPetMedsApiService.getMedicationReminderDetails(medicationReminderDetailsRequest.getSessionConfNumber(),medicationReminderDetailsRequest.getReminderId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AddMedicationReminderResponse>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.onError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(AddMedicationReminderResponse addMedicationReminderResponse) {
+                        if (addMedicationReminderResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.updateMedicationDetails(addMedicationReminderResponse);
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.showErrorOnUpdateMedicationDetails(
+                                        addMedicationReminderResponse.getStatus().getErrorMessages().get(0), false);
+                            }
+                        }
+
+                    }
+                });
+
+    }
 
 
     @Override
