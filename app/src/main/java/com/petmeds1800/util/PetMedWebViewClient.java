@@ -70,9 +70,15 @@ public class PetMedWebViewClient extends WebViewClient {
         Log.w("OverrideUrlLoading", "finalyClose Enter");
 
 //        Hide Progress Dialog
-        if (mProgressBar != null){
-            mProgressBar.setVisibility(View.GONE);
-        }
+        mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressBar != null){
+                    mProgressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
         if (((AppCompatActivity)mContext).getSupportFragmentManager().getBackStackEntryCount()<=0){
             if (shouldloaddata){
@@ -186,9 +192,14 @@ public class PetMedWebViewClient extends WebViewClient {
                 try {
 
 //                    Show Progress Dialog
-                    if (mProgressBar != null){
-                        mProgressBar.setVisibility(View.VISIBLE);
-                    }
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mProgressBar != null){
+                                mProgressBar.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
 
                     Log.w("URL HANDLING", url);
                     Response response;
