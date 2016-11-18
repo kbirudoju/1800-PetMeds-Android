@@ -481,7 +481,8 @@
     </string-array>
 
     <!--Shipping Methods-->
-    <string name="shipping_method_title">SELECT A SHIPPING METHOD</string>
+    <string name="shipping_method_title">SHIPPING METHOD</string>
+    <string name="shipping_method_subtitle">SELECT SHIPPING METHOD</string>
     <string name="shipment_method_header">SHIPMENT METHOD</string>
 
     <string name="label_shipping_method_standard">Standard (5en dash7 business days)</string>

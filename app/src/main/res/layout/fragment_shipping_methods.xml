@@ -40,7 +40,7 @@
                     android:paddingLeft="@dimen/xlarge_margin"
                     android:paddingRight="@dimen/xlarge_margin"
                     android:paddingTop="@dimen/dp_21"
-                    android:text="@string/shipping_method_title"
+                    android:text="@string/shipping_method_subtitle"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
 
