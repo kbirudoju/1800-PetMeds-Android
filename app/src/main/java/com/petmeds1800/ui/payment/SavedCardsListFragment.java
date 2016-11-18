@@ -46,7 +46,7 @@ public class SavedCardsListFragment extends AbstractFragment
     @BindView(R.id.addCard_button)
     Button mAddCardButton;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.savedCardsContainerLayout)
     RelativeLayout mContainerLayout;
 
     private SavedCardsListContract.Presenter mPresenter;
@@ -75,6 +75,26 @@ public class SavedCardsListFragment extends AbstractFragment
 
     }
 
+    @Override
+    protected boolean showErrorLayout() {
+        return super.showErrorLayout();
+    }
+
+    @Override
+    protected boolean hideErrorLayout() {
+        return super.hideErrorLayout();
+    }
+
+    @Override
+    protected void onRetryButtonClicked(View view) {
+        hideErrorLayout();
+        mProgressBar.setVisibility(View.VISIBLE);
+        super.onRetryButtonClicked(view);
+        if (mPresenter != null){
+            mPresenter.start();
+        }
+    }
+
     private void setupCardsRecyclerView() {
         mSavedCardsRecyclerView.setAdapter(mSavedCardsAdapter);
         mSavedCardsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -83,6 +103,7 @@ public class SavedCardsListFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
+        hideErrorLayout();
         mPresenter.start();
     }
 
@@ -125,6 +146,7 @@ public class SavedCardsListFragment extends AbstractFragment
 
     @Override
     public void showErrorMessage(String errorMessage) {
+        showErrorLayout();
         mProgressBar.setVisibility(View.GONE);
         errorMessage = errorMessage.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
         Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);

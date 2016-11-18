@@ -234,7 +234,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
         mEmailText.setText(user.getEmail());
         //we will never receive password as part of the response in User model
-        mPasswordText.setText("*******");
+        mPasswordText.setText("********");
         //intialize the userId to use while changing the settings
         mUserId = user.getUserId();
 
