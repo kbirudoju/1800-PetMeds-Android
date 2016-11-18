@@ -1,11 +1,14 @@
 package com.petmeds1800.ui.pets.presenter;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.PetList;
 import com.petmeds1800.ui.pets.support.PetListContract;
-
-import android.support.annotation.NonNull;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import javax.inject.Inject;
 
@@ -21,13 +24,13 @@ public class PetListPresenter implements PetListContract.Presenter {
     PetMedsApiService mPetMedsApiService;
 
     private PetListContract.View mView;
+    private Context mContext;
 
-
-    public PetListPresenter(@NonNull PetListContract.View view) {
+    public PetListPresenter(@NonNull PetListContract.View view,Context context) {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
-
+        this.mContext=context;
     }
 
     @Override
@@ -44,7 +47,11 @@ public class PetListPresenter implements PetListContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.onError(e.getLocalizedMessage());
+                        if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
+                            mView.onError(mContext.getString(R.string.no_internet_caps));
+                        }else {
+                            mView.onError(e.getLocalizedMessage());
+                        }
 
                     }
 

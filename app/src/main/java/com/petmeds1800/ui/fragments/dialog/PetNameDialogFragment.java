@@ -1,13 +1,5 @@
 package com.petmeds1800.ui.fragments.dialog;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.PetNameSelectionList;
-import com.petmeds1800.model.entities.Pets;
-import com.petmeds1800.ui.medicationreminders.AddPetNameListener;
-import com.petmeds1800.ui.pets.presenter.PetListPresenter;
-import com.petmeds1800.ui.pets.support.PetListContract;
-import com.petmeds1800.util.Constants;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -28,6 +20,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.PetNameSelectionList;
+import com.petmeds1800.model.entities.Pets;
+import com.petmeds1800.ui.medicationreminders.AddPetNameListener;
+import com.petmeds1800.ui.pets.presenter.PetListPresenter;
+import com.petmeds1800.ui.pets.support.PetListContract;
+import com.petmeds1800.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +96,7 @@ public class PetNameDialogFragment extends DialogFragment implements PetListCont
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_pet_name_layout, container, false);
-        mPresenter = new PetListPresenter(this);
+        mPresenter = new PetListPresenter(this,getActivity());
         mPetName = NO_PET;
         ButterKnife.bind(this, rootView);
         return rootView;
