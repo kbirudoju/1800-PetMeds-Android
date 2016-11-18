@@ -1,14 +1,14 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
+import android.support.design.widget.TextInputLayout;
+import android.widget.EditText;
+
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.ShippingAddressRequest;
 import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
-
-import android.support.design.widget.TextInputLayout;
-import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public interface GuestStepOneRootContract {
 
         void navigateOnSuccess(ShoppingCartListResponse response);
 
-        void hideProgress();
+        void onError(String errorMessage);
 
         void showErrorCrouton(CharSequence message, boolean span);
 
@@ -33,6 +33,10 @@ public interface GuestStepOneRootContract {
         void hideWarningView();
 
         void setAddress(Address address);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     interface Presenter extends BasePresenter {

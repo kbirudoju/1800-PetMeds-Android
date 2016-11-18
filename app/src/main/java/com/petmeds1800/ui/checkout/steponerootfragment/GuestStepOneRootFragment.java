@@ -251,14 +251,13 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     private void postShippingAddressData() {
         ShippingAddressRequest shippingAddressAttribute = getFragmentReference().getShippingAddressAttribute();
-        shippingAddressAttribute.setEmail(mEmailEdit.getText().toString());
-        shippingAddressAttribute.setConfirmEmail(mConfirmEmailEdit.getText().toString());
+        shippingAddressAttribute.setEmail(mEmailEdit.getText().toString().trim());
+        shippingAddressAttribute.setConfirmEmail(mConfirmEmailEdit.getText().toString().trim());
         shippingAddressAttribute.setUseShippingAddressAsDefault(mDefaultShippingAddressSwitch.isChecked());
         shippingAddressAttribute
-                .setPassword(mPasswordEdit.getText().toString().isEmpty() ? null : mPasswordEdit.getText().toString());
+                .setPassword(mPasswordEdit.getText().toString().isEmpty() ? null : mPasswordEdit.getText().toString().trim());
         shippingAddressAttribute.setConfirmPassword(
-                mConfirmPasswordEdit.getText().toString().isEmpty() ? null : mConfirmPasswordEdit.getText().toString());
-        ((CheckOutActivity) getActivity()).showProgress();
+                mConfirmPasswordEdit.getText().toString().isEmpty() ? null : mConfirmPasswordEdit.getText().toString().trim());
         mPresentor.saveGuestShippingAddressData(shippingAddressAttribute);
     }
 
@@ -277,8 +276,9 @@ public class GuestStepOneRootFragment extends AbstractFragment
             case R.id.shippingNavigator:
                 if (!isValidateFromActivity || !isValidateFromFragment) {
                     return;
+                } else {
+                    postShippingAddressData();
                 }
-                postShippingAddressData();
                 break;
         }
     }
@@ -290,14 +290,13 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     @Override
     public void navigateOnSuccess(ShoppingCartListResponse response) {
-        ((CheckOutActivity) getActivity()).hideProgress();
+        hideProgress();
         ((CheckOutActivity) getActivity()).moveToNext(mStepName, response);
-
     }
 
     @Override
-    public void hideProgress() {
-        ((CheckOutActivity) getActivity()).hideProgress();
+    public void onError(String errorMessage) {
+        hideProgress();
     }
 
     @Override
@@ -311,7 +310,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     @Override
     public void showWarningView(CharSequence message) {
-        ((CheckOutActivity) getActivity()).hideProgress();
+        hideProgress();
         mErrorView.setVisibility(View.VISIBLE);
         TextView title = (TextView) mErrorView.findViewById(R.id.txv_error_title);
         TextView description = (TextView) mErrorView.findViewById(R.id.txv_error_message);
@@ -330,6 +329,16 @@ public class GuestStepOneRootFragment extends AbstractFragment
         if (getFragmentReference() != null && address != null) {
             getFragmentReference().populateData(address);
         }
+    }
+
+    @Override
+    public void showProgress() {
+        ((CheckOutActivity) getActivity()).showProgress();
+    }
+
+    @Override
+    public void hideProgress() {
+        ((CheckOutActivity) getActivity()).hideProgress();
     }
 
     @Override

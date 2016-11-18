@@ -45,4 +45,52 @@ public class AddressRequest {
     public void setAddressId(String addressId) {
         this.addressId = addressId;
     }
+
+    public boolean isUseShippingAddressAsDefault() {
+        return useShippingAddressAsDefault;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getAddress1() {
+        return address1;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public boolean isUseBillingAddressAsDefault() {
+        return useBillingAddressAsDefault;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSessionConfNumber() {
+        return sessionConfNumber;
+    }
 }

@@ -86,4 +86,12 @@ public class SignUpRequest {
         this.shippingAddressPhoneNumber = shippingAddressPhoneNumber;
         this.sessionConfNumber = sessionConfNumber;
     }
+
+    public void setSessionConfNumber(String sessionConfNumber) {
+        this.sessionConfNumber = sessionConfNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }
