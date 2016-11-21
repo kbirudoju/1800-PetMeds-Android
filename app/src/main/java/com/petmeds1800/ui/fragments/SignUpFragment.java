@@ -1,23 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.mvp.SignupTask.SignUpContract;
-
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.intent.HomeIntent;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.model.entities.SignUpRequest;
-import com.petmeds1800.model.entities.SignUpResponse;
-import com.petmeds1800.mvp.SignupTask.SignUpContract;
-import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -50,6 +32,7 @@ import com.petmeds1800.model.entities.SignUpResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.SignupTask.SignUpContract;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
@@ -262,11 +245,14 @@ public class SignUpFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        showHideShipping();
         mStateEdit.setOnClickListener(this);
         mStateEdit.setFocusableInTouchMode(false);
         mCountryEdit.setOnClickListener(this);
         mCountryEdit.setFocusableInTouchMode(false);
+        mStateShippingEdit.setOnClickListener(this);
+        mStateShippingEdit.setFocusableInTouchMode(false);
+        mCountryShippingEdit.setOnClickListener(this);
+        mCountryShippingEdit.setFocusableInTouchMode(false);
     }
 
     @Override
@@ -333,7 +319,6 @@ public class SignUpFragment extends AbstractFragment
     @Override
     public void navigateToHome() {
         HomeIntent intent = new HomeIntent(getActivity());
-//        intent.putExtra(IS_FROM_HOME_ACTIVITY, true);
         startActivity(intent);
         getActivity().finish();
     }
@@ -418,7 +403,7 @@ public class SignUpFragment extends AbstractFragment
         if (firstNameText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameInput.getId());
             proceedSignUp = false;
-        } else if (!mPresenter.validateUserName(firstNameText)) {
+        } else if (!mPresenter.validateFirstName(firstNameText)) {
             setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameInput.getId());
             proceedSignUp = false;
         }
@@ -427,7 +412,7 @@ public class SignUpFragment extends AbstractFragment
         if (lastNameText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_last_name_required), mLastNameInput.getId());
             proceedSignUp = false;
-        } else if (!mPresenter.validateUserName(lastNameText)) {
+        } else if (!mPresenter.validateLastName(lastNameText)) {
             setErrorOnInput(getString(R.string.error_last_name_invalid), mLastNameInput.getId());
             proceedSignUp = false;
         }
@@ -495,7 +480,7 @@ public class SignUpFragment extends AbstractFragment
             if (firstNameShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameShippingInput.getId());
                 proceedSignUp = false;
-            } else if (!mPresenter.validateUserName(firstNameShippingText)) {
+            } else if (!mPresenter.validateFirstName(firstNameShippingText)) {
                 setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameShippingInput.getId());
                 proceedSignUp = false;
             }
@@ -504,7 +489,7 @@ public class SignUpFragment extends AbstractFragment
             if (lastNameShippingText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_last_name_required), mLastNameShippingInput.getId());
                 proceedSignUp = false;
-            } else if (!mPresenter.validateUserName(lastNameShippingText)) {
+            } else if (!mPresenter.validateLastName(lastNameShippingText)) {
                 setErrorOnInput(getString(R.string.error_last_name_invalid), mLastNameShippingInput.getId());
                 proceedSignUp = false;
             }

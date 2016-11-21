@@ -1,5 +1,9 @@
 package com.petmeds1800.mvp.SignupTask;
 
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Country;
 import com.petmeds1800.model.CountryListResponse;
@@ -7,10 +11,6 @@ import com.petmeds1800.model.StatesListResponse;
 import com.petmeds1800.model.UsaState;
 import com.petmeds1800.util.InputValidationUtil;
 import com.petmeds1800.util.RetrofitErrorHandler;
-
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import java.util.HashMap;
 
@@ -58,8 +58,13 @@ public class SignUpPresenter implements SignUpContract.Presenter {
     }
 
     @Override
-    public boolean validateUserName(String name) {
-        return true;
+    public boolean validateFirstName(String firstName) {
+        return firstName.matches(InputValidationUtil.firstNamePattern);
+    }
+
+    @Override
+    public boolean validateLastName(String lastName) {
+        return lastName.matches(InputValidationUtil.lastNamePattern);
     }
 
     @Override
@@ -178,7 +183,7 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
     @Override
     public String getCountryCode(String countryName) {
-        if(countriesHashMap != null) {
+        if (countriesHashMap != null) {
             return countriesHashMap.get(countryName);
         }
         return null;

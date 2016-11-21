@@ -35,7 +35,9 @@ public interface SignUpContract {
 
         boolean validatePassword(String password);
 
-        boolean validateUserName(String name);
+        boolean validateFirstName(String firstName);
+
+        boolean validateLastName(String lastName);
 
         boolean validateAddress(String address);
 

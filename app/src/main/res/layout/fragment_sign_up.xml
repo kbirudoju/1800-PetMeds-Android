@@ -145,7 +145,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_firstName"
-                        android:inputType="textPersonName" />
+                        android:inputType="textCapWords|textPersonName" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -162,7 +162,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_lastName"
-                        android:inputType="textPersonName" />
+                        android:inputType="textCapWords|textPersonName" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -179,7 +179,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_addressLine1"
-                        android:inputType="textPostalAddress" />
+                        android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -213,7 +213,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_city"
-                        android:inputType="none" />
+                        android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -345,7 +345,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_firstName"
-                        android:inputType="textPersonName" />
+                        android:inputType="textCapWords|textPersonName" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -362,7 +362,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_lastName"
-                        android:inputType="textPersonName" />
+                        android:inputType="textCapWords|textPersonName" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -379,7 +379,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_addressLine1"
-                        android:inputType="textPostalAddress" />
+                        android:inputType="textCapWords|textPostalAddress" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -413,7 +413,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_city"
-                        android:inputType="none" />
+                        android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout

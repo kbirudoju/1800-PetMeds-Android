@@ -212,7 +212,6 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
     @OnClick(R.id.shippingNavigator)
     public void onShippingNavigatorClick() {
-        activity.showProgress();
         //TODO call the presenter to first save the address and then card and then apply both of them
         AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager().findFragmentById(R.id.creditCardDetailFragment);
 
@@ -233,12 +232,14 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
                             CardRequest cardRequest = addGuestCardFragment.getCard();
 
                             mPresenter.applyCreditCardPaymentMethod(addressRequest , cardRequest , null);
+                            activity.showProgress();
                         }
                         else {
                             //pass the cardKey and get the updated card request
                             UpdateCardRequest updateCardRequest = addGuestCardFragment.getUpdatedCard(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey());
 
                             mPresenter.applyCreditCardPaymentMethod(addressRequest , null , updateCardRequest);
+                            activity.showProgress();
                         }
 
                     }
