@@ -245,7 +245,6 @@
     <string name="errorZipCodeRequired">Zip Code is required</string>
     <string name="errorPhoneNumberRequired">Phone Number is required</string>
     <string name="errorCountryNameRequired">Country is required</string>
-    <string name="choose_city_txt">Choose city</string>
     <string name="choose_country_txt">Choose country</string>
     <string name="choose_state_txt">Choose state</string>
     <string name="label_error_with_address">Error with your address</string>

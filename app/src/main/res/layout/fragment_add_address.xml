@@ -67,8 +67,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_firstName"
+                        android:inputType="textCapWords|textPersonName"
                         android:maxLength="@integer/characterLimit_40"
-                        android:singleLine="true" />
+                        android:maxLines="1" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -85,8 +86,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_lastName"
+                        android:inputType="textCapWords|textPersonName"
                         android:maxLength="@integer/characterLimit_40"
-                        android:singleLine="true" />
+                        android:maxLines="1" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -103,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_addressLine1"
-                        android:maxLength="@integer/characterLimit_30" />
+                        android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -120,7 +122,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_aptOrSuite"
-                        android:maxLength="@integer/characterLimit_30" />
+                        android:inputType="textPostalAddress" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -137,7 +139,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_city"
-                        android:maxLength="@integer/characterLimit_30" />
+                        android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -181,7 +183,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
                     app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
 
                     <EditText
                         android:id="@+id/phoneNumber_edit"
@@ -261,7 +262,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/petmeds_blue" />
-
 
                 <Switch
                     android:id="@+id/defaultBillingAddress_switch"

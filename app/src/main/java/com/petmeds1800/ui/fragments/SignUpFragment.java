@@ -37,8 +37,6 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
-import java.util.Arrays;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -325,17 +323,15 @@ public class SignUpFragment extends AbstractFragment
 
     @Override
     public void onStatesListReceived(String[] statesArray) {
-        Arrays.sort(statesArray);
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment statesDialogFragment = CommonDialogFragment
-                .newInstance(statesArray, getActivity().getString(R.string.choose_city_txt), USA_STATE_LIST_REQUEST);
+                .newInstance(statesArray, getActivity().getString(R.string.choose_state_txt), USA_STATE_LIST_REQUEST);
         statesDialogFragment.setValueSetListener(this);
         statesDialogFragment.show(fragManager);
     }
 
     @Override
     public void onCountryListReceived(String[] countryArray) {
-        Arrays.sort(countryArray);
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment statesDialogFragment = CommonDialogFragment
                 .newInstance(countryArray, getActivity().getString(R.string.choose_country_txt), COUNTRY_LIST_REQUEST);

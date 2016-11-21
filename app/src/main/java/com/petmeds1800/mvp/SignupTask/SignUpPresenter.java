@@ -12,7 +12,8 @@ import com.petmeds1800.model.UsaState;
 import com.petmeds1800.util.InputValidationUtil;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -30,9 +31,9 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
     private static final int PASSWORD_LENGTH = 8;
 
-    private HashMap<String, String> statesHashMap;
+    private TreeMap<String, String> statesTreeMap;
 
-    private HashMap<String, String> countriesHashMap;
+    private LinkedHashMap<String, String> countriesHashMap;
 
     @NonNull
     private final SignUpContract.View mSignUpView;
@@ -115,12 +116,12 @@ public class SignUpPresenter implements SignUpContract.Presenter {
                         mSignUpView.hideProgress();
                         if (statesListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             //StateName would be treated as key while stateCode would be treated as a key so that we could get the code as user selects one name
-                            statesHashMap = new HashMap<>(statesListResponse.getStateList().size());
+                            statesTreeMap = new TreeMap<>();
                             for (UsaState eachUsaState : statesListResponse.getStateList()) {
-                                statesHashMap.put(eachUsaState.getDisplayName(), eachUsaState.getCode());
+                                statesTreeMap.put(eachUsaState.getDisplayName(), eachUsaState.getCode());
                             }
                             mSignUpView.onStatesListReceived(
-                                    statesHashMap.keySet().toArray(new String[statesHashMap.size()]));
+                                    statesTreeMap.keySet().toArray(new String[statesTreeMap.size()]));
                         } else if (statesListResponse.getStatus().getCode().equals(API_ERROR_CODE)) {
                             Log.d("GetStatesList", statesListResponse.getStatus().getErrorMessages().get(0));
                             mSignUpView
@@ -132,8 +133,8 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
     @Override
     public String getStateCode(String stateName) {
-        if (statesHashMap != null) {
-            return statesHashMap.get(stateName);
+        if (statesTreeMap != null) {
+            return statesTreeMap.get(stateName);
         }
         return null;
     }
@@ -166,10 +167,17 @@ public class SignUpPresenter implements SignUpContract.Presenter {
                         mSignUpView.hideProgress();
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             //StateName would be treated as key while stateCode would be treated as a key so that we could get the code as user selects one name
-                            countriesHashMap = new HashMap<>(s.getCountryList().size());
+                            TreeMap treeMap = new TreeMap<>();
                             for (Country eachCountry : s.getCountryList()) {
-                                countriesHashMap.put(eachCountry.getDisplayName(), eachCountry.getCode());
+                                treeMap.put(eachCountry.getDisplayName(), eachCountry.getCode());
                             }
+                            //We have to show the "United States Of America" on top of the list
+                            treeMap.remove("United States Of America");
+
+                            countriesHashMap = new LinkedHashMap<>();
+                            countriesHashMap.put("United States Of America", "USA");
+                            countriesHashMap.putAll(treeMap);
+
                             mSignUpView.onCountryListReceived(
                                     countriesHashMap.keySet().toArray(new String[countriesHashMap.size()]));
                         } else {
