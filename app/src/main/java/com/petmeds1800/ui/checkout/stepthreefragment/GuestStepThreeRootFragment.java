@@ -1,5 +1,14 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
@@ -12,23 +21,13 @@ import com.petmeds1800.model.shoppingcart.response.PaymentGroups;
 import com.petmeds1800.model.shoppingcart.response.ShippingAddress;
 import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -52,7 +51,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.stepThreeContainerLayout)
     RelativeLayout mContainerLayout;
 
     private ShoppingCartListResponse mShoppingCartListResponse;
