@@ -170,7 +170,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
         } else if (mStage == Stage.LOGIN) {
             hideKeyboard(mEmailEdit);
             doLogin(mPreferencesHelper.getLoginEmail(), null, false);
-        } else if (mStage == Stage.FORGOT_PASSWORD) {
+        } else if (mStage == Stage.FORGOT_PASSWORD && mSecondDialogButton.getText().toString().equals(getString(R.string.label_send_email))) {
             sendForgotPasswordEmail();
         } else {
             gotoLogin();
@@ -181,7 +181,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     void onForgotPasswordClick() {
         mEmailInput.setError(null);
         String emailText = mPreferencesHelper.getLoginEmail();
-        if(emailText == null){
+        if (emailText == null) {
             emailText = mEmailEdit.getText().toString().trim();
         }
         if (emailText.isEmpty()) {
@@ -291,6 +291,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                 mLoginContent.setVisibility(View.VISIBLE);
                 mFingerprintContent.setVisibility(View.GONE);
                 mForgotPasswordContent.setVisibility(View.GONE);
+                mImageEmailSent.setVisibility(View.GONE);
+                mTextEmailSent.setVisibility(View.GONE);
                 break;
 
             case FORGOT_PASSWORD:
@@ -323,7 +325,10 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     void sendForgotPasswordEmail() {
         mEmailInput.setError(null);
         boolean isValidEmail;
-        final String emailText = mEmailEdit.getText().toString().trim();
+        String emailText = mPreferencesHelper.getLoginEmail();
+        if (emailText == null) {
+            emailText = mEmailEdit.getText().toString().trim();
+        }
         if (emailText.isEmpty()) {
             setEmailError(getString(R.string.accountSettingsEmailEmptyError));
             return;
@@ -333,6 +338,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
 
         if (mStage == Stage.FORGOT_PASSWORD && isValidEmail) {
             showProgress();
+            final String finalEmailText = emailText;
             mApiService.getSessionConfirmationNumber()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -360,7 +366,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                                     mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
                                 }
                                 return mApiService
-                                        .forgotPassword(new ForgotPasswordRequest(emailText, sessionConfNumber))
+                                        .forgotPassword(new ForgotPasswordRequest(finalEmailText, sessionConfNumber))
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribeOn(Schedulers.io());
                             } else {
@@ -388,12 +394,11 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                         public void onNext(ForgotPasswordResponse response) {
                             hideProgress();
                             if (response != null) {
-                                Log.v("response", response.getStatus().getErrorMessages().get(0));
                                 if (response.getStatus().getCode().equals("SUCCESS")) {
                                     mTextEmailSent.setText(getString(R.string.label_email_sent));
+                                    mImageEmailSent.setVisibility(View.VISIBLE);
+                                    mTextEmailSent.setVisibility(View.VISIBLE);
                                     mSecondDialogButton.setText(getString(R.string.label_enter_password));
-                                    mStage = Stage.FORGOT_PASSWORD;
-                                    updateStage();
                                 } else {
                                     showErrorCrouton(Html.fromHtml(response.getStatus().getErrorMessages().get(0)),
                                             true);
