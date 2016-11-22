@@ -310,7 +310,6 @@ public class GuestStepOneRootFragment extends AbstractFragment
 
     @Override
     public void showWarningView(CharSequence message) {
-        hideProgress();
         mErrorView.setVisibility(View.VISIBLE);
         TextView title = (TextView) mErrorView.findViewById(R.id.txv_error_title);
         TextView description = (TextView) mErrorView.findViewById(R.id.txv_error_message);
