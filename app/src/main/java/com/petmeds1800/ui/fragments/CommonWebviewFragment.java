@@ -113,16 +113,20 @@ public class CommonWebviewFragment extends AbstractFragment {
         View rootView = inflater.inflate(R.layout.fragment_common_webview, container, false);
         ButterKnife.bind(this, rootView);
 
+        setHasOptionsMenu(true);
+
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         //check if back button needs to be enabled
         if (mDisableBackButton) {
             ((AbstractActivity) getActivity()).disableBackButton();
         } else {
             ((AbstractActivity) getActivity()).enableBackButton();
         }
-
-        setHasOptionsMenu(true);
-
-        return rootView;
     }
 
     @Override

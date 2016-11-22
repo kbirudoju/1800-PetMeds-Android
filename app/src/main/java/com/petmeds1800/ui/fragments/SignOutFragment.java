@@ -6,6 +6,7 @@ import com.petmeds1800.R;
 import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.intent.SignUpIntent;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import android.os.Bundle;
@@ -43,10 +44,18 @@ public class SignOutFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
-        ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_account));
         mPreferencesHelper.setIsUserLoggedIn(false);
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //we should set the title only if current selected tab is not the first home tab
+        if(((HomeActivity)getActivity()).getCurrentSelectedTab() == 3) {
+            ((AbstractActivity)getActivity()).setToolBarTitle(getResources().getStringArray(R.array.tab_title)[3]);
+        }
     }
 
     @OnClick(R.id.log_in_button)
