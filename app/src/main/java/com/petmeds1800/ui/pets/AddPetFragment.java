@@ -310,7 +310,6 @@ public class AddPetFragment extends AbstractFragment
 
         }
 
-        ((AbstractActivity) getActivity()).enableBackButton();
         return view;
     }
 
@@ -447,7 +446,7 @@ public class AddPetFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
-
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     @Override

@@ -95,7 +95,6 @@ public class MyOrderFragment extends AbstractFragment
         View view = inflater.inflate(R.layout.fragment_my_orders, null);
         ButterKnife.bind(this, view);
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_my_orders));
-        ((AbstractActivity) getActivity()).enableBackButton();
 
         mOrderListAdapter = new MyOrderAdapter(false, getActivity(), new View.OnClickListener() {
             @Override
@@ -124,6 +123,11 @@ public class MyOrderFragment extends AbstractFragment
         mShopNowButton.setOnClickListener(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
+    }
 
     private void setUpOrderList() {
         mOrderRecyclerView.setAdapter(mOrderListAdapter);

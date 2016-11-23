@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -86,7 +87,6 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         View view = inflater.inflate(R.layout.fragment_account_settings, container, false);
         new AnalyticsUtil().trackScreen(getString(R.string.label_edit_email_password_analytics_title));
         ButterKnife.bind(this, view);
-        ((AbstractActivity) getActivity()).enableBackButton();
         ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.accountSettingsTitle));
         enableEditTexts(false);
 
@@ -200,6 +200,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @Override
     public void onResume() {
         super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
         mPresenter.start();
     }
 
@@ -232,6 +233,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     public void setUserData(User user) {
         mProgressBar.setVisibility(View.GONE);
 
+        Log.v("AccountSettingsFrag", "user email "+user.getEmail());
         mEmailText.setText(user.getEmail());
         //we will never receive password as part of the response in User model
         mPasswordText.setText("********");

@@ -128,7 +128,7 @@ public interface PetMedsApiService {
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/atg/userprofiling/ProfileActor/summary")
-    Observable<Profile> getAccountSettings(@Query("_dynSessConf") String sessionConfirmation);
+    Observable<Profile> getAccountSettings();
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @POST("/rest/model/atg/userprofiling/ProfileActor/update")

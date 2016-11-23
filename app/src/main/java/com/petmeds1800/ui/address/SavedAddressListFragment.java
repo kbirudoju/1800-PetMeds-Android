@@ -58,7 +58,6 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved_address_list, container, false);
         ButterKnife.bind(this, view);
-        ((AbstractActivity)getActivity()).enableBackButton();
         ((AbstractActivity)getActivity()).setToolBarTitle(getContext().getString(R.string.savedAddressListTitle));
         mSavedAddressAdapter = new SavedAddressAdapter(false,this,getContext());
         setupCardsRecyclerView();
@@ -74,6 +73,7 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
     @Override
     public void onResume() {
         super.onResume();
+        ((AbstractActivity)getActivity()).enableBackButton();
         mPresenter.start();
     }
 

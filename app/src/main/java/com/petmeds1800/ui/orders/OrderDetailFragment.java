@@ -133,6 +133,12 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
+    }
+
     private void populateOrderDetail() {
         mOrderDetailAdapter = new OrderDetailAdapter(getActivity(), orderList, new View.OnClickListener() {
             @Override
@@ -225,7 +231,6 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         });
         setRecyclerView();
         setTitle();
-        ((AbstractActivity) getActivity()).enableBackButton();
         List<Object> mData = mOrderDetailAdapter.setData(orderList);
         prepareListViewContentForPrinting(mData);
     }

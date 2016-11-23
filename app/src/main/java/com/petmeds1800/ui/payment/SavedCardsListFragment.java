@@ -67,7 +67,6 @@ public class SavedCardsListFragment extends AbstractFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saved_cards_list, container, false);
         ButterKnife.bind(this, view);
-        ((AbstractActivity) getActivity()).enableBackButton();
         ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.savedCardsListTitle));
         mSavedCardsAdapter = new SavedCardsAdapter(false, this, getContext());
         setupCardsRecyclerView();
@@ -103,6 +102,7 @@ public class SavedCardsListFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
         hideErrorLayout();
         mPresenter.start();
     }

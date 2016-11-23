@@ -69,7 +69,7 @@ public class AccountSettingsPresenter implements AccountSettingsContract.Present
     public void findUserData() {
 
         mPetMedsApiService
-                .getAccountSettings(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber())
+                .getAccountSettings()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Profile>() {

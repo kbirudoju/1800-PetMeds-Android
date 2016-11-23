@@ -233,8 +233,13 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         if (savedInstanceState == null) {
             ((AbstractActivity) getActivity())
                     .setToolBarTitle(isEditable ? getString(R.string.edit_reminder) : getString(R.string.add_reminder));
-            ((AbstractActivity) getActivity()).enableBackButton();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     private void showFingerprintDialog() {

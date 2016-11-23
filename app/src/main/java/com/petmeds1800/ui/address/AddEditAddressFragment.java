@@ -249,8 +249,6 @@ public class AddEditAddressFragment extends AbstractFragment
         mStateOrProvinceOrRegionEdit.setFocusableInTouchMode(false);
         mCountryNameEdit.setFocusableInTouchMode(false);
 
-        ((AbstractActivity) getActivity()).enableBackButton();
-
         //get the arguments and set views for address updation/edit request
 
         if (mBundle != null) {
@@ -281,6 +279,12 @@ public class AddEditAddressFragment extends AbstractFragment
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     public void populateData(Address address) {

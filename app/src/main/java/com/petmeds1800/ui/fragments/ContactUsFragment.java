@@ -57,7 +57,6 @@ public class ContactUsFragment extends AbstractFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((AbstractActivity) getActivity()).setToolBarTitle(getString(R.string.title_contact_us_caps));
-        ((AbstractActivity) getActivity()).enableBackButton();
         mEmailButton.setVisibility(View.GONE);
         mCallButton.setVisibility(View.GONE);
 
@@ -74,6 +73,12 @@ public class ContactUsFragment extends AbstractFragment {
                 mMapImageView.setImageDrawable(circularBitmapDrawable);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     @OnClick(R.id.chat_button)

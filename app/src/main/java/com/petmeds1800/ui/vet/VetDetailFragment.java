@@ -112,7 +112,6 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mVetDetail=(VetList)getArguments().getSerializable("vet_detail");
-        ((AbstractActivity) getActivity()).enableBackButton();
         if(mVetDetail!=null){
             ((AbstractActivity) getActivity()).setToolBarTitle(getString(R.string.near_vet_txt) + mVetDetail.getZip());
             mClinicNameLabel.setText(mVetDetail.getClinic());
@@ -136,6 +135,12 @@ public class VetDetailFragment extends AbstractFragment implements View.OnClickL
             });
 
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     @Override

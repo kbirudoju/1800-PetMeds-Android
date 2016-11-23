@@ -68,7 +68,6 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
 
         ((AbstractActivity) getActivity())
                 .setToolBarTitle(getActivity().getString(R.string.refill_reminder));
-        ((AbstractActivity) getActivity()).enableBackButton();
         return view;
     }
 
@@ -82,6 +81,12 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
             }
         });
         callReminderAPI(null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     @Override

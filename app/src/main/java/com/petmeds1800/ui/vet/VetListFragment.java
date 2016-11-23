@@ -58,7 +58,6 @@ public class VetListFragment extends AbstractFragment implements VetListContract
         mVetList=new ArrayList<>();
         ButterKnife.bind(this,view);
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_my_vets));
-        ((AbstractActivity) getActivity()).enableBackButton();
         mAddVetButton.setOnClickListener(this);
         return view;
     }
@@ -92,6 +91,11 @@ public class VetListFragment extends AbstractFragment implements VetListContract
         mPresenter.getVetListData();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
+    }
 
     private void setUpVetList() {
 

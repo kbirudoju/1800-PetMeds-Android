@@ -93,7 +93,6 @@ public class MedicationReminderListFragment extends AbstractFragment
         if (savedInstanceState == null) {
             ((AbstractActivity) getActivity())
                     .setToolBarTitle(getActivity().getString(R.string.medicationreminders_title));
-            ((AbstractActivity) getActivity()).enableBackButton();
         }
     }
 
@@ -103,6 +102,12 @@ public class MedicationReminderListFragment extends AbstractFragment
         setHasOptionsMenu(true);
         mMedicationReminderListPresentor = new MedicationReminderListPresentor(this);
         mMedicationReminderListPresentor.start();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     @Override

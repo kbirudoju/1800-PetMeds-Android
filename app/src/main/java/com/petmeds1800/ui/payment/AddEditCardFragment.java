@@ -220,7 +220,6 @@ public class AddEditCardFragment extends AbstractFragment
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_a_card, container, false);
         ButterKnife.bind(this, view);
-        ((AbstractActivity) getActivity()).enableBackButton();
 
         //diasble editing on the expiration date edittext. We will show up a expiration date dialog
         mExpirationDateEdit.setFocusableInTouchMode(false);
@@ -256,6 +255,12 @@ public class AddEditCardFragment extends AbstractFragment
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     @Override
