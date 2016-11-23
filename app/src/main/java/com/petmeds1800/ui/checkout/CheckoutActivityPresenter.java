@@ -6,15 +6,19 @@ import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.InitCheckoutResponse;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.model.shoppingcart.response.CommerceItems;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -52,7 +56,10 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
 
                     @Override
                     public void onError(Throwable e) {
-
+                        if(mView.isActive()) {
+                            mView.hideProgress();
+                            mView.showErrorCrouton(e.getLocalizedMessage() , false);
+                        }
                     }
 
                     @Override
@@ -69,6 +76,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
 
     @Override
     public void initializeCheckout(HashMap<String, String> itemsDetail) {
+        mView.showProgress();
         mItemDetail = itemsDetail;
         //attach the session confirmation number
         itemsDetail.put("_dynSessConf",
@@ -93,6 +101,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                         else {
                             if (mView.isActive()) {
                                 mView.showErrorCrouton(e.getMessage(), false);
+                                mView.hideProgress();
                             }
                         }
 
@@ -110,6 +119,9 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                         }
                         if (mView.isActive()) {
                             if (s != null) {
+                                //hide progress
+                                mView.hideProgress();
+
                                 if(s.getShoppingCart() != null) {
                                     mView.updateShoppingCartInShoppingCartListResponse(s.getShoppingCart());
                                 }
@@ -168,6 +180,54 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
 
     }
 
+
+    @Override
+    public void mapItemIdWithQuantity(final ShoppingCartListResponse shoppingCartListResponse) {
+//        mView.showProgress();
+        Observable.create(new Observable.OnSubscribe<HashMap<String, String>>() {
+            @Override
+            public void call(Subscriber<? super HashMap<String, String>> subscriber) {
+
+                ArrayList<CommerceItems> commerceItems = (shoppingCartListResponse.getShoppingCart() != null)
+                        ? shoppingCartListResponse.getShoppingCart().getCommerceItems() : null;
+                HashMap<String, String> itemDetails = new HashMap<>();
+                if (commerceItems != null) {
+                    for (CommerceItems commerceItem : commerceItems) {
+                        itemDetails.put(commerceItem.getCommerceItemId(), commerceItem.getQuantity());
+                    }
+                }
+
+                subscriber.onNext(itemDetails);
+
+            }
+        })
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<HashMap<String, String>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if(mView.isActive()) {
+                            mView.hideProgress();
+                            mView.showErrorCrouton(e.getLocalizedMessage(),false);
+                        }
+                    }
+
+                    @Override
+                    public void onNext(HashMap<String, String> itemDetails) {
+                        //null checks and empty checks would be done on the fragment itself
+                        if(mView.isActive()) {
+                            mView.hideProgress();
+                            mView.initializeSteps(itemDetails);
+                        }
+
+                    }
+                });
+    }
 
     @Override
     public void start() {

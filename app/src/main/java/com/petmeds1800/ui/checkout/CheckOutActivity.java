@@ -148,31 +148,18 @@ public class CheckOutActivity extends AbstractActivity
         //first set the mSecurityStatus to know if a user is logged-in or not
         mCheckoutPresenter.checkSecurityStatus();
 
-        //check if we have the valid items in the shopping cart
-        if (getIntent() != null && mShoppingCartListResponse != null) {
-            //TODO need to make this work on backgound thread.Consider moving it to the computational RX
-            //generate a mapping of itemsID and item quantity. We need to do this becoz of backend tem reluctance of changing their code
+    }
 
-            ArrayList<CommerceItems> commerceItems = (mShoppingCartListResponse.getShoppingCart() != null)
-                    ? mShoppingCartListResponse.getShoppingCart().getCommerceItems() : null;
-            HashMap<String, String> itemDetails = new HashMap<>();
-            if (commerceItems != null) {
-                for (CommerceItems commerceItem : commerceItems) {
-                    itemDetails.put(commerceItem.getCommerceItemId(), commerceItem.getQuantity());
-                }
-            }
-            if (mCheckoutSteps != null) {
-                setCheckoutSteps(mCheckoutSteps);
-                startNextStep(mCheckoutSteps.getStepState().getNextCheckoutStep());
-            } else {
-                if (itemDetails != null && itemDetails.size() > 0) {
-                    //show the progress
-                    mCheckoutPresenter.initializeCheckout(itemDetails);
-                }
+    @Override
+    public void initializeSteps(HashMap<String, String> itemDetails) {
+        if (mCheckoutSteps != null) {
+            setCheckoutSteps(mCheckoutSteps);
+            startNextStep(mCheckoutSteps.getStepState().getNextCheckoutStep());
+        } else {
+            if (itemDetails != null && itemDetails.size() > 0) {
+                mCheckoutPresenter.initializeCheckout(itemDetails);
             }
         }
-
-
     }
 
 
@@ -525,6 +512,13 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     public void setSecurityStatus(int securityStatus) {
         mSecurityStatus = securityStatus;
+
+        //check if we have the valid items in the shopping cart
+        if (getIntent() != null && mShoppingCartListResponse != null) {
+            //generate a mapping of itemsID and item quantity. We need to do this becoz of backend tem reluctance of changing their code
+            mCheckoutPresenter.mapItemIdWithQuantity(mShoppingCartListResponse);
+        }
+
     }
 
     @Override

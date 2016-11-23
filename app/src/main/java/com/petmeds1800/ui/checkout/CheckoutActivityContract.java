@@ -15,6 +15,8 @@ public interface CheckoutActivityContract {
 
     interface View extends BaseView<Presenter> {
 
+        void initializeSteps(HashMap<String, String> itemDetails);
+
         void hideProgress();
 
         void showProgress();
@@ -49,6 +51,8 @@ public interface CheckoutActivityContract {
         void initializeCheckout(HashMap<String, String> itemsDetail);
 
         void checkSecurityStatus();
+
+        void mapItemIdWithQuantity(ShoppingCartListResponse shoppingCartListResponse);
     }
 
     interface StepsFragmentInteractionListener {

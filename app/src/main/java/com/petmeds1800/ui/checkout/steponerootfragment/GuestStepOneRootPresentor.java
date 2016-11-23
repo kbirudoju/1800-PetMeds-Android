@@ -204,10 +204,15 @@ public class GuestStepOneRootPresentor implements GuestStepOneRootContract.Prese
                                            mView.navigateOnSuccess(shoppingCartListResponse);
                                        }
                                    } else if (shoppingCartListResponse.getStatus().getCode().equals(API_WARNING_CODE)) {
-                                       mView.showWarningView(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                                       if(mView.isActive()) {
+                                           mView.showWarningView(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                                           mView.hideProgress();
+                                       }
+
                                    } else {
                                        if (mView.isActive()) {
                                            mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0), false);
+                                           mView.hideProgress();
                                        }
                                    }
 
