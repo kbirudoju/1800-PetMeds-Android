@@ -18,6 +18,7 @@ import com.petmeds1800.ui.orders.OrderDetailFragment;
 import com.petmeds1800.ui.payment.SavedCardsListFragment;
 import com.petmeds1800.ui.pets.PetListFragment;
 import com.petmeds1800.ui.vet.VetListFragment;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.urbanairship.UAirship;
@@ -30,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -392,6 +394,10 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onSuccess() {
         ((HomeActivity) getActivity()).hideProgress();
+
+//        Update cart on signout
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+        
         replaceAccountFragment(new SignOutFragment());
     }
 
