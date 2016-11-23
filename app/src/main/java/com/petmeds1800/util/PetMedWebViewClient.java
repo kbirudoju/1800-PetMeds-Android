@@ -2,7 +2,6 @@ package com.petmeds1800.util;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,6 +17,7 @@ import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.ui.HomeActivity;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -115,6 +115,13 @@ public class PetMedWebViewClient extends WebViewClient {
             public void run() {
                 Toast.makeText(mContext, "Item Added Successfully", Toast.LENGTH_SHORT).show();
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+
+//                Move to Shopping Cart on Successful Item Add
+                try {
+                    ((HomeActivity)mContext).scrollViewPager(1);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
         Log.w("OverrideUrlLoading", "onSuccessResponse Exit");
