@@ -106,6 +106,11 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                                 mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
                             }
                         }
+                        else {
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                            }
+                        }
                     }
 
                     @Override
@@ -158,6 +163,11 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                         if(errorId != 0) { //internet connection error. Unknownhost or SocketTimeout exception
                             if(mView.isActive()){
                                 mView.showErrorCrouton(((Fragment)mView).getString(errorId), false);
+                            }
+                        }
+                        else {
+                            if(mView.isActive()){
+                                mView.showErrorCrouton(e.getLocalizedMessage(), false);
                             }
                         }
                     }

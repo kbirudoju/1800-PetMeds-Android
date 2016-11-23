@@ -7,6 +7,7 @@ import com.petmeds1800.model.RemoveAddressRequest;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.ShippingAddressRequest;
 import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
 import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootContract;
@@ -513,13 +514,13 @@ public class AddEditAddressFragment extends AbstractFragment
 
     @Override
     public void showErrorMessage(String errorMessage) {
-        mProgressBar.setVisibility(View.GONE);
+        hideProgress();
         Snackbar.make(mAddressLine1Edit, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
-        mProgressBar.setVisibility(View.GONE);
+        hideProgress();
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
         } else {
@@ -538,10 +539,12 @@ public class AddEditAddressFragment extends AbstractFragment
         switch (v.getId()) {
 
             case R.id.stateOrProvinceOrRegion_edit:
+                showProgress();
                 mPresenter.getUsaStatesList();
                 break;
 
             case R.id.countryName_edit:
+                showProgress();
                 mPresenter.getCountryList();
                 break;
 
@@ -552,6 +555,25 @@ public class AddEditAddressFragment extends AbstractFragment
         }
     }
 
+    private void showProgress() {
+        //we will show the activity loader if its an checkoutActivity becoz in-screen progressBar is not visible many times
+        if(getActivity() instanceof CheckOutActivity){
+            ((CheckOutActivity)getActivity()).showProgress();
+        }
+        else {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideProgress() {
+        //we will show the activity loader if its an checkoutActivity becoz in-screen progressBar is not visible many times
+        if(getActivity() instanceof CheckOutActivity){
+            ((CheckOutActivity)getActivity()).hideProgress();
+        }
+
+        mProgressBar.setVisibility(View.GONE);
+
+    }
     @Override
     public void showDeletionConfirmationDialog() {
         AlertDialog alertDialog = Utils.showAlertDailog(getActivity(),
@@ -567,6 +589,7 @@ public class AddEditAddressFragment extends AbstractFragment
 
     @Override
     public void usaStatesListReceived(String[] usaStateArray) {
+        hideProgress();
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment statesDialogFragment = CommonDialogFragment
                 .newInstance(usaStateArray, getActivity().getString(R.string.choose_state_txt), USA_STATE_LIST_REQUEST);
@@ -577,6 +600,7 @@ public class AddEditAddressFragment extends AbstractFragment
 
     @Override
     public void countryListReceived(String[] countryArray) {
+        hideProgress();
         FragmentManager fragManager = getFragmentManager();
         CommonDialogFragment statesDialogFragment = CommonDialogFragment
                 .newInstance(countryArray, getActivity().getString(R.string.choose_country_txt), COUNTRY_LIST_REQUEST);
