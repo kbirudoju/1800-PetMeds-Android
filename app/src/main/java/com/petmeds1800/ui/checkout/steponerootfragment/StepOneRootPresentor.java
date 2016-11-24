@@ -66,7 +66,7 @@ public class StepOneRootPresentor implements StepOneRootContract.Presenter {
                             mView.showWarningView(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
                         } else {
                             if (mView.isActive()) {
-                                mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0), true);
+                                mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0), false);
                             }
                         }
 
