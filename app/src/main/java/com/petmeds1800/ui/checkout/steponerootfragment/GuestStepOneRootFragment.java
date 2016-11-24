@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.text.Spanned;
-import android.util.Patterns;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
-
 import com.petmeds1800.R;
 import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.model.Address;
@@ -29,6 +15,22 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.util.InputValidationUtil;
 import com.petmeds1800.util.Utils;
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.text.Spanned;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -87,6 +89,9 @@ public class GuestStepOneRootFragment extends AbstractFragment
     @BindView(R.id.view_error)
     View mErrorView;
 
+    @BindView(R.id.scrollerView)
+    ScrollView mScrollerView;
+
     private String mStepName;
 
     public static final int REQUEST_CODE = 7;
@@ -122,7 +127,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
     }
 
     public boolean confirmValidation(EditText auditEditText, EditText confirmEditText,
-                                     TextInputLayout auditTextInputLayout, int errorStringId) {
+            TextInputLayout auditTextInputLayout, int errorStringId) {
         if (!Utils.checkConfirmFields(auditEditText, confirmEditText)) {
             auditTextInputLayout.setError(getContext().getString(errorStringId));
             return true;
@@ -134,7 +139,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
     }
 
     public static GuestStepOneRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
-                                                       String stepName) {
+            String stepName) {
         GuestStepOneRootFragment f = new GuestStepOneRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
@@ -158,7 +163,7 @@ public class GuestStepOneRootFragment extends AbstractFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_guest_step_one_fragment, container, false);
         ((CheckOutActivity) getActivity()).setActiveStep(mStepName);
         ButterKnife.bind(this, view);
@@ -242,7 +247,8 @@ public class GuestStepOneRootFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        replaceStepRootChildFragment(AddEditAddressFragment.newInstance(mAddress, GuestStepOneRootFragment.REQUEST_CODE),
+        replaceStepRootChildFragment(
+                AddEditAddressFragment.newInstance(mAddress, GuestStepOneRootFragment.REQUEST_CODE),
                 R.id.billingAddressfragment);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
@@ -255,9 +261,11 @@ public class GuestStepOneRootFragment extends AbstractFragment
         shippingAddressAttribute.setConfirmEmail(mConfirmEmailEdit.getText().toString().trim());
         shippingAddressAttribute.setUseShippingAddressAsDefault(mDefaultShippingAddressSwitch.isChecked());
         shippingAddressAttribute
-                .setPassword(mPasswordEdit.getText().toString().isEmpty() ? null : mPasswordEdit.getText().toString().trim());
+                .setPassword(mPasswordEdit.getText().toString().isEmpty() ? null
+                        : mPasswordEdit.getText().toString().trim());
         shippingAddressAttribute.setConfirmPassword(
-                mConfirmPasswordEdit.getText().toString().isEmpty() ? null : mConfirmPasswordEdit.getText().toString().trim());
+                mConfirmPasswordEdit.getText().toString().isEmpty() ? null
+                        : mConfirmPasswordEdit.getText().toString().trim());
         mPresentor.saveGuestShippingAddressData(shippingAddressAttribute);
     }
 
@@ -315,6 +323,12 @@ public class GuestStepOneRootFragment extends AbstractFragment
         TextView description = (TextView) mErrorView.findViewById(R.id.txv_error_message);
         title.setText(getString(R.string.label_error_with_address));
         description.setText(message);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mScrollerView.fullScroll(View.FOCUS_UP);
+            }
+        }, 100);
     }
 
     @Override
