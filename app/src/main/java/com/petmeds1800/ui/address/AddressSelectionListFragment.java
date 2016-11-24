@@ -109,7 +109,6 @@ public class AddressSelectionListFragment extends AbstractFragment
         if (mRequestCode == StepOneRootFragment.REQUEST_CODE) {
             setUpViews();
         } else {
-            ((AbstractActivity) getActivity()).enableBackButton();
             ((AbstractActivity) getActivity())
                     .setToolBarTitle(getContext().getString(R.string.addressSelectionListTitle));
         }
@@ -154,6 +153,7 @@ public class AddressSelectionListFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
         if (mPresenter != null) {
             mPresenter.start();
         }
