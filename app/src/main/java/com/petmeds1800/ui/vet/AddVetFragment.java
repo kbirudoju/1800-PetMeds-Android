@@ -63,10 +63,16 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
         mPresenter=new CantFindVetPresenter(this);
 
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.add_vet_header));
-        ((AbstractActivity) getActivity()).enableBackButton();
+        
         mZipCode=getArguments().getString("zipcode");
         setHasOptionsMenu(true);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     @Override

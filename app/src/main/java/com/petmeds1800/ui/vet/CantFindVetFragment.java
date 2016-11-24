@@ -72,7 +72,6 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
         setHasOptionsMenu(true);
         mPresenter=new CantFindVetPresenter(this);
         ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.cannot_find_vet_txt));
-        ((AbstractActivity) getActivity()).enableBackButton();
         return view;
     }
 
@@ -80,6 +79,12 @@ public class CantFindVetFragment extends AbstractFragment implements CantFindVet
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AbstractActivity) getActivity()).enableBackButton();
     }
 
     @Override
