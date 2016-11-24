@@ -108,8 +108,8 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mPresenter.findUserData();
     }
 
