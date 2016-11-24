@@ -170,6 +170,7 @@ public class StepOneRootFragment extends AbstractFragment implements StepOneRoot
 
     @Override
     public void showErrorCrouton(CharSequence message, boolean span) {
+        ((CheckOutActivity) getActivity()).hideProgress();
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
         } else {
