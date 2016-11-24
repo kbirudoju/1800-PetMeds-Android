@@ -332,7 +332,19 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final RecommendationViewHolder recommendationViewHolder = (RecommendationViewHolder) holder;
                 RecommendedCategory recommendedCategory = (RecommendedCategory) getItemAt(position);
                 recommendationViewHolder.doctorNameLabel.setText(recommendedCategory.getDoctorName());
-                recommendationViewHolder.quoteLabel.setText("[img src=ic_quote_left/]" + " " + recommendedCategory.getDoctorQuote() + "  " + "[img src=ic_quote_right/]");
+
+                if(recommendedCategory.getCategory().getCategoryIntro() != null) {
+                    recommendationViewHolder.quoteLabel.setText(
+                            "[img src=ic_quote_left/]" + " " + recommendedCategory.getCategory().getCategoryIntro() + "  "
+                                    + "[img src=ic_quote_right/]");
+
+                }
+                else {
+                    recommendationViewHolder.quoteLabel.setText(
+                            "[img src=ic_quote_left/]" + " " + recommendedCategory.getDoctorQuote() + "  "
+                                    + "[img src=ic_quote_right/]");
+                }
+
                 recommendationViewHolder.recommendatipnTitleLabel.setText(recommendedCategory.getWidgetTitle());
                 recommendationViewHolder.recommendationPetNameLabel.setText(recommendedCategory.getPetName());
                 Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + recommendedCategory.getDoctorPictureUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(recommendationViewHolder.doctorImage) {
