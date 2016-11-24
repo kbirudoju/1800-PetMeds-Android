@@ -1,29 +1,5 @@
 package com.petmeds1800.ui;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -54,6 +30,30 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 import com.urbanairship.UAirship;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,6 +123,7 @@ public class HomeActivity extends AbstractActivity
     //TODO chnage when push payload is appropriate
 
     private final int TYPE_MEDICATION_REMINDER__ALERT = 1;
+
     private final int TYPE_OFFER__ALERT = 2;
 
     private final int TYPE_ORDER_SHIPPED__ALERT = 3;
@@ -136,6 +137,8 @@ public class HomeActivity extends AbstractActivity
     private final int TYPE_VET_VERIFY_RX_ALERT = 7;
 
     private int screenType;
+
+    private boolean submitPressed;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -367,6 +370,10 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onResume() {
         super.onResume();
+        if (submitPressed) {
+            // Pop back stack when in app notification dailog arrives
+            this.getSupportFragmentManager().popBackStackImmediate("ProgressDialog",0);
+        }
         if (mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
             if (screenType == 0 || screenType == TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT) {
                 checkLoginStatus();
@@ -480,9 +487,10 @@ public class HomeActivity extends AbstractActivity
     }
 
     public void showProgress() {
-        mProgressDialog.setCancelable(false);
         if (!mProgressDialog.isAdded()) {
+            mProgressDialog.setCancelable(false);
             mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
+            submitPressed = true;
         }
     }
 
@@ -532,6 +540,12 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //Saving the state of the progress dailog
+        outState.putBoolean("submitPressed", submitPressed);
+    }
+
     /**
      * For updating BOTH contents of Shopping Cart and Tab Layout Quantity. Internally calls updateCartMenuItemCount
      * called when contents are altered in Shopping Cart from Outside {@link CartFragment}
@@ -571,16 +585,22 @@ public class HomeActivity extends AbstractActivity
             if (msg.what == Constants.KEY_COMPLETED_ASYN_COUNT_FETCH) {
                 if (msg.getData().getBoolean(Constants.KEY_SHOPPING_CART_ASYNC_SUCCESS)) {
                     mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image_container).setVisibility(View.VISIBLE);
-                    if ((Integer.parseInt(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE)))>0){
-                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setBackgroundResource(R.drawable.ball_red);
-                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setTextColor(Color.WHITE);
+                    if ((Integer.parseInt(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE))) > 0) {
+                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image))
+                                .setBackgroundResource(R.drawable.ball_red);
+                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image))
+                                .setTextColor(Color.WHITE);
                     } else {
-                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setBackgroundResource(R.drawable.ball_white);
-                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setTextColor(getResources().getColor(R.color.petmeds_blue));
+                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image))
+                                .setBackgroundResource(R.drawable.ball_white);
+                        ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image))
+                                .setTextColor(getResources().getColor(R.color.petmeds_blue));
                     }
-                    ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image)).setText(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE));
+                    ((TextView) mTabLayoutArray.get(1).findViewById(R.id.tab_text_over_image))
+                            .setText(msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE));
                 } else {
-                    Snackbar.make(mContainerLayout, msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE),Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(mContainerLayout, msg.getData().getString(Constants.KEY_SHOPPING_CART_ICON_VALUE),
+                            Snackbar.LENGTH_LONG).show();
                 }
             }
         }
@@ -594,8 +614,8 @@ public class HomeActivity extends AbstractActivity
     }
 
     public int getCurrentSelectedTab() {
-        if(mViewPager != null) {
-            return  mViewPager.getCurrentItem();
+        if (mViewPager != null) {
+            return mViewPager.getCurrentItem();
         }
 
         return -1;
