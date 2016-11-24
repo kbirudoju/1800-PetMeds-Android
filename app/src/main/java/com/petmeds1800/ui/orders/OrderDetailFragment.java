@@ -1,37 +1,5 @@
 package com.petmeds1800.ui.orders;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.PetMedsApplication;
@@ -59,6 +27,39 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.LayoutPrintingUtils;
 import com.petmeds1800.util.Utils;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +85,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     @BindView(R.id.order_detail_recycler_view)
     RecyclerView mOrderDetailRecyclerView;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.orderDetailContainerLayout)
     FrameLayout mContainerLayout;
 
     private OrderDetailAdapter mOrderDetailAdapter;
@@ -340,6 +341,14 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     public void onOrderDetailSuccess(OrderList orderList) {
         this.orderList = orderList;
         populateOrderDetail();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mOrderDetailRecyclerView.smoothScrollToPosition(mOrderDetailRecyclerView.getAdapter().getItemCount());
+            }
+        },300);
+
+
     }
 
     @Override

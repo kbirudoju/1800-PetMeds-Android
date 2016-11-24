@@ -172,11 +172,6 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        onCreate(savedInstanceState);
-    }
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -328,9 +323,8 @@ public class HomeActivity extends AbstractActivity
                         mViewPager.setCurrentItem(0);
                         break;
                     case TYPE_QUESTION_ANSWER_ALERT:
-                        HomeActivity.this.getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
-                        HomeActivity.this.screenType = 0;
                         mViewPager.setCurrentItem(2);
+                        HomeActivity.this.screenType = 0;
                         break;
 
 

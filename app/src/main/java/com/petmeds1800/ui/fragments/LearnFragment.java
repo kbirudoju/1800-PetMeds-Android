@@ -48,6 +48,7 @@ public class LearnFragment extends AbstractFragment {
     ViewPager mLearnViewPager;
 
     MenuItem mAboutMenuItem, mSearchMenuItem;
+    int screenType;
 
     @Nullable
     @Override
@@ -67,7 +68,7 @@ public class LearnFragment extends AbstractFragment {
     public void onResume() {
         super.onResume();
         //we should set the title only if current selected tab is not the first home tab
-        if(((HomeActivity)getActivity()).getCurrentSelectedTab() == 2) {
+        if (((HomeActivity) getActivity()).getCurrentSelectedTab() == 2) {
             ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[2]));
         }
     }
@@ -147,6 +148,7 @@ public class LearnFragment extends AbstractFragment {
 
     private void setUpViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
+        FeaturedFragment featuredFragment = new FeaturedFragment();
         adapter.addFragment(new FeaturedFragment(), getActivity().getString(R.string.title_featured));
         adapter.addFragment(new MedConditionsFragment(), getActivity().getString(R.string.title_conditions));
         viewPager.setAdapter(adapter);

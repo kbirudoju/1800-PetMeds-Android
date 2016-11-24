@@ -186,8 +186,8 @@ public class AccountFragment extends AbstractFragment
     public void onResume() {
         super.onResume();
         //we should set the title only if current selected tab is not the first home tab
-        if(((HomeActivity)getActivity()).getCurrentSelectedTab() == 3) {
-            ((AbstractActivity)getActivity()).setToolBarTitle(getResources().getStringArray(R.array.tab_title)[3]);
+        if (((HomeActivity) getActivity()).getCurrentSelectedTab() == 3) {
+            ((AbstractActivity) getActivity()).setToolBarTitle(getResources().getStringArray(R.array.tab_title)[3]);
         }
     }
 
@@ -396,8 +396,9 @@ public class AccountFragment extends AbstractFragment
         ((HomeActivity) getActivity()).hideProgress();
 
 //        Update cart on signout
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
-        
+        LocalBroadcastManager.getInstance(getActivity())
+                .sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+
         replaceAccountFragment(new SignOutFragment());
     }
 
@@ -453,7 +454,7 @@ public class AccountFragment extends AbstractFragment
         //  Added below lines in order to create UI after account fragment added into viewpager
         checkAndSetHasOptionsMenu(intent, AccountRootFragment.class.getName());
         fillWindow();
-        if (((HomeActivity) getActivity()).getIntent() != null) {
+        if (((HomeActivity) getActivity()) != null && ((HomeActivity) getActivity()).getIntent() != null) {
             navigateOnPush();
         }
         super.onReceivedBroadcast(context, intent);
