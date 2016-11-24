@@ -10,12 +10,14 @@ import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.MedicationReminderItem;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
@@ -140,6 +142,8 @@ public class HomeActivity extends AbstractActivity
 
     private boolean submitPressed;
 
+    private AccountRootFragment mAccountRootFragment;
+
     @Override
     protected void onNewIntent(Intent intent) {
         // TODO Auto-generated method stub
@@ -190,7 +194,8 @@ public class HomeActivity extends AbstractActivity
         fragmentList.add(mHomeRootFragment);
         fragmentList.add(mCartRootFragment);
         fragmentList.add(new LearnRootFragment());
-        fragmentList.add(new AccountRootFragment());
+        mAccountRootFragment = new AccountRootFragment();
+        fragmentList.add(mAccountRootFragment);
         mAdapter = new TabPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(mAdapter);
         //we need to set the offset to 3 otherwise options menu cant be managed.
@@ -481,6 +486,7 @@ public class HomeActivity extends AbstractActivity
                         } else if (securityStatus == 4 || securityStatus
                                 == 5) { //As per backend team, security status 4 or 5 should be treated similarly
                             //TODO: research more into silent sign in logic
+                            mAccountRootFragment.replaceAppropriateFragment();
                         }
                     }
                 });
