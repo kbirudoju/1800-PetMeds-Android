@@ -480,7 +480,7 @@ public class HomeActivity extends AbstractActivity
                         } else if (securityStatus == 4 || securityStatus
                                 == 5) { //As per backend team, security status 4 or 5 should be treated similarly
                             //TODO: research more into silent sign in logic
-                            mAccountRootFragment.replaceAppropriateFragment();
+                            mAccountRootFragment.showAccountFragment();
                         }
                     }
                 });

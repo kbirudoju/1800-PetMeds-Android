@@ -25,11 +25,14 @@ public class AccountRootFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_container, container, false);
         PetMedsApplication.getAppComponent().inject(this);
-        replaceAppropriateFragment();
+        replaceAccountFragment(mPreferencesHelper.getIsUserLoggedIn() ? new AccountFragment() : new SignOutFragment());
         return view;
     }
 
-    public void replaceAppropriateFragment(){
-        replaceAccountFragment(mPreferencesHelper.getIsUserLoggedIn() ? new AccountFragment() : new SignOutFragment());
+    public void showAccountFragment() {
+        //check if the added fragment is a SignOUtFragment.If yes then add the AccountFragment
+        if(getActivity().getSupportFragmentManager().findFragmentById(R.id.account_root_fragment_container) instanceof SignOutFragment) {
+            replaceAccountFragment(new AccountFragment());
+        }
     }
 }
