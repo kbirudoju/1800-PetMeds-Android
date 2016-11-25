@@ -100,7 +100,7 @@ public class GeneralPreferencesHelper {
     }
 
     public boolean getIsFingerPrintEnabled() {
-        return mPreferences.getBoolean(IS_ISFINGER_PRINT_ENABLED, true);
+        return mPreferences.getBoolean(IS_ISFINGER_PRINT_ENABLED, false);
     }
 
 }
