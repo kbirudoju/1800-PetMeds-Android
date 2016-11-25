@@ -162,7 +162,7 @@ public class HomeActivity extends AbstractActivity
     }
 
     //Call to replace receipt fragment on page listener
-    private void replaceFragmentOnConfirmReceipt() {
+    public void replaceFragmentOnConfirmReceipt() {
         if (commitOrderResponse != null) {
             commitOrderResponse = null;
             mCartRootFragment.replaceConfirmOrderFragment(commitOrderResponse);
