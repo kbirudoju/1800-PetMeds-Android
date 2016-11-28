@@ -60,7 +60,7 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
         View view = inflater.inflate(R.layout.fragment_reminder_list,null);
         mReminderMainList = (RecyclerView) view.findViewById(R.id.reminder_list);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mReminderListContainer = (LinearLayout) view.findViewById(R.id.reminer_list_container);
+        mReminderListContainer = (LinearLayout) view.findViewById(R.id.reminder_list_container);
         mNoReminderListContainer = (LinearLayout) view.findViewById(R.id.no_reminder_container);
         mReminderMainList.setLayoutManager(mLayoutManager);
         mReminderMainList.setItemAnimator(new DefaultItemAnimator());

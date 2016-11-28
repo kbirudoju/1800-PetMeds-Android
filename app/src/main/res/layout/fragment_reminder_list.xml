@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/reminer_list_container"
+        android:id="@+id/reminder_list_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_13"
+            android:layout_marginTop="@dimen/dp_34"
             android:text="@string/no_saved_refill_reminder_message" />
 
         <TextView
@@ -53,7 +53,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="@string/refill_reminder_will_appear_automatically_message" />
+            android:layout_marginLeft="@dimen/dp_28"
+            android:layout_marginRight="@dimen/dp_28"
+            android:gravity="center"
+            android:text="@string/description_no_refill_reminders" />
 
         <Button
             android:id="@+id/shop_now_button"
@@ -63,7 +66,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/dp_16"
             android:layout_marginRight="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_42"
+            android:layout_marginTop="@dimen/dp_25"
             android:background="@color/petmeds_blue"
             android:text="@string/shop_now_message"
             android:textColor="@color/white" />

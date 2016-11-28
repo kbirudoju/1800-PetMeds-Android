@@ -653,10 +653,10 @@
     <string name="set_reminder_date">SET REMINDER DATE</string>
     <string name="confirm_reminder_deletion_message">This Refill Reminder will be deleted from your account</string>
     <string name="no_saved_refill_reminder_message">You have no refill reminders</string>
-    <string name="refill_reminder_will_appear_automatically_message">Store an address for faster checkout.</string>
     <string name="shop_now_message">SHOP NOW</string>
     <string name="error_txt">Error</string>
     <string name="succes_txt">Success</string>
+    <string name="description_no_refill_reminders">A refill reminder will appear automatically every time you order a medication that includes a prescription.</string>
 
     <string name="label_edit_pet">Edit Pet</string>
     <string name="label_add_pet">Add Pet</string>
