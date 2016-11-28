@@ -83,9 +83,9 @@ public class VetListSuggestionAdapter extends BaseAdapter implements Filterable,
                     List<VetList> dataObject = findDataForConstraint(mContext, constraint.toString());
                     String searchString = constraint.toString().toLowerCase();
                     for(VetList c : dataObject) {
-                        if (c.getName().toLowerCase().contains(searchString)) {
+                        if (c.getName() != null && c.getName().toLowerCase().contains(searchString)) {
                             vetList.add(c);
-                        }  else if (c.getClinic().toLowerCase().contains(searchString)) {
+                        }  else if (c.getClinic() != null && c.getClinic().toLowerCase().contains(searchString)) {
                             vetList.add(c);
                         }else{
 

@@ -103,6 +103,9 @@ public class AddVetFragment extends AbstractFragment implements View.OnClickList
                             , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                     mPresenter.addVetData(addVetRequest);
                 }
+                else {
+                    mVetTextView.setError(getActivity().getString(R.string.not_in_list_vet_error));
+                }
             }else{
                 mVetTextView.setError(getActivity().getString(R.string.empty_vet_error));
 

@@ -527,6 +527,7 @@
     <string name="vet_phone_number_txt">Vet\'s Phone Number</string>
     <string name="error_validPhone">PhoneNumber is required</string>
     <string name="empty_vet_error">Please select a Vet</string>
+    <string name="not_in_list_vet_error">Not found in list</string>
     <string name="empty_pet_name">PetName is required</string>
     <string name="empty_vet_name">VetName is required</string>
     <string name="tracking_txt">Tracking #</string>
