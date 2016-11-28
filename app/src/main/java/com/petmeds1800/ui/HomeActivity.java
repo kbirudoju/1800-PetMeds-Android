@@ -14,6 +14,7 @@ import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.fragments.HomeFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
@@ -250,6 +251,10 @@ public class HomeActivity extends AbstractActivity
                 if (position == 0) {
                     getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
                     screenType = getIntent().getIntExtra("screenType", 0);
+
+                    //send local broadcast to select the WidgetsTab by default.PETU-40
+                    Intent intent = new Intent(HomeFragment.SELECT_WIDGET_TAB);
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 } else {
                     getToolbar().setLogo(null);
                 }

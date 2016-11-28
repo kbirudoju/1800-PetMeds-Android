@@ -44,6 +44,8 @@ import butterknife.ButterKnife;
  */
 public class HomeFragment extends AbstractFragment implements HomeFragmentContract.ProductCategoryInteractionListener {
 
+    public static final String SELECT_WIDGET_TAB = "select_widget_tab";
+
     @BindView(R.id.home_tabs)
     TabLayout homeTabs;
 
@@ -79,6 +81,7 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         homeTabs.setupWithViewPager(homeViewPager);
         //start listening for optionsMenuAction
         registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
+        registerIntent(new IntentFilter(HomeFragment.SELECT_WIDGET_TAB), getContext());
 
         return view;
     }
@@ -216,6 +219,12 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent, HomeRootFragment.class.getName());
+
+        //PETU-40. Default tab should always be first widget tab on page change
+        if(intent.getAction() != null && intent.getAction().equals(SELECT_WIDGET_TAB)) {
+            homeViewPager.setCurrentItem(0);
+        }
+
         super.onReceivedBroadcast(context, intent);
     }
 
