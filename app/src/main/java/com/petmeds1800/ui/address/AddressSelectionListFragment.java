@@ -18,6 +18,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +53,7 @@ public class AddressSelectionListFragment extends AbstractFragment
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.containerLayoutSavedAddressList)
     RelativeLayout mContainerLayout;
 
     @BindView(R.id.addNewAdrress)
@@ -211,10 +213,7 @@ public class AddressSelectionListFragment extends AbstractFragment
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
         errorMessage = errorMessage.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
-        mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), (String) errorMessage, mContainerLayout);
-
-
+        Utils.displayCrouton(getActivity(), Html.fromHtml(errorMessage), mContainerLayout);
     }
 
     @Override
