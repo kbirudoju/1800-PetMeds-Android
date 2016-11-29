@@ -57,6 +57,9 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     @BindView(R.id.txv_email)
     TextView mEmail;
 
+    @BindView(R.id.txv_shipping_method)
+    TextView mShippingMethod;
+
     @BindView(R.id.txv_subtotal)
     TextView mSubtotal;
 
@@ -67,7 +70,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     TextView mDiscount;
 
     @BindView(R.id.txv_shipping)
-    TextView mShipping;
+    TextView mShippingTotal;
 
     @BindView(R.id.txv_taxes)
     TextView mTaxes;
@@ -209,9 +212,10 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
                 mFirstName.setText(order.getFirstName());
                 mOrderId.setText(order.getOrderId());
                 mEmail.setText(order.getEmail());
+                mShippingMethod.setText(order.getShippingMethod());
                 mSubtotal.setText(String.valueOf(order.getOrderSubTotal()));
                 mDiscount.setText(String.valueOf(order.getDiscount()));
-                mShipping.setText(String.valueOf(order.getShippingTotal()));
+                mShippingTotal.setText(String.valueOf(order.getShippingTotal()));
                 mTaxes.setText(String.valueOf(order.getTaxTotal()));
                 mTotal.setText(String.valueOf(order.getOrderTotal()));
                 mSubtotalLabel.setText(getString(R.string.items_formatter, order.getItems().size()));

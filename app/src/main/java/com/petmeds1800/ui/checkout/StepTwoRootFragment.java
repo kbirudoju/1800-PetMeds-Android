@@ -162,7 +162,7 @@ public class StepTwoRootFragment extends AbstractFragment
                     .findViewHolderForAdapterPosition(i);
             holder.selectionImage.setImageResource(R.drawable.ic_radio_button_off);
         }
-        mShippingMethod = mShippingMethodList.get(position);
+        mShippingMethod = mListAdapter.getItem(position);
     }
 
     private void updateRecyclerView(List<ShippingMethod> shippingMethodList) {
