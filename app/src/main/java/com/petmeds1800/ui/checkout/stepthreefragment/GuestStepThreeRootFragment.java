@@ -115,6 +115,10 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
         mNewPaymentMethod.setVisibility(View.GONE);
 
+        if (((CheckOutActivity) getActivity()).getApplicableSteps() == 4) {
+            mShippingNavigator.setText(getString(R.string.review_submit_navigator_button_title));
+        }
+
         populateAddress();
         populatePaymentGroup();
         return view;
