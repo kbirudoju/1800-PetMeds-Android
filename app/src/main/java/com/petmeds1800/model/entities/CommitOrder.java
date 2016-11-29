@@ -18,7 +18,7 @@ public class CommitOrder implements Serializable {
     private double shippingTotal;
     private String shippingMethod;
     private String firstName;
-    private String orderId;
+    private String mpOrderNumber;
     private double discount;
     private String shippingState;
     private String shippingCountry;
@@ -88,11 +88,11 @@ public class CommitOrder implements Serializable {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    public String getOrderId() {
-        return orderId;
+    public String getMpOrderNumber() {
+        return mpOrderNumber;
     }
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setMpOrderNumber(String mpOrderNumber) {
+        this.mpOrderNumber = mpOrderNumber;
     }
     public double getDiscount() {
         return discount;

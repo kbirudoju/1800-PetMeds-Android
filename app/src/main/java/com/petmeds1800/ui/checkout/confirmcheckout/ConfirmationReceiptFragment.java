@@ -210,7 +210,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
             if (errorCode.equals(BasePresenter.API_SUCCESS_CODE)) {
                 order = commitOrderResponse.getOrder();
                 mFirstName.setText(order.getFirstName());
-                mOrderId.setText(order.getOrderId());
+                mOrderId.setText(order.getMpOrderNumber());
                 mEmail.setText(order.getEmail());
                 mShippingMethod.setText(order.getShippingMethod());
                 mSubtotal.setText(String.valueOf(order.getOrderSubTotal()));

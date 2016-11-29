@@ -55,7 +55,7 @@ public class AnalyticsUtil {
             builder.set("city", commitOrder.getShippingCity());
             builder.set("country", commitOrder.getShippingCountry());
             ProductAction productAction = new ProductAction(ProductAction.ACTION_PURCHASE)
-                    .setTransactionId(commitOrder.getOrderId())
+                    .setTransactionId(commitOrder.getMpOrderNumber())
                     .setTransactionAffiliation(context.getString(R.string.application_name))
                     .setTransactionRevenue(commitOrder.getOrderTotal())
                     .setTransactionTax(commitOrder.getTaxTotal())
