@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="phone_toll_free">+1 (800) PetMeds® (1-800-738-6337)</string>
-    <string name="phone_main">+1 (954) 979 - 5995</string>
-    <string name="phone_pharmacy">+1 (800) 600 - 8285 (Toll Free)</string>
-    <string name="fax_pharmacy">+1 (800) 600 - 8285</string>
+    <string name="label_phone_toll_free">+1 (800) PetMeds® (1-800-738-6337)</string>
+    <string name="number_phone_toll_free">+1 800-738-6337</string>
+    <string name="label_phone_main">+1 (954) 979 - 5995</string>
+    <string name="number_phone_main">+1 954-979-5995</string>
+    <string name="label_phone_pharmacy">+1 (800) 600 - 8285 (Toll Free)</string>
+    <string name="number_phone_pharmacy">+1 800-600-8285</string>
+    <string name="label_fax_pharmacy">+1 (800) 600 - 8285</string>
     <string name="email_contact_us">customerservice@1800petmeds.com</string>
     <string name="mailing_address">1441 SW 29th Ave\nPompano Beach, FL 33069\nUnited States</string>
-    <string name="phone_toll_free_number">1-800-738-6337</string>
-    <string name="phone_pharmacy_number">+1 (800) 600 - 8285</string>
+
 </resources>

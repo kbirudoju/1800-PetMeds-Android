@@ -17,7 +17,7 @@
             style="@style/dialog_button_style"
             android:layout_marginTop="@dimen/dp_16"
             android:background="@drawable/rectangular_background"
-            android:text="@string/call_us"
+            android:text="@string/label_call_us"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:stateListAnimator="@null"

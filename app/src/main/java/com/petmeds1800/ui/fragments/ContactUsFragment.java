@@ -166,22 +166,22 @@ public class ContactUsFragment extends AbstractFragment {
 
     @OnClick(R.id.view_call_toll_free)
     public void callPhoneTollFree() {
-        initCallPhonePermissionsWrapper(getString(R.string.phone_toll_free_number));
+        initCallPhonePermissionsWrapper(getString(R.string.number_phone_toll_free));
     }
 
     @OnClick(R.id.view_call_main)
     public void callPhoneMain() {
-        initCallPhonePermissionsWrapper(getString(R.string.phone_main));
+        initCallPhonePermissionsWrapper(getString(R.string.number_phone_main));
     }
 
     @OnClick(R.id.view_call_pharmacy)
     public void callPhonePharmacy() {
-        initCallPhonePermissionsWrapper(getString(R.string.phone_pharmacy_number));
+        initCallPhonePermissionsWrapper(getString(R.string.number_phone_pharmacy));
     }
 
     @OnClick(R.id.pharmacy_call_main)
     public void faxPharmacy() {
-        initCallPhonePermissionsWrapper(getString(R.string.fax_pharmacy));
+        initCallPhonePermissionsWrapper(getString(R.string.label_fax_pharmacy));
     }
 
     private void initCallPhonePermissionsWrapper(final String phoneNumber) {
@@ -205,8 +205,12 @@ public class ContactUsFragment extends AbstractFragment {
     }
 
     private void makePhoneCall(String phoneNumber) {
-        Intent intent = new Intent(Intent.ACTION_CALL);
+        Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 }

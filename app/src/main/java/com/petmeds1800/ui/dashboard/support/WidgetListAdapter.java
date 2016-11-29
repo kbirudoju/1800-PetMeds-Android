@@ -162,12 +162,11 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse("tel:1-800-738-6337"));
-
+                    intent.setData(Uri.parse("tel:" + mContext.getString(R.string.number_phone_toll_free)));
                     try {
                         mContext.startActivity(intent);
                     } catch (android.content.ActivityNotFoundException ex) {
-
+                        ex.printStackTrace();
                     }
                 }
             });

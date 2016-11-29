@@ -419,7 +419,6 @@
     <string name="email_us_txt">EMAIL US</string>
     <string name="live_chat_txt">LIVE CHAT</string>
     <string name="share_feedback_txt">SHARE YOUR FEEDBACK</string>
-    <string name="call_txt">CALL +1 (800) 738 6337</string>
     <string name="join_social_network_txt">Join Our Social Network</string>
     <string name="copyright_txt">Copyright 2016 PetMed Express, Inc. All Rights Reserved</string>
 
@@ -432,7 +431,7 @@
     <string name="payment_navigator_button_title">CONTINUE TO PET &amp;VET INFORMATION</string>
     <string name="reviewsubmit_navigator_button_title">CONTINUE TO REVIEW &amp;SUBMIT ORDER</string>
     <string name="email_us">EMAIL US</string>
-    <string name="call_us">CALL +1 (800) 738 6337</string>
+    <string name="label_call_us">CALL +1 (800) 738 6337</string>
     <string name="live_chat">LIVE CHAT</string>
     <string name="add_new_address">ADD NEW ADDRESS</string>
     <string name="numeric_one">1</string>

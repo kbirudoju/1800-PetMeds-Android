@@ -15,7 +15,7 @@
         android:id="@+id/call_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/call_txt"
+        android:text="@string/label_call_us"
         android:layout_marginTop="@dimen/dp_17"
         android:stateListAnimator="@null"
         android:background="@drawable/rectangular_background"

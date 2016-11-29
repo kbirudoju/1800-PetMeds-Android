@@ -105,8 +105,12 @@ public class CommunicationFragment extends AbstractFragment {
     }
 
     private void makePhoneCall() {
-        Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:" + getString(R.string.call_us)));
-        startActivity(intent);
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + getString(R.string.number_phone_toll_free)));
+        try {
+            startActivity(intent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 }

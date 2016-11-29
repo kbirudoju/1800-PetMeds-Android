@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txv_label_toll_free"
                     android:layout_toLeftOf="@+id/imv_call_toll_free"
-                    android:text="@string/phone_toll_free"
+                    android:text="@string/label_phone_toll_free"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
 
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txv_label_main_phone"
                     android:layout_toLeftOf="@+id/imv_call_main"
-                    android:text="@string/phone_main"
+                    android:text="@string/number_phone_main"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
 
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txv_label_pharmacy_phone"
                     android:layout_toLeftOf="@+id/imv_call_pharmacy_phone"
-                    android:text="@string/phone_pharmacy"
+                    android:text="@string/label_phone_pharmacy"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
 
@@ -151,7 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txv_label_pharmacy_fax"
-                    android:text="@string/fax_pharmacy"
+                    android:text="@string/label_fax_pharmacy"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
                 <ImageView
