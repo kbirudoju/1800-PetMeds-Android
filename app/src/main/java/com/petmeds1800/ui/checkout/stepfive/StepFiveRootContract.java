@@ -34,7 +34,7 @@ public class StepFiveRootContract {
 
         void getOrderReviewDetails(String sessionConfig);
 
-        void submitComittedOrderDetails(CommitOrderRequest commitOrderRequest);
+        void submitComittedOrderDetails(CommitOrderRequest commitOrderRequest, String shoppingCartId);
         void populatePetVetInfo(final ArrayList<Item> items, final ArrayList<String> applicableSteps);
 
     }

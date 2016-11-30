@@ -399,4 +399,9 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/reminder/ReminderActor/medReminderDetails")
     Observable<AddMedicationReminderResponse> getMedicationReminderDetails(@Query("_dynSessConf") String sessionConfNumber, @Query("reminderId")int reminderId);
+
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/checkout/CheckoutActor/orderReceipt")
+    Observable<CommitOrderResponse> getCommitedOrderDetails(@Query("orderId") String orderId);
 }

@@ -75,8 +75,51 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
     }
 
     @Override
-    public void submitComittedOrderDetails(CommitOrderRequest commitOrderRequest) {
+    public void submitComittedOrderDetails(CommitOrderRequest commitOrderRequest, final String shoppingCartId) {
         mPetMedsApiService.submitCommitedOrderDetails(commitOrderRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<CommitOrderResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //error handling would be implemented once we get the details from backend team
+                        mView.showErrorCrouton(e.getLocalizedMessage(), false);
+
+                    }
+
+                    @Override
+                    public void onNext(CommitOrderResponse commitOrderResponse) {
+                        if (commitOrderResponse.getStatus().getCode().equals(API_SUCCESS_CODE) ||
+                                commitOrderResponse.getStatus().getCode().equals(API_WARNING_CODE)) {
+                            if (mView.isActive()) {
+                                mView.navigateOnOrderConfirmation(commitOrderResponse);
+                            }
+                        } else {
+                            //shopping cart empty could be a possible in-case of a timeout
+                            if(commitOrderResponse.getStatus().getErrorMessages().get(0).contains("empty")) {
+                                //try to get the receipt by calling orderReceipt API
+                                getComittedOrderDetails(shoppingCartId);
+                            }
+                            else { //else show an error
+                                if (mView.isActive()) {
+                                    mView.showErrorCrouton(commitOrderResponse.getStatus().getErrorMessages().get(0),
+                                            false);
+                                }
+                            }
+
+                        }
+
+                    }
+                });
+    }
+
+
+    private void getComittedOrderDetails(String orderId) {
+        mPetMedsApiService.getCommitedOrderDetails(orderId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<CommitOrderResponse>() {
