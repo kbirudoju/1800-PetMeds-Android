@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 /**
  * Created by pooja on 8/4/2016.
  */
-public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     boolean blankView = false;
 
@@ -39,16 +39,16 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<OrderList> myOrder;
     private Context mContext;
 
-    public MyOrderAdapter( boolean blankView, Context context,View.OnClickListener onClickListener) {
+    public MyOrderAdapter(boolean blankView, Context context, View.OnClickListener onClickListener) {
         this.blankView = blankView;
         this.onClickListener = onClickListener;
-        this.mContext=context;
+        this.mContext = context;
 
     }
 
 
     public void clearData() {
-        if ( myOrder !=null ) {
+        if (myOrder != null) {
             myOrder.clear();
             notifyDataSetChanged();
         }
@@ -74,7 +74,7 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             int resource = R.layout.view_order_list;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new MyOrderItemViewHolder(v);
-           v.setOnClickListener(onClickListener);
+            v.setOnClickListener(onClickListener);
         } else {
             int resource = R.layout.view_order_loading;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -91,78 +91,80 @@ public class MyOrderAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             final MyOrderItemViewHolder orderViewHolder = (MyOrderItemViewHolder) holder;
             final OrderList myOrder = (OrderList) getItemAt(position);
-            orderViewHolder.tv_order_date.setText(myOrder.getSubmittedDate());
-            orderViewHolder.tv_order_number.setText("#"+myOrder.getOrderId());
-            orderViewHolder.tv_order_status.setText(myOrder.getStatus());
-            //temporary hardcoded value to check layout, it will be changed after confirmation from backend
-            if(myOrder.getStatus().equalsIgnoreCase("PROCESSING")){
-                orderViewHolder.tv_order_status.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
-                orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.yellow_rounded_button);
-            }else if(myOrder.getStatus().equalsIgnoreCase("Cancelled")){
-                orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.red_rounded_button);
-                orderViewHolder.tv_order_status.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
+            if (myOrder != null) {
+                orderViewHolder.tv_order_date.setText(myOrder.getSubmittedDate());
+                orderViewHolder.tv_order_number.setText("#" + myOrder.getOrderId());
+                orderViewHolder.tv_order_status.setText(myOrder.getStatus());
+                //temporary hardcoded value to check layout, it will be changed after confirmation from backend
+                if (myOrder.getStatus() != null && myOrder.getStatus().equalsIgnoreCase("PROCESSING")) {
+                    orderViewHolder.tv_order_status.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_shipping, 0, 0, 0);
+                    orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.yellow_rounded_button);
+                } else if (myOrder.getStatus() != null && myOrder.getStatus().equalsIgnoreCase("Cancelled")) {
+                    orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.red_rounded_button);
+                    orderViewHolder.tv_order_status.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_status_cancelled, 0, 0, 0);
 
-            }else{
-                orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.green_rounded_button);
+                } else {
+                    orderViewHolder.tv_order_status.setBackgroundResource(R.drawable.green_rounded_button);
+                }
             }
             //hardcoded the position value as not sure what we have to do in case of multiple CommerceItems
 
-if(myOrder.getCommerceItems().size()>0){
-    if(myOrder.getCommerceItems().size()==1){
-        orderViewHolder.iv_product_img.setVisibility(View.VISIBLE);
-        orderViewHolder.productCountlabel.setVisibility(View.INVISIBLE);
-        orderViewHolder.productSecondImage.setVisibility(View.INVISIBLE);
-        orderViewHolder.productThirdImage.setVisibility(View.INVISIBLE);
-        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
-            }
-        });
-    }else if(myOrder.getCommerceItems().size()==2){
-        orderViewHolder.productThirdImage.setVisibility(View.VISIBLE);
-        orderViewHolder.productSecondImage.setVisibility(View.VISIBLE);
-        orderViewHolder.iv_product_img.setVisibility(View.INVISIBLE);
-        orderViewHolder.productCountlabel.setVisibility(View.INVISIBLE);
-        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.productThirdImage) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                orderViewHolder.productThirdImage.setImageDrawable(circularBitmapDrawable);
-            }
-        });
+            if (myOrder.getCommerceItems().size() > 0) {
+                if (myOrder.getCommerceItems().size() == 1) {
+                    orderViewHolder.iv_product_img.setVisibility(View.VISIBLE);
+                    orderViewHolder.productCountlabel.setVisibility(View.INVISIBLE);
+                    orderViewHolder.productSecondImage.setVisibility(View.INVISIBLE);
+                    orderViewHolder.productThirdImage.setVisibility(View.INVISIBLE);
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                } else if (myOrder.getCommerceItems().size() == 2) {
+                    orderViewHolder.productThirdImage.setVisibility(View.VISIBLE);
+                    orderViewHolder.productSecondImage.setVisibility(View.VISIBLE);
+                    orderViewHolder.iv_product_img.setVisibility(View.INVISIBLE);
+                    orderViewHolder.productCountlabel.setVisibility(View.INVISIBLE);
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.productThirdImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            orderViewHolder.productThirdImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
 
-        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(1).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.productSecondImage) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                orderViewHolder.productSecondImage.setImageDrawable(circularBitmapDrawable);
-            }
-        });
-    }else{
-        orderViewHolder.productCountlabel.setVisibility(View.VISIBLE);
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + myOrder.getCommerceItems().get(1).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.productSecondImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            orderViewHolder.productSecondImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                } else {
+                    orderViewHolder.productCountlabel.setVisibility(View.VISIBLE);
 
-        Glide.with(mContext).load(mContext.getString(R.string.server_endpoint)+myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + myOrder.getCommerceItems().get(0).getSkuImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(orderViewHolder.iv_product_img) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            orderViewHolder.iv_product_img.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                    orderViewHolder.productSecondImage.setVisibility(View.INVISIBLE);
+                    orderViewHolder.productThirdImage.setVisibility(View.INVISIBLE);
+                    orderViewHolder.productCountlabel.setText("+" + (myOrder.getCommerceItems().size() - 1));
+                }
             }
-        });
-        orderViewHolder.productSecondImage.setVisibility(View.INVISIBLE);
-        orderViewHolder.productThirdImage.setVisibility(View.INVISIBLE);
-        orderViewHolder.productCountlabel.setText("+"+(myOrder.getCommerceItems().size()-1));
-    }
-}
 
         }
     }
@@ -178,7 +180,7 @@ if(myOrder.getCommerceItems().size()>0){
 
     @Override
     public int getItemCount() {
-        if (myOrder == null ) {
+        if (myOrder == null) {
             if (isFooterEnabled) {
                 return 1;
             } else {
@@ -227,14 +229,13 @@ if(myOrder.getCommerceItems().size()>0){
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.progressBar)
         ProgressBar progressbar;
+
         public ProgressViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
 
         }
     }
-
-
 
 
 }

@@ -12,9 +12,9 @@ import java.util.List;
 
 public class Order implements Serializable {
 
-    private double orderSubTotal;
+    private float orderSubTotal;
 
-    private double orderTotal;
+    private float orderTotal;
 
     private ArrayList<Item> items;
 
@@ -32,7 +32,7 @@ public class Order implements Serializable {
 
     private float discount;
 
-    public double getOrderSubTotal() {
+    public float getOrderSubTotal() {
         return orderSubTotal;
     }
 
@@ -40,7 +40,7 @@ public class Order implements Serializable {
         this.orderSubTotal = orderSubTotal;
     }
 
-    public double getOrderTotal() {
+    public float getOrderTotal() {
         return orderTotal;
     }
 
@@ -60,7 +60,7 @@ public class Order implements Serializable {
         return taxTotal;
     }
 
-    public void setTaxTotal(Integer taxTotal) {
+    public void setTaxTotal(float taxTotal) {
         this.taxTotal = taxTotal;
     }
 
@@ -108,7 +108,7 @@ public class Order implements Serializable {
         return discount;
     }
 
-    public void setDiscount(Integer discount) {
+    public void setDiscount(float discount) {
         this.discount = discount;
     }
 }
