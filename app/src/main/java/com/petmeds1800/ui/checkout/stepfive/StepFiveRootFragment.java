@@ -165,7 +165,7 @@ public class StepFiveRootFragment extends AbstractFragment
 
     public static final String DOLLAR_SIGN = "$";
 
-    private static final String MINUS_SIGN = "-";
+    public static final String MINUS_SIGN = "-";
 
     private static final String BLANK_SPACE = " ";
 
@@ -324,7 +324,7 @@ public class StepFiveRootFragment extends AbstractFragment
         }
         if (mOrder != null) {
             mSubTotalValue.setText(DOLLAR_SIGN + String.valueOf(mOrder.getOrderSubTotal()));
-            mOfferCodeValue.setText(MINUS_SIGN + BLANK_SPACE + DOLLAR_SIGN + String.valueOf(mOrder.getDiscount()));
+            mOfferCodeValue.setText(MINUS_SIGN  + DOLLAR_SIGN + String.valueOf(mOrder.getDiscount()));
             mShippingValue.setText(DOLLAR_SIGN + mOrder.getShippingTotal());
             mTaxesValue.setText(DOLLAR_SIGN + mOrder.getTaxTotal());
             mTotalValue.setText(DOLLAR_SIGN + String.valueOf(mOrder.getOrderTotal()));
