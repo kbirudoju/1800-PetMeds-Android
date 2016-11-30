@@ -30,7 +30,7 @@ public class Order implements Serializable {
 
     private String orderId;
 
-    private int discount;
+    private float discount;
 
     public double getOrderSubTotal() {
         return orderSubTotal;
@@ -104,7 +104,7 @@ public class Order implements Serializable {
         this.orderId = orderId;
     }
 
-    public Integer getDiscount() {
+    public float getDiscount() {
         return discount;
     }
 
