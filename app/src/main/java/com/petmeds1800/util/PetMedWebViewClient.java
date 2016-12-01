@@ -2,9 +2,6 @@ package com.petmeds1800.util;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,9 +20,7 @@ import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.ui.HomeActivity;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -38,10 +33,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.petmeds1800.util.Constants.KEY_APP_ID;
-import static com.petmeds1800.util.Constants.KEY_JESESSION_ID;
-import static com.petmeds1800.util.Constants.KEY_SITE_SERVER;
-
 /**
  * Created by Sarthak on 07-Nov-16.
  */
@@ -53,7 +44,6 @@ public class PetMedWebViewClient extends WebViewClient {
     private String mUrl;
     private boolean shouldloaddata = false;
     private ProgressBar mProgressBar;
-    private boolean isSuccess = false;
 
     @Inject
     PetMedsApiService mPetMedsApiService;
@@ -79,15 +69,15 @@ public class PetMedWebViewClient extends WebViewClient {
     private void finalyClose(){
         Log.w("OverrideUrlLoading", "finalyClose Enter");
 
-        if (isSuccess) {
-            mContext.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(mContext, "Item Added Successfully", Toast.LENGTH_SHORT).show();
-                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+//        Hide Progress Dialog
+        mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressBar != null){
+                    mProgressBar.setVisibility(View.GONE);
                 }
-            });
-        }
+            }
+        });
 
 
         if (((AppCompatActivity)mContext).getSupportFragmentManager().getBackStackEntryCount()<=0){
@@ -114,38 +104,26 @@ public class PetMedWebViewClient extends WebViewClient {
                 }
             });
         }
-
-        //        Hide Progress Dialog
-        mContext.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mProgressBar != null){
-                    mProgressBar.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        if (isSuccess){
-            isSuccess = false;
-            mContext.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-//                Move to Shopping Cart on Successful Item Add
-                    try {
-                        ((HomeActivity)mContext).scrollViewPager(1);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-
         Log.w("OverrideUrlLoading", "finalyClose Enter");
     }
 
     private void onSuccessResponse(final WebView view, String url){
         Log.w("OverrideUrlLoading", "onSuccessResponse Enter");
-        isSuccess = true;
+
+        mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(mContext, "Item Added Successfully", Toast.LENGTH_SHORT).show();
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+
+//                Move to Shopping Cart on Successful Item Add
+                try {
+                    ((HomeActivity)mContext).scrollViewPager(1);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
         Log.w("OverrideUrlLoading", "onSuccessResponse Exit");
     }
 
@@ -166,67 +144,50 @@ public class PetMedWebViewClient extends WebViewClient {
     }
 
     @Override
-    public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
         Log.d("url is", url);
 
-        if (CookieManager.getInstance().getCookie(url)== null || !CookieManager.getInstance().getCookie(url).toString().contains(KEY_JESESSION_ID) || !CookieManager.getInstance().getCookie(url).toString().contains(KEY_SITE_SERVER)) {
+        if (CookieManager.getInstance().getCookie(url)!= null && !CookieManager.getInstance().getCookie(url).toString().contains("JSESSIONID")) {
 
-            CookieManager.getInstance().removeAllCookie();
-            Log.w("PetMedWebViewClient", "shouldOverrideUrlLoading remove All Cookie Called");
-            SystemClock.sleep(1000);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+            if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                //removeSessionCookies seems the only working option.removeAllCookie didn't clear all the cookies in this case.
+                CookieManager.getInstance().removeSessionCookies(null);
                 CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
             } else {
+                CookieManager.getInstance().removeSessionCookie();
                 CookieManager.getInstance().setAcceptCookie(true);
             }
-            Log.w("PetMedWebViewClient", "shouldOverrideUrlLoading set accept third party cookies Called");
 
-            Map cookieMap = new HashMap();
+            String cookieString = "";
             for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
                 Cookie cookie = iterator.next();
-                if (cookie.name().equals(KEY_JESESSION_ID)) {
-                    cookieMap.put(KEY_JESESSION_ID,KEY_JESESSION_ID + "=" + cookie.value() + "; ");
-                } else if (cookie.name().equals(KEY_SITE_SERVER)) {
-                    cookieMap.put(KEY_SITE_SERVER,KEY_SITE_SERVER + "=" + cookie.value() + "; ");
+                if (cookie.name().equals("JSESSIONID")) {
+                    cookieString = cookieString + "JSESSIONID=" + cookie.value() + "; ";
+                } else if (cookie.name().equals("SITESERVER")) {
+                    cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
                 }
             }
-            cookieMap.put(KEY_APP_ID,KEY_APP_ID + "=true; ");
+            cookieString = cookieString + "app=true; ";
+            CookieManager.getInstance().setCookie(url, cookieString);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                Log.d("setUpWebView", "Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
-                CookieManager.getInstance().setCookie(url, (String) cookieMap.get("JSESSIONID"));
-                CookieManager.getInstance().setCookie(url, (String) cookieMap.get("SITESERVER"));
-                CookieManager.getInstance().setCookie(url, (String) cookieMap.get("app"));
+            if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 CookieManager.getInstance().flush();
             } else {
-                Log.d("setUpWebView", "Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
-                CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(mWebView.getContext());
-                cookieSyncMngr.startSync();
-                CookieManager cookieManager = CookieManager.getInstance();
-                cookieManager.setCookie(url, (String) cookieMap.get("JSESSIONID"));
-                cookieManager.setCookie(url, (String) cookieMap.get("SITESERVER"));
-                cookieManager.setCookie(url, (String) cookieMap.get("app"));
-                cookieSyncMngr.stopSync();
-                cookieSyncMngr.sync();
-            }
-            SystemClock.sleep(1000);
-        }
-
-        {
-            if (url.contains("Add+To+Cart")){
-                Log.w("OverrideUrlLoading", "Contains Cart");
-                Log.w("URL HANDLING PRIOR", url);
-
-                Log.w("shouldOverrideUrl", "Add To Cart Cookies : " + CookieManager.getInstance().getCookie(url));
-                syncCallWebViewResponse(view,url,false);
-            } else {
-
-                Log.w("shouldOverrideUrl", "NON Add To Cart Cookies : " + CookieManager.getInstance().getCookie(url));
-                mWebView.loadUrl(url);
+                CookieSyncManager.getInstance().sync();
             }
         }
-        return true;
+
+        if (url.contains("Add+To+Cart")){
+            Log.w("OverrideUrlLoading", "Contains Cart");
+            Log.w("URL HANDLING PRIOR", url);
+
+            syncCallWebViewResponse(view,url,false);
+            return true;
+        } else {
+            mWebView.loadUrl(url);
+            return true;
+        }
     }
 
     private void syncCallWebViewResponse(final WebView view,final String url,final boolean isRepeat){
@@ -248,9 +209,15 @@ public class PetMedWebViewClient extends WebViewClient {
                     });
 
                     Log.w("URL HANDLING", url);
-                    Log.w("URL HANDLING", "in mokhttpclient");
-                    Log.w("URL HANDLING", " Cookies : " + CookieManager.getInstance().getCookie(url));
-                    Response response = okHttpClient.newCall(new Request.Builder().url(url).build()).execute();
+                    Response response;
+                    if (url.toString().contains("jsessionid")) {
+                        Log.w("URL HANDLING", "in new okhttpclient");
+                         response = new OkHttpClient().newCall(new Request.Builder().url(url).build()).execute();
+                    }
+                    else {
+                        Log.w("URL HANDLING", "in mokhttpclient");
+                         response = okHttpClient.newCall(new Request.Builder().url(url).build()).execute();
+                    }
                     subscriber.onNext(response);
                     subscriber.onCompleted();
                     if (!response.isSuccessful()) subscriber.onError(new Exception("error"));
@@ -277,7 +244,6 @@ public class PetMedWebViewClient extends WebViewClient {
 
                         } else if (response.toString().contains("Conflict")){
                             Log.w("URL HANDLING Response","Conflict Still Remains : " + response.toString());
-                            onFailureResponse(view,url,("Cannot Add Item"));
                         } else {
                             onSuccessResponse(view,url);
                         }
@@ -307,36 +273,9 @@ public class PetMedWebViewClient extends WebViewClient {
 
             @Override
             public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
-                if (!sessionConfNumberResponse.getSessionConfirmationNumber().isEmpty()) {
-                    mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                }
                 syncCallWebViewResponse(view,url,true);
             }
         });
         Log.w("ShoppingCartListPresntr", "renewSessionConfirmationNumber Exit");
-    }
-
-    @Override
-    public void onPageFinished(WebView view, String url) {
-
-        String cookieString = "";
-        for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
-            Cookie cookie = iterator.next();
-            if (cookie.name().equals("JSESSIONID")) {
-                cookieString = cookieString + "JSESSIONID=" + cookie.value() + "; ";
-            } else if (cookie.name().equals("SITESERVER")) {
-                cookieString = cookieString + "SITESERVER=" + cookie.value() + "; ";
-            }
-        }
-        cookieString = cookieString + "app=true; ";
-        CookieManager.getInstance().setCookie(url, cookieString);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().flush();
-        } else {
-            CookieSyncManager.getInstance().sync();
-        }
-
-        super.onPageFinished(view, url);
     }
 }
