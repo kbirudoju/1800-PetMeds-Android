@@ -279,7 +279,6 @@ public class LocationRelatedStuff  implements GoogleApiClient.ConnectionCallback
     public void getLocationUpdate(){
         Log.d("Inside","getLocationUpdate"+">>>>>>");
         try {
-           ((AbstractActivity) mContext).startLoadingGif(mContext);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
