@@ -3,4 +3,5 @@
 
     <string name="server.endpoint">https://dev.1800petmeds.com</string>
     <string name="google_map_api_key">AIzaSyArUw37Y2g7yXp6wKVVdDrE9IqgXAvSL64</string>
+    <string name="testfairy_app_token">5e3b618779895e815f01043b0a35c7bf74e8c8d3</string>
 </resources>

@@ -279,6 +279,9 @@ dependencies {
     // Urban Airship SDK
     compile 'com.urbanairship.android:urbanairship-sdk:8.0.+'
 
+    //testfairy
+    compile 'testfairy:testfairy-android-sdk:1.+@aar'
+
 
 }
 
