@@ -48,7 +48,8 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public boolean validatePassword(String password) {
-        return password.length() >= PASSWORD_LENGTH;
+        // Allow any password input
+        return true;
     }
 
     @Override
