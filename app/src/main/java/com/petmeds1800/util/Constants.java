@@ -132,5 +132,13 @@ public class Constants {
 
     public static final String TAG_REDIRECT_OFF = "redirectOff";
 
+//    Keys for Cookie Insertion in CommonWebViewFragment and PetMedWebViewClient
+
+    public static final String KEY_JESESSION_ID = "JSESSIONID";
+
+    public static final String KEY_SITE_SERVER = "SITESERVER";
+
+    public static final String KEY_APP_ID = "app";
+
 
 }
