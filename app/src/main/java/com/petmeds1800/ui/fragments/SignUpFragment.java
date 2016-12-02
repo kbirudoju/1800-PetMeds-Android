@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.petmeds1800.PetMedsApplication;
@@ -201,6 +202,9 @@ public class SignUpFragment extends AbstractFragment
     @BindView(R.id.container_sign_up)
     RelativeLayout mContainerLayout;
 
+    @BindView(R.id.scroll_view_signup)
+    ScrollView mScrollView;
+
     @Inject
     PetMedsApiService mApiService;
 
@@ -219,6 +223,8 @@ public class SignUpFragment extends AbstractFragment
     private static final int COUNTRY_LIST_REQUEST = 2;
 
     private EditText mCurrentListDialogInput;
+
+    private boolean mFocusSet;
 
     public SignUpFragment() {
     }
@@ -289,6 +295,11 @@ public class SignUpFragment extends AbstractFragment
     public void setErrorOnInput(String errorString, int viewId) {
         TextInputLayout view = (TextInputLayout) getActivity().findViewById(viewId);
         view.setError(errorString);
+        if(!mFocusSet) {
+            mScrollView.scrollTo(0, view.getScrollY());
+            view.requestFocus();
+            mFocusSet = true;
+        }
     }
 
     @Override
@@ -354,6 +365,8 @@ public class SignUpFragment extends AbstractFragment
     }
 
     private void signUp() {
+
+        mFocusSet = false;
 
         boolean proceedSignUp = true;
 
@@ -579,6 +592,7 @@ public class SignUpFragment extends AbstractFragment
                         }
                     });
         }
+
     }
 
     private void doSignUp() {
@@ -711,6 +725,21 @@ public class SignUpFragment extends AbstractFragment
         mZipInput.setError(null);
         mPhoneInput.setError(null);
         mCountryInput.setError(null);
+
+        mEmailInput.clearFocus();
+        mConfirmEmailInput.clearFocus();
+        mPasswordInput.clearFocus();
+        mConfirmPasswordInput.clearFocus();
+        mFirstNameInput.clearFocus();
+        mLastNameInput.clearFocus();
+        mAddressLine1Input.clearFocus();
+        mApartmentInput.clearFocus();
+        mCityInput.clearFocus();
+        mStateInput.clearFocus();
+        mZipInput.clearFocus();
+        mPhoneInput.clearFocus();
+        mCountryInput.clearFocus();
+
         if (mShippingViewsContainer.getVisibility() == View.VISIBLE) {
             mFirstNameShippingInput.setError(null);
             mLastNameShippingInput.setError(null);
@@ -721,6 +750,16 @@ public class SignUpFragment extends AbstractFragment
             mZipShippingInput.setError(null);
             mPhoneShippingInput.setError(null);
             mCountryShippingInput.setError(null);
+
+            mFirstNameShippingInput.clearFocus();
+            mLastNameShippingInput.clearFocus();
+            mAddressLine1ShippingInput.clearFocus();
+            mApartmentShippingInput.clearFocus();
+            mCityShippingInput.clearFocus();
+            mStateShippingInput.clearFocus();
+            mZipShippingInput.clearFocus();
+            mPhoneShippingInput.clearFocus();
+            mCountryShippingInput.clearFocus();
         }
     }
 
