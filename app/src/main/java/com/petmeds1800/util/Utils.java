@@ -19,6 +19,8 @@ import com.petmeds1800.model.entities.NameValueData;
 import com.petmeds1800.ui.AbstractActivity;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -245,5 +247,11 @@ public class Utils {
         } catch (android.content.ActivityNotFoundException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static String getDomainName(String url) throws URISyntaxException {
+        URI uri = new URI(url);
+        String domain = uri.getHost();
+        return domain.startsWith("www.") ? domain.substring(4) : domain;
     }
 }
