@@ -568,6 +568,9 @@
     <!--Order Receipt-->
     <string name="quantity_formatter">Qty %d</string>
     <string name="items_formatter">Subtotal (%d Item)</string>
+    <string name="label_your_order_number">Your order number</string>
+    <string name="label_confirmation_email_sent">Confirmation email sent</string>
+    <string name="label_taxes">Taxes</string>
 
     <!--Vet-->
     <string name="action_call">CALL</string>

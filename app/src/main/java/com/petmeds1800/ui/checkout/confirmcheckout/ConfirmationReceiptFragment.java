@@ -37,6 +37,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -214,11 +215,12 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
                 mOrderId.setText(order.getMpOrderNumber());
                 mEmail.setText(order.getEmail());
                 mShippingMethod.setText(order.getShippingMethod());
-                mSubtotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.valueOf(order.getOrderSubTotal()));
-                mDiscount.setText(StepFiveRootFragment.MINUS_SIGN + StepFiveRootFragment.DOLLAR_SIGN + String.valueOf(order.getDiscount()));
-                mShippingTotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.valueOf(order.getShippingTotal()));
-                mTaxes.setText(StepFiveRootFragment.DOLLAR_SIGN + String.valueOf(order.getTaxTotal()));
-                mTotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.valueOf(order.getOrderTotal()));
+                Locale locale = getResources().getConfiguration().locale;
+                mSubtotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getOrderSubTotal()));
+                mDiscount.setText(StepFiveRootFragment.MINUS_SIGN + StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getDiscount()));
+                mShippingTotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getShippingTotal()));
+                mTaxes.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getTaxTotal()));
+                mTotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getOrderTotal()));
                 mSubtotalLabel.setText(getString(R.string.items_formatter, order.getItems().size()));
                 sendAnalyticsData(order);
                 updateRecyclerView(order.getItems());

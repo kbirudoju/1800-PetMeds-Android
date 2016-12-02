@@ -74,7 +74,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
 
         holder.mItemTitle.setText(mCommerceItemsesCollection.get(position).getProductDisplayName());
         holder.mItemDescription.setText(mCommerceItemsesCollection.get(position).getSkuDisplayName());
-        holder.mItemCost.setText(mContext.getResources().getString(R.string.dollar_placeholder) + Float.toString(mCommerceItemsesCollection.get(position).getSellingPrice()));
+        holder.mItemCost.setText(mContext.getResources().getString(R.string.dollar_placeholder) + String.format(mContext.getResources().getConfiguration().locale ,"%.2f", mCommerceItemsesCollection.get(position).getSellingPrice()));
 
         Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + mCommerceItemsesCollection.get(position).getImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(holder.itemImage) {
 

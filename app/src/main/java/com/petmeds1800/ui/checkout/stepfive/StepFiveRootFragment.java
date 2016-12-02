@@ -42,6 +42,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -323,11 +324,12 @@ public class StepFiveRootFragment extends AbstractFragment
             mPresenter.populatePetVetInfo((ArrayList<Item>) mOrder.getItems(), mApplicableSteps);
         }
         if (mOrder != null) {
-            mSubTotalValue.setText(DOLLAR_SIGN + String.valueOf(mOrder.getOrderSubTotal()));
-            mOfferCodeValue.setText(MINUS_SIGN  + DOLLAR_SIGN + String.valueOf(mOrder.getDiscount()));
-            mShippingValue.setText(DOLLAR_SIGN + mOrder.getShippingTotal());
-            mTaxesValue.setText(DOLLAR_SIGN + mOrder.getTaxTotal());
-            mTotalValue.setText(DOLLAR_SIGN + String.valueOf(mOrder.getOrderTotal()));
+            Locale locale = getResources().getConfiguration().locale;
+            mSubTotalValue.setText(DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getOrderSubTotal()));
+            mOfferCodeValue.setText(MINUS_SIGN  + DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getDiscount()));
+            mShippingValue.setText(DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getShippingTotal()));
+            mTaxesValue.setText(DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getTaxTotal()));
+            mTotalValue.setText(DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getOrderTotal()));
             setupCardsRecyclerView((ArrayList<Item>) mOrder.getItems());
             mSubTotal.setText(
                     String.format(getString(R.string.subtotal_title), String.valueOf(mOrder.getItems().size())));

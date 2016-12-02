@@ -43,6 +43,7 @@ import com.petmeds1800.util.ShoppingCartRecyclerViewAdapter;
 import com.petmeds1800.util.Utils;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -316,13 +317,12 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             sPreviousScrollPosition = 0;
         }
 
+        Locale locale = getResources().getConfiguration().locale;
         if (null != shoppingCartListResponse.getShoppingCart()) {
             ((TextView) (mTotalCheckOutContainer.findViewById(R.id.items_total_amt_txt))).setText(
-                    getActivity().getResources().getString(R.string.dollar_placeholder) + Float
-                            .toString(shoppingCartListResponse.getShoppingCart().getItemsTotal()));
+                    getActivity().getResources().getString(R.string.dollar_placeholder) + String.format(locale ,"%.2f", shoppingCartListResponse.getShoppingCart().getItemsTotal()));
             ((TextView) (mTotalCheckOutContainer.findViewById(R.id.subtotal_value_txt))).setText(
-                    getActivity().getResources().getString(R.string.dollar_placeholder) + Float
-                            .toString(shoppingCartListResponse.getShoppingCart().getSubTotal()));
+                    getActivity().getResources().getString(R.string.dollar_placeholder) + String.format(locale ,"%.2f", shoppingCartListResponse.getShoppingCart().getSubTotal()));
 
             ((Button) mTotalCheckOutContainer.findViewById(R.id.button_checkout))
                     .setOnClickListener(new View.OnClickListener() {
@@ -342,7 +342,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
         if (null != shoppingCartListResponse.getShoppingCart()) {
             ((TextView) mTotalCheckOutContainer.findViewById(R.id.offer_code_value_txt)).setText(
-                    getActivity().getResources().getString(R.string.dollar_placeholder) + Float.toString(shoppingCartListResponse.getShoppingCart().getDiscountAmount()));
+                    getActivity().getResources().getString(R.string.dollar_placeholder) + String.format(locale ,"%.2f", shoppingCartListResponse.getShoppingCart().getDiscountAmount()));
         } else {
             ((TextView) mTotalCheckOutContainer.findViewById(R.id.offer_code_value_txt)).setText("-");
         }

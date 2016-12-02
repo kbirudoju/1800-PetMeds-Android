@@ -40,7 +40,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Your order number"
+                    android:text="@string/label_your_order_number"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_16"/>
 
@@ -64,7 +64,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Confirmation email sent"
+                    android:text="@string/label_confirmation_email_sent"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_16"/>
 
@@ -88,7 +88,7 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Shipping Method"
+                    android:text="@string/shipping_method_txt"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_16"/>
 
@@ -109,7 +109,7 @@
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_16"
                 android:paddingTop="@dimen/dp_21"
-                android:text="ITEMS"/>
+                android:text="@string/item_header"/>
 
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_items"
@@ -162,7 +162,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:text="Offer Code"
+                        android:text="@string/offer_code"
                         android:textColor="@color/grey_text"
                         android:textSize="@dimen/sp_16"/>
 
@@ -188,7 +188,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:text="Shipping"
+                        android:text="@string/shipping"
                         android:textColor="@color/grey_text"
                         android:textSize="@dimen/sp_16"/>
 
@@ -214,7 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:text="Taxes"
+                        android:text="@string/label_taxes"
                         android:textColor="@color/grey_text"
                         android:textSize="@dimen/sp_16"/>
 
@@ -240,7 +240,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:text="Total"
+                        android:text="@string/total_txt"
                         android:textColor="@color/grey_text"
                         android:textSize="@dimen/sp_16"/>
 

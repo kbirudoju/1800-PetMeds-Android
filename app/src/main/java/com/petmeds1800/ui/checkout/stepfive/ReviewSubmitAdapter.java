@@ -136,7 +136,7 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         reviewSubmitViewHolder.mItemDescription.setVisibility(View.VISIBLE);
         reviewSubmitViewHolder.mItemDescription.setText(item.getSkuName());
         reviewSubmitViewHolder.mProductPriceLabel
-                .setText(StepFiveRootFragment.DOLLAR_SIGN + String.valueOf(item.getSellingPrice()));
+                .setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(mContext.getResources().getConfiguration().locale ,"%.2f", item.getSellingPrice()));
         Glide.with(mContext).load(item.getItemImageURL()).asBitmap()
                 .centerCrop().into(new BitmapImageViewTarget(reviewSubmitViewHolder.mProductImage) {
             @Override
