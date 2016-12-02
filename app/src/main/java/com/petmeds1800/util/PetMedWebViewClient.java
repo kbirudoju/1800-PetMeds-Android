@@ -23,6 +23,7 @@ import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.ui.HomeActivity;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class PetMedWebViewClient extends WebViewClient {
         PetMedsApplication.getAppComponent().inject(this);
     }
 
-    private void finalyClose(){
+    private void finalyClose() throws URISyntaxException {
         if (isSuccess) {
             mContext.runOnUiThread(new Runnable() {
                 @Override
@@ -87,8 +88,7 @@ public class PetMedWebViewClient extends WebViewClient {
             });
         }
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
-
-
+        reInitializeCookieManager();
         if (((AppCompatActivity)mContext).getSupportFragmentManager().getBackStackEntryCount()<=0){
             if (shouldloaddata){
                 mContext.runOnUiThread(new Runnable() {
@@ -160,40 +160,6 @@ public class PetMedWebViewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
         Log.d("url is", url);
-
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeAllCookie();
-        cookieManager.removeSessionCookie();
-        Log.w("CommonWebviewFragment", "onCreate remove All Cookie Called");
-
-        Map cookieMap = new HashMap();
-        for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
-            Cookie cookie = iterator.next();
-            if (cookie.name().equals(KEY_JESESSION_ID)) {
-                cookieMap.put(KEY_JESESSION_ID,KEY_JESESSION_ID + "=" + cookie.value() + "; ");
-            } else if (cookie.name().equals(KEY_SITE_SERVER)) {
-                cookieMap.put(KEY_SITE_SERVER,KEY_SITE_SERVER + "=" + cookie.value() + "; ");
-            }
-        }
-        cookieMap.put(KEY_APP_ID,KEY_APP_ID + "=true; ");
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            Log.d("setUpWebView", "Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
-            CookieManager.getInstance().setCookie(url, (String) cookieMap.get(KEY_JESESSION_ID));
-            CookieManager.getInstance().setCookie(url, (String) cookieMap.get(KEY_SITE_SERVER));
-            CookieManager.getInstance().setCookie(url, (String) cookieMap.get(KEY_APP_ID));
-            CookieManager.getInstance().flush();
-        } else {
-            Log.d("setUpWebView", "Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
-            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(mWebView.getContext());
-            cookieSyncMngr.startSync();
-            cookieManager.setCookie(url, (String) cookieMap.get(KEY_JESESSION_ID));
-            cookieManager.setCookie(url, (String) cookieMap.get(KEY_SITE_SERVER));
-            cookieManager.setCookie(url, (String) cookieMap.get(KEY_APP_ID));
-            cookieSyncMngr.stopSync();
-            cookieSyncMngr.sync();
-        }
-
         {
             if (url.contains("Add+To+Cart")){
                 syncCallWebViewResponse(view,url,false);
@@ -231,7 +197,11 @@ public class PetMedWebViewClient extends WebViewClient {
 
             @Override
             public void onCompleted() {
-                finalyClose();
+                try {
+                    finalyClose();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -281,5 +251,40 @@ public class PetMedWebViewClient extends WebViewClient {
                 syncCallWebViewResponse(view,url,true);
             }
         });
+    }
+
+    private void reInitializeCookieManager() throws URISyntaxException {
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeAllCookie();
+        cookieManager.removeSessionCookie();
+        Log.w("CommonWebviewFragment", "onCreate remove All Cookie Called");
+
+        Map cookieMap = new HashMap();
+        for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
+            Cookie cookie = iterator.next();
+            if (cookie.name().equals(KEY_JESESSION_ID)) {
+                cookieMap.put(KEY_JESESSION_ID,KEY_JESESSION_ID + "=" + cookie.value() + "; ");
+            } else if (cookie.name().equals(KEY_SITE_SERVER)) {
+                cookieMap.put(KEY_SITE_SERVER,KEY_SITE_SERVER + "=" + cookie.value() + "; ");
+            }
+        }
+        cookieMap.put(KEY_APP_ID,KEY_APP_ID + "=true; ");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Log.d("setUpWebView", "Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+            CookieManager.getInstance().setCookie(Utils.getDomainName(mUrl), (String) cookieMap.get(KEY_JESESSION_ID));
+            CookieManager.getInstance().setCookie(Utils.getDomainName(mUrl), (String) cookieMap.get(KEY_SITE_SERVER));
+            CookieManager.getInstance().setCookie(Utils.getDomainName(mUrl), (String) cookieMap.get(KEY_APP_ID));
+            CookieManager.getInstance().flush();
+        } else {
+            Log.d("setUpWebView", "Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(mWebView.getContext());
+            cookieSyncMngr.startSync();
+            cookieManager.setCookie(Utils.getDomainName(mUrl), (String) cookieMap.get(KEY_JESESSION_ID));
+            cookieManager.setCookie(Utils.getDomainName(mUrl), (String) cookieMap.get(KEY_SITE_SERVER));
+            cookieManager.setCookie(Utils.getDomainName(mUrl), (String) cookieMap.get(KEY_APP_ID));
+            cookieSyncMngr.stopSync();
+            cookieSyncMngr.sync();
+        }
     }
 }
