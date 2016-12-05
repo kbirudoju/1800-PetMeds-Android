@@ -172,7 +172,7 @@ public class FindAVetFragment extends AbstractFragment
     public void onSuccess(ArrayList<VetList> vetList) {
         mVetList = new ArrayList<>();
         mVetList = vetList;
-        if (mVetList.size() > 0) {
+        if (mVetList!=null && mVetList.size() > 0) {
             new AnalyticsUtil().trackScreen(getString(R.string.label_vet_search_results_analytics_title));
         }
         try {
