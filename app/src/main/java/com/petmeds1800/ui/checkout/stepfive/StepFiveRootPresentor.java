@@ -160,7 +160,7 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
             public void call(Subscriber<? super String> subscriber) {
 
                 String petVetInfo = "";
-                if (applicableSteps != null && applicableSteps.size() == 5 && items != null) {
+                if (applicableSteps != null && items != null) {
                     for (Item item : items) {
                         if (item.isRxItem()) {
                             petVetInfo = petVetInfo + item.getItemPetName() + "," + item.getItemDrName();

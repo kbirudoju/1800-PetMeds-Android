@@ -20,7 +20,6 @@ import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.CheckoutSteps;
 import com.petmeds1800.model.entities.StepState;
-import com.petmeds1800.model.shoppingcart.response.CommerceItems;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCart;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
@@ -51,13 +50,13 @@ public class CheckOutActivity extends AbstractActivity
 
     public static final String ITEMS_DETAIL = "itemsDetail";
 
-    public final static int SHIPPMENT_ADDRESS = 0;
+    public final static int STEP_ONE = 0;
 
-    public final static int SHIPPMENT_METHOD = 1;
+    public final static int STEP_TWO = 1;
 
-    public final static int PAYMENT_METHOD = 2;
+    public final static int STEP_THREE = 2;
 
-    public final static int PET_VET_INFORMATION = 3;
+    public final static int STEP_FOUR = 3;
 
     public final static int SUBMIT_N_REVIEW = 4;
 
@@ -182,7 +181,7 @@ public class CheckOutActivity extends AbstractActivity
 
     public void setCheckOutCircleAsUnSelectedAndUnDone(int code) {
         switch (code) {
-            case SHIPPMENT_ADDRESS:
+            case STEP_ONE:
                 mFirstShipmentAdressButton.setVisibility(View.VISIBLE);
                 mFirstShipmentAdressFontText.setVisibility(View.GONE);
                 mFirstShipmentAdressButton.setTextColor(ContextCompat.getColor(this, R.color.petmeds_blue));
@@ -190,7 +189,7 @@ public class CheckOutActivity extends AbstractActivity
                         .setBackground(ContextCompat
                                 .getDrawable(getApplicationContext(), R.drawable.check_out_white_circle_drawable));
                 break;
-            case SHIPPMENT_METHOD:
+            case STEP_TWO:
                 mSecondShipmentAdressButton.setVisibility(View.VISIBLE);
                 mSecondShipmentAdressFontText.setVisibility(View.GONE);
                 mSecondShipmentAdressButton.setTextColor(ContextCompat.getColor(this, R.color.petmeds_blue));
@@ -198,7 +197,7 @@ public class CheckOutActivity extends AbstractActivity
                         .setBackground(ContextCompat
                                 .getDrawable(getApplicationContext(), R.drawable.check_out_white_circle_drawable));
                 break;
-            case PAYMENT_METHOD:
+            case STEP_THREE:
                 mThirdShipmentAdressButton.setVisibility(View.VISIBLE);
                 mThirdShipmentAdressFontText.setVisibility(View.GONE);
                 mThirdShipmentAdressButton.setTextColor(ContextCompat.getColor(this, R.color.petmeds_blue));
@@ -206,7 +205,7 @@ public class CheckOutActivity extends AbstractActivity
                         .setBackground(ContextCompat
                                 .getDrawable(getApplicationContext(), R.drawable.check_out_white_circle_drawable));
                 break;
-            case PET_VET_INFORMATION:
+            case STEP_FOUR:
                 mFourthShipmentAdressButton.setVisibility(View.VISIBLE);
                 mFourthShipmentAdressFontText.setVisibility(View.GONE);
                 mFourthShipmentAdressButton.setTextColor(ContextCompat.getColor(this, R.color.petmeds_blue));
@@ -227,19 +226,19 @@ public class CheckOutActivity extends AbstractActivity
 
     private void setCheckOutCircleAsDone(int code) {
         switch (code) {
-            case SHIPPMENT_ADDRESS:
+            case STEP_ONE:
                 mFirstShipmentAdressButton.setVisibility(View.GONE);
                 mFirstShipmentAdressFontText.setVisibility(View.VISIBLE);
                 break;
-            case SHIPPMENT_METHOD:
+            case STEP_TWO:
                 mSecondShipmentAdressButton.setVisibility(View.GONE);
                 mSecondShipmentAdressFontText.setVisibility(View.VISIBLE);
                 break;
-            case PAYMENT_METHOD:
+            case STEP_THREE:
                 mThirdShipmentAdressButton.setVisibility(View.GONE);
                 mThirdShipmentAdressFontText.setVisibility(View.VISIBLE);
                 break;
-            case PET_VET_INFORMATION:
+            case STEP_FOUR:
                 mFourthShipmentAdressButton.setVisibility(View.GONE);
                 mFourthShipmentAdressFontText.setVisibility(View.VISIBLE);
                 break;
@@ -447,21 +446,21 @@ public class CheckOutActivity extends AbstractActivity
 
         switch (mApplicableSteps.indexOf(activeStep)) {
 
-            case SHIPPMENT_ADDRESS:
+            case STEP_ONE:
                 mFirstShipmentAdressButton.setTextColor(Color.WHITE);
                 mFirstShipmentAdressButton
                         .setBackground(ContextCompat
                                 .getDrawable(getApplicationContext(),
                                         R.drawable.check_out_blue_circle_drawable));
                 break;
-            case SHIPPMENT_METHOD:
+            case STEP_TWO:
                 mSecondShipmentAdressButton.setTextColor(Color.WHITE);
                 mSecondShipmentAdressButton
                         .setBackground(ContextCompat
                                 .getDrawable(getApplicationContext(),
                                         R.drawable.check_out_blue_circle_drawable));
                 break;
-            case PAYMENT_METHOD:
+            case STEP_THREE:
                 if (mApplicableSteps.size() == 4 || mApplicableSteps.size() == 5) {
                     mThirdShipmentAdressButton.setTextColor(Color.WHITE);
                     mThirdShipmentAdressButton
@@ -470,7 +469,7 @@ public class CheckOutActivity extends AbstractActivity
                                             R.drawable.check_out_blue_circle_drawable));
                     break;
                 }
-            case PET_VET_INFORMATION:
+            case STEP_FOUR:
                 if (mApplicableSteps.size() == 5) {
                     mFourthShipmentAdressButton.setTextColor(Color.WHITE);
                     mFourthShipmentAdressButton

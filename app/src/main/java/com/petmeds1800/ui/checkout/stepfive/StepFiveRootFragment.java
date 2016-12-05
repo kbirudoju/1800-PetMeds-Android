@@ -57,6 +57,7 @@ import butterknife.OnClick;
 public class StepFiveRootFragment extends AbstractFragment
         implements StepFiveRootContract.View, ReviewSubmitAdapter.OpenDailogListener {
 
+
     @BindView(R.id.shippingAddressDetailsText)
     TextView mShippingAddressDetailsText;
 
@@ -174,6 +175,8 @@ public class StepFiveRootFragment extends AbstractFragment
 
     private static final int ADD_ONE_MONTH = 1;
 
+    private static final int SIZE_THREE = 3;
+
     private static final int SIZE_FOUR = 4;
 
     private static final int SIZE_FIVE = 5;
@@ -278,24 +281,34 @@ public class StepFiveRootFragment extends AbstractFragment
         if (mApplicableSteps != null) {
             switch (view.getId()) {
                 case R.id.shippingAddressEdit:
-                    markAsUnselected(CheckOutActivity.SHIPPMENT_ADDRESS, CheckOutActivity.SUBMIT_N_REVIEW);
-                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.SHIPPMENT_ADDRESS),
+                    markAsUnselected(CheckOutActivity.STEP_ONE, CheckOutActivity.SUBMIT_N_REVIEW);
+                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.STEP_ONE),
                             mShoppingCartListResponse);
                     break;
                 case R.id.shippingMethodEdit:
-                    markAsUnselected(CheckOutActivity.SHIPPMENT_METHOD, CheckOutActivity.SUBMIT_N_REVIEW);
-                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.SHIPPMENT_METHOD),
+                    markAsUnselected(CheckOutActivity.STEP_TWO, CheckOutActivity.SUBMIT_N_REVIEW);
+                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.STEP_TWO),
                             mShoppingCartListResponse);
                     break;
                 case R.id.paymentMethodEdit:
-                    markAsUnselected(CheckOutActivity.PAYMENT_METHOD, CheckOutActivity.SUBMIT_N_REVIEW);
-                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PAYMENT_METHOD),
+                    markAsUnselected(CheckOutActivity.STEP_THREE, CheckOutActivity.SUBMIT_N_REVIEW);
+                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.STEP_THREE),
                             mShoppingCartListResponse, true);
                     break;
                 case R.id.petVetEdit:
-                    markAsUnselected(CheckOutActivity.PET_VET_INFORMATION, CheckOutActivity.SUBMIT_N_REVIEW);
-                    activity.startNextStep(mApplicableSteps.get(CheckOutActivity.PET_VET_INFORMATION),
-                            mShoppingCartListResponse);
+                    //determine whether payment was done using paypal as it would help us to decide whether to consider
+                    if (mApplicableSteps.size() == SIZE_FOUR && ! mPaymentMethod.getPaymentType().equalsIgnoreCase(getString(R.string.label_credit_card))) {
+                        //petvet step is at index 2
+                        markAsUnselected(CheckOutActivity.STEP_THREE, CheckOutActivity.SUBMIT_N_REVIEW);
+                        activity.startNextStep(mApplicableSteps.get(CheckOutActivity.STEP_THREE),
+                                mShoppingCartListResponse);
+                    }
+                    else { // petvet step is at index 3
+                        markAsUnselected(CheckOutActivity.STEP_FOUR, CheckOutActivity.SUBMIT_N_REVIEW);
+                        activity.startNextStep(mApplicableSteps.get(CheckOutActivity.STEP_FOUR),
+                                mShoppingCartListResponse);
+                    }
+
                     break;
             }
         }
@@ -318,18 +331,15 @@ public class StepFiveRootFragment extends AbstractFragment
         if (checkoutSteps != null) {
             mApplicableSteps = checkoutSteps.getApplicableSteps();
         }
-        if (mApplicableSteps != null && mApplicableSteps.size() == SIZE_FOUR) {
-            mPetVetContainer.setVisibility(View.GONE);
-        } else {
-            mPresenter.populatePetVetInfo((ArrayList<Item>) mOrder.getItems(), mApplicableSteps);
-        }
+
+
         if (mOrder != null) {
             Locale locale = getResources().getConfiguration().locale;
-            mSubTotalValue.setText(DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getOrderSubTotal()));
-            mOfferCodeValue.setText(MINUS_SIGN  + DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getDiscount()));
-            mShippingValue.setText(DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getShippingTotal()));
-            mTaxesValue.setText(DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getTaxTotal()));
-            mTotalValue.setText(DOLLAR_SIGN + String.format(locale ,"%.2f", mOrder.getOrderTotal()));
+            mSubTotalValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getOrderSubTotal()));
+            mOfferCodeValue.setText(MINUS_SIGN  + DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getDiscount()));
+            mShippingValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getShippingTotal()));
+            mTaxesValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getTaxTotal()));
+            mTotalValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getOrderTotal()));
             setupCardsRecyclerView((ArrayList<Item>) mOrder.getItems());
             mSubTotal.setText(
                     String.format(getString(R.string.subtotal_title), String.valueOf(mOrder.getItems().size())));
@@ -361,6 +371,20 @@ public class StepFiveRootFragment extends AbstractFragment
             }
 
         }
+
+        if (mApplicableSteps != null){
+
+            if((mApplicableSteps.size() == SIZE_THREE)) {
+                mPetVetContainer.setVisibility(View.GONE);
+            }
+            else if (mApplicableSteps.size() == SIZE_FOUR && mPaymentMethod.getPaymentType().equalsIgnoreCase(getString(R.string.label_credit_card))) {
+                mPetVetContainer.setVisibility(View.GONE);
+            }
+            else {
+                mPresenter.populatePetVetInfo((ArrayList<Item>) mOrder.getItems(), mApplicableSteps);
+            }
+        }
+
         mBottomContainer.setVisibility(View.VISIBLE);
         mScrollerView.setVisibility(View.VISIBLE);
 
