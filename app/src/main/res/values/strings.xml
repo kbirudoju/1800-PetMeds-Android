@@ -708,5 +708,7 @@
     <string name="label_shipping_analytics_title">Shipping</string>
     <string name="label_paypal">PayPal</string>
     <string name="label_credit_card">CreditCard</string>
+
+    <string name="label_retry">Retry</string>
 </resources>
 

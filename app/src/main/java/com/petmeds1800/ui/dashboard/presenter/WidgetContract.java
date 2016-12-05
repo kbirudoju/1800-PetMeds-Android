@@ -16,12 +16,14 @@ public interface WidgetContract {
         void updateWidgetData(List<Object> widgetData);
         boolean isActive();
         void onSuccess(List<Object> widgetListData);
-        void onError(String errorMessage);
         void onAddCartError(String errorMessage);
         void addToCartSuccess();
         void startWebView(Bundle bundle);
         void showRetryView();
         void hideRetryView();
+        void showProgress();
+        void hideProgress();
+        void showErrorCrouton(CharSequence message, boolean span);
     }
 
     interface Presenter extends BasePresenter {

@@ -9,14 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -31,19 +28,11 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by pooja on 9/13/2016.
  */
 public class CategoryListFragment extends AbstractFragment implements ProductCategoryListContract.View {
-
-
-    @BindView(R.id.error_layout)
-    LinearLayout mErrorLayout;
-
-    @BindView(R.id.error_Text)
-    TextView mErrorLabel;
 
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
@@ -64,7 +53,7 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPresenter = new ProductCategoryPresenter(this, getContext());
+        mPresenter = new ProductCategoryPresenter(this);
         onAttachFragment(getParentFragment());
 
         PetMedsApplication.getAppComponent().inject(this);
@@ -129,21 +118,27 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
     }
 
     @Override
-    public void showRetryView(String errorMessage) {
-        mErrorLayout.setVisibility(View.VISIBLE);
-        mErrorLabel.setText(errorMessage);
+    public void showRetryView() {
+        super.showErrorLayout();
     }
 
-    @OnClick(R.id.retry_Button)
-    public void retry() {
-        mErrorLayout.setVisibility(View.GONE);
-        showProgress();
-        mPresenter.getProductCategories();
+    @Override
+    public void hideRetryView() {
+        super.hideErrorLayout();
+    }
+
+    @Override
+    protected void onRetryButtonClicked(View view) {
+        super.onRetryButtonClicked(view);
+        hideRetryView();
+        if (mPresenter != null){
+            mPresenter.getProductCategories();
+        }
     }
 
     @Override
     public void populateCategoryList(ArrayList<ProductCategory> productCategoryList) {
-        mProductsCategoriesRecyclerView.setVisibility(View.VISIBLE);
+        hideRetryView();
         mProductCategoryAdapter.setData(productCategoryList);
         setupCardsRecyclerView();
     }

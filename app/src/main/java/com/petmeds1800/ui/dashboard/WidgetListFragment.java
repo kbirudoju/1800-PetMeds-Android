@@ -8,11 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -35,6 +37,7 @@ import com.petmeds1800.ui.fragments.HomeFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import java.util.List;
 
@@ -52,6 +55,9 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
 
     @BindView(R.id.progressbar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.containerLayoutWidget)
+    RelativeLayout mContainerLayout;
 
     private WidgetListAdapter mWidgetListAdapter;
     private WidgetContract.Presenter mPresenter;
@@ -146,15 +152,8 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
 
     @Override
     public void onSuccess(List<Object> widgetData) {
-        mProgressBar.setVisibility(View.GONE);
-        updateWidgetData(widgetData);
         hideRetryView();
-    }
-
-    @Override
-    public void onError(String errorMessage) {
-        mProgressBar.setVisibility(View.GONE);
-        Snackbar.make(mWidgetRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+        updateWidgetData(widgetData);
     }
 
     @Override
@@ -212,6 +211,7 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     @Override
     protected void onRetryButtonClicked(View view) {
         super.onRetryButtonClicked(view);
+        hideRetryView();
         if (mPresenter != null){
             mPresenter.start();
         }
@@ -225,5 +225,26 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     @Override
     public void hideRetryView() {
         hideErrorLayout();
+    }
+
+    @Override
+    public void showProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showErrorCrouton(CharSequence message, boolean span) {
+        message = message.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : message;
+        mProgressBar.setVisibility(View.GONE);
+        if (span) {
+            Utils.displayCrouton(getActivity(), (Spanned) message, mContainerLayout);
+        } else {
+            Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
+        }
     }
 }

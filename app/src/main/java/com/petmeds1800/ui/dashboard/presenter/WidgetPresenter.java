@@ -44,13 +44,12 @@ public class WidgetPresenter implements WidgetContract.Presenter{
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
-        mData= new ArrayList<Object>();
-
+        mData= new ArrayList<>();
     }
-
 
     @Override
     public void getWidgetListData() {
+        mView.showProgress();
         mApiService.getWidgetData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,28 +61,28 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
                     @Override
                     public void onError(Throwable e) {
-                        //error handling would be implemented once we get the details from backend team
-                        mView.onError(e.getLocalizedMessage());
-
-                        if (RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection || RetrofitErrorHandler.getErrorMessage(e) == R.string.connectionTimeout) {
-                            if (mView.isActive()) {
+                        mView.hideProgress();
+                        if(mView.isActive()){
+                            int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                            if (errorId == R.string.noInternetConnection || errorId == R.string.connectionTimeout) {
                                 mView.showRetryView();
+                            }else{
+                                //error handling would be implemented once we get the details from backend team
+                                mView.showErrorCrouton(e.getLocalizedMessage(), true);
                             }
                         }
                     }
 
                     @Override
                     public void onNext(WidgetListResponse s) {
-                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
-                            if (mView.isActive()) {
+                        mView.hideProgress();
+                        if(mView.isActive()){
+                            if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 mView.onSuccess(formatWidgetData(s.getWidgets()));
-                            }
-                        } else {
-                            if (mView.isActive()) {
-                                mView.onError(s.getStatus().getErrorMessages().get(0));
+                            } else {
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), true);
                             }
                         }
-
                     }
                 });
 
@@ -92,6 +91,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
     @Override
     public void addToCart(AddToCartRequest addToCartRequest) {
+        mView.showProgress();
         mApiService.addToCart(addToCartRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -103,6 +103,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.hideProgress();
                         //error handling would be implemented once we get the details from backend team
                         mView.onAddCartError(e.getLocalizedMessage());
 
@@ -110,6 +111,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
                     @Override
                     public void onNext(ShoppingCartListResponse s) {
+                        mView.hideProgress();
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.addToCartSuccess();

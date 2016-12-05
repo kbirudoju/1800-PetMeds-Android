@@ -6,7 +6,6 @@ import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
-import android.content.Context;
 import android.util.Log;
 
 import javax.inject.Inject;
@@ -22,14 +21,11 @@ public class ProductCategoryPresenter implements ProductCategoryListContract.Pre
 
     private final ProductCategoryListContract.View mView;
 
-    private final Context mContext;
-
     @Inject
     PetMedsApiService mPetMedsApiService;
 
 
-    ProductCategoryPresenter(ProductCategoryListContract.View view, Context context) {
-        mContext = context;
+    ProductCategoryPresenter(ProductCategoryListContract.View view) {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
@@ -37,6 +33,7 @@ public class ProductCategoryPresenter implements ProductCategoryListContract.Pre
 
     @Override
     public void getProductCategories() {
+        mView.showProgress();
         mPetMedsApiService.getProductCategory()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,38 +45,33 @@ public class ProductCategoryPresenter implements ProductCategoryListContract.Pre
 
                     @Override
                     public void onError(Throwable e) {
+                        //hide the progress
+                        mView.hideProgress();
                         //error handling would be implemented once we get the details from backend team
                         Log.e("GetProductCategory", e.getMessage());
-
-                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
                         if (mView.isActive()) {
-                            //hide the progress
-                            mView.hideProgress();
+                            int errorId = RetrofitErrorHandler.getErrorMessage(e);
                             //show the retry view
                             if (errorId == R.string.noInternetConnection || errorId == R.string.connectionTimeout) {
-                                mView.showRetryView(mContext.getString(errorId));
+                                mView.showRetryView();
+                            }else{
+                                mView.showErrorCrouton(e.getMessage(), true);
                             }
-
-                            mView.showErrorCrouton(e.getMessage(), false);
                         }
 
                     }
 
                     @Override
                     public void onNext(ProductCategoryListResponse s) {
-                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
-                            if (mView.isActive()) {
-                                mView.hideProgress();
+                        mView.hideProgress();
+                        if(mView.isActive()){
+                            if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 mView.populateCategoryList(s.getCategoryLinks());
-                            }
-                        } else {
-                            Log.d("GetProductCategoryList", s.getStatus().getErrorMessages().get(0));
-                            if (mView.isActive()) {
-                                mView.hideProgress();
-                                mView.showRetryView(s.getStatus().getErrorMessages().get(0));
+                            } else {
+                                Log.d("GetProductCategoryList", s.getStatus().getErrorMessages().get(0));
+                                mView.showRetryView();
                             }
                         }
-
                     }
                 });
 

@@ -20,8 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.petmeds1800.R;
 import com.petmeds1800.ui.HomeActivity;
@@ -317,32 +315,31 @@ public abstract class AbstractFragment extends Fragment {
     protected boolean showErrorLayout(){
         Log.w("AbstractFragment", "showErrorLayout Enter");
 
-        if (mParentContainerView != null && mErrorLayoutView == null){
-            mErrorLayoutView = getActivity().getLayoutInflater().inflate(R.layout.error_retry_layout,null);
-            mErrorButton = (Button) mErrorLayoutView.findViewById(R.id.retry_Button);
+        if (mParentContainerView != null){
+            if (mErrorLayoutView != null) {
+                mErrorLayoutView.setVisibility(View.VISIBLE);
+                Log.w("AbstractFragment", "showErrorLayout Exit");
+                return true;
+            }else {
+                mErrorLayoutView = getActivity().getLayoutInflater().inflate(R.layout.error_retry_layout,null);
+                mErrorButton = (Button) mErrorLayoutView.findViewById(R.id.retry_Button);
 
-            mErrorButton.setOnClickListener(new View.OnClickListener() {
+                mErrorButton.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    onRetryButtonClicked(v);
-                }
-            });
+                    @Override
+                    public void onClick(View v) {
+                        onRetryButtonClicked(v);
+                    }
+                });
 
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            if (mParentContainerView instanceof LinearLayout) {
-                ((LinearLayout) mParentContainerView).addView(mErrorLayoutView);
-            } else if (mParentContainerView instanceof RelativeLayout){
-                ((RelativeLayout) mParentContainerView).addView(mErrorLayoutView, params);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                ((ViewGroup) mParentContainerView).addView(mErrorLayoutView, params);
+                mErrorLayoutView.setVisibility(View.VISIBLE);
+
+                Log.w("AbstractFragment", "showErrorLayout Exit");
+                return true;
             }
-            mErrorLayoutView.setVisibility(View.VISIBLE);
 
-            Log.w("AbstractFragment", "showErrorLayout Exit");
-            return true;
-        } else if (mParentContainerView != null && mErrorLayoutView != null){
-            mErrorLayoutView.setVisibility(View.VISIBLE);
-            Log.w("AbstractFragment", "showErrorLayout Exit");
-            return true;
         } else {
             Log.w("AbstractFragment", "showErrorLayout Exit");
             return false;
@@ -352,11 +349,7 @@ public abstract class AbstractFragment extends Fragment {
     protected boolean hideErrorLayout(){
         if (mParentContainerView != null && mErrorLayoutView != null){
             mErrorLayoutView.setVisibility(View.GONE);
-            if (mParentContainerView instanceof LinearLayout) {
-                ((LinearLayout) mParentContainerView).removeView(mErrorLayoutView);
-            } else if (mParentContainerView instanceof RelativeLayout){
-                ((RelativeLayout) mParentContainerView).removeView(mErrorLayoutView);
-            }
+            ((ViewGroup) mParentContainerView).removeView(mErrorLayoutView);
             mErrorLayoutView = null;
             return true;
         } else {
