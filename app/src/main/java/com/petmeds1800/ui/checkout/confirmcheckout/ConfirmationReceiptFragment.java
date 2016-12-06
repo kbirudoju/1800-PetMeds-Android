@@ -113,7 +113,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_confirmation_receipt, container, false);
         ButterKnife.bind(this, view);
-        ((HomeActivity)getActivity()).updateCartTabItemCount();
+        ((HomeActivity) getActivity()).updateCartTabItemCount();
         return view;
     }
 
@@ -209,22 +209,21 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         CommitOrder order = null;
         if (commitOrderResponse != null) {
             String errorCode = commitOrderResponse.getStatus().getCode();
-            if (errorCode.equals(BasePresenter.API_SUCCESS_CODE)) {
-                order = commitOrderResponse.getOrder();
-                mFirstName.setText(order.getFirstName());
-                mOrderId.setText(order.getMpOrderNumber());
-                mEmail.setText(order.getEmail());
-                mShippingMethod.setText(order.getShippingMethod());
-                Locale locale = getResources().getConfiguration().locale;
-                mSubtotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getOrderSubTotal()));
-                mDiscount.setText(StepFiveRootFragment.MINUS_SIGN + StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getDiscount()));
-                mShippingTotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getShippingTotal()));
-                mTaxes.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getTaxTotal()));
-                mTotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale ,"%.2f", order.getOrderTotal()));
-                mSubtotalLabel.setText(getString(R.string.items_formatter, order.getItems().size()));
-                sendAnalyticsData(order);
-                updateRecyclerView(order.getItems());
-            } else if (errorCode.equals(BasePresenter.API_WARNING_CODE)) {
+            order = commitOrderResponse.getOrder();
+            mFirstName.setText(order.getFirstName());
+            mOrderId.setText(order.getMpOrderNumber());
+            mEmail.setText(order.getEmail());
+            mShippingMethod.setText(order.getShippingMethod());
+            Locale locale = getResources().getConfiguration().locale;
+            mSubtotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale, "%.2f", order.getOrderSubTotal()));
+            mDiscount.setText(StepFiveRootFragment.MINUS_SIGN + StepFiveRootFragment.DOLLAR_SIGN + String.format(locale, "%.2f", order.getDiscount()));
+            mShippingTotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale, "%.2f", order.getShippingTotal()));
+            mTaxes.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale, "%.2f", order.getTaxTotal()));
+            mTotal.setText(StepFiveRootFragment.DOLLAR_SIGN + String.format(locale, "%.2f", order.getOrderTotal()));
+            mSubtotalLabel.setText(getString(R.string.items_formatter, order.getItems().size()));
+            sendAnalyticsData(order);
+            updateRecyclerView(order.getItems());
+            if (errorCode.equals(BasePresenter.API_WARNING_CODE)) {
                 showErrorView(Html.fromHtml(commitOrderResponse.getStatus().getErrorMessages().get(0)));
             }
         }
