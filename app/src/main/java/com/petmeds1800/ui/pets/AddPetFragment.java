@@ -1,5 +1,7 @@
 package com.petmeds1800.ui.pets;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +18,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,6 +70,8 @@ import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -273,6 +279,8 @@ public class AddPetFragment extends AbstractFragment
 
     private Pets mPets;
 
+    private Uri mCropImageUri;
+
     @BindView(R.id.container_layout)
     LinearLayout mViewContainer;
 
@@ -377,7 +385,12 @@ public class AddPetFragment extends AbstractFragment
                 mPresenter.populatePetAgeList();
                 break;
             case R.id.pet_picture_edit:
-                showImageOptions();
+               // showImageOptions();
+                   if (CropImage.isExplicitCameraPermissionRequired(getActivity())) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+                } else {
+                    CropImage.startPickImageActivity(getActivity());
+                }
                 break;
             case R.id.takePhoto:
                 updateImageUtil.updateProfilePic(UpdateImageUtil.CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
@@ -402,7 +415,12 @@ public class AddPetFragment extends AbstractFragment
                 removePetDialog.show(fragmentManager);
                 break;
             case R.id.edit_pet_image:
-                showImageOptions();
+               // showImageOptions();
+                if (CropImage.isExplicitCameraPermissionRequired(getActivity())) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+                } else {
+                    CropImage.startPickImageActivity(getActivity());
+                }
                 break;
             case R.id.add_edit_medication_allergies:
                 // ((HomeActivity) getActivity()).showProgress();
@@ -509,7 +527,68 @@ public class AddPetFragment extends AbstractFragment
         fromGallery.setOnClickListener(this);
     }
 
+
+
+
+   @Override
+    @SuppressLint("NewApi")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK) {
+            Uri imageUri = CropImage.getPickImageResultUri(getActivity(), data);
+
+            // For API >= 23 we need to check specifically that we have permissions to read external storage,
+            // but we don't know if we need to for the URI so the simplest is to try open the stream and see if we get error.
+            boolean requirePermissions = false;
+            if (CropImage.isReadExternalStoragePermissionsRequired(getActivity(), imageUri)) {
+
+                // request permissions and handle the result in onRequestPermissionsResult()
+                requirePermissions = true;
+                mCropImageUri = imageUri;
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+            } else {
+                CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.OVAL)
+                        .start(getContext(), this);
+               // mCropImageView.setImageUriAsync(imageUri);
+
+            }
+
+        }
+       if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+           CropImage.ActivityResult result = CropImage.getActivityResult(data);
+           if (resultCode == AppCompatActivity.RESULT_OK) {
+               Uri resultUri = result.getUri();
+               Log.d("imageuri", resultUri.toString()+isEditable);
+               if(isEditable){
+                   Glide.with(this).load(resultUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                           .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
+                       @Override
+                       protected void setResource(Bitmap resource) {
+                           RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                           circularBitmapDrawable.setCircular(true);
+                           mEditPetImage.setImageDrawable(circularBitmapDrawable);
+                       }
+                   });
+               }else{
+                   Glide.with(this).load(resultUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                           .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
+                       @Override
+                       protected void setResource(Bitmap resource) {
+                           RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                           circularBitmapDrawable.setCircular(true);
+                           mPetImage.setImageDrawable(circularBitmapDrawable);
+                       }
+                   });
+               }
+
+           } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+               Exception error = result.getError();
+           }
+       }
+    }
+
+ /* public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         File mUri;
         if (resultCode == Activity.RESULT_OK) {
@@ -521,15 +600,17 @@ public class AddPetFragment extends AbstractFragment
                     updateImageUtil.onActivityResult(requestCode, resultCode, data);
                     break;
                 case Crop.REQUEST_CROP:
+
                     handleCrop(resultCode, data);
+
                     break;
                 default:
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
         }
-    }
-
+    }*/
+//TODO Remove code after QA approval of new cropping library
     protected void handleCrop(int resultCode, Intent result) {
         if (resultCode == Activity.RESULT_OK) {
             finalUri = Crop.getOutput(result);

@@ -278,6 +278,7 @@ dependencies {
 
     // Urban Airship SDK
     compile 'com.urbanairship.android:urbanairship-sdk:8.0.+'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
 
     //testfairy
     compile 'testfairy:testfairy-android-sdk:1.+@aar'
