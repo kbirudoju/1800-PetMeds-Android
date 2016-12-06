@@ -443,6 +443,8 @@
     <string name="label_share">Share</string>
     <string name="label_confirmation_and_receipt">Confirmation &amp; Receipt</string>
     <string name="label_start_new_order">START A NEW ORDER</string>
+    <string name="label_returning_user_login">Returning customer? Log In here</string>
+    <string name="label_create_password_optional">CREATE A PASSWORD (OPTIONAL)</string>
 
     <!--Icons-->
     <string name="ok_icon_font">&#xe800;</string>
