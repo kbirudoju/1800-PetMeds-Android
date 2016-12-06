@@ -71,9 +71,9 @@ public class PetMedsAirShipReceiver extends AirshipReceiver {
         if (openDefaultScreen) {
             homeIntent.putExtra(Constants.PUSH_SCREEN_TYPE, type);
             homeIntent.putExtra(Constants.PUSH_EXTRA_ID, id);
-            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(homeIntent);
         }
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(homeIntent);
         return true;
     }
 

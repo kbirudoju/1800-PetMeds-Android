@@ -13,7 +13,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.petmeds1800.util.Constants.PUSH_EXTRA_ID;
 import static com.petmeds1800.util.Constants.PUSH_SCREEN_TYPE;
 
 /**
@@ -31,7 +34,8 @@ public class FeaturedFragment extends AbstractFragment {
 
     private final int TYPE_QUESTION_ANSWER_ALERT = 6;
 
-    int screenType = 0;
+    private int screenType = 0;
+    private String id;
 
     @Nullable
     @Override
@@ -39,10 +43,14 @@ public class FeaturedFragment extends AbstractFragment {
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_featured, container, false);
         screenType = ((HomeActivity) getActivity()).getIntent().getIntExtra(PUSH_SCREEN_TYPE, 0);
+        id = ((HomeActivity) getActivity()).getIntent().getStringExtra(PUSH_EXTRA_ID);
         new AnalyticsUtil().trackScreen(getString(R.string.label_education_home_analytics_title));
         ButterKnife.bind(this, view);
         showWebViewFragment();
         setHasOptionsMenu(false);
+        if (((HomeActivity) getActivity()).getIntent() != null) {
+            navigateOnPush();
+        }
         //start listening for optionsMenuAction
         registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
         return view;
@@ -57,10 +65,13 @@ public class FeaturedFragment extends AbstractFragment {
 
     @OnClick(R.id.txv_questions)
     public void showAskVet() {
+        Log.v("screen Type","inside this show as petvet"+screenType);
         PetMedsApplication.menuItemsClicked = true;
         Bundle bundle = new Bundle();
         bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_q_and_a_directory));
-        bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.url_featured_ask_vet));
+        bundle.putString(CommonWebviewFragment.URL_KEY,
+                (screenType == TYPE_QUESTION_ANSWER_ALERT) ? getString(R.string.url_vet_answered)+id
+                        : getString(R.string.url_featured_ask_vet));
         ((LearnFragment) getParentFragment()).addAskVetFragment(bundle);
     }
 
@@ -72,22 +83,27 @@ public class FeaturedFragment extends AbstractFragment {
 
     public void navigateOnPush() {
         //TODO Reminder Id is hardcoded which is done when push payload inplementeid
-        switch (screenType) {
-            case TYPE_QUESTION_ANSWER_ALERT:
-                ((HomeActivity) getActivity()).getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
-                screenType = 0;
-                showAskVet();
-                break;
-        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch (screenType) {
+                    case TYPE_QUESTION_ANSWER_ALERT:
+                        ((HomeActivity) getActivity()).getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
+                        Log.v("screen Type","inside this"+screenType);
+                        showAskVet();
+                        screenType = 0;
+                        break;
+                }
+            }
+        },200);
+        Log.v("screen Type","screen Type"+screenType);
+
 
     }
 
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
-        if (((HomeActivity) getActivity()).getIntent() != null) {
-            navigateOnPush();
-        }
         super.onReceivedBroadcast(context, intent);
     }
 }
