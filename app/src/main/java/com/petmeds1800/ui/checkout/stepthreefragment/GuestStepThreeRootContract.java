@@ -1,17 +1,13 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import com.petmeds1800.model.Address;
+import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddressRequest;
-import com.petmeds1800.model.entities.GuestCheckoutPaymentReuest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.UpdateCardRequest;
-import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
-
-import java.util.ArrayList;
 
 /**
  * Created by Sdixit on 29-09-2016.
@@ -34,12 +30,15 @@ public class GuestStepThreeRootContract {
         void onSuccessCreditCardPayment(ShoppingCartListResponse response);
 
 //        void setAddress(Address address);
+void onSuccess(String url);
+        void onPayPalError(String errorMsg);
     }
 
     interface Presenter extends BasePresenter{
 
         void applyCreditCardPaymentMethod(AddressRequest addressRequest, CardRequest cardRequest,
                 UpdateCardRequest updateCardRequest);
+        void checkoutPayPal(PayPalCheckoutRequest request);
 
 //        void extractAddress(ArrayList<ShippingGroups> shippingGroupses);
     }

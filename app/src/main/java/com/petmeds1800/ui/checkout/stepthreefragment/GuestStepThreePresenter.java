@@ -1,33 +1,29 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+import android.support.v4.app.Fragment;
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.Address;
+import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
-import com.petmeds1800.model.entities.GuestCheckoutPaymentReuest;
 import com.petmeds1800.model.entities.UpdateCardRequest;
-import com.petmeds1800.model.shoppingcart.response.ShippingAddress;
-import com.petmeds1800.model.shoppingcart.response.ShippingGroups;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
-import android.support.v4.app.Fragment;
-import android.util.Log;
-
-import java.util.ArrayList;
-
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import retrofit2.Response;
 import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -45,6 +41,10 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
+    @Inject
+    @Named(Constants.TAG_REDIRECT_OFF)
+    PetMedsApiService mPetMedsApiServiceRedrirectOff;
+
     public GuestStepThreePresenter(GuestStepThreeRootContract.View view) {
         mView = view;
         PetMedsApplication.getAppComponent().inject(this);
@@ -55,7 +55,37 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
 
     }
 
+    @Override
+    public void checkoutPayPal(PayPalCheckoutRequest request) {
+        mPetMedsApiServiceRedrirectOff.payPalCheckout(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<String>>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("error",e.getLocalizedMessage());
+                        mView.onPayPalError(e.getLocalizedMessage());
+
+                    }
+
+                    @Override
+                    public void onNext(Response<String> s) {
+                        Log.d("response", s + ">>>");
+                        String loactionHeader=s.headers().get("Location");
+                        if(loactionHeader==null || loactionHeader.isEmpty()){
+                            mView.onPayPalError("");
+                        }else{
+                            mView.onSuccess(loactionHeader);
+                        }
+
+                    }
+                });
+    }
     @Override
     public void applyCreditCardPaymentMethod(AddressRequest addressRequest, final CardRequest cardRequest, final
     UpdateCardRequest updateCardRequest) {

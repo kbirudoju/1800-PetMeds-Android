@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.Card;
+import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
@@ -26,6 +29,7 @@ import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -41,7 +45,7 @@ import butterknife.OnClick;
  * Created by Abhinav on 27-09-2016.
  */
 
-public class GuestStepThreeRootFragment extends AbstractFragment implements GuestStepThreeRootContract.View {
+public class GuestStepThreeRootFragment extends AbstractFragment implements GuestStepThreeRootContract.View,CompoundButton.OnCheckedChangeListener, CheckOutActivity.PaypalErrorListener {
 
     @BindView(R.id.newPaymentMethod)
     Button mNewPaymentMethod;
@@ -70,6 +74,9 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
+
+    @BindView(R.id.payPalCheckBox)
+    CheckBox mPaypalCheckbox;
 
     private PaymentGroups mPaymentGroup;
 
@@ -121,6 +128,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
         populateAddress();
         populatePaymentGroup();
+        mPaypalCheckbox.setOnCheckedChangeListener(this);
         return view;
 
     }
@@ -261,7 +269,59 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
     }
 
     @Override
+    public void onSuccess(String url) {
+        activity.hideProgress();
+        Bundle bundle = new Bundle();
+        bundle.putString(CommonWebviewFragment.PAYPAL_DATA, url);
+        bundle.putBoolean(CommonWebviewFragment.ISCHECKOUT, true);
+        bundle.putString(CommonWebviewFragment.STEPNAME, mStepName);
+        ((CheckOutActivity) getActivity())
+                .replaceCheckOutFragmentWithBundle(new CommonWebviewFragment(), CommonWebviewFragment.class.getName(),
+                        false, bundle);
+    }
+
+    @Override
+    public void onPayPal(final String errorMsg) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utils.displayCrouton(getActivity(), errorMsg, mContainerLayout);
+                    }
+                });
+            }
+        };
+        thread.start();
+    }
+
+    @Override
     public void setPresenter(GuestStepThreeRootContract.Presenter presenter) {
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        activity.showProgress();
+        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout");
+        mPresenter.checkoutPayPal(payPalCheckoutRequest);
+    }
+
+    @Override
+    public void onPayPalError(String errorMsg) {
+        activity.hideProgress();
+        if (errorMsg.isEmpty()) {
+            Utils.displayCrouton(getActivity(), getString(R.string.unexpected_error_label), mContainerLayout);
+
+        } else {
+            Utils.displayCrouton(getActivity(), errorMsg, mContainerLayout);
+
+        }
     }
 }
