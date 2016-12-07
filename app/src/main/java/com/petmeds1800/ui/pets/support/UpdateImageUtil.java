@@ -338,6 +338,7 @@ public class UpdateImageUtil {
                 case GALLERY_CAPTURE_IMAGE_REQUEST_CODE:
                     mUri = resizePic(data.getData());
                     performCrop(Uri.fromFile(mUri));
+
                     break;
                 default:
                     break;

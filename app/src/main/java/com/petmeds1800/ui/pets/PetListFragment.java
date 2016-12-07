@@ -68,11 +68,11 @@ public class PetListFragment extends AbstractFragment implements PetListContract
                     Pets pet = mPetListAdapter.getItemAt(position);
                     bundle.putSerializable("pet", pet);
                     bundle.putBoolean("isEditable", true);
-                    replaceAccountFragmentWithBundle(new AddPetFragment(), bundle);
+                    replaceAccountFragmentWithBundleTag(new AddPetFragment(),AddPetFragment.class.getName(), bundle);
 
                 } else {
                     bundle.putBoolean("isEditable", false);
-                    replaceAccountFragmentWithBundle(new AddPetFragment(), bundle);
+                    replaceAccountFragmentWithBundleTag(new AddPetFragment(),AddPetFragment.class.getName(), bundle);
                 }
             }
         });
@@ -137,7 +137,7 @@ public class PetListFragment extends AbstractFragment implements PetListContract
     public void addPet() {
         Bundle bundle = new Bundle();
         bundle.putBoolean("isEditable", false);
-        replaceAccountFragmentWithBundle(new AddPetFragment(), bundle);
+        replaceAccountFragmentWithBundleTag(new AddPetFragment(), AddPetFragment.class.getName(), bundle);
     }
 
     @Override

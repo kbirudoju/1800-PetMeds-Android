@@ -135,7 +135,9 @@
         <activity
             android:name=".ui.vet.VetDetailActivtiy"
             android:screenOrientation="portrait" />
-
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.Theme.AppCompat"/>
         <receiver android:name=".util.alarm.MedicationAlarmReceiver" />
 
         <receiver android:name=".util.alarm.MedicationAlarmReceiver"/>
