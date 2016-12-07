@@ -436,13 +436,6 @@ public class SignUpFragment extends AbstractFragment
         }
 
         apartmentText = mApartmentEdit.getText().toString().trim();
-        if (apartmentText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_apartment_required), mApartmentInput.getId());
-            proceedSignUp = false;
-        } else if (!mPresenter.validateAddress(apartmentText)) {
-            setErrorOnInput(getString(R.string.error_apartment_invalid), mApartmentInput.getId());
-            proceedSignUp = false;
-        }
 
         cityText = mCityEdit.getText().toString().trim();
         if (cityText.isEmpty()) {
@@ -513,13 +506,6 @@ public class SignUpFragment extends AbstractFragment
             }
 
             apartmentShippingText = mApartmentShippingEdit.getText().toString().trim();
-            if (apartmentShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_apartment_required), mApartmentShippingInput.getId());
-                proceedSignUp = false;
-            } else if (!mPresenter.validateAddress(apartmentShippingText)) {
-                setErrorOnInput(getString(R.string.error_apartment_invalid), mApartmentShippingInput.getId());
-                proceedSignUp = false;
-            }
 
             cityShippingText = mCityShippingEdit.getText().toString().trim();
             if (cityShippingText.isEmpty()) {
@@ -719,7 +705,6 @@ public class SignUpFragment extends AbstractFragment
         mFirstNameInput.setError(null);
         mLastNameInput.setError(null);
         mAddressLine1Input.setError(null);
-        mApartmentInput.setError(null);
         mCityInput.setError(null);
         mStateInput.setError(null);
         mZipInput.setError(null);
@@ -744,7 +729,6 @@ public class SignUpFragment extends AbstractFragment
             mFirstNameShippingInput.setError(null);
             mLastNameShippingInput.setError(null);
             mAddressLine1ShippingInput.setError(null);
-            mApartmentShippingInput.setError(null);
             mCityShippingInput.setError(null);
             mStateShippingInput.setError(null);
             mZipShippingInput.setError(null);

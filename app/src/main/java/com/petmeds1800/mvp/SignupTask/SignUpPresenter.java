@@ -29,8 +29,6 @@ public class SignUpPresenter implements SignUpContract.Presenter {
     @Inject
     PetMedsApiService mPetMedsApiService;
 
-    private static final int PASSWORD_LENGTH = 8;
-
     private TreeMap<String, String> statesTreeMap;
 
     private LinkedHashMap<String, String> countriesHashMap;

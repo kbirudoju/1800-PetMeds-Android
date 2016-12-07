@@ -120,8 +120,6 @@
     <string name="error_last_name_invalid">Last name invalid</string>
     <string name="error_address_required">Address is required</string>
     <string name="error_address_invalid">Address invalid</string>
-    <string name="error_apartment_required">Apartment name is required</string>
-    <string name="error_apartment_invalid">Apartment name invalid</string>
     <string name="error_city_required">City name is required</string>
     <string name="error_city_invalid">City name invalid</string>
     <string name="error_state_required">State name is required</string>
