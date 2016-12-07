@@ -83,6 +83,10 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     private ImageButton mPayPalCheckoutButton;
 
+    private ShoppingCartRecyclerViewAdapter mShoppingCartRecyclerViewAdapter;
+
+    private ShoppingCartListResponse mShoppingCartListResponse;
+
 
     public final Handler CartFragmentMessageHandler = new Handler() {
         @Override
@@ -206,6 +210,15 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             if (simpleName != null && simpleName.equalsIgnoreCase(ApplyCouponRequestShoppingCart.class.getSimpleName())) {
                 mCouponCodeLayout.setError(errorMessage);
                 mOfferCodeContainerLayout.findViewById(R.id.order_status_label).setVisibility(View.GONE);
+            } else if (simpleName != null && simpleName.equalsIgnoreCase(UpdateItemQuantityRequestShoppingCart.class.getSimpleName())) {
+
+                if (null != mShoppingCartListResponse && null != mContainerLayoutItems) {
+                    mContainerLayoutItems.setAdapter(null);
+                    mShoppingCartRecyclerViewAdapter = new ShoppingCartRecyclerViewAdapter(mShoppingCartListResponse.getShoppingCart().getCommerceItems(), createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_offer_code_card, null, false), mShoppingCartListResponse), getActivity(), CartFragmentMessageHandler);
+                    mContainerLayoutItems.setAdapter(mShoppingCartRecyclerViewAdapter);
+                }
+
+                Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
             } else  {
                 Utils.displayCrouton(getActivity(), (String) errorMessage, mItemListtContainer);
             }
@@ -243,8 +256,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
         }
         mProgressBar.setVisibility(View.GONE);
-
-
     }
 
     @Override
@@ -306,11 +317,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     }
 
     private boolean initializeShoppingCartPage(final ShoppingCartListResponse shoppingCartListResponse) {
-        mContainerLayoutItems.setAdapter(
-                new ShoppingCartRecyclerViewAdapter(shoppingCartListResponse.getShoppingCart().getCommerceItems(),
-                        createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                                .inflate(R.layout.view_offer_code_card, null, false), shoppingCartListResponse),
-                        getActivity(), CartFragmentMessageHandler));
+        mShoppingCartListResponse = shoppingCartListResponse;
+        mShoppingCartRecyclerViewAdapter = new ShoppingCartRecyclerViewAdapter(shoppingCartListResponse.getShoppingCart().getCommerceItems(),createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_offer_code_card, null, false), shoppingCartListResponse),getActivity(), CartFragmentMessageHandler);
+        mContainerLayoutItems.setAdapter(mShoppingCartRecyclerViewAdapter);
 
         if (sPreviousScrollPosition > 0) {
             mContainerLayoutItems.scrollToPosition(sPreviousScrollPosition);

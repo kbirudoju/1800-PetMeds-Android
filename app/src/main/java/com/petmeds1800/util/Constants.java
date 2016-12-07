@@ -140,5 +140,7 @@ public class Constants {
 
     public static final String KEY_APP_ID = "app";
 
+    public static final int KEY_INITIALIZE_COOKIES = 1273;
+
 
 }

@@ -26,6 +26,7 @@ import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -43,15 +44,27 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
     private Handler mHandler;
     private Handler mTextChangeHandler;
     private Runnable mTextChangeRunnable;
-    private ShoppingCartRecyclerViewAdapter mShoppingCartRecyclerViewAdapter;
+    private ArrayList<CommerceItems> mCommerceItemsesCollection_previous;
 
     public ShoppingCartRecyclerViewAdapter(ArrayList<CommerceItems> commerceItemsesCollection, View itemFooter, Context context, Handler handler) {
         this.mCommerceItemsesCollection = commerceItemsesCollection;
         this.mItemFooter = itemFooter;
         this.mContext = context;
         this.mHandler = handler;
-        this.mShoppingCartRecyclerViewAdapter =this;
+        mCommerceItemsesCollection_previous = null;
     }
+
+//    public void updateShoppingCartRecyclerViewAdapter(){
+//        Applog.getInstance().Enter();
+//
+//        mCommerceItemsesCollection = null;
+//        mCommerceItemsesCollection = new ArrayList<>();
+//        mCommerceItemsesCollection.addAll(mCommerceItemsesCollection_previous);
+//        mCommerceItemsesCollection_previous = null;
+//        notifyDataSetChanged();
+//
+//        Applog.getInstance().Enter();
+//    }
 
     @Override
     public ShoppingCartAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,6 +75,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
         } else if (viewType == TYPE_FOOTER) {
             searchItemView = mItemFooter;
         }
+
         return new ShoppingCartAdapterViewHolder(searchItemView,viewType);
     }
 
@@ -139,16 +153,21 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
 
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                     if (actionId == EditorInfo.IME_ACTION_DONE && !holder.mItemQuantityDescription.getEditText().getText().toString().isEmpty() && !(mCommerceItemsesCollection.get(position).getQuantity()).equalsIgnoreCase(holder.mItemQuantityDescription.getEditText().getText().toString().trim())) {
                         Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
                         Bundle b = new Bundle();
+
+                        mCommerceItemsesCollection_previous = null;
+                        mCommerceItemsesCollection_previous = new ArrayList<>();
+                        mCommerceItemsesCollection_previous.addAll(mCommerceItemsesCollection);
 
                         HashMap<String, String> commerceID_QuantityMap = new HashMap<String, String>();
                         for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
                             commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
                         }
                         commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(), holder.mItemQuantityDescription.getEditText().getText().toString().trim());
-                        mCommerceItemsesCollection.get(position).setQuantity(holder.mItemQuantityDescription.getEditText().getText().toString().trim());
+//                        mCommerceItemsesCollection.get(position).setQuantity(holder.mItemQuantityDescription.getEditText().getText().toString().trim());
                         b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
                         msg.setData(b);
 
@@ -163,19 +182,24 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                         } finally {
                             InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(holder.mItemQuantityDescription.getEditText().getWindowToken(), 0);
+
                             return true;
                         }
-                    } else return false;
+                    } else {
+                        return false;
+                    }
                 }
             });
 
             holder.mItemQuantityDescription.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
+
                     if (!hasFocus){
                         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(holder.mItemQuantityDescription.getEditText().getWindowToken(), 0);
                     }
+
                 }
             });
 
@@ -206,15 +230,20 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                         mTextChangeRunnable = new Runnable() {
                             @Override
                             public void run() {
+
                                 Message msg = Message.obtain(null, Constants.UPDATE_ITEM_QUANTITY_SHOPPINGCART);
                                 Bundle b = new Bundle();
+
+                                mCommerceItemsesCollection_previous = null;
+                                mCommerceItemsesCollection_previous = new ArrayList<>();
+                                mCommerceItemsesCollection_previous.addAll(mCommerceItemsesCollection);
 
                                 HashMap<String, String> commerceID_QuantityMap = new HashMap<String, String>();
                                 for (int i = 0; i < mCommerceItemsesCollection.size(); i++) {
                                     commerceID_QuantityMap.put(mCommerceItemsesCollection.get(i).getCommerceItemId(), (mCommerceItemsesCollection.get(i).getQuantity()));
                                 }
                                 commerceID_QuantityMap.put(mCommerceItemsesCollection.get(position).getCommerceItemId(), holder.mItemQuantityDescription.getEditText().getText().toString().trim());
-                                mCommerceItemsesCollection.get(position).setQuantity(holder.mItemQuantityDescription.getEditText().getText().toString().trim());
+//                                mCommerceItemsesCollection.get(position).setQuantity(holder.mItemQuantityDescription.getEditText().getText().toString().trim());
                                 b.putSerializable(Constants.QUANTITY_MAP, commerceID_QuantityMap);
                                 msg.setData(b);
 
@@ -231,7 +260,6 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                                 }
                             }
                         };
-
                         mTextChangeHandler = new Handler();
                         mTextChangeHandler.postDelayed(mTextChangeRunnable,2000);
                     }
