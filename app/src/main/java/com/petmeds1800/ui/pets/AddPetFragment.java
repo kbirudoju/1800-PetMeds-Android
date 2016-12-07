@@ -401,19 +401,19 @@ public class AddPetFragment extends AbstractFragment
                 alertDailogForPicture.dismiss();
                 break;
             case R.id.remove_pet_button:
-                FragmentManager fragmentManager = getFragmentManager();
-                Bundle removePetBundle = new Bundle();
-                removePetBundle.putStringArray("options", getResources().getStringArray(R.array.remove_pet_option));
-                removePetBundle.putString("title", getString(R.string.remove_pet_title));
-                removePetBundle.putString("message", getString(R.string.remove_pet_message));
-                removePetBundle.putString("ok", getString(R.string.label_fingerprint_continue));
-                removePetBundle.putString("cancel", getString(R.string.cancelTextOnDialog));
-                GenderDialogFragment removePetDialog = new GenderDialogFragment();
-                removePetDialog.setTargetFragment(this, REMOVE_PET_REQUEST_CODE);
-                removePetDialog.setGenderSetListener(this);
-                removePetDialog.setArguments(removePetBundle);
-                removePetDialog.show(fragmentManager);
-                break;
+             FragmentManager fragmentManager = getFragmentManager();
+            Bundle removePetBundle = new Bundle();
+            removePetBundle.putStringArray("options", getResources().getStringArray(R.array.remove_pet_option));
+            removePetBundle.putString("title", getString(R.string.remove_pet_title));
+            removePetBundle.putString("message", getString(R.string.remove_pet_message));
+            removePetBundle.putString("ok", getString(R.string.label_fingerprint_continue));
+            removePetBundle.putString("cancel", getString(R.string.cancelTextOnDialog));
+            GenderDialogFragment removePetDialog = new GenderDialogFragment();
+            removePetDialog.setTargetFragment(this, REMOVE_PET_REQUEST_CODE);
+            removePetDialog.setGenderSetListener(this);
+            removePetDialog.setArguments(removePetBundle);
+            removePetDialog.show(fragmentManager);
+            break;
             case R.id.edit_pet_image:
                // showImageOptions();
                 if (CropImage.isExplicitCameraPermissionRequired(getActivity())) {

@@ -297,4 +297,11 @@
         <item name="android:textColor">@color/grey_text</item>
     </style>
 
+    <style name="MyTheme" parent="@style/Base.Theme.AppCompat">
+        <item name="colorPrimary">@color/petmeds_blue</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
 </resources>
