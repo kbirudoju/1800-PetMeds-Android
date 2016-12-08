@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.ui.HomeActivity;
 
 import java.io.IOException;
@@ -218,7 +217,7 @@ public class PetMedWebViewClient extends WebViewClient {
                     @Override
                     public void run() {
                         if (url.contains("Add+To+Cart")){
-                            syncCallWebViewResponse(view,url,false);
+                            syncCallWebViewResponse(view,url);
                         } else {
                             mWebView.loadUrl(url);
                         }
@@ -230,7 +229,7 @@ public class PetMedWebViewClient extends WebViewClient {
         return true;
     }
 
-    private void syncCallWebViewResponse(final WebView view,final String url,final boolean isRepeat){
+    private void syncCallWebViewResponse(final WebView view,final String url){
 
         Observable.create(new Observable.OnSubscribe<Response>() {
             @Override
@@ -272,10 +271,7 @@ public class PetMedWebViewClient extends WebViewClient {
             @Override
             public void onNext(Response response) {
                 Log.e("URL HANDLING Response", response.toString());
-                if (response.toString().contains("Conflict") && !isRepeat){
-                    renewSessionConfirmationNumber(view,url,true);
-
-                } else if (response.toString().contains("Conflict")){
+                 if (response.toString().contains("Conflict")){
                     Log.e("URL HANDLING Response","Conflict Still Remains : " + response.toString());
                     onFailureResponse(view,url,("Cannot Add Item"));
                 } else {
@@ -290,29 +286,6 @@ public class PetMedWebViewClient extends WebViewClient {
      * This is intrinsic call and does not effect overall cart fragment APIs
      * @param
      */
-    private void renewSessionConfirmationNumber(final WebView view, final String url, boolean repeat) {
-
-        mPetMedsApiService.getSessionConfirmationNumber().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<SessionConfNumberResponse>() {
-
-            @Override
-            public void onCompleted() {}
-
-            @Override
-            public void onError(Throwable e) {
-                Toast.makeText(mContext,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
-                if (!sessionConfNumberResponse.getSessionConfirmationNumber().isEmpty()) {
-                    mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                }
-                syncCallWebViewResponse(view,url,true);
-            }
-        });
-    }
-
     private void reInitializeCookieManager() throws URISyntaxException {
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie();
