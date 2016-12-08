@@ -142,5 +142,6 @@ public class Constants {
 
     public static final int KEY_INITIALIZE_COOKIES = 1273;
 
-
+    public static final String INTENT_FILTER_REFILL_NOTIFICATION = "intent_filter_refill_notification";
+    public static final String IS_REFILL_NOTIFICATION="is_refill_notification";
 }

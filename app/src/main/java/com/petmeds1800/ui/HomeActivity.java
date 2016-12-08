@@ -1,8 +1,10 @@
 package com.petmeds1800.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,11 +31,14 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
+import com.petmeds1800.intent.CheckOutIntent;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.MedicationReminderItem;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.mvp.RefillNotificationContract;
+import com.petmeds1800.mvp.RefillNotificationPresenter;
 import com.petmeds1800.ui.fragments.AccountRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CartRootFragment;
@@ -68,12 +73,10 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.petmeds1800.util.Constants.PUSH_SCREEN_TYPE;
-
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
         MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,
-        CommonWebviewFragment.OnPaymentCompletedListener {
+        CommonWebviewFragment.OnPaymentCompletedListener,RefillNotificationContract.View {
 
     public static final String SETUP_HAS_OPTIONS_MENU_ACTION = "setupHasOptionsMenuAction";
 
@@ -144,6 +147,8 @@ public class HomeActivity extends AbstractActivity
 
     private AccountRootFragment mAccountRootFragment;
 
+    private RefillNotificationContract.Presenter mPresenter;
+
     @Override
     protected void onNewIntent(Intent intent) {
         // TODO Auto-generated method stub
@@ -178,6 +183,8 @@ public class HomeActivity extends AbstractActivity
         getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
         ButterKnife.bind(this);
         mAnalyticsUtil = new AnalyticsUtil();
+
+        mPresenter=new RefillNotificationPresenter(this,HomeActivity.this);
 
         PetMedsApplication.getAppComponent().inject(this);
         //Perform operation on the first time loading of home screen
@@ -291,6 +298,10 @@ public class HomeActivity extends AbstractActivity
         mAuthenticationDialog = new FingerprintAuthenticationDialog();
         mViewPager.addOnPageChangeListener(pageChangeListener);
         navigateOnReceivedNotification(screenType);
+
+        IntentFilter intentFilter=new IntentFilter(Constants.INTENT_FILTER_REFILL_NOTIFICATION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLoginReceiver, intentFilter);
+
     }
 
     private void sendAnalytics(int position) {
@@ -322,9 +333,8 @@ public class HomeActivity extends AbstractActivity
                         break;
                     case TYPE_OFFER__ALERT:
                     case TYPE_PRESCRIPTION_REFILL_DUE_ALERT:
-                        HomeActivity.this.getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
-                        HomeActivity.this.screenType = 0;
-                        mViewPager.setCurrentItem(0);
+                        showProgress();
+                        mPresenter.checkSecurityStatus();
                         break;
                     case TYPE_QUESTION_ANSWER_ALERT:
                         mViewPager.setCurrentItem(2);
@@ -382,6 +392,7 @@ public class HomeActivity extends AbstractActivity
             }
             // checkLoginStatus();
         }
+
     }
 
     @Override
@@ -393,6 +404,7 @@ public class HomeActivity extends AbstractActivity
         if (mAuthenticationDialog != null && mAuthenticationDialog.isVisible()) {
             mAuthenticationDialog.dismiss();
         }
+
     }
 
     @Override
@@ -644,6 +656,65 @@ public class HomeActivity extends AbstractActivity
     @Override
     public void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName) {
 
+    }
+
+    @Override
+    public void onSecurityStatusSuccess() {
+
+    }
+
+    @Override
+    public void onSecurityStatusError() {
+        hideProgress();
+        FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constants.IS_REFILL_NOTIFICATION, true);
+        mAuthenticationDialog.setArguments(bundle);
+        if (!mAuthenticationDialog.isAdded()) {
+            mAuthenticationDialog.setCancelable(false);
+            mAuthenticationDialog
+                    .show(getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+        }
+    }
+
+    @Override
+    public void onShoppingCartSuccess(ShoppingCartListResponse response) {
+        CheckOutIntent checkOutIntent = new CheckOutIntent(HomeActivity.this);
+        checkOutIntent.putExtra(CartFragment.SHOPPING_CART, response);
+        checkOutIntent.putExtra(CartFragment.CHECKOUT_STEPS,response.getCheckoutSteps());
+        startActivity(checkOutIntent);
+    }
+
+    @Override
+    public void onShoppingCartError(String errorMsg) {
+        hideProgress();
+        Utils.displayCrouton(this,  errorMsg, mContainerLayout);
+    }
+
+    @Override
+    public void onHomeWidgetError(String errorMsg) {
+        hideProgress();
+        Utils.displayCrouton(this,  errorMsg, mContainerLayout);
+    }
+
+    @Override
+    public void setPresenter(RefillNotificationContract.Presenter presenter) {
+
+    }
+
+    private BroadcastReceiver mLoginReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent;
+            showProgress();
+            mPresenter.checkSecurityStatus();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoginReceiver);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.petmeds1800.dagger;
 
 import com.petmeds1800.dagger.component.AppComponent;
+import com.petmeds1800.mvp.RefillNotificationPresenter;
 import com.petmeds1800.mvp.SignupTask.SignUpPresenter;
 import com.petmeds1800.service.RefillReminderService;
 import com.petmeds1800.ui.HomeActivity;
@@ -229,5 +230,7 @@ public interface Injector {
     void inject(HomeRootFragment homeRootFragment);
 
     void inject(PetMedWebViewClient petMedWebViewClient);
+
+    void inject(RefillNotificationPresenter refillNotificationPresenter);
 }
 
