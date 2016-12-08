@@ -49,6 +49,8 @@
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_transparent_text_apply"
                         android:hint="@string/offer_code"
+                        android:imeOptions="actionGo"
+                        android:inputType="text"
                         android:textColor="@color/circle_indicator_stroke"
                         android:textColorHint="@color/battleship_grey"
                         android:textSize="16sp" />
