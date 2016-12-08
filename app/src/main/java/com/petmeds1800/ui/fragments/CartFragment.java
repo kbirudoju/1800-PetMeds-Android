@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -81,8 +82,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     private ProgressBar mProgressBar;
 
-    private ImageButton mPayPalCheckoutButton;
-
     private ShoppingCartRecyclerViewAdapter mShoppingCartRecyclerViewAdapter;
 
     private ShoppingCartListResponse mShoppingCartListResponse;
@@ -119,7 +118,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mItemListtContainer = (LinearLayout) view.findViewById(R.id.item_list_container);
         mEmptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
-        mPayPalCheckoutButton=(ImageButton)view.findViewById(R.id.button_paypal_checkout);
+        ImageButton payPalCheckoutButton = (ImageButton) view.findViewById(R.id.button_paypal_checkout);
 
         setHasOptionsMenu(false);
 
@@ -128,7 +127,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         intentFilter.addAction(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION);
         registerIntent(intentFilter, getActivity());
 
-        mPayPalCheckoutButton.setOnClickListener(this);
+        payPalCheckoutButton.setOnClickListener(this);
         return view;
     }
 
@@ -156,7 +155,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
 
-        if (intent.getAction() == Constants.KEY_CART_FRAGMENT_INTENT_FILTER) {
+        if (intent.getAction().equals(Constants.KEY_CART_FRAGMENT_INTENT_FILTER)) {
             callmShoppingCartAPI(null);
         } else if (intent.getAction().equals(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION)) {
             checkAndSetHasOptionsMenu(intent , CartRootFragment.class.getName());
@@ -270,10 +269,11 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         Button OrderStatusLAbel = (Button) footerView.findViewById(R.id.order_status_label);
 
         OrderStatusLAbel.setVisibility(View.GONE);
-        ((EditText) mCouponCodeLayout.getEditText()).setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)
-                        && ((EditText) mCouponCodeLayout.getEditText()).getText() != null) {
+        ((EditText) mCouponCodeLayout.getEditText()).setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+
+                if (actionId == EditorInfo.IME_ACTION_GO) {
                     callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(
                             ((EditText) mCouponCodeLayout.getEditText()).getText().toString().trim(), null));
                     return true;
@@ -281,6 +281,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
                 return false;
             }
         });
+        ((EditText) mCouponCodeLayout.getEditText()).setImeOptions(EditorInfo.IME_ACTION_GO);
 
         ((EditText) mCouponCodeLayout.getEditText()).setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -378,7 +379,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             mTotalCheckOutContainer.setVisibility(View.VISIBLE);
             mItemListtContainer.setVisibility(View.VISIBLE);
             mEmptyCheckoutContainer.setVisibility(View.GONE);
-        } else if (isEmpty) {
+        } else {
             mTotalCheckOutContainer.setVisibility(View.GONE);
             mItemListtContainer.setVisibility(View.GONE);
             mEmptyCheckoutContainer.setVisibility(View.VISIBLE);
@@ -386,9 +387,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     }
 
     private void hideAllShoppingListView() {
-            mTotalCheckOutContainer.setVisibility(View.GONE);
-            mItemListtContainer.setVisibility(View.GONE);
-            mEmptyCheckoutContainer.setVisibility(View.GONE);
+        mTotalCheckOutContainer.setVisibility(View.GONE);
+        mItemListtContainer.setVisibility(View.GONE);
+        mEmptyCheckoutContainer.setVisibility(View.GONE);
     }
 
     private void callmShoppingCartAPI(Object object) {
