@@ -122,11 +122,211 @@
                 android:paddingLeft="@dimen/xlarge_margin"
                 android:paddingRight="@dimen/xlarge_margin"
                 android:paddingTop="@dimen/dp_21"
-                android:text="@string/label_billing_address"
+                android:text="@string/label_shipping_address"
                 android:textColor="@color/hint_color"
                 android:textSize="@dimen/sp_14" />
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/xlarge_margin">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/first_name_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/first_name_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_firstName"
+                        android:inputType="textCapWords|textPersonName" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/last_name_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/last_name_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_lastName"
+                        android:inputType="textCapWords|textPersonName" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/address_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/address_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_addressLine1"
+                        android:inputType="textCapWords|textPostalAddress" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/apartment_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/apartment_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_aptOrSuite"
+                        android:inputType="textPostalAddress" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/city_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/city_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_city"
+                        android:inputType="textCapWords" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/state_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/state_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_stateOrProvinceOrRegion"
+                        android:inputType="none" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/zip_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/zip_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_zipcode"
+                        android:inputType="number"
+                        android:maxLength="@integer/characterLimit_5"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/phone_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/phone_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_phoneNumber"
+                        android:inputType="phone" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/country_shipping_input"
+                    style="@style/StyledEditTextHintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
+
+                    <EditText
+                        android:id="@+id/country_shipping_edit"
+                        style="@style/StyledEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_countryName"
+                        android:inputType="none" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/large_margin"
+                android:paddingLeft="@dimen/xlarge_margin"
+                android:paddingRight="@dimen/xlarge_margin"
+                android:paddingTop="@dimen/dp_21"
+                android:text="@string/label_billing_address"
+                android:textColor="@color/hint_color"
+                android:textSize="@dimen/sp_14" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/xlarge_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/switch_same_addresses"
+                    android:text="@string/label_same_billing_shipping"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_same_addresses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/pattern_blue" />
+
+            <LinearLayout
+                android:id="@+id/container_billing_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -282,206 +482,6 @@
 
                     <EditText
                         android:id="@+id/country_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_countryName"
-                        android:inputType="none" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/large_margin"
-                android:paddingLeft="@dimen/xlarge_margin"
-                android:paddingRight="@dimen/xlarge_margin"
-                android:paddingTop="@dimen/dp_21"
-                android:text="@string/label_shipping_address"
-                android:textColor="@color/hint_color"
-                android:textSize="@dimen/sp_14" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/xlarge_margin">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@+id/switch_same_addresses"
-                    android:text="@string/label_same_billing_shipping"
-                    android:textColor="@color/grey_text"
-                    android:textSize="@dimen/sp_16" />
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/switch_same_addresses"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/pattern_blue" />
-
-            <LinearLayout
-                android:id="@+id/container_shipping_linear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="@dimen/xlarge_margin">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/first_name_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/first_name_shipping_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_firstName"
-                        android:inputType="textCapWords|textPersonName" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/last_name_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/last_name_shipping_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_lastName"
-                        android:inputType="textCapWords|textPersonName" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/address_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/address_shipping_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_addressLine1"
-                        android:inputType="textCapWords|textPostalAddress" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/apartment_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/apartment_shipping_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_aptOrSuite"
-                        android:inputType="textPostalAddress" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/city_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/city_shipping_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_city"
-                        android:inputType="textCapWords" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/state_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/state_shipping_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_stateOrProvinceOrRegion"
-                        android:inputType="none" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/zip_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/zip_shipping_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_zipcode"
-                        android:inputType="number"
-                        android:maxLength="@integer/characterLimit_5"/>
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/phone_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/phone_shipping_edit"
-                        style="@style/StyledEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/prompt_phoneNumber"
-                        android:inputType="phone" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/country_shipping_input"
-                    style="@style/StyledEditTextHintLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    app:hintTextAppearance="@style/StyledEditTextFloatingLabel">
-
-                    <EditText
-                        android:id="@+id/country_shipping_edit"
                         style="@style/StyledEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

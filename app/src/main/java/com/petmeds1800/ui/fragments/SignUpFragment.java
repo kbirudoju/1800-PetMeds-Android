@@ -139,8 +139,8 @@ public class SignUpFragment extends AbstractFragment
     @BindView(R.id.switch_same_addresses)
     SwitchCompat mSameAddressesSwitch;
 
-    @BindView(R.id.container_shipping_linear)
-    LinearLayout mShippingViewsContainer;
+    @BindView(R.id.container_billing_linear)
+    LinearLayout mBillingViewsContainer;
 
     @BindView(R.id.first_name_shipping_input)
     TextInputLayout mFirstNameShippingInput;
@@ -358,9 +358,9 @@ public class SignUpFragment extends AbstractFragment
     @OnClick(R.id.switch_same_addresses)
     public void showHideShipping() {
         if (mSameAddressesSwitch.isChecked()) {
-            mShippingViewsContainer.setVisibility(View.GONE);
+            mBillingViewsContainer.setVisibility(View.GONE);
         } else {
-            mShippingViewsContainer.setVisibility(View.VISIBLE);
+            mBillingViewsContainer.setVisibility(View.VISIBLE);
         }
     }
 
@@ -408,141 +408,141 @@ public class SignUpFragment extends AbstractFragment
             proceedSignUp = false;
         }
 
-        firstNameText = mFirstNameEdit.getText().toString().trim();
-        if (firstNameText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameInput.getId());
+        firstNameShippingText = mFirstNameShippingEdit.getText().toString().trim();
+        if (firstNameShippingText.isEmpty()) {
+            setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameShippingInput.getId());
             proceedSignUp = false;
-        } else if (!mPresenter.validateFirstName(firstNameText)) {
-            setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameInput.getId());
-            proceedSignUp = false;
-        }
-
-        lastNameText = mLastNameEdit.getText().toString().trim();
-        if (lastNameText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_last_name_required), mLastNameInput.getId());
-            proceedSignUp = false;
-        } else if (!mPresenter.validateLastName(lastNameText)) {
-            setErrorOnInput(getString(R.string.error_last_name_invalid), mLastNameInput.getId());
+        } else if (!mPresenter.validateFirstName(firstNameShippingText)) {
+            setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameShippingInput.getId());
             proceedSignUp = false;
         }
 
-        addressText = mAddressLine1Edit.getText().toString().trim();
-        if (addressText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_address_required), mAddressLine1Input.getId());
+        lastNameShippingText = mLastNameShippingEdit.getText().toString().trim();
+        if (lastNameShippingText.isEmpty()) {
+            setErrorOnInput(getString(R.string.error_last_name_required), mLastNameShippingInput.getId());
             proceedSignUp = false;
-        } else if (!mPresenter.validateAddress(addressText)) {
-            setErrorOnInput(getString(R.string.error_address_invalid), mAddressLine1Input.getId());
-            proceedSignUp = false;
-        }
-
-        apartmentText = mApartmentEdit.getText().toString().trim();
-
-        cityText = mCityEdit.getText().toString().trim();
-        if (cityText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_city_required), mCityInput.getId());
-            proceedSignUp = false;
-        } else if (!mPresenter.validateCity(cityText)) {
-            setErrorOnInput(getString(R.string.error_city_invalid), mCityInput.getId());
+        } else if (!mPresenter.validateLastName(lastNameShippingText)) {
+            setErrorOnInput(getString(R.string.error_last_name_invalid), mLastNameShippingInput.getId());
             proceedSignUp = false;
         }
 
-        stateText = mStateEdit.getText().toString().trim();
-        if (stateText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_state_required), mStateInput.getId());
+        addressShippingText = mAddressLine1ShippingEdit.getText().toString().trim();
+        if (addressShippingText.isEmpty()) {
+            setErrorOnInput(getString(R.string.error_address_required), mAddressLine1ShippingInput.getId());
+            proceedSignUp = false;
+        } else if (!mPresenter.validateAddress(addressShippingText)) {
+            setErrorOnInput(getString(R.string.error_address_invalid), mAddressLine1ShippingInput.getId());
             proceedSignUp = false;
         }
 
-        zipText = mZipEdit.getText().toString().trim();
-        if (zipText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_zip_required), mZipInput.getId());
+        apartmentShippingText = mApartmentShippingEdit.getText().toString().trim();
+
+        cityShippingText = mCityShippingEdit.getText().toString().trim();
+        if (cityShippingText.isEmpty()) {
+            setErrorOnInput(getString(R.string.error_city_required), mCityShippingInput.getId());
             proceedSignUp = false;
-        } else if (!mPresenter.validatePostalCode(zipText)) {
-            setErrorOnInput(getString(R.string.error_zip_invalid), mZipInput.getId());
+        } else if (!mPresenter.validateCity(cityShippingText)) {
+            setErrorOnInput(getString(R.string.error_city_invalid), mCityShippingInput.getId());
             proceedSignUp = false;
         }
 
-        phoneText = mPhoneEdit.getText().toString().trim();
-        if (phoneText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_phone_required), mPhoneInput.getId());
-            proceedSignUp = false;
-        } else if (!mPresenter.validatePhoneNumber(phoneText)) {
-            setErrorOnInput(getString(R.string.error_phone_invalid), mPhoneInput.getId());
+        stateShippingText = mStateShippingEdit.getText().toString().trim();
+        if (stateShippingText.isEmpty()) {
+            setErrorOnInput(getString(R.string.error_state_required), mStateShippingInput.getId());
             proceedSignUp = false;
         }
 
-        countryText = mCountryEdit.getText().toString().trim();
-        if (countryText.isEmpty()) {
-            setErrorOnInput(getString(R.string.error_country_required), mCountryInput.getId());
+        zipShippingText = mZipShippingEdit.getText().toString().trim();
+        if (zipShippingText.isEmpty()) {
+            setErrorOnInput(getString(R.string.error_zip_required), mZipShippingInput.getId());
+            proceedSignUp = false;
+        } else if (!mPresenter.validatePostalCode(zipShippingText)) {
+            setErrorOnInput(getString(R.string.error_zip_invalid), mZipShippingInput.getId());
             proceedSignUp = false;
         }
 
-        if (mShippingViewsContainer.getVisibility() == View.VISIBLE) {
+        phoneShippingText = mPhoneShippingEdit.getText().toString().trim();
+        if (phoneShippingText.isEmpty()) {
+            setErrorOnInput(getString(R.string.error_phone_required), mPhoneShippingInput.getId());
+            proceedSignUp = false;
+        } else if (!mPresenter.validatePhoneNumber(phoneShippingText)) {
+            setErrorOnInput(getString(R.string.error_phone_invalid), mPhoneShippingInput.getId());
+            proceedSignUp = false;
+        }
 
-            firstNameShippingText = mFirstNameShippingEdit.getText().toString().trim();
-            if (firstNameShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameShippingInput.getId());
+        countryShippingText = mCountryShippingEdit.getText().toString().trim();
+        if (countryShippingText.isEmpty()) {
+            setErrorOnInput(getString(R.string.error_country_required), mCountryShippingInput.getId());
+            proceedSignUp = false;
+        }
+
+        if (mBillingViewsContainer.getVisibility() == View.VISIBLE) {
+
+            firstNameText = mFirstNameEdit.getText().toString().trim();
+            if (firstNameText.isEmpty()) {
+                setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameInput.getId());
                 proceedSignUp = false;
-            } else if (!mPresenter.validateFirstName(firstNameShippingText)) {
-                setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameShippingInput.getId());
+            } else if (!mPresenter.validateFirstName(firstNameText)) {
+                setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameInput.getId());
                 proceedSignUp = false;
             }
 
-            lastNameShippingText = mLastNameShippingEdit.getText().toString().trim();
-            if (lastNameShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_last_name_required), mLastNameShippingInput.getId());
+            lastNameText = mLastNameEdit.getText().toString().trim();
+            if (lastNameText.isEmpty()) {
+                setErrorOnInput(getString(R.string.error_last_name_required), mLastNameInput.getId());
                 proceedSignUp = false;
-            } else if (!mPresenter.validateLastName(lastNameShippingText)) {
-                setErrorOnInput(getString(R.string.error_last_name_invalid), mLastNameShippingInput.getId());
-                proceedSignUp = false;
-            }
-
-            addressShippingText = mAddressLine1ShippingEdit.getText().toString().trim();
-            if (addressShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_address_required), mAddressLine1ShippingInput.getId());
-                proceedSignUp = false;
-            } else if (!mPresenter.validateAddress(addressShippingText)) {
-                setErrorOnInput(getString(R.string.error_address_invalid), mAddressLine1ShippingInput.getId());
+            } else if (!mPresenter.validateLastName(lastNameText)) {
+                setErrorOnInput(getString(R.string.error_last_name_invalid), mLastNameInput.getId());
                 proceedSignUp = false;
             }
 
-            apartmentShippingText = mApartmentShippingEdit.getText().toString().trim();
-
-            cityShippingText = mCityShippingEdit.getText().toString().trim();
-            if (cityShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_city_required), mCityShippingInput.getId());
+            addressText = mAddressLine1Edit.getText().toString().trim();
+            if (addressText.isEmpty()) {
+                setErrorOnInput(getString(R.string.error_address_required), mAddressLine1Input.getId());
                 proceedSignUp = false;
-            } else if (!mPresenter.validateCity(cityShippingText)) {
-                setErrorOnInput(getString(R.string.error_city_invalid), mCityShippingInput.getId());
+            } else if (!mPresenter.validateAddress(addressText)) {
+                setErrorOnInput(getString(R.string.error_address_invalid), mAddressLine1Input.getId());
                 proceedSignUp = false;
             }
 
-            stateShippingText = mStateShippingEdit.getText().toString().trim();
-            if (stateShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_state_required), mStateShippingInput.getId());
+            apartmentText = mApartmentEdit.getText().toString().trim();
+
+            cityText = mCityEdit.getText().toString().trim();
+            if (cityText.isEmpty()) {
+                setErrorOnInput(getString(R.string.error_city_required), mCityInput.getId());
+                proceedSignUp = false;
+            } else if (!mPresenter.validateCity(cityText)) {
+                setErrorOnInput(getString(R.string.error_city_invalid), mCityInput.getId());
                 proceedSignUp = false;
             }
 
-            zipShippingText = mZipShippingEdit.getText().toString().trim();
-            if (zipShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_zip_required), mZipShippingInput.getId());
-                proceedSignUp = false;
-            } else if (!mPresenter.validatePostalCode(zipShippingText)) {
-                setErrorOnInput(getString(R.string.error_zip_invalid), mZipShippingInput.getId());
+            stateText = mStateEdit.getText().toString().trim();
+            if (stateText.isEmpty()) {
+                setErrorOnInput(getString(R.string.error_state_required), mStateInput.getId());
                 proceedSignUp = false;
             }
 
-            phoneShippingText = mPhoneShippingEdit.getText().toString().trim();
-            if (phoneShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_phone_required), mPhoneShippingInput.getId());
+            zipText = mZipEdit.getText().toString().trim();
+            if (zipText.isEmpty()) {
+                setErrorOnInput(getString(R.string.error_zip_required), mZipInput.getId());
                 proceedSignUp = false;
-            } else if (!mPresenter.validatePhoneNumber(phoneShippingText)) {
-                setErrorOnInput(getString(R.string.error_phone_invalid), mPhoneShippingInput.getId());
+            } else if (!mPresenter.validatePostalCode(zipText)) {
+                setErrorOnInput(getString(R.string.error_zip_invalid), mZipInput.getId());
                 proceedSignUp = false;
             }
 
-            countryShippingText = mCountryEdit.getText().toString().trim();
-            if (countryShippingText.isEmpty()) {
-                setErrorOnInput(getString(R.string.error_country_required), mCountryShippingInput.getId());
+            phoneText = mPhoneEdit.getText().toString().trim();
+            if (phoneText.isEmpty()) {
+                setErrorOnInput(getString(R.string.error_phone_required), mPhoneInput.getId());
+                proceedSignUp = false;
+            } else if (!mPresenter.validatePhoneNumber(phoneText)) {
+                setErrorOnInput(getString(R.string.error_phone_invalid), mPhoneInput.getId());
+                proceedSignUp = false;
+            }
+
+            countryText = mCountryEdit.getText().toString().trim();
+            if (countryText.isEmpty()) {
+                setErrorOnInput(getString(R.string.error_country_required), mCountryInput.getId());
                 proceedSignUp = false;
             }
         }
@@ -608,21 +608,20 @@ public class SignUpFragment extends AbstractFragment
                                 mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
                             }
                             if (mSameAddressesSwitch.isChecked()) {
-                                firstNameShippingText = firstNameText;
-                                lastNameShippingText = lastNameText;
-                                addressShippingText = addressText;
-                                apartmentShippingText = apartmentText;
-                                cityShippingText = cityText;
-                                stateShippingText = stateText;
-                                zipShippingText = zipText;
-                                countryShippingText = countryText;
-                                phoneShippingText = phoneText;
+                                firstNameText = firstNameShippingText;
+                                lastNameText = lastNameShippingText;
+                                addressText = addressShippingText;
+                                apartmentText = apartmentShippingText;
+                                cityText = cityShippingText;
+                                stateText = stateShippingText;
+                                zipText = zipShippingText;
+                                countryText = countryShippingText;
+                                phoneText = phoneShippingText;
                             }
                             return mApiService.signUp(new SignUpRequest(emailText, confirmEmailText, passwordText,
-                                    confirmPasswordText, firstNameText, lastNameText, addressText, apartmentText,
-                                    cityText, stateText, zipText, countryText, phoneText, firstNameShippingText,
-                                    lastNameShippingText, addressShippingText, apartmentShippingText, cityShippingText,
-                                    stateShippingText, zipShippingText, countryShippingText, phoneShippingText,
+                                    confirmPasswordText, firstNameShippingText, lastNameShippingText, addressShippingText, apartmentShippingText, cityShippingText,
+                                    stateShippingText, zipShippingText, countryShippingText, phoneShippingText,firstNameText, lastNameText, addressText, apartmentText,
+                                    cityText, stateText, zipText, countryText, phoneText,
                                     sessionConfNumber))
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
@@ -702,48 +701,48 @@ public class SignUpFragment extends AbstractFragment
         mConfirmEmailInput.setError(null);
         mPasswordInput.setError(null);
         mConfirmPasswordInput.setError(null);
-        mFirstNameInput.setError(null);
-        mLastNameInput.setError(null);
-        mAddressLine1Input.setError(null);
-        mCityInput.setError(null);
-        mStateInput.setError(null);
-        mZipInput.setError(null);
-        mPhoneInput.setError(null);
-        mCountryInput.setError(null);
+        mFirstNameShippingInput.setError(null);
+        mLastNameShippingInput.setError(null);
+        mAddressLine1ShippingInput.setError(null);
+        mCityShippingInput.setError(null);
+        mStateShippingInput.setError(null);
+        mZipShippingInput.setError(null);
+        mPhoneShippingInput.setError(null);
+        mCountryShippingInput.setError(null);
 
         mEmailInput.clearFocus();
         mConfirmEmailInput.clearFocus();
         mPasswordInput.clearFocus();
         mConfirmPasswordInput.clearFocus();
-        mFirstNameInput.clearFocus();
-        mLastNameInput.clearFocus();
-        mAddressLine1Input.clearFocus();
-        mApartmentInput.clearFocus();
-        mCityInput.clearFocus();
-        mStateInput.clearFocus();
-        mZipInput.clearFocus();
-        mPhoneInput.clearFocus();
-        mCountryInput.clearFocus();
+        mFirstNameShippingInput.clearFocus();
+        mLastNameShippingInput.clearFocus();
+        mAddressLine1ShippingInput.clearFocus();
+        mApartmentShippingInput.clearFocus();
+        mCityShippingInput.clearFocus();
+        mStateShippingInput.clearFocus();
+        mZipShippingInput.clearFocus();
+        mPhoneShippingInput.clearFocus();
+        mCountryShippingInput.clearFocus();
 
-        if (mShippingViewsContainer.getVisibility() == View.VISIBLE) {
-            mFirstNameShippingInput.setError(null);
-            mLastNameShippingInput.setError(null);
-            mAddressLine1ShippingInput.setError(null);
-            mCityShippingInput.setError(null);
-            mStateShippingInput.setError(null);
-            mZipShippingInput.setError(null);
-            mPhoneShippingInput.setError(null);
-            mCountryShippingInput.setError(null);
+        if (mBillingViewsContainer.getVisibility() == View.VISIBLE) {
+            mFirstNameInput.setError(null);
+            mLastNameInput.setError(null);
+            mAddressLine1Input.setError(null);
+            mCityInput.setError(null);
+            mStateInput.setError(null);
+            mZipInput.setError(null);
+            mPhoneInput.setError(null);
+            mCountryInput.setError(null);
 
-            mFirstNameShippingInput.clearFocus();
-            mLastNameShippingInput.clearFocus();
-            mAddressLine1ShippingInput.clearFocus();
-            mApartmentShippingInput.clearFocus();
-            mCityShippingInput.clearFocus();
-            mStateShippingInput.clearFocus();
-            mZipShippingInput.clearFocus();
-            mPhoneShippingInput.clearFocus();
-            mCountryShippingInput.clearFocus();
+            mFirstNameInput.clearFocus();
+            mLastNameInput.clearFocus();
+            mAddressLine1Input.clearFocus();
+            mApartmentInput.clearFocus();
+            mCityInput.clearFocus();
+            mStateInput.clearFocus();
+            mZipInput.clearFocus();
+            mPhoneInput.clearFocus();
+            mCountryInput.clearFocus();
         }
     }
 
