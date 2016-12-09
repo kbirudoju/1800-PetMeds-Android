@@ -11,6 +11,8 @@ import com.petmeds1800.api.RxCallAdapterFactoryWithErrorHandling;
 import com.petmeds1800.dagger.scopes.AppScope;
 import com.petmeds1800.util.Constants;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Named;
 
 import dagger.Module;
@@ -45,7 +47,10 @@ public class RestModule {
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addNetworkInterceptor(interceptor);
+            builder.addNetworkInterceptor(interceptor)
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(40, TimeUnit.SECONDS)
+                    .readTimeout(40, TimeUnit.SECONDS);
 
         }
         return builder.cookieJar(cookieJar).build();
