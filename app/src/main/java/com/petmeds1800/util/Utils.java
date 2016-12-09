@@ -266,6 +266,9 @@ public class Utils {
         if (e instanceof HttpException) {
             Map<String, List<String>> map = ((HttpException) e).response().headers().toMultimap();
 
+            if (!map.containsKey("set-cookie")){
+                return;
+            }
             List<String> cookiesList = map.get("set-cookie");
 
             String cookieName;
@@ -301,16 +304,10 @@ public class Utils {
             builder.name("JSESSIONID");
             builder.value(cookieValue);
             builder.domain("dev.1800petmeds.com"); //TODO update the domain
-
             Cookie jsessionCookie = builder.build();
-
             updatedCookieCache.add(jsessionCookie);
-
-
             cookieCache.clear();
             cookieCache.addAll(updatedCookieCache);
-
-
         }
     }
 }

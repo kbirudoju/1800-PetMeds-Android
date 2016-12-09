@@ -130,7 +130,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
     @Override
     public void start() {
-//        getWidgetListData();
+        getWidgetListData();
     }
 
     private List<Object> formatWidgetData(ArrayList<Widget> widgetData) {
