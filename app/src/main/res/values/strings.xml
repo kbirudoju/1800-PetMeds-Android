@@ -254,7 +254,7 @@
     <string name="hint_pet_picture">Pet Picture</string>
     <string name="hint_owner_name">Owner Name</string>
     <string name="hint_pet_type">Type of Pet</string>
-    <string name="hint_pet_breed">Type of Breed</string>
+    <string name="hint_pet_breed">Breed</string>
     <string name="hint_pet_gender">Pet Gender</string>
     <string name="hint_pet_age">Pet Age</string>
     <string name="male_txt">Male</string>
