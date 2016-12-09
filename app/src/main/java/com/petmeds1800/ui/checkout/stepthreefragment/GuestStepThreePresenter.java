@@ -1,8 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import android.support.v4.app.Fragment;
-import android.util.Log;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.PayPalCheckoutRequest;
@@ -11,11 +8,15 @@ import com.petmeds1800.model.entities.AddEditCardResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.CardRequest;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
+import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
+
+import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -68,7 +69,7 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("error",e.getLocalizedMessage());
+                        Log.d("error", e.getLocalizedMessage());
                         mView.onPayPalError(e.getLocalizedMessage());
 
                     }
@@ -76,16 +77,143 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
                     @Override
                     public void onNext(Response<String> s) {
                         Log.d("response", s + ">>>");
-                        String loactionHeader=s.headers().get("Location");
-                        if(loactionHeader==null || loactionHeader.isEmpty()){
+                        String loactionHeader = s.headers().get("Location");
+                        if (loactionHeader == null || loactionHeader.isEmpty()) {
                             mView.onPayPalError("");
-                        }else{
+                        } else {
                             mView.onSuccess(loactionHeader);
                         }
 
                     }
                 });
     }
+
+    @Override
+    public void getDefaultBillingAddress(final String sessionNumber) {
+        mPetMedsApiService.getSecurityStatus()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<SecurityStatusResponse, Observable<AddAddressResponse>>() {
+                    @Override
+                    public Observable<AddAddressResponse> call(SecurityStatusResponse securityStatusResponse) {
+                        int securityStatus = securityStatusResponse.getSecurityStatus();
+                        if (securityStatus == 2) {
+                            return mPetMedsApiService
+                                    .getDefaultBillingAddress(sessionNumber)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeOn(Schedulers.io());
+                        } else if (securityStatus == 4 || securityStatus == 5) {
+                            return Observable.<AddAddressResponse>just(null);
+                        } else {
+                            return Observable.error(new Throwable("Please try again"));
+                        }
+                    }
+
+                })
+                .subscribe(new Subscriber<AddAddressResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId != 0) {
+                            mView.showErrorCrouton(((Fragment) mView).getString(errorId), false);
+                        }
+                    }
+
+                    @Override
+                    public void onNext(AddAddressResponse addAddressResponse) {
+                        if (addAddressResponse != null) {
+                            if (addAddressResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                                if (mView.isActive()) {
+                                    mView.onDefaultBillingAddressSuccess(addAddressResponse);
+                                }
+                            } else {
+                                if (mView.isActive()) {
+                                    mView.showErrorCrouton(addAddressResponse.getStatus().getErrorMessages().get(0),
+                                            false);
+                                }
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.hideProgressDailog();
+                            }
+                        }
+                    }
+                });
+    }
+
+
+    private Observable<AddEditCardResponse> addOrUpdateCard(CardRequest cardRequest,
+            UpdateCardRequest updateCardRequest) {
+        //identify whether its a card add request or update card request
+        return (cardRequest != null) ? mPetMedsApiService.addPaymentCard(cardRequest)
+                : mPetMedsApiService.updateCard(updateCardRequest);
+    }
+
+    @Override
+    public void applyCreditPaymentMethodOnDefaultBillingAddress(CardRequest cardRequest,
+            UpdateCardRequest updateCardRequest) {
+        addOrUpdateCard(cardRequest, updateCardRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<AddEditCardResponse, Observable<ShoppingCartListResponse>>() {
+                    @Override
+                    public Observable<ShoppingCartListResponse> call(AddEditCardResponse addEditCardResponse) {
+
+                        if (addEditCardResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            //create a GuestPaymentRequest
+                            CreditCardPaymentMethodRequest creditCardPaymentMethodRequest =
+                                    new CreditCardPaymentMethodRequest(
+                                            addEditCardResponse.getCard().getId()
+                                            , addEditCardResponse.getCard().getBillingAddress().getRepositoryId()
+                                            , mPreferencesHelper.getSessionConfirmationResponse()
+                                            .getSessionConfirmationNumber()
+                                    );
+
+                            return mPetMedsApiService.applyCreditCardPaymentMethod(creditCardPaymentMethodRequest)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeOn(Schedulers.io());
+                        } else {
+                            mView.showErrorCrouton(addEditCardResponse.getStatus().getErrorMessages().get(0), false);
+                            return null;
+                        }
+
+                    }
+                })
+                .subscribe(new Subscriber<ShoppingCartListResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId != 0) {
+                            mView.showErrorCrouton(((Fragment) mView).getString(errorId), false);
+                        }
+                    }
+
+                    @Override
+                    public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
+                        if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.onSuccessCreditCardPayment(shoppingCartListResponse);
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.showErrorCrouton(shoppingCartListResponse.getStatus().getErrorMessages().get(0),
+                                        false);
+                            }
+                        }
+                    }
+                });
+    }
+
     @Override
     public void applyCreditCardPaymentMethod(AddressRequest addressRequest, final CardRequest cardRequest, final
     UpdateCardRequest updateCardRequest) {

@@ -1,16 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
@@ -30,8 +19,21 @@ import com.petmeds1800.ui.checkout.CommunicationFragment;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -45,7 +47,11 @@ import butterknife.OnClick;
  * Created by Abhinav on 27-09-2016.
  */
 
-public class GuestStepThreeRootFragment extends AbstractFragment implements GuestStepThreeRootContract.View,CompoundButton.OnCheckedChangeListener, CheckOutActivity.PaypalErrorListener {
+public class GuestStepThreeRootFragment extends AbstractFragment
+        implements GuestStepThreeRootContract.View, CompoundButton.OnCheckedChangeListener,
+        CheckOutActivity.PaypalErrorListener {
+
+    private static final String SECURITY_STATUS = "securityStatus";
 
     @BindView(R.id.newPaymentMethod)
     Button mNewPaymentMethod;
@@ -58,6 +64,9 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
     @BindView(R.id.stepThreeContainerLayout)
     RelativeLayout mContainerLayout;
 
+    @BindView(R.id.billingAddressfragment)
+    FrameLayout mBillingAddressfragment;
+
     private ShoppingCartListResponse mShoppingCartListResponse;
 
     private Address mAddress;
@@ -68,7 +77,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
     private String mStepName;
 
-    private GuestStepThreePresenter mPresenter;
+    private GuestStepThreeRootContract.Presenter mPresenter;
 
     private Card mCard;
 
@@ -80,12 +89,17 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
     private PaymentGroups mPaymentGroup;
 
+    private boolean isDefaultBillingAddress;
+
+    private String mAddressId;
+
     public static GuestStepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
-                                                         String stepName) {
+            String stepName, int securityStatus) {
         GuestStepThreeRootFragment f = new GuestStepThreeRootFragment();
         Bundle args = new Bundle();
         args.putSerializable(CartFragment.SHOPPING_CART, shoppingCartListResponse);
         args.putString(CheckOutActivity.STEP_NAME, stepName);
+        args.putInt(SECURITY_STATUS, securityStatus);
         f.setArguments(args);
         return f;
     }
@@ -99,33 +113,41 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
     }
 
+    private void showFingerprintDialog() {
+        FingerprintAuthenticationDialog authenticationDialog = new FingerprintAuthenticationDialog();
+        if (!authenticationDialog.isAdded()) {
+            authenticationDialog.setCancelable(false);
+            authenticationDialog.show(getActivity().getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter = new GuestStepThreePresenter(this);
         activity.setToolBarTitle(getString(R.string.payment_method_header));
         mShoppingCartListResponse = (ShoppingCartListResponse) getArguments()
                 .getSerializable(CartFragment.SHOPPING_CART);
         mStepName = getArguments().getString(CheckOutActivity.STEP_NAME);
         activity.setLastCompletedSteps(mStepName);
         activity.setActiveStep(mStepName);
-
-
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step_three_checkout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
         ButterKnife.bind(this, view);
-
         mNewPaymentMethod.setVisibility(View.GONE);
-
         if (((CheckOutActivity) getActivity()).getApplicableSteps() == 4) {
             mShippingNavigator.setText(getString(R.string.review_submit_navigator_button_title));
         }
-
+        activity.showProgress();
+        //Fetch defaultBillingAddress when security status equals 2
+        mPresenter.getDefaultBillingAddress(
+                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         populateAddress();
         populatePaymentGroup();
         mPaypalCheckbox.setOnCheckedChangeListener(this);
@@ -169,16 +191,14 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter = new GuestStepThreePresenter(this);
 
         //add the creditCardFragment
         //check if a payment method is present
-        if(mPaymentGroup == null) {
+        if (mPaymentGroup == null) {
             replaceStepRootChildFragment(
                     AddGuestCardFragment.newInstance(),
                     R.id.creditCardDetailFragment);
-        }
-        else {
+        } else {
             replaceStepRootChildFragment(
                     AddGuestCardFragment.newInstance(mPaymentGroup),
                     R.id.creditCardDetailFragment);
@@ -188,7 +208,8 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
         replaceStepRootChildFragment(
                 AddGuestCardFragment.newInstance(),
                 R.id.creditCardDetailFragment);
-        replaceStepRootChildFragment(AddEditAddressFragment.newInstance(mAddress, GuestStepThreeRootFragment.REQUEST_CODE),
+        replaceStepRootChildFragment(
+                AddEditAddressFragment.newInstance(mAddress, GuestStepThreeRootFragment.REQUEST_CODE),
                 R.id.billingAddressfragment);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
@@ -200,15 +221,6 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
         return isAdded();
     }
 
-    @Override
-    public void onSuccessAddressAddition(AddAddressResponse addAddressResponse) {
-
-    }
-
-    @Override
-    public void onSuccessCreditCardAddition(Object response) {
-        activity.hideProgress();
-    }
 
     @Override
     public void onError(String errorMessage) {
@@ -225,32 +237,32 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
     @OnClick(R.id.shippingNavigator)
     public void onShippingNavigatorClick() {
         //TODO call the presenter to first save the address and then card and then apply both of them
-        AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager().findFragmentById(R.id.creditCardDetailFragment);
+        AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager()
+                .findFragmentById(R.id.creditCardDetailFragment);
 
         AddressRequest addressRequest;
-        if(addGuestCardFragment != null) {
-            if( addGuestCardFragment.checkAndShowError()) {
+        if (addGuestCardFragment != null) {
+            if (addGuestCardFragment.checkAndShowError()) {
 
-                AddEditAddressFragment addEditAddressFragment = (AddEditAddressFragment) getChildFragmentManager().findFragmentById(R.id.billingAddressfragment);
-                if(addEditAddressFragment != null) {
-                    if(addEditAddressFragment.validateFields()) {
+                AddEditAddressFragment addEditAddressFragment = (AddEditAddressFragment) getChildFragmentManager()
+                        .findFragmentById(R.id.billingAddressfragment);
+                if (addEditAddressFragment != null) {
+                    if (addEditAddressFragment.validateFields()) {
                         addEditAddressFragment.initializeGuestAddressRequest();
                         addressRequest = addEditAddressFragment.getAddressRequest();
 
                         //check if its a addCard request or update card depending on the availablity of the paymentCardKey
-                        if(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey() == null ||
+                        if (mShoppingCartListResponse.getShoppingCart().getPaymentCardKey() == null ||
                                 mShoppingCartListResponse.getShoppingCart().getPaymentCardKey().isEmpty()) {
 
                             CardRequest cardRequest = addGuestCardFragment.getCard();
-
-                            mPresenter.applyCreditCardPaymentMethod(addressRequest , cardRequest , null);
+                            performAddCreditCardOperation(addressRequest, cardRequest);
                             activity.showProgress();
-                        }
-                        else {
+                        } else {
                             //pass the cardKey and get the updated card request
-                            UpdateCardRequest updateCardRequest = addGuestCardFragment.getUpdatedCard(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey());
-
-                            mPresenter.applyCreditCardPaymentMethod(addressRequest , null , updateCardRequest);
+                            UpdateCardRequest updateCardRequest = addGuestCardFragment
+                                    .getUpdatedCard(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey());
+                            performUpdateCreditCardOperation(addressRequest, updateCardRequest);
                             activity.showProgress();
                         }
 
@@ -261,11 +273,44 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
 
     }
 
+    private void performUpdateCreditCardOperation(AddressRequest addressRequest, UpdateCardRequest updateCardRequest) {
+        if (isDefaultBillingAddress) {
+            updateCardRequest.setBillingAddressId(mAddressId);
+            mPresenter.applyCreditPaymentMethodOnDefaultBillingAddress(null, updateCardRequest);
+        } else {
+            mPresenter.applyCreditCardPaymentMethod(addressRequest, null, updateCardRequest);
+        }
+    }
+
+    private void performAddCreditCardOperation(AddressRequest addressRequest, CardRequest cardRequest) {
+        if (isDefaultBillingAddress) {
+            cardRequest.setBillingAddressId(mAddressId);
+            mPresenter.applyCreditPaymentMethodOnDefaultBillingAddress(cardRequest, null);
+        } else {
+            mPresenter.applyCreditCardPaymentMethod(addressRequest, cardRequest, null);
+        }
+    }
+
     @Override
     public void onSuccessCreditCardPayment(ShoppingCartListResponse response) {
         activity.hideProgress();
         activity.moveToNext(mStepName, response);
 
+    }
+
+    @Override
+    public void onDefaultBillingAddressSuccess(AddAddressResponse addAddressResponse) {
+        activity.hideProgress();
+        if (addAddressResponse != null && addAddressResponse.getProfileAddress() != null) {
+            Address profileAddress = addAddressResponse.getProfileAddress();
+            isDefaultBillingAddress = profileAddress.getIsDefaultBillingAddress();
+            mAddressId = profileAddress.getAddressId();
+            if (isDefaultBillingAddress) {
+                mBillingAddressfragment.setVisibility(View.GONE);
+            } else {
+                showFingerprintDialog();
+            }
+        }
     }
 
     @Override
@@ -323,5 +368,10 @@ public class GuestStepThreeRootFragment extends AbstractFragment implements Gues
             Utils.displayCrouton(getActivity(), errorMsg, mContainerLayout);
 
         }
+    }
+
+    @Override
+    public void hideProgressDailog() {
+        activity.hideProgress();
     }
 }

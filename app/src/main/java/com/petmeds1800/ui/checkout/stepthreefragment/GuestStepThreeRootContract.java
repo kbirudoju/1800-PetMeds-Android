@@ -18,20 +18,16 @@ public class GuestStepThreeRootContract {
     interface View extends BaseView<Presenter> {
 
         boolean isActive();
-
-        void onSuccessAddressAddition(AddAddressResponse addAddressResponse);
-
-        void onSuccessCreditCardAddition(Object response);
-
         void onError(String errorMessage);
 
         void showErrorCrouton(CharSequence message, boolean span);
 
         void onSuccessCreditCardPayment(ShoppingCartListResponse response);
-
+        void onDefaultBillingAddressSuccess(AddAddressResponse addAddressResponse);
 //        void setAddress(Address address);
-void onSuccess(String url);
+        void onSuccess(String url);
         void onPayPalError(String errorMsg);
+        void hideProgressDailog();
     }
 
     interface Presenter extends BasePresenter{
@@ -39,6 +35,9 @@ void onSuccess(String url);
         void applyCreditCardPaymentMethod(AddressRequest addressRequest, CardRequest cardRequest,
                 UpdateCardRequest updateCardRequest);
         void checkoutPayPal(PayPalCheckoutRequest request);
+        void getDefaultBillingAddress(String sessionNumber);
+        void applyCreditPaymentMethodOnDefaultBillingAddress(CardRequest cardRequest,
+                UpdateCardRequest updateCardRequest);
 
 //        void extractAddress(ArrayList<ShippingGroups> shippingGroupses);
     }
