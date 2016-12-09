@@ -404,4 +404,8 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/checkout/CheckoutActor/orderReceipt")
     Observable<CommitOrderResponse> getCommitedOrderDetails(@Query("orderId") String orderId);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @GET("/rest/model/1800petmeds/contact/ContactActor/defaultBillingAddress")
+    Observable<AddAddressResponse> getDefaultBillingAddress(@Query("_dynSessConf") String sessionConfirmation);
 }

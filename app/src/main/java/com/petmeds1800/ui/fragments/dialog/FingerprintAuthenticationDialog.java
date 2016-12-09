@@ -1,5 +1,21 @@
 package com.petmeds1800.ui.fragments.dialog;
 
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ForgotPasswordRequest;
+import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,22 +38,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ForgotPasswordRequest;
-import com.petmeds1800.model.entities.ForgotPasswordResponse;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -134,7 +134,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fingerprint_container, container, false);
         ButterKnife.bind(this, view);
         mPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -170,7 +170,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
         } else if (mStage == Stage.LOGIN) {
             hideKeyboard(mEmailEdit);
             doLogin(mPreferencesHelper.getLoginEmail(), null, false);
-        } else if (mStage == Stage.FORGOT_PASSWORD && mSecondDialogButton.getText().toString().equals(getString(R.string.label_send_email))) {
+        } else if (mStage == Stage.FORGOT_PASSWORD && mSecondDialogButton.getText().toString()
+                .equals(getString(R.string.label_send_email))) {
             sendForgotPasswordEmail();
         } else {
             gotoLogin();
@@ -201,12 +202,17 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     }
 
     private void navigateToHome() {
-        ((HomeActivity) getActivity()).getViewPager().setCurrentItem(0);
+        if (getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).getViewPager().setCurrentItem(0);
+        } else {
+            getActivity().finish();
+        }
     }
 
     private void authenticateFingerprint() {
 
-        if (RxFingerprint.isUnavailable(getActivity()) || !mPreferencesHelper.getIsFingerPrintEnabled() || mPreferencesHelper.getLoginEmail() == null) {
+        if (RxFingerprint.isUnavailable(getActivity()) || !mPreferencesHelper.getIsFingerPrintEnabled()
+                || mPreferencesHelper.getLoginEmail() == null) {
             mStage = Stage.LOGIN;
             updateStage();
             return;
@@ -244,7 +250,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                                         .setImageDrawable(ContextCompat
                                                 .getDrawable(getActivity(), R.drawable.ic_fingerprint_success));
                                 mFingerprintStatus.setText(getString(R.string.label_fingerprint_recognized));
-                                doLogin(mPreferencesHelper.getLoginEmail(), mPreferencesHelper.getLoginPassword(), true);
+                                doLogin(mPreferencesHelper.getLoginEmail(), mPreferencesHelper.getLoginPassword(),
+                                        true);
                                 break;
                         }
                     }
@@ -509,17 +516,20 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                                     mPreferencesHelper.setLoginEmail(loginResponse.getProfile().getEmail());
                                     mPreferencesHelper.setLoginPassword(passwordText);
                                     if (getArguments() != null && getArguments().getBoolean(FROM_PUSH)) {
-                                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_AUTHENTICATION_SUCCESS));
+                                        LocalBroadcastManager.getInstance(getActivity())
+                                                .sendBroadcast(new Intent(Constants.KEY_AUTHENTICATION_SUCCESS));
                                     }
                                     if (getArguments() != null && getArguments().getBoolean(Constants.IS_REFILL_NOTIFICATION)) {
                                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.INTENT_FILTER_REFILL_NOTIFICATION));
                                     }
                                     // Update the count on Shopping Cart TAB since user has logged out
-                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
+                                    LocalBroadcastManager.getInstance(getActivity())
+                                            .sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
 
                                     dismiss();
                                 } else {
-                                    showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)), true);
+                                    showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),
+                                            true);
                                     if (isLoginAfterFingerprintAuth) {
                                         mPreferencesHelper.setLoginEmail(null);
                                         mPreferencesHelper.setLoginPassword(null);
