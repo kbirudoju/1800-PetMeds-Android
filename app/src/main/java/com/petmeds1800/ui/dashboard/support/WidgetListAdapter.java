@@ -399,7 +399,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case RECOMMENDATION_VIEW_MORE_PRODUCT:
                 RecommendationMoreViewHolder moreViewHolder = (RecommendationMoreViewHolder) holder;
                 Category category = (Category) getItemAt(position);
-                moreViewHolder.seeMoreLabel.setText(mContext.getString(R.string.see_all_txt) + category.getDisplayName() + " " + mContext.getString(R.string.products_txt));
+                moreViewHolder.seeMoreLabel.setText(mContext.getString(R.string.see_all_txt) +" " +category.getDisplayName() + " " + mContext.getString(R.string.products_txt));
                 moreViewHolder.seeMoreLabel.setTag(category);
                 break;
             case TIP_VIEW_TYPE:
