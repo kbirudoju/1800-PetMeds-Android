@@ -181,8 +181,8 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                             final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment()
                                     .newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(),
                                             getString(R.string.cancel_order_title),
-                                            getString(R.string.dialog_ok_button),
-                                            getString(R.string.dialog_cancel_button));
+                                            getString(R.string.dialog_yes_button),
+                                            getString(R.string.dialog_no_button));
                             okCancelDialogFragment.show(((AbstractActivity) getActivity()).getSupportFragmentManager());
                             okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
                                 @Override

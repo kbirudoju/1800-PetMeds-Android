@@ -33,6 +33,8 @@
     <string name="dialog.cancel_button">Cancel</string>
     <string name="dialog.deny_button">Deny</string>
     <string name="dialog.allow_button">Allow</string>
+    <string name="dialog.yes_button">Yes</string>
+    <string name="dialog.no_button">No</string>
     <string name="dialog.logout_button">Logout</string>
     <string name="internet_not_available">Please check your internet connection or Try again later</string>
     <string name="permission.storage_rationale">The permission to write into the external storage is needed to save the
