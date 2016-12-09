@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.checkout;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
@@ -121,18 +122,27 @@ public class StepTwoPresenter implements StepTwoContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
-                        if (e.getMessage().contains("Conflict")) { //TODO need to change it
-                            renewSessionConfirmationNumber();
+
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("StepTwoPresenter", "retrying after session renew");
+                            mShippingMethodsRequest.setDynSessConf(
+                                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                            applyShippingMethods();
+
+                            return;
+
                         }
-                        else if (errorId != 0) {
-                            if (mView.isActive()){
+
+                        //check for other errors
+                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                        if (errorId != 0) {
+                            if (mView.isActive()) {
                                 mView.showErrorCrouton(((Fragment) mView).getString(errorId), false);
                                 mView.hideActivityProgress();
                             }
-                        }
-                        else {
-                            if (mView.isActive()){
+                        } else {
+                            if (mView.isActive()) {
                                 mView.showErrorCrouton(e.getLocalizedMessage(), false);
                                 mView.hideActivityProgress();
                             }
@@ -156,31 +166,6 @@ public class StepTwoPresenter implements StepTwoContract.Presenter {
                 });
     }
 
-    private void renewSessionConfirmationNumber() {
-        mApiService.getSessionConfirmationNumber()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<SessionConfNumberResponse>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.hideActivityProgress();
-                    }
-
-                    @Override
-                    public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
-                        String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                        if (sessionConfNumber != null) {
-                            mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                            applyShippingMethods();
-
-                        }
-
-                    }
-                });
-    }
     @Override
     public void start() {
 

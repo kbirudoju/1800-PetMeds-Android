@@ -34,6 +34,7 @@ public interface StepTwoContract {
         void onSuccessShippingMethodsApplied(ShoppingCartListResponse shoppingCartListResponse);
 
         void onErrorShippingMethodsApplied(String error);
+
     }
 
     interface Presenter extends BasePresenter {

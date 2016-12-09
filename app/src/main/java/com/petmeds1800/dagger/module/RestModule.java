@@ -7,6 +7,7 @@ import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.api.RxCallAdapterFactoryWithErrorHandling;
 import com.petmeds1800.dagger.scopes.AppScope;
 import com.petmeds1800.util.Constants;
 
@@ -70,7 +71,7 @@ public class RestModule {
     public Retrofit provideRetrofit(final OkHttpClient client) {
         final Retrofit.Builder builder = new Retrofit.Builder()
                 .client(client)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(new RxCallAdapterFactoryWithErrorHandling())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(mEndpoint);
@@ -84,7 +85,7 @@ public class RestModule {
     public Retrofit provideRetrofitForRedirectOffClient(@Named(Constants.TAG_REDIRECT_OFF) final OkHttpClient client) {
         final Retrofit.Builder builder = new Retrofit.Builder()
                 .client(client)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(new RxCallAdapterFactoryWithErrorHandling())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(mEndpoint);

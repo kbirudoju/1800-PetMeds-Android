@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.NameValueData;
 import com.petmeds1800.ui.AbstractActivity;
@@ -26,10 +28,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import okhttp3.Cookie;
+import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Created by pooja on 8/27/2016.
@@ -253,5 +260,57 @@ public class Utils {
         URI uri = new URI(url);
         String domain = uri.getHost();
         return domain.startsWith("www.") ? domain.substring(4) : domain;
+    }
+
+    public static void getAndUpdateNewCookie(Throwable e , SetCookieCache cookieCache) {
+        if (e instanceof HttpException) {
+            Map<String, List<String>> map = ((HttpException) e).response().headers().toMultimap();
+
+            List<String> cookiesList = map.get("set-cookie");
+
+            String cookieName;
+            String cookieValue = null;
+
+            for (String eachCookie : cookiesList) {
+                if (eachCookie.contains("JSESSIONID")) {
+                    String[] rawCookieParams = eachCookie.split(";");
+                    String[] rawCookieNameAndValue = rawCookieParams[0].split("=");
+                    if (rawCookieNameAndValue.length != 2) {
+                        Log.d("errorRetreivingCookie", "missing name and value");
+                    }
+
+                    cookieName = rawCookieNameAndValue[0].trim();
+                    cookieValue = rawCookieNameAndValue[1].trim();
+
+                    break;
+                }
+            }
+
+            //remove the old JSESSIONID
+            ArrayList<Cookie> updatedCookieCache = new ArrayList<Cookie>();
+
+            for (Iterator<Cookie> iterator = cookieCache.iterator(); iterator.hasNext(); ) {
+                Cookie cookie = iterator.next();
+                if ( ! cookie.name().equals("JSESSIONID")) {
+                    updatedCookieCache.add(cookie);
+                }
+            }
+
+            //insert the valid JsessionID
+            Cookie.Builder builder = new Cookie.Builder();
+            builder.name("JSESSIONID");
+            builder.value(cookieValue);
+            builder.domain("dev.1800petmeds.com"); //TODO update the domain
+
+            Cookie jsessionCookie = builder.build();
+
+            updatedCookieCache.add(jsessionCookie);
+
+
+            cookieCache.clear();
+            cookieCache.addAll(updatedCookieCache);
+
+
+        }
     }
 }
