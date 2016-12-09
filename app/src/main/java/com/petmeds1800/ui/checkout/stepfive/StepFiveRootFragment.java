@@ -29,6 +29,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -297,13 +298,13 @@ public class StepFiveRootFragment extends AbstractFragment
                     break;
                 case R.id.petVetEdit:
                     //determine whether payment was done using paypal as it would help us to decide whether to consider
-                    if (mApplicableSteps.size() == SIZE_FOUR && ! mPaymentMethod.getPaymentType().equalsIgnoreCase(getString(R.string.label_credit_card))) {
+                    if (mApplicableSteps.size() == SIZE_FOUR && !mPaymentMethod.getPaymentType()
+                            .equalsIgnoreCase(getString(R.string.label_credit_card))) {
                         //petvet step is at index 2
                         markAsUnselected(CheckOutActivity.STEP_THREE, CheckOutActivity.SUBMIT_N_REVIEW);
                         activity.startNextStep(mApplicableSteps.get(CheckOutActivity.STEP_THREE),
                                 mShoppingCartListResponse);
-                    }
-                    else { // petvet step is at index 3
+                    } else { // petvet step is at index 3
                         markAsUnselected(CheckOutActivity.STEP_FOUR, CheckOutActivity.SUBMIT_N_REVIEW);
                         activity.startNextStep(mApplicableSteps.get(CheckOutActivity.STEP_FOUR),
                                 mShoppingCartListResponse);
@@ -332,11 +333,10 @@ public class StepFiveRootFragment extends AbstractFragment
             mApplicableSteps = checkoutSteps.getApplicableSteps();
         }
 
-
         if (mOrder != null) {
             Locale locale = getResources().getConfiguration().locale;
             mSubTotalValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getOrderSubTotal()));
-            mOfferCodeValue.setText(MINUS_SIGN  + DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getDiscount()));
+            mOfferCodeValue.setText(MINUS_SIGN + DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getDiscount()));
             mShippingValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getShippingTotal()));
             mTaxesValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getTaxTotal()));
             mTotalValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getOrderTotal()));
@@ -363,6 +363,7 @@ public class StepFiveRootFragment extends AbstractFragment
                                     + mPaymentMethod.getExpirationMonth() + FORWARD_SLASH + mPaymentMethod
                                     .getExpirationyear());
                 } else {
+
                     mPaymentMethodDetailsText.setText(R.string.label_paypal);
                     mPaymentMethodEdit.setVisibility(View.GONE);
                 }
@@ -372,15 +373,14 @@ public class StepFiveRootFragment extends AbstractFragment
 
         }
 
-        if (mApplicableSteps != null){
+        if (mApplicableSteps != null) {
 
-            if((mApplicableSteps.size() == SIZE_THREE)) {
+            if ((mApplicableSteps.size() == SIZE_THREE)) {
                 mPetVetContainer.setVisibility(View.GONE);
-            }
-            else if (mApplicableSteps.size() == SIZE_FOUR && mPaymentMethod.getPaymentType().equalsIgnoreCase(getString(R.string.label_credit_card))) {
+            } else if (mApplicableSteps.size() == SIZE_FOUR && mPaymentMethod.getPaymentType()
+                    .equalsIgnoreCase(getString(R.string.label_credit_card))) {
                 mPetVetContainer.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 mPresenter.populatePetVetInfo((ArrayList<Item>) mOrder.getItems(), mApplicableSteps);
             }
         }
@@ -422,7 +422,11 @@ public class StepFiveRootFragment extends AbstractFragment
 
     @Override
     public void setPetVetInfo(String petVetInfo) {
-        mPetVetDetailsText.setText(petVetInfo);
+        if (TextUtils.isEmpty(petVetInfo)) {
+            mPetVetContainer.setVisibility(View.GONE);
+        } else {
+            mPetVetDetailsText.setText(petVetInfo);
+        }
     }
 
     @Override
@@ -446,7 +450,8 @@ public class StepFiveRootFragment extends AbstractFragment
                 .set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         commitOrderRequest.setCommerceItemIds(mReviewSubmitAdapter.getCommerceItemsIdList());
         commitOrderRequest.setReminderMonths(mReviewSubmitAdapter.getReorderMonthsIdList());
-        mPresenter.submitComittedOrderDetails(commitOrderRequest , mShoppingCartListResponse.getShoppingCart().getShoppingCartId());
+        mPresenter.submitComittedOrderDetails(commitOrderRequest,
+                mShoppingCartListResponse.getShoppingCart().getShoppingCartId());
     }
 
     @Override
