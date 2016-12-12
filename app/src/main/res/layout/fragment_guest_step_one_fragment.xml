@@ -41,9 +41,6 @@
                 android:gravity="left|center_vertical"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingRight="@dimen/dp_24"
-                android:text="@string/label_returning_user_login"
-                android:textColor="@color/petmeds_blue"
-                android:textStyle="bold"
                 android:textAllCaps="false" />
 
             <TextView

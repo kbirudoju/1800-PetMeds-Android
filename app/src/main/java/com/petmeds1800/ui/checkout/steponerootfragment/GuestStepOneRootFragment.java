@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.Spanned;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -247,6 +249,11 @@ public class GuestStepOneRootFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        int blackColor = ContextCompat.getColor(getContext(), R.color.black);
+        int petmedsBlueColor = ContextCompat.getColor(getContext(), R.color.petmeds_blue);
+        mLoginNavigator.setText(Html.fromHtml("<font color="+blackColor+">" + getString(R.string.label_returning_user)+" " + "<b></font>" + "<font color="+petmedsBlueColor+">" + getString(R.string.label_login_here) + "</font></b>"));
+
         replaceStepRootChildFragment(
                 AddEditAddressFragment.newInstance(mAddress, GuestStepOneRootFragment.REQUEST_CODE),
                 R.id.billingAddressfragment);
