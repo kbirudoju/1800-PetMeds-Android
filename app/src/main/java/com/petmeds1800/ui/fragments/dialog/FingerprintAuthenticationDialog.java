@@ -151,9 +151,9 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
             return;
         } else if (mStage == Stage.FINGERPRINT) {
             navigateToHome();
-        } else if (mStage == Stage.LOGIN && mPreferencesHelper.getLoginEmail() == null) {
+        } else if (mStage == Stage.LOGIN && mPreferencesHelper.getLoginPassword() == null) {
             navigateToHome();
-        } else if (mStage == Stage.LOGIN && mPreferencesHelper.getIsFingerPrintEnabled()) {
+        } else if (mStage == Stage.LOGIN && mPreferencesHelper.getIsFingerPrintEnabled() && mPreferencesHelper.getLoginPassword() != null) {
             mStage = Stage.FINGERPRINT;
             updateStage();
             return;
@@ -212,7 +212,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     private void authenticateFingerprint() {
 
         if (RxFingerprint.isUnavailable(getActivity()) || !mPreferencesHelper.getIsFingerPrintEnabled()
-                || mPreferencesHelper.getLoginEmail() == null) {
+                || mPreferencesHelper.getLoginPassword() == null) {
             mStage = Stage.LOGIN;
             updateStage();
             return;

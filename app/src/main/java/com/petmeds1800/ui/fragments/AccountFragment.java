@@ -393,6 +393,9 @@ public class AccountFragment extends AbstractFragment
 
     @Override
     public void onSuccess() {
+        mPreferencesHelper.setIsUserLoggedIn(false);
+        mPreferencesHelper.setLoginEmail(null);
+        mPreferencesHelper.setLoginPassword(null);
         ((HomeActivity) getActivity()).hideProgress();
 
 //        Update cart on signout

@@ -197,16 +197,14 @@ public class GuestStepOneRootPresentor implements GuestStepOneRootContract.Prese
                                @Override
                                public void onNext(ShoppingCartListResponse shoppingCartListResponse) {
                                    if (shoppingCartListResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
-                                       if(shippingAddressRequest.getPassword()!=null){
-                                           mPreferencesHelper.setIsUserLoggedIn(true);
-                                           mPreferencesHelper.setLoginEmail(shippingAddressRequest.getEmail());
-                                           mPreferencesHelper.setLoginPassword(shippingAddressRequest.getPassword());
-                                       }
+                                       mPreferencesHelper.setIsUserLoggedIn(true);
+                                       mPreferencesHelper.setLoginEmail(shippingAddressRequest.getEmail());
+                                       mPreferencesHelper.setLoginPassword(shippingAddressRequest.getPassword());
                                        if (mView.isActive()) {
                                            mView.navigateOnSuccess(shoppingCartListResponse);
                                        }
                                    } else if (shoppingCartListResponse.getStatus().getCode().equals(API_WARNING_CODE)) {
-                                       if(mView.isActive()) {
+                                       if (mView.isActive()) {
                                            mView.showWarningView(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
                                            mView.hideProgress();
                                        }
