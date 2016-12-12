@@ -489,11 +489,10 @@ public class HomeActivity extends AbstractActivity
                         int securityStatus = securityStatusResponse.getSecurityStatus();
                         Log.i("security status:", securityStatus + "");
                         //TODO: improvement
-                        if (securityStatus == 0 || securityStatus
-                                == 2) {  // We need to treat security status 2 same as 0 as all the API on AccountSection stopped working if we would treat 2 same as 4
+                        if (securityStatus == 0) {  // We need to treat security status 2 same as 0 as all the API on AccountSection stopped working if we would treat 2 same as 4
                             showFingerprintDialog();
                         } else if (securityStatus == 4 || securityStatus
-                                == 5) { //As per backend team, security status 4 or 5 should be treated similarly
+                                == 5 || securityStatus == 2) { //As per backend team, security status 4 or 5 should be treated similarly
                             //TODO: research more into silent sign in logic
                             mAccountRootFragment.showAccountFragment();
                         }
