@@ -51,12 +51,12 @@ public class GuestStepThreeRootFragment extends AbstractFragment
         implements GuestStepThreeRootContract.View, CompoundButton.OnCheckedChangeListener,
         CheckOutActivity.PaypalErrorListener {
 
+    public final static int REQUEST_CODE = 8;
+
     private static final String SECURITY_STATUS = "securityStatus";
 
     @BindView(R.id.newPaymentMethod)
     Button mNewPaymentMethod;
-
-    public final static int REQUEST_CODE = 8;
 
     @BindView(R.id.shippingNavigator)
     Button mShippingNavigator;
@@ -66,6 +66,12 @@ public class GuestStepThreeRootFragment extends AbstractFragment
 
     @BindView(R.id.billingAddressfragment)
     FrameLayout mBillingAddressfragment;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
+    @BindView(R.id.payPalCheckBox)
+    CheckBox mPaypalCheckbox;
 
     private ShoppingCartListResponse mShoppingCartListResponse;
 
@@ -80,12 +86,6 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     private GuestStepThreeRootContract.Presenter mPresenter;
 
     private Card mCard;
-
-    @Inject
-    GeneralPreferencesHelper mPreferencesHelper;
-
-    @BindView(R.id.payPalCheckBox)
-    CheckBox mPaypalCheckbox;
 
     private PaymentGroups mPaymentGroup;
 
@@ -113,11 +113,13 @@ public class GuestStepThreeRootFragment extends AbstractFragment
 
     }
 
-    private void showFingerprintDialog() {
+    @Override
+    public void showFingerprintDialog() {
+        isDefaultBillingAddress = false;
         FingerprintAuthenticationDialog authenticationDialog = new FingerprintAuthenticationDialog();
         if (!authenticationDialog.isAdded()) {
             authenticationDialog.setCancelable(false);
-            authenticationDialog.show(getActivity().getSupportFragmentManager(), "FingerprintAuthenticationDialog");
+            authenticationDialog.show(getActivity().getSupportFragmentManager(), "FingerprintAuthenticationDialog" );
         }
     }
 
@@ -301,15 +303,11 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     @Override
     public void onDefaultBillingAddressSuccess(AddAddressResponse addAddressResponse) {
         activity.hideProgress();
-        if (addAddressResponse != null && addAddressResponse.getProfileAddress() != null) {
-            Address profileAddress = addAddressResponse.getProfileAddress();
-            isDefaultBillingAddress = profileAddress.getIsDefaultBillingAddress();
-            mAddressId = profileAddress.getAddressId();
-            if (isDefaultBillingAddress) {
-                mBillingAddressfragment.setVisibility(View.GONE);
-            } else {
-                showFingerprintDialog();
-            }
+        Address profileAddress = addAddressResponse.getProfileAddress();
+        isDefaultBillingAddress = profileAddress.getIsDefaultBillingAddress();
+        mAddressId = profileAddress.getAddressId();
+        if (isDefaultBillingAddress) {
+            mBillingAddressfragment.setVisibility(View.GONE);
         }
     }
 
@@ -354,7 +352,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         activity.showProgress();
-        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout");
+        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout" );
         mPresenter.checkoutPayPal(payPalCheckoutRequest);
     }
 

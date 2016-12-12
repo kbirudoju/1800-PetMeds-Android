@@ -76,10 +76,10 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
 
                     @Override
                     public void onNext(Response<String> s) {
-                        Log.d("response", s + ">>>");
-                        String loactionHeader = s.headers().get("Location");
+                        Log.d("response", s + ">>>" );
+                        String loactionHeader = s.headers().get("Location" );
                         if (loactionHeader == null || loactionHeader.isEmpty()) {
-                            mView.onPayPalError("");
+                            mView.onPayPalError("" );
                         } else {
                             mView.onSuccess(loactionHeader);
                         }
@@ -105,7 +105,7 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
                         } else if (securityStatus == 4 || securityStatus == 5) {
                             return Observable.<AddAddressResponse>just(null);
                         } else {
-                            return Observable.error(new Throwable("Please try again"));
+                            return Observable.error(new Throwable("Please try again" ));
                         }
                     }
 
@@ -129,7 +129,11 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
                         if (addAddressResponse != null) {
                             if (addAddressResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 if (mView.isActive()) {
-                                    mView.onDefaultBillingAddressSuccess(addAddressResponse);
+                                    if (addAddressResponse.getProfileAddress() != null) {
+                                        mView.onDefaultBillingAddressSuccess(addAddressResponse);
+                                    }else{
+                                        mView.showFingerprintDialog();
+                                    }
                                 }
                             } else {
                                 if (mView.isActive()) {

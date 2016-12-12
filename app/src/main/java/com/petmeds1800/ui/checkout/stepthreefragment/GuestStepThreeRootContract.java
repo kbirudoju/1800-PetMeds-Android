@@ -28,6 +28,7 @@ public class GuestStepThreeRootContract {
         void onSuccess(String url);
         void onPayPalError(String errorMsg);
         void hideProgressDailog();
+        void showFingerprintDialog();
     }
 
     interface Presenter extends BasePresenter{
