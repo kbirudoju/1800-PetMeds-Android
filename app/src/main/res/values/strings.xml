@@ -388,7 +388,7 @@
 
     <!--Home Screen-->
     <string name="home_title">Home</string>
-    <string name="shop_category_title">SHOP CATEGORIES</string>
+    <string name="shop_category_title">SHOP BY CATEGORIES</string>
     <string name="label_barcode">Barcode</string>
     <string name="label_search">Search...</string>
     <string name="add_title">ADD</string>
