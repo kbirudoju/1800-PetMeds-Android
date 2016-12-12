@@ -1,14 +1,14 @@
 package com.petmeds1800.ui;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.mvp.SignupTask.DaggerSignUpComponent;
 import com.petmeds1800.mvp.SignupTask.SignUpPresenter;
 import com.petmeds1800.mvp.SignupTask.SignUpPresenterModule;
 import com.petmeds1800.ui.fragments.SignUpFragment;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 

@@ -1,12 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.learn.FeaturedFragment;
-import com.petmeds1800.ui.learn.MedConditionsFragment;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +20,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.learn.FeaturedFragment;
+import com.petmeds1800.ui.learn.MedConditionsFragment;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

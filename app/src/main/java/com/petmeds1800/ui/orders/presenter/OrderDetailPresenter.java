@@ -1,5 +1,7 @@
 package com.petmeds1800.ui.orders.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.AddToCartRequest;
@@ -8,8 +10,6 @@ import com.petmeds1800.model.ReOrderResponse;
 import com.petmeds1800.model.entities.OrderDetailResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.orders.OrderDetailContract;
-
-import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 

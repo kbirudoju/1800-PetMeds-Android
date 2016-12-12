@@ -1,5 +1,14 @@
 package com.petmeds1800.ui.medicationreminders.service;
 
+import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.Service;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.ResultReceiver;
+import android.support.annotation.Nullable;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.LoginRequest;
@@ -10,15 +19,6 @@ import com.petmeds1800.model.entities.MedicationRemindersAlarmData;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.alarm.MedicationAlarmReceiver;
-
-import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.Service;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.ResultReceiver;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 

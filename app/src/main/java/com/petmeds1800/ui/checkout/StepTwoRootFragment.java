@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.checkout;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ShippingMethod;
-import com.petmeds1800.model.entities.ShippingMethodsRequest;
-import com.petmeds1800.model.entities.ShippingMethodsResponse;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CartFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +13,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ShippingMethod;
+import com.petmeds1800.model.entities.ShippingMethodsRequest;
+import com.petmeds1800.model.entities.ShippingMethodsResponse;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CartFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

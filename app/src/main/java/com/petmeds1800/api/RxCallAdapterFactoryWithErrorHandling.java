@@ -3,7 +3,6 @@ package com.petmeds1800.api;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -15,7 +14,6 @@ import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.HttpException;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.functions.Func1;

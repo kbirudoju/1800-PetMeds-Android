@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.util.AsyncRenewSessionConfirmationNumber;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -22,11 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import javax.inject.Inject;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.util.AsyncRenewSessionConfirmationNumber;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import javax.inject.Inject;
 
 /**
  * Created by pooja on 8/4/2016.

@@ -2,14 +2,9 @@ package com.petmeds1800.ui.refillreminder.presenter;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.refillreminder.response.EasyRefillReminder;
-import com.petmeds1800.model.refillreminder.response.OrderItems;
 import com.petmeds1800.model.refillreminder.response.RefillReminderListResponse;
 import com.petmeds1800.ui.refillreminder.ReminderListContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 

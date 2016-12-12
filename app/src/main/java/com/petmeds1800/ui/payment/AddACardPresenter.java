@@ -1,5 +1,8 @@
 package com.petmeds1800.ui.payment;
 
+import android.support.v4.app.Fragment;
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.RemoveCardRequest;
@@ -10,9 +13,6 @@ import com.petmeds1800.model.entities.UpdateCardRequest;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
-
-import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import javax.inject.Inject;
 

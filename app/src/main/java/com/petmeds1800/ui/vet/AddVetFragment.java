@@ -1,18 +1,5 @@
 package com.petmeds1800.ui.vet;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.AddVetRequest;
-import com.petmeds1800.model.VetList;
-import com.petmeds1800.model.entities.Vet;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.AddNewEntityActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.vet.support.VetListSuggestionAdapter;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -31,6 +18,19 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.AddVetRequest;
+import com.petmeds1800.model.VetList;
+import com.petmeds1800.model.entities.Vet;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.AddNewEntityActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.vet.support.VetListSuggestionAdapter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 

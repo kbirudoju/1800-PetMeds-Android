@@ -1,5 +1,7 @@
 package com.petmeds1800.ui.dashboard.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -18,8 +20,6 @@ import com.petmeds1800.model.entities.WidgetListResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.RetrofitErrorHandler;
-
-import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;

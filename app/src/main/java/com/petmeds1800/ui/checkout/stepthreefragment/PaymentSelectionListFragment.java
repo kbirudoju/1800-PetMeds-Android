@@ -1,16 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.Card;
-import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.payment.AddEditCardFragment;
-import com.petmeds1800.ui.payment.SavedCardsListContract;
-import com.petmeds1800.ui.payment.SavedCardsListPresenter;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.Card;
+import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.payment.AddEditCardFragment;
+import com.petmeds1800.ui.payment.SavedCardsListContract;
+import com.petmeds1800.ui.payment.SavedCardsListPresenter;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import java.util.List;
 

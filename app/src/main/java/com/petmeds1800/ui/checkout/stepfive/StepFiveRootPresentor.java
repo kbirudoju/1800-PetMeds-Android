@@ -1,13 +1,13 @@
 package com.petmeds1800.ui.checkout.stepfive;
 
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.Item;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
-
-import android.util.Log;
 
 import java.util.ArrayList;
 

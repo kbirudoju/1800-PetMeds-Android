@@ -1,16 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CardRequest;
-import com.petmeds1800.model.entities.PaymentGroup;
-import com.petmeds1800.model.entities.UpdateCardRequest;
-import com.petmeds1800.model.shoppingcart.response.PaymentGroups;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.MonthYearPicker;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +11,16 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.UpdateCardRequest;
+import com.petmeds1800.model.shoppingcart.response.PaymentGroups;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.MonthYearPicker;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 

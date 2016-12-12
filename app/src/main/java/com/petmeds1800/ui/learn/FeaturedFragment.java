@@ -1,14 +1,5 @@
 package com.petmeds1800.ui.learn;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.ui.fragments.LearnFragment;
-import com.petmeds1800.ui.fragments.LearnRootFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,6 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.fragments.LearnFragment;
+import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.util.AnalyticsUtil;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

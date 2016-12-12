@@ -1,5 +1,11 @@
 package com.petmeds1800.ui;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
+import android.support.v7.app.AppCompatActivity;
+
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -7,13 +13,6 @@ import com.petmeds1800.intent.HomeIntent;
 import com.petmeds1800.intent.IntroIntent;
 import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.testfairy.TestFairy;
-
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
@@ -35,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TestFairy.begin(this, getString(R.string.testfairy_app_token));
+      //  TestFairy.begin(this, getString(R.string.testfairy_app_token));
 
         setContentView(R.layout.activity_splash);
         PetMedsApplication.getAppComponent().inject(this);

@@ -1,16 +1,15 @@
 package com.petmeds1800.util;
 
+import android.content.Context;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.analytics.ecommerce.Product;
 import com.google.android.gms.analytics.ecommerce.ProductAction;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CommitOrder;
 import com.petmeds1800.model.entities.Item;
-
-import android.content.Context;
 
 import java.util.List;
 

@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.vet;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.RemoveVetRequest;
-import com.petmeds1800.model.UpdateVetRequest;
-import com.petmeds1800.model.entities.Vet;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
-import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
-import com.petmeds1800.ui.vet.presenter.EditVetPresenter;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -31,6 +17,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.RemoveVetRequest;
+import com.petmeds1800.model.UpdateVetRequest;
+import com.petmeds1800.model.entities.Vet;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
+import com.petmeds1800.ui.vet.presenter.EditVetPresenter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 

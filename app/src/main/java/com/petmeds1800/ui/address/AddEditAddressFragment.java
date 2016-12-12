@@ -1,24 +1,5 @@
 package com.petmeds1800.ui.address;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.RemoveAddressRequest;
-import com.petmeds1800.model.entities.AddressRequest;
-import com.petmeds1800.model.entities.ShippingAddressRequest;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
-import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
-import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootContract;
-import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
-import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +22,25 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.RemoveAddressRequest;
+import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.model.entities.ShippingAddressRequest;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootContract;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 

@@ -1,3 +1,5 @@
+import groovy.transform.Field
+
 // This section tells Gradle where to find everything it needs.
 buildscript {
     dependencies {
@@ -7,11 +9,13 @@ buildscript {
         classpath 'com.dminc.gradle:android-release-plugin:1.0.2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.testfairy.plugins.gradle:testfairy:1.+'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
     repositories {
         mavenLocal()
         maven { url 'https://nexus.dminc-gtc.com/nexus/content/groups/public/' }
         maven { url 'https://www.testfairy.com/maven' }
+        maven { url 'https://maven.fabric.io/public' }
     }
 }
 
@@ -21,11 +25,13 @@ repositories {
     //maven { url 'http://www.bugsense.com/gradle/' }
     //Uncomment if you include facebook
     //maven { url "http://mente.github.io/facebook-api-android-aar" }
+    maven { url 'https://maven.fabric.io/public' }
 
 }
 
 // Here we're applying the plugins we want to use in the build script. 'android' is the most important.
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'com.jakewharton.hugo'
 apply plugin: 'android-release-plugin'
 apply plugin: 'com.neenbedankt.android-apt'
@@ -113,11 +119,15 @@ android {
     buildTypes {
         release {
             zipAlignEnabled true
+            buildConfigField 'Boolean', 'enableCrashlytics', 'true'
+
         }
 
         debug {
             applicationIdSuffix '.debug'
             versionNameSuffix '-SNAPSHOT'
+            buildConfigField 'Boolean', 'enableCrashlytics', 'false'
+
         }
 
         // Here we're adding a release signing profile, if we found the keystore.
@@ -134,9 +144,12 @@ android {
         // Servers
         dev {
             applicationId "com.petmeds1800.dev"
+            ext.enableCrashlytics = false
         }
         prod {
             applicationId "com.petmeds1800"
+            manifestPlaceholders = [crashlyticsApiKey: CRASHLYTICS_API_SECRET_KEY]
+
         }
     }
 
@@ -282,6 +295,9 @@ dependencies {
 
     //testfairy
     compile 'testfairy:testfairy-android-sdk:1.+@aar'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
 
 
 }
@@ -321,6 +337,9 @@ def printKeystoreInfos(File keystore, File keystorePassword) {
     println("keystorePassword exists => " + keystorePassword.exists())
     println("keystorePassword can read => " + keystorePassword.canRead())
 }
+
+@Field
+def CRASHLYTICS_API_SECRET_KEY = "c65039b5c266a0f00fba58e4df2adf34860376ae"
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'

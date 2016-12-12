@@ -1,11 +1,11 @@
 package com.petmeds1800.ui.checkout.stepfour.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.SavePetVetRequest;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-
-import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 

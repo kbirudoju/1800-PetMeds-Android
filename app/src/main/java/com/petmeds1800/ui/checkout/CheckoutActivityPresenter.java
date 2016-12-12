@@ -1,5 +1,7 @@
 package com.petmeds1800.ui.checkout;
 
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -10,8 +12,6 @@ import com.petmeds1800.model.shoppingcart.response.CommerceItems;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
-
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;

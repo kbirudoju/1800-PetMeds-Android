@@ -1,5 +1,15 @@
 package com.petmeds1800.ui.checkout.steponerootfragment;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.text.Spanned;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
@@ -14,16 +24,6 @@ import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.Spanned;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -37,7 +37,6 @@ import butterknife.OnClick;
 public class StepOneRootFragment extends AbstractFragment implements StepOneRootContract.View {
 
     public final static int REQUEST_CODE = 2;
-
     public final static String SHIPPING_ADDRESS_KEY = "shippingAddressId";
 
     @BindView(R.id.shippingNavigator)

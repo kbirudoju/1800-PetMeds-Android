@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.petmeds1800">
+
+
+
+    <application
+        android:name=".PetMedsApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/application.name"
+        android:theme="@style/application.theme">
+
+
+            <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${crashlyticsApiKey}"
+            />
+    </application>
+
+</manifest>

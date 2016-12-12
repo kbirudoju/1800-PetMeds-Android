@@ -1,14 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.intent.LoginIntent;
-import com.petmeds1800.intent.SignUpIntent;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -17,12 +8,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.intent.LoginIntent;
+import com.petmeds1800.intent.SignUpIntent;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.CookieJar;
 
 /**
  * Created by Sdixit on 08-09-2016.

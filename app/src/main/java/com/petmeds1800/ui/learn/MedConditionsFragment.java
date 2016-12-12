@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.learn;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.PetEducationCategory;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.ui.fragments.LearnFragment;
-import com.petmeds1800.ui.fragments.LearnRootFragment;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,6 +15,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.PetEducationCategory;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.fragments.LearnFragment;
+import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,12 +1,12 @@
 package com.petmeds1800.ui.account;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.SessionConfigRequest;
 import com.petmeds1800.model.entities.SignOutResponse;
-
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import javax.inject.Inject;
 

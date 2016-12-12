@@ -1,12 +1,12 @@
 package com.petmeds1800.ui.dashboard;
 
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.util.RetrofitErrorHandler;
-
-import android.util.Log;
 
 import javax.inject.Inject;
 

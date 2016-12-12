@@ -47,8 +47,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.R.id.message;
-
 /**
  * Created by Abhinav on 13/8/16.
  */

@@ -1,5 +1,8 @@
 package com.petmeds1800.ui.address;
 
+import android.support.v4.app.Fragment;
+import android.util.Log;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Country;
@@ -11,11 +14,6 @@ import com.petmeds1800.model.entities.AddAddressResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.widget.LinearLayout;
-
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 

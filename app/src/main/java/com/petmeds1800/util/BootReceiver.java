@@ -1,12 +1,12 @@
 package com.petmeds1800.util;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
-
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
 
 import javax.inject.Inject;
 
