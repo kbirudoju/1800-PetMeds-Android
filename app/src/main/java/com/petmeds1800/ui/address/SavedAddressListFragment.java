@@ -51,7 +51,7 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new SavedAddressListPresenter(this);
+        mPresenter = new SavedAddressListPresenter(this, getContext());
         setHasOptionsMenu(true);
     }
 

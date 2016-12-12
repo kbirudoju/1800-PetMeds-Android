@@ -90,7 +90,7 @@ public class AddressSelectionListFragment extends AbstractFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new SavedAddressListPresenter(this);
+        mPresenter = new SavedAddressListPresenter(this, getContext());
         Bundle bundle = getArguments();
 
         if (bundle != null) {

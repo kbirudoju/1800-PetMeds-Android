@@ -1,10 +1,13 @@
 package com.petmeds1800.ui.address;
 
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -27,8 +30,11 @@ public class SavedAddressListPresenter implements SavedAddressListContract.Prese
 
     private SavedAddressListContract.View mView;
 
-    public SavedAddressListPresenter(@NonNull SavedAddressListContract.View view) {
+    private Context mContext;
+
+    public SavedAddressListPresenter(@NonNull SavedAddressListContract.View view, Context context) {
         mView = view;
+        mContext = context;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
     }
@@ -51,7 +57,11 @@ public class SavedAddressListPresenter implements SavedAddressListContract.Prese
                         //notify about the error.It could be any type of error while getting data from the API
                         Log.e(SavedAddressListPresenter.class.getName(), e.getMessage());
                         if (mView.isActive()) {
-                            mView.showErrorMessage(e.getMessage());
+                            if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
+                                mView.showErrorMessage(mContext.getString(R.string.no_internet_caps));
+                            }else {
+                                mView.showErrorMessage(e.getLocalizedMessage());
+                            }
                         }
                     }
 
