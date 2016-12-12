@@ -128,6 +128,7 @@ public class SavedAddressListFragment extends AbstractFragment implements SavedA
     @Override
     public void showErrorMessage(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
+        errorMessage = errorMessage.equals(Utils.TIME_OUT) ? getString(R.string.internet_not_available) : errorMessage;
         Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
     }
 
