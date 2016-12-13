@@ -11,6 +11,7 @@ import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
 import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
@@ -560,10 +561,28 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     }
 
     public void showErrorCrouton(CharSequence message, boolean span) {
+        if(getActivity() instanceof HomeActivity){
+            showErrorCroutonOnHomeActivity(message, span);
+        }
+        else {
+            showErrorCroutonOnCheckoutActivity(message, span);
+        }
+
+    }
+
+    private void showErrorCroutonOnHomeActivity(CharSequence message, boolean span) {
         if (span) {
             Utils.displayCrouton(getActivity(), (Spanned) message, ((HomeActivity) getActivity()).getContainerView());
         } else {
             Utils.displayCrouton(getActivity(), (String) message, ((HomeActivity) getActivity()).getContainerView());
+        }
+    }
+
+    private void showErrorCroutonOnCheckoutActivity(CharSequence message, boolean span) {
+        if (span) {
+            Utils.displayCrouton(getActivity(), (Spanned) message, ((CheckOutActivity) getActivity()).getContainerView());
+        } else {
+            Utils.displayCrouton(getActivity(), (String) message, ((CheckOutActivity) getActivity()).getContainerView());
         }
     }
 

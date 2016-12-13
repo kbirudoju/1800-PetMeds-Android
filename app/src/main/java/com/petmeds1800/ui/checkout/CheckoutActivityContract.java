@@ -6,6 +6,8 @@ import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
 
+import android.widget.RelativeLayout;
+
 import java.util.HashMap;
 
 /**
@@ -38,6 +40,8 @@ public interface CheckoutActivityContract {
         void showErrorCrouton(CharSequence message, boolean span);
 
         void showErrorInMiddle(String errorMessage);
+
+        RelativeLayout getContainerView();
 
         boolean isActive();
 

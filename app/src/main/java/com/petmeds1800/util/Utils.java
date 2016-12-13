@@ -303,7 +303,7 @@ public class Utils {
             Cookie.Builder builder = new Cookie.Builder();
             builder.name("JSESSIONID");
             builder.value(cookieValue);
-            builder.domain("dev.1800petmeds.com"); //TODO update the domain
+            builder.domain("1800petmeds.com"); //TODO update the domain
             Cookie jsessionCookie = builder.build();
             updatedCookieCache.add(jsessionCookie);
             cookieCache.clear();

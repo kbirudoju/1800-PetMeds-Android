@@ -75,7 +75,7 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
     }
 
     @Override
-    public void initializeCheckout(HashMap<String, String> itemsDetail) {
+    public void initializeCheckout(final HashMap<String, String> itemsDetail) {
         mView.showProgress();
         mItemDetail = itemsDetail;
         //attach the session confirmation number
@@ -95,9 +95,15 @@ public class CheckoutActivityPresenter implements CheckoutActivityContract.Prese
                     public void onError(Throwable e) {
                         //error handling would be implemented once we get the details from backend team
                         Log.e("InitCheckout", e.getMessage());
-                        if(e.getMessage().contains("Conflict")) { //TODO need to change it
-                            renewSessionConfirmationNumber();
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("InitCheckout", "retrying after session renew");
+                            initializeCheckout(itemsDetail);
+
+                            return;
+
                         }
+
                         else {
                             if (mView.isActive()) {
                                 mView.showErrorCrouton(e.getMessage(), false);

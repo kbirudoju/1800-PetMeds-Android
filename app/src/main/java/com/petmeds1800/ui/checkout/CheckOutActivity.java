@@ -103,6 +103,9 @@ public class CheckOutActivity extends AbstractActivity
     @BindView(R.id.thirdContainer)
     LinearLayout mThirdContainer;
 
+    @BindView(R.id.activity_check_out)
+    RelativeLayout mRootContainer;
+
     private ArrayList<String> mApplicableSteps;
 
     private StepState mStepStates;
@@ -421,6 +424,12 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     public void showErrorInMiddle(String errorMessage) {
 
+    }
+
+    @Override
+    public RelativeLayout getContainerView(){
+
+        return mRootContainer;
     }
 
     @Override
