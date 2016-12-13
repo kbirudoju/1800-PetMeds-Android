@@ -8,6 +8,7 @@ public class Constants {
     /*WidgetTypes Constant*/
     public static final String VIEW_TYPE_BANNER = "Banner";
 
+
     public static enum RepeatFrequency {
         REPEAT_DAILY, REPEAT_WEEKLY, REPEAT_MONTHLY
     }
@@ -144,4 +145,5 @@ public class Constants {
 
     public static final String INTENT_FILTER_REFILL_NOTIFICATION = "intent_filter_refill_notification";
     public static final String IS_REFILL_NOTIFICATION="is_refill_notification";
+    public static final String SCROLL_TO_SHOP_CATEGORIES = "scroll_to_shop_categories";
 }

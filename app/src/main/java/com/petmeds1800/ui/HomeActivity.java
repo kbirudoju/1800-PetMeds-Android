@@ -1,31 +1,5 @@
 package com.petmeds1800.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -62,6 +36,32 @@ import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 import com.urbanairship.UAirship;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +76,7 @@ import rx.schedulers.Schedulers;
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
         MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,
-        CommonWebviewFragment.OnPaymentCompletedListener,RefillNotificationContract.View {
+        CommonWebviewFragment.OnPaymentCompletedListener, RefillNotificationContract.View {
 
     public static final String SETUP_HAS_OPTIONS_MENU_ACTION = "setupHasOptionsMenuAction";
 
@@ -184,7 +184,7 @@ public class HomeActivity extends AbstractActivity
         ButterKnife.bind(this);
         mAnalyticsUtil = new AnalyticsUtil();
 
-        mPresenter=new RefillNotificationPresenter(this,HomeActivity.this);
+        mPresenter = new RefillNotificationPresenter(this, HomeActivity.this);
 
         PetMedsApplication.getAppComponent().inject(this);
         //Perform operation on the first time loading of home screen
@@ -299,7 +299,7 @@ public class HomeActivity extends AbstractActivity
         mViewPager.addOnPageChangeListener(pageChangeListener);
         navigateOnReceivedNotification(screenType);
 
-        IntentFilter intentFilter=new IntentFilter(Constants.INTENT_FILTER_REFILL_NOTIFICATION);
+        IntentFilter intentFilter = new IntentFilter(Constants.INTENT_FILTER_REFILL_NOTIFICATION);
         LocalBroadcastManager.getInstance(this).registerReceiver(mLoginReceiver, intentFilter);
 
     }
@@ -384,7 +384,7 @@ public class HomeActivity extends AbstractActivity
         super.onResume();
         if (submitPressed) {
             // Pop back stack when in app notification dailog arrives
-            this.getSupportFragmentManager().popBackStackImmediate("ProgressDialog",0);
+            this.getSupportFragmentManager().popBackStackImmediate("ProgressDialog", 0);
         }
         if (mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
             if (screenType == 0 || screenType == TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT) {
@@ -524,9 +524,11 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        AddPetFragment fragment= (AddPetFragment)getSupportFragmentManager().findFragmentByTag(AddPetFragment.class.getName());
-        if(fragment!=null)
+        AddPetFragment fragment = (AddPetFragment) getSupportFragmentManager()
+                .findFragmentByTag(AddPetFragment.class.getName());
+        if (fragment != null) {
             fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -632,6 +634,10 @@ public class HomeActivity extends AbstractActivity
      */
     public void scrollViewPager(int pageNo) {
         mViewPager.setCurrentItem(pageNo);
+        Intent intent = new Intent(Constants.SCROLL_TO_SHOP_CATEGORIES);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
+
     }
 
     public int getCurrentSelectedTab() {
@@ -680,20 +686,20 @@ public class HomeActivity extends AbstractActivity
     public void onShoppingCartSuccess(ShoppingCartListResponse response) {
         CheckOutIntent checkOutIntent = new CheckOutIntent(HomeActivity.this);
         checkOutIntent.putExtra(CartFragment.SHOPPING_CART, response);
-        checkOutIntent.putExtra(CartFragment.CHECKOUT_STEPS,response.getCheckoutSteps());
+        checkOutIntent.putExtra(CartFragment.CHECKOUT_STEPS, response.getCheckoutSteps());
         startActivity(checkOutIntent);
     }
 
     @Override
     public void onShoppingCartError(String errorMsg) {
         hideProgress();
-        Utils.displayCrouton(this,  errorMsg, mContainerLayout);
+        Utils.displayCrouton(this, errorMsg, mContainerLayout);
     }
 
     @Override
     public void onHomeWidgetError(String errorMsg) {
         hideProgress();
-        Utils.displayCrouton(this,  errorMsg, mContainerLayout);
+        Utils.displayCrouton(this, errorMsg, mContainerLayout);
     }
 
     @Override

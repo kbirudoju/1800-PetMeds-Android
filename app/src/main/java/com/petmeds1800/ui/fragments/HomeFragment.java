@@ -8,6 +8,7 @@ import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.dashboard.CategoryListFragment;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
+import com.petmeds1800.util.Constants;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -61,12 +62,11 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         super.onResume();
         ((AbstractActivity) getActivity()).disableBackButton();
 
-        if(((HomeActivity)getActivity()).getCurrentSelectedTab() == 0) {
-            ((AbstractActivity)getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[0]));
+        if (((HomeActivity) getActivity()).getCurrentSelectedTab() == 0) {
+            ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[0]));
             ((AbstractActivity) getActivity()).getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
             setHasOptionsMenu(true);
-        }
-        else {
+        } else {
             ((AbstractActivity) getActivity()).getToolbar().setLogo(null);
         }
     }
@@ -82,7 +82,7 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         //start listening for optionsMenuAction
         registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
         registerIntent(new IntentFilter(HomeFragment.SELECT_WIDGET_TAB), getContext());
-
+        registerIntent(new IntentFilter(Constants.SCROLL_TO_SHOP_CATEGORIES), getActivity());
         return view;
     }
 
@@ -102,11 +102,11 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
     }
 
     @Override
-    public void replaceWebViewFragment(String url,String title) {
+    public void replaceWebViewFragment(String url, String title) {
         Bundle bundle = new Bundle();
-      //  bundle.putString(CommonWebviewFragment.TITLE_KEY, productCategory.getName());
+        //  bundle.putString(CommonWebviewFragment.TITLE_KEY, productCategory.getName());
         bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.server_endpoint) + url);
-        bundle.putString(CommonWebviewFragment.TITLE_KEY,title);
+        bundle.putString(CommonWebviewFragment.TITLE_KEY, title);
         replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
 
     }
@@ -184,7 +184,8 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
                     bundle.putString(CommonWebviewFragment.URL_KEY, url);
                     // getToolbar().setLogo(null);
                     MenuItemCompat.collapseActionView(searchMenuItem);
-                    replaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.home_root_fragment_container);
+                    replaceFragmentWithBackStack(new CommonWebviewFragment(), bundle,
+                            R.id.home_root_fragment_container);
 
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -221,10 +222,12 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         checkAndSetHasOptionsMenu(intent, HomeRootFragment.class.getName());
 
         //PETU-40. Default tab should always be first widget tab on page change
-        if(intent.getAction() != null && intent.getAction().equals(SELECT_WIDGET_TAB)) {
+        if (intent.getAction() != null && intent.getAction().equals(SELECT_WIDGET_TAB)) {
             homeViewPager.setCurrentItem(0);
         }
-
+        if (intent.getAction() != null && intent.getAction().equals(Constants.SCROLL_TO_SHOP_CATEGORIES)) {
+            homeViewPager.setCurrentItem(1);
+        }
         super.onReceivedBroadcast(context, intent);
     }
 
