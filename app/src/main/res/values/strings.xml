@@ -442,7 +442,7 @@
     <string name="payment_method_title">CHOOSE A PAYMENT METHOD</string>
     <string name="label_share">Share</string>
     <string name="label_confirmation_and_receipt">Confirmation &amp; Receipt</string>
-    <string name="label_start_new_order">START A NEW ORDER</string>
+    <string name="label_return_to_home">RETURN TO HOME</string>
     <string name="label_returning_user">Returning customer?</string>
     <string name="label_login_here">Log In here</string>
     <string name="label_create_password_optional">CREATE A PASSWORD (OPTIONAL)</string>
