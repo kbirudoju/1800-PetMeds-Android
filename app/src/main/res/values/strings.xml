@@ -341,18 +341,16 @@
 
     <string name="label_get_started">Get Started</string>
     <string name="title_shop">Shop</string>
-    <string name="description_shop">It\'s easy to find and buy what you need.</string>
+    <string name="description_shop">It\'s easy to find and buy the medications and supplies\nyour pet needs.</string>
     <string name="title_medication_reminder">Medication Reminder</string>
-    <string name="description_medication_reminder">Set notification so that your pet never\nmisses a dose of meds.
-    </string>
+    <string name="description_medication_reminder">Get notifications when it\'s time for your pet\'s meds\nso you never forget a dose.</string>
     <string name="title_find_a_pet">Find a Vet</string>
-    <string name="description_find_a_pet">Find a nearby vet using your current\nlocation or ZIP code.</string>
+    <string name="description_find_a_pet">Find nearby vets using your current location\nor ZIP code.</string>
     <string name="title_education">Education</string>
-    <string name="description_education">Learn about pet health from experts, or\nask our vet a question.</string>
-    <string name="title_ez_refill">EZ Fill</string>
-    <string name="description_ez_refill">Quickly reorder medications you\'ve\npurchased in the past.</string>
-    <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.
-    </string>
+    <string name="description_education">Gain access to expert pet care information,\nor ask our vet a question.</string>
+    <string name="title_ez_refill">Easy ReFill</string>
+    <string name="description_ez_refill">Quickly reorder your pet\'s medications\nso you never run out.</string>
+    <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.</string>
     <string name="logout_alert_title">Are you sure you want to \nlogout?</string>
     <string name="textForAccountDetails">Login or Sign Up\n to view your Account details</string>
     <string name="buttonCaptionForSignUpLabel">Don\'t have an account?
