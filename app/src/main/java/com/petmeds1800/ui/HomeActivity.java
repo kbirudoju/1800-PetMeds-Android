@@ -634,10 +634,9 @@ public class HomeActivity extends AbstractActivity
      */
     public void scrollViewPager(int pageNo) {
         mViewPager.setCurrentItem(pageNo);
+        //Sending broadcast in order to scroll to shop by category
         Intent intent = new Intent(Constants.SCROLL_TO_SHOP_CATEGORIES);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-
-
     }
 
     public int getCurrentSelectedTab() {

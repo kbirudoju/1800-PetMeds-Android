@@ -130,8 +130,10 @@ public class GuestStepThreePresenter implements GuestStepThreeRootContract.Prese
                             if (addAddressResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 if (mView.isActive()) {
                                     if (addAddressResponse.getProfileAddress() != null) {
+                                        //perform operation in case when default address is there during soft login
                                         mView.onDefaultBillingAddressSuccess(addAddressResponse);
                                     }else{
+                                        //show dialog in case when default address is not there during soft login
                                         mView.showFingerprintDialog();
                                     }
                                 }
