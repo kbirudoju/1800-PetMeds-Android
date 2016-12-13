@@ -145,5 +145,16 @@ public class Constants {
 
     public static final String INTENT_FILTER_REFILL_NOTIFICATION = "intent_filter_refill_notification";
     public static final String IS_REFILL_NOTIFICATION="is_refill_notification";
+	
+	public static final String KEY_RETRY_REQUEST = "logged_in_addedit_fragment";
+
+    public static final String REQUEST_ADD_ADDRESS = "request_add_Address";
+
+    public static final String REQUEST_UPDATE_ADDRESS = "request_update_Address";
+
+    public static final String REQUEST_REMOVE_ADDRESS = "request_remove_Address";
+
+    public static final String REQUEST_TYPE = "request_Type";
+	
     public static final String SCROLL_TO_SHOP_CATEGORIES = "scroll_to_shop_categories";
 }

@@ -522,10 +522,13 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                                     if (getArguments() != null && getArguments().getBoolean(Constants.IS_REFILL_NOTIFICATION)) {
                                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.INTENT_FILTER_REFILL_NOTIFICATION));
                                     }
+                                    if (getArguments() != null && getArguments().containsKey(Constants.REQUEST_TYPE)) {
+                                        Intent intent = new Intent(Constants.KEY_RETRY_REQUEST);
+                                        intent.putExtra(Constants.REQUEST_TYPE,getArguments().getString(Constants.REQUEST_TYPE));
+                                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                                    }
                                     // Update the count on Shopping Cart TAB since user has logged out
-                                    LocalBroadcastManager.getInstance(getActivity())
-                                            .sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
-
+                                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
                                     dismiss();
                                 } else {
                                     showErrorCrouton(Html.fromHtml(loginResponse.getStatus().getErrorMessages().get(0)),

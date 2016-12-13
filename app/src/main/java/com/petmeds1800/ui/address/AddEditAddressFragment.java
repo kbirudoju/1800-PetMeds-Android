@@ -1,6 +1,29 @@
 package com.petmeds1800.ui.address;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.model.RemoveAddressRequest;
+import com.petmeds1800.model.entities.AddressRequest;
+import com.petmeds1800.model.entities.ShippingAddressRequest;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootContract;
+import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
+import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
+
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,31 +46,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.model.RemoveAddressRequest;
-import com.petmeds1800.model.entities.AddressRequest;
-import com.petmeds1800.model.entities.ShippingAddressRequest;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.ui.checkout.steponerootfragment.GuestStepOneRootFragment;
-import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
-import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootContract;
-import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
-import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.petmeds1800.R.id.firstNameLayout;
+import static com.petmeds1800.util.Constants.KEY_RETRY_REQUEST;
+import static com.petmeds1800.util.Constants.REQUEST_ADD_ADDRESS;
+import static com.petmeds1800.util.Constants.REQUEST_REMOVE_ADDRESS;
+import static com.petmeds1800.util.Constants.REQUEST_TYPE;
+import static com.petmeds1800.util.Constants.REQUEST_UPDATE_ADDRESS;
 
 /**
  * Created by Abhinav on 13/8/16.
@@ -72,6 +81,12 @@ public class AddEditAddressFragment extends AbstractFragment
     private static final int DISMISS_APPROVAL_DIALOG = 1;
 
     private static final long APPROVAL_DIALOG_DURATION = 1000;
+
+    public static final String FROM_PUSH = "fromPush";
+
+    private static final String FINGERPRINT_AUTHENTICATION_DIALOG = "FingerprintAuthenticationDialog";
+
+
 
     @BindView(firstNameLayout)
     TextInputLayout mfirstNameLayout;
@@ -272,10 +287,11 @@ public class AddEditAddressFragment extends AbstractFragment
                 ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
             }
         } else {
-
             ((AbstractActivity) getActivity()).setToolBarTitle(getContext().getString(R.string.addAddressTitle));
-
         }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(KEY_RETRY_REQUEST);
+        registerIntent(intentFilter, getActivity());
 
         return view;
     }
@@ -612,6 +628,19 @@ public class AddEditAddressFragment extends AbstractFragment
     }
 
     @Override
+    public void openFingerprintAuthenticationDialog(String requestType) {
+        FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(FROM_PUSH, true);
+        bundle.putString(REQUEST_TYPE,requestType);
+        mAuthenticationDialog.setArguments(bundle);
+        if (!mAuthenticationDialog.isAdded()) {
+            mAuthenticationDialog.setCancelable(false);
+            mAuthenticationDialog.show(getActivity().getSupportFragmentManager(), FINGERPRINT_AUTHENTICATION_DIALOG);
+        }
+    }
+
+    @Override
     public void onValueSelected(String value, int requestCode) {
 
         switch (requestCode) {
@@ -682,10 +711,31 @@ public class AddEditAddressFragment extends AbstractFragment
                             // do nothing . We only need to make all the address fields as blank
                         }
                     }
-
                 }
                 break;
         }
+    }
 
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        super.onReceivedBroadcast(context, intent);
+
+        if (intent.getAction().equals(KEY_RETRY_REQUEST)) {
+            if (mPresenter != null){
+                if ((intent.getStringExtra(REQUEST_TYPE).equalsIgnoreCase(REQUEST_ADD_ADDRESS)) && mAddressRequest != null){
+                    mPresenter.saveAddress(mAddressRequest);
+                } else if ((intent.getStringExtra(REQUEST_TYPE).equalsIgnoreCase(REQUEST_REMOVE_ADDRESS)) && mAddress != null){
+                    mPresenter.removeAddress(new RemoveAddressRequest(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),mAddress.getAddressId()));
+                } else if ((intent.getStringExtra(REQUEST_TYPE).equalsIgnoreCase(REQUEST_UPDATE_ADDRESS))&& mAddressRequest != null){
+                    mPresenter.updateAddress(mAddressRequest);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        deregisterIntent(getActivity());
     }
 }

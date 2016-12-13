@@ -23,10 +23,16 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.petmeds1800.util.Constants.REQUEST_ADD_ADDRESS;
+import static com.petmeds1800.util.Constants.REQUEST_REMOVE_ADDRESS;
+import static com.petmeds1800.util.Constants.REQUEST_UPDATE_ADDRESS;
+
 /**
  * Created by Abhinav on 13/8/16.
  */
 public class AddAddressPresenter implements AddEditAddressContract.Presenter {
+
+    private static final String LOGGED_IN = "logged in";
 
     @Inject
     PetMedsApiService mPetMedsApiService;
@@ -75,6 +81,9 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
                                 mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
+                                if (s.getStatus().getErrorMessages().get(0).contains(LOGGED_IN)){
+                                    mView.openFingerprintAuthenticationDialog(REQUEST_ADD_ADDRESS);
+                                }
                             }
                         }
 
@@ -249,6 +258,9 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
                                 mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
+                                if (s.getStatus().getErrorMessages().get(0).toString().contains(LOGGED_IN)) {
+                                    mView.openFingerprintAuthenticationDialog(REQUEST_UPDATE_ADDRESS);
+                                }
                             }
                         }
 
@@ -290,6 +302,9 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
                                 mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
+                                if (s.getStatus().getErrorMessages().get(0).toString().contains(LOGGED_IN)) {
+                                    mView.openFingerprintAuthenticationDialog(REQUEST_REMOVE_ADDRESS);
+                                }
                             }
                         }
 

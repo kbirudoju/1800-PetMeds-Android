@@ -14,46 +14,26 @@ import android.widget.EditText;
 public interface AddEditAddressContract {
 
     interface View extends BaseView<Presenter> {
-
         boolean isActive();
-
         void addressAdded();
-
         void addressUpdated();
-
         void addressRemoved();
-
         void showErrorMessage(String errorMessage);
-
         void showErrorCrouton(CharSequence message, boolean span);
-
         boolean checkAndShowError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId);
-
         void showDeletionConfirmationDialog();
-
         void usaStatesListReceived(String[] usaStateArray);
-
         void countryListReceived(String[] countryArray);
-
-
-
+        void openFingerprintAuthenticationDialog(String RequestType);
     }
 
     interface Presenter extends BasePresenter {
-
         void saveAddress(AddressRequest card);
-
         void getUsaStatesList();
-
         String getUsaStateCode(String usaStateName);
-
         void getCountryList();
-
         String getCountryCode(String countryName);
-
         void updateAddress(AddressRequest addressRequest);
-
         void removeAddress(RemoveAddressRequest removeAddressRequest);
-
     }
 }
