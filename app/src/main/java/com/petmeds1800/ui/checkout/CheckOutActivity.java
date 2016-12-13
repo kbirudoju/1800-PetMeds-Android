@@ -340,7 +340,7 @@ public class CheckOutActivity extends AbstractActivity
 
             case 0: //step 1 "Select Shipping Address"
                 //check if the user is logged-in
-                if (mSecurityStatus == 4 || mSecurityStatus == 5) {
+                if (mSecurityStatus == 4 || mSecurityStatus == 5 || mSecurityStatus == 2) {
                     replaceCheckOutFragment(StepOneRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepOneRootFragment.class.getName(), false);
                 } else {

@@ -30,6 +30,6 @@
             android:layout_marginBottom="@dimen/dp_16"
             android:layout_marginLeft="@dimen/dp_16"
             android:layout_marginRight="@dimen/dp_16"
-            android:text="@string/label_start_new_order" />
+            android:text="@string/label_return_to_home" />
     </LinearLayout>
 </ScrollView>
