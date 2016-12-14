@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -138,9 +137,6 @@ public class SignUpFragment extends AbstractFragment
 
     @BindView(R.id.switch_same_addresses)
     SwitchCompat mSameAddressesSwitch;
-
-    @BindView(R.id.container_billing_linear)
-    LinearLayout mBillingViewsContainer;
 
     @BindView(R.id.first_name_shipping_input)
     TextInputLayout mFirstNameShippingInput;
@@ -358,10 +354,20 @@ public class SignUpFragment extends AbstractFragment
     @OnClick(R.id.switch_same_addresses)
     public void showHideShipping() {
         if (mSameAddressesSwitch.isChecked()) {
-            mBillingViewsContainer.setVisibility(View.GONE);
-        } else {
-            mBillingViewsContainer.setVisibility(View.VISIBLE);
+            copyShippingDataIntoBilling();
         }
+    }
+
+    private void copyShippingDataIntoBilling(){
+        mFirstNameEdit.setText(mFirstNameShippingEdit.getText().toString().trim());
+        mLastNameEdit.setText(mLastNameShippingEdit.getText().toString().trim());
+        mAddressLine1Edit.setText(mAddressLine1ShippingEdit.getText().toString().trim());
+        mApartmentEdit.setText(mApartmentShippingEdit.getText().toString().trim());
+        mCityEdit.setText(mCityShippingEdit.getText().toString().trim());
+        mStateEdit.setText(mStateShippingEdit.getText().toString().trim());
+        mZipEdit.setText(mZipShippingEdit.getText().toString().trim());
+        mPhoneEdit.setText(mPhoneShippingEdit.getText().toString().trim());
+        mCountryEdit.setText(mCountryShippingEdit.getText().toString().trim());
     }
 
     private void signUp() {
@@ -476,8 +482,6 @@ public class SignUpFragment extends AbstractFragment
             proceedSignUp = false;
         }
 
-        if (mBillingViewsContainer.getVisibility() == View.VISIBLE) {
-
             firstNameText = mFirstNameEdit.getText().toString().trim();
             if (firstNameText.isEmpty()) {
                 setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameInput.getId());
@@ -545,7 +549,6 @@ public class SignUpFragment extends AbstractFragment
                 setErrorOnInput(getString(R.string.error_country_required), mCountryInput.getId());
                 proceedSignUp = false;
             }
-        }
 
         if (proceedSignUp) {
             showProgress();
@@ -724,7 +727,6 @@ public class SignUpFragment extends AbstractFragment
         mPhoneShippingInput.clearFocus();
         mCountryShippingInput.clearFocus();
 
-        if (mBillingViewsContainer.getVisibility() == View.VISIBLE) {
             mFirstNameInput.setError(null);
             mLastNameInput.setError(null);
             mAddressLine1Input.setError(null);
@@ -743,7 +745,6 @@ public class SignUpFragment extends AbstractFragment
             mZipInput.clearFocus();
             mPhoneInput.clearFocus();
             mCountryInput.clearFocus();
-        }
     }
 
     @Override
