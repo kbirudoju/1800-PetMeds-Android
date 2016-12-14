@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.petmeds1800.PetMedsApplication;
@@ -86,6 +87,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     private ShoppingCartListResponse mShoppingCartListResponse;
 
+    private ScrollView mCartScrollViewContainer;
+
 
     public final Handler CartFragmentMessageHandler = new Handler() {
         @Override
@@ -113,7 +116,9 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mContainerLayoutItems.setLayoutManager(mLayoutManager);
         mContainerLayoutItems.setItemAnimator(new DefaultItemAnimator());
+        mContainerLayoutItems.setNestedScrollingEnabled(false);
 
+        mCartScrollViewContainer = (ScrollView) view.findViewById(R.id.cartScrollViewContainer);
         mTotalCheckOutContainer = (LinearLayout) view.findViewById(R.id.total_checkout_container);
         mItemListtContainer = (LinearLayout) view.findViewById(R.id.item_list_container);
         mEmptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
@@ -376,19 +381,16 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     private void toggleVisibilityShoppingList(boolean isEmpty) {
         if (!isEmpty) {
-            mTotalCheckOutContainer.setVisibility(View.VISIBLE);
-            mItemListtContainer.setVisibility(View.VISIBLE);
+            mCartScrollViewContainer.setVisibility(View.VISIBLE);
             mEmptyCheckoutContainer.setVisibility(View.GONE);
         } else {
-            mTotalCheckOutContainer.setVisibility(View.GONE);
-            mItemListtContainer.setVisibility(View.GONE);
+            mCartScrollViewContainer.setVisibility(View.GONE);
             mEmptyCheckoutContainer.setVisibility(View.VISIBLE);
         }
     }
 
     private void hideAllShoppingListView() {
-        mTotalCheckOutContainer.setVisibility(View.GONE);
-        mItemListtContainer.setVisibility(View.GONE);
+        mCartScrollViewContainer.setVisibility(View.GONE);
         mEmptyCheckoutContainer.setVisibility(View.GONE);
     }
 
@@ -459,10 +461,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
                 }
             };
             thread.start();
-
-
-
-
         }
     }
 
