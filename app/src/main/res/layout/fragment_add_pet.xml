@@ -277,7 +277,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/dialog_button_style"
-                        android:text="Medication Conditions"/>
+                        android:text="@string/medical_condition"/>
                 <TextView
                         android:layout_centerVertical="true"
                         android:layout_alignBottom="@+id/medical_condition_title"
