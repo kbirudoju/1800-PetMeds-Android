@@ -344,8 +344,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                     + "[img src=ic_quote_right/]");
                 }
 
-                recommendationViewHolder.recommendatipnTitleLabel.setText(recommendedCategory.getWidgetTitle());
-                recommendationViewHolder.recommendationPetNameLabel.setText(recommendedCategory.getPetName());
+                recommendationViewHolder.recommendatipnTitleLabel.setText(recommendedCategory.getRecommendationTitle());
+                recommendationViewHolder.recommendationPetNameLabel.setText(recommendedCategory.getWidgetTitle());
                 Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + recommendedCategory.getDoctorPictureUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(recommendationViewHolder.doctorImage) {
                     @Override
                     protected void setResource(Bitmap resource) {

@@ -174,6 +174,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
             //Add recommendation data
             if(widgetData.get(widgetCount).getWidgetType().equalsIgnoreCase(Constants.VIEW_TYPE_RECOMMENDATIONS)){
                 RecommendedCategory recommendedCategory=widgetData.get(widgetCount).getData().getRecommendedCategory();
+                recommendedCategory.setRecommendationTitle(widgetData.get(widgetCount).getData().getWidgetTitle());
                 mData.add(recommendedCategory);
                 ArrayList<RecommendedProducts> recommendedProductsList=recommendedCategory.getProductList();
                 for(int recommendedProductsCount=0;recommendedProductsCount<recommendedProductsList.size();recommendedProductsCount++){

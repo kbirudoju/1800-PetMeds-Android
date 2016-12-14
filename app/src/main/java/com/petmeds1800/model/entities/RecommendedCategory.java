@@ -17,6 +17,16 @@ public class RecommendedCategory implements Serializable{
     private String petImageUrl;
     private String doctorName;
 
+    public String getRecommendationTitle() {
+        return recommendationTitle;
+    }
+
+    public void setRecommendationTitle(String recommendationTitle) {
+        this.recommendationTitle = recommendationTitle;
+    }
+
+    private String recommendationTitle;
+
     public String getDoctorPictureUrl() {
         return doctorPictureUrl;
     }
