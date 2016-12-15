@@ -1,22 +1,5 @@
 package com.petmeds1800.ui.dashboard.support;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.BrowsingHistory;
-import com.petmeds1800.model.entities.Category;
-import com.petmeds1800.model.entities.PetItemList;
-import com.petmeds1800.model.entities.Products;
-import com.petmeds1800.model.entities.RecommendedCategory;
-import com.petmeds1800.model.entities.RecommendedProducts;
-import com.petmeds1800.model.entities.RefillItem;
-import com.petmeds1800.model.entities.SalePitch;
-import com.petmeds1800.model.entities.WhatsNextCategory;
-import com.petmeds1800.model.entities.WidgetData;
-import com.petmeds1800.model.entities.WidgetFooter;
-import com.petmeds1800.ui.dashboard.WidgetListFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -475,7 +458,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final WhatsNextViewHolder whatsNextViewHolder = (WhatsNextViewHolder) holder;
                 WhatsNextCategory whatsNextCategory = (WhatsNextCategory) getItemAt(position);
                 whatsNextViewHolder.whatsNextTitle.setText(whatsNextCategory.getDisplayName());
-                whatsNextViewHolder.subtitleWhatsNext.setText(mContext.getString(R.string.explore_txt) + " " + whatsNextCategory.getDisplayName());
+                whatsNextViewHolder.subtitleWhatsNext.setText(mContext.getString(R.string.explore_txt) + " " + whatsNextCategory.getDisplayName() +" "+ mContext.getString(R.string.products_txt));
 
                 if (whatsNextCategory.getBannerImagePath() != null) {
                     Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + whatsNextCategory.getBannerImagePath()).asBitmap().centerCrop().into(new BitmapImageViewTarget(whatsNextViewHolder.whatsNextImage) {
