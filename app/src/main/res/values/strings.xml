@@ -719,5 +719,6 @@
     <string name="label_credit_card">CreditCard</string>
 
     <string name="label_retry">Retry</string>
+    <string name="pet_image_upload_error">Pet Image failed to upload</string>
 </resources>
 

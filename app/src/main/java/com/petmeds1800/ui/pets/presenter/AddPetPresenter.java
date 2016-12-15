@@ -1,12 +1,9 @@
 package com.petmeds1800.ui.pets.presenter;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.PetImageUploadResponse;
 import com.petmeds1800.model.entities.AddPetRequest;
 import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AgeListResponse;
@@ -16,9 +13,12 @@ import com.petmeds1800.model.entities.PetMedicationResponse;
 import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
-import com.petmeds1800.model.shoppingcart.response.Status;
 import com.petmeds1800.ui.pets.support.AddPetContract;
 import com.petmeds1800.util.RetrofitErrorHandler;
+
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -339,7 +339,7 @@ public class AddPetPresenter implements AddPetContract.Presenter {
         mPetMedsApiService.uploadPetImage(petId, imageBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Status>() {
+                .subscribe(new Subscriber<PetImageUploadResponse>() {
                     @Override
                     public void onCompleted() {
 
@@ -353,21 +353,24 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(Status status) {
-                        if (status != null) {
-                            if (status.getCode() != null && status.getCode().equals(API_SUCCESS_CODE)) {
+                    public void onNext(PetImageUploadResponse petImageUploadResponse) {
+                        if (petImageUploadResponse.getStatus() != null) {
+                            if (petImageUploadResponse.getStatus().getCode() != null && petImageUploadResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 if (mView.isActive()) {
-                                    mView.onImageUplaodSuccess();
+                                    mView.onImageUploadSuccess();
                                 }
                             } else {
                                 if (mView.isActive()) {
-                                    mView.onImgaeUploadError();
+                                    mView.onImageUploadError(
+                                            petImageUploadResponse.getStatus().getErrorMessages().size() > 0 ? petImageUploadResponse.getStatus().getErrorMessages()
+                                                    .get(0) : null);
                                 }
                             }
 
                         } else {
                             if (mView.isActive()) {
-                                mView.onImgaeUploadError();
+                                mView.onImageUploadError(petImageUploadResponse.getStatus().getErrorMessages().size() > 0 ? petImageUploadResponse.getStatus().getErrorMessages()
+                                        .get(0) : null);
                             }
                         }
                     }

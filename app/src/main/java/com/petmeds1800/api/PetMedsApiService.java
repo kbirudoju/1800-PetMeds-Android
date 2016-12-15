@@ -5,6 +5,7 @@ import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.AddVetResponse;
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.PayPalCheckoutRequest;
+import com.petmeds1800.model.PetImageUploadResponse;
 import com.petmeds1800.model.ProductCategoryListResponse;
 import com.petmeds1800.model.ReOrderRequest;
 import com.petmeds1800.model.ReOrderResponse;
@@ -46,6 +47,8 @@ import com.petmeds1800.model.entities.PetMedicalConditionResponse;
 import com.petmeds1800.model.entities.PetMedicationResponse;
 import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.Profile;
+import com.petmeds1800.model.entities.PushNotificationRequest;
+import com.petmeds1800.model.entities.PushNotificationResponse;
 import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
 import com.petmeds1800.model.entities.RemoveMedicationReminderResponse;
 import com.petmeds1800.model.entities.RemovePetRequest;
@@ -394,7 +397,7 @@ public interface PetMedsApiService {
 
     @Multipart
     @POST("/petImageUpload.jsp")
-    Observable<Status> uploadPetImage( @Part("petid") RequestBody id,@Part MultipartBody.Part file);
+    Observable<PetImageUploadResponse> uploadPetImage( @Part("petid") RequestBody id,@Part MultipartBody.Part file);
 
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/reminder/ReminderActor/medReminderDetails")
@@ -408,4 +411,8 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
     @GET("/rest/model/1800petmeds/contact/ContactActor/defaultBillingAddress")
     Observable<AddAddressResponse> getDefaultBillingAddress(@Query("_dynSessConf") String sessionConfirmation);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: pmdevrestapi"})
+    @POST("/rest/model/atg/userprofiling/ProfileActor/pushNotification")
+    Observable<PushNotificationResponse> savePushNotificationFlag(@Body PushNotificationRequest pushNotificationRequest);
 }
