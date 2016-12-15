@@ -437,7 +437,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case RECOMMENDATION_VIEW_MORE_PRODUCT:
                 RecommendationMoreViewHolder moreViewHolder = (RecommendationMoreViewHolder) holder;
                 Category category = (Category) getItemAt(position);
-                moreViewHolder.seeMoreLabel.setText(mContext.getString(R.string.see_all_txt) +" " +category.getDisplayName() + " " + mContext.getString(R.string.products_txt));
+                moreViewHolder.seeMoreLabel.setText(mContext.getString(R.string.see_all_txt) +" " +category.getDisplayName());
                 moreViewHolder.seeMoreLabel.setTag(category);
                 break;
             case TIP_VIEW_TYPE:
@@ -475,7 +475,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final WhatsNextViewHolder whatsNextViewHolder = (WhatsNextViewHolder) holder;
                 WhatsNextCategory whatsNextCategory = (WhatsNextCategory) getItemAt(position);
                 whatsNextViewHolder.whatsNextTitle.setText(whatsNextCategory.getDisplayName());
-                whatsNextViewHolder.subtitleWhatsNext.setText(mContext.getString(R.string.explore_txt) + " " + whatsNextCategory.getDisplayName() + mContext.getString(R.string.products_txt));
+                whatsNextViewHolder.subtitleWhatsNext.setText(mContext.getString(R.string.explore_txt) + " " + whatsNextCategory.getDisplayName());
 
                 if (whatsNextCategory.getBannerImagePath() != null) {
                     Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + whatsNextCategory.getBannerImagePath()).asBitmap().centerCrop().into(new BitmapImageViewTarget(whatsNextViewHolder.whatsNextImage) {

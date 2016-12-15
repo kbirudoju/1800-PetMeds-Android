@@ -412,7 +412,7 @@
         <strike>%1$s</strike>
     </string>
     <string name="starts_at_txt">"Starts at "</string>
-    <string name="see_all_txt">"See All "</string>
+    <string name="see_all_txt">"See All"</string>
     <string name="products_txt">Products</string>
     <string name="due_on_txt">Due on</string>
     <string name="explore_txt">Explore</string>
