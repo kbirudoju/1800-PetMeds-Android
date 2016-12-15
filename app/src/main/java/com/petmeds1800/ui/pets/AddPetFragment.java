@@ -1,40 +1,5 @@
 package com.petmeds1800.ui.pets;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -73,6 +38,41 @@ import com.petmeds1800.util.Utils;
 import com.soundcloud.android.crop.Crop;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -274,6 +274,7 @@ public class AddPetFragment extends AbstractFragment
     private AddNewEntityActivity mCallback;
 
     private AddPetNameListener mAddPetNameListener;
+
     private String mSelectedPetType;
 
     private Uri finalUri;
@@ -326,7 +327,7 @@ public class AddPetFragment extends AbstractFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter = new AddPetPresenter(this,getActivity());
+        mPresenter = new AddPetPresenter(this, getActivity());
         setHasOptionsMenu(true);
         PetMedsApplication.getAppComponent().inject(this);
         mPetGenderText.setOnClickListener(this);
@@ -386,9 +387,10 @@ public class AddPetFragment extends AbstractFragment
                 mPresenter.populatePetAgeList();
                 break;
             case R.id.pet_picture_edit:
-               // showImageOptions();
-                   if (CropImage.isExplicitCameraPermissionRequired(getActivity())) {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+                // showImageOptions();
+                if (CropImage.isExplicitCameraPermissionRequired(getActivity())) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA},
+                            CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
                 } else {
                     CropImage.startPickImageActivity(getActivity());
                 }
@@ -402,23 +404,24 @@ public class AddPetFragment extends AbstractFragment
                 alertDailogForPicture.dismiss();
                 break;
             case R.id.remove_pet_button:
-             FragmentManager fragmentManager = getFragmentManager();
-            Bundle removePetBundle = new Bundle();
-            removePetBundle.putStringArray("options", getResources().getStringArray(R.array.remove_pet_option));
-            removePetBundle.putString("title", getString(R.string.remove_pet_title));
-            removePetBundle.putString("message", getString(R.string.remove_pet_message));
-            removePetBundle.putString("ok", getString(R.string.label_fingerprint_continue));
-            removePetBundle.putString("cancel", getString(R.string.cancelTextOnDialog));
-            GenderDialogFragment removePetDialog = new GenderDialogFragment();
-            removePetDialog.setTargetFragment(this, REMOVE_PET_REQUEST_CODE);
-            removePetDialog.setGenderSetListener(this);
-            removePetDialog.setArguments(removePetBundle);
-            removePetDialog.show(fragmentManager);
-            break;
+                FragmentManager fragmentManager = getFragmentManager();
+                Bundle removePetBundle = new Bundle();
+                removePetBundle.putStringArray("options", getResources().getStringArray(R.array.remove_pet_option));
+                removePetBundle.putString("title", getString(R.string.remove_pet_title));
+                removePetBundle.putString("message", getString(R.string.remove_pet_message));
+                removePetBundle.putString("ok", getString(R.string.label_fingerprint_continue));
+                removePetBundle.putString("cancel", getString(R.string.cancelTextOnDialog));
+                GenderDialogFragment removePetDialog = new GenderDialogFragment();
+                removePetDialog.setTargetFragment(this, REMOVE_PET_REQUEST_CODE);
+                removePetDialog.setGenderSetListener(this);
+                removePetDialog.setArguments(removePetBundle);
+                removePetDialog.show(fragmentManager);
+                break;
             case R.id.edit_pet_image:
-               // showImageOptions();
+                // showImageOptions();
                 if (CropImage.isExplicitCameraPermissionRequired(getActivity())) {
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+                    requestPermissions(new String[]{Manifest.permission.CAMERA},
+                            CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
                 } else {
                     CropImage.startPickImageActivity(getActivity());
                 }
@@ -456,8 +459,8 @@ public class AddPetFragment extends AbstractFragment
                 break;
             case R.id.breed_type_edit:
                 //  ((HomeActivity) getActivity()).showProgress();
-                mSelectedPetType=mPetTypeText.getText().toString();
-                    mPresenter.pouplatePetBreedTypeList();
+                mSelectedPetType = mPetTypeText.getText().toString();
+                mPresenter.pouplatePetBreedTypeList();
                 break;
         }
     }
@@ -529,9 +532,7 @@ public class AddPetFragment extends AbstractFragment
     }
 
 
-
-
-   @Override
+    @Override
     @SuppressLint("NewApi")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -547,70 +548,73 @@ public class AddPetFragment extends AbstractFragment
                 // request permissions and handle the result in onRequestPermissionsResult()
                 requirePermissions = true;
                 mCropImageUri = imageUri;
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
             } else {
                 CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.OVAL)
                         .start(getContext(), this);
-               // mCropImageView.setImageUriAsync(imageUri);
+                // mCropImageView.setImageUriAsync(imageUri);
 
             }
 
         }
-       if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-           CropImage.ActivityResult result = CropImage.getActivityResult(data);
-           if (resultCode == AppCompatActivity.RESULT_OK) {
-               Uri resultUri = result.getUri();
-               Log.d("imageuri", resultUri.toString()+isEditable);
-               if(isEditable){
-                   Glide.with(this).load(resultUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
-                           .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
-                       @Override
-                       protected void setResource(Bitmap resource) {
-                           RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
-                           circularBitmapDrawable.setCircular(true);
-                           mEditPetImage.setImageDrawable(circularBitmapDrawable);
-                       }
-                   });
-               }else{
-                   Glide.with(this).load(resultUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
-                           .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
-                       @Override
-                       protected void setResource(Bitmap resource) {
-                           RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
-                           circularBitmapDrawable.setCircular(true);
-                           mPetImage.setImageDrawable(circularBitmapDrawable);
-                       }
-                   });
-               }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == AppCompatActivity.RESULT_OK) {
+                finalUri = result.getUri();
+                Log.d("imageuri", finalUri.toString() + isEditable);
+                if (isEditable) {
+                    Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mEditPetImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory
+                                    .create(getActivity().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            mEditPetImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                } else {
+                    Glide.with(this).load(finalUri.toString()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(mPetImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory
+                                    .create(getActivity().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            mPetImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                }
 
-           } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-               Exception error = result.getError();
-           }
-       }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 
- /* public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        File mUri;
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case UpdateImageUtil.CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
-                    updateImageUtil.onActivityResult(requestCode, resultCode, data);
-                    break;
-                case UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE:
-                    updateImageUtil.onActivityResult(requestCode, resultCode, data);
-                    break;
-                case Crop.REQUEST_CROP:
+    /* public void onActivityResult(int requestCode, int resultCode, Intent data) {
+           super.onActivityResult(requestCode, resultCode, data);
+           File mUri;
+           if (resultCode == Activity.RESULT_OK) {
+               switch (requestCode) {
+                   case UpdateImageUtil.CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
+                       updateImageUtil.onActivityResult(requestCode, resultCode, data);
+                       break;
+                   case UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE:
+                       updateImageUtil.onActivityResult(requestCode, resultCode, data);
+                       break;
+                   case Crop.REQUEST_CROP:
 
-                    handleCrop(resultCode, data);
+                       handleCrop(resultCode, data);
 
-                    break;
-                default:
-                    break;
-            }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-        }
-    }*/
+                       break;
+                   default:
+                       break;
+               }
+           } else if (resultCode == Activity.RESULT_CANCELED) {
+           }
+       }*/
 //TODO Remove code after QA approval of new cropping library
     protected void handleCrop(int resultCode, Intent result) {
         if (resultCode == Activity.RESULT_OK) {
@@ -681,7 +685,8 @@ public class AddPetFragment extends AbstractFragment
             isValidPetName = checkAndShowError(mPetNameText, mPetNameInputLayout, R.string.error_petname);
             isValidOwnerName = checkAndShowError(mOwnerNameText, mOwnerNameInputLayout, R.string.error_petowner);
             isValidPetType = checkAndShowError(mPetTypeText, mPetTypeInputLayout, R.string.error_pettype);
-            isValidBreedType = checkAndShowBreedError(mBreedTypeText, mBreedInputLayout, R.string.error_petbreed,mPetTypeText.getText().toString());
+            isValidBreedType = checkAndShowBreedError(mBreedTypeText, mBreedInputLayout, R.string.error_petbreed,
+                    mPetTypeText.getText().toString());
             isValidGender = checkAndShowError(mPetGenderText, mGenderInputLayout, R.string.error_petgender);
             isValidWeight = checkAndShowError(mPetWeight, mWeightInputLayout, R.string.error_validweight);
             isValidAge = checkAndShowError(mPetAgeText, mAgeInputLayout, R.string.error_petage, mPetBirthdayText);
@@ -818,15 +823,13 @@ public class AddPetFragment extends AbstractFragment
         progressBar.setVisibility(View.GONE);
         Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
 
-
-
-     //   Snackbar.make(mPetWeight, errorMessage, Snackbar.LENGTH_LONG).show();
+        //   Snackbar.make(mPetWeight, errorMessage, Snackbar.LENGTH_LONG).show();
 
     }
 
     public void showPetMedicalData(String title, List list) {
         //two activities HomeActivity and AddNewEntity are
-        if(getActivity() instanceof HomeActivity){
+        if (getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).hideProgress();
         }
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -904,19 +907,21 @@ public class AddPetFragment extends AbstractFragment
     @Override
     public void populatePetBreedTypeData(PetBreedTypeListResponse response) {
         ArrayList<String> list = new ArrayList<String>();
-        if(mSelectedPetType==null ||mSelectedPetType.isEmpty()){
+        if (mSelectedPetType == null || mSelectedPetType.isEmpty()) {
             for (BreedItem data : response.getBreeds()) {
-                    list.add(data.getValue());
+                list.add(data.getValue());
             }
-        }else {
+        } else {
             for (BreedItem data : response.getBreeds()) {
-                if (data.getType().equalsIgnoreCase(mSelectedPetType))
+                if (data.getType().equalsIgnoreCase(mSelectedPetType)) {
                     list.add(data.getValue());
+                }
             }
         }
         String dataArray[] = new String[list.size()];
-        if(dataArray.length>0)
+        if (dataArray.length > 0) {
             openDailog(list.toArray(dataArray), BREED_REQUEST, getActivity().getString(R.string.choose_breed_title));
+        }
     }
 
     @Override
@@ -993,19 +998,21 @@ public class AddPetFragment extends AbstractFragment
     }
 
     @Override
-    public boolean checkAndShowBreedError(EditText auditEditText, TextInputLayout auditTextInputLayout, int errorStringId,String petType) {
-       if(petType.equalsIgnoreCase(getString(R.string.breed_type_cat))||petType.equalsIgnoreCase(getString(R.string.breed_type_dog))){
-           if (auditEditText.getText().toString().isEmpty()) {
-               auditTextInputLayout.setError(getContext().getString(errorStringId));
-               return true;
-           } else {
-               auditTextInputLayout.setError(null);
-               auditTextInputLayout.setErrorEnabled(false);
-               return false;
-           }
-       }else{
-           return false;
-       }
+    public boolean checkAndShowBreedError(EditText auditEditText, TextInputLayout auditTextInputLayout,
+            int errorStringId, String petType) {
+        if (petType.equalsIgnoreCase(getString(R.string.breed_type_cat)) || petType
+                .equalsIgnoreCase(getString(R.string.breed_type_dog))) {
+            if (auditEditText.getText().toString().isEmpty()) {
+                auditTextInputLayout.setError(getContext().getString(errorStringId));
+                return true;
+            } else {
+                auditTextInputLayout.setError(null);
+                auditTextInputLayout.setErrorEnabled(false);
+                return false;
+            }
+        } else {
+            return false;
+        }
 
     }
 
@@ -1047,7 +1054,7 @@ public class AddPetFragment extends AbstractFragment
         mPetBirthdayText.setEnabled(isEnable);
         removePetButton.setEnabled(isEnable);
         mEditPetImage.setEnabled(isEnable);
-      //  mPetAgeText.setEnabled(isEnable);
+        //  mPetAgeText.setEnabled(isEnable);
         mAddEditMedicationAllergies.setEnabled(isEnable);
         mAddEditMedicationConditions.setEnabled(isEnable);
         mAddEditCurrentMedications.setEnabled(isEnable);
@@ -1062,7 +1069,7 @@ public class AddPetFragment extends AbstractFragment
             mPetGenderText.setText(pet.getGender());
             mPetWeight.setText(pet.getWeight());
             mPetBirthdayText.setText(pet.getBirthday());
-            if(pet.getPetAge()!= null){
+            if (pet.getPetAge() != null) {
                 age = pet.getPetAge().getValue();
                 mPetAgeText.setText(pet.getPetAge().getName());
             }
