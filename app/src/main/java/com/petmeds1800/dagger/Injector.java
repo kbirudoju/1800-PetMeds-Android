@@ -60,6 +60,7 @@ import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.presenter.PetListPresenter;
+import com.petmeds1800.ui.pushnotifications.PushNotificationPresenter;
 import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
 import com.petmeds1800.ui.refillreminder.presenter.ReminderListPresenter;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
@@ -235,5 +236,9 @@ public interface Injector {
     void inject(RefillNotificationPresenter refillNotificationPresenter);
 
     void inject(RxCallAdapterFactoryWithErrorHandling rxCallAdapterFactoryWithErrorHandling);
+
+    void inject(PushNotificationPresenter pushNotificationPresenter);
+
+
 }
 

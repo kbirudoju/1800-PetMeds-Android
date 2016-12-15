@@ -982,19 +982,18 @@ public class AddPetFragment extends AbstractFragment
     }
 
     @Override
-    public void onImageUplaodSuccess() {
-
-    }
-
-    @Override
-    public void onImgaeUploadError() {
+    public void onImageUploadSuccess() {
         if (isEditable) {
             progressBar.setVisibility(View.GONE);
             closeWindow();
         } else {
             onAddPetSuccess(mPets);
         }
+    }
 
+    @Override
+    public void onImageUploadError(String error) {
+        Utils.displayCrouton(getActivity(), getString(R.string.pet_image_upload_error), mContainerLayout);
     }
 
     @Override
