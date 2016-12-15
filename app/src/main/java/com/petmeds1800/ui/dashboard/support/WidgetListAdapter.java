@@ -1,5 +1,22 @@
 package com.petmeds1800.ui.dashboard.support;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.BrowsingHistory;
+import com.petmeds1800.model.entities.Category;
+import com.petmeds1800.model.entities.PetItemList;
+import com.petmeds1800.model.entities.Products;
+import com.petmeds1800.model.entities.RecommendedCategory;
+import com.petmeds1800.model.entities.RecommendedProducts;
+import com.petmeds1800.model.entities.RefillItem;
+import com.petmeds1800.model.entities.SalePitch;
+import com.petmeds1800.model.entities.WhatsNextCategory;
+import com.petmeds1800.model.entities.WidgetData;
+import com.petmeds1800.model.entities.WidgetFooter;
+import com.petmeds1800.ui.dashboard.WidgetListFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -19,23 +36,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.BrowsingHistory;
-import com.petmeds1800.model.entities.Category;
-import com.petmeds1800.model.entities.PetItemList;
-import com.petmeds1800.model.entities.Products;
-import com.petmeds1800.model.entities.RecommendedCategory;
-import com.petmeds1800.model.entities.RecommendedProducts;
-import com.petmeds1800.model.entities.RefillItem;
-import com.petmeds1800.model.entities.SalePitch;
-import com.petmeds1800.model.entities.WhatsNextCategory;
-import com.petmeds1800.model.entities.WidgetData;
-import com.petmeds1800.model.entities.WidgetFooter;
-import com.petmeds1800.ui.dashboard.WidgetListFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 
 import java.util.List;
 
@@ -90,9 +90,11 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else if (viewType == REFILL_PRODUCT_VIEW_TYPE) {
             int resource = R.layout.view_refill_product;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+            viewHolder = new RefillViewHolder(v);
             Button addCartBtn = (Button) v.findViewById(R.id.add_cart_button);
             addCartBtn.setOnClickListener(listener);
-            viewHolder = new RefillViewHolder(v);
+            Button addCouponCartBtn = (Button) v.findViewById(R.id.add_cart_button_coupons);
+            addCouponCartBtn.setOnClickListener(listener);
         } else if (viewType == RECOMENDATION_HEADER_VIEW_TYPE) {
             int resource = R.layout.view_recommendation;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -326,6 +328,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     });
                 }
                 refillHolder.refillAddCartButton.setTag(petItem);
+                refillHolder.refillAddCouponCartButton.setTag(petItem);
                 break;
             case RECOMENDATION_HEADER_VIEW_TYPE:
                 final RecommendationViewHolder recommendationViewHolder = (RecommendationViewHolder) holder;
@@ -549,7 +552,8 @@ browseHistoryViewHolder.shoppingHistoryLayout.setTag(shoppingProducts);
         TextView refillSellingpriceLabel;
         @BindView(R.id.add_cart_button)
         Button refillAddCartButton;
-
+        @BindView(R.id.add_cart_button_coupons)
+        Button refillAddCouponCartButton;
         @BindView(R.id.row_pet_product_coupons)
         RelativeLayout row_coupons_layout;
         @BindView(R.id.refill_view_product_label_coupons)
