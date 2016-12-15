@@ -40,6 +40,9 @@ public class Constants {
 
     public static final String VIEW_TYPE_BROWSE_HISTORY = "BrowseHistory";
 
+    public static final String VIEW_TYPE_RECENTLY_ORDERED = "RecentlyOrdered";
+    public static final String VIEW_TYPE_RECENTLY_ORDERED_HEADER = "RecentlyOrderedHeader";
+
     public static final int ADD_NEW_PET_REQUEST = 1;
 
     public static final int ADD_NEW_ADDRESS_REQUEST = 2;

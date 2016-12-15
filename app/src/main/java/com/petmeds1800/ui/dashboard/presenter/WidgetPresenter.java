@@ -9,6 +9,8 @@ import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.entities.BrowsingHistory;
 import com.petmeds1800.model.entities.PetItemList;
 import com.petmeds1800.model.entities.Products;
+import com.petmeds1800.model.entities.RecentlyOrdered;
+import com.petmeds1800.model.entities.RecentlyOrderedTitle;
 import com.petmeds1800.model.entities.RecommendedCategory;
 import com.petmeds1800.model.entities.RecommendedProducts;
 import com.petmeds1800.model.entities.RefillItem;
@@ -150,6 +152,18 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                     }
 
                 }
+            }
+            //Add recently Ordered data
+            if(widgetData.get(widgetCount).getWidgetType().equalsIgnoreCase(Constants.VIEW_TYPE_RECENTLY_ORDERED)){
+                ArrayList<RecentlyOrdered> recentlyOrderedItem=widgetData.get(widgetCount).getData().getRecentlyOrderedItems();
+                RecentlyOrderedTitle recentlyOrderedTitle=new RecentlyOrderedTitle(widgetData.get(widgetCount).getData().getWidgetTitle());
+                mData.add(recentlyOrderedTitle);
+              for(int recentOrderCount =0;recentOrderCount<recentlyOrderedItem.size();recentOrderCount++){
+                  //Add RecentlyOrdred data
+                 RecentlyOrdered recentlyOrdered= recentlyOrderedItem.get(recentOrderCount);
+                  mData.add(recentlyOrdered);
+
+              }
             }
             //Add salespitch data
             if (widgetData.get(widgetCount).getWidgetType().equalsIgnoreCase(Constants.VIEW_TYPE_SALES_PITCH)) {

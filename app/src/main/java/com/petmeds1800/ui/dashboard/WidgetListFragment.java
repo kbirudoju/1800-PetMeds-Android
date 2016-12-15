@@ -22,6 +22,7 @@ import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.entities.Category;
 import com.petmeds1800.model.entities.PetItemList;
 import com.petmeds1800.model.entities.Products;
+import com.petmeds1800.model.entities.RecentlyOrdered;
 import com.petmeds1800.model.entities.RecommendedProducts;
 import com.petmeds1800.model.entities.SalePitch;
 import com.petmeds1800.model.entities.WhatsNextCategory;
@@ -87,7 +88,20 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                     AddToCartRequest addToCartRequest = new AddToCartRequest(skuId, productId, quantity, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                     mPresenter.addToCart(addToCartRequest);
                     Log.d("cart detail", petItem.getRefillQuantity() + ">>>" + petItem.getSku().getParentProduct().getProductId() + ">>>" + petItem.getSku().getSkuId());
-                }else if(v.getTag() instanceof Category){
+                }else if(v.getTag() instanceof RecentlyOrdered){
+                    RecentlyOrdered recentlyOrdered = (RecentlyOrdered) v.getTag();
+                    String productId = recentlyOrdered.getParentProduct().getProductId();
+                    String skuId = recentlyOrdered.getSkuId();
+                    int quantity = 1;
+                    try {
+                        ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    AddToCartRequest addToCartRequest = new AddToCartRequest(skuId, productId, quantity, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                    mPresenter.addToCart(addToCartRequest);
+                }
+                else if(v.getTag() instanceof Category){
                  Category category =(Category)v.getTag();
                   ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(category.getCategoryPageUrl(), getString(R.string.recommendation_title));
 
@@ -170,6 +184,8 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     public void addToCartSuccess() {
         try {
             ((AbstractActivity) getActivity()).stopLoadingGif(getActivity());
+            ((HomeActivity)getActivity()).updateCartMenuItemCount();
+          ((HomeActivity) getActivity()).getViewPager().setCurrentItem(1);
         } catch (Exception e) {
             e.printStackTrace();
         }

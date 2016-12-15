@@ -37,6 +37,25 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.BrowsingHistory;
+import com.petmeds1800.model.entities.Category;
+import com.petmeds1800.model.entities.PetItemList;
+import com.petmeds1800.model.entities.Products;
+import com.petmeds1800.model.entities.RecentlyOrdered;
+import com.petmeds1800.model.entities.RecentlyOrderedTitle;
+import com.petmeds1800.model.entities.RecommendedCategory;
+import com.petmeds1800.model.entities.RecommendedProducts;
+import com.petmeds1800.model.entities.RefillItem;
+import com.petmeds1800.model.entities.SalePitch;
+import com.petmeds1800.model.entities.WhatsNextCategory;
+import com.petmeds1800.model.entities.WidgetData;
+import com.petmeds1800.model.entities.WidgetFooter;
+import com.petmeds1800.ui.dashboard.WidgetListFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -60,6 +79,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public final static int RECOMMENDATION_PRODUCT_DETAIL = 10;
     public final static int RECOMMENDATION_VIEW_MORE_PRODUCT = 11;
     public final static int VIEW_FOOTER = 12;
+    public final static int VIEW_RECENTLY_ORDERED_HEADER=13;
+    public final static int VIEW_RECENTLY_ORDERED_PRODUCT=14;
     private WidgetListFragment mContext;
     private View.OnClickListener listener;
 
@@ -139,7 +160,21 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             int resource = R.layout.view_shopping_history_header;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             viewHolder = new BrowseHistoryHeaderViewHolder(v);
-        } else if (viewType == VIEW_FOOTER) {
+        } else if(viewType==VIEW_RECENTLY_ORDERED_HEADER){
+            int resource = R.layout.view_recently_ordered_header;
+            v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+            viewHolder = new RecentlyOrderedHeaderViewHolder(v);
+        }else if(viewType ==VIEW_RECENTLY_ORDERED_PRODUCT){
+            int resource = R.layout.view_refill_product;
+            v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+            viewHolder = new RefillViewHolder(v);
+            Button addCartBtn = (Button) v.findViewById(R.id.add_cart_button);
+            addCartBtn.setOnClickListener(listener);
+            Button addCouponCartBtn = (Button) v.findViewById(R.id.add_cart_button_coupons);
+            addCouponCartBtn.setOnClickListener(listener);
+
+        }
+        else if (viewType == VIEW_FOOTER) {
             int resource = R.layout.view_widget_footer;
             v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             ((Button) v.findViewById(R.id.email_button)).setOnClickListener(new View.OnClickListener() {
@@ -292,7 +327,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final RefillViewHolder refillHolder = (RefillViewHolder) holder;
                 PetItemList petItem = (PetItemList) getItemAt(position);
                 if(petItem.getSku().getPriceInfo().getPromoText()!=null && !petItem.getSku().getPriceInfo().getPromoText().isEmpty()){
-                   refillHolder.row_coupons_layout.setVisibility(View.VISIBLE);
+                    refillHolder.row_coupons_layout.setVisibility(View.VISIBLE);
                     refillHolder.noCouponRefillLayout.setVisibility(View.GONE);
                     refillHolder.refillProductCouponsLabel.setText(petItem.getSku().getDisplayName());
                     refillHolder.refillDateCouponLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
@@ -397,7 +432,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recommendationProductViewHolder.recommendationPriceLabel.setPaintFlags(recommendationProductViewHolder.recommendationPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     recommendationProductViewHolder.recommendationSellingPriceLabel.setText(" $" + recommendedProducts.getSellingPrice());
                 }
-               recommendationProductViewHolder.recommendationView.setTag(recommendedProducts);
+                recommendationProductViewHolder.recommendationView.setTag(recommendedProducts);
                 break;
             case RECOMMENDATION_VIEW_MORE_PRODUCT:
                 RecommendationMoreViewHolder moreViewHolder = (RecommendationMoreViewHolder) holder;
@@ -485,12 +520,59 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         browseHistoryViewHolder.productImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
-browseHistoryViewHolder.shoppingHistoryLayout.setTag(shoppingProducts);
+                browseHistoryViewHolder.shoppingHistoryLayout.setTag(shoppingProducts);
                 break;
             case BROWSE_HISTORY_HEADER_VIEW_TYPE:
                 final BrowseHistoryHeaderViewHolder browseHistoryHeaderViewHolder = (BrowseHistoryHeaderViewHolder) holder;
                 BrowsingHistory browseHistory = (BrowsingHistory) getItemAt(position);
                 browseHistoryHeaderViewHolder.shoppingHistoryTitleLabel.setText(browseHistory.getWidgetTitle());
+                break;
+            case VIEW_RECENTLY_ORDERED_HEADER:
+                final RecentlyOrderedHeaderViewHolder recentlyOrderedHeaderViewHolder = (RecentlyOrderedHeaderViewHolder) holder;
+                RecentlyOrderedTitle recentlyOrderedTitle = (RecentlyOrderedTitle) getItemAt(position);
+                recentlyOrderedHeaderViewHolder.recentlyOrderedHeader.setText(recentlyOrderedTitle.getRecentlyOrderedWidgetTitle());
+                break;
+            case VIEW_RECENTLY_ORDERED_PRODUCT:
+                final RefillViewHolder recentlyOrderedHolder = (RefillViewHolder) holder;
+                RecentlyOrdered recentlyOrdered = (RecentlyOrdered) getItemAt(position);
+                if(recentlyOrdered.getPriceInfo().getPromoText()!=null && !recentlyOrdered.getPriceInfo().getPromoText().isEmpty()){
+                    recentlyOrderedHolder.row_coupons_layout.setVisibility(View.VISIBLE);
+                    recentlyOrderedHolder.noCouponRefillLayout.setVisibility(View.GONE);
+                    recentlyOrderedHolder.refillDateCouponLabel.setVisibility(View.GONE);
+                    recentlyOrderedHolder.refillProductCouponsLabel.setText(recentlyOrdered.getDisplayName());
+                    recentlyOrderedHolder.refillStartCouponLabel.setPaintFlags(recentlyOrderedHolder.refillStartCouponLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    recentlyOrderedHolder.refillOriginalPriceCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice());
+                    recentlyOrderedHolder.refillStartCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getListPrice());
+                    recentlyOrderedHolder.refillPromoLabel.setText(recentlyOrdered.getPriceInfo().getPromoText());
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + recentlyOrdered.getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(recentlyOrderedHolder.refillCouponProductImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            recentlyOrderedHolder.refillCouponProductImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                }else {
+                    recentlyOrderedHolder.row_coupons_layout.setVisibility(View.GONE);
+                    recentlyOrderedHolder.noCouponRefillLayout.setVisibility(View.VISIBLE);
+                    recentlyOrderedHolder.refillDateCouponLabel.setVisibility(View.GONE);
+                    recentlyOrderedHolder.refillProductTitleLabel.setText(recentlyOrdered.getDisplayName());
+                    recentlyOrderedHolder.refillOriginalPriceLabel.setText(" $" + recentlyOrdered.getPriceInfo().getListPrice());
+                    recentlyOrderedHolder.refillOriginalPriceLabel.setPaintFlags(recentlyOrderedHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    recentlyOrderedHolder.refillSellingpriceLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice());
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + recentlyOrdered.getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(recentlyOrderedHolder.refillProductImage) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            recentlyOrderedHolder.refillProductImage.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+                }
+                recentlyOrderedHolder.refillAddCartButton.setTag(recentlyOrdered);
+                recentlyOrderedHolder.refillAddCouponCartButton.setTag(recentlyOrdered);
                 break;
             case VIEW_FOOTER:
 
@@ -557,6 +639,10 @@ browseHistoryViewHolder.shoppingHistoryLayout.setTag(shoppingProducts);
         @BindView(R.id.row_pet_product_coupons)
         RelativeLayout row_coupons_layout;
         @BindView(R.id.refill_view_product_label_coupons)
+
+
+
+
         TextView refillProductCouponsLabel;
         @BindView(R.id.refill_view_date_label_coupons)
         TextView refillDateCouponLabel;
@@ -789,6 +875,19 @@ browseHistoryViewHolder.shoppingHistoryLayout.setTag(shoppingProducts);
         }
     }
 
+    public static class RecentlyOrderedHeaderViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.recently_ordered_header)
+        TextView recentlyOrderedHeader;
+
+
+        public RecentlyOrderedHeaderViewHolder(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
+
+        }
+    }
+
     @Override
     public int getItemViewType(int position) {
 
@@ -816,6 +915,10 @@ browseHistoryViewHolder.shoppingHistoryLayout.setTag(shoppingProducts);
             return BANNER_VIEW_TYPE;
         if (getItemAt(position) instanceof WidgetFooter)
             return VIEW_FOOTER;
+        if(getItemAt(position) instanceof RecentlyOrderedTitle)
+            return VIEW_RECENTLY_ORDERED_HEADER;
+        if(getItemAt(position) instanceof RecentlyOrdered)
+            return VIEW_RECENTLY_ORDERED_PRODUCT;
 
         return -1;
 

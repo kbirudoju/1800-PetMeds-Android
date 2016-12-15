@@ -29,6 +29,26 @@ public class WidgetData {
     //Sales Pitch
     private SalePitch SalesPitch;
 
+    public ArrayList<RecentlyOrdered> getRecentlyOrderedItems() {
+        return recentlyOrderedItems;
+    }
+
+    public void setRecentlyOrderedItems(ArrayList<RecentlyOrdered> recentlyOrderedItems) {
+        this.recentlyOrderedItems = recentlyOrderedItems;
+    }
+
+    //Recently Ordered
+    private ArrayList<RecentlyOrdered> recentlyOrderedItems;
+    public RecentlyOrderedTitle getRecentlyOrderedWidgetTitle() {
+        return recentlyOrderedWidgetTitle;
+    }
+
+    public void setRecentlyOrderedWidgetTitle(RecentlyOrderedTitle recentlyOrderedWidgetTitle) {
+        this.recentlyOrderedWidgetTitle = recentlyOrderedWidgetTitle;
+    }
+
+    private RecentlyOrderedTitle recentlyOrderedWidgetTitle;
+
     public BrowsingHistory getBrowsingHistory() {
         return browsingHistory;
     }
