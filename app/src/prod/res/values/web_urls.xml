@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="url_live_chat">http://chat.1800petmeds.com/webchat.asp?custname=WebUser&amp;email=WebUser@1800petmeds.com&amp;custnum=954-979-5995</string>
-    <string name="url_med_condition"></string>
+    <string name="url_search_education"></string>
     <string name="url_share_your_feedback"></string>
    <string name="url_featured_education">http://dev.1800petmeds.com/education</string>
     <string name="url_featured_ask_vet">http://dev.1800petmeds.com/education/ask-the-vet-form.htm</string>

@@ -14,6 +14,7 @@
         app:tabSelectedTextColor="@color/white"
         android:background="@color/petmeds_blue"
         app:tabIndicatorColor="@color/white"
+        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
         app:tabMode="fixed" />
 
     <android.support.v4.view.ViewPager

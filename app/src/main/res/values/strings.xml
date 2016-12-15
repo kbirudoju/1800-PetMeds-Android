@@ -386,7 +386,7 @@
 
     <!--Home Screen-->
     <string name="home_title">Home</string>
-    <string name="shop_category_title">SHOP BY CATEGORIES</string>
+    <string name="shop_category_title">Shop by Category</string>
     <string name="label_barcode">Barcode</string>
     <string name="label_search">Search...</string>
     <string name="add_title">ADD</string>
@@ -610,8 +610,8 @@
     <string name="requestReferralMsg">We have notified %1$s of your interest in their services.</string>
 
     <!--Learn-->
-    <string name="title_featured">FEATURED</string>
-    <string name="title_conditions">CONDITIONS</string>
+    <string name="title_featured">Featured</string>
+    <string name="title_conditions">Conditions</string>
     <string name="label_about">About</string>
     <string name="label_got_questions">Got Questions? Check Our Q&amp;A Directory</string>
     <string name="label_q_and_a_directory">Q &amp; A Directory</string>

@@ -109,8 +109,7 @@ public class LearnFragment extends AbstractFragment {
                 try {
                     PetMedsApplication.menuItemsClicked = true;
                     String encodedQuery = URLEncoder.encode(query, "utf-8");
-                    String url = getString(R.string.server_endpoint) + "/search.jsp?Ns=product.salesvolume%7C1&Ntt="
-                            + encodedQuery;
+                    String url = getString(R.string.url_search_education) + encodedQuery;
                     Bundle bundle = new Bundle();
                     bundle.putString(CommonWebviewFragment.TITLE_KEY, query);
                     bundle.putString(CommonWebviewFragment.URL_KEY, url);
