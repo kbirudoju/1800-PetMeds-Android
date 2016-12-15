@@ -44,7 +44,7 @@ public interface AddPetContract {
 
         void onPetAddSuccess(Pets pet);
 
-        void onPetRemoved();
+        void onPetRemoved(int key);
 
         void onImageUplaodSuccess();
 
@@ -61,7 +61,7 @@ public interface AddPetContract {
 
         void updatePetData(AddPetRequest request);
 
-        void removePet(RemovePetRequest request);
+        void removePet(RemovePetRequest request, int key);
 
         void populatePetMedicationsList();
 

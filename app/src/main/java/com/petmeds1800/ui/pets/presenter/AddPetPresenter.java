@@ -131,7 +131,7 @@ public class AddPetPresenter implements AddPetContract.Presenter {
     }
 
     @Override
-    public void removePet(RemovePetRequest request) {
+    public void removePet(RemovePetRequest request, final int key) {
         mPetMedsApiService.removePet(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -152,7 +152,7 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                     public void onNext(RemovePetResponse s) {
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
-                                mView.onPetRemoved();
+                                mView.onPetRemoved(key);
                             }
                         } else {
                             if (mView.isActive()) {

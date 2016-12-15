@@ -63,6 +63,7 @@ import com.petmeds1800.ui.fragments.dialog.GenderDialogFragment;
 import com.petmeds1800.ui.medicationreminders.AddPetNameListener;
 import com.petmeds1800.ui.pets.presenter.AddPetPresenter;
 import com.petmeds1800.ui.pets.support.AddPetContract;
+import com.petmeds1800.ui.pets.support.DialogOptionEnum;
 import com.petmeds1800.ui.pets.support.UpdateImageUtil;
 import com.petmeds1800.util.AlertRecyclerView;
 import com.petmeds1800.util.AlertRecyclerViewAdapter;
@@ -474,7 +475,7 @@ public class AddPetFragment extends AbstractFragment
         } else if (fragment.getTargetRequestCode() == REMOVE_PET_REQUEST_CODE) {
             RemovePetRequest request = new RemovePetRequest(mPet.getPetId(), String.valueOf(key),
                     mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-            mPresenter.removePet(request);
+            mPresenter.removePet(request , key);
 
         }
     }
@@ -962,9 +963,16 @@ public class AddPetFragment extends AbstractFragment
     }
 
     @Override
-    public void onPetRemoved() {
+    public void onPetRemoved(int key) {
         progressBar.setVisibility(View.GONE);
-        Snackbar.make(mPetWeight, getActivity().getString(R.string.pet_removed_msg), Snackbar.LENGTH_LONG).show();
+
+        if(key == DialogOptionEnum.PET_PASSED.getValue()) {
+            Snackbar.make(mPetWeight, getActivity().getString(R.string.pet_passed_removed_msg), Snackbar.LENGTH_LONG).show();
+        }
+        else {
+            Snackbar.make(mPetWeight, getActivity().getString(R.string.pet_removed_msg), Snackbar.LENGTH_LONG).show();
+        }
+
         closeWindow();
     }
 
