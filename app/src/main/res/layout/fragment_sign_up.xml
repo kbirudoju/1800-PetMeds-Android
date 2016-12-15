@@ -326,6 +326,7 @@
                 android:background="@color/pattern_blue" />
 
             <LinearLayout
+                android:id="@+id/container_billing_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
