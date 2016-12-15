@@ -272,7 +272,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
     private void setTitle() {
         if (orderList != null) {
             ((AbstractActivity) getActivity())
-                    .setToolBarTitle(getActivity().getString(R.string.order_txt) + " #" + orderList.getOrderId());
+                    .setToolBarTitle(getActivity().getString(R.string.order_txt) + " #" + orderList.getDisplayOrderId());
         }
     }
 

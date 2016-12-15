@@ -183,7 +183,7 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
             case VIEW_TYPE_INFO:
                 OrderInfoViewHolder orderInfoViewHolder = (OrderInfoViewHolder) holder;
                 OrderList orderInfo = (OrderList) getItemAt(position);
-                orderInfoViewHolder.orderNoLabel.setText(orderInfo.getOrderId());
+                orderInfoViewHolder.orderNoLabel.setText(orderInfo.getDisplayOrderId());
                 orderInfoViewHolder.orderDateLabel.setText(orderInfo.getSubmittedDate());
                 orderInfoViewHolder.orderShipToLabel.setText(orderInfo.getShipTo());
                 orderInfoViewHolder.orderTotalLabel.setText("$" + String.valueOf(orderInfo.getTotal()));
