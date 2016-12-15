@@ -1,5 +1,10 @@
 package com.petmeds1800.util;
 
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.ui.HomeActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -13,11 +18,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.ui.HomeActivity;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -128,7 +128,7 @@ public class PetMedWebViewClient extends WebViewClient {
                 public void run() {
 //                Move to Shopping Cart on Successful Item Add
                     try {
-                        ((HomeActivity)mContext).scrollViewPager(1);
+                        ((HomeActivity)mContext).scrollViewPager(1,false);
                     } catch (Exception e){
                         e.printStackTrace();
                     }

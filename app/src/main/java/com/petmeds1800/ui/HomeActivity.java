@@ -632,11 +632,13 @@ public class HomeActivity extends AbstractActivity
     /**
      * Move View Pager Externaly via programtically assigning selection number
      */
-    public void scrollViewPager(int pageNo) {
+    public void scrollViewPager(int pageNo,boolean navigateToShopCategory) {
         mViewPager.setCurrentItem(pageNo);
         //Sending broadcast in order to scroll to shop by category
-        Intent intent = new Intent(Constants.SCROLL_TO_SHOP_CATEGORIES);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+        if(navigateToShopCategory) {
+            Intent intent = new Intent(Constants.SCROLL_TO_SHOP_CATEGORIES);
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+        }
     }
 
     public int getCurrentSelectedTab() {

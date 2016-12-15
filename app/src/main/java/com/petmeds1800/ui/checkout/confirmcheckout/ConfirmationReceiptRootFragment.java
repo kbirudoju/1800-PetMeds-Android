@@ -47,6 +47,6 @@ public class ConfirmationReceiptRootFragment extends AbstractFragment {
     @OnClick(R.id.btn_start_new_order)
     public void startNewOrder(){
         HomeActivity homeActivity = (HomeActivity) getActivity();
-        homeActivity.scrollViewPager(0);
+        homeActivity.scrollViewPager(0,false);
     }
 }
