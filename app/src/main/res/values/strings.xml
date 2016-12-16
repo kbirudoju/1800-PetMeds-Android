@@ -720,5 +720,6 @@
 
     <string name="label_retry">Retry</string>
     <string name="pet_image_upload_error">Pet Image failed to upload</string>
+    <string name="current_medicatiob_title">Is your pet taking any medications?\n(Not purchased through us)</string>
 </resources>
 
