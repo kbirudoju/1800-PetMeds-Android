@@ -32,6 +32,41 @@
             android:textSize="@dimen/sp_14" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_reset_password"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/pattern_light_blue" />
+
+        <TextView
+            android:id="@+id/txv_view_shipping_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:drawableRight="@drawable/ic_arrow"
+            android:gravity="center_vertical"
+            android:padding="@dimen/xlarge_margin"
+            android:text="@string/label_reset_password"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <Button
+        style="@style/dialog_button_style"
+        android:background="@drawable/rectangular_background"
+        android:text="@string/label_reset_password_caps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/xlarge_margin"
+        android:stateListAnimator="@null"
+        android:visibility="gone"
+        android:id="@+id/btn_reset_password"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

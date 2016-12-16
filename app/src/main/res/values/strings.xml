@@ -131,6 +131,8 @@
     <string name="error_phone_invalid">Phone number invalid</string>
     <string name="error_country_required">Country is required</string>
     <string name="label_unable_to_update_password">Unable to update your password</string>
+    <string name="label_reset_password">Reset your password</string>
+    <string name="label_reset_password_caps">Reset Your Password</string>
 
     <!--Finger Print Dialog-->
     <string name="title.fingerprint_login">FINGERPRINT LOGIN</string>

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.petmeds1800.R;
+import com.petmeds1800.intent.ForgotPasswordIntent;
 import com.petmeds1800.model.entities.CommitOrder;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.Item;
@@ -243,9 +244,19 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         TextView description = (TextView) mErrorView.findViewById(R.id.txv_error_message);
         title.setText(getString(R.string.label_unable_to_update_password));
         description.setText(message);
+        View resetPasswordButton = mErrorView.findViewById(R.id.view_reset_password);
+        resetPasswordButton.setVisibility(View.VISIBLE);
+        resetPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new ForgotPasswordIntent(getActivity()));
+            }
+        });
+        description.setText(message);
     }
 
     private void hideErrorView() {
         mErrorView.setVisibility(View.GONE);
+        mErrorView.findViewById(R.id.view_reset_password).setVisibility(View.GONE);
     }
 }

@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.intent.ForgotPasswordIntent;
 import com.petmeds1800.intent.HomeIntent;
 import com.petmeds1800.model.entities.LoginRequest;
 import com.petmeds1800.model.entities.LoginResponse;
@@ -317,12 +319,21 @@ public class SignUpFragment extends AbstractFragment
         TextView title = (TextView) mErrorView.findViewById(R.id.txv_error_title);
         TextView description = (TextView) mErrorView.findViewById(R.id.txv_error_message);
         title.setText(getString(R.string.label_unable_to_update_password));
+        Button resetPasswordButton = (Button) mErrorView.findViewById(R.id.btn_reset_password);
+        resetPasswordButton.setVisibility(View.VISIBLE);
+        resetPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new ForgotPasswordIntent(getActivity()));
+            }
+        });
         description.setText(message);
     }
 
     @Override
     public void hideWarningView() {
         mErrorView.setVisibility(View.GONE);
+        mErrorView.findViewById(R.id.btn_reset_password).setVisibility(View.GONE);
     }
 
     @Override
