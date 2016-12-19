@@ -35,11 +35,28 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
         <LinearLayout
+            android:id="@+id/mail_option_divider"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_1"
             android:background="@color/petmeds_blue"
             android:layout_below="@+id/mail_option_switch"
             />
 
+
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/prescription_detail_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_2"
+        android:layout_below="@id/mail_option_divider">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mail_prescription_txt"/>
+    </LinearLayout>
 </LinearLayout>

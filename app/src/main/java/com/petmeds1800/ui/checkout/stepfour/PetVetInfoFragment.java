@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.checkout.stepfour;
 
-import java.util.LinkedHashMap;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,8 +28,10 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.Constants;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -119,9 +119,14 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     mMailOption="Y";
+                    mAdapter.setPrescriptionOption(true);
+
                 }else{
                     mMailOption="N";
                 }
+
+                mAdapter.setPrescriptionOption(isChecked);
+                mAdapter.notifyDataSetChanged();
             }
         },this);
         setupRecyclerView();

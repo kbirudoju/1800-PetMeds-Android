@@ -481,7 +481,7 @@
     <string name="dollar_placeholder">$</string>
     <string name="cart_title">Cart</string>
     <string name="select_item_quantity">Select Item Quantity</string>
-    <string name="continue_shipping_title">CONTINUE SHIPPING</string>
+    <string name="continue_shipping_title">CONTINUE SHOPPING</string>
     <string-array name="items_reminder_array">
         <item>REPEAT DAILY</item>
         <item>REPEAT WEEKLY</item>
@@ -723,5 +723,6 @@
     <string name="label_retry">Retry</string>
     <string name="pet_image_upload_error">Pet Image failed to upload</string>
     <string name="current_medicatiob_title">Is your pet taking any medications?\n(Not purchased through us)</string>
+    <string name="mail_prescription_txt">Please mail your prescription to:\n\n1-800-PetMeds®\nAttention: Pharmacy\n420 S. Congress Ave, Suite 100\nDelray Beach, FL 33445\n\nOnce we receive your mailed in prescription, we will ship your order.\n\nNo faxes due to pharmacy regulations</string>
 </resources>
 

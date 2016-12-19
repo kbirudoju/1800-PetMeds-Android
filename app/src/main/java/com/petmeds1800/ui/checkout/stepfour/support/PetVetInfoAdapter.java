@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -23,6 +23,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
 import com.petmeds1800.model.shoppingcart.response.CommerceItems;
 import com.petmeds1800.ui.checkout.stepfour.StepFourRootFragment;
+import com.petmeds1800.ui.vet.support.VetListAdapter;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private View.OnClickListener listener;
     private CompoundButton.OnCheckedChangeListener checkListener;
     Fragment mFragment;
+    private boolean isShowPrescriptionView;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -49,6 +51,7 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return new HeaderViewHolder (v);
         } else if(viewType == TYPE_FOOTER) {
             View v = LayoutInflater.from (parent.getContext ()).inflate (R.layout.view_pet_vet_info_footer, parent, false);
+            RecyclerView.ViewHolder footerViewHolder=new VetListAdapter.FooterViewHolder(v);
             Switch mailOptionSwitch=(Switch)v.findViewById(R.id.mail_option_switch);
             mailOptionSwitch.setOnCheckedChangeListener(checkListener);
             return new FooterViewHolder (v);
@@ -86,6 +89,11 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         } else if(holder instanceof FooterViewHolder) {
             FooterViewHolder footerHolder = (FooterViewHolder) holder;
+            if(isShowPrescriptionView){
+                footerHolder.prescriptionView.setVisibility(View.VISIBLE);
+            }else{
+                footerHolder.prescriptionView.setVisibility(View.GONE);
+            }
 
         } else if(holder instanceof ItemViewHolder) {
             CommerceItems commerceItem = getItem (position - 1);
@@ -149,6 +157,10 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return TYPE_ITEM;
     }
 
+    public void setPrescriptionOption(boolean isShowPrescriptionView){
+        this.isShowPrescriptionView=isShowPrescriptionView;
+    }
+
     private boolean isPositionHeader (int position) {
         return position == 0;
     }
@@ -159,7 +171,10 @@ public class PetVetInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     class FooterViewHolder extends RecyclerView.ViewHolder {
-
+          @BindView(R.id.mail_option_switch)
+          Switch mailOptionSwitch;
+        @BindView(R.id.prescription_detail_view)
+        LinearLayout prescriptionView;
         public FooterViewHolder (View itemView) {
             super (itemView);
             ButterKnife.bind(this,itemView);
