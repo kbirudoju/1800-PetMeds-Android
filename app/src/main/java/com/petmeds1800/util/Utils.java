@@ -299,15 +299,18 @@ public class Utils {
                 }
             }
 
-            //insert the valid JsessionID
-            Cookie.Builder builder = new Cookie.Builder();
-            builder.name("JSESSIONID");
-            builder.value(cookieValue);
-            builder.domain("1800petmeds.com"); //TODO update the domain
-            Cookie jsessionCookie = builder.build();
-            updatedCookieCache.add(jsessionCookie);
-            cookieCache.clear();
-            cookieCache.addAll(updatedCookieCache);
+            if(cookieValue != null) {
+                //insert the valid JsessionID
+                Cookie.Builder builder = new Cookie.Builder();
+                builder.name("JSESSIONID");
+                builder.value(cookieValue);
+                builder.domain("1800petmeds.com"); //TODO update the domain
+                Cookie jsessionCookie = builder.build();
+                updatedCookieCache.add(jsessionCookie);
+                cookieCache.clear();
+                cookieCache.addAll(updatedCookieCache);
+            }
+
         }
     }
 }

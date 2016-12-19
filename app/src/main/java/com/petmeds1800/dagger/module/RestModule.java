@@ -47,12 +47,16 @@ public class RestModule {
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addNetworkInterceptor(interceptor)
-                    .connectTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(40, TimeUnit.SECONDS)
-                    .readTimeout(40, TimeUnit.SECONDS);
+            builder.addNetworkInterceptor(interceptor);
+
+
 
         }
+
+        builder.connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS);
+
         return builder.cookieJar(cookieJar).build();
     }
 
@@ -68,6 +72,11 @@ public class RestModule {
             builder.addNetworkInterceptor(interceptor);
 
         }
+
+        builder.connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS);
+
         return builder.cookieJar(cookieJar).build();
     }
 
