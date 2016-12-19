@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -88,7 +89,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
     private ShoppingCartListResponse mShoppingCartListResponse;
 
-    private ScrollView mCartScrollViewContainer;
+    private NestedScrollView mCartScrollViewContainer;
 
 
     public final Handler CartFragmentMessageHandler = new Handler() {
@@ -121,7 +122,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         mContainerLayoutItems.setLayoutManager(mLayoutManager);
         mContainerLayoutItems.setItemAnimator(new DefaultItemAnimator());
         mContainerLayoutItems.setNestedScrollingEnabled(false);
-        mCartScrollViewContainer = (ScrollView) view.findViewById(R.id.cartScrollViewContainer);
+        mCartScrollViewContainer = (NestedScrollView) view.findViewById(R.id.cartScrollViewContainer);
         mTotalCheckOutContainer = (LinearLayout) view.findViewById(R.id.total_checkout_container);
         mItemListtContainer = (LinearLayout) view.findViewById(R.id.item_list_container);
         mEmptyCheckoutContainer = (LinearLayout) view.findViewById(R.id.order_empty_view);
