@@ -1,14 +1,14 @@
 package com.petmeds1800.ui;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
-import com.petmeds1800.R;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.petmeds1800.R;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.util.Constants;
 
 /**
  * Created by Digvijay on 9/20/2016.
@@ -31,12 +31,12 @@ public class BarcodeScanResultsActivity extends AbstractActivity{
                 finish();
             } else {
                 String url = getString(R.string.server_endpoint) + "/search.jsp?Ns=product.salesvolume%7C1&Ntt=" + result.getContents();
-                Bundle bundle = new Bundle();
-                bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_scan_results));
-                bundle.putString(CommonWebviewFragment.URL_KEY, url);
-                CommonWebviewFragment webViewFragment = new CommonWebviewFragment();
-                webViewFragment.setArguments(bundle);
-                replaceFragmentWithStateLoss(webViewFragment, R.id.barcode_scan_container);
+               Intent intent=new Intent();
+                intent.putExtra(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_scan_results));
+                intent.putExtra(CommonWebviewFragment.URL_KEY, url);
+                setResult(Constants.BARCODE_SCANNER_REQUEST, intent);
+                finish();
+
             }
         }
     }

@@ -119,7 +119,6 @@ public class PetVetInfoFragment extends AbstractFragment implements PetVetInfoCo
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     mMailOption="Y";
-                    mAdapter.setPrescriptionOption(true);
 
                 }else{
                     mMailOption="N";

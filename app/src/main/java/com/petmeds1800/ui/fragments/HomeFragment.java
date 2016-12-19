@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-import com.petmeds1800.intent.BarcodeScannerIntent;
-import com.petmeds1800.model.ProductCategory;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.dashboard.CategoryListFragment;
-import com.petmeds1800.ui.dashboard.WidgetListFragment;
-import com.petmeds1800.ui.support.HomeFragmentContract;
-import com.petmeds1800.util.Constants;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +21,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import com.petmeds1800.R;
+import com.petmeds1800.intent.BarcodeScannerIntent;
+import com.petmeds1800.model.ProductCategory;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.dashboard.CategoryListFragment;
+import com.petmeds1800.ui.dashboard.WidgetListFragment;
+import com.petmeds1800.ui.support.HomeFragmentContract;
+import com.petmeds1800.util.Constants;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -206,7 +206,7 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.action_barcode) {
-            startActivity(new BarcodeScannerIntent(getActivity()));
+            startActivityForResult(new BarcodeScannerIntent(getActivity()), 2);
         }
         return super.onOptionsItemSelected(menuItem);
     }
@@ -231,6 +231,21 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         super.onReceivedBroadcast(context, intent);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==2)
+        {
+            String title=data.getStringExtra(CommonWebviewFragment.TITLE_KEY);
+            String url=data.getStringExtra(CommonWebviewFragment.URL_KEY);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(CommonWebviewFragment.TITLE_KEY, title);
+            bundle.putString(CommonWebviewFragment.URL_KEY, url);
+            replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
+        }
+    }
 }
 
 

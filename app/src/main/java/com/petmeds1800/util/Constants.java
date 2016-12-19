@@ -160,4 +160,6 @@ public class Constants {
     public static final String REQUEST_TYPE = "request_Type";
 	
     public static final String SCROLL_TO_SHOP_CATEGORIES = "scroll_to_shop_categories";
+
+    public static final int BARCODE_SCANNER_REQUEST=101;
 }
