@@ -1,22 +1,5 @@
 package com.petmeds1800.ui.fragments.dialog;
 
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.ForgotPasswordRequest;
-import com.petmeds1800.model.entities.ForgotPasswordResponse;
-import com.petmeds1800.model.entities.LoginRequest;
-import com.petmeds1800.model.entities.LoginResponse;
-import com.petmeds1800.model.entities.SessionConfNumberResponse;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-import com.petmeds1800.util.Utils;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +22,23 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.mtramin.rxfingerprint.data.FingerprintAuthenticationResult;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.entities.ForgotPasswordRequest;
+import com.petmeds1800.model.entities.ForgotPasswordResponse;
+import com.petmeds1800.model.entities.LoginRequest;
+import com.petmeds1800.model.entities.LoginResponse;
+import com.petmeds1800.model.entities.SessionConfNumberResponse;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
+import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -290,9 +290,12 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                     mEmailInput.setVisibility(View.VISIBLE);
                 } else {
                     mDialogTitle.setText(R.string.title_use_password_to_signin);
-                    mEmailInput.setVisibility(View.GONE);
-                    mEmailTextLogin.setVisibility(View.VISIBLE);
-                    mEmailTextLogin.setText(loginEmail);
+                  /*  mEmailInput.setVisibility(View.GONE);
+                    mEmailTextLogin.setVisibility(View.VISIBLE);*/
+                    mEmailTextLogin.setVisibility(View.GONE);
+                    mEmailInput.setVisibility(View.VISIBLE);
+                    mEmailEdit.setText(loginEmail);
+                   // mEmailTextLogin.setText(loginEmail);
                 }
                 mCancelButton.setText(R.string.label_fingerprint_cancel);
                 mSecondDialogButton.setText(R.string.label_fingerprint_continue);
