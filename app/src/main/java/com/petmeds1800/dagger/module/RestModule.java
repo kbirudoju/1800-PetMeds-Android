@@ -1,7 +1,5 @@
 package com.petmeds1800.dagger.module;
 
-import android.content.Context;
-
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
@@ -10,6 +8,8 @@ import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.api.RxCallAdapterFactoryWithErrorHandling;
 import com.petmeds1800.dagger.scopes.AppScope;
 import com.petmeds1800.util.Constants;
+
+import android.content.Context;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,12 +21,15 @@ import okhttp3.CookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @Module
 public class RestModule {
+
+    private static final int CONNECT_TIMEOUT = 10;
+
+    private static final int READ_WRITE_TIMEOUT = 40;
 
     private final String mEndpoint;
 
@@ -53,9 +56,9 @@ public class RestModule {
 
         }
 
-        builder.connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(40, TimeUnit.SECONDS)
-                .readTimeout(40, TimeUnit.SECONDS);
+        builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(READ_WRITE_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(READ_WRITE_TIMEOUT, TimeUnit.SECONDS);
 
         return builder.cookieJar(cookieJar).build();
     }
@@ -73,9 +76,9 @@ public class RestModule {
 
         }
 
-        builder.connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(40, TimeUnit.SECONDS)
-                .readTimeout(40, TimeUnit.SECONDS);
+        builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(READ_WRITE_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(READ_WRITE_TIMEOUT, TimeUnit.SECONDS);
 
         return builder.cookieJar(cookieJar).build();
     }

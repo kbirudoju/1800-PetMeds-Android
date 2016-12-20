@@ -1,83 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:id="@+id/refillReminderListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/reminder_list_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
+                  android:id="@+id/reminder_list_container"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/reminder_list"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:cacheColorHint="#f8f8ff"
-            android:choiceMode="singleChoice"
-            android:divider="#000000"
-            android:fadeScrollbars="true"
-            android:fastScrollEnabled="true"
-            android:footerDividersEnabled="true"
-            android:textFilterEnabled="true" />
+                android:id="@+id/reminder_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:cacheColorHint="#f8f8ff"
+                android:choiceMode="singleChoice"
+                android:divider="#000000"
+                android:fadeScrollbars="true"
+                android:fastScrollEnabled="true"
+                android:footerDividersEnabled="true"
+                android:textFilterEnabled="true"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/no_reminder_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:visibility="gone">
+            android:id="@+id/no_reminder_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_menu_cart_large" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_menu_cart_large"/>
 
         <TextView
-            style="@style/styledefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_34"
-            android:text="@string/no_saved_refill_reminder_message" />
+                style="@style/styledefault"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_34"
+                android:text="@string/no_saved_refill_reminder_message"/>
 
         <TextView
-            style="@style/paragraph"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_16"
-            android:layout_marginLeft="@dimen/dp_28"
-            android:layout_marginRight="@dimen/dp_28"
-            android:gravity="center"
-            android:text="@string/description_no_refill_reminders" />
+                style="@style/paragraph"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_16"
+                android:layout_marginLeft="@dimen/dp_28"
+                android:layout_marginRight="@dimen/dp_28"
+                android:gravity="center"
+                android:text="@string/description_no_refill_reminders"/>
 
         <Button
-            android:id="@+id/shop_now_button"
-            style="@style/label"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_45"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="@dimen/dp_16"
-            android:layout_marginRight="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_25"
-            android:background="@color/petmeds_blue"
-            android:text="@string/shop_now_message"
-            android:textColor="@color/white" />
+                android:id="@+id/shop_now_button"
+                style="@style/label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:layout_marginRight="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_25"
+                android:background="@color/petmeds_blue"
+                android:text="@string/shop_now_message"
+                android:textColor="@color/white"/>
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/progressbar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:visibility="visible" />
+            android:id="@+id/progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="visible"/>
 </RelativeLayout>

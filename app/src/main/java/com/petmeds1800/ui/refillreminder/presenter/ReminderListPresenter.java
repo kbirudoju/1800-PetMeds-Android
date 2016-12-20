@@ -3,8 +3,10 @@ package com.petmeds1800.ui.refillreminder.presenter;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.refillreminder.response.RefillReminderListResponse;
+import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.refillreminder.ReminderListContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import javax.inject.Inject;
 
@@ -39,7 +41,20 @@ public class ReminderListPresenter implements ReminderListContract.Presenter {
             public void onCompleted() {}
 
             @Override
-            public void onError(Throwable e) {}
+            public void onError(Throwable e) {
+
+                //error handling would be implemented once we get the details from backend team
+                int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                if (mView.isActive()) {
+                    if (errorId != 0) {
+                        mView.onError(((AbstractFragment) mView).getString(errorId));
+                        mView.showRetryView();
+                    } else {
+                        mView.onError("Unexpected error");
+                    }
+                }
+
+            }
 
             @Override
             public void onNext(RefillReminderListResponse refillReminderListResponse) {

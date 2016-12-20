@@ -14,6 +14,8 @@ public interface ReminderListContract {
         boolean isActive();
         boolean postGeneralPopulateRefillReminderList(RefillReminderListResponse refillReminderListResponse);
         boolean onError(String errorMessage);
+        void showRetryView();
+        void hideRetryView();
     }
 
     interface Presenter extends BasePresenter {

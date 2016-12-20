@@ -42,7 +42,7 @@ public class MedicationReminderListFragment extends AbstractFragment
     @BindView(R.id.medicationsreminder_recyclerView)
     RecyclerView mMedicationsreminderRecyclerView;
 
-    @BindView(R.id.containerLayout)
+    @BindView(R.id.medicationReminderContainerLayout)
     RelativeLayout mContainerLayout;
 
     MedicationRemindersAdapter mMedicationRemindersAdapter;
@@ -160,6 +160,25 @@ public class MedicationReminderListFragment extends AbstractFragment
     public void showErrorCrouton(CharSequence message, boolean span) {
         mProgressBar.setVisibility(View.GONE);
         Utils.displayCrouton(getActivity(), message.toString(), mContainerLayout);
+    }
+
+    @Override
+    public void showRetryView() {
+        super.showErrorLayout();
+    }
+
+    @Override
+    public void hideRetryView() {
+        super.hideErrorLayout();
+
+    }
+
+    @Override
+    protected void onRetryButtonClicked(View view) {
+        super.onRetryButtonClicked(view);
+        mProgressBar.setVisibility(View.VISIBLE);
+        hideRetryView();
+        mMedicationReminderListPresentor.start();
     }
 
     @Override

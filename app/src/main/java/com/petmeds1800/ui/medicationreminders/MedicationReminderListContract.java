@@ -14,6 +14,8 @@ public interface MedicationReminderListContract {
         void onSuccess(MedicationReminderListResponse response);
         void onError(String errorMessage);
         void showErrorCrouton(CharSequence message, boolean span);
+        void showRetryView();
+        void hideRetryView();
     }
 
     interface Presenter extends BasePresenter {

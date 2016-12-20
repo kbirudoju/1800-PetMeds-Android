@@ -29,9 +29,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -46,6 +49,9 @@ import static com.petmeds1800.util.Utils.toggleProgressDialogVisibility;
  * Created by pooja on 9/7/2016.
  */
 public class ReminderListFragment extends AbstractFragment implements ReminderListContract.View {
+
+    @BindView(R.id.refillReminderListContainer)
+    RelativeLayout mRefillReminderListContainer;
 
     private RecyclerView mReminderMainList;
 
@@ -73,6 +79,7 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
 
         ((AbstractActivity) getActivity())
                 .setToolBarTitle(getActivity().getString(R.string.refill_reminder));
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -119,11 +126,28 @@ public class ReminderListFragment extends AbstractFragment implements ReminderLi
 
     @Override
     public boolean onError(String errorMessage) {
-        Utils.displayCrouton(getActivity(), (String) errorMessage, mReminderMainList);
-
+        Utils.displayCrouton(getActivity(), (String) errorMessage, mRefillReminderListContainer);
         toggleProgressDialogVisibility(HIDE_PROGRESSBAR_OR_ANIMATION, mProgressBar);
         toggleGIFAnimantionVisibility(HIDE_PROGRESSBAR_OR_ANIMATION, getActivity());
         return false;
+    }
+
+    @Override
+    public void showRetryView() {
+        super.showErrorLayout();
+    }
+
+    @Override
+    public void hideRetryView() {
+        super.hideErrorLayout();
+
+    }
+
+    @Override
+    protected void onRetryButtonClicked(View view) {
+        super.onRetryButtonClicked(view);
+        hideRetryView();
+        callReminderAPI(null);
     }
 
     @Override

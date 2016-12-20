@@ -4,7 +4,7 @@
                 android:layout_height="match_parent"
                 android:padding="@dimen/dp_16"
                 android:background="@color/fingerprint_alert_title_background"
-                android:id="@+id/containerLayout">
+                android:id="@+id/medicationReminderContainerLayout">
 
     <ProgressBar android:id="@+id/progressBar"
                  android:layout_width="wrap_content"
