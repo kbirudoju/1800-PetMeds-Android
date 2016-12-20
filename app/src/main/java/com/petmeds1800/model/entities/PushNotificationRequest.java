@@ -17,4 +17,11 @@ public class PushNotificationRequest {
         this.sessionConfNumber = sessionConfNumber;
     }
 
+    public String getPushNotification() {
+        return pushNotification;
+    }
+
+    public String getSessionConfNumber() {
+        return sessionConfNumber;
+    }
 }

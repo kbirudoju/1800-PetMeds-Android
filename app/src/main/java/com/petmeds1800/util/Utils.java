@@ -1,5 +1,10 @@
 package com.petmeds1800.util;
 
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.ui.AbstractActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +19,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.NameValueData;
-import com.petmeds1800.ui.AbstractActivity;
 
 import java.io.File;
 import java.net.URI;
@@ -313,4 +313,5 @@ public class Utils {
 
         }
     }
+
 }

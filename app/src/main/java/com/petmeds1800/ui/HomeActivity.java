@@ -35,6 +35,7 @@ import com.petmeds1800.intent.CheckOutIntent;
 import com.petmeds1800.model.Address;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.MedicationReminderItem;
+import com.petmeds1800.model.entities.PushNotificationRequest;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.mvp.RefillNotificationContract;
@@ -53,6 +54,8 @@ import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract
 import com.petmeds1800.ui.payment.AddACardContract;
 import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.pets.AddPetFragment;
+import com.petmeds1800.ui.pushnotifications.PushNotificationContract;
+import com.petmeds1800.ui.pushnotifications.PushNotificationPresenter;
 import com.petmeds1800.ui.support.TabPagerAdapter;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.AsyncUpdateShoppingCartIconCountThread;
@@ -76,9 +79,14 @@ import rx.schedulers.Schedulers;
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
         MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,
-        CommonWebviewFragment.OnPaymentCompletedListener, RefillNotificationContract.View {
+        CommonWebviewFragment.OnPaymentCompletedListener, RefillNotificationContract.View,
+        PushNotificationContract.View {
+
+    private static final String PUSH_ENABLING = "pushEnabling";
 
     public static final String SETUP_HAS_OPTIONS_MENU_ACTION = "setupHasOptionsMenuAction";
+
+    public static final String PUSH_NOTIFICATION_ACTION = "pushNotificationAction";
 
     public static final String FRAGMENT_NAME_KEY = "fragmentName";
 
@@ -87,6 +95,10 @@ public class HomeActivity extends AbstractActivity
     private static final String SCREEN_TYPE = "screenType";
 
     private static final String NAVIGATE_TO_CART = "navigateToCart";
+
+    public static final String PUSH_NOTIFICATION_SUCCESS = "true";
+
+    public static final String PUSH_NOTIFICATION_FAILURE = "false";
 
     @BindView(R.id.tablayout)
     TabLayout mHomeTab;
@@ -149,6 +161,10 @@ public class HomeActivity extends AbstractActivity
 
     private RefillNotificationContract.Presenter mPresenter;
 
+    private PushNotificationContract.Presenter mPushPresenter;
+
+    private boolean isPushNotificationEnabled;
+
     @Override
     protected void onNewIntent(Intent intent) {
         // TODO Auto-generated method stub
@@ -177,7 +193,6 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
-
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
@@ -185,7 +200,7 @@ public class HomeActivity extends AbstractActivity
         mAnalyticsUtil = new AnalyticsUtil();
 
         mPresenter = new RefillNotificationPresenter(this, HomeActivity.this);
-
+        mPushPresenter = new PushNotificationPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
         //Perform operation on the first time loading of home screen
         performOperationOnFirstLoad();
@@ -355,6 +370,8 @@ public class HomeActivity extends AbstractActivity
             mPreferencesHelper.setIsFingerPrintEnabled(false);
         } else if (!RxFingerprint.hasEnrolledFingerprints(this)) {
             mPreferencesHelper.setIsFingerPrintEnabled(false);
+        } else {
+            mPreferencesHelper.setIsFingerPrintEnabled(true);
         }
         if (getIntent().getBooleanExtra(IS_FROM_HOME_ACTIVITY, false) && mPreferencesHelper.getIsUserLoggedIn()) {
             showPushPermissionDailog();
@@ -487,10 +504,12 @@ public class HomeActivity extends AbstractActivity
                         int securityStatus = securityStatusResponse.getSecurityStatus();
                         Log.i("security status:", securityStatus + "");
                         //TODO: improvement
-                        if (securityStatus == 0) {  // We need to treat security status 2 same as 0 as all the API on AccountSection stopped working if we would treat 2 same as 4
+                        if (securityStatus
+                                == 0) {  // We need to treat security status 2 same as 0 as all the API on AccountSection stopped working if we would treat 2 same as 4
                             showFingerprintDialog();
                         } else if (securityStatus == 4 || securityStatus
-                                == 5 || securityStatus == 2) { //As per backend team, security status 4 or 5 should be treated similarly
+                                == 5 || securityStatus
+                                == 2) { //As per backend team, security status 4 or 5 should be treated similarly
                             //TODO: research more into silent sign in logic
                             mAccountRootFragment.showAccountFragment();
                         }
@@ -534,14 +553,25 @@ public class HomeActivity extends AbstractActivity
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
+        isPushNotificationEnabled = (which == DialogInterface.BUTTON_POSITIVE);
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
-                setPushNotificationEnability(true);
+                performPushOperation(new PushNotificationRequest(PUSH_NOTIFICATION_SUCCESS,
+                        mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
-                setPushNotificationEnability(false);
+                performPushOperation(new PushNotificationRequest(PUSH_NOTIFICATION_FAILURE,
+                        mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
                 break;
         }
+    }
+
+    public void performPushOperation(PushNotificationRequest pushNotificationRequest) {
+        showProgress();
+        isPushNotificationEnabled = pushNotificationRequest.getPushNotification()
+                .equalsIgnoreCase(PUSH_NOTIFICATION_SUCCESS) ? true : false;
+        mPushPresenter.savePushNotificationFlag(pushNotificationRequest);
+
     }
 
     private void setPushNotificationEnability(boolean value) {
@@ -633,10 +663,10 @@ public class HomeActivity extends AbstractActivity
     /**
      * Move View Pager Externaly via programtically assigning selection number
      */
-    public void scrollViewPager(int pageNo,boolean navigateToShopCategory) {
+    public void scrollViewPager(int pageNo, boolean navigateToShopCategory) {
         mViewPager.setCurrentItem(pageNo);
         //Sending broadcast in order to scroll to shop by category
-        if(navigateToShopCategory) {
+        if (navigateToShopCategory) {
             Intent intent = new Intent(Constants.SCROLL_TO_SHOP_CATEGORIES);
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
         }
@@ -722,6 +752,40 @@ public class HomeActivity extends AbstractActivity
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoginReceiver);
+    }
+
+
+    @Override
+    public void onNotificationFlagSuccess() {
+        hideProgress();
+        setPushNotificationEnability(isPushNotificationEnabled);
+        Intent intent = new Intent(HomeActivity.PUSH_NOTIFICATION_ACTION);
+        intent.putExtra(PUSH_ENABLING, isPushNotificationEnabled);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void onNotificationFlagError(String error) {
+        performErrorFunctionality(error);
+    }
+
+    private void performErrorFunctionality(String error) {
+        hideProgress();
+        setPushNotificationEnability(!isPushNotificationEnabled);
+        Utils.displayCrouton(this, error.toString(), mContainerLayout);
+        Intent intent = new Intent(HomeActivity.PUSH_NOTIFICATION_ACTION);
+        intent.putExtra(PUSH_ENABLING, !isPushNotificationEnabled);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+    @Override
+    public void onError(String error) {
+        performErrorFunctionality(error);
+    }
+
+    @Override
+    public boolean isActive() {
+        return true;
     }
 }
 

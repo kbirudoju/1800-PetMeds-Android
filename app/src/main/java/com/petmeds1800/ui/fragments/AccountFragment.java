@@ -1,5 +1,29 @@
 package com.petmeds1800.ui.fragments;
 
+import com.mtramin.rxfingerprint.RxFingerprint;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
+import com.petmeds1800.model.entities.PushNotificationRequest;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.account.AccountSettingsFragment;
+import com.petmeds1800.ui.account.SignOutContract;
+import com.petmeds1800.ui.account.SignOutPresenter;
+import com.petmeds1800.ui.address.SavedAddressListFragment;
+import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
+import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
+import com.petmeds1800.ui.medicationreminders.service.MedicationReminderResultReceiver;
+import com.petmeds1800.ui.orders.MyOrderFragment;
+import com.petmeds1800.ui.orders.OrderDetailFragment;
+import com.petmeds1800.ui.payment.SavedCardsListFragment;
+import com.petmeds1800.ui.pets.PetListFragment;
+import com.petmeds1800.ui.vet.VetListFragment;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.CustomSwitch;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Utils;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,29 +42,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.mtramin.rxfingerprint.RxFingerprint;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.intent.AddUpdateMedicationRemindersIntent;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.account.AccountSettingsFragment;
-import com.petmeds1800.ui.account.SignOutContract;
-import com.petmeds1800.ui.account.SignOutPresenter;
-import com.petmeds1800.ui.address.SavedAddressListFragment;
-import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
-import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
-import com.petmeds1800.ui.medicationreminders.service.MedicationReminderResultReceiver;
-import com.petmeds1800.ui.orders.MyOrderFragment;
-import com.petmeds1800.ui.orders.OrderDetailFragment;
-import com.petmeds1800.ui.payment.SavedCardsListFragment;
-import com.petmeds1800.ui.pets.PetListFragment;
-import com.petmeds1800.ui.vet.VetListFragment;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
-import com.urbanairship.UAirship;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -48,6 +49,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static com.petmeds1800.ui.HomeActivity.PUSH_NOTIFICATION_ACTION;
+import static com.petmeds1800.ui.HomeActivity.PUSH_NOTIFICATION_FAILURE;
+import static com.petmeds1800.ui.HomeActivity.PUSH_NOTIFICATION_SUCCESS;
+import static com.petmeds1800.ui.HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION;
 import static com.petmeds1800.util.Constants.ORDER_ID_KEY;
 import static com.petmeds1800.util.Constants.PUSH_EXTRA_ID;
 import static com.petmeds1800.util.Constants.PUSH_SCREEN_TYPE;
@@ -60,6 +65,8 @@ import static com.petmeds1800.util.Constants.SUCCESS;
 public class AccountFragment extends AbstractFragment
         implements View.OnClickListener, Switch.OnCheckedChangeListener, DialogInterface.OnClickListener,
         SignOutContract.View, MedicationReminderResultReceiver.Receiver {
+
+    private static final String PUSH_ENABLING = "pushEnabling";
 
     @BindView(R.id.myOrder)
     TextView myOrderView;
@@ -80,7 +87,7 @@ public class AccountFragment extends AbstractFragment
     Switch fingerPrintStatus;
 
     @BindView(R.id.notificationStatus)
-    Switch notificationStatus;
+    CustomSwitch notificationStatus;
 
     @BindView(R.id.my_vets_label)
     TextView mVetLabel;
@@ -140,8 +147,7 @@ public class AccountFragment extends AbstractFragment
         signOut.setOnClickListener(this);
         mMedicationReminderLabel.setOnClickListener(this);
         mRefillReminderLabel.setOnClickListener(this);
-
-
+        fillWindow();
     }
 
 
@@ -244,8 +250,8 @@ public class AccountFragment extends AbstractFragment
         ((AbstractActivity) getActivity()).disableBackButton();
         setHasOptionsMenu(false);
         //start listening for optionsMenuAction
-        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
-
+        registerIntent(new IntentFilter(SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
+        registerIntent(new IntentFilter(HomeActivity.PUSH_NOTIFICATION_ACTION), getContext());
         return view;
 
     }
@@ -300,20 +306,9 @@ public class AccountFragment extends AbstractFragment
         switch (buttonView.getId()) {
             case R.id.notificationStatus:
                 fromWhichAlert = FROM_NOTIFICATION;
-                mPreferencesHelper.setIsPushNotificationEnableFlag(isChecked);
-                UAirship.shared().getPushManager().setUserNotificationsEnabled(isChecked);
-                if (isChecked) {
-                    ((HomeActivity) getActivity()).getAnalyticsRef()
-                            .trackEvent(getString(R.string.push_notifications_category),
-                                    getString(R.string.push_notifications_enability),
-                                    getString(R.string.push_notifications_enable_label));
-
-                } else {
-                    ((HomeActivity) getActivity()).getAnalyticsRef()
-                            .trackEvent(getString(R.string.push_notifications_category),
-                                    getString(R.string.push_notifications_disability),
-                                    getString(R.string.push_notification_disability));
-                }
+                ((HomeActivity) getActivity()).performPushOperation(new PushNotificationRequest(
+                        isChecked ? PUSH_NOTIFICATION_SUCCESS : PUSH_NOTIFICATION_FAILURE,
+                        mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
                 break;
             case R.id.fingerPrintStatus:
                 if (buttonView.isPressed()) {
@@ -455,11 +450,15 @@ public class AccountFragment extends AbstractFragment
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
         //  Added below lines in order to create UI after account fragment added into viewpager
-        checkAndSetHasOptionsMenu(intent, AccountRootFragment.class.getName());
-        fillWindow();
-        if (((HomeActivity) getActivity()) != null && ((HomeActivity) getActivity()).getIntent() != null) {
-            navigateOnPush();
+        if (intent.getAction() == PUSH_NOTIFICATION_ACTION) {
+            notificationStatus.setCheckedProgrammatically(intent.getBooleanExtra(PUSH_ENABLING, false));
+        } else {
+            checkAndSetHasOptionsMenu(intent, AccountRootFragment.class.getName());
+            if (((HomeActivity) getActivity()) != null && ((HomeActivity) getActivity()).getIntent() != null) {
+                navigateOnPush();
+            }
         }
+
         super.onReceivedBroadcast(context, intent);
     }
 

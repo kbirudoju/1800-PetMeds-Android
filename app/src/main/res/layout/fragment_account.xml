@@ -1,243 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
     <LinearLayout
-        android:id="@+id/containerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            style="@style/label"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:gravity="center_vertical"
-            android:text="@string/title_orders" />
-
-        <TextView
-            android:id="@+id/myOrder"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_orders"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_my_orders"
-
-            />
-
-        <include layout="@layout/view_separator"></include>
-
-        <TextView
-            style="@style/label"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:gravity="center_vertical"
-            android:text="@string/title_account" />
-
-        <TextView
-            android:id="@+id/accountSettings_label"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_accountsettings"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_change_account_settings" />
-
-        <include layout="@layout/view_separator"></include>
-
-        <TextView
-            android:id="@+id/managePayment_label"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_paymnentinformation"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_manage_payment_option" />
-
-        <include layout="@layout/view_separator" />
-
-        <TextView
-            android:id="@+id/manageAddress_label"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_manageaddress"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_manage_address" />
-
-        <include layout="@layout/view_separator" />
-
-        <TextView
-            android:id="@+id/my_pets_label"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_mypets"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_my_pets" />
-
-        <include layout="@layout/view_separator" />
-
-        <TextView
-            android:id="@+id/my_vets_label"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_myvets"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_my_vets" />
-
-        <include layout="@layout/view_separator" />
-
-        <TextView
-            android:id="@+id/refill_reminder_label"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_refill"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_set_refill_schedule" />
-
-        <TextView
-            android:id="@+id/medication_reminder_label"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_refill"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_medication_reminder" />
-
-        <include layout="@layout/view_separator" />
-
-        <TextView
-            style="@style/label"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:gravity="center_vertical"
-            android:text="@string/title_setting" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:paddingRight="20dp">
-
-            <TextView
-                style="@style/styledefault"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/fingerPrintStatus"
-                android:text="@string/title_use_fingerprint" />
-
-            <Switch
-                android:id="@+id/fingerPrintStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
-
-        <include layout="@layout/view_separator" />
-
-        <RelativeLayout
+            android:id="@+id/containerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingRight="@dimen/dp_20">
+            android:orientation="vertical">
+
+        <TextView
+                style="@style/label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:text="@string/title_orders"/>
+
+        <TextView
+                android:id="@+id/myOrder"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_orders"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_my_orders"
+
+        />
+
+        <include layout="@layout/view_separator"></include>
+
+        <TextView
+                style="@style/label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:text="@string/title_account"/>
+
+        <TextView
+                android:id="@+id/accountSettings_label"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_accountsettings"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_change_account_settings"/>
+
+        <include layout="@layout/view_separator"></include>
+
+        <TextView
+                android:id="@+id/managePayment_label"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_paymnentinformation"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_manage_payment_option"/>
+
+        <include layout="@layout/view_separator"/>
+
+        <TextView
+                android:id="@+id/manageAddress_label"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_manageaddress"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_manage_address"/>
+
+        <include layout="@layout/view_separator"/>
+
+        <TextView
+                android:id="@+id/my_pets_label"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_mypets"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_my_pets"/>
+
+        <include layout="@layout/view_separator"/>
+
+        <TextView
+                android:id="@+id/my_vets_label"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_myvets"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_my_vets"/>
+
+        <include layout="@layout/view_separator"/>
+
+        <TextView
+                android:id="@+id/refill_reminder_label"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_refill"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_set_refill_schedule"/>
+
+        <TextView
+                android:id="@+id/medication_reminder_label"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_refill"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_medication_reminder"/>
+
+        <include layout="@layout/view_separator"/>
+
+        <TextView
+                style="@style/label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:text="@string/title_setting"/>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingRight="20dp">
 
             <TextView
-                android:id="@+id/header_notification"
-                style="@style/styledefault"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_50"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/notificationStatus"
-                android:gravity="center_vertical"
-                android:text="@string/title_push_notification" />
+                    style="@style/styledefault"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/fingerPrintStatus"
+                    android:text="@string/title_use_fingerprint"/>
 
             <Switch
-                android:id="@+id/notificationStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-
-            <TextView
-                style="@style/paragraph"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/header_notification"
-                android:layout_marginBottom="@dimen/dp_13"
-                android:layout_marginTop="@dimen/dp_3"
-                android:layout_toLeftOf="@+id/notificationStatus"
-                android:text="@string/push_notification_desc" />
+                    android:id="@+id/fingerPrintStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
         </RelativeLayout>
 
-        <include layout="@layout/view_separator" />
+        <include layout="@layout/view_separator"/>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingRight="@dimen/dp_20">
+
+            <TextView
+                    android:id="@+id/header_notification"
+                    style="@style/styledefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/notificationStatus"
+                    android:gravity="center_vertical"
+                    android:text="@string/title_push_notification"/>
+
+            <com.petmeds1800.util.CustomSwitch
+                    android:id="@+id/notificationStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+
+            <TextView
+                    style="@style/paragraph"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/header_notification"
+                    android:layout_marginBottom="@dimen/dp_13"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:layout_toLeftOf="@+id/notificationStatus"
+                    android:text="@string/push_notification_desc"/>
+        </RelativeLayout>
+
+        <include layout="@layout/view_separator"/>
 
         <TextView
-            style="@style/label"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:gravity="center_vertical"
-            android:text="@string/title_more" />
+                style="@style/label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:gravity="center_vertical"
+                android:text="@string/title_more"/>
 
         <TextView
-            android:id="@+id/txv_contact_us"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_contact"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_contact_us" />
+                android:id="@+id/txv_contact_us"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_contact"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_contact_us"/>
 
-        <include layout="@layout/view_separator" />
+        <include layout="@layout/view_separator"/>
 
         <TextView
-            android:id="@+id/signOut"
-            style="@style/styledefault"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:drawableLeft="@drawable/ic_logout"
-            android:drawablePadding="@dimen/dp_12"
-            android:drawableRight="@drawable/ic_arrow"
-            android:gravity="center_vertical"
-            android:text="@string/title_signout" />
+                android:id="@+id/signOut"
+                style="@style/styledefault"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/ic_logout"
+                android:drawablePadding="@dimen/dp_12"
+                android:drawableRight="@drawable/ic_arrow"
+                android:gravity="center_vertical"
+                android:text="@string/title_signout"/>
 
     </LinearLayout>
 </ScrollView>
