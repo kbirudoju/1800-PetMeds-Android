@@ -128,7 +128,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
         if (!isEmpty) {
             activity.showProgress();
             //create request for add pet and vet info to cart
-            SavePetVetRequest savePetVetRequest = new SavePetVetRequest(true, fragment.mMailOption, commerceItemIds,
+            SavePetVetRequest savePetVetRequest = new SavePetVetRequest(false, fragment.mMailOption, commerceItemIds,
                     petIds,
                     vetIds, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.applyPetVetInfo(savePetVetRequest);
