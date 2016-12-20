@@ -160,6 +160,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         //we should set the title only if current selected tab is not the first home tab
         if (((HomeActivity) getActivity()).getCurrentSelectedTab() == 1) {
             ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[1]));
+            ((AbstractActivity) getActivity()).disableBackButton();
         }
     }
 
