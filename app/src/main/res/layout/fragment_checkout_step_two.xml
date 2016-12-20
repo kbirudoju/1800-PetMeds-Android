@@ -24,9 +24,11 @@
         </RelativeLayout>
     </ScrollView>
 <Button
+        android:drawableEnd="@drawable/red_arrow"
+        android:drawableRight="@drawable/red_arrow"
     android:id="@+id/review_submit_button"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/dp_44"
     android:text="@string/review_and_submit_txt"
     style="@style/dialog_button_style_blue"
     android:layout_alignParentBottom="true"/>

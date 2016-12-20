@@ -8,6 +8,8 @@
                 android:background="@color/white">
 
     <Button
+            android:drawableEnd="@drawable/red_arrow"
+            android:drawableRight="@drawable/red_arrow"
             style="@style/dialog_button_style_blue"
             android:text="@string/payment_navigator_button_title"
             android:layout_width="match_parent"
