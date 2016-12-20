@@ -447,7 +447,7 @@ public class AddPetFragment extends AbstractFragment
             case R.id.add_edit_current_medications:
                 fromWhichDailog = IS_CURRENT_MEDICATIONS_DAILOG;
                 if (petCurrentMedicationList != null && petCurrentMedicationList.size() > 0) {
-                    showPetMedicalData(getString(R.string.current_medication), petCurrentMedicationList);
+                    showPetMedicalData(getString(R.string.current_medication_title), petCurrentMedicationList);
                 } else {
                     mPresenter.populatePetMedicationsList();
                 }
@@ -876,7 +876,7 @@ public class AddPetFragment extends AbstractFragment
             executeCommonLogic(response, getString(R.string.title_for_pet_allergies), petMedicationAlleryList,
                     nameValueDetailsForMedicalallergy);
         } else {
-            executeCommonLogic(response, getString(R.string.current_medicatiob_title), petCurrentMedicationList,
+            executeCommonLogic(response, getString(R.string.current_medication_title), petCurrentMedicationList,
                     nameValueDetailsForCurrentMedications);
         }
 

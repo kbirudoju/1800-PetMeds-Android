@@ -297,7 +297,7 @@
     <string name="title_pet_profiles">Pet profiles</string>
     <string name="title_track_shipment">Track Shipment</string>
     <string name="title_forgot_password">Forgot Password</string>
-    <string name="title_for_pet_allergies">PET MEDICATION ALLERGIES</string>
+    <string name="title_for_pet_allergies">Is your pet allergic to any medications?</string>
     <string name="title_for_pet_conditions">Does your pet have any medical conditions?</string>
     <!--Webview Urls-->
 
@@ -722,7 +722,7 @@
 
     <string name="label_retry">Retry</string>
     <string name="pet_image_upload_error">Pet Image failed to upload</string>
-    <string name="current_medicatiob_title">Is your pet taking any medications?\n(Not purchased through us)</string>
+    <string name="current_medication_title">Is your pet taking any medications?\n(Not purchased through us)</string>
     <string name="mail_prescription_txt">Please mail your prescription to:\n\n1-800-PetMeds®\nAttention: Pharmacy\n420 S. Congress Ave, Suite 100\nDelray Beach, FL 33445\n\nOnce we receive your mailed in prescription, we will ship your order.\n\nNo faxes due to pharmacy regulations</string>
     <string name="recently_ordered_title">Recently Ordered</string>
 </resources>
