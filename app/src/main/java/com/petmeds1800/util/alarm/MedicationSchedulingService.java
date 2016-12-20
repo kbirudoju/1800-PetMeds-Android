@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
 /**
  * This {@code IntentService} does the app's actual work. {@code SampleAlarmReceiver} (a {@code
@@ -49,11 +50,12 @@ public class MedicationSchedulingService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setAutoCancel(true)
+                        .setColor(ContextCompat.getColor(this,R.color.petmeds_blue))
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(getString(R.string.application_name))
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(notificationMessage + "" + notificationId))
-                        .setContentText(notificationMessage + "" + notificationId);
+                                .bigText(notificationMessage))
+                        .setContentText(notificationMessage);
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(notificationId, mBuilder.build());
     }

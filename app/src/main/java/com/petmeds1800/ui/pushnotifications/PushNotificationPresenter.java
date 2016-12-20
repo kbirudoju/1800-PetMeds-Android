@@ -10,8 +10,6 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import rx.Subscriber;
@@ -37,7 +35,6 @@ public class PushNotificationPresenter implements PushNotificationContract.Prese
     @Override
     public void savePushNotificationFlag(PushNotificationRequest pushNotificationRequest) {
         mPetMedsApiService.savePushNotificationFlag(pushNotificationRequest)
-                .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<PushNotificationResponse>() {
