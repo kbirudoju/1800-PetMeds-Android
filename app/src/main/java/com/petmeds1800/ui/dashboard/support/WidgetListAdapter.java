@@ -155,6 +155,10 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             addCartBtn.setOnClickListener(listener);
             Button addCouponCartBtn = (Button) v.findViewById(R.id.add_cart_button_coupons);
             addCouponCartBtn.setOnClickListener(listener);
+            RelativeLayout couponArrowView=(RelativeLayout)v.findViewById(R.id.product_desc_layout_coupons);
+            RelativeLayout arrowView=(RelativeLayout)v.findViewById(R.id.product_desc_layout);
+            couponArrowView.setOnClickListener(listener);
+            arrowView.setOnClickListener(listener);
 
         }
         else if (viewType == VIEW_FOOTER) {
@@ -536,6 +540,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                             recentlyOrderedHolder.refillCouponProductImage.setImageDrawable(circularBitmapDrawable);
                         }
                     });
+                    recentlyOrderedHolder.refillArrowImage.setVisibility(View.VISIBLE);
                 }else {
                     recentlyOrderedHolder.row_coupons_layout.setVisibility(View.GONE);
                     recentlyOrderedHolder.noCouponRefillLayout.setVisibility(View.VISIBLE);
@@ -554,8 +559,11 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         }
                     });
                 }
+                recentlyOrderedHolder.arrowImage.setVisibility(View.VISIBLE);
                 recentlyOrderedHolder.refillAddCartButton.setTag(recentlyOrdered);
                 recentlyOrderedHolder.refillAddCouponCartButton.setTag(recentlyOrdered);
+                recentlyOrderedHolder.productDescCouponView.setTag(recentlyOrdered.getPageUrl());
+                recentlyOrderedHolder.productDescView.setTag(recentlyOrdered.getPageUrl());
                 break;
             case VIEW_FOOTER:
 
@@ -637,7 +645,14 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView refillPromoLabel;
         @BindView(R.id.refill_view_product_image_coupons)
         ImageView refillCouponProductImage;
-
+        @BindView(R.id.refill_view_arrow_image)
+        ImageView refillArrowImage;
+        @BindView(R.id.arrow_image)
+        ImageView arrowImage;
+        @BindView(R.id.product_desc_layout_coupons)
+        RelativeLayout productDescCouponView;
+        @BindView(R.id.product_desc_layout)
+        RelativeLayout productDescView;
 
 
 

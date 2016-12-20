@@ -16,13 +16,27 @@
         android:paddingTop="@dimen/dp_13"
 
        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/product_desc_layout">
         <ImageView
             android:id="@+id/refill_view_product_image"
             android:layout_width="@dimen/dp_62"
             android:layout_height="@dimen/dp_62"
             android:background="@drawable/circular_background"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             />
+        <ImageView
+            android:id="@+id/arrow_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_arrow"
+            android:layout_marginTop="@dimen/dp_28"
+            android:visibility="gone"
+          />
         <LinearLayout
             android:id="@+id/product_detail_layout"
             android:layout_width="wrap_content"
@@ -31,7 +45,8 @@
             android:layout_marginLeft="@dimen/dp_23"
             android:layout_toRightOf="@+id/refill_view_product_image"
             android:gravity="center_vertical"
-            android:layout_marginBottom="@dimen/dp_11">
+            android:layout_marginBottom="@dimen/dp_11"
+            android:layout_toLeftOf="@+id/arrow_image">
             <TextView
                 android:id="@+id/refill_view_product_label"
                 android:layout_width="wrap_content"
@@ -47,10 +62,13 @@
 
                 />
             <LinearLayout
+                android:id="@+id/product_detail_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dp_3">
+                android:layout_marginTop="@dimen/dp_3"
+
+                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,6 +101,7 @@
             <include
                 layout="@layout/view_coupon"/>
         </LinearLayout>
+        </RelativeLayout>
         <Button
             android:id="@+id/add_cart_button"
             android:layout_width="match_parent"
@@ -90,7 +109,7 @@
             android:background="@color/petmeds_blue"
             android:padding="@dimen/dp_13"
             android:text="@string/add_cart_txt"
-            android:layout_below="@+id/product_detail_layout"
+            android:layout_below="@+id/product_desc_layout"
             style="@style/dialog_button_style"
             android:textColor="@color/white"/>
     </RelativeLayout>
@@ -106,12 +125,25 @@
         android:visibility="visible"
 
         >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/product_desc_layout_coupons">
         <ImageView
             android:id="@+id/refill_view_product_image_coupons"
             android:layout_width="@dimen/dp_62"
             android:layout_height="@dimen/dp_62"
             android:background="@drawable/circular_background"
             android:layout_alignParentLeft="true"
+            />
+        <ImageView
+            android:id="@+id/refill_view_arrow_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_arrow"
+            android:layout_marginTop="@dimen/dp_28"
+            android:visibility="gone"
             />
         <LinearLayout
             android:id="@+id/product_detail_layout_coupons"
@@ -121,7 +153,8 @@
             android:layout_marginLeft="@dimen/dp_23"
             android:layout_toRightOf="@+id/refill_view_product_image_coupons"
             android:gravity="center_vertical"
-            android:layout_marginBottom="@dimen/dp_11">
+            android:layout_marginBottom="@dimen/dp_11"
+            android:layout_toLeftOf="@+id/refill_view_arrow_image">
             <TextView
                 android:id="@+id/refill_view_product_label_coupons"
                 android:layout_width="wrap_content"
@@ -189,6 +222,7 @@
             <include
                 layout="@layout/view_coupon"/>
         </LinearLayout>
+    </RelativeLayout>
         <Button
             android:id="@+id/add_cart_button_coupons"
             android:layout_width="match_parent"
@@ -196,7 +230,7 @@
             android:background="@color/petmeds_blue"
             android:padding="@dimen/dp_13"
             android:text="@string/add_cart_txt"
-            android:layout_below="@+id/product_detail_layout_coupons"
+            android:layout_below="@+id/product_desc_layout_coupons"
             style="@style/dialog_button_style"
             android:textColor="@color/white"/>
     </RelativeLayout>

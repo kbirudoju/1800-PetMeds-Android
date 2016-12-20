@@ -126,6 +126,10 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                     Products shoppingProducts=(Products)v.getTag();
                     ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(shoppingProducts.getProductPageUrl(), shoppingProducts.getDisplayName());
 
+                }else if(v.getTag() instanceof String){
+                    String productPageUrl=(String)v.getTag();
+                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(productPageUrl,getString(R.string.recently_ordered_title));
+
                 }
             }
         });
