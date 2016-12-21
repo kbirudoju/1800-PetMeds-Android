@@ -295,6 +295,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
                     mEmailTextLogin.setVisibility(View.GONE);
                     mEmailInput.setVisibility(View.VISIBLE);
                     mEmailEdit.setText(loginEmail);
+                    mEmailEdit.setSelection(mEmailEdit.getText().length());
                    // mEmailTextLogin.setText(loginEmail);
                 }
                 mCancelButton.setText(R.string.label_fingerprint_cancel);
