@@ -246,13 +246,15 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         // check if the request code is same as what is passed  here it is 2
         if(requestCode==2)
         {
-            String title=data.getStringExtra(CommonWebviewFragment.TITLE_KEY);
-            String url=data.getStringExtra(CommonWebviewFragment.URL_KEY);
+            if(data!=null) {
+                String title = data.getStringExtra(CommonWebviewFragment.TITLE_KEY);
+                String url = data.getStringExtra(CommonWebviewFragment.URL_KEY);
 
-            Bundle bundle = new Bundle();
-            bundle.putString(CommonWebviewFragment.TITLE_KEY, title);
-            bundle.putString(CommonWebviewFragment.URL_KEY, url);
-            replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString(CommonWebviewFragment.TITLE_KEY, title);
+                bundle.putString(CommonWebviewFragment.URL_KEY, url);
+                replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
+            }
         }
     }
 }
