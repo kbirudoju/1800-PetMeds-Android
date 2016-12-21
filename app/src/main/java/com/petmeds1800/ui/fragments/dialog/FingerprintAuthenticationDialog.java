@@ -106,7 +106,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     TextView mEmailTextLogin;
 
     @BindView(R.id.txv_email)
-    TextView mEmailTextForgotPassword;
+    EditText mEmailTextForgotPassword;
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
