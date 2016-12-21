@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.intent.BarcodeScannerIntent;
@@ -33,6 +34,7 @@ import com.petmeds1800.ui.support.HomeFragmentContract;
 import com.petmeds1800.util.Constants;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +169,14 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         searchView.setIconifiedByDefault(false);
         EditText searchEdit = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchEdit.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
-        searchEdit.setHintTextColor(ContextCompat.getColor(getActivity(), R.color.hint_color));
+        searchEdit.setHintTextColor(ContextCompat.getColor(getActivity(), R.color.serach_hint_color));
+        try {
+            Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+            mCursorDrawableRes.setAccessible(true);
+            mCursorDrawableRes.set(searchEdit, R.drawable.search_cursor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
