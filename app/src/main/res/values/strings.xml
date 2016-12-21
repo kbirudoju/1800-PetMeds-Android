@@ -621,7 +621,7 @@
     <string name="title_featured">Featured</string>
     <string name="title_conditions">Conditions</string>
     <string name="label_about">About</string>
-    <string name="label_got_questions">Got Questions? Check Our Q&amp;A Directory</string>
+    <string name="label_got_questions">Got Questions? Ask The Vet </string>
     <string name="label_q_and_a_directory">Q &amp; A Directory</string>
     <string name="remove_vet_message">This vet will be removed from your account</string>
 
@@ -725,5 +725,6 @@
     <string name="current_medication_title">Is your pet taking any medications?\n(Not purchased through us)</string>
     <string name="mail_prescription_txt">Please mail your prescription to:\n\n1-800-PetMeds®\nAttention: Pharmacy\n420 S. Congress Ave, Suite 100\nDelray Beach, FL 33445\n\nOnce we receive your mailed in prescription, we will ship your order.\n\nNo faxes due to pharmacy regulations</string>
     <string name="recently_ordered_title">Recently Ordered</string>
+    <string name="ask_the_vet_title">Ask The Vet</string>
 </resources>
 

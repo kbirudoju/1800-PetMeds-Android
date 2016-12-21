@@ -68,7 +68,7 @@ public class FeaturedFragment extends AbstractFragment {
         Log.v("screen Type","inside this show as petvet"+screenType);
         PetMedsApplication.menuItemsClicked = true;
         Bundle bundle = new Bundle();
-        bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_q_and_a_directory));
+        bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.ask_the_vet_title));
         bundle.putString(CommonWebviewFragment.URL_KEY,
                 (screenType == TYPE_QUESTION_ANSWER_ALERT) ? getString(R.string.url_vet_answered)+id
                         : getString(R.string.url_featured_ask_vet));
