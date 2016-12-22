@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -44,7 +45,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -55,7 +55,7 @@ import rx.schedulers.Schedulers;
  * Created by Digvijay on 9/9/2016.
  */
 public class SignUpFragment extends AbstractFragment
-        implements SignUpContract.View, View.OnClickListener, CommonDialogFragment.ValueSelectedListener {
+        implements SignUpContract.View, View.OnClickListener, CommonDialogFragment.ValueSelectedListener,CompoundButton.OnCheckedChangeListener {
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
@@ -259,6 +259,10 @@ public class SignUpFragment extends AbstractFragment
         mStateShippingEdit.setFocusableInTouchMode(false);
         mCountryShippingEdit.setOnClickListener(this);
         mCountryShippingEdit.setFocusableInTouchMode(false);
+        mSameAddressesSwitch.setOnCheckedChangeListener(this);
+
+
+
     }
 
     @Override
@@ -366,14 +370,10 @@ public class SignUpFragment extends AbstractFragment
         mPresenter = presenter;
     }
 
-    @OnClick(R.id.switch_same_addresses)
+    /*@OnClick(R.id.switch_same_addresses)
     public void showHideShipping() {
-        if (mSameAddressesSwitch.isChecked()) {
-            mBillingViewsContainer.setVisibility(View.GONE);
-        } else {
-            mBillingViewsContainer.setVisibility(View.VISIBLE);
-        }
-    }
+
+    }*/
 
     private void signUp() {
 
@@ -784,6 +784,16 @@ public class SignUpFragment extends AbstractFragment
 
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (mSameAddressesSwitch.isChecked()) {
+            mBillingViewsContainer.setVisibility(View.GONE);
+
+        } else {
+            mBillingViewsContainer.setVisibility(View.VISIBLE);
         }
     }
 }
