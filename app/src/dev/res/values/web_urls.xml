@@ -7,4 +7,5 @@
     <string name="url_learn_about">http://dev.1800petmeds.com/about_app.jsp</string>
     <string name="url_live_chat">http://dev.1800petmeds.com/popup/webchat.jsp</string>
     <string name="url_vet_answered">https://dev.1800petmeds.com/askthevet.jsp?Q=</string>
+    <string name="url_ship_rates">https://dev.1800petmeds.com/shiprate.jsp</string>
 </resources>

@@ -40,6 +40,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -289,19 +290,18 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         Button OrderStatusLAbel = (Button) footerView.findViewById(R.id.order_status_label);
 
         OrderStatusLAbel.setVisibility(View.GONE);
+        ((EditText) mCouponCodeLayout.getEditText()).setImeOptions(EditorInfo.IME_ACTION_GO);
         ((EditText) mCouponCodeLayout.getEditText()).setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
 
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(
-                            ((EditText) mCouponCodeLayout.getEditText()).getText().toString().trim(), null));
+                if (actionId == EditorInfo.IME_ACTION_GO || (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN)) {
+                    callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(((EditText) mCouponCodeLayout.getEditText()).getText().toString().trim(), null));
                     return true;
                 }
                 return false;
             }
         });
-        ((EditText) mCouponCodeLayout.getEditText()).setImeOptions(EditorInfo.IME_ACTION_GO);
 
         ((EditText) mCouponCodeLayout.getEditText()).setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -312,12 +312,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
                 final int DRAWABLE_BOTTOM = 3;
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (((EditText) mCouponCodeLayout.getEditText()).getRight()
-                            - ((EditText) mCouponCodeLayout.getEditText()).getCompoundDrawables()[DRAWABLE_RIGHT]
-                            .getBounds().width())) {
-                        callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(
-                                ((EditText) mCouponCodeLayout.getEditText()).getText().toString().trim(), null));
-
+                    if (event.getRawX() >= (((EditText) mCouponCodeLayout.getEditText()).getRight() - ((EditText) mCouponCodeLayout.getEditText()).getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        callmShoppingCartAPI(new ApplyCouponRequestShoppingCart(((EditText) mCouponCodeLayout.getEditText()).getText().toString().trim(), null));
                         return true;
                     }
                 }
@@ -325,10 +321,13 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
             }
         });
 
-        if (null != shoppingCartListResponse && null != shoppingCartListResponse.getShoppingCart().getCoupon()
-                && !shoppingCartListResponse.getShoppingCart().getCoupon().isEmpty()) {
+        if (null != shoppingCartListResponse && null != shoppingCartListResponse.getShoppingCart().getCoupon() && !shoppingCartListResponse.getShoppingCart().getCoupon().isEmpty()) {
             mCouponCodeLayout.getEditText().setText(shoppingCartListResponse.getShoppingCart().getCoupon());
             OrderStatusLAbel.setVisibility(View.VISIBLE);
+        }
+
+        if (null != shoppingCartListResponse && null != shoppingCartListResponse.getPromotionMessage() && !shoppingCartListResponse.getPromotionMessage().isEmpty()){
+            ((TextView)footerView.findViewById(R.id.promotion_message)).setText(shoppingCartListResponse.getPromotionMessage());
         }
         return footerView;
     }
@@ -343,8 +342,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     private boolean initializeShoppingCartPage(final ShoppingCartListResponse shoppingCartListResponse) {
         mShoppingCartListResponse = shoppingCartListResponse;
         mShoppingCartRecyclerViewAdapter = new ShoppingCartRecyclerViewAdapter(
-                shoppingCartListResponse.getShoppingCart().getCommerceItems(), createFooter(
-                ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                shoppingCartListResponse.getShoppingCart().getCommerceItems(), createFooter(((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                         .inflate(R.layout.view_offer_code_card, null, false), shoppingCartListResponse), getActivity(),
                 CartFragmentMessageHandler);
         mContainerLayoutItems.setAdapter(mShoppingCartRecyclerViewAdapter);
@@ -389,14 +387,24 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
 
         if (shoppingCartListResponse.getShippingMessageInfo().getIsFreeShipping()) {
             mTotalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.VISIBLE);
-            ((TextView) (mTotalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText(
-                    getActivity().getResources().getString(R.string.your_order_qualifies_for_free_standard_shipping));
-        } else if (!shoppingCartListResponse.getShippingMessageInfo().getIsFreeShipping()
-                && null != shoppingCartListResponse.getShippingMessageInfo().getMessage()
-                && shoppingCartListResponse.getShippingMessageInfo().getMessage().length() > 0) {
+            ((TextView) (mTotalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText(getActivity().getResources().getString(R.string.your_order_qualifies_for_free_standard_shipping));
+            ((ImageView) (mTotalCheckOutContainer.findViewById(R.id.shipping_web_link))).setVisibility(View.GONE);
+        } else if (!shoppingCartListResponse.getShippingMessageInfo().getIsFreeShipping() && null != shoppingCartListResponse.getShippingMessageInfo().getMessage() && shoppingCartListResponse.getShippingMessageInfo().getMessage().length() > 0) {
             mTotalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.VISIBLE);
-            ((TextView) (mTotalCheckOutContainer.findViewById(R.id.standard_shipping_txt)))
-                    .setText(shoppingCartListResponse.getShippingMessageInfo().getMessage().trim());
+            ((TextView) (mTotalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText(shoppingCartListResponse.getShippingMessageInfo().getMessage());
+            ((ImageView) (mTotalCheckOutContainer.findViewById(R.id.shipping_web_link))).setVisibility(View.VISIBLE);
+            mTotalCheckOutContainer.findViewById(R.id.shipping_description_layout).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    CommonWebviewFragment commonWebviewFragment = new CommonWebviewFragment();
+                    Bundle b = new Bundle();
+                    b.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.shipping_rates));
+                    b.putString(CommonWebviewFragment.URL_KEY, getResources().getString(R.string.url_ship_rates));
+                    commonWebviewFragment.setArguments(b);
+                    addStepRootChildFragment(commonWebviewFragment, R.id.cart_root_fragment_container);
+                }
+            });
         } else {
             ((TextView) (mTotalCheckOutContainer.findViewById(R.id.standard_shipping_txt))).setText("-");
             mTotalCheckOutContainer.findViewById(R.id.shipping_description_layout).setVisibility(View.GONE);
@@ -462,7 +470,6 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
                 ((HomeActivity) getActivity()).scrollViewPager(0,false);
                 break;
         }
-
     }
 
     public void startCheckoutAfterPayment(final ShoppingCartListResponse response) {
