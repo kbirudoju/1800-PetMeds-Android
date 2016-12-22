@@ -370,9 +370,7 @@ public class HomeActivity extends AbstractActivity
             mPreferencesHelper.setIsFingerPrintEnabled(false);
         } else if (!RxFingerprint.hasEnrolledFingerprints(this)) {
             mPreferencesHelper.setIsFingerPrintEnabled(false);
-        } else {
-            mPreferencesHelper.setIsFingerPrintEnabled(true);
-        }
+        } 
         if (getIntent().getBooleanExtra(IS_FROM_HOME_ACTIVITY, false) && mPreferencesHelper.getIsUserLoggedIn()) {
             showPushPermissionDailog();
             startService(new AddUpdateMedicationRemindersIntent(this, false));
