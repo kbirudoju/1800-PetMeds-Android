@@ -12,8 +12,15 @@ public class RecentlyOrdered implements Serializable{
     private String skuImage;
     private String skuId;
     private String displayName;
+    private int minQty;
 
+    public int getMinQty() {
+        return minQty;
+    }
 
+    public void setMinQty(int minQty) {
+        this.minQty = minQty;
+    }
 
     public String getPageUrl() {
         return pageUrl;

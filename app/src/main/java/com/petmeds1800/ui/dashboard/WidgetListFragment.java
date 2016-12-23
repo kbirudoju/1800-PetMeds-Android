@@ -92,7 +92,8 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                     RecentlyOrdered recentlyOrdered = (RecentlyOrdered) v.getTag();
                     String productId = recentlyOrdered.getParentProduct().getProductId();
                     String skuId = recentlyOrdered.getSkuId();
-                    int quantity = 1;
+                    int quantity = recentlyOrdered.getMinQty();
+                    Log.d("minqty",">>>>>"+quantity);
                     try {
                         ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
                     } catch (Exception e) {
