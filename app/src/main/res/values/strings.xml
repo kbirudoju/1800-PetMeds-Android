@@ -726,5 +726,6 @@
     <string name="mail_prescription_txt">Please mail your prescription to:\n\n1-800-PetMeds®\nAttention: Pharmacy\n420 S. Congress Ave, Suite 100\nDelray Beach, FL 33445\n\nOnce we receive your mailed in prescription, we will ship your order.\n\nNo faxes due to pharmacy regulations</string>
     <string name="recently_ordered_title">Recently Ordered</string>
     <string name="ask_the_vet_title">Ask The Vet</string>
+    <string name="shipping_rates">PetMeds® Shipping Rates</string>
 </resources>
 

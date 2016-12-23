@@ -12,6 +12,8 @@ public class ShoppingCartListResponse implements Serializable {
 
     private ShoppingCart shoppingCart;
 
+    private String promotionMessage;
+
     private Status status;
 
     private int itemCount;
@@ -36,6 +38,14 @@ public class ShoppingCartListResponse implements Serializable {
     public void setShoppingCart (ShoppingCart shoppingCart)
     {
         this.shoppingCart = shoppingCart;
+    }
+
+    public String getPromotionMessage() {
+        return promotionMessage;
+    }
+
+    public void setPromotionMessage(String promotionMessage) {
+        this.promotionMessage = promotionMessage;
     }
 
     public Status getStatus ()
