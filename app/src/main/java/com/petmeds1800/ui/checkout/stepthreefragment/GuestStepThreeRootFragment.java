@@ -34,6 +34,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * Created by Abhinav on 27-09-2016.
@@ -73,6 +75,9 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     @BindView(R.id.payPalCheckBox)
     CheckBox mPaypalCheckbox;
 
+    @BindView(R.id.billingAddressHeader)
+    TextView mBillingAddressHeader;
+
     private ShoppingCartListResponse mShoppingCartListResponse;
 
     private Address mAddress;
@@ -92,6 +97,8 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     private boolean isDefaultBillingAddress;
 
     private String mAddressId;
+
+    private Unbinder mUnbinder;
 
     public static GuestStepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
             String stepName, int securityStatus) {
@@ -119,7 +126,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment
         FingerprintAuthenticationDialog authenticationDialog = new FingerprintAuthenticationDialog();
         if (!authenticationDialog.isAdded()) {
             authenticationDialog.setCancelable(false);
-            authenticationDialog.show(getActivity().getSupportFragmentManager(), "FingerprintAuthenticationDialog" );
+            authenticationDialog.show(getActivity().getSupportFragmentManager(), "FingerprintAuthenticationDialog");
         }
     }
 
@@ -141,7 +148,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step_three_checkout, container, false);
         PetMedsApplication.getAppComponent().inject(this);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mNewPaymentMethod.setVisibility(View.GONE);
         if (((CheckOutActivity) getActivity()).getApplicableSteps() == 4) {
             mShippingNavigator.setText(getString(R.string.review_submit_navigator_button_title));
@@ -308,6 +315,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment
         mAddressId = profileAddress.getAddressId();
         if (isDefaultBillingAddress) {
             mBillingAddressfragment.setVisibility(View.GONE);
+            mBillingAddressHeader.setVisibility(View.GONE);
         }
     }
 
@@ -352,7 +360,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         activity.showProgress();
-        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout" );
+        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout");
         mPresenter.checkoutPayPal(payPalCheckoutRequest);
     }
 
@@ -371,5 +379,11 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     @Override
     public void hideProgressDailog() {
         activity.hideProgress();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

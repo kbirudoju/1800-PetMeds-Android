@@ -32,8 +32,9 @@
                 <Switch
                     android:id="@+id/useMyShippingAddress_switch"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_48"
-                    android:layout_marginTop="@dimen/dp_18"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_5"
                     android:background="@color/white"
                     android:checked="true"
                     android:fontFamily="@string/font_roboto_regular"
@@ -41,7 +42,7 @@
                     android:text="@string/my_shipping_address"
                     android:textColor="@color/battleship_grey"
                     android:textSize="@dimen/sp_16"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <View
                     android:id="@+id/useMyShippingAddress_switchview"

@@ -156,29 +156,13 @@
                     android:layout_below="@+id/creditCardDetailsHeader"
                     android:id="@+id/creditCardDetailFragment">
             </FrameLayout>
-            <TextView
+            <LinearLayout
+                    android:id="@+id/addNewPaymentContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:layout_below="@+id/creditCardDetailFragment"
-                    android:id="@+id/billingAddressHeader"
-                    android:text="@string/input_billing_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_50"
-                    style="@style/StyleForMultiChoiceDailog"
-                    android:paddingLeft="@dimen/dp_16"
-                    android:gravity="center_vertical"
-                    android:fontFamily="@string/font_roboto_medium"
-            />
-            <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/billingAddressfragment"
-                    android:layout_below="@+id/billingAddressHeader"
-                    android:layout_alignLeft="@+id/billingAddressHeader">
-            </FrameLayout>
-            <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="match_parent"
-                          android:orientation="vertical"
-                          android:layout_below="@+id/billingAddressfragment"
-                          android:background="@color/fingerprint_alert_title_background"
+                    android:background="@color/fingerprint_alert_title_background"
             >
                 <Button
                         android:layout_marginTop="@dimen/dp_23"
@@ -191,13 +175,38 @@
                         android:layout_marginRight="@dimen/dp_16"
 
                 />
+            </LinearLayout>
+            <TextView
+                    android:layout_below="@+id/addNewPaymentContainer"
+                    android:id="@+id/billingAddressHeader"
+                    android:text="@string/input_billing_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    style="@style/StyleForMultiChoiceDailog"
+                    android:paddingLeft="@dimen/dp_16"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@string/font_roboto_medium"
+            />
+            <FrameLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/billingAddressfragment"
+                    android:layout_below="@+id/billingAddressHeader"
+                    android:layout_alignLeft="@+id/billingAddressHeader">
+            </FrameLayout>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:orientation="vertical"
+                          android:layout_below="@+id/billingAddressfragment"
+                          android:background="@color/fingerprint_alert_title_background"
+            >
                 <FrameLayout
                         android:layout_alignParentLeft="true"
                         android:layout_margin="@dimen/dp_16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/communicationfragment"
-
                         android:layout_alignLeft="@+id/billingAddressfragment">
                 </FrameLayout>
             </LinearLayout>
