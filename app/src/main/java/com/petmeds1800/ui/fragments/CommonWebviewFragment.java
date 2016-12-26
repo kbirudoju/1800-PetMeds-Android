@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.fragments;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.util.PetMedWebViewClient;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
@@ -21,18 +34,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.util.PetMedWebViewClient;
 
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -191,7 +192,6 @@ public class CommonWebviewFragment extends AbstractFragment {
                 }
             }
         };
-        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(), mWebView, url, false, mProgressBar));
         mWebView.setWebChromeClient(client);
         mWebView.loadUrl(url);
@@ -213,7 +213,7 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         };
 
-        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
         mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(), mWebView, htmlData, true, mProgressBar));
         mWebView.setWebChromeClient(client);
         mWebView.loadData(htmlData, "text/html", "UTF-8");
@@ -222,8 +222,6 @@ public class CommonWebviewFragment extends AbstractFragment {
     private void loadHtmlWithPostRequest(String postData) throws URISyntaxException {
 
         Log.d("URL", postData + ">>>>>");
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
 
@@ -238,7 +236,7 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         };
 
-        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
         mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
         mWebView.addJavascriptInterface(new MyJavaScriptInterface(getActivity()), "HtmlViewer");
