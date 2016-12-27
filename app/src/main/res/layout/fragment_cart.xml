@@ -156,19 +156,8 @@
                 <RelativeLayout
                     android:id="@+id/shipping_description_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/rectangular_background">
-
-                    <TextView
-                        android:id="@+id/standard_shipping_txt"
-                        style="@style/cart_standard_shipping"
-                        android:layout_width="wrap_content"
-                        android:layout_height="16dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginBottom="@dimen/dp_10"
-                        android:layout_marginLeft="@dimen/dp_17"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="@string/your_order_qualifies_for_free_standard_shipping" />
 
                     <ImageView
                         android:id="@+id/shipping_web_link"
@@ -176,10 +165,23 @@
                         android:layout_height="12dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginBottom="@dimen/dp_10"
+                        android:layout_marginBottom="@dimen/dp_16"
                         android:layout_marginRight="@dimen/dp_16"
                         android:layout_marginTop="@dimen/dp_16"
                         android:src="@drawable/ic_status_cancelled" />
+
+                    <TextView
+                        android:id="@+id/standard_shipping_txt"
+                        android:layout_toLeftOf="@+id/shipping_web_link"
+                        style="@style/cart_standard_shipping"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:layout_marginLeft="@dimen/dp_17"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="@string/your_order_qualifies_for_free_standard_shipping" />
+
 
                 </RelativeLayout>
 
