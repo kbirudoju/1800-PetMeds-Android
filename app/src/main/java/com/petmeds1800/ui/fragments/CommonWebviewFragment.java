@@ -57,11 +57,17 @@ import static com.petmeds1800.util.Constants.KEY_SITE_SERVER;
 public class CommonWebviewFragment extends AbstractFragment {
 
     public static final String URL_KEY = "url";
+
     public static final String TITLE_KEY = "title";
+
     public static final String HTML_DATA = "html_data";
+
     public static final String PAYPAL_DATA = "paypal_data";
+
     public static final String ISCHECKOUT = "ischeckout";
+
     public static final String STEPNAME = "stepname";
+
     public static final String DISABLE_BACK_BUTTON = "disableBackButton";
 
     @BindView(R.id.webViewContainer)
@@ -77,8 +83,11 @@ public class CommonWebviewFragment extends AbstractFragment {
     PetMedsApiService mPetMedsApiService;
 
     private boolean mDisableBackButton;
+
     private OnPaymentCompletedListener onPaymnetSelectedListener;
+
     private boolean isCheckout = false;
+
     private String mStepName;
 
     public static CommonWebviewFragment newInstance(boolean disableBackButton) {
@@ -168,7 +177,7 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         } else {
             try {
-                new Thread(new CookieChecker(url,messageHandler)).start();
+                new Thread(new CookieChecker(url, messageHandler)).start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -213,7 +222,6 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         };
 
-
         mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(), mWebView, htmlData, true, mProgressBar));
         mWebView.setWebChromeClient(client);
         mWebView.loadData(htmlData, "text/html", "UTF-8");
@@ -235,7 +243,6 @@ public class CommonWebviewFragment extends AbstractFragment {
                 super.onProgressChanged(view, progress);
             }
         };
-
 
         mWebView.setWebViewClient(new Callback());
         mWebView.setWebChromeClient(client);
@@ -274,12 +281,17 @@ public class CommonWebviewFragment extends AbstractFragment {
         @Override
         public void onPageFinished(WebView view, String url) {
             if (url.contains("applyPayPalPaymentMethod")) {
-                mWebView.loadUrl("javascript:HtmlViewer.showHTML" + "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
+                mWebView.setVisibility(View.INVISIBLE);
+                mProgressBar.setVisibility(View.VISIBLE);
+                mWebView.loadUrl("javascript:HtmlViewer.showHTML"
+                        + "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
             }
+
         }
     }
 
     class MyJavaScriptInterface {
+
         private Context ctx;
 
         MyJavaScriptInterface(Context ctx) {
@@ -310,13 +322,16 @@ public class CommonWebviewFragment extends AbstractFragment {
     }
 
     public interface OnPaymentCompletedListener {
+
         void onPaymentCompleted(ShoppingCartListResponse paypalResponse);
+
         void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName);
     }
 
-    class CookieChecker implements Runnable{
+    class CookieChecker implements Runnable {
 
         private String url;
+
         private Handler handler;
 
         public CookieChecker(String url, Handler handler) {
@@ -339,15 +354,16 @@ public class CommonWebviewFragment extends AbstractFragment {
             for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
                 Cookie cookie = iterator.next();
                 if (cookie.name().equals(KEY_JESESSION_ID)) {
-                    cookieMap.put(KEY_JESESSION_ID,KEY_JESESSION_ID + "=" + cookie.value() + "; ");
+                    cookieMap.put(KEY_JESESSION_ID, KEY_JESESSION_ID + "=" + cookie.value() + "; ");
                 } else if (cookie.name().equals(KEY_SITE_SERVER)) {
-                    cookieMap.put(KEY_SITE_SERVER,KEY_SITE_SERVER + "=" + cookie.value() + "; ");
+                    cookieMap.put(KEY_SITE_SERVER, KEY_SITE_SERVER + "=" + cookie.value() + "; ");
                 }
             }
-            cookieMap.put(KEY_APP_ID,KEY_APP_ID + "=true; ");
+            cookieMap.put(KEY_APP_ID, KEY_APP_ID + "=true; ");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                Log.d("setUpWebView", "Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+                Log.d("setUpWebView",
+                        "Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
                 try {
                     CookieManager.getInstance().setCookie((url), (String) cookieMap.get(KEY_JESESSION_ID));
                     CookieManager.getInstance().setCookie((url), (String) cookieMap.get(KEY_SITE_SERVER));
@@ -358,7 +374,8 @@ public class CommonWebviewFragment extends AbstractFragment {
                 }
 
             } else {
-                Log.d("setUpWebView", "Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+                Log.d("setUpWebView",
+                        "Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
                 try {
                     CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(mWebView.getContext());
                     cookieSyncMngr.startSync();
@@ -388,13 +405,13 @@ public class CommonWebviewFragment extends AbstractFragment {
         }
     }
 
-    private final Handler messageHandler = new Handler(){
+    private final Handler messageHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
 
             super.handleMessage(msg);
-            if (msg.what == KEY_INITIALIZE_COOKIES){
+            if (msg.what == KEY_INITIALIZE_COOKIES) {
                 try {
                     setUpWebView(msg.getData().getString(URL_KEY));
                 } catch (Exception e) {
