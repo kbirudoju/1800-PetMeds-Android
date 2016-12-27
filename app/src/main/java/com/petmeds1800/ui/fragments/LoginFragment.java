@@ -123,13 +123,17 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             @Override
             public void getSessionCookiesOnFinish(boolean doLogin, Throwable e) {
                 int errorId = RetrofitErrorHandler.getErrorMessage(e);
+
                 if (errorId == R.string.noInternetConnection) {
                     showErrorCrouton(getString(errorId), false);
+                    hideProgress();
+                } else if (!(e instanceof SecurityException)){
+                    showErrorCrouton(e.getMessage(), false);
                     hideProgress();
                 } else {
                     if (doLogin) {
                         doLogin();
-                    } else {
+                    } else if((e instanceof SecurityException)) {
 //                        initializeSessionConfirmationNumber();
                         navigateToHomeOrCheckout();
                     }
