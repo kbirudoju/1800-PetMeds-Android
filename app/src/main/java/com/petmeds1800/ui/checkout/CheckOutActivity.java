@@ -16,7 +16,6 @@ import com.petmeds1800.ui.checkout.stepthreefragment.GuestStepThreeRootFragment;
 import com.petmeds1800.ui.checkout.stepthreefragment.StepThreeRootFragment;
 import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 
@@ -116,8 +115,6 @@ public class CheckOutActivity extends AbstractActivity
 
     private ShoppingCartListResponse mShoppingCartListResponse;
 
-    private ProgressDialog mProgressDialog;
-
     boolean mIsReviewOn = false;
 
     @Inject
@@ -136,8 +133,6 @@ public class CheckOutActivity extends AbstractActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mProgressDialog = new ProgressDialog();
         mShoppingCartListResponse = (ShoppingCartListResponse) getIntent()
                 .getSerializableExtra(CartFragment.SHOPPING_CART);
         mCheckoutSteps = (CheckoutSteps) getIntent().getSerializableExtra(CartFragment.CHECKOUT_STEPS);
@@ -167,7 +162,11 @@ public class CheckOutActivity extends AbstractActivity
 
     @Override
     public void hideProgress() {
-        mProgressDialog.dismiss();
+        try {
+            stopLoadingGif(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -297,9 +296,10 @@ public class CheckOutActivity extends AbstractActivity
 
     @Override
     public void showProgress() {
-        mProgressDialog.setCancelable(false);
-        if (!mProgressDialog.isAdded()) {
-            mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
+        try {
+            startLoadingGif(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

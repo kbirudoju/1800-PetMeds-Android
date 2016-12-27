@@ -1,5 +1,8 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.R;
+import com.petmeds1800.ui.HomeActivity;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,9 +24,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
-import com.petmeds1800.R;
-import com.petmeds1800.ui.HomeActivity;
-
 import java.util.HashMap;
 
 public abstract class AbstractFragment extends Fragment {
@@ -32,7 +32,6 @@ public abstract class AbstractFragment extends Fragment {
     private View mErrorLayoutView;
     private Button mErrorButton;
     private View mParentContainerView;
-
     private PermissionRequested permissionRequested;
 
     @Nullable

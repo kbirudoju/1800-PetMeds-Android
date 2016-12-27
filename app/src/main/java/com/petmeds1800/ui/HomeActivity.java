@@ -1,31 +1,5 @@
 package com.petmeds1800.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -64,6 +38,32 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 import com.urbanairship.UAirship;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -309,7 +309,7 @@ public class HomeActivity extends AbstractActivity
         invalidateOptionsMenu(0);
 
         // Instead of initializing it in onResume for many times we initialize it in onCreate
-        mProgressDialog = new ProgressDialog();
+        //mProgressDialog = new ProgressDialog();
         mAuthenticationDialog = new FingerprintAuthenticationDialog();
         mViewPager.addOnPageChangeListener(pageChangeListener);
         navigateOnReceivedNotification(screenType);
@@ -411,9 +411,9 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if (mProgressDialog != null && mProgressDialog.isVisible()) {
+        /*if (mProgressDialog != null && mProgressDialog.isVisible()) {
             mProgressDialog.dismiss();
-        }
+        }*/
         if (mAuthenticationDialog != null && mAuthenticationDialog.isVisible()) {
             mAuthenticationDialog.dismiss();
         }
@@ -516,15 +516,25 @@ public class HomeActivity extends AbstractActivity
     }
 
     public void showProgress() {
-        if (!mProgressDialog.isAdded()) {
+       /* if (!mProgressDialog.isAdded()) {
             mProgressDialog.setCancelable(false);
             mProgressDialog.show(getSupportFragmentManager(), "ProgressDialog");
-            submitPressed = true;
+
+        }*/
+        submitPressed = true;
+        try {
+            startLoadingGif(this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void hideProgress() {
-        mProgressDialog.dismiss();
+        try {
+            stopLoadingGif(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public ViewGroup getContainerView() {
