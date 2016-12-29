@@ -24,10 +24,14 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +59,9 @@ public class MedConditionsFragment extends AbstractFragment
     @BindView(R.id.recycler_med_conditions)
     RecyclerView mRecyclerMedConditions;
 
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     private MedConditionsListAdapter mListAdapter;
 
     private List<PetEducationCategory> mMedConditionList = new ArrayList<>();
@@ -77,13 +84,18 @@ public class MedConditionsFragment extends AbstractFragment
         ButterKnife.bind(this, view);
         setHasOptionsMenu(false);
         //start listening for optionsMenuAction
-        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION);
+        intentFilter.addAction(Constants.SECURITY_STATUS_RECEIVED);
+        registerIntent(intentFilter, getContext());
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        PetMedsApplication.getAppComponent().inject(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerMedConditions.setLayoutManager(layoutManager);
         mListAdapter = new MedConditionsListAdapter(mMedConditionList);
@@ -94,7 +106,10 @@ public class MedConditionsFragment extends AbstractFragment
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.getConditionsList();
+        //check if we have a securityStatus lock
+        if(! mPreferencesHelper.shouldWaitForSecurityStatus()) {
+            mPresenter.getConditionsList();
+        }
     }
 
     @Override
@@ -171,6 +186,11 @@ public class MedConditionsFragment extends AbstractFragment
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
+
+        //call the API if we have released the security status lock
+        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
+            mPresenter.getConditionsList();
+        }
         super.onReceivedBroadcast(context, intent);
     }
 }

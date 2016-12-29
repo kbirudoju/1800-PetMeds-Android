@@ -22,9 +22,13 @@ import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +46,9 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
 
     @BindView(R.id.productCategories_recyclerView)
     RecyclerView mProductsCategoriesRecyclerView;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     private ProductCategoryAdapter mProductCategoryAdapter;
 
@@ -67,12 +74,18 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
         ButterKnife.bind(this, view);
         mProductCategoryAdapter = new ProductCategoryAdapter(this, getContext());
 
-        showProgress();
-        mPresenter.getProductCategories();
+        //check if we have a securityStatus lock
+        if(! mPreferencesHelper.shouldWaitForSecurityStatus()){
+            showProgress();
+            mPresenter.getProductCategories();
+        }
 
         setHasOptionsMenu(true);
         //start listening for optionsMenuAction
-        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION);
+        intentFilter.addAction(Constants.SECURITY_STATUS_RECEIVED);
+        registerIntent(intentFilter, getContext());
 
         return view;
     }
@@ -158,14 +171,20 @@ public class CategoryListFragment extends AbstractFragment implements ProductCat
     @Override
     public void onDestroyView() {
 
-
         deregisterIntent(getContext());
         super.onDestroyView();
     }
 
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
-        checkAndSetHasOptionsMenu(intent , HomeRootFragment.class.getName());
+        checkAndSetHasOptionsMenu(intent, HomeRootFragment.class.getName());
+
+        //call the API if we have released the security status lock
+        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
+            showProgress();
+            mPresenter.getProductCategories();
+        }
+
         super.onReceivedBroadcast(context, intent);
     }
 }

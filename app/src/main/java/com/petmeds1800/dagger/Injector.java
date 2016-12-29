@@ -46,6 +46,8 @@ import com.petmeds1800.ui.fragments.LoginFragment;
 import com.petmeds1800.ui.fragments.SignOutFragment;
 import com.petmeds1800.ui.fragments.SignUpFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.learn.FeaturedFragment;
+import com.petmeds1800.ui.learn.MedConditionsFragment;
 import com.petmeds1800.ui.learn.MedConditionsListPresenter;
 import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
 import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersPresentor;
@@ -64,6 +66,7 @@ import com.petmeds1800.ui.pushnotifications.PushNotificationPresenter;
 import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
 import com.petmeds1800.ui.refillreminder.presenter.ReminderListPresenter;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
+import com.petmeds1800.ui.support.HomeActivityPresenter;
 import com.petmeds1800.ui.vet.AddVetFragment;
 import com.petmeds1800.ui.vet.AddVetPresenter;
 import com.petmeds1800.ui.vet.CantFindVetFragment;
@@ -238,6 +241,12 @@ public interface Injector {
     void inject(RxCallAdapterFactoryWithErrorHandling rxCallAdapterFactoryWithErrorHandling);
 
     void inject(PushNotificationPresenter pushNotificationPresenter);
+
+    void inject(HomeActivityPresenter homeActivityPresenter);
+
+    void inject(MedConditionsFragment medConditionsFragment);
+
+    void inject(FeaturedFragment featuredFragment);
 
 
 }

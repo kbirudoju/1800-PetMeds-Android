@@ -342,11 +342,11 @@ public class CommonWebviewFragment extends AbstractFragment {
         @Override
         public void run() {
             Log.e("shouldOverrideUrl", "Cookies before clearing: " + CookieManager.getInstance().getCookie(url));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
             Log.e("shouldOverrideUrl", "Cookies before setcookie: " + CookieManager.getInstance().getCookie(url));
 

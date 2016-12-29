@@ -26,6 +26,8 @@ public class GeneralPreferencesHelper {
 
     public static final String HAS_USER_SEEN_INTRO = "has_user_seen_intro";
 
+    public static final String SHOULD_START_SECURITY_STATUS = "shouldStartSecurityStatus";
+
     private SharedPreferences mPreferences;
 
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";
@@ -101,6 +103,14 @@ public class GeneralPreferencesHelper {
 
     public boolean getIsFingerPrintEnabled() {
         return mPreferences.getBoolean(IS_ISFINGER_PRINT_ENABLED, false);
+    }
+
+    public void setWaitForSecurityStatus(boolean value) {
+        mPreferences.edit().putBoolean(SHOULD_START_SECURITY_STATUS, value).apply();
+    }
+
+    public boolean shouldWaitForSecurityStatus() {
+        return mPreferences.getBoolean(SHOULD_START_SECURITY_STATUS,true);
     }
 
 }

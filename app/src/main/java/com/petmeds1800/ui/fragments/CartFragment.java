@@ -135,6 +135,7 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constants.KEY_CART_FRAGMENT_INTENT_FILTER);
         intentFilter.addAction(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION);
+        intentFilter.addAction(Constants.SECURITY_STATUS_RECEIVED);
         registerIntent(intentFilter, getActivity());
 
         payPalCheckoutButton.setOnClickListener(this);
@@ -157,7 +158,10 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @Override
     public void onResume() {
         super.onResume();
-        callmShoppingCartAPI(null);
+        //check if we have a securityStatus lock
+        if(! mPreferencesHelper.shouldWaitForSecurityStatus()) {
+            callmShoppingCartAPI(null);
+        }
         //we should set the title only if current selected tab is not the first home tab
         if (((HomeActivity) getActivity()).getCurrentSelectedTab() == 1) {
             ((AbstractActivity) getActivity()).setToolBarTitle((getResources().getStringArray(R.array.tab_title)[1]));
@@ -168,7 +172,8 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
 
-        if (intent.getAction().equals(Constants.KEY_CART_FRAGMENT_INTENT_FILTER)) {
+        if (intent.getAction().equals(Constants.KEY_CART_FRAGMENT_INTENT_FILTER)
+                || intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)) {
             callmShoppingCartAPI(null);
         } else if (intent.getAction().equals(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION)) {
             checkAndSetHasOptionsMenu(intent, CartRootFragment.class.getName());

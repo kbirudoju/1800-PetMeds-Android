@@ -21,7 +21,9 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
+import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.NoTitleOkDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract;
@@ -30,6 +32,8 @@ import com.petmeds1800.ui.payment.AddEditCardFragment;
 import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pushnotifications.PushNotificationContract;
 import com.petmeds1800.ui.pushnotifications.PushNotificationPresenter;
+import com.petmeds1800.ui.support.HomeActivityContract;
+import com.petmeds1800.ui.support.HomeActivityPresenter;
 import com.petmeds1800.ui.support.TabPagerAdapter;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.AsyncUpdateShoppingCartIconCountThread;
@@ -51,6 +55,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -80,7 +85,7 @@ public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
         MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,
         CommonWebviewFragment.OnPaymentCompletedListener, RefillNotificationContract.View,
-        PushNotificationContract.View {
+        PushNotificationContract.View , HomeActivityContract.View {
 
     private static final String PUSH_ENABLING = "pushEnabling";
 
@@ -163,7 +168,11 @@ public class HomeActivity extends AbstractActivity
 
     private PushNotificationContract.Presenter mPushPresenter;
 
+    private HomeActivityContract.Presenter mHomeActivityPresenter;
+
     private boolean isPushNotificationEnabled;
+
+    private boolean mIsDestroyed = false;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -201,6 +210,7 @@ public class HomeActivity extends AbstractActivity
 
         mPresenter = new RefillNotificationPresenter(this, HomeActivity.this);
         mPushPresenter = new PushNotificationPresenter(this);
+        mHomeActivityPresenter = new HomeActivityPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
         //Perform operation on the first time loading of home screen
         performOperationOnFirstLoad();
@@ -395,6 +405,13 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        //we need to call the security status API in-order to ensure that we get the correct value of session and jession cookie value
+        if(mPreferencesHelper.shouldWaitForSecurityStatus()) {
+            showProgress();
+            mHomeActivityPresenter.getSecurityStatusFirst();
+        }
+
         if (submitPressed) {
             // Pop back stack when in app notification dailog arrives
             this.getSupportFragmentManager().popBackStackImmediate("ProgressDialog", 0);
@@ -419,6 +436,14 @@ public class HomeActivity extends AbstractActivity
         }
 
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //activate the lock to receive the new cookies as applicable
+        mPreferencesHelper.setWaitForSecurityStatus(true);
+    }
+
 
     @Override
     public void setAddress(Address address, int requestCode) {
@@ -529,6 +554,7 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
+    @Override
     public void hideProgress() {
         try {
             stopLoadingGif(this);
@@ -759,6 +785,7 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mIsDestroyed = true;
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoginReceiver);
     }
 
@@ -793,8 +820,30 @@ public class HomeActivity extends AbstractActivity
 
     @Override
     public boolean isActive() {
-        return true;
+        return ! mIsDestroyed;
     }
+
+    @Override
+    public void showNonCancelableDialog(String errorMessage) {
+        NoTitleOkDialogFragment retrySecurityStatusDialog = NoTitleOkDialogFragment.newInstance(errorMessage);
+        retrySecurityStatusDialog.setCancelable(false);
+
+        retrySecurityStatusDialog.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
+            @Override
+            public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
+                mHomeActivityPresenter.getSecurityStatusFirst();
+            }
+        });
+        retrySecurityStatusDialog.show(getSupportFragmentManager());
+    }
+
+    @Override
+    public void moveAhead() {
+        //fire up a local broadcast to notify all the fragment to view pager to start their API call
+        Intent intent = new Intent(Constants.SECURITY_STATUS_RECEIVED);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
 }
 
 

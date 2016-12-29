@@ -37,6 +37,7 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.HomeFragment;
 import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -139,7 +140,11 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
 
         setHasOptionsMenu(true);
         //start listening for optionsMenuAction
-        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION);
+        intentFilter.addAction(Constants.SECURITY_STATUS_RECEIVED);
+        registerIntent(intentFilter, getContext());
+
         return view;
     }
 
@@ -148,7 +153,10 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
         super.onViewCreated(view, savedInstanceState);
         PetMedsApplication.getAppComponent().inject(this);
         setUpWidgetList();
-        mPresenter.start();
+        //check if we have a securityStatus lock
+        if(! mPreferencesHelper.shouldWaitForSecurityStatus()) {
+            mPresenter.start();
+        }
     }
 
 
@@ -216,6 +224,11 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent , HomeRootFragment.class.getName());
+        //call the API if we have released the security status lock
+        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
+            showProgress();
+            mPresenter.start();
+        }
         super.onReceivedBroadcast(context, intent);
     }
 

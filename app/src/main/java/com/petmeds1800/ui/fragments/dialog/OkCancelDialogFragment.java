@@ -62,7 +62,6 @@ public class OkCancelDialogFragment extends BaseDialogFragment {
                     }
                 }
             });
-
             builder.setNegativeButton(mNegative,new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {

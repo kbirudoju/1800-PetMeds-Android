@@ -19,6 +19,10 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.ui.fragments.LearnFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,6 +41,9 @@ public class FeaturedFragment extends AbstractFragment {
     private int screenType = 0;
     private String id;
 
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -46,13 +53,22 @@ public class FeaturedFragment extends AbstractFragment {
         id = ((HomeActivity) getActivity()).getIntent().getStringExtra(PUSH_EXTRA_ID);
         new AnalyticsUtil().trackScreen(getString(R.string.label_education_home_analytics_title));
         ButterKnife.bind(this, view);
-        showWebViewFragment();
+        PetMedsApplication.getAppComponent().inject(this);
+
+        //check if we have a securityStatus lock
+        if(! mPreferencesHelper.shouldWaitForSecurityStatus()) {
+            showWebViewFragment();
+        }
+
         setHasOptionsMenu(false);
         if (((HomeActivity) getActivity()).getIntent() != null) {
             navigateOnPush();
         }
         //start listening for optionsMenuAction
-        registerIntent(new IntentFilter(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION), getContext());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION);
+        intentFilter.addAction(Constants.SECURITY_STATUS_RECEIVED);
+        registerIntent(intentFilter, getContext());
         return view;
     }
 
@@ -104,6 +120,10 @@ public class FeaturedFragment extends AbstractFragment {
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
+        //add the webview if we have released the security status lock
+        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
+            showWebViewFragment();
+        }
         super.onReceivedBroadcast(context, intent);
     }
 }
