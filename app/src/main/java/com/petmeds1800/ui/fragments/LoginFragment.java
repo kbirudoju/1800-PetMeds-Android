@@ -237,7 +237,7 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
             return;
         }
 
-        mGetSessionCookiesHack.doHackForGettingSessionCookies(true, mApiService);
+        doLogin();
     }
 
     private void doLogin() {
@@ -246,40 +246,20 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
         final String passwordText = mPasswordEdit.getText().toString().trim();
 
         showProgress();
-        mApiService.getSessionConfirmationNumber()
+
+        String sessionConfirmNumber;
+
+        if(mPreferencesHelper.getSessionConfirmationResponse() == null) {
+            sessionConfirmNumber = "";
+        }
+        else {
+            sessionConfirmNumber = mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber();
+        }
+
+        mApiService
+                .login(new LoginRequest(emailText, passwordText, sessionConfirmNumber))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .onErrorReturn(new Func1<Throwable, SessionConfNumberResponse>() {
-                    @Override
-                    public SessionConfNumberResponse call(Throwable throwable) {
-                        int errorId = RetrofitErrorHandler.getErrorMessage(throwable);
-                        if (errorId == R.string.noInternetConnection) {
-                            hideProgress();
-                            showErrorCrouton(getString(errorId), false);
-                        } else {
-                            return mPreferencesHelper.getSessionConfirmationResponse();
-                        }
-                        return null;
-                    }
-                })
-                .flatMap(new Func1<SessionConfNumberResponse, Observable<LoginResponse>>() {
-                    @Override
-                    public Observable<LoginResponse> call(SessionConfNumberResponse sessionConfNumberResponse) {
-                        if (sessionConfNumberResponse != null) {
-                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                            Log.v("sessionToken", sessionConfNumber);
-                            if (sessionConfNumber != null) {
-                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                            }
-                            return mApiService
-                                    .login(new LoginRequest(emailText, passwordText, sessionConfNumber))
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io());
-                        } else {
-                            return null;
-                        }
-                    }
-                })
                 .subscribe(new Subscriber<LoginResponse>() {
                     @Override
                     public void onCompleted() {
@@ -289,10 +269,17 @@ public class LoginFragment extends AbstractFragment implements LoginContract.Vie
                     @Override
                     public void onError(Throwable e) {
                         hideProgress();
-                        int errorId = RetrofitErrorHandler.getErrorMessage(e);
-                        if (errorId == R.string.noInternetConnection) {
-                            showErrorCrouton(getString(errorId), false);
+                        if (e instanceof SecurityException) {
+                            doLogin();
+                        } else {
+                            int errorId = RetrofitErrorHandler.getErrorMessage(e);
+                            if (errorId == R.string.noInternetConnection) {
+                                showErrorCrouton(getString(errorId), false);
+                            } else {
+                                showErrorCrouton(e.getLocalizedMessage(), false);
+                            }
                         }
+
                         Log.v("onError", e.getMessage());
                     }
 
