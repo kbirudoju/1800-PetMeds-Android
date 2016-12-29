@@ -21,7 +21,7 @@ public interface CheckoutActivityContract {
 
         void hideProgress();
 
-        void showProgress() throws Exception;
+        void showProgress();
 
         //TODO once Sarthak done with CartFragment implementation.We will define this method.
 //        void setShoppingCart(ShoppingCart shoppingCart);
