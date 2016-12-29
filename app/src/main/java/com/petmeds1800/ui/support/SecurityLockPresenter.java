@@ -25,7 +25,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Abhinav on 21/12/16.
  */
-public class HomeActivityPresenter implements HomeActivityContract.Presenter {
+public class SecurityLockPresenter implements HomeActivityContract.Presenter {
 
     @Inject
     PetMedsApiService mPetMedsApiService;
@@ -35,7 +35,7 @@ public class HomeActivityPresenter implements HomeActivityContract.Presenter {
 
     HomeActivityContract.View mView;
 
-    public HomeActivityPresenter(HomeActivityContract.View mView) {
+    public SecurityLockPresenter(HomeActivityContract.View mView) {
         this.mView = mView;
         PetMedsApplication.getAppComponent().inject(this);
     }

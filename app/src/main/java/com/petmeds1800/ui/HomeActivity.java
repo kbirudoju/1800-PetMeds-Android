@@ -23,7 +23,7 @@ import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.fragments.LearnRootFragment;
 import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.fragments.dialog.NoTitleOkDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.ProgressDialog;
 import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderItemListContract;
@@ -33,7 +33,7 @@ import com.petmeds1800.ui.pets.AddPetFragment;
 import com.petmeds1800.ui.pushnotifications.PushNotificationContract;
 import com.petmeds1800.ui.pushnotifications.PushNotificationPresenter;
 import com.petmeds1800.ui.support.HomeActivityContract;
-import com.petmeds1800.ui.support.HomeActivityPresenter;
+import com.petmeds1800.ui.support.SecurityLockPresenter;
 import com.petmeds1800.ui.support.TabPagerAdapter;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.AsyncUpdateShoppingCartIconCountThread;
@@ -210,7 +210,7 @@ public class HomeActivity extends AbstractActivity
 
         mPresenter = new RefillNotificationPresenter(this, HomeActivity.this);
         mPushPresenter = new PushNotificationPresenter(this);
-        mHomeActivityPresenter = new HomeActivityPresenter(this);
+        mHomeActivityPresenter = new SecurityLockPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
         //Perform operation on the first time loading of home screen
         performOperationOnFirstLoad();
@@ -825,16 +825,31 @@ public class HomeActivity extends AbstractActivity
 
     @Override
     public void showNonCancelableDialog(String errorMessage) {
-        NoTitleOkDialogFragment retrySecurityStatusDialog = NoTitleOkDialogFragment.newInstance(errorMessage);
-        retrySecurityStatusDialog.setCancelable(false);
 
-        retrySecurityStatusDialog.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
+        final OkCancelDialogFragment okCancelDialogFragment = OkCancelDialogFragment.newInstance(errorMessage,
+                getString(R.string.error_txt),
+                getString(R.string.label_retry),
+                getString(R.string.label_exit));
+
+        okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
             @Override
             public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
+
+                showProgress();
                 mHomeActivityPresenter.getSecurityStatusFirst();
+
             }
         });
-        retrySecurityStatusDialog.show(getSupportFragmentManager());
+        okCancelDialogFragment.setNegativeListener(new BaseDialogFragment.DialogButtonsListener() {
+            @Override
+            public void onDialogButtonClick(DialogFragment dialog, String buttonName) {
+                okCancelDialogFragment.dismiss();
+                finish();
+            }
+        });
+
+        okCancelDialogFragment.setCancelable(false);
+        okCancelDialogFragment.show(getSupportFragmentManager());
     }
 
     @Override

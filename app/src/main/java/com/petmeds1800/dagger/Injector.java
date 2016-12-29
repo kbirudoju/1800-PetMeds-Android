@@ -66,7 +66,7 @@ import com.petmeds1800.ui.pushnotifications.PushNotificationPresenter;
 import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
 import com.petmeds1800.ui.refillreminder.presenter.ReminderListPresenter;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
-import com.petmeds1800.ui.support.HomeActivityPresenter;
+import com.petmeds1800.ui.support.SecurityLockPresenter;
 import com.petmeds1800.ui.vet.AddVetFragment;
 import com.petmeds1800.ui.vet.AddVetPresenter;
 import com.petmeds1800.ui.vet.CantFindVetFragment;
@@ -242,7 +242,7 @@ public interface Injector {
 
     void inject(PushNotificationPresenter pushNotificationPresenter);
 
-    void inject(HomeActivityPresenter homeActivityPresenter);
+    void inject(SecurityLockPresenter securityLockPresenter);
 
     void inject(MedConditionsFragment medConditionsFragment);
 
