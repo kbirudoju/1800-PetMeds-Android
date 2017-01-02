@@ -223,7 +223,7 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
 
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
-        checkAndSetHasOptionsMenu(intent , HomeRootFragment.class.getName());
+        checkAndSetHasOptionsMenu(intent, HomeRootFragment.class.getName());
         //call the API if we have released the security status lock
         if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
             showProgress();
@@ -280,5 +280,10 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
         } else {
             Utils.displayCrouton(getActivity(), (String) message, mContainerLayout);
         }
+    }
+
+    public void openWebViewOnBanner(String url){
+        ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceBannerView(url);
+
     }
 }

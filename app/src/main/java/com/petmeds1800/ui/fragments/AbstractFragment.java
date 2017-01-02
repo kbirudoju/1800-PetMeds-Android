@@ -1,8 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.petmeds1800.R;
-import com.petmeds1800.ui.HomeActivity;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+
+import com.petmeds1800.R;
+import com.petmeds1800.ui.HomeActivity;
 
 import java.util.HashMap;
 
@@ -90,7 +90,7 @@ public abstract class AbstractFragment extends Fragment {
         transaction.commit();
     }
 
-    void replaceHomeFragment(Fragment fragment, String tag) {
+    public void replaceHomeFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = getFragmentManager()
                 .beginTransaction();
         transaction.replace(R.id.home_root_fragment_container, fragment, tag);
@@ -106,7 +106,7 @@ public abstract class AbstractFragment extends Fragment {
     }
 
     //TODO: can be replaced with replaceFragmentWithBundle
-    protected void replaceHomeFragmentWithBundle(Fragment fragment, Bundle bundle) {
+    public void replaceHomeFragmentWithBundle(Fragment fragment, Bundle bundle) {
         FragmentTransaction trans = getFragmentManager()
                 .beginTransaction();
         trans.replace(R.id.home_root_fragment_container, fragment);

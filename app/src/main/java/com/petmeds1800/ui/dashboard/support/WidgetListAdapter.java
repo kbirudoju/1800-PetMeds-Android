@@ -10,6 +10,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -293,7 +294,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 bannerHolder.bannerWebView.loadUrl(url);
                 bannerHolder.bannerWebView.getSettings().setJavaScriptEnabled(true);
                 bannerHolder.bannerWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                bannerHolder.bannerWebView.setWebViewClient(new WebViewClient());
+                bannerHolder.bannerWebView.setWebViewClient(new WidgetWebClient());
                 break;
             case REFILL_HEADER_VIEW_TYPE:
                 final RefillHeaderViewHolder refillHeaderHolder = (RefillHeaderViewHolder) holder;
@@ -927,5 +928,25 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public Object getItemAt(int position) {
         return mData.get(position);
+    }
+    public class WidgetWebClient extends WebViewClient
+    {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            // TODO Auto-generated method stub
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            // TODO Auto-generated method stub
+            Log.d("url is", url + ">>>>>>");
+            if(url.contains("shiprate.jsp")){
+                mContext.openWebViewOnBanner(url);
+            }
+          /* view.loadUrl(url); */
+            return true;
+
+        }
     }
 }

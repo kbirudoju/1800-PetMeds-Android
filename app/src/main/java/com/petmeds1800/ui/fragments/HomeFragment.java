@@ -113,6 +113,15 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
 
     }
 
+    @Override
+    public void replaceBannerView(String url) {
+        Bundle bundle = new Bundle();
+        //  bundle.putString(CommonWebviewFragment.TITLE_KEY, productCategory.getName());
+        bundle.putString(CommonWebviewFragment.URL_KEY, url);
+        bundle.putString(CommonWebviewFragment.TITLE_KEY, "1800-PetMeds");
+        replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
+    }
+
     static class Adapter extends FragmentPagerAdapter {
 
         private final List<Fragment> mFragments = new ArrayList<>();
