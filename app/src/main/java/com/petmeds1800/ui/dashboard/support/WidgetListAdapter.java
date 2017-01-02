@@ -9,6 +9,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -431,6 +432,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final TipViewHolder tipViewHolder = (TipViewHolder) holder;
                 WidgetData widgetData = (WidgetData) getItemAt(position);
                 tipViewHolder.contentLabel.setText(Html.fromHtml(widgetData.getContent()));
+               // tipViewHolder.contentLabel.setText(Html.fromHtml("<a href=\"http://www.google.com\">Google</a>"));
+                tipViewHolder.contentLabel.setMovementMethod(LinkMovementMethod.getInstance());
                 tipViewHolder.tipTitleLabel.setText(widgetData.getWidgetTitle());
                 tipViewHolder.tipDoctorLabel.setText(widgetData.getDoctorName());
                 Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + widgetData.getDoctorPictureUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(tipViewHolder.tipDoctorImage) {

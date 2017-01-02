@@ -1,10 +1,5 @@
 package com.petmeds1800.util;
 
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.NameValueData;
-import com.petmeds1800.ui.AbstractActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +14,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.ui.AbstractActivity;
 
 import java.io.File;
 import java.net.URI;
@@ -68,6 +68,18 @@ public class Utils {
         return dateString;
     }
 
+    public static String changeStringtoMillis(String currentDate){
+        DateFormat originalFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        DateFormat targetFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = null;
+        try {
+            date = originalFormat.parse(currentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String formattedDate = targetFormat.format(date);
+        return formattedDate;
+    }
     public static AlertDialog.Builder showAlertDailog(Activity activity, String title, String msg, int theme) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, theme);
         builder.setTitle(title);

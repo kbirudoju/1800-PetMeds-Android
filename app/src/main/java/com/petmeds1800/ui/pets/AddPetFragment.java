@@ -401,7 +401,7 @@ public class AddPetFragment extends AbstractFragment
                 break;
             case fromGallery:
                 updateImageUtil.updateProfilePic(UpdateImageUtil.GALLERY_CAPTURE_IMAGE_REQUEST_CODE);
-                alertDailogForPicture.dismiss();
+             //   alertDailogForPicture.dismiss();
                 break;
             case R.id.remove_pet_button:
                 FragmentManager fragmentManager = getFragmentManager();
@@ -428,7 +428,6 @@ public class AddPetFragment extends AbstractFragment
                 break;
             case R.id.add_edit_medication_allergies:
                 // ((HomeActivity) getActivity()).showProgress();
-                fromWhichDailog = IS_MEDICATIONS_ALLERGY_DAILOG;
                 if (petMedicationAlleryList != null && petMedicationAlleryList.size() > 0) {
                     showPetMedicalData(getString(R.string.title_for_pet_allergies), petMedicationAlleryList);
                 } else {
@@ -488,7 +487,8 @@ public class AddPetFragment extends AbstractFragment
         @Override
         public void onDateTimeSet(Date date) {
             birthdayInMillis = date.getTime();
-            mPetBirthdayText.setText(Utils.changeDateFormat(date.getTime(), "MMM dd, yyyy"));
+            mPetBirthdayText.setText(Utils.changeDateFormat(date.getTime(), "MM/dd/yyyy"));
+            Log.d("pet birthday", date.getTime()+">>>");
         }
 
         // Optional cancel listener
@@ -730,6 +730,7 @@ public class AddPetFragment extends AbstractFragment
             }
         }
         if (isEditable) {
+            //mPetBirthdayText.getText().toString();
             AddPetRequest addPetRequest = new AddPetRequest(mPet.getPetId(), mPetNameText.getText().toString()
                     , mOwnerNameText.getText().toString(),
                     mPetTypeText.getText().toString().toLowerCase(),
@@ -737,7 +738,7 @@ public class AddPetFragment extends AbstractFragment
                     mPetGenderText.getText().toString().toLowerCase(),
                     mPetWeight.getText().toString(),
                     age,
-                    Utils.changeDateFormat(birthdayInMillis, "MM/dd/yyyy"),
+                    mPetBirthdayText.getText().toString(),
                     "yes",
                     "dog two allergy info",
                     medicationAllergyArray[MEDICATION_ALLERGY_1],
@@ -1067,7 +1068,8 @@ public class AddPetFragment extends AbstractFragment
             mBreedTypeText.setText(pet.getBreedType());
             mPetGenderText.setText(pet.getGender());
             mPetWeight.setText(pet.getWeight());
-            mPetBirthdayText.setText(pet.getBirthday());
+            mPetBirthdayText.setText(Utils.changeStringtoMillis(pet.getBirthday()));
+
             if (pet.getPetAge() != null) {
                 age = pet.getPetAge().getValue();
                 mPetAgeText.setText(pet.getPetAge().getName());
