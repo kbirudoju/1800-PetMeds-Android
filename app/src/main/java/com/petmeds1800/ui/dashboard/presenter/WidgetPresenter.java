@@ -46,7 +46,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
-        mData= new ArrayList<>();
+
     }
 
     @Override
@@ -132,6 +132,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
     @Override
     public void start() {
+        mData= new ArrayList<>();
         getWidgetListData();
     }
 
