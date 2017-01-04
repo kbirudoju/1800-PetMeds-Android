@@ -12,7 +12,7 @@ import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import javax.inject.Inject;
 

@@ -2,7 +2,7 @@ package com.petmeds1800.ui.orders.support;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.CommerceItems;

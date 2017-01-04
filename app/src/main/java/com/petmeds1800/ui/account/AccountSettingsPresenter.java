@@ -3,7 +3,7 @@ package com.petmeds1800.ui.account;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;

@@ -1,18 +1,16 @@
 package com.petmeds1800.ui.address;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.entities.MySavedAddress;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import javax.inject.Inject;
 
 import rx.Subscriber;

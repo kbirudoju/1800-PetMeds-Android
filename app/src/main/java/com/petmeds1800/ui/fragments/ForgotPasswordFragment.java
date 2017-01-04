@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;

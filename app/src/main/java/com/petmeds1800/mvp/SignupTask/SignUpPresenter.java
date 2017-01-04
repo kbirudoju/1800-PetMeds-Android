@@ -2,7 +2,7 @@ package com.petmeds1800.mvp.SignupTask;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Country;

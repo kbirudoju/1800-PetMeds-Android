@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 import android.view.MenuItem;
 
 import com.petmeds1800.R;

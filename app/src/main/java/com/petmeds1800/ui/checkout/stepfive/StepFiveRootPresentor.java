@@ -1,6 +1,6 @@
 package com.petmeds1800.ui.checkout.stepfive;
 
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;

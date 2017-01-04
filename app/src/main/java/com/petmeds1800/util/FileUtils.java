@@ -1,7 +1,7 @@
 package com.petmeds1800.util;
 
 import android.os.Environment;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;

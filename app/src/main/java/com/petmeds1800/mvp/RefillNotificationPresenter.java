@@ -2,7 +2,7 @@ package com.petmeds1800.mvp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;

@@ -27,7 +27,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;

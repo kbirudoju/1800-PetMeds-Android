@@ -12,7 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 import android.widget.Toast;
 
 import com.petmeds1800.ui.fragments.AbstractFragment;

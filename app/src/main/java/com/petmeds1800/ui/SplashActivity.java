@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import com.petmeds1800.util.Log;
 
 import com.petmeds1800.BuildConfig;
 import com.petmeds1800.PetMedsApplication;
@@ -38,6 +39,11 @@ public class SplashActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash);
         PetMedsApplication.getAppComponent().inject(this);
+        Log.v("info",">>>>>>>");
+        Log.d("info","dd>>>>>>");
+        Log.i("info","ii>>>>>>>");
+        Log.w("info","ww>>>>");
+        Log.e("info","ee>>>>");
 
         if (savedInstanceState != null) {
             mFinishTime = savedInstanceState.getLong(STATE_FINISH_TIME);

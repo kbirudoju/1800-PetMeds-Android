@@ -16,7 +16,7 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -1,7 +1,7 @@
 package com.petmeds1800.ui.checkout;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;

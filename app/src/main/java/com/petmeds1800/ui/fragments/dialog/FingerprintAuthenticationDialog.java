@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +36,7 @@ import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
@@ -228,7 +228,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("ERROR", "authenticate", e);
+                        Log.e("ERROR", "authenticate"+ e);
                     }
 
                     @Override

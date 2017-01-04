@@ -39,7 +39,6 @@ import butterknife.ButterKnife;
  * Created by Sdixit on 20-10-2016.
  */
 
-@SuppressWarnings("RedundantStringToString")
 public class MedicationReminderItemsListFragment extends AbstractFragment
         implements MedicationReminderItemListContract.View, Runnable ,EditText.OnEditorActionListener{
 

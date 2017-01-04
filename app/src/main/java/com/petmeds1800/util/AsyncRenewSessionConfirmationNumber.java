@@ -2,7 +2,7 @@ package com.petmeds1800.util;
 
 import android.content.Context;
 import android.text.Spanned;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 import android.widget.FrameLayout;
 
 import com.petmeds1800.api.PetMedsApiService;

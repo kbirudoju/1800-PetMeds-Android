@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import static com.petmeds1800.util.Constants.PUSH_TYPE;
 

@@ -1,19 +1,19 @@
 package com.petmeds1800.ui.address;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.Address;
-import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
-
 import android.content.Context;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.Address;
+import com.petmeds1800.ui.checkout.steponerootfragment.StepOneRootFragment;
+import com.petmeds1800.util.Log;
 
 import java.util.List;
 

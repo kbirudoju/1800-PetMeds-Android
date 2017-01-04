@@ -11,7 +11,7 @@ import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
-import android.util.Log;
+import com.petmeds1800.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;

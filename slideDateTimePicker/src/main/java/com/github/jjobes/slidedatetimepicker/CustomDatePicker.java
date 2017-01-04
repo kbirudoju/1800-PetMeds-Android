@@ -61,19 +61,22 @@ public class CustomDatePicker extends DatePicker
         }
         catch (ClassNotFoundException e)
         {
+            if(BuildConfig.DEBUG)
             Log.e(TAG, "ClassNotFoundException in CustomDatePicker", e);
         }
         catch (NoSuchFieldException e)
-        {
+        {   if(BuildConfig.DEBUG)
             Log.e(TAG, "NoSuchFieldException in CustomDatePicker", e);
         }
         catch (IllegalAccessException e)
         {
-            Log.e(TAG, "IllegalAccessException in CustomDatePicker", e);
+            if(BuildConfig.DEBUG)
+             Log.e(TAG, "IllegalAccessException in CustomDatePicker", e);
         }
         catch (IllegalArgumentException e)
         {
-            Log.e(TAG, "IllegalArgumentException in CustomDatePicker", e);
+            if(BuildConfig.DEBUG)
+             Log.e(TAG, "IllegalArgumentException in CustomDatePicker", e);
         }
     }
 }
