@@ -304,8 +304,8 @@ public class AddPetFragment extends AbstractFragment
                 ((AbstractActivity) getActivity()).setToolBarTitle(mPet.getPetName());
             }
             new AnalyticsUtil().trackScreen(getString(R.string.label_edit_pet));
-            editPetImageView.setVisibility(view.VISIBLE);
-            addPetImageView.setVisibility(view.GONE);
+            editPetImageView.setVisibility(View.VISIBLE);
+            addPetImageView.setVisibility(View.GONE);
             removePetButton.setVisibility(View.VISIBLE);
             setPetData(mPet);
             enableViews(false);
@@ -313,8 +313,8 @@ public class AddPetFragment extends AbstractFragment
         } else {
             ((AbstractActivity) getActivity()).setToolBarTitle(getActivity().getString(R.string.title_add_pet));
             new AnalyticsUtil().trackScreen(getString(R.string.label_add_pet));
-            addPetImageView.setVisibility(view.VISIBLE);
-            editPetImageView.setVisibility(view.GONE);
+            addPetImageView.setVisibility(View.VISIBLE);
+            editPetImageView.setVisibility(View.GONE);
             removePetButton.setVisibility(View.GONE);
             enableViews(true);
 

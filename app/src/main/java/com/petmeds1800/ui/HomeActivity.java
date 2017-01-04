@@ -1,5 +1,32 @@
 package com.petmeds1800.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -42,33 +69,6 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 import com.urbanairship.UAirship;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -807,7 +807,7 @@ public class HomeActivity extends AbstractActivity
     private void performErrorFunctionality(String error) {
         hideProgress();
         setPushNotificationEnability(!isPushNotificationEnabled);
-        Utils.displayCrouton(this, error.toString(), mContainerLayout);
+        Utils.displayCrouton(this, error, mContainerLayout);
         Intent intent = new Intent(HomeActivity.PUSH_NOTIFICATION_ACTION);
         intent.putExtra(PUSH_ENABLING, !isPushNotificationEnabled);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);

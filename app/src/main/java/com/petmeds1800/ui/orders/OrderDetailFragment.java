@@ -178,7 +178,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                     case CustomOrderDetailRecyclerAdapter.CANCEL_ORDER_ROW_ID:
                         if (orderList.getIsCancellable().equals("true")) {
 
-                            final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment()
+                            final OkCancelDialogFragment okCancelDialogFragment = OkCancelDialogFragment
                                     .newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(),
                                             getString(R.string.cancel_order_title),
                                             getString(R.string.dialog_yes_button),
@@ -352,8 +352,8 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
 
     @Override
     public void onOrderDetailError(String errorMessage) {
-        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
-        if (errorMessage.toString().contains(LOGGED_IN)) {
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
+        if (errorMessage.contains(LOGGED_IN)) {
             FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
             Bundle bundle = new Bundle();
             bundle.putBoolean(FROM_PUSH, true);

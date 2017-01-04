@@ -194,7 +194,7 @@ public class EditVetFragment extends AbstractFragment implements EditVetContract
     @Override
     public void onClick(View v) {
 
-        final OkCancelDialogFragment okCancelDialogFragment = new OkCancelDialogFragment().newInstance(getString(R.string.areYouSure), getString(R.string.remove_vet_message), getString(R.string.action_remove), getString(R.string.cancelTextOnDialog));
+        final OkCancelDialogFragment okCancelDialogFragment = OkCancelDialogFragment.newInstance(getString(R.string.areYouSure), getString(R.string.remove_vet_message), getString(R.string.action_remove), getString(R.string.cancelTextOnDialog));
         okCancelDialogFragment.show(((AbstractActivity) getActivity()).getSupportFragmentManager());
         okCancelDialogFragment.setPositiveListener(new BaseDialogFragment.DialogButtonsListener() {
             @Override

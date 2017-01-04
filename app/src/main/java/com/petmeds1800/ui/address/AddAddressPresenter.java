@@ -258,7 +258,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
                                 mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
-                                if (s.getStatus().getErrorMessages().get(0).toString().contains(LOGGED_IN)) {
+                                if (s.getStatus().getErrorMessages().get(0).contains(LOGGED_IN)) {
                                     mView.openFingerprintAuthenticationDialog(REQUEST_UPDATE_ADDRESS);
                                 }
                             }
@@ -302,7 +302,7 @@ public class AddAddressPresenter implements AddEditAddressContract.Presenter {
                             Log.d("AddACard", s.getStatus().getErrorMessages().get(0));
                             if (mView.isActive()) {
                                 mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
-                                if (s.getStatus().getErrorMessages().get(0).toString().contains(LOGGED_IN)) {
+                                if (s.getStatus().getErrorMessages().get(0).contains(LOGGED_IN)) {
                                     mView.openFingerprintAuthenticationDialog(REQUEST_REMOVE_ADDRESS);
                                 }
                             }

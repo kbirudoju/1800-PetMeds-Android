@@ -1,12 +1,5 @@
 package com.petmeds1800.ui.medicationreminders;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.MedicationReminderItem;
-import com.petmeds1800.model.entities.MedicationReminderListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.util.Utils;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +14,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.MedicationReminderItem;
+import com.petmeds1800.model.entities.MedicationReminderListResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 
@@ -153,7 +153,7 @@ public class MedicationReminderListFragment extends AbstractFragment
     @Override
     public void onError(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
     }
 
     @Override

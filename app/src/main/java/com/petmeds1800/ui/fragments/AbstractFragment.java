@@ -100,10 +100,11 @@ public abstract class AbstractFragment extends Fragment {
 
     void replaceFragment(Fragment fragment, String tag, int containerId) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(containerId, fragment, tag);
+        transaction.replace(R.id.container_fragment_learn, fragment, tag);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
     }
+   
 
     //TODO: can be replaced with replaceFragmentWithBundle
     public void replaceHomeFragmentWithBundle(Fragment fragment, Bundle bundle) {

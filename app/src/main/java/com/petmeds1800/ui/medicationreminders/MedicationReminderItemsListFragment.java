@@ -1,15 +1,5 @@
 package com.petmeds1800.ui.medicationreminders;
 
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CommerceItems;
-import com.petmeds1800.model.entities.MedicationReminderCommerceItem;
-import com.petmeds1800.model.entities.OrderList;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.orders.support.DividerItemDecoration;
-import com.petmeds1800.util.Utils;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +19,16 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CommerceItems;
+import com.petmeds1800.model.entities.MedicationReminderCommerceItem;
+import com.petmeds1800.model.entities.OrderList;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.orders.support.DividerItemDecoration;
+import com.petmeds1800.util.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
  * Created by Sdixit on 20-10-2016.
  */
 
+@SuppressWarnings("RedundantStringToString")
 public class MedicationReminderItemsListFragment extends AbstractFragment
         implements MedicationReminderItemListContract.View, Runnable ,EditText.OnEditorActionListener{
 
@@ -174,7 +175,7 @@ public class MedicationReminderItemsListFragment extends AbstractFragment
     @Override
     public void onError(String errorMessage) {
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
     }
 
     @Override

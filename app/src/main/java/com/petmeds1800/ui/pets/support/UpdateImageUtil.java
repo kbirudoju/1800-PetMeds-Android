@@ -101,7 +101,7 @@ public class UpdateImageUtil {
             }
 
             if (!permissionList.isEmpty()) {
-                final String requestPermission[] = (String[]) permissionList.toArray(new String[0]);
+                final String requestPermission[] = (String[]) permissionList.toArray(new String[permissionList.size()]);
                 ((AbstractFragment) mParent).checkRequiredPermission(requestPermission, new AbstractFragment.PermissionRequested() {
                     @Override
                     public void onPermissionGranted() {
@@ -117,11 +117,11 @@ public class UpdateImageUtil {
                             if (entry.getValue()) {//check if true means user has revoked permission permanently
                                 switch (entry.getKey()) {
                                     case android.Manifest.permission.CAMERA:
-                                        permissionDialogue = new NoTitleOkDialogFragment().newInstance("To re-enable, please go to Settings>Permissions and enable Camera Service for this app.");
+                                        permissionDialogue =  NoTitleOkDialogFragment.newInstance("To re-enable, please go to Settings>Permissions and enable Camera Service for this app.");
                                         break;
 
                                     case android.Manifest.permission.READ_EXTERNAL_STORAGE:
-                                        permissionDialogue = new NoTitleOkDialogFragment().newInstance("To re-enable, please go to Settings>Permissions and enable Storage Service for this app.");
+                                        permissionDialogue =  NoTitleOkDialogFragment.newInstance("To re-enable, please go to Settings>Permissions and enable Storage Service for this app.");
                                         break;
                                 }
                             } else {
@@ -179,7 +179,7 @@ public class UpdateImageUtil {
                             if (entry.getValue()) {//check if true means user has revoked permission permanently
                                 switch (entry.getKey()) {
                                     case android.Manifest.permission.READ_EXTERNAL_STORAGE:
-                                        permissionDialogue = new NoTitleOkDialogFragment().newInstance("To re-enable, please go to Settings>Permissions and enable Storage Service for this app.");
+                                        permissionDialogue =  NoTitleOkDialogFragment.newInstance("To re-enable, please go to Settings>Permissions and enable Storage Service for this app.");
                                         break;
                                 }
                             } else {

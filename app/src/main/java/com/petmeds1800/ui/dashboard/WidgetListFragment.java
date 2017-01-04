@@ -118,7 +118,7 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
 
                 }else if(v.getTag() instanceof SalePitch){
                     SalePitch salePitch=(SalePitch)v.getTag();
-                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(salePitch.getLinkUrl(), getString(R.string.sales_pitch_title));
+                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(salePitch.getLinkUrl(), salePitch.getWidgetTitle());
 
                 }else if(v.getTag() instanceof RecommendedProducts){
                     RecommendedProducts recommendedProducts=(RecommendedProducts)v.getTag();

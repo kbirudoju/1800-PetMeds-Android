@@ -321,7 +321,7 @@ public class ItemSelectionDialogFragment extends DialogFragment {
             } else {
                 holder = (ViewHolder) view.getTag();
             }
-            holder.tvSname.setText(newList.get(position).toString());
+            holder.tvSname.setText(newList.get(position));
 
             return view;
         }
