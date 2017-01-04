@@ -49,7 +49,7 @@ public class AddPetPresenter implements AddPetContract.Presenter {
 
 
     @Override
-    public void addPetData(AddPetRequest addPetRequest) {
+    public void addPetData(final AddPetRequest addPetRequest) {
         mPetMedsApiService.addPet(addPetRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -61,8 +61,15 @@ public class AddPetPresenter implements AddPetContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        //error handling would be implemented once we get the details from backend team
-                        if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
+                        if (e instanceof SecurityException) {
+                            Log.d("updatePetData", "retrying after session renew");
+
+                            addPetData(addPetRequest);
+
+                            return;
+
+                        }
+                        else if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
                             mView.onError(mContext.getString(R.string.no_internet_caps));
                         }else {
                             mView.onError(e.getLocalizedMessage());
@@ -91,7 +98,7 @@ public class AddPetPresenter implements AddPetContract.Presenter {
 
 
     @Override
-    public void updatePetData(AddPetRequest addPetRequest) {
+    public void updatePetData(final AddPetRequest addPetRequest) {
         mPetMedsApiService.updatePet(addPetRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -103,14 +110,20 @@ public class AddPetPresenter implements AddPetContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        //error handling would be implemented once we get the details from backend team
-                        if(RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection ) {
-                                mView.onError(mContext.getString(R.string.no_internet_caps));
-                            }else {
-                                mView.onError(e.getLocalizedMessage());
-                            }
 
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("updatePetData", "retrying after session renew");
 
+                            updatePetData(addPetRequest);
+
+                            return;
+
+                        } else if (RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection) {
+                            mView.onError(mContext.getString(R.string.no_internet_caps));
+                        } else {
+                            mView.onError(e.getLocalizedMessage());
+                        }
 
                     }
 

@@ -198,8 +198,9 @@ public class AccountFragment extends AbstractFragment
     }
 
     private void fillWindow() {
+
         if (mPreferencesHelper.getIsPushNotificationEnableFlag()) {
-            notificationStatus.setChecked(true);
+            notificationStatus.setCheckedProgrammatically(true);
         }
         if (mPreferencesHelper.getIsFingerPrintEnabled()) {
             fingerPrintStatus.setChecked(true);

@@ -174,6 +174,8 @@ public class HomeActivity extends AbstractActivity
 
     private boolean mIsDestroyed = false;
 
+    private boolean isOnActivityResultCalled = false;
+
     @Override
     protected void onNewIntent(Intent intent) {
         // TODO Auto-generated method stub
@@ -412,15 +414,12 @@ public class HomeActivity extends AbstractActivity
             mHomeActivityPresenter.getSecurityStatusFirst();
         }
 
-        if (submitPressed) {
-            // Pop back stack when in app notification dailog arrives
-            this.getSupportFragmentManager().popBackStackImmediate("ProgressDialog", 0);
-        }
-        if (mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
+        if (! isOnActivityResultCalled && mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
             if (screenType == 0 || screenType == TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT) {
                 checkLoginStatus();
             }
             // checkLoginStatus();
+            isOnActivityResultCalled = false;
         }
 
     }
@@ -575,6 +574,12 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //We dont want to call the security API again in onResume()
+        mPreferencesHelper.setWaitForSecurityStatus(false);
+
+        isOnActivityResultCalled = true;
+
         if(requestCode!=Constants.BARCODE_SCANNER_REQUEST){
             AddPetFragment fragment = (AddPetFragment) getSupportFragmentManager()
                     .findFragmentByTag(AddPetFragment.class.getName());
