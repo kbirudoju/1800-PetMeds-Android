@@ -19,6 +19,7 @@ public interface StepFourRootContract {
         void onError(String errorMessage);
 
         void showErrorCrouton(CharSequence message, boolean span);
+        void onWarning(String errorMessage);
     }
 
     interface Presenter extends BasePresenter {

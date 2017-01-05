@@ -60,7 +60,12 @@ public class StepFourRootPresenter implements StepFourRootContract.Presenter {
                             if (mView.isActive()) {
                                 mView.onSuccess(shoppingCartListResponse);
                             }
-                        } else {
+                        }else if(shoppingCartListResponse.getStatus().getCode().equals(API_WARNING_CODE)){
+                            if (mView.isActive()) {
+                                mView.onWarning(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+                        else {
                             if (mView.isActive()) {
                                 mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0));
                             }
