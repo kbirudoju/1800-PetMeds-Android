@@ -82,7 +82,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                             if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 mView.onSuccess(formatWidgetData(s.getWidgets()));
                             } else {
-                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), true);
+                                mView.showErrorCrouton(s.getStatus().getErrorMessages().get(0), false);
                             }
                         }
                     }
