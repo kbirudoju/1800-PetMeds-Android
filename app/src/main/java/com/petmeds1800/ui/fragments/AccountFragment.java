@@ -306,10 +306,15 @@ public class AccountFragment extends AbstractFragment
 
         switch (buttonView.getId()) {
             case R.id.notificationStatus:
-                fromWhichAlert = FROM_NOTIFICATION;
-                ((HomeActivity) getActivity()).performPushOperation(new PushNotificationRequest(
-                        isChecked ? PUSH_NOTIFICATION_SUCCESS : PUSH_NOTIFICATION_FAILURE,
-                        mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
+                //onCheckChanged is being called even if there is no actual user cilck
+                // so we need to check if user has actually clicked on the switch or not.Hence isPressed() method is being used.
+                if( buttonView.isPressed()) {
+                    fromWhichAlert = FROM_NOTIFICATION;
+                    ((HomeActivity) getActivity()).performPushOperation(new PushNotificationRequest(
+                            isChecked ? PUSH_NOTIFICATION_SUCCESS : PUSH_NOTIFICATION_FAILURE,
+                            mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()));
+
+                }
                 break;
             case R.id.fingerPrintStatus:
                 if (buttonView.isPressed()) {
