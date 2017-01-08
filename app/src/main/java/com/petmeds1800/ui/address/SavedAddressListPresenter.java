@@ -54,6 +54,17 @@ public class SavedAddressListPresenter implements SavedAddressListContract.Prese
 
                     @Override
                     public void onError(Throwable e) {
+
+                        Log.e("SavedAddressListPresenter", e.getMessage());
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("savedAddressList", "retrying after session renew");
+
+                            getSavedAddress();
+
+                            return;
+
+                        }
                         //notify about the error.It could be any type of error while getting data from the API
                         Log.e(SavedAddressListPresenter.class.getName(), e.getMessage());
                         if (mView.isActive()) {

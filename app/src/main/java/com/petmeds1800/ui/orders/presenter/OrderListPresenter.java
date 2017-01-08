@@ -64,6 +64,18 @@ public class OrderListPresenter implements OrderListContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e("OrderListPresenter", e.getMessage());
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("OrderList", "retrying after session renew");
+
+                            setOrderListData();
+
+                            return;
+
+                        }
+
+                        //proceed further
                         mOrderView.onError(e.getLocalizedMessage());
 
                     }
