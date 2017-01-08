@@ -408,18 +408,16 @@ public class HomeActivity extends AbstractActivity
     protected void onResume() {
         super.onResume();
 
-        //we need to call the security status API in-order to ensure that we get the correct value of session and jession cookie value
-        if(mPreferencesHelper.shouldWaitForSecurityStatus()) {
+        //check if we need to prompt the user for any auth dialog only if tabIndex = last = 3 = account
+        if (! isOnActivityResultCalled && mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()
+                && (screenType == 0 || screenType == TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT)) {
+            checkLoginStatus();
+            isOnActivityResultCalled = false;
+        }//for all other tabs
+        // we need to call the security status API in-order to ensure that we get the correct value of session and jession cookie value
+        else if(mPreferencesHelper.shouldWaitForSecurityStatus()) {
             showProgress();
             mHomeActivityPresenter.getSecurityStatusFirst();
-        }
-
-        if (! isOnActivityResultCalled && mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()) {
-            if (screenType == 0 || screenType == TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT) {
-                checkLoginStatus();
-            }
-            // checkLoginStatus();
-            isOnActivityResultCalled = false;
         }
 
     }
@@ -427,9 +425,6 @@ public class HomeActivity extends AbstractActivity
     @Override
     protected void onPause() {
         super.onPause();
-        /*if (mProgressDialog != null && mProgressDialog.isVisible()) {
-            mProgressDialog.dismiss();
-        }*/
         if (mAuthenticationDialog != null && mAuthenticationDialog.isVisible()) {
             mAuthenticationDialog.dismiss();
         }

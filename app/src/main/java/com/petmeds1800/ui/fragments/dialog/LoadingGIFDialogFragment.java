@@ -34,7 +34,7 @@ public class LoadingGIFDialogFragment extends DialogFragment {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             d.getWindow().setLayout(width, height);
-            Glide.with(getActivity()).load(Uri.parse("file:///android_asset/Loading.gif")).asGif().crossFade().into(mLoadingGif);
+            Glide.with(getActivity()).load(Uri.parse("file:///android_asset/Loading.gif")).asGif().into(mLoadingGif);
         }
     }
 
