@@ -1,6 +1,8 @@
 package com.petmeds1800.ui.account;
 
 import android.support.annotation.NonNull;
+
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
@@ -25,6 +27,9 @@ public class SignOutPresenter implements SignOutContract.Presenter {
     @Inject
     PetMedsApiService mPetMedsApiService;
 
+    @Inject
+    GeneralPreferencesHelper mGeneralPreferencesHelper;
+
     public SignOutPresenter(@NonNull SignOutContract.View mView) {
         this.mView = mView;
         this.mView.setPresenter(this);
@@ -32,7 +37,7 @@ public class SignOutPresenter implements SignOutContract.Presenter {
     }
 
     @Override
-    public void sendDataToServer(String sessionConfigParam) {
+    public void sendDataToServer(final String sessionConfigParam) {
         mPetMedsApiService.logout(new SessionConfigRequest(sessionConfigParam))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -44,6 +49,18 @@ public class SignOutPresenter implements SignOutContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+
+                        Log.e("SignouPresenter", e.getMessage());
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("Signout", "retrying after session renew");
+
+                            sendDataToServer(mGeneralPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+
+                            return;
+
+                        }
+
                         //error handling would be implemented once we get the details from backend team
                         mView.onError(e.getLocalizedMessage());
 

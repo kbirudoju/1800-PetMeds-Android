@@ -157,7 +157,6 @@ public class LearnFragment extends AbstractFragment {
 
     private void setUpViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        FeaturedFragment featuredFragment = new FeaturedFragment();
         adapter.addFragment(new FeaturedFragment(), getActivity().getString(R.string.title_featured));
         adapter.addFragment(new MedConditionsFragment(), getActivity().getString(R.string.title_conditions));
         viewPager.setAdapter(adapter);

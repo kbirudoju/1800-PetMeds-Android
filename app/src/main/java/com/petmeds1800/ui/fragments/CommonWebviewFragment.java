@@ -11,10 +11,14 @@ import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.PetMedWebViewClient;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -82,6 +86,9 @@ public class CommonWebviewFragment extends AbstractFragment {
     @Inject
     PetMedsApiService mPetMedsApiService;
 
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
+
     private boolean mDisableBackButton;
 
     private OnPaymentCompletedListener onPaymnetSelectedListener;
@@ -89,6 +96,12 @@ public class CommonWebviewFragment extends AbstractFragment {
     private boolean isCheckout = false;
 
     private String mStepName;
+
+    private String url;
+
+    private String htmlData;
+
+    private String paypalData;
 
     public static CommonWebviewFragment newInstance(boolean disableBackButton) {
         Bundle args = new Bundle();
@@ -139,6 +152,12 @@ public class CommonWebviewFragment extends AbstractFragment {
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie();
         cookieManager.removeSessionCookie();
+
+        //start listening for security status lock
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.SECURITY_STATUS_RECEIVED);
+        registerIntent(intentFilter, getContext());
+
         return rootView;
     }
 
@@ -156,10 +175,10 @@ public class CommonWebviewFragment extends AbstractFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String url = getArguments().getString(URL_KEY);
+        url = getArguments().getString(URL_KEY);
         String title = getArguments().getString(TITLE_KEY);
-        String htmlData = getArguments().getString(HTML_DATA);
-        String paypalData = getArguments().getString(PAYPAL_DATA);
+        htmlData = getArguments().getString(HTML_DATA);
+        paypalData = getArguments().getString(PAYPAL_DATA);
         isCheckout = getArguments().getBoolean(ISCHECKOUT);
         mStepName = getArguments().getString(STEPNAME);
 
@@ -167,6 +186,25 @@ public class CommonWebviewFragment extends AbstractFragment {
             ((AbstractActivity) getActivity()).setToolBarTitle(title);
         }
 
+        //if its homeActivity instance then we should check if we have a securityStatus lock
+        if(getActivity() instanceof HomeActivity) {
+            if(! mPreferencesHelper.shouldWaitForSecurityStatus()) {
+                startLoading(url, htmlData, paypalData);
+            }
+        }
+        else {
+            //loading should get started as in-case of all other activities as here we dont have to wait and check for a securitylock
+            //here no security status broadcast would be fired up
+            startLoading(url, htmlData, paypalData);
+        }
+
+        ((AbstractActivity) getActivity()).getToolbar().getMenu().clear();
+        if (title != null && !title.equals(getString(R.string.label_q_and_a_directory))) {
+            ((AbstractActivity) getActivity()).getToolbar().setLogo(null);
+        }
+    }
+
+    private void startLoading(String url, String htmlData, String paypalData) {
         if (htmlData != null) {
             loadFromHtmlData(htmlData);
         } else if (paypalData != null) {
@@ -181,11 +219,6 @@ public class CommonWebviewFragment extends AbstractFragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-
-        ((AbstractActivity) getActivity()).getToolbar().getMenu().clear();
-        if (title != null && !title.equals(getString(R.string.label_q_and_a_directory))) {
-            ((AbstractActivity) getActivity()).getToolbar().setLogo(null);
         }
     }
 
@@ -420,4 +453,14 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         }
     };
+
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
+        //add the webview if we have released the security status lock
+        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
+            startLoading(url, htmlData, paypalData);
+        }
+        super.onReceivedBroadcast(context, intent);
+    }
 }

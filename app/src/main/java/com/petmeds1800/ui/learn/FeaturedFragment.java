@@ -6,6 +6,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+
+import com.petmeds1800.ui.dashboard.CategoryListFragment;
+import com.petmeds1800.ui.fragments.AccountFragment;
 import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,10 +58,7 @@ public class FeaturedFragment extends AbstractFragment {
         ButterKnife.bind(this, view);
         PetMedsApplication.getAppComponent().inject(this);
 
-        //check if we have a securityStatus lock
-        if(! mPreferencesHelper.shouldWaitForSecurityStatus()) {
-            showWebViewFragment();
-        }
+        showWebViewFragment();
 
         setHasOptionsMenu(false);
         if (((HomeActivity) getActivity()).getIntent() != null) {
@@ -120,10 +120,6 @@ public class FeaturedFragment extends AbstractFragment {
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
-        //add the webview if we have released the security status lock
-        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
-            showWebViewFragment();
-        }
         super.onReceivedBroadcast(context, intent);
     }
 }

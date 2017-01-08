@@ -633,12 +633,6 @@ public class HomeActivity extends AbstractActivity
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        //Saving the state of the progress dailog
-        outState.putBoolean("submitPressed", submitPressed);
-    }
-
     /**
      * For updating BOTH contents of Shopping Cart and Tab Layout Quantity. Internally calls updateCartMenuItemCount
      * called when contents are altered in Shopping Cart from Outside {@link CartFragment}
