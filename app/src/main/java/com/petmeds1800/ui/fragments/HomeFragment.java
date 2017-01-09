@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +31,7 @@ import com.petmeds1800.ui.dashboard.CategoryListFragment;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
 import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -118,7 +118,7 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
         Bundle bundle = new Bundle();
         //  bundle.putString(CommonWebviewFragment.TITLE_KEY, productCategory.getName());
         bundle.putString(CommonWebviewFragment.URL_KEY, url);
-        bundle.putString(CommonWebviewFragment.TITLE_KEY, "1800-PetMeds");
+        bundle.putString(CommonWebviewFragment.TITLE_KEY, "");
         replaceHomeFragmentWithBundle(new CommonWebviewFragment(), bundle);
     }
 
