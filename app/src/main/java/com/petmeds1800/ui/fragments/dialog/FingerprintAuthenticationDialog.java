@@ -170,7 +170,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
             gotoLogin();
         } else if (mStage == Stage.LOGIN) {
             hideKeyboard(mEmailEdit);
-            doLogin(mPreferencesHelper.getLoginEmail(), null, false);
+           // doLogin(mPreferencesHelper.getLoginEmail(), null, false);
+            doLogin(mEmailEdit.getText().toString().trim(), null, false);
         } else if (mStage == Stage.FORGOT_PASSWORD && mSecondDialogButton.getText().toString()
                 .equals(getString(R.string.label_send_email))) {
             sendForgotPasswordEmail();
@@ -337,7 +338,8 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     void sendForgotPasswordEmail() {
         mEmailInput.setError(null);
         boolean isValidEmail;
-        String emailText = mPreferencesHelper.getLoginEmail();
+      //  String emailText = mPreferencesHelper.getLoginEmail();
+        String emailText  = mEmailEdit.getText().toString().trim();
         if (emailText == null) {
             emailText = mEmailEdit.getText().toString().trim();
         }
@@ -609,7 +611,7 @@ public class FingerprintAuthenticationDialog extends DialogFragment implements E
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            doLogin(mPreferencesHelper.getLoginEmail(), null, false);
+            doLogin(mEmailEdit.getText().toString(), null, false);
         }
         return false;
     }
