@@ -11,6 +11,7 @@ public class PetMedsApplication extends PetMedsBaseApplication {
 
     private static AppComponent mAppComponent;
     public static boolean menuItemsClicked = false;
+    public static final String requestCredential="pmdevrestapi";
 
     @Override
     public void onCreate() {
