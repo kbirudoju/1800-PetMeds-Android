@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,7 @@ import com.petmeds1800.ui.fragments.HomeRootFragment;
 import com.petmeds1800.ui.support.HomeFragmentContract;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.Utils;
 
 import java.util.List;
@@ -118,7 +118,7 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
 
                 }else if(v.getTag() instanceof SalePitch){
                     SalePitch salePitch=(SalePitch)v.getTag();
-                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(salePitch.getLinkUrl(), salePitch.getWidgetTitle());
+                    ((HomeFragmentContract.ProductCategoryInteractionListener) getParentFragment()).replaceWebViewFragment(salePitch.getLinkUrl(), "");
 
                 }else if(v.getTag() instanceof RecommendedProducts){
                     RecommendedProducts recommendedProducts=(RecommendedProducts)v.getTag();
