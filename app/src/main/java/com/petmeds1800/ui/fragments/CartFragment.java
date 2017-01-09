@@ -439,19 +439,19 @@ public class CartFragment extends AbstractFragment implements ShoppingCartListCo
         }
         if (object == null) {
             toggleProgressDialogVisibility(SHOW_PROGRESSBAR_OR_ANIMATION, mProgressBar);
-            mPresenter.getGeneralPopulateShoppingCart(false);
+            mPresenter.getGeneralPopulateShoppingCart();
         } else if (object instanceof AddItemRequestShoppingCart) {
-            mPresenter.getAddItemShoppingCart((AddItemRequestShoppingCart) (object), false);
+            mPresenter.getAddItemShoppingCart((AddItemRequestShoppingCart) (object));
         } else if (object instanceof RemoveItemRequestShoppingCart) {
             toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION, getActivity());
-            mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart) (object), false);
+            mPresenter.getRemoveItemShoppingCart((RemoveItemRequestShoppingCart) (object));
         } else if (object instanceof ApplyCouponRequestShoppingCart) {
             toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION, getActivity());
-            mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart) (object), false);
+            mPresenter.getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart) (object));
         } else if (object instanceof UpdateItemQuantityRequestShoppingCart) {
             toggleGIFAnimantionVisibility(SHOW_PROGRESSBAR_OR_ANIMATION, getActivity());
             mPresenter
-                    .getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart) (object), false);
+                    .getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart) (object));
         }
     }
 

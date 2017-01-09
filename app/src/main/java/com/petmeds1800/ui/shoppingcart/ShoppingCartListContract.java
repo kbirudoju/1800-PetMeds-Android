@@ -25,11 +25,13 @@ public interface ShoppingCartListContract {
     }
 
     interface Presenter extends BasePresenter {
-        void getGeneralPopulateShoppingCart(boolean isRepeat);
-        void getAddItemShoppingCart(AddItemRequestShoppingCart addItemRequestShoppingCart,boolean isRepeat);
-        void getRemoveItemShoppingCart(RemoveItemRequestShoppingCart removeItemRequestShoppingCart,boolean isRepeat);
-        void getApplyCouponShoppingCart(ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart,boolean isRepeat);
-        void getUpdateItemQuantityRequestShoppingCart(UpdateItemQuantityRequestShoppingCart updateItemQuantityRequestShoppingCart,boolean isRepeat);
+        void getGeneralPopulateShoppingCart();
+
+        void getAddItemShoppingCart(AddItemRequestShoppingCart addItemRequestShoppingCart);
+
+        void getRemoveItemShoppingCart(RemoveItemRequestShoppingCart removeItemRequestShoppingCart);
+        void getApplyCouponShoppingCart(ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart);
+        void getUpdateItemQuantityRequestShoppingCart(UpdateItemQuantityRequestShoppingCart updateItemQuantityRequestShoppingCart);
         void checkoutPayPal(PayPalCheckoutRequest request);
     }
 }

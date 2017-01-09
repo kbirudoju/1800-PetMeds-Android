@@ -49,7 +49,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
     }
 
     @Override
-    public void getGeneralPopulateShoppingCart(final boolean isRepeat) {
+    public void getGeneralPopulateShoppingCart() {
         Log.w("ShoppingCartListPresntr", "getGeneralPopulateShoppingCart Enter");
 
         mPetMedsApiService.getGeneralPopulateShoppingCart(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
@@ -59,10 +59,14 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
             @Override
             public void onError(Throwable e) {
-                if (e.getMessage().contains("Conflict")) {
-                    if (!isRepeat){
-                        renewSessionConfirmationNumber(null);
-                    }
+                //check if we need to retry as a consequence of 409 conflict
+                if (e instanceof SecurityException) {
+                    Log.d("getAddItemShoppingCart", "retrying after session renew");
+
+                    getGeneralPopulateShoppingCart();
+
+                    return;
+
                 } else if (RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection || RetrofitErrorHandler.getErrorMessage(e) == R.string.connectionTimeout) {
                     if (mView.isActive()) {
                         mView.showRetryView();
@@ -92,7 +96,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
     }
 
     @Override
-    public void getAddItemShoppingCart(final AddItemRequestShoppingCart addItemRequestShoppingCart,final boolean isRepeat) {
+    public void getAddItemShoppingCart(final AddItemRequestShoppingCart addItemRequestShoppingCart) {
         Log.w("ShoppingCartListPresntr", "getAddItemShoppingCart Enter");
 
         mPetMedsApiService.getAddItemShoppingCart(addItemRequestShoppingCart).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<ShoppingCartListResponse>() {
@@ -102,11 +106,17 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
             @Override
             public void onError(Throwable e) {
-                if (e.getMessage().contains("Conflict")) {
-                    if (!isRepeat){
-                        renewSessionConfirmationNumber(addItemRequestShoppingCart);
-                    }
-                } else {
+
+                //check if we need to retry as a consequence of 409 conflict
+                if (e instanceof SecurityException) {
+                    Log.d("getAddItemShoppingCart", "retrying after session renew");
+
+                    getAddItemShoppingCart(addItemRequestShoppingCart);
+
+                    return;
+
+                }
+                else {
                     if (mView.isActive()) {
                         mView.onError(e.getMessage(),AddItemRequestShoppingCart.class.getSimpleName());
                     }
@@ -130,7 +140,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
     }
 
     @Override
-    public void getRemoveItemShoppingCart(final RemoveItemRequestShoppingCart removeItemRequestShoppingCart,final boolean isRepeat) {
+    public void getRemoveItemShoppingCart(final RemoveItemRequestShoppingCart removeItemRequestShoppingCart) {
         Log.w("ShoppingCartListPresntr", "getRemoveItemShoppingCart Enter");
 
         removeItemRequestShoppingCart.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
@@ -142,10 +152,14 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
             @Override
             public void onError(Throwable e) {
-                if (e.getMessage().contains("Conflict")) {
-                    if (!isRepeat){
-                        renewSessionConfirmationNumber(removeItemRequestShoppingCart);
-                    }
+                //check if we need to retry as a consequence of 409 conflict
+                if (e instanceof SecurityException) {
+                    Log.d("getRemoveItemShoppingCart", "retrying after session renew");
+
+                    getRemoveItemShoppingCart(removeItemRequestShoppingCart);
+
+                    return;
+
                 } else {
                     if (mView.isActive()) {
                         mView.onError(e.getMessage(),RemoveItemRequestShoppingCart.class.getSimpleName());
@@ -170,7 +184,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
     }
 
     @Override
-    public void getApplyCouponShoppingCart(final ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart, final boolean isRepeat) {
+    public void getApplyCouponShoppingCart(final ApplyCouponRequestShoppingCart applyCouponRequestShoppingCart) {
         Log.w("ShoppingCartListPresntr", "getApplyCouponShoppingCart Enter");
 
         applyCouponRequestShoppingCart.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
@@ -182,10 +196,14 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
             @Override
             public void onError(Throwable e) {
-                if (e.getMessage().contains("Conflict")) {
-                    if (!isRepeat){
-                        renewSessionConfirmationNumber(applyCouponRequestShoppingCart);
-                    }
+                //check if we need to retry as a consequence of 409 conflict
+                if (e instanceof SecurityException) {
+                    Log.d("getApplyCouponShoppingCart", "retrying after session renew");
+
+                    getApplyCouponShoppingCart(applyCouponRequestShoppingCart);
+
+                    return;
+
                 } else {
                     if (mView.isActive()) {
                         mView.onError(e.getMessage(),ApplyCouponRequestShoppingCart.class.getSimpleName());
@@ -210,7 +228,7 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
     }
 
     @Override
-    public void getUpdateItemQuantityRequestShoppingCart(final UpdateItemQuantityRequestShoppingCart updateItemQuantityRequestShoppingCart, final boolean isRepeat) {
+    public void getUpdateItemQuantityRequestShoppingCart(final UpdateItemQuantityRequestShoppingCart updateItemQuantityRequestShoppingCart) {
         Log.w("ShoppingCartListPresntr", "getUpdateItemQuantityRequestShoppingCart Enter");
 
         updateItemQuantityRequestShoppingCart.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
@@ -221,10 +239,14 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
             @Override
             public void onError(Throwable e) {
-                if (e.getMessage().contains("Conflict")) {
-                    if (!isRepeat){
-                        renewSessionConfirmationNumber(updateItemQuantityRequestShoppingCart);
-                    }
+                //check if we need to retry as a consequence of 409 conflict
+                if (e instanceof SecurityException) {
+                    Log.d("getUpdateItemQuantityRequestShoppingCart", "retrying after session renew");
+
+                    getUpdateItemQuantityRequestShoppingCart(updateItemQuantityRequestShoppingCart);
+
+                    return;
+
                 } else {
                     if (mView.isActive()) {
                         mView.onError(e.getMessage(),UpdateItemQuantityRequestShoppingCart.class.getSimpleName());
@@ -284,46 +306,5 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
 
     @Override
     public void start() {
-    }
-
-    /**
-     * Renew Session Confirmation number in case it has expired
-     * This is intrinsic call and does not effect overall cart fragment APIs
-     * @param typeofRequest
-     */
-    private void renewSessionConfirmationNumber(final Object typeofRequest) {
-        Log.w("ShoppingCartListPresntr", "renewSessionConfirmationNumber Enter");
-
-        mPetMedsApiService.getSessionConfirmationNumber().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<SessionConfNumberResponse>() {
-
-            @Override
-            public void onCompleted() {}
-
-            @Override
-            public void onError(Throwable e) {
-                if (mView.isActive()) {
-                    mView.onError(e.getMessage(),null);
-                }
-            }
-
-            @Override
-            public void onNext(SessionConfNumberResponse sessionConfNumberResponse) {
-                if (!sessionConfNumberResponse.getSessionConfirmationNumber().isEmpty()) {
-                    mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                }
-                if (typeofRequest == null){
-                    getGeneralPopulateShoppingCart(true);
-                } else if (typeofRequest instanceof AddItemRequestShoppingCart){
-                    getAddItemShoppingCart((AddItemRequestShoppingCart) typeofRequest,true);
-                } else if (typeofRequest instanceof RemoveItemRequestShoppingCart){
-                    getRemoveItemShoppingCart((RemoveItemRequestShoppingCart) typeofRequest,true);
-                }  else if (typeofRequest instanceof ApplyCouponRequestShoppingCart){
-                    getApplyCouponShoppingCart((ApplyCouponRequestShoppingCart) typeofRequest,true);
-                }  else if (typeofRequest instanceof UpdateItemQuantityRequestShoppingCart){
-                    getUpdateItemQuantityRequestShoppingCart((UpdateItemQuantityRequestShoppingCart) typeofRequest,true);
-                }
-            }
-        });
-        Log.w("ShoppingCartListPresntr", "renewSessionConfirmationNumber Exit");
     }
 }
