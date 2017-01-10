@@ -1,5 +1,33 @@
 package com.petmeds1800.ui.orders;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.AddToCartRequest;
+import com.petmeds1800.model.ReOrderRequest;
+import com.petmeds1800.model.entities.CommerceItems;
+import com.petmeds1800.model.entities.OrderDetailHeader;
+import com.petmeds1800.model.entities.OrderList;
+import com.petmeds1800.model.entities.PaymentGroup;
+import com.petmeds1800.model.entities.ShippingGroup;
+import com.petmeds1800.model.entities.WebViewHeader;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
+import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
+import com.petmeds1800.ui.orders.support.CustomOrderDetailRecyclerAdapter;
+import com.petmeds1800.ui.orders.support.OrderDetailAdapter;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.LayoutPrintingUtils;
+import com.petmeds1800.util.Log;
+import com.petmeds1800.util.Utils;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -31,35 +59,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.AddToCartRequest;
-import com.petmeds1800.model.ReOrderRequest;
-import com.petmeds1800.model.entities.CommerceItems;
-import com.petmeds1800.model.entities.OrderDetailHeader;
-import com.petmeds1800.model.entities.OrderList;
-import com.petmeds1800.model.entities.PaymentGroup;
-import com.petmeds1800.model.entities.ShippingGroup;
-import com.petmeds1800.model.entities.WebViewHeader;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.ui.fragments.dialog.BaseDialogFragment;
-import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
-import com.petmeds1800.ui.fragments.dialog.OkCancelDialogFragment;
-import com.petmeds1800.ui.orders.presenter.OrderDetailPresenter;
-import com.petmeds1800.ui.orders.support.CustomOrderDetailRecyclerAdapter;
-import com.petmeds1800.ui.orders.support.OrderDetailAdapter;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.LayoutPrintingUtils;
-import com.petmeds1800.util.Log;
-import com.petmeds1800.util.Utils;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -512,7 +511,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                     LinearLayout infoView = (LinearLayout) layoutInflater
                             .inflate(R.layout.view_order_detail_info_row, null);
                     OrderList orderInfo = (OrderList) data.get(i);
-                    ((TextView) infoView.findViewById(R.id.order_no_label)).setText(orderInfo.getOrderId());
+                    ((TextView) infoView.findViewById(R.id.order_no_label)).setText(orderInfo.getDisplayOrderId());
                     ((TextView) infoView.findViewById(R.id.order_date_label)).setText(orderInfo.getSubmittedDate());
                     ((TextView) infoView.findViewById(R.id.ship_to_label)).setText(orderInfo.getShipTo());
                     ((TextView) infoView.findViewById(R.id.order_total_label))
