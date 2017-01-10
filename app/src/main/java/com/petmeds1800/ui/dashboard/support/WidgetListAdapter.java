@@ -30,6 +30,8 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -433,7 +435,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final TipViewHolder tipViewHolder = (TipViewHolder) holder;
                 WidgetData widgetData = (WidgetData) getItemAt(position);
                 tipViewHolder.contentLabel.setText(Html.fromHtml(widgetData.getContent()));
-               // tipViewHolder.contentLabel.setText(Html.fromHtml("<a href=\"http://www.google.com\">Google</a>"));
+                // tipViewHolder.contentLabel.setText(Html.fromHtml("<a href=\"http://www.google.com\">Google</a>"));
                 tipViewHolder.contentLabel.setMovementMethod(LinkMovementMethod.getInstance());
                 tipViewHolder.tipTitleLabel.setText(widgetData.getWidgetTitle());
                 tipViewHolder.tipDoctorLabel.setText(widgetData.getDoctorName());
@@ -452,7 +454,15 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case SALES_PITCH_VIEW_TYPE:
                 final SalesPitchViewHolder salesPitchViewHolder = (SalesPitchViewHolder) holder;
                 SalePitch salesPitch = (SalePitch) getItemAt(position);
-                Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + salesPitch.getImage().getUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(salesPitchViewHolder.salesPitchImage) {
+                Display display = mContext.getActivity().getWindowManager().getDefaultDisplay();
+                DisplayMetrics outMetrics = new DisplayMetrics();
+                display.getMetrics(outMetrics);
+                int screen_width = outMetrics.widthPixels;
+                double screen_height = screen_width*0.75;
+                salesPitchViewHolder.salesPitchImage.getLayoutParams().height=(int)screen_height;
+                salesPitchViewHolder.salesPitchImage.getLayoutParams().width=screen_width;
+
+                Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + salesPitch.getImage().getUrl()).asBitmap().fitCenter().into(new BitmapImageViewTarget(salesPitchViewHolder.salesPitchImage) {
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
@@ -460,6 +470,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         salesPitchViewHolder.salesPitchImage.setImageDrawable(circularBitmapDrawable);
                     }
                 });
+
                 salesPitchViewHolder.salesPitchlayout.setTag(salesPitch);
                 break;
             case WHATS_NEXT_VIEW_TYPE:
