@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.orders.presenter;
 
-import android.support.annotation.NonNull;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.AddToCartRequest;
@@ -10,6 +8,10 @@ import com.petmeds1800.model.ReOrderResponse;
 import com.petmeds1800.model.entities.OrderDetailResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.ui.orders.OrderDetailContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
+
+import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
@@ -26,6 +28,9 @@ public class OrderDetailPresenter implements OrderDetailContract.Presenter {
 
     @Inject
     PetMedsApiService mPetMedsApiService;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     public OrderDetailPresenter(@NonNull OrderDetailContract.View view) {
         mView = view;
@@ -136,7 +141,7 @@ public class OrderDetailPresenter implements OrderDetailContract.Presenter {
     }
 
     @Override
-    public void getOrderDetail(String sessionConfig, String orderId) {
+    public void getOrderDetail(String sessionConfig, final String orderId) {
         mPetMedsApiService.getOrderDetail(sessionConfig, orderId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -148,6 +153,15 @@ public class OrderDetailPresenter implements OrderDetailContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("getOrderDetail", "retrying after session renew");
+                            getOrderDetail(
+                                    mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                                    orderId);
+                            return;
+
+                        }
                         //error handling would be implemented once we get the details from backend team
                         mView.onError(e.getLocalizedMessage());
 

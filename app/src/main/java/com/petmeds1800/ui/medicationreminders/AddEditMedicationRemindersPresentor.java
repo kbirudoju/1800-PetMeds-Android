@@ -7,6 +7,8 @@ import com.petmeds1800.model.entities.AddMedicationReminderResponse;
 import com.petmeds1800.model.entities.MedicationReminderDetailsRequest;
 import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
 import com.petmeds1800.model.entities.RemoveMedicationReminderResponse;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 
 import javax.inject.Inject;
 
@@ -22,6 +24,9 @@ public class AddEditMedicationRemindersPresentor implements AddEditMedicationRem
 
     @Inject
     PetMedsApiService mPetMedsApiService;
+
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     private final AddEditMedicationRemindersContract.View mView;
 
@@ -108,8 +113,10 @@ public class AddEditMedicationRemindersPresentor implements AddEditMedicationRem
     }
 
     @Override
-    public void getMedicationReminderDetails(MedicationReminderDetailsRequest medicationReminderDetailsRequest) {
-        mPetMedsApiService.getMedicationReminderDetails(medicationReminderDetailsRequest.getSessionConfNumber(),medicationReminderDetailsRequest.getReminderId())
+    public void getMedicationReminderDetails(final MedicationReminderDetailsRequest medicationReminderDetailsRequest) {
+        mPetMedsApiService.getMedicationReminderDetails(
+                mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber(),
+                medicationReminderDetailsRequest.getReminderId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<AddMedicationReminderResponse>() {
@@ -120,6 +127,13 @@ public class AddEditMedicationRemindersPresentor implements AddEditMedicationRem
 
                     @Override
                     public void onError(Throwable e) {
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("getMedicationReminderDetails", "retrying after session renew");
+                            getMedicationReminderDetails(medicationReminderDetailsRequest);
+                            return;
+
+                        }
                         //error handling would be implemented once we get the details from backend team
                         mView.onError(e.getLocalizedMessage());
 
@@ -127,6 +141,7 @@ public class AddEditMedicationRemindersPresentor implements AddEditMedicationRem
 
                     @Override
                     public void onNext(AddMedicationReminderResponse addMedicationReminderResponse) {
+
                         if (addMedicationReminderResponse.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                             if (mView.isActive()) {
                                 mView.updateMedicationDetails(addMedicationReminderResponse);

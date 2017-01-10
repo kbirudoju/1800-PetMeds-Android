@@ -1,5 +1,10 @@
 package com.petmeds1800.util;
 
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.NameValueData;
+import com.petmeds1800.ui.AbstractActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -7,18 +12,12 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.Spanned;
 import android.text.TextUtils;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.NameValueData;
-import com.petmeds1800.ui.AbstractActivity;
 
 import java.io.File;
 import java.net.URI;
@@ -32,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -42,6 +42,7 @@ import retrofit2.adapter.rxjava.HttpException;
  * Created by pooja on 8/27/2016.
  */
 public class Utils {
+
     public static final String TIME_OUT = "timeout";
 
     private static final String[] PICKER_DISPLAY_MONTHS_NAMES = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -57,18 +58,19 @@ public class Utils {
     private static final int CVV_DIGITS_RULE_2 = 4;
 
     public static final String[] WEEKDAYS_NAMES = new String[]{"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+
     public static final String reminderTypeArray[] = new String[]{"daily", "weekly", "monthly"};
 
     public static String changeDateFormat(long millisecond, String dateFormat) {
-         if(millisecond == 0){
-             return "";
-         }
+        if (millisecond == 0) {
+            return "";
+        }
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
         String dateString = formatter.format(new Date(millisecond));
         return dateString;
     }
 
-    public static String changeStringtoMillis(String currentDate){
+    public static String changeStringtoMillis(String currentDate) {
         DateFormat originalFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
         DateFormat targetFormat = new SimpleDateFormat("MM/dd/yyyy");
         Date date = null;
@@ -80,6 +82,7 @@ public class Utils {
         String formattedDate = targetFormat.format(date);
         return formattedDate;
     }
+
     public static AlertDialog.Builder showAlertDailog(Activity activity, String title, String msg, int theme) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, theme);
         builder.setTitle(title);
@@ -90,7 +93,7 @@ public class Utils {
     }
 
     public static AlertDialog.Builder showAlertDailogListView(Activity activity, View view,
-                                                              int theme) {
+            int theme) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, theme);
         builder.setView(view);
         return builder;
@@ -106,7 +109,8 @@ public class Utils {
         View customView = inflater.inflate(R.layout.view_crouton, null);
         TextView textView = (TextView) customView.findViewById(R.id.txv_crouton);
         textView.setText(messageString);
-        final Configuration configuration = new Configuration.Builder().setDuration(Configuration.DURATION_LONG).build();
+        final Configuration configuration = new Configuration.Builder().setDuration(Configuration.DURATION_LONG)
+                .build();
         final Crouton crouton = Crouton.make(activity, customView, attachToView.getId(), configuration);
         crouton.show();
     }
@@ -116,7 +120,8 @@ public class Utils {
         View customView = inflater.inflate(R.layout.view_crouton, null);
         TextView textView = (TextView) customView.findViewById(R.id.txv_crouton);
         textView.setText(messageString);
-        final Configuration configuration = new Configuration.Builder().setDuration(Configuration.DURATION_LONG).build();
+        final Configuration configuration = new Configuration.Builder().setDuration(Configuration.DURATION_LONG)
+                .build();
         final Crouton crouton = Crouton.make(activity, customView, attachToView.getId(), configuration);
         crouton.show();
     }
@@ -154,17 +159,17 @@ public class Utils {
     }
 
     public static Date getDate(String dateStr) throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("h:mm a",Locale.ENGLISH);
+        DateFormat formatter = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
         return formatter.parse(dateStr);
     }
 
     public static Date getReminderDate(String dateStr) throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("MMM dd h:mm a",Locale.ENGLISH);
+        DateFormat formatter = new SimpleDateFormat("MMM dd h:mm a", Locale.ENGLISH);
         return formatter.parse(dateStr);
     }
 
     public static String getDateInMM_DD_YYYY_Format(Date date) {
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy",Locale.ENGLISH);
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
         return formatter.format(date);
     }
 
@@ -262,7 +267,8 @@ public class Utils {
         }
         emailIntent.setType("message/rfc822");
         try {
-            context.startActivity(Intent.createChooser(emailIntent, context.getResources().getString(R.string.choose_email_client)));
+            context.startActivity(
+                    Intent.createChooser(emailIntent, context.getResources().getString(R.string.choose_email_client)));
         } catch (android.content.ActivityNotFoundException ex) {
             ex.printStackTrace();
         }
@@ -274,11 +280,11 @@ public class Utils {
         return domain.startsWith("www.") ? domain.substring(4) : domain;
     }
 
-    public static void getAndUpdateNewCookie(Throwable e , SetCookieCache cookieCache) {
+    public static void getAndUpdateNewCookie(Throwable e, SetCookieCache cookieCache) {
         if (e instanceof HttpException) {
             Map<String, List<String>> map = ((HttpException) e).response().headers().toMultimap();
 
-            if (!map.containsKey("set-cookie")){
+            if (!map.containsKey("set-cookie")) {
                 return;
             }
             List<String> cookiesList = map.get("set-cookie");
@@ -306,12 +312,12 @@ public class Utils {
 
             for (Iterator<Cookie> iterator = cookieCache.iterator(); iterator.hasNext(); ) {
                 Cookie cookie = iterator.next();
-                if ( ! cookie.name().equals("JSESSIONID")) {
+                if (!cookie.name().equals("JSESSIONID")) {
                     updatedCookieCache.add(cookie);
                 }
             }
 
-            if(cookieValue != null) {
+            if (cookieValue != null) {
                 //insert the valid JsessionID
                 Cookie.Builder builder = new Cookie.Builder();
                 builder.name("JSESSIONID");
@@ -326,4 +332,8 @@ public class Utils {
         }
     }
 
+    public static long getDateDiff(long startTimeInMillis, long endTimeInMills, TimeUnit timeUnit) {
+        long diffInMillis = endTimeInMills - startTimeInMillis;
+        return (diffInMillis > 0) ? timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS) : 0;
+    }
 }

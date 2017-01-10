@@ -33,6 +33,9 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
 
     public static final String REMINDER_ID = "reminderId";
 
+    public static final String START_TIME = "startTime";
+
+
     // The app's AlarmManager, which provides access to the system alarm services.
     private AlarmManager alarmMgr;
 
@@ -46,12 +49,14 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
 
     private final int ZERO_INDEX = 0;
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent service = new Intent(context, MedicationSchedulingService.class);
-        service.putExtra(ALARM_ID, intent.getIntExtra(ALARM_ID, 0));
+        service.putExtra(ALARM_ID, intent.getIntExtra(ALARM_ID, ZERO_INDEX));
         service.putExtra(REMINDER_ID, intent.getStringExtra(REMINDER_ID));
         service.putExtra(NOTIFICATION_MESSAGE, intent.getStringExtra(NOTIFICATION_MESSAGE));
+        service.putExtra(START_TIME, intent.getLongExtra(START_TIME, ZERO_INDEX));
         startWakefulService(context, service);
     }
 
@@ -61,6 +66,7 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
         intent.putExtra(ALARM_ID, reminderId);
         intent.putExtra(NOTIFICATION_MESSAGE, notificationMessage);
         intent.putExtra(REMINDER_ID, medicationReminderId);
+        intent.putExtra(START_TIME, calendar.getTimeInMillis());
         PendingIntent alarmIntent = PendingIntent
                 .getBroadcast(context, reminderId, intent,
                         FLAG_UPDATE_CURRENT);
@@ -195,7 +201,6 @@ public class MedicationAlarmReceiver extends WakefulBroadcastReceiver {
         intent.putExtra(ALARM_ID, reminderId);
         intent.putExtra(REMINDER_ID, medicationReminderId);
         intent.putExtra(NOTIFICATION_MESSAGE, notificationMessage);
-
         PendingIntent addedIntent = PendingIntent
                 .getBroadcast(context, reminderId, intent,
                         FLAG_UPDATE_CURRENT);
