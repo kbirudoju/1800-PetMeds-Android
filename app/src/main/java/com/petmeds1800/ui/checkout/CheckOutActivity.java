@@ -18,6 +18,7 @@ import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.util.FontelloTextView;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,7 +28,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
-import com.petmeds1800.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -165,7 +165,7 @@ public class CheckOutActivity extends AbstractActivity
         try {
             stopLoadingGif(this);
         } catch (Exception e) {
-            e.printStackTrace();
+           Log.e(CheckOutActivity.class.getSimpleName(),"error "+e.getMessage());
         }
     }
 

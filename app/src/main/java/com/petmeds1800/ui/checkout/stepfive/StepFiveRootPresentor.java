@@ -163,7 +163,7 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
                 if (applicableSteps != null && items != null) {
                     for (Item item : items) {
                         if (item.isRxItem()) {
-                            petVetInfo = petVetInfo + item.getItemPetName() + "," + item.getItemDrName();
+                            petVetInfo = petVetInfo + item.getItemPetName() + " , " + item.getItemDrName();
                         }
                     }
                 }

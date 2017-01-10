@@ -110,7 +110,7 @@
     <string name="label_billing_address">Billing Address</string>
     <string name="label_shipping_address">Shipping Address</string>
     <string name="label_same_billing_shipping">Same Billing and Shipping Address</string>
-    <string name="label_pet_vet_title">Pet &amp;Vet Information</string>
+    <string name="label_pet_vet_title">Pet &amp; Vet Information</string>
     <string name="label_sign_up">Sign Up</string>
     <string name="error_confirm_email_must_match">Confirmation email must match your email address</string>
     <string name="error_confirm_password_must_match">Confirmation password must match your password</string>
