@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import com.petmeds1800.R;
 import com.petmeds1800.model.entities.Item;
+import com.petmeds1800.util.Log;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,6 +28,7 @@ public class ReceiptItemsListAdapter extends RecyclerView.Adapter<RecyclerView.V
     private List<Item> mItemList;
 
     private Context mContext;
+    DecimalFormat df = new DecimalFormat("0.00");
 
     public ReceiptItemsListAdapter(List<Item> itemList, Context context) {
         mItemList = itemList;
@@ -48,7 +51,7 @@ public class ReceiptItemsListAdapter extends RecyclerView.Adapter<RecyclerView.V
             Picasso.with(mContext).load(item.getItemImageURL()).into(viewHolder.itemImage);
             viewHolder.itemName.setText(item.getProductName());
             viewHolder.itemDescription.setText(item.getSkuName());
-            viewHolder.itemPrice.setText(String.valueOf(item.getPrice()));
+            viewHolder.itemPrice.setText(String.valueOf(df.format(item.getPrice())));
             viewHolder.itemQuantity.setText(mContext.getString(R.string.quantity_formatter, item.getItemQuantity()));
         }
     }

@@ -92,6 +92,7 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
     protected List<Item> mReceiptItemList = new ArrayList<>();
 
 
+
     public static ConfirmationReceiptFragment newInstance(CommitOrderResponse commitOrderResponse) {
 
         Bundle args = new Bundle();
