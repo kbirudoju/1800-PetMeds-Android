@@ -1,27 +1,5 @@
 package com.petmeds1800.ui.dashboard.support;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Paint;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import com.petmeds1800.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
@@ -40,6 +18,28 @@ import com.petmeds1800.model.entities.WidgetData;
 import com.petmeds1800.model.entities.WidgetFooter;
 import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.util.Log;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Paint;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -241,7 +241,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putString(CommonWebviewFragment.TITLE_KEY, mContext.getString(R.string.label_google));
+                    bundle.putString(CommonWebviewFragment.TITLE_KEY, mContext.getString(R.string.label_google_plus));
                     bundle.putString(CommonWebviewFragment.URL_KEY, mContext.getString(R.string.url_join_network_google));
                     mContext.startWebView(bundle);
                 }

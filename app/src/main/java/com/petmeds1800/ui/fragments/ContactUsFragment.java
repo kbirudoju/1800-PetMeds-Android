@@ -1,5 +1,11 @@
 package com.petmeds1800.ui.fragments;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.R;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.util.Utils;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,12 +22,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.R;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.util.Utils;
 
 import java.util.HashMap;
 
@@ -116,7 +116,7 @@ public class ContactUsFragment extends AbstractFragment {
     @OnClick(R.id.imv_google)
     public void googlePage() {
         Bundle bundle = new Bundle();
-        bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_google));
+        bundle.putString(CommonWebviewFragment.TITLE_KEY, getString(R.string.label_google_plus));
         bundle.putString(CommonWebviewFragment.URL_KEY, getString(R.string.url_join_network_google));
         replaceFragmentWithBackStack(new CommonWebviewFragment(), bundle, R.id.account_root_fragment_container);
     }
