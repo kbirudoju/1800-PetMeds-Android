@@ -179,10 +179,10 @@ public class ContactUsFragment extends AbstractFragment {
         initCallPhonePermissionsWrapper(getString(R.string.number_phone_pharmacy));
     }
 
-    @OnClick(R.id.pharmacy_call_main)
+   /* @OnClick(R.id.pharmacy_call_main)
     public void faxPharmacy() {
         initCallPhonePermissionsWrapper(getString(R.string.label_fax_pharmacy));
-    }
+    }*/
 
     private void initCallPhonePermissionsWrapper(final String phoneNumber) {
         int hasCallPhonePermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE);

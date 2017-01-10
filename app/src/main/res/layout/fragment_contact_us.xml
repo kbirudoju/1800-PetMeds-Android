@@ -124,6 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+
                     android:src="@drawable/ic_phone" />
             </RelativeLayout>
 
@@ -154,13 +155,14 @@
                     android:text="@string/label_fax_pharmacy"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
-                <ImageView
+                <!--<ImageView
                     android:id="@+id/pharmacy_call_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_phone" />
+                    android:visibility="gone"
+                    android:src="@drawable/ic_phone" />-->
 
             </RelativeLayout>
 
