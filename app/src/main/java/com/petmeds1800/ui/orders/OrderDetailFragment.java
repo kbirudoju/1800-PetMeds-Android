@@ -18,7 +18,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +57,7 @@ import com.petmeds1800.ui.orders.support.OrderDetailAdapter;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.LayoutPrintingUtils;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.Utils;
 
 import java.io.File;
@@ -179,7 +179,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
                         if (orderList.getIsCancellable().equals("true")) {
 
                             final OkCancelDialogFragment okCancelDialogFragment = OkCancelDialogFragment
-                                    .newInstance(getString(R.string.cancel_order_msg) + orderList.getOrderId(),
+                                    .newInstance(getString(R.string.cancel_order_msg) + orderList.getDisplayOrderId(),
                                             getString(R.string.cancel_order_title),
                                             getString(R.string.dialog_yes_button),
                                             getString(R.string.dialog_no_button));
