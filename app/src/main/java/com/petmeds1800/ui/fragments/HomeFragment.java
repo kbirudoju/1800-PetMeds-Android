@@ -1,5 +1,16 @@
 package com.petmeds1800.ui.fragments;
 
+import com.petmeds1800.R;
+import com.petmeds1800.intent.BarcodeScannerIntent;
+import com.petmeds1800.model.ProductCategory;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.dashboard.CategoryListFragment;
+import com.petmeds1800.ui.dashboard.WidgetListFragment;
+import com.petmeds1800.ui.support.HomeFragmentContract;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.Log;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -21,17 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.petmeds1800.R;
-import com.petmeds1800.intent.BarcodeScannerIntent;
-import com.petmeds1800.model.ProductCategory;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.dashboard.CategoryListFragment;
-import com.petmeds1800.ui.dashboard.WidgetListFragment;
-import com.petmeds1800.ui.support.HomeFragmentContract;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -195,8 +195,13 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
             public boolean onQueryTextSubmit(String query) {
                 try {
                     String encodedQuery = URLEncoder.encode(query, "utf-8");
-                    String url = getString(R.string.server_endpoint) + "/search.jsp?Ns=product.salesvolume%7C1&Ntt="
-                            + encodedQuery;
+                    String url = getString(R.string.server_endpoint)
+                            + "/productw.jsp?_D:/1800petmeds/search/FacetSearchFormHandler.selection=+&/1800petmeds/"
+                            + "search/FacetSearchFormHandler.selection=Products&/1800petmeds/search/FacetSearchFormHandler.question="
+                            + encodedQuery + "&_D:/1800petmeds/search/FacetSearchFormHandler.question="
+                            + "+&/1800petmeds/search/FacetSearchFormHandler.successURL=/search.jsp&_D:/1800petmeds/search/FacetSearchFormHandler.successURL="
+                            + "+&/1800petmeds/search/FacetSearchFormHandler.errorURL=/productw.jsp&_D:/1800petmeds/search/FacetSearchFormHandler.errorURL="
+                            + "+&/1800petmeds/search/FacetSearchFormHandler.search=Search&_D:/1800petmeds/search/FacetSearchFormHandler.search=+&_DARGS=/includes/top_home_01.jsp";
                     Bundle bundle = new Bundle();
                     bundle.putString(CommonWebviewFragment.TITLE_KEY, query);
                     bundle.putString(CommonWebviewFragment.URL_KEY, url);
@@ -253,9 +258,8 @@ public class HomeFragment extends AbstractFragment implements HomeFragmentContra
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
-        if(requestCode==2)
-        {
-            if(data!=null) {
+        if (requestCode == 2) {
+            if (data != null) {
                 String title = data.getStringExtra(CommonWebviewFragment.TITLE_KEY);
                 String url = data.getStringExtra(CommonWebviewFragment.URL_KEY);
 
