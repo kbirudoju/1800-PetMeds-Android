@@ -352,7 +352,7 @@
     <string name="title_education">Education</string>
     <string name="description_education">Gain access to expert pet care information,\nor ask our vet a question.
     </string>
-    <string name="title_ez_refill">Easy ReFill</string>
+    <string name="title_ez_refill">Easy Refill</string>
     <string name="description_ez_refill">Quickly reorder your pet\'s medications\nso you never run out.</string>
     <string name="fingerprint_enrollment_message">Please enroll in fingerprint under Settings to enable this feature.
     </string>
