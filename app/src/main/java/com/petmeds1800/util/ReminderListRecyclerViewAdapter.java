@@ -1,6 +1,5 @@
 package com.petmeds1800.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -21,11 +20,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.petmeds1800.R;
 import com.petmeds1800.model.RefillReminderSortingperPet;
-import com.petmeds1800.model.refillreminder.response.OrderItems;
 import com.petmeds1800.model.refillreminder.response.ReminderMonth;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Sarthak on 10/20/2016.
@@ -35,6 +33,7 @@ public class ReminderListRecyclerViewAdapter extends RecyclerView.Adapter<Remind
     private Context mContext;
     private Handler mHandler;
     private ArrayList<RefillReminderSortingperPet> mRefillReminderSortingperPets;
+    DecimalFormat df = new DecimalFormat("0.00");
 
     public ReminderListRecyclerViewAdapter(Context mContext, Handler mHandler, ArrayList<RefillReminderSortingperPet> refillReminderSortingperPets) {
         this.mContext = mContext;
@@ -86,7 +85,10 @@ public class ReminderListRecyclerViewAdapter extends RecyclerView.Adapter<Remind
             ((TextView)v.findViewById(R.id.text_medication_description)).setText(mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().getSkuDisplayName());
             ((TextView)v.findViewById(R.id.text_medication_month)).setText(mContext.getString(R.string.for_tag_pet_month) + " " + mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().getReminderMonth().getName());
             ((TextView)v.findViewById(R.id.text_medication_quantity)).setText(mContext.getString(R.string.for_tag_pet_quantity_remaining) + " " + mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().getQuantity());
-            ((TextView)v.findViewById(R.id.text_medication_price)).setText(mContext.getString(R.string.for_tag_pet_price) + "" + mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().getSellingPrice());
+             ((TextView)v.findViewById(R.id.text_medication_price)).setText(mContext.getString(R.string.for_tag_pet_price) + "" +df.format(Double.parseDouble(mRefillReminderSortingperPets.get(position).getRefillReminderSortingPetcompOrderArraylist().get(i).getListed_orderItem().getSellingPrice())));
+
+
+
             final int finalI = i;
             ((FrameLayout) v.findViewById(R.id.frame_edit)).setOnClickListener(new View.OnClickListener() {
                 @Override

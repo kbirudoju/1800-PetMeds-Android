@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.R;
-import com.petmeds1800.model.refillreminder.request.RemoveRefillReminderRequest;
-import com.petmeds1800.model.refillreminder.request.UpdateRefillReminderRequest;
-import com.petmeds1800.model.refillreminder.response.MonthSelectListResponse;
-import com.petmeds1800.model.shoppingcart.response.Status;
-import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
-import com.petmeds1800.ui.refillreminder.EditReminderContract;
-import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.Utils;
-
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -35,6 +21,21 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.R;
+import com.petmeds1800.model.refillreminder.request.RemoveRefillReminderRequest;
+import com.petmeds1800.model.refillreminder.request.UpdateRefillReminderRequest;
+import com.petmeds1800.model.refillreminder.response.MonthSelectListResponse;
+import com.petmeds1800.model.shoppingcart.response.Status;
+import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
+import com.petmeds1800.ui.refillreminder.EditReminderContract;
+import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.Utils;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -86,6 +87,7 @@ public class EditReminderFragment extends AbstractFragment implements View.OnTou
     private ProgressBar mProgressBar;
     private String mReminderMonthID;
     private int CALANDER_SELECTION_CODE = 7012;
+    DecimalFormat df = new DecimalFormat("0.00");
 
 
     @Override
@@ -135,7 +137,8 @@ public class EditReminderFragment extends AbstractFragment implements View.OnTou
     private void initValues(){
         if (getArguments() != null){
             if (getArguments().containsKey(Constants.REFILL_LIST_PER_PET_PRICE) && !getArguments().getString(Constants.REFILL_LIST_PER_PET_PRICE).isEmpty()){
-                mEditPrice.getEditText().setText(getArguments().getString(Constants.REFILL_LIST_PER_PET_PRICE));
+              mEditPrice.getEditText().setText(String.valueOf(df.format(Double.parseDouble(getArguments().getString(Constants.REFILL_LIST_PER_PET_PRICE)))));
+
             }
             if (getArguments().containsKey(Constants.REFILL_LIST_PER_PET_SKUID) && !getArguments().getString(Constants.REFILL_LIST_PER_PET_SKUID).isEmpty()){
                 mDescriptionMedication.setText(getArguments().getString(Constants.REFILL_LIST_PER_PET_SKUID));
