@@ -1,7 +1,5 @@
 package com.petmeds1800.ui.dashboard.presenter;
 
-import android.support.annotation.NonNull;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -21,7 +19,11 @@ import com.petmeds1800.model.entities.WidgetFooter;
 import com.petmeds1800.model.entities.WidgetListResponse;
 import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
 import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
+
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,8 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
     @Inject
     PetMedsApiService mApiService;
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     public WidgetPresenter(@NonNull WidgetContract.View view) {
         mView = view;
@@ -63,8 +67,8 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.hideProgress();
                         if(mView.isActive()){
+                            mView.hideProgress();
                             int errorId = RetrofitErrorHandler.getErrorMessage(e);
                             if (errorId == R.string.noInternetConnection || errorId == R.string.connectionTimeout) {
                                 mView.showRetryView();
@@ -77,8 +81,9 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
                     @Override
                     public void onNext(WidgetListResponse s) {
-                        mView.hideProgress();
+
                         if(mView.isActive()){
+                            mView.hideProgress();
                             if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 mView.onSuccess(formatWidgetData(s.getWidgets()));
                             } else {
@@ -92,7 +97,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
     }
 
     @Override
-    public void addToCart(AddToCartRequest addToCartRequest) {
+    public void addToCart(final AddToCartRequest addToCartRequest) {
         mView.showProgress();
         mApiService.addToCart(addToCartRequest)
                 .subscribeOn(Schedulers.io())
@@ -105,9 +110,18 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.hideProgress();
-                        //error handling would be implemented once we get the details from backend team
-                        mView.onAddCartError(e.getLocalizedMessage());
+                        if (e instanceof SecurityException) {
+                            Log.d("WidgetPresenter", "retrying after session renew");
+                            addToCartRequest.setDynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                            addToCart(addToCartRequest);
+                            return;
+
+                        }
+                        if(mView.isActive()) {
+                            mView.hideProgress();
+                            //error handling would be implemented once we get the details from backend team
+                            mView.onAddCartError(e.getLocalizedMessage());
+                        }
 
                     }
 
