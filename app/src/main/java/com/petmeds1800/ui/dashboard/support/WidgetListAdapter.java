@@ -1,25 +1,5 @@
 package com.petmeds1800.ui.dashboard.support;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.BrowsingHistory;
-import com.petmeds1800.model.entities.Category;
-import com.petmeds1800.model.entities.PetItemList;
-import com.petmeds1800.model.entities.Products;
-import com.petmeds1800.model.entities.RecentlyOrdered;
-import com.petmeds1800.model.entities.RecentlyOrderedTitle;
-import com.petmeds1800.model.entities.RecommendedCategory;
-import com.petmeds1800.model.entities.RecommendedProducts;
-import com.petmeds1800.model.entities.RefillItem;
-import com.petmeds1800.model.entities.SalePitch;
-import com.petmeds1800.model.entities.WhatsNextCategory;
-import com.petmeds1800.model.entities.WidgetData;
-import com.petmeds1800.model.entities.WidgetFooter;
-import com.petmeds1800.ui.dashboard.WidgetListFragment;
-import com.petmeds1800.ui.fragments.CommonWebviewFragment;
-import com.petmeds1800.util.Log;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -42,6 +22,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.BrowsingHistory;
+import com.petmeds1800.model.entities.Category;
+import com.petmeds1800.model.entities.PetItemList;
+import com.petmeds1800.model.entities.Products;
+import com.petmeds1800.model.entities.RecentlyOrdered;
+import com.petmeds1800.model.entities.RecentlyOrderedTitle;
+import com.petmeds1800.model.entities.RecommendedCategory;
+import com.petmeds1800.model.entities.RecommendedProducts;
+import com.petmeds1800.model.entities.RefillItem;
+import com.petmeds1800.model.entities.SalePitch;
+import com.petmeds1800.model.entities.WhatsNextCategory;
+import com.petmeds1800.model.entities.WidgetData;
+import com.petmeds1800.model.entities.WidgetFooter;
+import com.petmeds1800.ui.dashboard.WidgetListFragment;
+import com.petmeds1800.ui.fragments.CommonWebviewFragment;
+import com.petmeds1800.util.Log;
 
 import java.util.List;
 
@@ -434,8 +434,17 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case TIP_VIEW_TYPE:
                 final TipViewHolder tipViewHolder = (TipViewHolder) holder;
                 WidgetData widgetData = (WidgetData) getItemAt(position);
-                tipViewHolder.contentLabel.setText(Html.fromHtml(widgetData.getContent()));
-                // tipViewHolder.contentLabel.setText(Html.fromHtml("<a href=\"http://www.google.com\">Google</a>"));
+                String contentLabelTxt=widgetData.getContent();
+                String hyperlinkToSearch="href=\"";
+                String[] split = contentLabelTxt.split(hyperlinkToSearch);
+                try {
+                    String firstSubString = split[0] + "href=\"" + mContext.getString(R.string.server_endpoint);
+                    String secondSubString = split[1];
+                    contentLabelTxt = firstSubString + secondSubString;
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                tipViewHolder.contentLabel.setText(Html.fromHtml(contentLabelTxt));
                 tipViewHolder.contentLabel.setMovementMethod(LinkMovementMethod.getInstance());
                 tipViewHolder.tipTitleLabel.setText(widgetData.getWidgetTitle());
                 tipViewHolder.tipDoctorLabel.setText(widgetData.getDoctorName());
