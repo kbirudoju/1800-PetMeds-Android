@@ -89,7 +89,6 @@
                 android:paddingLeft="@dimen/dp_16"
         />
         <TextView
-                android:text="October"
                 android:layout_marginLeft="@dimen/dp_16"
                 android:id="@+id/reminderMonth"
                 android:layout_width="wrap_content"

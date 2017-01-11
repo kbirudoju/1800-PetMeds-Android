@@ -540,7 +540,7 @@
     <string name="track_via_txt">"Track via "</string>
 
     <string name="edit_cart_title">EDIT CART</string>
-    <string name="refill_reminder_title">Refill Reminder Month</string>
+    <string name="refill_reminder_title">Receive Reorder Reminder</string>
     <string name="reminder_title">Set Reminder Date</string>
     <string-array name="month_names">
         <item>January</item>
