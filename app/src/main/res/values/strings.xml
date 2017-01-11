@@ -113,7 +113,7 @@
     <string name="label_pet_vet_title">Pet &amp; Vet Information</string>
     <string name="label_sign_up">Sign Up</string>
     <string name="error_confirm_email_must_match">Confirmation email must match your email address</string>
-    <string name="error_confirm_password_must_match">Confirmation password must match your password</string>
+    <string name="error_confirm_password_must_match">Password doesn’t match</string>
     <string name="error_first_name_required">First name is required</string>
     <string name="error_first_name_invalid">First name invalid</string>
     <string name="error_last_name_required">Last name is required</string>
@@ -156,6 +156,7 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_confirm_email">Confirm Email</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_new_password">New Password</string>
     <string name="prompt_confirm_password">Confirm Password</string>
     <string name="action_sign_in">Sign in or register</string>
 

@@ -1,7 +1,6 @@
 package com.petmeds1800.ui.support;
 
 import com.petmeds1800.mvp.BasePresenter;
-import com.petmeds1800.mvp.BaseView;
 
 /**
  * Created by Abhinav on 21/12/16.
@@ -22,6 +21,7 @@ public interface HomeActivityContract {
     interface Presenter extends BasePresenter {
 
         void getSecurityStatusFirst();
+        void unsubscribeSubscription();
 
     }
 

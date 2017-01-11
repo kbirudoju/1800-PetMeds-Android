@@ -3,23 +3,17 @@ package com.petmeds1800.ui.support;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.entities.OrderHistoryFilter;
-import com.petmeds1800.model.entities.Profile;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
-import com.petmeds1800.model.entities.Status;
 import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.shoppingcart.ShoppingCartListContract;
 import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.RetrofitErrorHandler;
-
 import com.petmeds1800.util.Log;
+import com.petmeds1800.util.RetrofitErrorHandler;
 
 import javax.inject.Inject;
 
-import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -35,6 +29,8 @@ public class SecurityLockPresenter implements HomeActivityContract.Presenter {
 
     HomeActivityContract.View mView;
 
+    private Subscription mSubscription;
+
     public SecurityLockPresenter(HomeActivityContract.View mView) {
         this.mView = mView;
         PetMedsApplication.getAppComponent().inject(this);
@@ -43,7 +39,7 @@ public class SecurityLockPresenter implements HomeActivityContract.Presenter {
     @Override
     public void getSecurityStatusFirst() {
 
-        mPetMedsApiService.getSecurityStatus()
+        mSubscription = mPetMedsApiService.getSecurityStatus()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SecurityStatusResponse>() {
@@ -85,17 +81,27 @@ public class SecurityLockPresenter implements HomeActivityContract.Presenter {
                     public void onNext(SecurityStatusResponse securityStatusResponse) {
 
                         //we should now unblock the UI in-order to make subsequent network calls
+
                         if (securityStatusResponse != null) {
                             Log.d("securityStatus", securityStatusResponse.getSecurityStatus() + "");
 
                             //clear the lock to wait for security status
                             mPreferencesHelper.setWaitForSecurityStatus(false);
-
-                            mView.hideProgress();
-                            mView.moveAhead();
+                            if (mView.isActive()) {
+                                mView.hideProgress();
+                                mView.moveAhead();
+                            }
                         }
                     }
                 });
+
+    }
+
+    @Override
+    public void unsubscribeSubscription() {
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 
     @Override

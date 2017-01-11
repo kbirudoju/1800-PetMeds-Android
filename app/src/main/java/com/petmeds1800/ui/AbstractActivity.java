@@ -1,5 +1,9 @@
 package com.petmeds1800.ui;
 
+import com.petmeds1800.R;
+import com.petmeds1800.ui.fragments.dialog.LoadingGIFDialogFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,10 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import com.petmeds1800.R;
-import com.petmeds1800.ui.fragments.dialog.LoadingGIFDialogFragment;
-import com.petmeds1800.util.AnalyticsUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,9 +88,8 @@ public abstract class AbstractActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 LoadingGIFDialogFragment frag = new LoadingGIFDialogFragment();
-                frag.show(fragmentTransaction, LoadingGIFDialogFragment.class.getSimpleName());
+                frag.show(getSupportFragmentManager(), LoadingGIFDialogFragment.class.getSimpleName());
             }
         },100);
     }
@@ -109,7 +108,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
                 Fragment prev = getSupportFragmentManager().findFragmentByTag(LoadingGIFDialogFragment.class.getSimpleName());
                 if (prev != null) {
                     LoadingGIFDialogFragment df = (LoadingGIFDialogFragment) prev;
-                    df.dismiss();
+                    df.dismissAllowingStateLoss();
                 }
             }
         },1000);

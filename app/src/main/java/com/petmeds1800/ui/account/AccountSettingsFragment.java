@@ -1,10 +1,20 @@
 package com.petmeds1800.ui.account;
 
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
+import com.petmeds1800.model.entities.User;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
+import com.petmeds1800.util.Utils;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import com.petmeds1800.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,16 +27,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
-import com.petmeds1800.model.entities.User;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.util.AnalyticsUtil;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Utils;
 
 import javax.inject.Inject;
 
@@ -77,7 +77,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mPresenter = new AccountSettingsPresenter(this,getActivity());
+        mPresenter = new AccountSettingsPresenter(this, getActivity());
         PetMedsApplication.getAppComponent().inject(this);
     }
 
@@ -183,7 +183,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
             proceedUpdate = false;
         }
 
-        if(proceedUpdate){
+        if (proceedUpdate) {
             mProgressBar.setVisibility(View.VISIBLE);
             //following should be executable after validation success
             enableEditTexts(false);
@@ -221,10 +221,12 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
         if (enable) {
             mEmailText.setEnabled(true);
             mPasswordText.setEnabled(true);
+            mPasswordInputLayout.setHint(getString(R.string.prompt_new_password));
             mConfirmPasswordInputLayout.setVisibility(View.VISIBLE);
         } else {
             mEmailText.setEnabled(false);
             mPasswordText.setEnabled(false);
+            mPasswordInputLayout.setHint(getString(R.string.prompt_password));
             mConfirmPasswordInputLayout.setVisibility(View.GONE);
         }
     }
@@ -233,7 +235,7 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     public void setUserData(User user) {
         mProgressBar.setVisibility(View.GONE);
 
-        Log.v("AccountSettingsFrag", "user email "+user.getEmail());
+        Log.v("AccountSettingsFrag", "user email " + user.getEmail());
         mEmailText.setText(user.getEmail());
         //we will never receive password as part of the response in User model
         mPasswordText.setText("********");
@@ -251,8 +253,8 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @Override
     public void showError(String error) {
         mProgressBar.setVisibility(View.GONE);
-        Utils.displayCrouton(getActivity(),error,mAccountSettingContainer);
-      //  Snackbar.make(mPasswordText, error, Snackbar.LENGTH_SHORT).show();
+        Utils.displayCrouton(getActivity(), error, mAccountSettingContainer);
+        //  Snackbar.make(mPasswordText, error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
