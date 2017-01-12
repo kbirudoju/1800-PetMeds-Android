@@ -720,6 +720,12 @@ public class HomeActivity extends AbstractActivity
         CartFragment cartFragment = (CartFragment) getSupportFragmentManager()
                 .findFragmentByTag(CartFragment.class.getSimpleName());
         if (cartFragment != null) {
+            //make sure we have the accountFragment added once we
+            if(paypalResponse != null && paypalResponse.getShoppingCart() !=null) {
+                mPreferencesHelper.setIsUserLoggedIn(true);
+                mAccountRootFragment.showAccountFragment();
+            }
+
             cartFragment.startCheckoutAfterPayment(paypalResponse);
         }
     }
