@@ -13,33 +13,43 @@ import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.checkout.CheckOutActivity;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.PetMedWebViewClient;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,10 +60,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Cookie;
 
+import static android.app.Activity.RESULT_OK;
 import static com.petmeds1800.util.Constants.KEY_APP_ID;
 import static com.petmeds1800.util.Constants.KEY_INITIALIZE_COOKIES;
 import static com.petmeds1800.util.Constants.KEY_JESESSION_ID;
 import static com.petmeds1800.util.Constants.KEY_SITE_SERVER;
+import static com.urbanairship.UAirship.getApplicationContext;
+import static com.urbanairship.UAirship.getPackageManager;
 
 /**
  * Created by pooja on 8/25/2016.
@@ -73,7 +86,12 @@ public class CommonWebviewFragment extends AbstractFragment {
     public static final String STEPNAME = "stepname";
 
     public static final String DISABLE_BACK_BUTTON = "disableBackButton";
+    private static final int INPUT_FILE_REQUEST_CODE = 1;
 
+    private static final String TAG = CommonWebviewFragment.class.getSimpleName();
+    private ValueCallback<Uri[]> mFilePathCallback;
+    private Uri mCapturedImageURI = null;
+    private String mCameraPhotoPath;
     @BindView(R.id.webViewContainer)
     WebView mWebView;
 
@@ -102,6 +120,9 @@ public class CommonWebviewFragment extends AbstractFragment {
     private String htmlData;
 
     private String paypalData;
+    private final static int FILECHOOSER_RESULTCODE = 1;
+
+    private ValueCallback<Uri> mUploadMessage;
 
     public static CommonWebviewFragment newInstance(boolean disableBackButton) {
         Bundle args = new Bundle();
@@ -221,7 +242,71 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         }
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
+                super.onActivityResult(requestCode, resultCode, data);
+                return;
+            }
+            Uri[] results = null;
+            // Check that the response is a good one
+            if (resultCode == Activity.RESULT_OK) {
+                if (data == null) {
+                    // If there is not data, then we may have taken a photo
+                    if (mCameraPhotoPath != null) {
+                        results = new Uri[]{Uri.parse(mCameraPhotoPath)};
+                    }
+                } else {
+                    String dataString = data.getDataString();
+                    if (dataString != null) {
+                        results = new Uri[]{Uri.parse(dataString)};
+                    }
+                }
+            }
+            mFilePathCallback.onReceiveValue(results);
+            mFilePathCallback = null;
+        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            if (requestCode != FILECHOOSER_RESULTCODE || mUploadMessage == null) {
+                super.onActivityResult(requestCode, resultCode, data);
+                return;
+            }
+            if (requestCode == FILECHOOSER_RESULTCODE) {
+                if (null == this.mUploadMessage) {
+                    return;
+                }
+                Uri result = null;
+                try {
+                    if (resultCode != RESULT_OK) {
+                        result = null;
+                    } else {
+                        // retrieve from the private variable if the intent is null
+                        result = data == null ? mCapturedImageURI : data.getData();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "activity :" + e,
+                            Toast.LENGTH_LONG).show();
+                }
+                mUploadMessage.onReceiveValue(result);
+                mUploadMessage = null;
+            }
+        }
 
+        return;
+    }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File imageFile = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        return imageFile;
+    }
     private void setUpWebView(final String url) throws URISyntaxException {
 
         Log.d("URL", url + ">>>>>");
@@ -233,11 +318,110 @@ public class CommonWebviewFragment extends AbstractFragment {
                     mProgressBar.setVisibility(View.GONE);
                 }
             }
+            // For Android 5.0
+            @Override
+            public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> filePath, WebChromeClient.FileChooserParams fileChooserParams) {
+                // Double check that we don't have any existing callbacks
+                if (mFilePathCallback != null) {
+                    mFilePathCallback.onReceiveValue(null);
+                }
+                mFilePathCallback = filePath;
+
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                        takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
+                    } catch (IOException ex) {
+                        // Error occurred while creating the File
+                    }
+
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+                        mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                Uri.fromFile(photoFile));
+                    } else {
+                        takePictureIntent = null;
+                    }
+                }
+
+                Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                contentSelectionIntent.setType("image/*");
+
+                Intent[] intentArray;
+                if (takePictureIntent != null) {
+                    intentArray = new Intent[]{takePictureIntent};
+                } else {
+                    intentArray = new Intent[0];
+                }
+                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
+                return true;
+            }
+
+            // openFileChooser for Android 3.0+
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
+                mUploadMessage = uploadMsg;
+                // Create AndroidExampleFolder at sdcard
+                // Create AndroidExampleFolder at sdcard
+                File imageStorageDir = new File(
+                        Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES)
+                        , "AndroidExampleFolder");
+                if (!imageStorageDir.exists()) {
+                    // Create AndroidExampleFolder at sdcard
+                    imageStorageDir.mkdirs();
+                }
+                // Create camera captured image file path and name
+                File file = new File(
+                        imageStorageDir + File.separator + "IMG_"
+                                + String.valueOf(System.currentTimeMillis())
+                                + ".jpg");
+                Log.d("File", "File: " + file);
+                mCapturedImageURI = Uri.fromFile(file);
+                // Camera capture image intent
+                final Intent captureIntent = new Intent(
+                        android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("image/*");
+                // Create file chooser intent
+                Intent chooserIntent = Intent.createChooser(i, "Image Chooser");
+                // Set camera intent to file chooser
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS
+                        , new Parcelable[] { captureIntent });
+                // On select image call onActivityResult method of activity
+                startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
+            }
+
+            // openFileChooser for Android < 3.0
+            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+                openFileChooser(uploadMsg, "");
+            }
+
+            //openFileChooser for other Android versions
+            public void openFileChooser(ValueCallback<Uri> uploadMsg,
+                    String acceptType,
+                    String capture) {
+
+                openFileChooser(uploadMsg, acceptType);
+            }
+
         };
         mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(), mWebView, url, false, mProgressBar));
         mWebView.setWebChromeClient(client);
         mWebView.loadUrl(url);
     }
+
 
     private void loadFromHtmlData(String htmlData) {
 
@@ -252,6 +436,23 @@ public class CommonWebviewFragment extends AbstractFragment {
                     mProgressBar.setVisibility(View.GONE);
                 }
                 super.onProgressChanged(view, progress);
+
+            }
+            // For Android > 5.0
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                //Logic to implement
+                return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
+            }
+            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+
+                mUploadMessage = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("image/*");
+                getActivity().startActivityForResult(
+                        Intent.createChooser(i, "Image Browser"),
+                        FILECHOOSER_RESULTCODE);
             }
         };
 
@@ -274,6 +475,21 @@ public class CommonWebviewFragment extends AbstractFragment {
                     mProgressBar.setVisibility(View.GONE);
                 }
                 super.onProgressChanged(view, progress);
+            }
+            @Override
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                //Logic to implement
+                return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
+            }
+            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+
+                mUploadMessage = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("image/*");
+                getActivity().startActivityForResult(
+                        Intent.createChooser(i, "Image Browser"),
+                        FILECHOOSER_RESULTCODE);
             }
         };
 
