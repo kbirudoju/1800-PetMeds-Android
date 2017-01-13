@@ -26,7 +26,6 @@ import com.petmeds1800.ui.fragments.CartFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -129,7 +128,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
                     Message msg = Message.obtain(null, Constants.CLICK_ITEM_UPDATE_SHOPPINGCART);
                     Bundle b = new Bundle();
                     b.putString(CommonWebviewFragment.TITLE_KEY, mCommerceItemsesCollection.get(position).getProductDisplayName());
-                    b.putString(CommonWebviewFragment.URL_KEY, mContext.getString(R.string.server_endpoint) + mCommerceItemsesCollection.get(position).getProductPageUrl());
+                    b.putString(CommonWebviewFragment.URL_KEY, mContext.getString(R.string.server_endpoint) + mCommerceItemsesCollection.get(position).getProductPageUrl()+"&ci="+mCommerceItemsesCollection.get(position).getCommerceItemId());
                     msg.setData(b);
 
                     try {
