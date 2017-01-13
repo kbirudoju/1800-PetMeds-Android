@@ -56,6 +56,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
 
     public boolean isEmpty = false;
     private boolean skipPetWeightCheck =false;
+    private boolean skipPetSpeciesCheck =false;
 
 
     public static StepFourRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse, String stepName) {
@@ -130,7 +131,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
         if (!isEmpty) {
             activity.showProgress();
             //create request for add pet and vet info to cart
-            SavePetVetRequest savePetVetRequest = new SavePetVetRequest(skipPetWeightCheck, fragment.mMailOption, commerceItemIds,
+            SavePetVetRequest savePetVetRequest = new SavePetVetRequest(skipPetSpeciesCheck,skipPetWeightCheck, fragment.mMailOption, commerceItemIds,
                     petIds,
                     vetIds, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             mPresenter.applyPetVetInfo(savePetVetRequest);
@@ -169,6 +170,7 @@ public class StepFourRootFragment extends AbstractFragment implements View.OnCli
     public void onWarning(String errorMessage) {
         showErrorCrouton(errorMessage,false);
         skipPetWeightCheck=true;
+        skipPetSpeciesCheck=true;
     }
 
     @Override

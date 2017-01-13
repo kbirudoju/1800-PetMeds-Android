@@ -12,14 +12,25 @@ public class SavePetVetRequest {
     private ArrayList<String> petIds;
     private ArrayList<String> vetIds;
 
+    public boolean isSkipPetSpeciesCheck() {
+        return skipPetSpeciesCheck;
+    }
 
-    public SavePetVetRequest(boolean skipPetWeightCheck, String mailInPrescriptionFlag, ArrayList<String> commerceItemIds, ArrayList<String> petIds, ArrayList<String> vetIds, String _dynSessConf) {
+    public void setSkipPetSpeciesCheck(boolean skipPetSpeciesCheck) {
+        this.skipPetSpeciesCheck = skipPetSpeciesCheck;
+    }
+
+    private boolean skipPetSpeciesCheck;
+
+
+    public SavePetVetRequest(boolean skipPetSpeciesCheck,boolean skipPetWeightCheck, String mailInPrescriptionFlag, ArrayList<String> commerceItemIds, ArrayList<String> petIds, ArrayList<String> vetIds, String _dynSessConf) {
         this.skipPetWeightCheck = skipPetWeightCheck;
         this.mailInPrescriptionFlag = mailInPrescriptionFlag;
         this.commerceItemIds = commerceItemIds;
         this.petIds = petIds;
         this.vetIds = vetIds;
         this._dynSessConf = _dynSessConf;
+        this.skipPetSpeciesCheck=skipPetSpeciesCheck;
     }
 
     public boolean isSkipPetWeightCheck() {

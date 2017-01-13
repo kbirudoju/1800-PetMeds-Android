@@ -363,7 +363,7 @@ public class StepFiveRootFragment extends AbstractFragment
                                 .getState() + BLANK_SPACE + mShippingAddress.getPostalCode());
             }
             if (mShippingMethod != null) {
-                mShippingMethodDetailsText.setText(mShippingMethod.getDescription());
+                mShippingMethodDetailsText.setText(mShippingMethod.getMethod());
             }
             if (mPaymentMethod != null) {
                 if (mPaymentMethod.getPaymentType().equalsIgnoreCase(getString(R.string.label_credit_card))) {

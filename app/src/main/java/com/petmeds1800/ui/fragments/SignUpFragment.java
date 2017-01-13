@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Html;
 import android.text.Spanned;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +37,7 @@ import com.petmeds1800.mvp.SignupTask.SignUpContract;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
@@ -629,11 +629,11 @@ public class SignUpFragment extends AbstractFragment
                                 countryText = countryShippingText;
                                 phoneText = phoneShippingText;
                             }
-                            return mApiService.signUp(new SignUpRequest(emailText, confirmEmailText, passwordText,
-                                    confirmPasswordText, firstNameShippingText, lastNameShippingText, addressShippingText, apartmentShippingText, cityShippingText,
-                                    stateShippingText, zipShippingText, countryShippingText, phoneShippingText,firstNameText, lastNameText, addressText, apartmentText,
-                                    cityText, stateText, zipText, countryText, phoneText,
-                                    sessionConfNumber))
+                            SignUpRequest signUpRequest=new SignUpRequest(emailText, confirmEmailText, passwordText,
+                                    confirmPasswordText, firstNameText, lastNameText,addressText, apartmentText,cityText, stateText,  zipText, countryText, phoneText,firstNameShippingText, lastNameShippingText,addressShippingText, apartmentShippingText, cityShippingText,stateShippingText,
+                                    zipShippingText, countryShippingText, phoneShippingText,
+                                    sessionConfNumber);
+                            return mApiService.signUp(signUpRequest)
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io());
                         } else {
