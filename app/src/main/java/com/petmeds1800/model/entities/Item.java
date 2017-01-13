@@ -25,6 +25,16 @@ public class Item implements Serializable{
     private String itemPetName;
     private String itemDrName;
 
+    public boolean isHasUnitLife() {
+        return hasUnitLife;
+    }
+
+    public void setHasUnitLife(boolean hasUnitLife) {
+        this.hasUnitLife = hasUnitLife;
+    }
+
+    private boolean hasUnitLife;
+
     public String getItemDrName() {
         return itemDrName;
     }

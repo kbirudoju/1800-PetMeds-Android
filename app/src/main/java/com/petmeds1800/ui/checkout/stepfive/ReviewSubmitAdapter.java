@@ -1,17 +1,11 @@
 package com.petmeds1800.ui.checkout.stepfive;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.Item;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +13,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.Item;
+import com.petmeds1800.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,8 +105,7 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Log.d("position of items :::: ", position + ">>>>" + mItems.size());
         final ReviewSubmitViewHolder reviewSubmitViewHolder = (ReviewSubmitViewHolder) holder;
         final Item item = (Item) getItemAt(position);
-        if (item.isRxItem()) {
-
+        if (item.isHasUnitLife()) {
             commerceItemId = item.getCommerceItemId();
             commerceItemsIdList.add(commerceItemId);
             reorderMonthsIdList.add(item.getReOrderReminderMonth());
@@ -115,8 +114,8 @@ public class ReviewSubmitAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     mContext.getResources().getStringArray(R.array.month_names)[Integer
                             .parseInt(item.getReOrderReminderMonth()) - FIRST_INDEX]);
 
-
         }
+
         reviewSubmitViewHolder.mReminderMonthEdit.setTag(commerceItemId);
         reviewSubmitViewHolder.mReminderMonthEdit.setOnClickListener(new View.OnClickListener() {
             @Override
