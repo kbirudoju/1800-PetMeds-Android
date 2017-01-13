@@ -71,8 +71,6 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, AddEditMedicationRemindersContract.View,
         AddPetNameListener, DialogInterface.OnClickListener {
 
-    public static final String FROM_PUSH = "fromPush";
-
     private static final String IS_EDITABLE = "isEditable";
 
     private static final String REMINDER_ID = "reminderId";
@@ -123,8 +121,6 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
     AddEditMedicationRemindersContract.Presenter mPresenter;
 
     private ReminderDialogData mReminderDialogData;
-
-    private FingerprintAuthenticationDialog mAuthenticationDialog;
 
     private ArrayList<String> mDayOfWeeks;
 
@@ -241,15 +237,6 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         super.onResume();
         ((AbstractActivity) getActivity()).enableBackButton();
     }
-
-    private void showFingerprintDialog() {
-        mAuthenticationDialog = new FingerprintAuthenticationDialog();
-        if (!mAuthenticationDialog.isAdded()) {
-            mAuthenticationDialog.setCancelable(false);
-            mAuthenticationDialog.show(getActivity().getSupportFragmentManager(), "FingerprintAuthenticationDialog");
-        }
-    }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -552,7 +539,7 @@ public class AddEditMedicationRemindersFragment extends AbstractFragment
         if (message.toString().contains(LOGGED_IN)) {
             FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
             Bundle bundle = new Bundle();
-            bundle.putBoolean(FROM_PUSH, true);
+            bundle.putBoolean(Constants.SHOW_SOFT_LOGIN_DAILOG, true);
             mAuthenticationDialog.setArguments(bundle);
             if (!mAuthenticationDialog.isAdded()) {
                 mAuthenticationDialog.setCancelable(false);

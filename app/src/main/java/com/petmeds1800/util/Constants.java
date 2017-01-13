@@ -69,7 +69,7 @@ public class Constants {
 
     public static final String IS_EDITABLE = "isEditable";
 
-    public static final String FROM_PUSH = "fromPush";
+    public static final String SHOW_SOFT_LOGIN_DAILOG = "softLogin";
 
     public static final String MEDICATION_REMINDER_INFO = "medicationReminderInfo";
 

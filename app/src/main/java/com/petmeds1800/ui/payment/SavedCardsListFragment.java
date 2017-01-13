@@ -4,8 +4,13 @@ import com.petmeds1800.R;
 import com.petmeds1800.model.Card;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.Utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,7 +37,7 @@ import butterknife.OnClick;
  * Created by Abhinav on 11/8/16.
  */
 public class SavedCardsListFragment extends AbstractFragment
-        implements SavedCardsListContract.View, View.OnClickListener {
+        implements SavedCardsListContract.View {
 
     @BindView(R.id.noSavedCards_layout)
     LinearLayout mNoSavedCardsLinearLayout;
@@ -55,11 +60,14 @@ public class SavedCardsListFragment extends AbstractFragment
 
     private MenuItem mAddMenuItem;
 
+    private static final String LOGGED_IN = "logged in";
+    private static final String FINGERPRINT_AUTHENTICATION_DIALOG = "FingerprintAuthenticationDialog";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new SavedCardsListPresenter(this);
         setHasOptionsMenu(true);
+        registerIntent(new IntentFilter(Constants.KEY_AUTHENTICATION_SUCCESS), getActivity());
     }
 
     @Nullable
@@ -89,7 +97,7 @@ public class SavedCardsListFragment extends AbstractFragment
         hideErrorLayout();
         mProgressBar.setVisibility(View.VISIBLE);
         super.onRetryButtonClicked(view);
-        if (mPresenter != null){
+        if (mPresenter != null) {
             mPresenter.start();
         }
     }
@@ -130,6 +138,7 @@ public class SavedCardsListFragment extends AbstractFragment
 
     @Override
     public void showNoCardsView() {
+
         mProgressBar.setVisibility(View.GONE);
         mNoSavedCardsLinearLayout.setVisibility(View.VISIBLE);
         mSavedCardsRecyclerView.setVisibility(View.VISIBLE);
@@ -171,7 +180,28 @@ public class SavedCardsListFragment extends AbstractFragment
     }
 
     @Override
-    public void onClick(View v) {
+    public void showCroutanMessage(String errorMessage) {
+        Utils.displayCrouton(getActivity(), errorMessage.toString(), mContainerLayout);
+        if (errorMessage.contains(LOGGED_IN)) {
+            FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constants.SHOW_SOFT_LOGIN_DAILOG, true);
+            mAuthenticationDialog.setArguments(bundle);
+            if (!mAuthenticationDialog.isAdded()) {
+                mAuthenticationDialog.setCancelable(false);
+                mAuthenticationDialog.show(getActivity().getSupportFragmentManager(), FINGERPRINT_AUTHENTICATION_DIALOG);
+            }
+        }
+    }
 
+    @Override
+    public void onDestroy() {
+        deregisterIntent(getActivity());
+        super.onDestroy();
+    }
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        mPresenter.start();
+        super.onReceivedBroadcast(context, intent);
     }
 }

@@ -98,8 +98,6 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
 
     private String orderId;
 
-    public static final String FROM_PUSH = "fromPush";
-
     private static final String FINGERPRINT_AUTHENTICATION_DIALOG = "FingerprintAuthenticationDialog";
 
     private static final String LOGGED_IN = "logged in";
@@ -355,7 +353,7 @@ public class OrderDetailFragment extends AbstractFragment implements OrderDetail
         if (errorMessage.contains(LOGGED_IN)) {
             FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
             Bundle bundle = new Bundle();
-            bundle.putBoolean(FROM_PUSH, true);
+            bundle.putBoolean(Constants.SHOW_SOFT_LOGIN_DAILOG, true);
             mAuthenticationDialog.setArguments(bundle);
             if (!mAuthenticationDialog.isAdded()) {
                 mAuthenticationDialog.setCancelable(false);

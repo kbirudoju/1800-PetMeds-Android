@@ -14,11 +14,12 @@ import com.petmeds1800.model.entities.PetTypesListResponse;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
 import com.petmeds1800.ui.pets.support.AddPetContract;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.petmeds1800.util.Log;
 
 import javax.inject.Inject;
 
@@ -35,7 +36,8 @@ public class AddPetPresenter implements AddPetContract.Presenter {
 
     @Inject
     PetMedsApiService mPetMedsApiService;
-
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
     private AddPetContract.View mView;
     private Context mContext;
 
@@ -63,9 +65,8 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                     public void onError(Throwable e) {
                         if (e instanceof SecurityException) {
                             Log.d("updatePetData", "retrying after session renew");
-
+                            addPetRequest.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                             addPetData(addPetRequest);
-
                             return;
 
                         }
@@ -114,9 +115,8 @@ public class AddPetPresenter implements AddPetContract.Presenter {
                         //check if we need to retry as a consequence of 409 conflict
                         if (e instanceof SecurityException) {
                             Log.d("updatePetData", "retrying after session renew");
-
+                            addPetRequest.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
                             updatePetData(addPetRequest);
-
                             return;
 
                         } else if (RetrofitErrorHandler.getErrorMessage(e) == R.string.noInternetConnection) {

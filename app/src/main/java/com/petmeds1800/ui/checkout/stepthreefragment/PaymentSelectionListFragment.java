@@ -1,16 +1,5 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Card;
@@ -21,6 +10,17 @@ import com.petmeds1800.ui.payment.SavedCardsListContract;
 import com.petmeds1800.ui.payment.SavedCardsListPresenter;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -167,6 +167,11 @@ public class PaymentSelectionListFragment extends AbstractFragment implements Sa
 
     @Override
     public void startCardUpdate(Card card) {
+
+    }
+
+    @Override
+    public void showCroutanMessage(String errorMessage) {
 
     }
 

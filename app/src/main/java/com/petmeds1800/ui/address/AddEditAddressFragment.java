@@ -17,6 +17,7 @@ import com.petmeds1800.ui.fragments.AbstractFragment;
 import com.petmeds1800.ui.fragments.dialog.CommonDialogFragment;
 import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
@@ -82,7 +83,7 @@ public class AddEditAddressFragment extends AbstractFragment
 
     private static final long APPROVAL_DIALOG_DURATION = 1000;
 
-    public static final String FROM_PUSH = "fromPush";
+
 
     private static final String FINGERPRINT_AUTHENTICATION_DIALOG = "FingerprintAuthenticationDialog";
 
@@ -631,7 +632,7 @@ public class AddEditAddressFragment extends AbstractFragment
     public void openFingerprintAuthenticationDialog(String requestType) {
         FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(FROM_PUSH, true);
+        bundle.putBoolean(Constants.SHOW_SOFT_LOGIN_DAILOG, true);
         bundle.putString(REQUEST_TYPE,requestType);
         mAuthenticationDialog.setArguments(bundle);
         if (!mAuthenticationDialog.isAdded()) {

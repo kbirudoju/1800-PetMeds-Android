@@ -6,11 +6,16 @@ import com.petmeds1800.model.entities.UpdateAccountSettingsRequest;
 import com.petmeds1800.model.entities.User;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.util.AnalyticsUtil;
+import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Log;
 import com.petmeds1800.util.Utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -72,10 +77,12 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
 
     @BindView(R.id.account_setting_container)
     LinearLayout mAccountSettingContainer;
-
+    private static final String LOGGED_IN = "logged in";
+    private static final String FINGERPRINT_AUTHENTICATION_DIALOG = "FingerprintAuthenticationDialog";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerIntent(new IntentFilter(Constants.KEY_AUTHENTICATION_SUCCESS), getActivity());
         setHasOptionsMenu(true);
         mPresenter = new AccountSettingsPresenter(this, getActivity());
         PetMedsApplication.getAppComponent().inject(this);
@@ -254,7 +261,17 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     public void showError(String error) {
         mProgressBar.setVisibility(View.GONE);
         Utils.displayCrouton(getActivity(), error, mAccountSettingContainer);
-        //  Snackbar.make(mPasswordText, error, Snackbar.LENGTH_SHORT).show();
+        if (error.contains(LOGGED_IN)) {
+            FingerprintAuthenticationDialog mAuthenticationDialog = new FingerprintAuthenticationDialog();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constants.SHOW_SOFT_LOGIN_DAILOG, true);
+            mAuthenticationDialog.setArguments(bundle);
+            if (!mAuthenticationDialog.isAdded()) {
+                mAuthenticationDialog.setCancelable(false);
+                mAuthenticationDialog.show(getActivity().getSupportFragmentManager(), FINGERPRINT_AUTHENTICATION_DIALOG);
+            }
+        }
+
     }
 
     @Override
@@ -266,5 +283,17 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @Override
     public void setPresenter(AccountSettingsContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        deregisterIntent(getActivity());
+        super.onDestroy();
+    }
+    @Override
+    protected void onReceivedBroadcast(Context context, Intent intent) {
+        validateAndUpdate();
+        super.onReceivedBroadcast(context, intent);
     }
 }

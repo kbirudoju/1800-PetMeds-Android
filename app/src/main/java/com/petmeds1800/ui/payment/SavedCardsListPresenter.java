@@ -1,8 +1,5 @@
 package com.petmeds1800.ui.payment;
 
-import android.support.annotation.NonNull;
-import com.petmeds1800.util.Log;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.model.Card;
@@ -10,6 +7,9 @@ import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.shoppingcart.request.CardDetailRequest;
 import com.petmeds1800.model.shoppingcart.response.CardDetailResponse;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
+
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -64,13 +64,16 @@ public class SavedCardsListPresenter implements SavedCardsListContract.Presenter
                     public void onNext(MySavedCard s) {
                         if (s.getStatus().getCode().equals(API_SUCCESS_CODE)
                                 && s.getCreditCardList() != null && s.getCreditCardList().size() > 0) {
-
                             if (mView.isActive()) {
                                 mView.showCardsListView(s.getCreditCardList());
                             }
                         } else {
                             if (mView.isActive()) {
-                                mView.showNoCardsView();
+                                if(s.getStatus().getCode().equals(API_ERROR_CODE)){
+                                    mView.showCroutanMessage(s.getStatus().getErrorMessages().get(0));
+                                }else{
+                                    mView.showNoCardsView();
+                                }
                             }
                         }
                     }
