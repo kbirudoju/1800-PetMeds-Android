@@ -1,21 +1,5 @@
 package com.petmeds1800.ui.fragments;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.petmeds1800.PetMedsApplication;
-import com.petmeds1800.R;
-import com.petmeds1800.api.PetMedsApiService;
-import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.checkout.CheckOutActivity;
-import com.petmeds1800.util.Constants;
-import com.petmeds1800.util.GeneralPreferencesHelper;
-import com.petmeds1800.util.Log;
-import com.petmeds1800.util.PetMedWebViewClient;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -46,14 +30,27 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
+import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.shoppingcart.response.ShoppingCartListResponse;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.checkout.CheckOutActivity;
+import com.petmeds1800.util.Constants;
+import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
+import com.petmeds1800.util.PetMedWebViewClient;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -64,8 +61,6 @@ import okhttp3.Cookie;
 import static android.app.Activity.RESULT_OK;
 import static com.petmeds1800.util.Constants.KEY_APP_ID;
 import static com.petmeds1800.util.Constants.KEY_INITIALIZE_COOKIES;
-import static com.petmeds1800.util.Constants.KEY_JESESSION_ID;
-import static com.petmeds1800.util.Constants.KEY_SITE_SERVER;
 import static com.urbanairship.UAirship.getApplicationContext;
 import static com.urbanairship.UAirship.getPackageManager;
 
@@ -186,11 +181,11 @@ public class CommonWebviewFragment extends AbstractFragment {
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-//            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
-//        } else {
-//            CookieManager.getInstance().setAcceptCookie(true);
-//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+        } else {
+            CookieManager.getInstance().setAcceptCookie(true);
+        }
 
         Log.d("setUpWebView", "Using clearCookies code for cookies");
         CookieManager cookieManager = CookieManager.getInstance();
@@ -588,48 +583,43 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         @Override
         public void run() {
-            Log.e("shouldOverrideUrl", "Cookies before clearing: " + CookieManager.getInstance().getCookie(url));
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-
-            Log.e("shouldOverrideUrl", "Cookies before setcookie: " + CookieManager.getInstance().getCookie(url));
-
-            Map cookieMap = new HashMap();
-            for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
-                Cookie cookie = iterator.next();
-                if (cookie.name().equals(KEY_JESESSION_ID)) {
-                    cookieMap.put(KEY_JESESSION_ID, KEY_JESESSION_ID + "=" + cookie.value() + "; ");
-                } else if (cookie.name().equals(KEY_SITE_SERVER)) {
-                    cookieMap.put(KEY_SITE_SERVER, KEY_SITE_SERVER + "=" + cookie.value() + "; ");
-                }
+            Log.e("CookieChecker", "Cookies before clearing: " + CookieManager.getInstance().getCookie(url));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            cookieMap.put(KEY_APP_ID, KEY_APP_ID + "=true; ");
+
+            Log.e("CookieChecker", "Cookies before setcookie: " + CookieManager.getInstance().getCookie(url));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                Log.d("setUpWebView",
-                        "Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+                Log.d("CookieChecker","Using clearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
                 try {
-                    CookieManager.getInstance().setCookie((url), (String) cookieMap.get(KEY_JESESSION_ID));
-                    CookieManager.getInstance().setCookie((url), (String) cookieMap.get(KEY_SITE_SERVER));
-                    CookieManager.getInstance().setCookie((url), (String) cookieMap.get(KEY_APP_ID));
+
+                    for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
+                        Cookie cookie = iterator.next();
+                        CookieManager.getInstance().setCookie((url), cookie.name() + "=" + cookie.value() + ";");
+                    }
+
+                    CookieManager.getInstance().setCookie((url), KEY_APP_ID + "=true;");
                     CookieManager.getInstance().flush();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             } else {
-                Log.d("setUpWebView",
-                        "Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
+                Log.d("CookieChecker","Using clearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
                 try {
                     CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(mWebView.getContext());
                     cookieSyncMngr.startSync();
                     CookieManager cManager = CookieManager.getInstance();
-                    cManager.setCookie((url), (String) cookieMap.get(KEY_JESESSION_ID));
-                    cManager.setCookie((url), (String) cookieMap.get(KEY_SITE_SERVER));
-                    cManager.setCookie((url), (String) cookieMap.get(KEY_APP_ID));
+
+                    for (Iterator<Cookie> iterator = mCookieCache.iterator(); iterator.hasNext(); ) {
+                        Cookie cookie = iterator.next();
+                        cManager.setCookie((url), cookie.name() + "=" + cookie.value() + ";");
+                    }
+
+                    cManager.setCookie((url),  KEY_APP_ID + "=true;");
                     cookieSyncMngr.stopSync();
                     cookieSyncMngr.sync();
                 } catch (Exception e) {
@@ -642,7 +632,7 @@ public class CommonWebviewFragment extends AbstractFragment {
                 e.printStackTrace();
             }
 
-            Log.e("shouldOverrideUrl", "Cookies after setcookie: " + CookieManager.getInstance().getCookie(url));
+            Log.e("CookieChecker", "Cookies after setcookie: " + CookieManager.getInstance().getCookie(url));
 
             Message message = Message.obtain(null, KEY_INITIALIZE_COOKIES);
             Bundle b = new Bundle();
