@@ -32,6 +32,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,12 +87,33 @@ public class CommonWebviewFragment extends AbstractFragment {
     public static final String STEPNAME = "stepname";
 
     public static final String DISABLE_BACK_BUTTON = "disableBackButton";
+
     private static final int INPUT_FILE_REQUEST_CODE = 1;
 
     private static final String TAG = CommonWebviewFragment.class.getSimpleName();
+
+    private static final String PHOTO_PATH = "PhotoPath";
+
+    private static final String FILE_PATH = "file:";
+
+    private static final String MIME_TYPE = "image/*";
+
+    private static final String IMAGE_CHOOSER = "Image Chooser";
+
+    private static final String PET_MEDS_PICTURES = "PetMedsPictures";
+
+    private static final String JPEG_FORMAT = ".jpg";
+
+    private static final String IMG_STRING = "IMG_";
+
+    private static final String DATE_FORMAT = "yyyyMMdd_HHmmss";
+
     private ValueCallback<Uri[]> mFilePathCallback;
+
     private Uri mCapturedImageURI = null;
+
     private String mCameraPhotoPath;
+
     @BindView(R.id.webViewContainer)
     WebView mWebView;
 
@@ -120,6 +142,7 @@ public class CommonWebviewFragment extends AbstractFragment {
     private String htmlData;
 
     private String paypalData;
+
     private final static int FILECHOOSER_RESULTCODE = 1;
 
     private ValueCallback<Uri> mUploadMessage;
@@ -208,12 +231,11 @@ public class CommonWebviewFragment extends AbstractFragment {
         }
 
         //if its homeActivity instance then we should check if we have a securityStatus lock
-        if(getActivity() instanceof HomeActivity) {
-            if(! mPreferencesHelper.shouldWaitForSecurityStatus()) {
+        if (getActivity() instanceof HomeActivity) {
+            if (!mPreferencesHelper.shouldWaitForSecurityStatus()) {
                 startLoading(url, htmlData, paypalData);
             }
-        }
-        else {
+        } else {
             //loading should get started as in-case of all other activities as here we dont have to wait and check for a securitylock
             //here no security status broadcast would be fired up
             startLoading(url, htmlData, paypalData);
@@ -242,6 +264,7 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -294,23 +317,41 @@ public class CommonWebviewFragment extends AbstractFragment {
 
         return;
     }
+
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat(DATE_FORMAT).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File imageFile = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                JPEG_FORMAT,
+                storageDir
         );
         return imageFile;
     }
-    private void setUpWebView(final String url) throws URISyntaxException {
 
-        Log.d("URL", url + ">>>>>");
+    private void setUpWebView(final String url) throws URISyntaxException {
         mWebView.getSettings().setJavaScriptEnabled(true);
+        //For webView goback
+        mWebView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    WebView webView = (WebView) v;
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_BACK:
+                            if (webView.canGoBack()) {
+                                webView.goBack();
+                                return true;
+                            }
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
         WebChromeClient client = new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
@@ -318,40 +359,38 @@ public class CommonWebviewFragment extends AbstractFragment {
                     mProgressBar.setVisibility(View.GONE);
                 }
             }
+
             // For Android 5.0
             @Override
-            public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> filePath, WebChromeClient.FileChooserParams fileChooserParams) {
+            public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> filePath,
+                    WebChromeClient.FileChooserParams fileChooserParams) {
                 // Double check that we don't have any existing callbacks
                 if (mFilePathCallback != null) {
                     mFilePathCallback.onReceiveValue(null);
                 }
                 mFilePathCallback = filePath;
-
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     // Create the File where the photo should go
                     File photoFile = null;
                     try {
                         photoFile = createImageFile();
-                        takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
+                        takePictureIntent.putExtra(PHOTO_PATH, mCameraPhotoPath);
                     } catch (IOException ex) {
                         // Error occurred while creating the File
                     }
-
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
-                        mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
+                        mCameraPhotoPath = FILE_PATH + photoFile.getAbsolutePath();
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                                 Uri.fromFile(photoFile));
                     } else {
                         takePictureIntent = null;
                     }
                 }
-
                 Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                contentSelectionIntent.setType("image/*");
-
+                contentSelectionIntent.setType(MIME_TYPE);
                 Intent[] intentArray;
                 if (takePictureIntent != null) {
                     intentArray = new Intent[]{takePictureIntent};
@@ -360,7 +399,7 @@ public class CommonWebviewFragment extends AbstractFragment {
                 }
                 Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
                 chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-                chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+                chooserIntent.putExtra(Intent.EXTRA_TITLE, IMAGE_CHOOSER);
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
                 startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
                 return true;
@@ -370,35 +409,33 @@ public class CommonWebviewFragment extends AbstractFragment {
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
                 mUploadMessage = uploadMsg;
                 // Create AndroidExampleFolder at sdcard
-                // Create AndroidExampleFolder at sdcard
                 File imageStorageDir = new File(
                         Environment.getExternalStoragePublicDirectory(
                                 Environment.DIRECTORY_PICTURES)
-                        , "AndroidExampleFolder");
+                        , PET_MEDS_PICTURES);
                 if (!imageStorageDir.exists()) {
                     // Create AndroidExampleFolder at sdcard
                     imageStorageDir.mkdirs();
                 }
                 // Create camera captured image file path and name
                 File file = new File(
-                        imageStorageDir + File.separator + "IMG_"
+                        imageStorageDir + File.separator + IMG_STRING
                                 + String.valueOf(System.currentTimeMillis())
-                                + ".jpg");
+                                + JPEG_FORMAT);
                 Log.d("File", "File: " + file);
                 mCapturedImageURI = Uri.fromFile(file);
                 // Camera capture image intent
                 final Intent captureIntent = new Intent(
                         android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
                 captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE);
-                i.setType("image/*");
+                i.setType(MIME_TYPE);
                 // Create file chooser intent
-                Intent chooserIntent = Intent.createChooser(i, "Image Chooser");
+                Intent chooserIntent = Intent.createChooser(i, IMAGE_CHOOSER);
                 // Set camera intent to file chooser
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS
-                        , new Parcelable[] { captureIntent });
+                        , new Parcelable[]{captureIntent});
                 // On select image call onActivityResult method of activity
                 startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
             }
@@ -409,10 +446,7 @@ public class CommonWebviewFragment extends AbstractFragment {
             }
 
             //openFileChooser for other Android versions
-            public void openFileChooser(ValueCallback<Uri> uploadMsg,
-                    String acceptType,
-                    String capture) {
-
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                 openFileChooser(uploadMsg, acceptType);
             }
 
@@ -424,12 +458,9 @@ public class CommonWebviewFragment extends AbstractFragment {
 
 
     private void loadFromHtmlData(String htmlData) {
-
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
-
         WebChromeClient client = new WebChromeClient() {
-
             @Override
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
@@ -438,24 +469,7 @@ public class CommonWebviewFragment extends AbstractFragment {
                 super.onProgressChanged(view, progress);
 
             }
-            // For Android > 5.0
-            @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-                //Logic to implement
-                return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
-            }
-            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-
-                mUploadMessage = uploadMsg;
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.addCategory(Intent.CATEGORY_OPENABLE);
-                i.setType("image/*");
-                getActivity().startActivityForResult(
-                        Intent.createChooser(i, "Image Browser"),
-                        FILECHOOSER_RESULTCODE);
-            }
         };
-
         mWebView.setWebViewClient(new PetMedWebViewClient(getActivity(), mWebView, htmlData, true, mProgressBar));
         mWebView.setWebChromeClient(client);
         mWebView.loadData(htmlData, "text/html", "UTF-8");
@@ -466,9 +480,7 @@ public class CommonWebviewFragment extends AbstractFragment {
         Log.d("URL", postData + ">>>>>");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
-
         WebChromeClient client = new WebChromeClient() {
-
             @Override
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
@@ -476,21 +488,7 @@ public class CommonWebviewFragment extends AbstractFragment {
                 }
                 super.onProgressChanged(view, progress);
             }
-            @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-                //Logic to implement
-                return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
-            }
-            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
 
-                mUploadMessage = uploadMsg;
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                i.addCategory(Intent.CATEGORY_OPENABLE);
-                i.setType("image/*");
-                getActivity().startActivityForResult(
-                        Intent.createChooser(i, "Image Browser"),
-                        FILECHOOSER_RESULTCODE);
-            }
         };
 
         mWebView.setWebViewClient(new Callback());
@@ -674,7 +672,7 @@ public class CommonWebviewFragment extends AbstractFragment {
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent, LearnRootFragment.class.getName());
         //add the webview if we have released the security status lock
-        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
+        if (intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)) {
             startLoading(url, htmlData, paypalData);
         }
         super.onReceivedBroadcast(context, intent);
