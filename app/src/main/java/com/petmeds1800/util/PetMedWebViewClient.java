@@ -2,6 +2,7 @@ package com.petmeds1800.util;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
 import com.petmeds1800.ui.HomeActivity;
 
@@ -140,9 +142,9 @@ public class PetMedWebViewClient extends WebViewClient {
         mContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(mContext,responseCode, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, responseCode, Toast.LENGTH_LONG).show();
                 if (responseCode.contains("Conflict")) {
-                    Toast.makeText(mContext,responseCode,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, responseCode, Toast.LENGTH_SHORT).show();
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.KEY_HOME_ROOT_SESSION_CONFIRMATION));
                 }
             }
@@ -211,7 +213,30 @@ public class PetMedWebViewClient extends WebViewClient {
                         Log.e("shouldOverrideUrl", "Outside Cookies after setcookie: " + CookieManager.getInstance().getCookie(url));
                         if (url.contains("Add+To+Cart")){
                             syncCallWebViewResponse(view,url);
-                        } else {
+                        } else if((url.contains("tel:")))
+                        {
+                            try {
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse(url));
+                                mContext.startActivity(intent);
+                            }catch (android.content.ActivityNotFoundException ex) {
+                                ex.printStackTrace();
+                            }
+                        }else if(url.contains("customercare")){
+                            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mContext.getResources().getString(R.string.customer_care_email)});
+                            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+
+                            //need this to prompts email client only
+                            emailIntent.setType("message/rfc822");
+                            try {
+                                mContext.startActivity(Intent.createChooser(emailIntent, mContext.getResources().getString(R.string.choose_email_client)));
+                            } catch (android.content.ActivityNotFoundException ex) {
+
+                            }
+                        }
+                        else {
                             mWebView.loadUrl(url);
                         }
                     }

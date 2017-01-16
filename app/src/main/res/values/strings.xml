@@ -727,5 +727,6 @@
     <string name="ask_the_vet_title">Ask The Vet</string>
     <string name="shipping_rates">PetMeds® Shipping Rates</string>
     <string name="label_exit">Exit</string>
+    <string name="customer_care_email">customercare@1800petmeds.com</string>
 </resources>
 
