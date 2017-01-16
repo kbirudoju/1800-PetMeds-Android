@@ -1,5 +1,15 @@
 package com.petmeds1800.ui.medicationreminders;
 
+import com.petmeds1800.R;
+import com.petmeds1800.model.entities.CommerceItems;
+import com.petmeds1800.model.entities.MedicationReminderCommerceItem;
+import com.petmeds1800.model.entities.OrderList;
+import com.petmeds1800.ui.AbstractActivity;
+import com.petmeds1800.ui.HomeActivity;
+import com.petmeds1800.ui.fragments.AbstractFragment;
+import com.petmeds1800.ui.orders.support.DividerItemDecoration;
+import com.petmeds1800.util.Utils;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,16 +28,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.petmeds1800.R;
-import com.petmeds1800.model.entities.CommerceItems;
-import com.petmeds1800.model.entities.MedicationReminderCommerceItem;
-import com.petmeds1800.model.entities.OrderList;
-import com.petmeds1800.ui.AbstractActivity;
-import com.petmeds1800.ui.HomeActivity;
-import com.petmeds1800.ui.fragments.AbstractFragment;
-import com.petmeds1800.ui.orders.support.DividerItemDecoration;
-import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,10 +165,16 @@ public class MedicationReminderItemsListFragment extends AbstractFragment
     }
 
     @Override
-    public void onSuccess(ArrayList<OrderList> list) {
+    public void onSuccess(final ArrayList<OrderList> list) {
         mMedicationReminderCommerceItems = new ArrayList<MedicationReminderCommerceItem>();
         mProgressBar.setVisibility(View.GONE);
-        populateList(list);
+        (new Thread(){
+            @Override
+            public void run() {
+                populateList(list);
+            }
+        }).start();
+
     }
 
     @Override
