@@ -8,9 +8,9 @@ import com.petmeds1800.service.RefillReminderService;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.IntroActivity;
 import com.petmeds1800.ui.SplashActivity;
+import com.petmeds1800.ui.account.AccountPresenter;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
 import com.petmeds1800.ui.account.AccountSettingsPresenter;
-import com.petmeds1800.ui.account.SignOutPresenter;
 import com.petmeds1800.ui.address.AddAddressPresenter;
 import com.petmeds1800.ui.address.AddEditAddressFragment;
 import com.petmeds1800.ui.address.SavedAddressListPresenter;
@@ -136,7 +136,7 @@ public interface Injector {
 
     void inject(RefillReminderService refillReminderService);
 
-    void inject(SignOutPresenter signOutPresenter);
+    void inject(AccountPresenter accountPresenter);
 
     void inject(AnalyticsUtil analyticsUtil);
 

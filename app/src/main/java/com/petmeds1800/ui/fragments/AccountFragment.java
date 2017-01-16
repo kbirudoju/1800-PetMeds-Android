@@ -8,8 +8,8 @@ import com.petmeds1800.model.entities.PushNotificationRequest;
 import com.petmeds1800.ui.AbstractActivity;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
-import com.petmeds1800.ui.account.SignOutContract;
-import com.petmeds1800.ui.account.SignOutPresenter;
+import com.petmeds1800.ui.account.AccountContract;
+import com.petmeds1800.ui.account.AccountPresenter;
 import com.petmeds1800.ui.address.SavedAddressListFragment;
 import com.petmeds1800.ui.medicationreminders.AddEditMedicationRemindersFragment;
 import com.petmeds1800.ui.medicationreminders.MedicationReminderListFragment;
@@ -64,9 +64,12 @@ import static com.petmeds1800.util.Constants.SUCCESS;
  */
 public class AccountFragment extends AbstractFragment
         implements View.OnClickListener, Switch.OnCheckedChangeListener, DialogInterface.OnClickListener,
-        SignOutContract.View, MedicationReminderResultReceiver.Receiver {
+        AccountContract.View, MedicationReminderResultReceiver.Receiver {
 
     private static final String PUSH_ENABLING = "pushEnabling";
+
+    @BindView(R.id.easyRefill)
+    TextView mEasyRefill;
 
     @BindView(R.id.myOrder)
     TextView myOrderView;
@@ -122,7 +125,7 @@ public class AccountFragment extends AbstractFragment
     @BindView(R.id.refill_reminder_label)
     TextView mRefillReminderLabel;
 
-    private SignOutContract.Presenter mPresenter;
+    private AccountContract.Presenter mPresenter;
 
     private MedicationReminderResultReceiver mMedicationReminderResultReceiver;
 
@@ -147,6 +150,7 @@ public class AccountFragment extends AbstractFragment
         signOut.setOnClickListener(this);
         mMedicationReminderLabel.setOnClickListener(this);
         mRefillReminderLabel.setOnClickListener(this);
+        mEasyRefill.setOnClickListener(this);
         fillWindow();
     }
 
@@ -247,7 +251,7 @@ public class AccountFragment extends AbstractFragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.bind(this, view);
         PetMedsApplication.getAppComponent().inject(this);
-        mPresenter = new SignOutPresenter(this);
+        mPresenter = new AccountPresenter(this);
         ((AbstractActivity) getActivity()).disableBackButton();
         setHasOptionsMenu(false);
         //start listening for optionsMenuAction
@@ -260,6 +264,11 @@ public class AccountFragment extends AbstractFragment
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.easyRefill:
+                ((HomeActivity) getActivity()).showProgress();
+                mPresenter.addEasyRefillReorder();
+                break;
+
             case R.id.myOrder:
                 replaceAccountAndAddToBackStack(new MyOrderFragment(), MyOrderFragment.class.getName());
                 break;
@@ -393,7 +402,7 @@ public class AccountFragment extends AbstractFragment
     }
 
     @Override
-    public void onSuccess() {
+    public void onSignoutSuccess() {
         mPreferencesHelper.setIsUserLoggedIn(false);
         mPreferencesHelper.setLoginEmail(null);
         mPreferencesHelper.setLoginPassword(null);
@@ -419,7 +428,16 @@ public class AccountFragment extends AbstractFragment
     }
 
     @Override
-    public void setPresenter(SignOutContract.Presenter presenter) {
+    public void navigateToCartFragment() {
+        if(getActivity() != null ){
+            ((HomeActivity) getActivity()).hideProgress();
+            ((HomeActivity) getActivity()).scrollViewPager(1,false);
+        }
+
+    }
+
+    @Override
+    public void setPresenter(AccountContract.Presenter presenter) {
 
     }
 
@@ -438,7 +456,7 @@ public class AccountFragment extends AbstractFragment
             String resultValue = resultData.getString(RESULT_VALUE);
             if (resultValue.equals(SUCCESS)) {
                 ((HomeActivity) getActivity()).showProgress();
-                mPresenter.sendDataToServer(
+                mPresenter.signout(
                         mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
             } else {
                 Utils.displayCrouton(getActivity(), resultValue, mContainerLayout);
