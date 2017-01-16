@@ -81,6 +81,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.petmeds1800.util.Constants.PUSH_SCREEN_TYPE;
+
 public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
         MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,
@@ -359,7 +361,13 @@ public class HomeActivity extends AbstractActivity
                         mViewPager.setCurrentItem(3);
                         break;
                     case TYPE_OFFER__ALERT:
+                        HomeActivity.this.getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
+                        HomeActivity.this.screenType = 0;
+                        mViewPager.setCurrentItem(0);
+                        break;
                     case TYPE_PRESCRIPTION_REFILL_DUE_ALERT:
+                        HomeActivity.this.getIntent().putExtra(PUSH_SCREEN_TYPE, 0);
+                        HomeActivity.this.screenType = 0;
                         showProgress();
                         mPresenter.checkSecurityStatus();
                         break;
@@ -367,8 +375,6 @@ public class HomeActivity extends AbstractActivity
                         mViewPager.setCurrentItem(2);
                         HomeActivity.this.screenType = 0;
                         break;
-
-
                 }
             }
         }, 200);

@@ -418,4 +418,8 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: "+ PetMedsApplication.requestCredential})
     @POST("/rest/model/atg/userprofiling/ProfileActor/pushNotification")
     Observable<PushNotificationResponse> savePushNotificationFlag(@Body PushNotificationRequest pushNotificationRequest);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: "+ PetMedsApplication.requestCredential})
+    @POST("/rest/model/1800petmeds/cart/CartActor/addEasyRefillItemsToShoppingCart")
+    Observable<ShoppingCartListResponse> addEasyRefillItemsToShoppingCart();
 }
