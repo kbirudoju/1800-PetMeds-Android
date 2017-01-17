@@ -1,257 +1,272 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/root_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/pattern_light_blue"
-            android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pattern_light_blue"
+        android:orientation="vertical">
 
         <ImageView
-                android:id="@+id/imv_receipt"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_40"
-                android:src="@drawable/ic_fingerprint_success"/>
+            android:id="@+id/imv_receipt"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_40"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_fingerprint_success"/>
 
         <TextView
-                android:id="@+id/txv_first_name"
+            android:id="@+id/txv_first_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_32"
+            android:layout_below="@+id/imv_receipt"
+            android:text="Thank you for your order, Todd."
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"/>
+
+        <LinearLayout
+            android:id="@+id/order_number_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_40"
+            android:background="@color/white"
+            android:layout_below="@+id/txv_first_name"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_16">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dp_32"
-                android:text="Thank you for your order, Todd."
+                android:text="@string/label_your_order_number"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_16"/>
 
-        <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/txv_order_id"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_40"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="@dimen/dp_16">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_your_order_number"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
-
-            <TextView
-                    android:id="@+id/txv_order_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="242344343431"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
+                android:text="242344343431"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"/>
 
         </LinearLayout>
 
         <LinearLayout
-                android:layout_width="match_parent"
+            android:id="@+id/confirmation_email_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_below="@+id/order_number_view"
+            android:padding="@dimen/dp_16">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="@dimen/dp_16">
+                android:text="@string/label_confirmation_email_sent"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"/>
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_confirmation_email_sent"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
-
-            <TextView
-                    android:id="@+id/txv_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="todd@yahoo.com"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
+                android:id="@+id/txv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="todd@yahoo.com"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"/>
 
         </LinearLayout>
 
         <LinearLayout
-                android:layout_width="match_parent"
+            android:id="@+id/shipping_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_below="@id/confirmation_email_view"
+            android:padding="@dimen/dp_16">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="@dimen/dp_16">
+                android:text="@string/shipping_method_txt"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"/>
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/shipping_method_txt"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
-
-            <TextView
-                    android:id="@+id/txv_shipping_method"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Standard (5-7 business days)"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_16"/>
+                android:id="@+id/txv_shipping_method"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Standard (5-7 business days)"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_16"/>
 
         </LinearLayout>
 
         <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/dp_12"
-                android:paddingLeft="@dimen/dp_16"
-                android:paddingRight="@dimen/dp_16"
-                android:paddingTop="@dimen/dp_21"
-                android:text="@string/item_header"/>
+            android:id="@+id/items_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_12"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingRight="@dimen/dp_16"
+            android:paddingTop="@dimen/dp_21"
+            android:layout_below="@+id/shipping_view"
+            android:text="@string/item_header"/>
 
         <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_items"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            android:id="@+id/recycler_items"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/items_header"/>
 
-        <LinearLayout
+       <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:background="@color/white"
+            android:layout_below="@+id/recycler_items"
+            android:orientation="vertical">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_16"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                android:paddingTop="@dimen/dp_10">
 
-            <RelativeLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/txv_label_subtotal"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp_10"
-                    android:paddingLeft="@dimen/dp_16"
-                    android:paddingRight="@dimen/dp_16"
-                    android:paddingTop="@dimen/dp_10">
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/items_formatter"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16"/>
 
                 <TextView
-                        android:id="@+id/txv_label_subtotal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="@string/items_formatter"
-                        android:textColor="@color/grey_text"
-                        android:textSize="@dimen/sp_16"/>
-
-                <TextView
-                        android:id="@+id/txv_subtotal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:text="$32.75"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/sp_16"/>
+                    android:id="@+id/txv_subtotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="$32.75"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/sp_16"/>
             </RelativeLayout>
 
             <RelativeLayout
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                android:paddingTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp_10"
-                    android:paddingLeft="@dimen/dp_16"
-                    android:paddingRight="@dimen/dp_16"
-                    android:paddingTop="@dimen/dp_10">
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/offer_code"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16"/>
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="@string/offer_code"
-                        android:textColor="@color/grey_text"
-                        android:textSize="@dimen/sp_16"/>
-
-                <TextView
-                        android:id="@+id/discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:text="-$5.25"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/sp_16"/>
+                    android:id="@+id/discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="-$5.25"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/sp_16"/>
             </RelativeLayout>
 
             <RelativeLayout
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                android:paddingTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp_10"
-                    android:paddingLeft="@dimen/dp_16"
-                    android:paddingRight="@dimen/dp_16"
-                    android:paddingTop="@dimen/dp_10">
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/shipping"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16"/>
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="@string/shipping"
-                        android:textColor="@color/grey_text"
-                        android:textSize="@dimen/sp_16"/>
-
-                <TextView
-                        android:id="@+id/txv_shipping"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:text="$0"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/sp_16"/>
+                    android:id="@+id/txv_shipping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="$0"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/sp_16"/>
             </RelativeLayout>
 
             <RelativeLayout
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                android:paddingTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp_10"
-                    android:paddingLeft="@dimen/dp_16"
-                    android:paddingRight="@dimen/dp_16"
-                    android:paddingTop="@dimen/dp_10">
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/label_taxes"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16"/>
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="@string/label_taxes"
-                        android:textColor="@color/grey_text"
-                        android:textSize="@dimen/sp_16"/>
-
-                <TextView
-                        android:id="@+id/txv_taxes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:text="$6.25"
-                        android:textColor="@color/light_grey"
-                        android:textSize="@dimen/sp_16"/>
+                    android:id="@+id/txv_taxes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="$6.25"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/sp_16"/>
             </RelativeLayout>
 
             <RelativeLayout
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_16"
+                android:paddingRight="@dimen/dp_16"
+                android:paddingTop="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/dp_10"
-                    android:paddingLeft="@dimen/dp_16"
-                    android:paddingRight="@dimen/dp_16"
-                    android:paddingTop="@dimen/dp_10">
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/total_txt"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/sp_16"/>
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="@string/total_txt"
-                        android:textColor="@color/grey_text"
-                        android:textSize="@dimen/sp_16"/>
-
-                <TextView
-                        android:id="@+id/txv_total"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:text="$33.60"
-                        android:textColor="@color/crimson_red"
-                        android:textSize="@dimen/sp_16"/>
+                    android:id="@+id/txv_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="$33.60"
+                    android:textColor="@color/crimson_red"
+                    android:textSize="@dimen/sp_16"/>
             </RelativeLayout>
 
         </LinearLayout>
@@ -264,6 +279,6 @@
             android:id="@+id/view_error"
             android:visibility="gone"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </ScrollView>

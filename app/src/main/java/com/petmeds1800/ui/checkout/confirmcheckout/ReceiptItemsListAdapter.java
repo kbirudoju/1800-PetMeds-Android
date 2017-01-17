@@ -45,8 +45,9 @@ public class ReceiptItemsListAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ReceiptItemsListAdapter.ViewHolder viewHolder = (ReceiptItemsListAdapter.ViewHolder) holder;
-
+        Log.e("position is",position+"onBindViewHolder");
         if (viewHolder != null) {
+            Log.e("position is",position+"onBindViewHolder");
             final Item item = mItemList.get(position);
             Picasso.with(mContext).load(item.getItemImageURL()).into(viewHolder.itemImage);
             viewHolder.itemName.setText(item.getProductName());

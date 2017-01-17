@@ -138,8 +138,10 @@ public class ConfirmationReceiptFragment extends AbstractFragment {
         super.onViewCreated(view, savedInstanceState);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerReceiptItems.setLayoutManager(layoutManager);
+        mRecyclerReceiptItems.setHasFixedSize(true);
         mListAdapter = new ReceiptItemsListAdapter(mReceiptItemList, getContext());
         mRecyclerReceiptItems.setAdapter(mListAdapter);
+        mRecyclerReceiptItems.setNestedScrollingEnabled(false);
         populateReceiptData();
     }
 
