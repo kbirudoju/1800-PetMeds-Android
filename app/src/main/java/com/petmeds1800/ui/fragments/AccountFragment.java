@@ -431,8 +431,12 @@ public class AccountFragment extends AbstractFragment
     public void navigateToCartFragment() {
         if(getActivity() != null ){
             ((HomeActivity) getActivity()).hideProgress();
-            ((HomeActivity) getActivity()).scrollViewPager(1,false);
+            ((HomeActivity) getActivity()).scrollViewPager(1, false);
+
+            //refresh the cart
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(Constants.KEY_CART_FRAGMENT_INTENT_FILTER));
         }
+
 
     }
 
