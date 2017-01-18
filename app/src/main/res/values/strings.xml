@@ -74,9 +74,9 @@
     <string name="label_pharmacy_phone_number">Pharmacy Phone Number</string>
     <string name="label_pharmacy_fax_number">Pharmacy Fax Number</string>
     <string name="label_email_address">Email Address</string>
-    <string name="description_email_address">Emails received after normal business hours (see below) are answered the
+    <string name="description_email_address">Emails received after normal business hours are answered the
         next day. If an immediate answer is required or if your pet is in need of urgent or emergency care, contact your
-        pet\'s veterinary immediately.
+        pet\'s veterinarian immediately.
     </string>
     <string name="title_contact_us_caps">Contact Us</string>
     <string name="label_mailing_address">Mailing Address</string>
