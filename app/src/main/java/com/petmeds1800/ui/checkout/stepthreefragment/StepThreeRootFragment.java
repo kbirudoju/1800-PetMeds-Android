@@ -4,7 +4,6 @@ package com.petmeds1800.ui.checkout.stepthreefragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,7 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.Utils;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ import butterknife.OnClick;
  */
 
 public class StepThreeRootFragment extends AbstractFragment
-        implements StepThreeRootContract.View, CompoundButton.OnCheckedChangeListener, CheckOutActivity.PaypalErrorListener {
+        implements StepThreeRootContract.View, CheckOutActivity.PaypalErrorListener {
 
 
     @BindView(R.id.newPaymentMethod)
@@ -90,6 +90,12 @@ public class StepThreeRootFragment extends AbstractFragment
     private int mRequestCode;
 
     private boolean mReviewOn;
+
+    @BindView(R.id.creditCardCheckBox)
+    CheckBox mCreditCardCheckbox;
+ private boolean isPayPalClicked;
+    private boolean isCreditCardClicked;
+
 
 
     public static StepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
@@ -150,8 +156,38 @@ public class StepThreeRootFragment extends AbstractFragment
             mShippingNavigator.setText(getString(R.string.review_submit_navigator_button_title));
         }
         populateAddress();
-        mPaypalCheckbox.setOnCheckedChangeListener(this);
+       /* mPaypalCheckbox.setOnCheckedChangeListener(this);
+        mCreditCardCheckbox.setOnCheckedChangeListener(this);*/
         Log.d("oncreateview", "STEPTHREEROOTFRAGMENT");
+
+        mPaypalCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isPressed()) {
+                    if (mCreditCardCheckbox.isChecked()) {
+                        mCreditCardCheckbox.setChecked(false);
+                    }
+
+                    if (mPaypalCheckbox.isChecked()) {
+                        activity.showProgress();
+                        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout");
+                        mPresenter.checkoutPayPal(payPalCheckoutRequest);
+                    }
+                }
+            }
+        });
+        mCreditCardCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isPressed()) {
+                    if (mPaypalCheckbox.isChecked()) {
+                        mPaypalCheckbox.setChecked(false);
+                    }
+                }
+
+
+            }
+        });
         return view;
 
     }
@@ -328,14 +364,19 @@ public class StepThreeRootFragment extends AbstractFragment
 
     }
 
-    @Override
+   /* @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Log.d("oncheckchange", isChecked + ">>>");
-        activity.showProgress();
-        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout");
-        mPresenter.checkoutPayPal(payPalCheckoutRequest);
-    }
+        switch(buttonView.getId()){
+            case R.id.payPalCheckBox:
 
+                break;
+            case R.id.creditCardCheckBox:
+
+                break;
+        }
+
+    }
+*/
 
     @Override
     public void onPayPal( final String errorMsg) {

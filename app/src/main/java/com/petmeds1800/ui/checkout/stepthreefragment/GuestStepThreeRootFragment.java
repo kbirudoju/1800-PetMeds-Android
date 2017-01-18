@@ -1,5 +1,18 @@
 package com.petmeds1800.ui.checkout.stepthreefragment;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.model.Address;
@@ -23,19 +36,6 @@ import com.petmeds1800.ui.fragments.dialog.FingerprintAuthenticationDialog;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -50,7 +50,7 @@ import butterknife.Unbinder;
  */
 
 public class GuestStepThreeRootFragment extends AbstractFragment
-        implements GuestStepThreeRootContract.View, CompoundButton.OnCheckedChangeListener,
+        implements GuestStepThreeRootContract.View,
         CheckOutActivity.PaypalErrorListener {
 
     public final static int REQUEST_CODE = 8;
@@ -99,7 +99,8 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     private String mAddressId;
 
     private Unbinder mUnbinder;
-
+    @BindView(R.id.creditCardCheckBox)
+    CheckBox mCreditCardCheckbox;
     public static GuestStepThreeRootFragment newInstance(ShoppingCartListResponse shoppingCartListResponse,
             String stepName, int securityStatus) {
         GuestStepThreeRootFragment f = new GuestStepThreeRootFragment();
@@ -159,7 +160,35 @@ public class GuestStepThreeRootFragment extends AbstractFragment
                 mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
         populateAddress();
         populatePaymentGroup();
-        mPaypalCheckbox.setOnCheckedChangeListener(this);
+        mPaypalCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isPressed()) {
+                    if (mCreditCardCheckbox.isChecked()) {
+                        mCreditCardCheckbox.setChecked(false);
+                    }
+
+                    if (mPaypalCheckbox.isChecked()) {
+                        activity.showProgress();
+                        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout");
+                        mPresenter.checkoutPayPal(payPalCheckoutRequest);
+                    }
+                }
+            }
+        });
+        mCreditCardCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isPressed()) {
+                    if (mPaypalCheckbox.isChecked()) {
+                        mPaypalCheckbox.setChecked(false);
+                    }
+                }
+
+
+            }
+        });
+
         return view;
 
     }
@@ -357,12 +386,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment
 
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        activity.showProgress();
-        PayPalCheckoutRequest payPalCheckoutRequest = new PayPalCheckoutRequest("checkout");
-        mPresenter.checkoutPayPal(payPalCheckoutRequest);
-    }
+
 
     @Override
     public void onPayPalError(String errorMsg) {
