@@ -1,9 +1,9 @@
 package com.petmeds1800;
 
-import android.support.multidex.MultiDexApplication;
-
 import com.petmeds1800.dagger.component.AppComponent;
 import com.urbanairship.UAirship;
+
+import android.support.multidex.MultiDexApplication;
 
 public abstract class PetMedsBaseApplication extends MultiDexApplication {
 

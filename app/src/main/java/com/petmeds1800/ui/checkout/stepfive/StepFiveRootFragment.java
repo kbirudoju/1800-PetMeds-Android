@@ -1,23 +1,5 @@
 package com.petmeds1800.ui.checkout.stepfive;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.intent.HomeIntent;
@@ -41,6 +23,24 @@ import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -58,6 +58,8 @@ import butterknife.OnClick;
 public class StepFiveRootFragment extends AbstractFragment
         implements StepFiveRootContract.View, ReviewSubmitAdapter.OpenDailogListener {
 
+
+    private static final String NULL_STRING = "null";
 
     @BindView(R.id.shippingAddressDetailsText)
     TextView mShippingAddressDetailsText;
@@ -337,7 +339,7 @@ public class StepFiveRootFragment extends AbstractFragment
             Locale locale = getResources().getConfiguration().locale;
             mSubTotalValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getOrderSubTotal()));
 
-            if (mOrder.getDiscount() > 0.0 ){
+            if (mOrder.getDiscount() > 0.0) {
                 mOfferCodeValue.setText(MINUS_SIGN + DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getDiscount()));
                 mOfferCodeValue.setVisibility(View.VISIBLE);
                 mOfferCode.setVisibility(View.VISIBLE);
@@ -357,10 +359,12 @@ public class StepFiveRootFragment extends AbstractFragment
             mPaymentMethod = mOrder.getPaymentMethod();
 
             if (mShippingAddress != null) {
-                mShippingAddressDetailsText.setText(
-                        mShippingAddress.getAddress1() + BLANK_SPACE + mShippingAddress.getAddress2() + BLANK_SPACE
-                                + mShippingAddress
-                                .getState() + BLANK_SPACE + mShippingAddress.getPostalCode());
+                String addressText = mShippingAddress.getAddress1() + BLANK_SPACE + mShippingAddress.getAddress2()
+                        + BLANK_SPACE
+                        + mShippingAddress
+                        .getState() + BLANK_SPACE + mShippingAddress.getPostalCode();
+                addressText = addressText.replace(NULL_STRING, "");
+                mShippingAddressDetailsText.setText(addressText);
             }
             if (mShippingMethod != null) {
                 mShippingMethodDetailsText.setText(mShippingMethod.getMethod());
