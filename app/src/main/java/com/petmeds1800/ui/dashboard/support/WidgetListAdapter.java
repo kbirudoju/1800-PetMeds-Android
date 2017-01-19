@@ -321,7 +321,12 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     refillHolder.row_coupons_layout.setVisibility(View.VISIBLE);
                     refillHolder.noCouponRefillLayout.setVisibility(View.GONE);
                     refillHolder.refillProductCouponsLabel.setText(petItem.getSku().getDisplayName());
+                    if(petItem.getDueDate()!=null && !petItem.getDueDate().isEmpty()){
                     refillHolder.refillDateCouponLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
+                    }else{
+                        refillHolder.refillDateCouponLabel.setVisibility(View.GONE);
+                    }
+
                     refillHolder.refillStartCouponLabel.setPaintFlags(refillHolder.refillStartCouponLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     refillHolder.refillOriginalPriceCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
                     refillHolder.refillStartCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
@@ -342,8 +347,11 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     refillHolder.refillOriginalPriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
                     refillHolder.refillOriginalPriceLabel.setPaintFlags(refillHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     refillHolder.refillSellingpriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
-                    refillHolder.refillDateLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
-                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillProductImage) {
+                    if(petItem.getDueDate()!=null && !petItem.getDueDate().isEmpty()){
+                        refillHolder.refillDateCouponLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
+                    }else{
+                        refillHolder.refillDateCouponLabel.setVisibility(View.GONE);
+                    }                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillProductImage) {
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
@@ -365,20 +373,13 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recommendationViewHolder.quoteLabel.setText(" "+
                             recommendedCategory.getCategory().getCategoryIntro()
                                     );
-                    /*recommendationViewHolder.quoteLabel.setText(
-                           recommendedCategory.getCategory().getCategoryIntro()
-                                    );
-                    recommendationViewHolder.quoteLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_quote_left, 0, R.drawable.ic_quote_right, 0);
-*/
+
 
                 }
                 else {
                    recommendationViewHolder.quoteLabel.setText(" "+
                            recommendedCategory.getDoctorQuote());
-                   /* recommendationViewHolder.quoteLabel.setText(
-                            recommendedCategory.getDoctorQuote());
-                    recommendationViewHolder.quoteLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_quote_left,0, R.drawable.ic_quote_right,0);
-*/
+
                 }
 
                 recommendationViewHolder.recommendatipnTitleLabel.setText(recommendedCategory.getRecommendationTitle());
