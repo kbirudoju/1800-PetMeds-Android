@@ -50,12 +50,41 @@
         android:paddingRight="@dimen/dp_16"
         android:paddingTop="@dimen/dp_13"
         >
-        <com.petmeds1800.util.TextViewWithImages
-            android:id="@+id/quote_label"
+        <RelativeLayout
+            android:id="@+id/quote_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/rounded_button_text"
-            />
+            android:layout_marginBottom="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_30"
+            >
+            <ImageView
+                android:id="@+id/left_quote_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_quote_left"
+                android:layout_alignParentLeft="true"
+
+               />
+            <TextView
+                android:id="@+id/quote_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/rounded_button_text"
+                android:layout_toRightOf="@+id/left_quote_img"
+                android:layout_toLeftOf="@+id/right_quote_img"
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_8"
+                />
+            <ImageView
+                android:id="@+id/right_quote_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_quote_right"
+                android:layout_alignBottom="@+id/quote_label"
+                android:layout_alignParentRight="true"
+               />
+        </RelativeLayout>
+
 
         <ImageView
             android:id="@+id/doctor_image"
@@ -64,7 +93,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginTop="@dimen/dp_21"
             android:background="@drawable/circular_background"
-            android:layout_below="@+id/quote_label"
+            android:layout_below="@+id/quote_view"
             android:layout_marginBottom="@dimen/dp_12"/>
         <TextView
             android:id="@+id/doctor_name_label"
@@ -73,7 +102,7 @@
             android:layout_marginLeft="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_21"
             android:layout_toRightOf="@+id/doctor_image"
-            android:layout_below="@+id/quote_label"
+            android:layout_below="@+id/quote_view"
             style="@style/styledefault_no_padding"/>
 
     </RelativeLayout>

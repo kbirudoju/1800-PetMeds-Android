@@ -362,15 +362,23 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 recommendationViewHolder.doctorNameLabel.setText(recommendedCategory.getDoctorName());
 
                 if(recommendedCategory.getCategory().getCategoryIntro() != null) {
-                    recommendationViewHolder.quoteLabel.setText(
-                            "[img src=ic_quote_left/]" + " " + recommendedCategory.getCategory().getCategoryIntro() + "  "
-                                    + "[img src=ic_quote_right/]");
+                    recommendationViewHolder.quoteLabel.setText(" "+
+                            recommendedCategory.getCategory().getCategoryIntro()
+                                    );
+                    /*recommendationViewHolder.quoteLabel.setText(
+                           recommendedCategory.getCategory().getCategoryIntro()
+                                    );
+                    recommendationViewHolder.quoteLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_quote_left, 0, R.drawable.ic_quote_right, 0);
+*/
 
                 }
                 else {
-                    recommendationViewHolder.quoteLabel.setText(
-                            "[img src=ic_quote_left/]" + " " + recommendedCategory.getDoctorQuote() + "  "
-                                    + "[img src=ic_quote_right/]");
+                   recommendationViewHolder.quoteLabel.setText(" "+
+                           recommendedCategory.getDoctorQuote());
+                   /* recommendationViewHolder.quoteLabel.setText(
+                            recommendedCategory.getDoctorQuote());
+                    recommendationViewHolder.quoteLabel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_quote_left,0, R.drawable.ic_quote_right,0);
+*/
                 }
 
                 recommendationViewHolder.recommendatipnTitleLabel.setText(recommendedCategory.getRecommendationTitle());
