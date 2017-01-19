@@ -165,7 +165,7 @@ public class CheckOutActivity extends AbstractActivity
         try {
             stopLoadingGif(this);
         } catch (Exception e) {
-           Log.e(CheckOutActivity.class.getSimpleName(),"error "+e.getMessage());
+            Log.e(CheckOutActivity.class.getSimpleName(), "error " + e.getMessage());
         }
     }
 
@@ -363,21 +363,19 @@ public class CheckOutActivity extends AbstractActivity
                 if (mApplicableSteps.size() == 3) {
                     replaceCheckOutFragment(StepFiveRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepFiveRootFragment.class.getName(), false);
-                }else if(mApplicableSteps.size()==4 && stepName.equals("PETVET")){
+                } else if (mApplicableSteps.size() == 4 && stepName.equals("PETVET")) {
                     replaceCheckOutFragment(
                             StepFourRootFragment.newInstance(mShoppingCartListResponse, stepName),
                             StepFourRootFragment.class.getName(), false);
-                }
-                else if (mSecurityStatus == 4 || mSecurityStatus == 5) {
+                } else if (mSecurityStatus == 4 || mSecurityStatus == 5) {
                     replaceCheckOutFragment(StepThreeRootFragment
                                     .newInstance(mShoppingCartListResponse, stepName,
                                             StepThreeRootFragment.LOGGED_IN_REQUEST_CODE),
                             StepThreeRootFragment.class.getName(),
                             false);
-                }
-                else { //guest user adding payment for first time
+                } else { //guest user adding payment for first time
                     replaceCheckOutFragment(GuestStepThreeRootFragment
-                                    .newInstance(mShoppingCartListResponse, stepName,mSecurityStatus),
+                                    .newInstance(mShoppingCartListResponse, stepName, mSecurityStatus),
                             GuestStepThreeRootFragment.class.getName(),
                             false);
                 }
@@ -427,7 +425,7 @@ public class CheckOutActivity extends AbstractActivity
     }
 
     @Override
-    public RelativeLayout getContainerView(){
+    public RelativeLayout getContainerView() {
 
         return mRootContainer;
     }
@@ -537,7 +535,9 @@ public class CheckOutActivity extends AbstractActivity
     public int getApplicableSteps() {
         return mApplicableSteps.size();
     }
-
+    public boolean isContainPetVetData(){
+        return mApplicableSteps.contains("PETVET");
+    }
     public String getNextApplicableSteps() {
         if (mShoppingCartListResponse.getCheckoutSteps() != null) {
             return mShoppingCartListResponse.getCheckoutSteps().getStepState().getNextCheckoutStep();
@@ -549,9 +549,10 @@ public class CheckOutActivity extends AbstractActivity
     public void onCheckoutPaymentCompleted(ShoppingCartListResponse paypalResponse, String stepName) {
    /*  CommonWebviewFragment fragment= (CommonWebviewFragment)getSupportFragmentManager().findFragmentByTag(CommonWebviewFragment.class.getName());
      fragment.removeFragment();
-*/        if (paypalResponse.getShoppingCart() != null) {
-
-         moveToNext(stepName, paypalResponse);
+*/
+        if (paypalResponse.getShoppingCart() != null) {
+            mApplicableSteps = paypalResponse.getCheckoutSteps().getApplicableSteps();
+            moveToNext(stepName, paypalResponse);
             Log.d("response in cart",
                     paypalResponse.getCheckoutSteps().getApplicableSteps() + ">>>" + paypalResponse.getCheckoutSteps()
                             .getStepState().getNextCheckoutStep() + "stepname" + stepName);
@@ -570,9 +571,10 @@ public class CheckOutActivity extends AbstractActivity
     }
 
     public interface PaypalErrorListener {
-             void onPayPal(String errorMsg);
-        }
 
+        void onPayPal(String errorMsg);
     }
+
+}
 
 

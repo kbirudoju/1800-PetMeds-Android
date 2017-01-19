@@ -1,19 +1,5 @@
 package com.petmeds1800.ui.checkout;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -27,6 +13,20 @@ import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Utils;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,9 +124,8 @@ public class StepTwoRootFragment extends AbstractFragment
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
         ButterKnife.bind(this, view);
-        if (((CheckOutActivity) getActivity()).getApplicableSteps() == 4
-                && ((CheckOutActivity) getActivity()).getNextApplicableSteps() != null) {
-            if (((CheckOutActivity) getActivity()).getNextApplicableSteps().equalsIgnoreCase("PETVET")) {
+        if (((CheckOutActivity) getActivity()).getApplicableSteps() == 4) {
+            if (((CheckOutActivity) getActivity()).isContainPetVetData()) {
                 mShippingNavigator.setText(getString(R.string.payment_navigator_button_title));
             }
         }
