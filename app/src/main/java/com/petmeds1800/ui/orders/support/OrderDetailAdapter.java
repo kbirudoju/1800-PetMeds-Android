@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
-import com.petmeds1800.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,9 @@ import com.petmeds1800.model.entities.OrderList;
 import com.petmeds1800.model.entities.PaymentGroup;
 import com.petmeds1800.model.entities.ShippingGroup;
 import com.petmeds1800.model.entities.WebViewHeader;
+import com.petmeds1800.util.Log;
+
+import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +42,7 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
     private OrderList orderList;
     private Context context;
     private View.OnClickListener listener;
+    DecimalFormat df = new DecimalFormat("0.00");
 
     public OrderDetailAdapter(Context context, OrderList orderList) {
         super(context);
@@ -124,7 +127,7 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
             case VIEW_TYPE_PRODUCT:
                 final ProductViewHolder productHolder = (ProductViewHolder) holder;
                 CommerceItems commerceItem = (CommerceItems) getItemAt(position);
-                productHolder.priceLabel.setText("$" + commerceItem.getAmount());
+                productHolder.priceLabel.setText("$" + df.format(Double.parseDouble(commerceItem.getAmount())));
                 productHolder.productNameLabel.setText(commerceItem.getProductName());
                 productHolder.quantityLabel.setText(context.getString(R.string.quantity_txt) + commerceItem.getQuantity());
                 productHolder.productDescLabel.setText(commerceItem.getSkuName());
@@ -186,7 +189,7 @@ public class OrderDetailAdapter extends CustomOrderDetailRecyclerAdapter {
                 orderInfoViewHolder.orderNoLabel.setText(orderInfo.getDisplayOrderId());
                 orderInfoViewHolder.orderDateLabel.setText(orderInfo.getSubmittedDate());
                 orderInfoViewHolder.orderShipToLabel.setText(orderInfo.getShipTo());
-                orderInfoViewHolder.orderTotalLabel.setText("$" + String.valueOf(orderInfo.getTotal()));
+                orderInfoViewHolder.orderTotalLabel.setText("$" + String.valueOf(df.format(orderInfo.getTotal())));
                 orderInfoViewHolder.orderStatusLabel.setText(orderInfo.getStatus());
 
 
