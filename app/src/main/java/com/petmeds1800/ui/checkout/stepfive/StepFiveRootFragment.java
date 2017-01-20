@@ -359,7 +359,7 @@ public class StepFiveRootFragment extends AbstractFragment
             mPaymentMethod = mOrder.getPaymentMethod();
 
             if (mShippingAddress != null) {
-                String addressText = mShippingAddress.getAddress1() + BLANK_SPACE + mShippingAddress.getAddress2()
+                String addressText = mShippingAddress.getAddress1() + BLANK_SPACE + mShippingAddress.getCity()
                         + BLANK_SPACE
                         + mShippingAddress
                         .getState() + BLANK_SPACE + mShippingAddress.getPostalCode();
