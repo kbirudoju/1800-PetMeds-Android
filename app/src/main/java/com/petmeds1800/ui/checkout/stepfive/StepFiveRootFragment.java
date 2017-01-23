@@ -337,7 +337,7 @@ public class StepFiveRootFragment extends AbstractFragment
 
         if (mOrder != null) {
             Locale locale = getResources().getConfiguration().locale;
-            mSubTotalValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getOrderSubTotal()));
+            mSubTotalValue.setText(DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getItemsTotal()));
 
             if (mOrder.getDiscount() > 0.0) {
                 mOfferCodeValue.setText(MINUS_SIGN + DOLLAR_SIGN + String.format(locale, "%.2f", mOrder.getDiscount()));

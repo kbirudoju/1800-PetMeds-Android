@@ -507,7 +507,7 @@
     <string name="select_vet_title">Select Vet</string>
     <string name="hint_vet_name">Vet Name</string>
     <string name="place_order_button_title">PLACE ORDER</string>
-    <string name="subtotal_title">Subtotal (%1$s item)</string>
+    <string name="subtotal_title">Items Subtotal (%1$s item)</string>
 
     <!--Review & Submit Order-->
     <string name="review_submit_order_title"><![CDATA[Review & Submit Order]]></string>

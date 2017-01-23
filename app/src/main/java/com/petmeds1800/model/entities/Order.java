@@ -14,6 +14,8 @@ public class Order implements Serializable {
 
     private float orderSubTotal;
 
+    private float itemsTotal;
+
     private float orderTotal;
 
     private ArrayList<Item> items;
@@ -110,5 +112,14 @@ public class Order implements Serializable {
 
     public void setDiscount(float discount) {
         this.discount = discount;
+    }
+
+    public float getItemsTotal() {
+
+        return itemsTotal;
+    }
+
+    public void setItemsTotal(float itemsTotal) {
+        this.itemsTotal = itemsTotal;
     }
 }
