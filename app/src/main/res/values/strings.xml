@@ -728,5 +728,6 @@
     <string name="shipping_rates">PetMeds® Shipping Rates</string>
     <string name="label_exit">Exit</string>
     <string name="customer_care_email">customercare@1800petmeds.com</string>
+    <string name="search_zip_code_txt">Search by Zip Code</string>
 </resources>
 

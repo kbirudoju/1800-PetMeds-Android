@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search by Zip Code or City and State"
+            android:text="@string/search_zip_code_txt"
             style="@style/formlabel"
             android:layout_marginRight="@dimen/dp_20"
             android:layout_marginLeft="@dimen/dp_12"
