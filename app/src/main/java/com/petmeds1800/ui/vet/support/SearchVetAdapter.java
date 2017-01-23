@@ -46,8 +46,8 @@ private ArrayList<VetList> mVetList;
         final VetList vetInfo = (VetList) getItemAt(position);
         vetViewHolder.clinic_name_label.setText(vetInfo.getClinic());
         vetViewHolder.address_first_label.setText(vetInfo.getAddress());
-        vetViewHolder.address_second_label.setText(vetInfo.getState());
-        vetViewHolder.distancelabel.setText(vetInfo.getDistanceFromZip() +" "+mContext.getString(R.string.miles_txt)+" "+mContext.getString(R.string.from_txt)+" "+vetInfo.getZip());
+        vetViewHolder.address_second_label.setText(vetInfo.getCity()+","+vetInfo.getState()+" "+vetInfo.getZip());
+        vetViewHolder.distancelabel.setText(vetInfo.getDistanceFromZip() +" "+mContext.getString(R.string.miles_txt));
     }
 
     @Override
