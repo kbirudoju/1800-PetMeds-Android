@@ -222,9 +222,10 @@ public class PetMedWebViewClient extends WebViewClient {
                             }catch (android.content.ActivityNotFoundException ex) {
                                 ex.printStackTrace();
                             }
-                        }else if(url.contains("customercare")){
+                        }else if(url.contains("mailto") ){
+                            String mail = url.replaceFirst("mailto:", "");
                             Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mContext.getResources().getString(R.string.customer_care_email)});
+                            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mail});
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
                             emailIntent.putExtra(Intent.EXTRA_TEXT, "");
 
