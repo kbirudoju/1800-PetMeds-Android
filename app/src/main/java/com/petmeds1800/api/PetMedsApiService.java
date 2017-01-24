@@ -4,6 +4,7 @@ import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.AddVetResponse;
+import com.petmeds1800.model.ContactUsResponse;
 import com.petmeds1800.model.CountryListResponse;
 import com.petmeds1800.model.PayPalCheckoutRequest;
 import com.petmeds1800.model.PetImageUploadResponse;
@@ -422,4 +423,10 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: "+ PetMedsApplication.requestCredential})
     @POST("/rest/model/1800petmeds/cart/CartActor/addEasyRefillItemsToShoppingCart")
     Observable<ShoppingCartListResponse> addEasyRefillItemsToShoppingCart();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: "+ PetMedsApplication.requestCredential})
+    @GET("/rest/model/1800petmeds/home/HomeActor/contactUs")
+    Observable<ContactUsResponse> getContactDetail ();
+
+
 }

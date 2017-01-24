@@ -4,6 +4,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/contact_us_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/pattern_light_blue"
@@ -32,11 +33,11 @@
                     android:textSize="@dimen/sp_16" />
 
                 <TextView
+                    android:id="@+id/toll_free_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txv_label_toll_free"
                     android:layout_toLeftOf="@+id/imv_call_toll_free"
-                    android:text="@string/label_phone_toll_free"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
 
@@ -71,11 +72,11 @@
                     android:textSize="@dimen/sp_16" />
 
                 <TextView
+                    android:id="@+id/main_phone_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txv_label_main_phone"
                     android:layout_toLeftOf="@+id/imv_call_main"
-                    android:text="@string/number_phone_main"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
 
@@ -110,11 +111,11 @@
                     android:textSize="@dimen/sp_16" />
 
                 <TextView
+                    android:id="@+id/pharmacy_phone_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txv_label_pharmacy_phone"
                     android:layout_toLeftOf="@+id/imv_call_pharmacy_phone"
-                    android:text="@string/label_phone_pharmacy"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
 
@@ -149,10 +150,10 @@
                     android:textSize="@dimen/sp_16" />
 
                 <TextView
+                    android:id="@+id/pharmacy_fax_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txv_label_pharmacy_fax"
-                    android:text="@string/label_fax_pharmacy"
                     android:textColor="@color/hint_color"
                     android:textSize="@dimen/sp_14" />
                 <!--<ImageView
@@ -192,11 +193,11 @@
                 android:textSize="@dimen/sp_16" />
 
             <TextView
+                android:id="@+id/email_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txv_label_email_address"
                 android:layout_toLeftOf="@+id/imv_email"
-                android:text="@string/email_contact_us"
                 android:textColor="@color/grey_text"
                 android:textSize="@dimen/sp_14" />
 
@@ -210,13 +211,13 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/email_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:paddingBottom="@dimen/xlarge_margin"
             android:paddingLeft="@dimen/xlarge_margin"
             android:paddingRight="@dimen/xlarge_margin"
-            android:text="@string/description_email_address"
             android:textColor="@color/hint_color" />
 
         <RelativeLayout
@@ -237,11 +238,11 @@
                 android:textSize="@dimen/sp_16" />
 
             <TextView
+                android:id="@+id/mailing_address_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txv_label_mailing_address"
                 android:layout_toLeftOf="@+id/imv_map"
-                android:text="@string/mailing_address"
                 android:textColor="@color/hint_color"
                 android:textSize="@dimen/sp_14" />
 
