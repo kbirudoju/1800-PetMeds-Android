@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rectangular_background"
-    android:layout_marginTop="@dimen/dp_1"
-  >
+    android:layout_marginTop="@dimen/dp_1">
     <RelativeLayout
         android:id="@+id/row_pet_product"
         android:layout_width="match_parent"
@@ -47,18 +48,23 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="@dimen/dp_11"
             android:layout_toLeftOf="@+id/arrow_image">
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/refill_view_product_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/styledefault_no_padding"
                 android:singleLine="true"
-               />
+                autofit:minTextSize="12sp"
+                android:text="fjbgfjgbjfgbjfgbfjgbfjgbfjgbfjgbfjbgfjbgfjbgf"
+
+
+                />
             <TextView
                 android:id="@+id/refill_view_date_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/formlabel"
+                android:visibility="gone"
 
                 />
             <LinearLayout
@@ -66,7 +72,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dp_3"
 
                 >
                 <TextView
@@ -89,14 +94,17 @@
                 android:text="fsdfsdf"
                 android:layout_marginLeft="@dimen/dp_5"
                 style="@style/styledefault_no_padding"/>
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/refill_view_sell_price_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="dsgsdg"
-                android:layout_marginLeft="@dimen/dp_26"
+                android:singleLine="true"
+                android:layout_marginLeft="@dimen/dp_16"
                 style="@style/styledefault_no_padding"
-                android:textColor="@color/crimson_red"/>
+                android:textColor="@color/crimson_red"
+                autofit:minTextSize="12sp"
+                />
             </LinearLayout>
             <include
                 layout="@layout/view_coupon"/>
@@ -155,13 +163,14 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="@dimen/dp_11"
             android:layout_toLeftOf="@+id/refill_view_arrow_image">
-            <TextView
+            <me.grantland.widget.AutofitTextView
                 android:id="@+id/refill_view_product_label_coupons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/styledefault_no_padding"
                 android:singleLine="true"
                 android:text="gjgjgjg"
+                autofit:minTextSize="12sp"
                 />
             <TextView
                 android:id="@+id/refill_view_date_label_coupons"
@@ -193,22 +202,26 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/dp_3">
-                <TextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/refill_view_original_price_label_coupons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/starts_at_txt"
                     style="@style/styledefault_no_padding"
                     android:textColor="@color/crimson_red"
+                    android:singleLine="true"
+                    autofit:minTextSize="12sp"
                     />
 
-                <TextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/promotext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="fsdfsdf"
+                    android:singleLine="true"
                     android:layout_marginLeft="@dimen/dp_5"
                     android:textColor="@color/crimson_red"
+                    autofit:minTextSize="12sp"
                     style="@style/styledefault_no_padding"/>
                <!-- <TextView
                     android:id="@+id/refill_view_sell_price_label_coupons"

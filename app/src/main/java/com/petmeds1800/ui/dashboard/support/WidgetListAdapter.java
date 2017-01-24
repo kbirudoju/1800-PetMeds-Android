@@ -320,8 +320,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 if(petItem.getSku().getPriceInfo().getPromoText()!=null && !petItem.getSku().getPriceInfo().getPromoText().isEmpty()){
                     refillHolder.row_coupons_layout.setVisibility(View.VISIBLE);
                     refillHolder.noCouponRefillLayout.setVisibility(View.GONE);
-                    refillHolder.refillProductCouponsLabel.setText(petItem.getSku().getDisplayName());
+                    refillHolder.refillProductCouponsLabel.setText(petItem.getSku().getParentProduct().getDisplayName());
                     if(petItem.getDueDate()!=null && !petItem.getDueDate().isEmpty()){
+                        refillHolder.refillDateCouponLabel.setVisibility(View.VISIBLE);
                     refillHolder.refillDateCouponLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
                     }else{
                         refillHolder.refillDateCouponLabel.setVisibility(View.GONE);
@@ -343,15 +344,17 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }else {
                     refillHolder.row_coupons_layout.setVisibility(View.GONE);
                     refillHolder.noCouponRefillLayout.setVisibility(View.VISIBLE);
-                    refillHolder.refillProductTitleLabel.setText(petItem.getSku().getDisplayName());
+                    refillHolder.refillProductTitleLabel.setText(petItem.getSku().getParentProduct().getDisplayName());
                     refillHolder.refillOriginalPriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
                     refillHolder.refillOriginalPriceLabel.setPaintFlags(refillHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     refillHolder.refillSellingpriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
                     if(petItem.getDueDate()!=null && !petItem.getDueDate().isEmpty()){
-                        refillHolder.refillDateCouponLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
+                        refillHolder.refillDateLabel.setVisibility(View.VISIBLE);
+                        refillHolder.refillDateLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
                     }else{
-                        refillHolder.refillDateCouponLabel.setVisibility(View.GONE);
-                    }                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillProductImage) {
+                        refillHolder.refillDateLabel.setVisibility(View.GONE);
+                    }
+                    Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillProductImage) {
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
@@ -495,7 +498,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final WhatsNextViewHolder whatsNextViewHolder = (WhatsNextViewHolder) holder;
                 WhatsNextCategory whatsNextCategory = (WhatsNextCategory) getItemAt(position);
                 whatsNextViewHolder.whatsNextTitle.setText(whatsNextCategory.getDisplayName());
-                whatsNextViewHolder.subtitleWhatsNext.setText(mContext.getString(R.string.explore_txt) + " " + whatsNextCategory.getDisplayName() +" "+ mContext.getString(R.string.products_txt));
+                whatsNextViewHolder.subtitleWhatsNext.setText(mContext.getString(R.string.explore_txt) + " " + whatsNextCategory.getDisplayName());
 
                 if (whatsNextCategory.getBannerImagePath() != null) {
                     Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + whatsNextCategory.getBannerImagePath()).asBitmap().centerCrop().into(new BitmapImageViewTarget(whatsNextViewHolder.whatsNextImage) {
@@ -559,7 +562,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recentlyOrderedHolder.row_coupons_layout.setVisibility(View.VISIBLE);
                     recentlyOrderedHolder.noCouponRefillLayout.setVisibility(View.GONE);
                     recentlyOrderedHolder.refillDateCouponLabel.setVisibility(View.GONE);
-                    recentlyOrderedHolder.refillProductCouponsLabel.setText(recentlyOrdered.getDisplayName());
+                    recentlyOrderedHolder.refillProductCouponsLabel.setText(recentlyOrdered.getParentProduct().getDisplayName());
                     recentlyOrderedHolder.refillStartCouponLabel.setPaintFlags(recentlyOrderedHolder.refillStartCouponLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     recentlyOrderedHolder.refillOriginalPriceCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice());
                     recentlyOrderedHolder.refillStartCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getListPrice());
@@ -578,7 +581,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recentlyOrderedHolder.row_coupons_layout.setVisibility(View.GONE);
                     recentlyOrderedHolder.noCouponRefillLayout.setVisibility(View.VISIBLE);
                     recentlyOrderedHolder.refillDateCouponLabel.setVisibility(View.GONE);
-                    recentlyOrderedHolder.refillProductTitleLabel.setText(recentlyOrdered.getDisplayName());
+                    recentlyOrderedHolder.refillProductTitleLabel.setText(recentlyOrdered.getParentProduct().getDisplayName());
                     recentlyOrderedHolder.refillOriginalPriceLabel.setText(" $" + recentlyOrdered.getPriceInfo().getListPrice());
                     recentlyOrderedHolder.refillOriginalPriceLabel.setPaintFlags(recentlyOrderedHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     recentlyOrderedHolder.refillSellingpriceLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice());
@@ -663,10 +666,6 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.row_pet_product_coupons)
         RelativeLayout row_coupons_layout;
         @BindView(R.id.refill_view_product_label_coupons)
-
-
-
-
         TextView refillProductCouponsLabel;
         @BindView(R.id.refill_view_date_label_coupons)
         TextView refillDateCouponLabel;

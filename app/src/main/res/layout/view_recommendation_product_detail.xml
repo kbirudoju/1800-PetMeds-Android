@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <include
         layout="@layout/view_separator"></include>
@@ -24,7 +26,7 @@
             android:src="@drawable/ic_arrow"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_23"/>
-        <TextView
+        <me.grantland.widget.AutofitTextView
             android:id="@+id/product_title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,6 +35,8 @@
             android:layout_marginTop="@dimen/dp_20"
             android:text="sfsfs"
             android:layout_toLeftOf="@+id/arrow_image"
+            android:singleLine="true"
+            autofit:minTextSize="12sp"
             style="@style/styledefault_no_padding"/>
         <LinearLayout
             android:id="@+id/promotext_view"
@@ -70,21 +74,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/dp_6">
-                <TextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/selling_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/starts_at_txt"
                     style="@style/styledefault_no_padding"
                     android:textColor="@color/crimson_red"
+                    android:singleLine="true"
+                    autofit:minTextSize="12sp"
                     />
 
-                <TextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/promotext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="fsdfsdf"
                     android:layout_marginLeft="@dimen/dp_5"
+                    android:singleLine="true"
+                    autofit:minTextSize="12sp"
                     android:textColor="@color/crimson_red"
                     style="@style/styledefault_no_padding"/>
 
