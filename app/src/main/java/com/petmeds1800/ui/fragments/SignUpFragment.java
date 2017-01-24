@@ -630,8 +630,8 @@ public class SignUpFragment extends AbstractFragment
                                 phoneText = phoneShippingText;
                             }
                             SignUpRequest signUpRequest=new SignUpRequest(emailText, confirmEmailText, passwordText,
-                                    confirmPasswordText, firstNameText, lastNameText,addressText, apartmentText,cityText, stateText,  zipText, countryText, phoneText,firstNameShippingText, lastNameShippingText,addressShippingText, apartmentShippingText, cityShippingText,stateShippingText,
-                                    zipShippingText, countryShippingText, phoneShippingText,
+                                    confirmPasswordText, firstNameText, lastNameText,addressText, apartmentText,cityText, mPresenter.getStateCode(stateText),  zipText, mPresenter.getCountryCode(countryText), phoneText,firstNameShippingText, lastNameShippingText,addressShippingText, apartmentShippingText, cityShippingText,mPresenter.getStateCode(stateShippingText),
+                                    zipShippingText, mPresenter.getCountryCode(countryShippingText), phoneShippingText,
                                     sessionConfNumber);
                             return mApiService.signUp(signUpRequest)
                                     .observeOn(AndroidSchedulers.mainThread())
