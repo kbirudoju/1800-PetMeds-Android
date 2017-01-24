@@ -118,7 +118,7 @@ public class ShoppingCartRecyclerViewAdapter extends RecyclerView.Adapter<Shoppi
             }
         });
 
-        if (null != mCommerceItemsesCollection.get(position).getProductPageUrl() && !mCommerceItemsesCollection.get(position).getProductPageUrl().isEmpty()) {
+        if (true == mCommerceItemsesCollection.get(position).isRxItem()) {
 
             holder.mEditItemLayout.setVisibility(View.VISIBLE);
             holder.mEditItemLayout.setOnClickListener(new View.OnClickListener() {
