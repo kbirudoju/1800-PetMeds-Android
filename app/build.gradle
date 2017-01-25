@@ -171,6 +171,10 @@ android {
             applicationId "com.petmeds1800.dev"
             ext.enableCrashlytics = false
         }
+        stage{
+            applicationId "com.petmeds1800.stage"
+            ext.enableCrashlytics = false
+        }
         prod {
             applicationId "com.petmeds1800"
             manifestPlaceholders = [crashlyticsApiKey: CRASHLYTICS_API_SECRET_KEY]

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="url_share_your_feedback">http://test.1800petmeds.com/app_feedback.jsp</string>
+    <string name="url_search_education">http://test.1800petmeds.com/peteducation/search.jsp?Ntt=</string>
+    <string name="url_featured_education">http://test.1800petmeds.com/education</string>
+    <string name="url_featured_ask_vet">http://test.1800petmeds.com/education/ask-the-vet-form.htm</string>
+    <string name="url_learn_about">http://test.1800petmeds.com/about_app.jsp</string>
+    <string name="url_live_chat">http://test.1800petmeds.com/popup/webchat.jsp</string>
+    <string name="url_vet_answered">https://test.1800petmeds.com/askthevet.jsp?Q=</string>
+    <string name="url_ship_rates">https://test.1800petmeds.com/shiprate.jsp</string>
+</resources>
