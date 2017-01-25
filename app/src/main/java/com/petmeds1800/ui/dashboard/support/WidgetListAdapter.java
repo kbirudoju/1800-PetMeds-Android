@@ -329,9 +329,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
 
                     refillHolder.refillStartCouponLabel.setPaintFlags(refillHolder.refillStartCouponLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    refillHolder.refillOriginalPriceCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
+               //     refillHolder.refillOriginalPriceCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
                     refillHolder.refillStartCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
-                    refillHolder.refillPromoLabel.setText(petItem.getSku().getPriceInfo().getPromoText());
+                    refillHolder.refillPromoLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice()+" "+petItem.getSku().getPriceInfo().getPromoText());
                     Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillCouponProductImage) {
                         @Override
                         protected void setResource(Bitmap resource) {
@@ -564,9 +564,11 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recentlyOrderedHolder.refillDateCouponLabel.setVisibility(View.GONE);
                     recentlyOrderedHolder.refillProductCouponsLabel.setText(recentlyOrdered.getParentProduct().getDisplayName());
                     recentlyOrderedHolder.refillStartCouponLabel.setPaintFlags(recentlyOrderedHolder.refillStartCouponLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    recentlyOrderedHolder.refillOriginalPriceCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice());
+                  //  recentlyOrderedHolder.refillOriginalPriceCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice());
                     recentlyOrderedHolder.refillStartCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getListPrice());
                     recentlyOrderedHolder.refillPromoLabel.setText(recentlyOrdered.getPriceInfo().getPromoText());
+                    recentlyOrderedHolder.refillPromoLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice()+" "+recentlyOrdered.getPriceInfo().getPromoText());
+
                     Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + recentlyOrdered.getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(recentlyOrderedHolder.refillCouponProductImage) {
                         @Override
                         protected void setResource(Bitmap resource) {

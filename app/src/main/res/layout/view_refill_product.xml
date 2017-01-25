@@ -211,6 +211,7 @@
                     android:textColor="@color/crimson_red"
                     android:singleLine="true"
                     autofit:minTextSize="12sp"
+                    android:visibility="gone"
                     />
 
                 <me.grantland.widget.AutofitTextView
@@ -219,7 +220,6 @@
                     android:layout_height="wrap_content"
                     android:text="fsdfsdf"
                     android:singleLine="true"
-                    android:layout_marginLeft="@dimen/dp_5"
                     android:textColor="@color/crimson_red"
                     autofit:minTextSize="12sp"
                     style="@style/styledefault_no_padding"/>
