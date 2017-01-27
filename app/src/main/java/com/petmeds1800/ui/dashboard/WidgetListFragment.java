@@ -143,6 +143,7 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(HomeActivity.SETUP_HAS_OPTIONS_MENU_ACTION);
         intentFilter.addAction(Constants.SECURITY_STATUS_RECEIVED);
+        intentFilter.addAction(Constants.KEY_ACTION_USER_LOGGED_IN);
         registerIntent(intentFilter, getContext());
 
         return view;
@@ -225,8 +226,9 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
     @Override
     protected void onReceivedBroadcast(Context context, Intent intent) {
         checkAndSetHasOptionsMenu(intent, HomeRootFragment.class.getName());
-        //call the API if we have released the security status lock
-        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)){
+        //call the API if we have released the security status lock or user logged-in
+        if(intent.getAction().equals(Constants.SECURITY_STATUS_RECEIVED)
+                || intent.getAction().equals(Constants.KEY_ACTION_USER_LOGGED_IN)){
             showProgress();
             mPresenter.start();
         }

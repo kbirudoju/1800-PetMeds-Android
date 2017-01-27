@@ -1,5 +1,7 @@
 package com.petmeds1800.util;
 
+import android.content.Intent;
+
 /**
  * Created by pooja on 9/15/2016.
  */
@@ -7,7 +9,6 @@ public class Constants {
 
     /*WidgetTypes Constant*/
     public static final String VIEW_TYPE_BANNER = "Banner";
-
 
     public static enum RepeatFrequency {
         REPEAT_DAILY, REPEAT_WEEKLY, REPEAT_MONTHLY
@@ -164,4 +165,6 @@ public class Constants {
     public static final int BARCODE_SCANNER_REQUEST=101;
 
     public static final String SECURITY_STATUS_RECEIVED = "securityStatusReceived";
+
+    public static final String KEY_ACTION_USER_LOGGED_IN = "user_logged_in";
 }
