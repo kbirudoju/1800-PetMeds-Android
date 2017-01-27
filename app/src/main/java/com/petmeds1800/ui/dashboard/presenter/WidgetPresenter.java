@@ -1,8 +1,11 @@
 package com.petmeds1800.ui.dashboard.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
+import com.petmeds1800.model.AddRecentlyItemToCart;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.entities.BrowsingHistory;
 import com.petmeds1800.model.entities.PetItemList;
@@ -22,8 +25,6 @@ import com.petmeds1800.util.Constants;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
-
-import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +68,12 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
                     @Override
                     public void onError(Throwable e) {
-                        if(mView.isActive()){
+                        if (mView.isActive()) {
                             mView.hideProgress();
                             int errorId = RetrofitErrorHandler.getErrorMessage(e);
                             if (errorId == R.string.noInternetConnection || errorId == R.string.connectionTimeout) {
                                 mView.showRetryView();
-                            }else{
+                            } else {
                                 //error handling would be implemented once we get the details from backend team
                                 mView.showErrorCrouton(e.getLocalizedMessage(), true);
                             }
@@ -82,7 +83,7 @@ public class WidgetPresenter implements WidgetContract.Presenter{
                     @Override
                     public void onNext(WidgetListResponse s) {
 
-                        if(mView.isActive()){
+                        if (mView.isActive()) {
                             mView.hideProgress();
                             if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 mView.onSuccess(formatWidgetData(s.getWidgets()));
@@ -118,6 +119,54 @@ public class WidgetPresenter implements WidgetContract.Presenter{
 
                         }
                         if(mView.isActive()) {
+                            mView.hideProgress();
+                            //error handling would be implemented once we get the details from backend team
+                            mView.onAddCartError(e.getLocalizedMessage());
+                        }
+
+                    }
+
+                    @Override
+                    public void onNext(ShoppingCartListResponse s) {
+                        mView.hideProgress();
+                        if (s.getStatus().getCode().equals(API_SUCCESS_CODE)) {
+                            if (mView.isActive()) {
+                                mView.addToCartSuccess();
+                            }
+                        } else {
+                            if (mView.isActive()) {
+                                mView.onAddCartError(s.getStatus().getErrorMessages().get(0));
+                            }
+                        }
+
+                    }
+                });
+
+
+    }
+
+    @Override
+    public void addRecentlyItemToCart(final AddRecentlyItemToCart addRecentlyItemToCart) {
+        mView.showProgress();
+        mApiService.addRecentlyItemToCart(addRecentlyItemToCart)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ShoppingCartListResponse>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof SecurityException) {
+                            Log.d("WidgetPresenter", "retrying after session renew");
+                            addRecentlyItemToCart.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                            addRecentlyItemToCart(addRecentlyItemToCart);
+                            return;
+
+                        }
+                        if (mView.isActive()) {
                             mView.hideProgress();
                             //error handling would be implemented once we get the details from backend team
                             mView.onAddCartError(e.getLocalizedMessage());

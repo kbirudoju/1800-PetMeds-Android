@@ -2,6 +2,7 @@ package com.petmeds1800.ui.dashboard.presenter;
 
 import android.os.Bundle;
 
+import com.petmeds1800.model.AddRecentlyItemToCart;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.mvp.BasePresenter;
 import com.petmeds1800.mvp.BaseView;
@@ -29,6 +30,7 @@ public interface WidgetContract {
     interface Presenter extends BasePresenter {
         void getWidgetListData();
         void addToCart(AddToCartRequest addToCartRequest);
+        void addRecentlyItemToCart(AddRecentlyItemToCart addToCartRequest);
 
     }
 }

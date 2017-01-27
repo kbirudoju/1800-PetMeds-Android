@@ -1,6 +1,7 @@
 package com.petmeds1800.api;
 
 import com.petmeds1800.PetMedsApplication;
+import com.petmeds1800.model.AddRecentlyItemToCart;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.AddVetRequest;
 import com.petmeds1800.model.AddVetResponse;
@@ -427,6 +428,10 @@ public interface PetMedsApiService {
     @Headers({"Content-Type: application/json", "Request-Credential: "+ PetMedsApplication.requestCredential})
     @GET("/rest/model/1800petmeds/home/HomeActor/contactUs")
     Observable<ContactUsResponse> getContactDetail ();
+
+    @Headers({"Content-Type: application/json", "Request-Credential: "+ PetMedsApplication.requestCredential})
+    @POST("/rest/model/1800petmeds/cart/CartActor/addRecentOrderedItemToCart")
+    Observable<ShoppingCartListResponse> addRecentlyItemToCart(@Body AddRecentlyItemToCart request);
 
 
 }

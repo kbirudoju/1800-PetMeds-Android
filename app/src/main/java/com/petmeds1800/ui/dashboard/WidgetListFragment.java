@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
@@ -17,6 +16,7 @@ import android.widget.RelativeLayout;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.model.AddRecentlyItemToCart;
 import com.petmeds1800.model.AddToCartRequest;
 import com.petmeds1800.model.entities.Category;
 import com.petmeds1800.model.entities.PetItemList;
@@ -93,15 +93,15 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
                     RecentlyOrdered recentlyOrdered = (RecentlyOrdered) v.getTag();
                     String productId = recentlyOrdered.getParentProduct().getProductId();
                     String skuId = recentlyOrdered.getSkuId();
-                    int quantity = recentlyOrdered.getMinQty();
-                    Log.d("minqty",">>>>>"+quantity);
+                    String quantity = recentlyOrdered.getPurchaseItemId();
+                    Log.d("minqty", ">>>>>" + quantity);
                     try {
                         ((AbstractActivity) getActivity()).startLoadingGif(getActivity());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    AddToCartRequest addToCartRequest = new AddToCartRequest(skuId, productId, quantity, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-                    mPresenter.addToCart(addToCartRequest);
+                    AddRecentlyItemToCart addRecentlyItemToCart = new AddRecentlyItemToCart(skuId, productId, quantity, mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                    mPresenter.addRecentlyItemToCart(addRecentlyItemToCart);
                 }
                 else if(v.getTag() instanceof Category){
                  Category category =(Category)v.getTag();
@@ -190,7 +190,8 @@ public class WidgetListFragment extends AbstractFragment implements WidgetContra
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Snackbar.make(mWidgetRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
+        Utils.displayCrouton(getActivity(), errorMessage, mContainerLayout);
+      //  Snackbar.make(mWidgetRecyclerView, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

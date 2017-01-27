@@ -13,6 +13,15 @@ public class RecentlyOrdered implements Serializable{
     private String skuId;
     private String displayName;
     private int minQty;
+    private String purchaseItemId;
+
+    public String getPurchaseItemId() {
+        return purchaseItemId;
+    }
+
+    public void setPurchaseItemId(String purchaseItemId) {
+        this.purchaseItemId = purchaseItemId;
+    }
 
     public int getMinQty() {
         return minQty;
