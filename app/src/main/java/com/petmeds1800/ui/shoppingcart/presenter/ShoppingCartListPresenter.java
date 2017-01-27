@@ -86,6 +86,12 @@ public class ShoppingCartListPresenter implements ShoppingCartListContract.Prese
                         mView.postGeneralPopulateShoppingCart(shoppingCartListResponse);
                     }
                 } else {
+                    //we should retry once in-case of the following specifc error
+                    //*****Shopping cart cannot be retrieved at this time - try clicking on the home icon and back.*****/
+                    if(shoppingCartListResponse.getStatus().getErrorMessages().get(0).contains("cannot be retrieved")) {
+                        getGeneralPopulateShoppingCart();
+                        return;
+                    }
                     if (mView.isActive()) {
                         mView.onError(shoppingCartListResponse.getStatus().getErrorMessages().get(0),null);
                     }
