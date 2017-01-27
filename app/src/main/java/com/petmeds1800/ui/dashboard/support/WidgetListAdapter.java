@@ -43,6 +43,7 @@ import com.petmeds1800.ui.dashboard.WidgetListFragment;
 import com.petmeds1800.ui.fragments.CommonWebviewFragment;
 import com.petmeds1800.util.Log;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -70,6 +71,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public final static int VIEW_RECENTLY_ORDERED_PRODUCT=14;
     private WidgetListFragment mContext;
     private View.OnClickListener listener;
+    DecimalFormat df = new DecimalFormat("0.00");
 
     public WidgetListAdapter(WidgetListFragment context, View.OnClickListener listener) {
         this.mContext = context;
@@ -327,11 +329,10 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }else{
                         refillHolder.refillDateCouponLabel.setVisibility(View.GONE);
                     }
-
                     refillHolder.refillStartCouponLabel.setPaintFlags(refillHolder.refillStartCouponLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                //     refillHolder.refillOriginalPriceCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
-                    refillHolder.refillStartCouponLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
-                    refillHolder.refillPromoLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice()+" "+petItem.getSku().getPriceInfo().getPromoText());
+                    refillHolder.refillStartCouponLabel.setText(" $" + df.format(Double.parseDouble(petItem.getSku().getPriceInfo().getListPrice())));
+                    refillHolder.refillPromoLabel.setText(" $" + df.format(Double.parseDouble(petItem.getSku().getPriceInfo().getSellingPrice()))+" "+petItem.getSku().getPriceInfo().getPromoText());
                     Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + petItem.getSku().getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(refillHolder.refillCouponProductImage) {
                         @Override
                         protected void setResource(Bitmap resource) {
@@ -345,9 +346,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     refillHolder.row_coupons_layout.setVisibility(View.GONE);
                     refillHolder.noCouponRefillLayout.setVisibility(View.VISIBLE);
                     refillHolder.refillProductTitleLabel.setText(petItem.getSku().getParentProduct().getDisplayName());
-                    refillHolder.refillOriginalPriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getListPrice());
+                    refillHolder.refillOriginalPriceLabel.setText(" $" + df.format(Double.parseDouble(petItem.getSku().getPriceInfo().getListPrice())));
                     refillHolder.refillOriginalPriceLabel.setPaintFlags(refillHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    refillHolder.refillSellingpriceLabel.setText(" $" + petItem.getSku().getPriceInfo().getSellingPrice());
+                    refillHolder.refillSellingpriceLabel.setText(" $" + df.format(Double.parseDouble(petItem.getSku().getPriceInfo().getSellingPrice())));
                     if(petItem.getDueDate()!=null && !petItem.getDueDate().isEmpty()){
                         refillHolder.refillDateLabel.setVisibility(View.VISIBLE);
                         refillHolder.refillDateLabel.setText(mContext.getString(R.string.due_on_txt) + " " + petItem.getDueDate());
@@ -424,16 +425,16 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recommendationProductViewHolder.promoViewlayout.setVisibility(View.VISIBLE);
                     recommendationProductViewHolder.noPromoViewLayout.setVisibility(View.GONE);
                     recommendationProductViewHolder.promoTextLabel.setText(recommendedProducts.getPromoText());
-                    recommendationProductViewHolder.listPriceLabel.setText(" $" + recommendedProducts.getListPrice());
+                    recommendationProductViewHolder.listPriceLabel.setText(" $" + df.format(Double.parseDouble(recommendedProducts.getListPrice())));
                     recommendationProductViewHolder.listPriceLabel.setPaintFlags(recommendationProductViewHolder.recommendationPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     recommendationProductViewHolder.startsAtLabel.setText(recommendedProducts.getPriceLabel());
-                    recommendationProductViewHolder.sellingPriceLabel.setText(" $" +recommendedProducts.getSellingPrice());
+                    recommendationProductViewHolder.sellingPriceLabel.setText(" $" + df.format(Double.parseDouble(recommendedProducts.getSellingPrice())));
                 }else {
                     recommendationProductViewHolder.promoViewlayout.setVisibility(View.GONE);
                     recommendationProductViewHolder.noPromoViewLayout.setVisibility(View.VISIBLE);
-                    recommendationProductViewHolder.recommendationPriceLabel.setText(" $" + recommendedProducts.getListPrice());
+                    recommendationProductViewHolder.recommendationPriceLabel.setText(" $" +  df.format(Double.parseDouble(recommendedProducts.getListPrice())));
                     recommendationProductViewHolder.recommendationPriceLabel.setPaintFlags(recommendationProductViewHolder.recommendationPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    recommendationProductViewHolder.recommendationSellingPriceLabel.setText(" $" + recommendedProducts.getSellingPrice());
+                    recommendationProductViewHolder.recommendationSellingPriceLabel.setText(" $" +  df.format(Double.parseDouble(recommendedProducts.getSellingPrice())));
                 }
                 recommendationProductViewHolder.recommendationView.setTag(recommendedProducts);
                 break;
@@ -520,16 +521,16 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     browseHistoryViewHolder.promoViewlayout.setVisibility(View.VISIBLE);
                     browseHistoryViewHolder.noPromoViewLayout.setVisibility(View.GONE);
                     browseHistoryViewHolder.promoTextLabel.setText(shoppingProducts.getPromoText());
-                    browseHistoryViewHolder.listPriceLabel.setText(" $" + shoppingProducts.getListPrice());
+                    browseHistoryViewHolder.listPriceLabel.setText(" $" + df.format(Double.parseDouble(shoppingProducts.getListPrice())));
                     browseHistoryViewHolder.listPriceLabel.setPaintFlags(browseHistoryViewHolder.listPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     browseHistoryViewHolder.startsAtLabel.setText(shoppingProducts.getPriceLabel());
-                    browseHistoryViewHolder.sellingPriceLabel.setText(" $" +shoppingProducts.getSellingPrice());
+                    browseHistoryViewHolder.sellingPriceLabel.setText(" $" + df.format(Double.parseDouble(shoppingProducts.getSellingPrice())));
                 } else {
                     browseHistoryViewHolder.promoViewlayout.setVisibility(View.GONE);
                     browseHistoryViewHolder.noPromoViewLayout.setVisibility(View.VISIBLE);
-                    browseHistoryViewHolder.productPriceLabel.setText(" $" + shoppingProducts.getListPrice());
+                    browseHistoryViewHolder.productPriceLabel.setText(" $" +  df.format(Double.parseDouble(shoppingProducts.getListPrice())));
                     browseHistoryViewHolder.productPriceLabel.setPaintFlags(browseHistoryViewHolder.productPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    browseHistoryViewHolder.productSellingPriceLabel.setText(" $" + shoppingProducts.getSellingPrice());
+                    browseHistoryViewHolder.productSellingPriceLabel.setText(" $" +  df.format(Double.parseDouble(shoppingProducts.getSellingPrice())));
 
 
                 }
@@ -565,9 +566,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recentlyOrderedHolder.refillProductCouponsLabel.setText(recentlyOrdered.getParentProduct().getDisplayName());
                     recentlyOrderedHolder.refillStartCouponLabel.setPaintFlags(recentlyOrderedHolder.refillStartCouponLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                   //  recentlyOrderedHolder.refillOriginalPriceCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice());
-                    recentlyOrderedHolder.refillStartCouponLabel.setText(" $" + recentlyOrdered.getPriceInfo().getListPrice());
+                    recentlyOrderedHolder.refillStartCouponLabel.setText(" $" +  df.format(Double.parseDouble(recentlyOrdered.getPriceInfo().getListPrice())));
                     recentlyOrderedHolder.refillPromoLabel.setText(recentlyOrdered.getPriceInfo().getPromoText());
-                    recentlyOrderedHolder.refillPromoLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice()+" "+recentlyOrdered.getPriceInfo().getPromoText());
+                    recentlyOrderedHolder.refillPromoLabel.setText(" $" +  df.format(Double.parseDouble(recentlyOrdered.getPriceInfo().getSellingPrice()))+" "+recentlyOrdered.getPriceInfo().getPromoText());
 
                     Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + recentlyOrdered.getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(recentlyOrderedHolder.refillCouponProductImage) {
                         @Override
@@ -584,9 +585,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recentlyOrderedHolder.noCouponRefillLayout.setVisibility(View.VISIBLE);
                     recentlyOrderedHolder.refillDateCouponLabel.setVisibility(View.GONE);
                     recentlyOrderedHolder.refillProductTitleLabel.setText(recentlyOrdered.getParentProduct().getDisplayName());
-                    recentlyOrderedHolder.refillOriginalPriceLabel.setText(" $" + recentlyOrdered.getPriceInfo().getListPrice());
+                    recentlyOrderedHolder.refillOriginalPriceLabel.setText(" $" +  df.format(Double.parseDouble(recentlyOrdered.getPriceInfo().getListPrice())));
                     recentlyOrderedHolder.refillOriginalPriceLabel.setPaintFlags(recentlyOrderedHolder.refillOriginalPriceLabel.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    recentlyOrderedHolder.refillSellingpriceLabel.setText(" $" + recentlyOrdered.getPriceInfo().getSellingPrice());
+                    recentlyOrderedHolder.refillSellingpriceLabel.setText(" $" +  df.format(Double.parseDouble(recentlyOrdered.getPriceInfo().getSellingPrice())));
                     Glide.with(mContext).load(mContext.getString(R.string.server_endpoint) + recentlyOrdered.getParentProduct().getProductImage()).asBitmap().centerCrop().into(new BitmapImageViewTarget(recentlyOrderedHolder.refillProductImage) {
                         @Override
                         protected void setResource(Bitmap resource) {
