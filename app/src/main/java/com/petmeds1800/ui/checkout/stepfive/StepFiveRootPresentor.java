@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.checkout.stepfive;
 
+import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
@@ -28,6 +29,8 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
 
     @Inject
     PetMedsApiService mPetMedsApiService;
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     public StepFiveRootPresentor(StepFiveRootContract.View view) {
         mView = view;
@@ -75,7 +78,7 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
     }
 
     @Override
-    public void submitComittedOrderDetails(CommitOrderRequest commitOrderRequest, final String shoppingCartId) {
+    public void submitComittedOrderDetails(final CommitOrderRequest commitOrderRequest, final String shoppingCartId) {
         mPetMedsApiService.submitCommitedOrderDetails(commitOrderRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -86,8 +89,23 @@ public class StepFiveRootPresentor implements StepFiveRootContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        //error handling would be implemented once we get the details from backend team
-                        mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                        //check if we need to retry as a consequence of 409 conflict
+                        if (e instanceof SecurityException) {
+                            Log.d("submitCommitedOrderDetails", "retrying after session renew");
+                            //refresh the sessionConfirmationNumber in the commitOrderRequest
+                            commitOrderRequest.set_dynSessConf(mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                            submitComittedOrderDetails(commitOrderRequest, shoppingCartId);
+
+                            return;
+
+                        }
+                        else {
+                            if(mView.isActive()) {
+                                //error handling would be implemented once we get the details from backend team
+                                mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                            }
+                        }
+
 
                     }
 
