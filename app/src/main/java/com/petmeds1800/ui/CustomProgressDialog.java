@@ -31,8 +31,6 @@ public class CustomProgressDialog extends ProgressDialog {
         CustomProgressDialog dialog = new CustomProgressDialog(context, android.R.style.Theme_Translucent_NoTitleBar);
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
-        if (dialog.getWindow() != null)
-            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         return dialog;
     }
 }
