@@ -2,8 +2,10 @@ package com.petmeds1800.ui;
 
 import com.petmeds1800.R;
 import com.petmeds1800.ui.fragments.dialog.LoadingGIFDialogFragment;
+
 import com.petmeds1800.util.AnalyticsUtil;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +24,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
     @SuppressWarnings("checkstyle:visibilitymodifier")
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
+    ProgressDialog mDialog;
     //CHECKSTYLE:ON
     AnalyticsUtil mAnalyticsUtil;
 
@@ -80,37 +82,41 @@ public abstract class AbstractActivity extends AppCompatActivity {
     /**
      * Starts Paws animation located in assets. Blocks UI
      * For updates to Cart Fragment in case of Update Quantity or apply coupon
+     *
      * @param mContext
      * @throws Exception
      */
-    public void startLoadingGif(Context mContext) throws Exception{
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LoadingGIFDialogFragment frag = new LoadingGIFDialogFragment();
-                frag.show(getSupportFragmentManager(), LoadingGIFDialogFragment.class.getSimpleName());
+    public void startLoadingGif(Context mContext) throws Exception {
+        if (mDialog != null) {
+            mDialog.dismiss();
+            mDialog = null;
+        }
+        mDialog = CustomProgressDialog.getInstance(mContext);
+        if (mDialog != null) {
+            if (!mDialog.isShowing()) {
+                mDialog.show();
             }
-        },100);
+        }
     }
 
     /**
      * Stops Paws animation located in assets. Removed Blocks to UI
      * For updates to Cart Fragment in case of Update Quantity or apply coupon
+     *
      * @param mContext
      * @throws Exception
      */
-    public void stopLoadingGif(Context mContext) throws Exception{
+    public void stopLoadingGif(Context mContext) throws Exception {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+    }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Fragment prev = getSupportFragmentManager().findFragmentByTag(LoadingGIFDialogFragment.class.getSimpleName());
-                if (prev != null) {
-                    LoadingGIFDialogFragment df = (LoadingGIFDialogFragment) prev;
-                    df.dismissAllowingStateLoss();
-                }
-            }
-        },1000);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
     }
 }

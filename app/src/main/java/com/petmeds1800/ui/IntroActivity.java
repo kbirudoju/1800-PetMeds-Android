@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Digvijay on 9/1/2016.
  */
-public class IntroActivity extends AbstractActivity implements IntroFragment.OnIntroFinishedListener{
+public class IntroActivity extends AbstractActivity implements IntroFragment.OnIntroFinishedListener {
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
@@ -47,7 +47,7 @@ public class IntroActivity extends AbstractActivity implements IntroFragment.OnI
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-      //  setContentView(R.layout.activity_intro);
+        //  setContentView(R.layout.activity_intro);
         PetMedsApplication.getAppComponent().inject(this);
 
 
@@ -59,20 +59,20 @@ public class IntroActivity extends AbstractActivity implements IntroFragment.OnI
                 if (errorId == R.string.noInternetConnection) {
                     hideProgress();
                     showNonCancelableDialog(getString(errorId));
-                   // showErrorCrouton(getString(errorId), false);
+                    // showErrorCrouton(getString(errorId), false);
 
-                } else if (!(e instanceof SecurityException)){
+                } else if (!(e instanceof SecurityException)) {
                     hideProgress();
                     showNonCancelableDialog(e.getMessage());
-                   // showErrorCrouton(e.getMessage(), false);
+                    // showErrorCrouton(e.getMessage(), false);
 
-                }  else if((e instanceof SecurityException)) {
+                } else if ((e instanceof SecurityException)) {
 //                        initializeSessionConfirmationNumber();
                     hideProgress();
                     startHomeActivity();
 
-                    }
                 }
+            }
 
 
             @Override
@@ -90,14 +90,14 @@ public class IntroActivity extends AbstractActivity implements IntroFragment.OnI
     @Override
     protected int getLayoutResource() {
 
-            return R.layout.activity_intro;
+        return R.layout.activity_intro;
     }
 
     @Override
     public void onIntroFragmentFinished() {
         SessionConfNumberResponse sessionConfNumberResponse = mPreferencesHelper.getSessionConfirmationResponse();
         if (sessionConfNumberResponse != null && sessionConfNumberResponse.getSessionConfirmationNumber() != null) {
-           startHomeActivity();
+            startHomeActivity();
         } else {
             showProgress();
             mGetSessionCookiesHack.doHackForGettingSessionCookies(false, mApiService);
@@ -106,7 +106,7 @@ public class IntroActivity extends AbstractActivity implements IntroFragment.OnI
 
     }
 
-    private void startHomeActivity(){
+    private void startHomeActivity() {
         mPreferencesHelper.setHasUserSeenIntro(true);
         startActivity(new HomeIntent(this));
         finish();
@@ -122,11 +122,8 @@ public class IntroActivity extends AbstractActivity implements IntroFragment.OnI
 
 
     public void showProgress() {
-
         try {
-
-            LoadingGIFDialogFragment frag = new LoadingGIFDialogFragment();
-            frag.show(getSupportFragmentManager(), LoadingGIFDialogFragment.class.getSimpleName());
+            startLoadingGif(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,15 +132,7 @@ public class IntroActivity extends AbstractActivity implements IntroFragment.OnI
 
     public void hideProgress() {
         try {
-            Fragment prev = getSupportFragmentManager().findFragmentByTag(LoadingGIFDialogFragment.class.getSimpleName());
-            if (prev != null) {
-                LoadingGIFDialogFragment df = (LoadingGIFDialogFragment) prev;
-                df.dismissAllowingStateLoss();
-                getSupportFragmentManager().executePendingTransactions();
-               //
-                Log.d("stop dialog", ">>>>");
-
-            }
+            stopLoadingGif(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,7 +162,6 @@ public class IntroActivity extends AbstractActivity implements IntroFragment.OnI
                 finish();
             }
         });
-
         okCancelDialogFragment.setCancelable(false);
         okCancelDialogFragment.show(getSupportFragmentManager());
     }
