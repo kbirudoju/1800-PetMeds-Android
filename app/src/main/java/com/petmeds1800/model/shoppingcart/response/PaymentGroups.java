@@ -19,6 +19,16 @@ public class PaymentGroups implements Serializable {
     private String creditCardType;
     private String orderId;
 
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    private String paymentMethod;
+
     public float getAmount ()
     {
         return amount;

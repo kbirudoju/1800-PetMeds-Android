@@ -93,8 +93,7 @@ public class StepThreeRootFragment extends AbstractFragment
 
     @BindView(R.id.creditCardCheckBox)
     CheckBox mCreditCardCheckbox;
- private boolean isPayPalClicked;
-    private boolean isCreditCardClicked;
+
 
 
 
@@ -188,6 +187,7 @@ public class StepThreeRootFragment extends AbstractFragment
 
             }
         });
+
         return view;
 
     }
@@ -239,6 +239,17 @@ public class StepThreeRootFragment extends AbstractFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPresenter = new StepThreeRootPresentor(this);
+
+
+       // Log.d("mShoppingCartListResponse",mShoppingCartListResponse.getShoppingCart().getPaymentGroups().get(0).getPaymentMethod());
+
+        if (mShoppingCartListResponse.getShoppingCart().getPaymentGroups()!=null && mShoppingCartListResponse.getShoppingCart().getPaymentGroups().size()>0 && mShoppingCartListResponse.getShoppingCart().getPaymentGroups().get(0).getPaymentMethod()!=null && mShoppingCartListResponse.getShoppingCart().getPaymentGroups().get(0).getPaymentMethod().equalsIgnoreCase("PayPal")){
+            mPaypalCheckbox.setChecked(true);
+            mCreditCardCheckbox.setChecked(false);
+        }else {
+            mCreditCardCheckbox.setChecked(true);
+            mPaypalCheckbox.setChecked(false);
+        }
 
         if (mRequestCode == LOGGED_IN_REQUEST_CODE) {
             replaceStepRootChildFragment(
@@ -348,20 +359,22 @@ public class StepThreeRootFragment extends AbstractFragment
 
     @OnClick(R.id.shippingNavigator)
     public void onShippingNavigatorClick() {
-        activity.showProgress();
-        Card card;
-        card = getCard();
-        if (card != null) {
-            CreditCardPaymentMethodRequest request = new CreditCardPaymentMethodRequest(card.getId()
-                    , card.getBillingAddress().getRepositoryId()
-                    , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
-            mPresenter.applyCreditCardPaymentMethod(request);
+        if(mPaypalCheckbox.isChecked()){
+            activity.moveToNext(mStepName, mShoppingCartListResponse);
+        }else {
+            activity.showProgress();
+            Card card;
+            card = getCard();
+            if (card != null) {
+                CreditCardPaymentMethodRequest request = new CreditCardPaymentMethodRequest(card.getId()
+                        , card.getBillingAddress().getRepositoryId()
+                        , mPreferencesHelper.getSessionConfirmationResponse().getSessionConfirmationNumber());
+                mPresenter.applyCreditCardPaymentMethod(request);
+            } else {
+                activity.hideProgress();
+                showErrorCrouton(getString(R.string.noSavedCardsAvailableMessage), false);
+            }
         }
-        else {
-            activity.hideProgress();
-            showErrorCrouton(getString(R.string.noSavedCardsAvailableMessage),false);
-        }
-
     }
 
    /* @Override
@@ -401,5 +414,7 @@ public class StepThreeRootFragment extends AbstractFragment
         thread.start();
             }
 
+private void disableCardDetails(){
 
+}
 }

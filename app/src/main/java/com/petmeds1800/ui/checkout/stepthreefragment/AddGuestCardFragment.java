@@ -74,6 +74,9 @@ public class AddGuestCardFragment extends AbstractFragment implements
 
     private PaymentGroups mPaymentGroups;
 
+    private static final String PAYMENT_METHOD = "paymentMethod";
+    boolean isPaypalSelected;
+
     public static AddGuestCardFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -92,6 +95,16 @@ public class AddGuestCardFragment extends AbstractFragment implements
         return fragment;
     }
 
+    public static AddGuestCardFragment newInstance(boolean isPaypalSelected) {
+
+        Bundle args = new Bundle();
+        args.putBoolean(PAYMENT_METHOD,isPaypalSelected);
+        AddGuestCardFragment fragment = new AddGuestCardFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +114,8 @@ public class AddGuestCardFragment extends AbstractFragment implements
             if(paymentGroups != null) {
                         populateCardData(paymentGroups);
             }
+             isPaypalSelected = args.getBoolean(PAYMENT_METHOD);
+
         }
         PetMedsApplication.getAppComponent().inject(this);
     }
@@ -120,6 +135,16 @@ public class AddGuestCardFragment extends AbstractFragment implements
         mAddressContainerLayout.setVisibility(View.GONE);
         mAddressSelectionLabel.setVisibility(View.GONE);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if(isPaypalSelected){
+            disableCardDetails();
+        }else{
+            enableCardDetails();
+        }
     }
 
     private void populateCardData(PaymentGroups paymentGroups) {
@@ -229,5 +254,40 @@ public class AddGuestCardFragment extends AbstractFragment implements
         updateCardRequest.setCvv(mCvvEdit.getText().toString());
 
         return updateCardRequest;
+    }
+
+    public void disableCardDetails(){
+        mCardNumberLayout.setError(null);
+        mCvvInputLayout.setError(null);
+        mExpirationDateInputLayout.setError(null);
+
+        mCardNumberEdit.setFocusable(false);
+        mCardNumberEdit.setEnabled(false);
+        mCardNumberEdit.setFocusableInTouchMode(false);
+
+        mCvvEdit.setFocusable(false);
+        mCvvEdit.setEnabled(false);
+        mCvvEdit.setFocusableInTouchMode(false);
+
+        mExpirationDateEdit.setFocusable(false);
+        mExpirationDateEdit.setEnabled(false);
+        mExpirationDateEdit.setFocusableInTouchMode(false);
+
+    }
+    public void enableCardDetails(){
+
+
+        mCardNumberEdit.setFocusable(true);
+        mCardNumberEdit.setEnabled(true);
+        mCardNumberEdit.setFocusableInTouchMode(true);
+
+        mCvvEdit.setFocusable(true);
+        mCvvEdit.setEnabled(true);
+        mCvvEdit.setFocusableInTouchMode(true);
+
+        mExpirationDateEdit.setFocusable(true);
+        mExpirationDateEdit.setEnabled(true);
+        mExpirationDateEdit.setFocusableInTouchMode(true);
+
     }
 }

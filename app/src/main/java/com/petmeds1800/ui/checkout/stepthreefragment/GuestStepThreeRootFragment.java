@@ -164,6 +164,11 @@ public class GuestStepThreeRootFragment extends AbstractFragment
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
+                    AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager()
+                            .findFragmentById(R.id.creditCardDetailFragment);
+                    if(addGuestCardFragment!=null){
+                        addGuestCardFragment.disableCardDetails();
+                    }
                     if (mCreditCardCheckbox.isChecked()) {
                         mCreditCardCheckbox.setChecked(false);
                     }
@@ -180,6 +185,11 @@ public class GuestStepThreeRootFragment extends AbstractFragment
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
+                    AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager()
+                            .findFragmentById(R.id.creditCardDetailFragment);
+                    if(addGuestCardFragment!=null){
+                        addGuestCardFragment.enableCardDetails();
+                    }
                     if (mPaypalCheckbox.isChecked()) {
                         mPaypalCheckbox.setChecked(false);
                     }
@@ -230,7 +240,7 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //add the creditCardFragment
+              //add the creditCardFragment
         //check if a payment method is present
         if (mPaymentGroup == null) {
             replaceStepRootChildFragment(
@@ -241,16 +251,28 @@ public class GuestStepThreeRootFragment extends AbstractFragment
                     AddGuestCardFragment.newInstance(mPaymentGroup),
                     R.id.creditCardDetailFragment);
         }
+        boolean isPaypalSelected=mShoppingCartListResponse.getShoppingCart().getPaymentGroups()!=null && mShoppingCartListResponse.getShoppingCart().getPaymentGroups().size()>0 && mShoppingCartListResponse.getShoppingCart().getPaymentGroups().get(0).getPaymentMethod()!=null && mShoppingCartListResponse.getShoppingCart().getPaymentGroups().get(0).getPaymentMethod().equalsIgnoreCase("PayPal");
+
 
         //add the addeditAddressFragment
         replaceStepRootChildFragment(
-                AddGuestCardFragment.newInstance(),
+                AddGuestCardFragment.newInstance(isPaypalSelected),
                 R.id.creditCardDetailFragment);
         replaceStepRootChildFragment(
                 AddEditAddressFragment.newInstance(mAddress, GuestStepThreeRootFragment.REQUEST_CODE),
                 R.id.billingAddressfragment);
         replaceStepRootChildFragment(CommunicationFragment.newInstance(CommunicationFragment.REQUEST_CODE_VALUE),
                 R.id.communicationfragment);
+
+
+        if (isPaypalSelected){
+            mPaypalCheckbox.setChecked(true);
+            mCreditCardCheckbox.setChecked(false);
+
+        }else {
+            mCreditCardCheckbox.setChecked(true);
+            mPaypalCheckbox.setChecked(false);
+        }
 
     }
 
@@ -275,40 +297,43 @@ public class GuestStepThreeRootFragment extends AbstractFragment
     @OnClick(R.id.shippingNavigator)
     public void onShippingNavigatorClick() {
         //TODO call the presenter to first save the address and then card and then apply both of them
-        AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager()
-                .findFragmentById(R.id.creditCardDetailFragment);
+        if(mPaypalCheckbox.isChecked()){
+            activity.moveToNext(mStepName, mShoppingCartListResponse);
+        }else {
+            AddGuestCardFragment addGuestCardFragment = (AddGuestCardFragment) getChildFragmentManager()
+                    .findFragmentById(R.id.creditCardDetailFragment);
 
-        AddressRequest addressRequest;
-        if (addGuestCardFragment != null) {
-            if (addGuestCardFragment.checkAndShowError()) {
+            AddressRequest addressRequest;
+            if (addGuestCardFragment != null) {
+                if (addGuestCardFragment.checkAndShowError()) {
 
-                AddEditAddressFragment addEditAddressFragment = (AddEditAddressFragment) getChildFragmentManager()
-                        .findFragmentById(R.id.billingAddressfragment);
-                if (addEditAddressFragment != null) {
-                    if (addEditAddressFragment.validateFields()) {
-                        addEditAddressFragment.initializeGuestAddressRequest();
-                        addressRequest = addEditAddressFragment.getAddressRequest();
+                    AddEditAddressFragment addEditAddressFragment = (AddEditAddressFragment) getChildFragmentManager()
+                            .findFragmentById(R.id.billingAddressfragment);
+                    if (addEditAddressFragment != null) {
+                        if (addEditAddressFragment.validateFields()) {
+                            addEditAddressFragment.initializeGuestAddressRequest();
+                            addressRequest = addEditAddressFragment.getAddressRequest();
 
-                        //check if its a addCard request or update card depending on the availablity of the paymentCardKey
-                        if (mShoppingCartListResponse.getShoppingCart().getPaymentCardKey() == null ||
-                                mShoppingCartListResponse.getShoppingCart().getPaymentCardKey().isEmpty()) {
+                            //check if its a addCard request or update card depending on the availablity of the paymentCardKey
+                            if (mShoppingCartListResponse.getShoppingCart().getPaymentCardKey() == null ||
+                                    mShoppingCartListResponse.getShoppingCart().getPaymentCardKey().isEmpty()) {
 
-                            CardRequest cardRequest = addGuestCardFragment.getCard();
-                            performAddCreditCardOperation(addressRequest, cardRequest);
-                            activity.showProgress();
-                        } else {
-                            //pass the cardKey and get the updated card request
-                            UpdateCardRequest updateCardRequest = addGuestCardFragment
-                                    .getUpdatedCard(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey());
-                            performUpdateCreditCardOperation(addressRequest, updateCardRequest);
-                            activity.showProgress();
+                                CardRequest cardRequest = addGuestCardFragment.getCard();
+                                performAddCreditCardOperation(addressRequest, cardRequest);
+                                activity.showProgress();
+                            } else {
+                                //pass the cardKey and get the updated card request
+                                UpdateCardRequest updateCardRequest = addGuestCardFragment
+                                        .getUpdatedCard(mShoppingCartListResponse.getShoppingCart().getPaymentCardKey());
+                                performUpdateCreditCardOperation(addressRequest, updateCardRequest);
+                                activity.showProgress();
+                            }
+
                         }
-
                     }
                 }
             }
         }
-
     }
 
     private void performUpdateCreditCardOperation(AddressRequest addressRequest, UpdateCardRequest updateCardRequest) {
