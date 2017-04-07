@@ -259,8 +259,7 @@ public class ResetPasswordFragment extends AbstractFragment implements ResetPass
         if (resultCode == RESULT_OK) {
             String resultValue = resultData.getString(RESULT_VALUE);
             if (resultValue.equals(SUCCESS)) {
-                //mPresenter.signout();
-                onSignOutSuccess(true);
+                mPresenter.signout();
             } else {
                 Utils.displayCrouton(getActivity(), resultValue, mResetPasswordContainer);
             }
