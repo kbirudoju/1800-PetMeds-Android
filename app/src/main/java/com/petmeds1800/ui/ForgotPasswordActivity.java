@@ -6,10 +6,12 @@ import android.view.MenuItem;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
+import com.petmeds1800.intent.LoginIntent;
 import com.petmeds1800.mvp.ForgotPasswordTask.DaggerForgotPasswordComponent;
 import com.petmeds1800.mvp.ForgotPasswordTask.ForgotPasswordPresenter;
 import com.petmeds1800.mvp.ForgotPasswordTask.ForgotPasswordPresenterModule;
 import com.petmeds1800.ui.fragments.ForgotPasswordFragment;
+import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
@@ -20,6 +22,8 @@ public class ForgotPasswordActivity extends AbstractActivity {
 
     @Inject
     ForgotPasswordPresenter mForgotPasswordPresenter;
+    @Inject
+    GeneralPreferencesHelper mPreferencesHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +56,13 @@ public class ForgotPasswordActivity extends AbstractActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == android.R.id.home) {
-            super.onBackPressed();
+            if(mPreferencesHelper.getIsUserLoggedIn()){
+                super.onBackPressed();
+            }else{
+                startActivity(new LoginIntent(this));
+                this.finishAffinity();
+            }
+
         }
         return super.onOptionsItemSelected(menuItem);
     }

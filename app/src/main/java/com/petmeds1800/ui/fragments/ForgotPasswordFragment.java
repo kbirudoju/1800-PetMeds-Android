@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.Html;
 import android.text.Spanned;
-import com.petmeds1800.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +26,7 @@ import com.petmeds1800.mvp.ForgotPasswordTask.ForgotPasswordContract;
 import com.petmeds1800.util.AnalyticsUtil;
 import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.GetSessionCookiesHack;
+import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 
@@ -189,27 +189,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                         return null;
                     }
                 })
-                .flatMap(new Func1<SessionConfNumberResponse, Observable<ForgotPasswordResponse>>() {
-                    @Override
-                    public Observable<ForgotPasswordResponse> call(
-                            SessionConfNumberResponse sessionConfNumberResponse) {
-                        if (sessionConfNumberResponse != null) {
-                            String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
-                            Log.v("sessionToken", sessionConfNumber);
-                            if (sessionConfNumber != null) {
-                                mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
-                            }
-
-                            return mApiService
-                                    .forgotPassword(
-                                            new ForgotPasswordRequest(mEmailText.getText().toString().trim(), sessionConfNumber))
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io());
-                        } else {
-                            return null;
-                        }
-                    }
-                })
+                .flatMap(new ForgotPasswordObservable())
                 .subscribe(new Subscriber<ForgotPasswordResponse>() {
                     @Override
                     public void onCompleted() {
@@ -241,6 +221,28 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                     }
                 });
 
+    }
+
+    class ForgotPasswordObservable implements Func1<SessionConfNumberResponse, Observable<ForgotPasswordResponse>> {
+        @Override
+        public Observable<ForgotPasswordResponse> call(
+                SessionConfNumberResponse sessionConfNumberResponse) {
+            if (sessionConfNumberResponse != null) {
+                String sessionConfNumber = sessionConfNumberResponse.getSessionConfirmationNumber();
+                Log.v("sessionToken", sessionConfNumber);
+                if (sessionConfNumber != null) {
+                    mPreferencesHelper.saveSessionConfirmationResponse(sessionConfNumberResponse);
+                }
+
+                return mApiService
+                        .forgotPassword(
+                                new ForgotPasswordRequest(mEmailText.getText().toString().trim(), sessionConfNumber))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io());
+            } else {
+                return null;
+            }
+        }
     }
 
     @Override

@@ -1,5 +1,31 @@
 package com.petmeds1800.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.mtramin.rxfingerprint.RxFingerprint;
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -44,32 +70,6 @@ import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
 import com.urbanairship.UAirship;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class HomeActivity extends AbstractActivity
         implements AddACardContract.AddressSelectionListener,
         MedicationReminderItemListContract.AddEditMedicationReminderListener, DialogInterface.OnClickListener,
         CommonWebviewFragment.OnPaymentCompletedListener, RefillNotificationContract.View,
-        PushNotificationContract.View , HomeActivityContract.View {
+        PushNotificationContract.View, HomeActivityContract.View {
 
     private static final String PUSH_ENABLING = "pushEnabling";
 
@@ -185,7 +185,6 @@ public class HomeActivity extends AbstractActivity
         super.onNewIntent(intent);
         setIntent(intent);
         replaceCommitOrderFragment();
-
     }
 
     private void replaceCommitOrderFragment() {
@@ -330,7 +329,6 @@ public class HomeActivity extends AbstractActivity
 
         IntentFilter intentFilter = new IntentFilter(Constants.INTENT_FILTER_REFILL_NOTIFICATION);
         LocalBroadcastManager.getInstance(this).registerReceiver(mLoginReceiver, intentFilter);
-
     }
 
     private void sendAnalytics(int position) {
@@ -415,13 +413,13 @@ public class HomeActivity extends AbstractActivity
         super.onResume();
 
         //check if we need to prompt the user for any auth dialog only if tabIndex = last = 3 = account
-        if (! isOnActivityResultCalled && mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()
+        if (!isOnActivityResultCalled && mTabIndex == 3 && mPreferencesHelper.getIsUserLoggedIn()
                 && (screenType == 0 || screenType == TYPE_PRESCRIPTION_ORDERED_RECALL_ALERT)) {
             checkLoginStatus();
             isOnActivityResultCalled = false;
         }//for all other tabs
         // we need to call the security status API in-order to ensure that we get the correct value of session and jession cookie value
-        else if(mPreferencesHelper.shouldWaitForSecurityStatus()) {
+        else if (mPreferencesHelper.shouldWaitForSecurityStatus()) {
             showProgress();
             mHomeActivityPresenter.getSecurityStatusFirst();
         }
@@ -581,7 +579,7 @@ public class HomeActivity extends AbstractActivity
 
         isOnActivityResultCalled = true;
 
-        if(requestCode!=Constants.BARCODE_SCANNER_REQUEST){
+        if (requestCode != Constants.BARCODE_SCANNER_REQUEST) {
             AddPetFragment fragment = (AddPetFragment) getSupportFragmentManager()
                     .findFragmentByTag(AddPetFragment.class.getName());
             if (fragment != null) {
@@ -721,7 +719,7 @@ public class HomeActivity extends AbstractActivity
                 .findFragmentByTag(CartFragment.class.getSimpleName());
         if (cartFragment != null) {
             //make sure we have the accountFragment added once we
-            if(paypalResponse != null && paypalResponse.getShoppingCart() !=null) {
+            if (paypalResponse != null && paypalResponse.getShoppingCart() != null) {
                 mPreferencesHelper.setIsUserLoggedIn(true);
                 mAccountRootFragment.showAccountFragment();
             }
@@ -826,7 +824,7 @@ public class HomeActivity extends AbstractActivity
 
     @Override
     public boolean isActive() {
-        return ! mIsDestroyed;
+        return !mIsDestroyed;
     }
 
     @Override

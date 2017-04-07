@@ -1,7 +1,5 @@
 package com.petmeds1800.util;
 
-import android.content.Intent;
-
 /**
  * Created by pooja on 9/15/2016.
  */
@@ -9,6 +7,7 @@ public class Constants {
 
     /*WidgetTypes Constant*/
     public static final String VIEW_TYPE_BANNER = "Banner";
+    public static final String RESET_TOKEN_KEY = "resetToken";
 
     public static enum RepeatFrequency {
         REPEAT_DAILY, REPEAT_WEEKLY, REPEAT_MONTHLY

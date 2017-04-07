@@ -8,6 +8,7 @@ import com.petmeds1800.mvp.contactustask.ContactUsPresenter;
 import com.petmeds1800.service.RefillReminderService;
 import com.petmeds1800.ui.HomeActivity;
 import com.petmeds1800.ui.IntroActivity;
+import com.petmeds1800.ui.ResetPasswordActivity;
 import com.petmeds1800.ui.SplashActivity;
 import com.petmeds1800.ui.account.AccountPresenter;
 import com.petmeds1800.ui.account.AccountSettingsFragment;
@@ -66,6 +67,8 @@ import com.petmeds1800.ui.pets.presenter.PetListPresenter;
 import com.petmeds1800.ui.pushnotifications.PushNotificationPresenter;
 import com.petmeds1800.ui.refillreminder.presenter.EditReminderPresenter;
 import com.petmeds1800.ui.refillreminder.presenter.ReminderListPresenter;
+import com.petmeds1800.ui.resetpassword.ResetPasswordFragment;
+import com.petmeds1800.ui.resetpassword.ResetPasswordPresenter;
 import com.petmeds1800.ui.shoppingcart.presenter.ShoppingCartListPresenter;
 import com.petmeds1800.ui.support.SecurityLockPresenter;
 import com.petmeds1800.ui.vet.AddVetFragment;
@@ -250,6 +253,12 @@ public interface Injector {
     void inject(FeaturedFragment featuredFragment);
 
     void inject(ContactUsPresenter contactUsPresenter);
+
+    void inject(ResetPasswordPresenter resetPasswordPresenter);
+
+    void inject(ResetPasswordFragment resetPasswordFragment);
+
+    void inject(ResetPasswordActivity resetPasswordActivity);
 
 
 }

@@ -27,6 +27,7 @@ import com.petmeds1800.model.entities.AddPetResponse;
 import com.petmeds1800.model.entities.AddressRequest;
 import com.petmeds1800.model.entities.AgeListResponse;
 import com.petmeds1800.model.entities.CardRequest;
+import com.petmeds1800.model.entities.CheckResetPasswordTokenRequest;
 import com.petmeds1800.model.entities.CommitOrderRequest;
 import com.petmeds1800.model.entities.CommitOrderResponse;
 import com.petmeds1800.model.entities.CreditCardPaymentMethodRequest;
@@ -43,6 +44,7 @@ import com.petmeds1800.model.entities.MySavedCard;
 import com.petmeds1800.model.entities.OrderDetailResponse;
 import com.petmeds1800.model.entities.OrderHistoryFilter;
 import com.petmeds1800.model.entities.OrderReviewSubmitResponse;
+import com.petmeds1800.model.entities.PasswordResetResponse;
 import com.petmeds1800.model.entities.PetBreedTypeListResponse;
 import com.petmeds1800.model.entities.PetEducationCategoriesResponse;
 import com.petmeds1800.model.entities.PetList;
@@ -56,7 +58,9 @@ import com.petmeds1800.model.entities.RemoveMedicationReminderRequest;
 import com.petmeds1800.model.entities.RemoveMedicationReminderResponse;
 import com.petmeds1800.model.entities.RemovePetRequest;
 import com.petmeds1800.model.entities.RemovePetResponse;
+import com.petmeds1800.model.entities.ResetPasswordResponse;
 import com.petmeds1800.model.entities.SavePetVetRequest;
+import com.petmeds1800.model.entities.SaveResetPasswordRequest;
 import com.petmeds1800.model.entities.SavedShippingAddressRequest;
 import com.petmeds1800.model.entities.SecurityStatusResponse;
 import com.petmeds1800.model.entities.SessionConfNumberResponse;
@@ -433,5 +437,12 @@ public interface PetMedsApiService {
     @POST("/rest/model/1800petmeds/cart/CartActor/addRecentOrderedItemToCart")
     Observable<ShoppingCartListResponse> addRecentlyItemToCart(@Body AddRecentlyItemToCart request);
 
+    @Headers({"Content-Type: application/json", "Request-Credential: "+ PetMedsApplication.requestCredential})
+    @POST("/rest/model/atg/userprofiling/ProfileActor/resetPasswordByToken")
+    Observable<ResetPasswordResponse> saveResetPasswordDetails(@Body SaveResetPasswordRequest save);
+
+    @Headers({"Content-Type: application/json", "Request-Credential: "+ PetMedsApplication.requestCredential})
+    @POST("/rest/model/atg/userprofiling/ProfileActor/checkPasswordResetToken")
+    Observable<PasswordResetResponse> checkPasswordResetToken(@Body CheckResetPasswordTokenRequest checkResetPasswordTokenRequest);
 
 }
