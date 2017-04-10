@@ -1,6 +1,7 @@
 package com.petmeds1800.ui.resetpassword;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.util.Log;
 
 import com.petmeds1800.PetMedsApplication;
@@ -31,14 +32,16 @@ public class ResetPasswordPresenter implements ResetPasswordContract.Presenter {
     private ResetPasswordContract.View mView;
     @Inject
     PetMedsApiService mPetMedsApiService;
+    private Context mContext;
 
     @Inject
     GeneralPreferencesHelper mPreferencesHelper;
 
-    public ResetPasswordPresenter(ResetPasswordContract.View view) {
+    public ResetPasswordPresenter(ResetPasswordContract.View view, Context context) {
         mView = view;
         mView.setPresenter(this);
         PetMedsApplication.getAppComponent().inject(this);
+        mContext = context;
     }
 
     @Override
@@ -92,7 +95,9 @@ public class ResetPasswordPresenter implements ResetPasswordContract.Presenter {
                     @Override
                     public SessionConfNumberResponse call(Throwable throwable) {
                         int errorId = RetrofitErrorHandler.getErrorMessage(throwable);
-                        if (!(errorId == R.string.noInternetConnection)) {
+                        if (errorId == R.string.noInternetConnection) {
+                            mView.showErrorCrouton(mContext.getString(R.string.noInternetConnection), false);
+                        } else {
                             return mPreferencesHelper.getSessionConfirmationResponse();
                         }
                         return null;

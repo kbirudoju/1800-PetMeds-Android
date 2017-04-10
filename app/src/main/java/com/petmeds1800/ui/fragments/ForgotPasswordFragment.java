@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
@@ -213,6 +214,7 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                             Log.v("response", response.getStatus().getCode());
                             if (response.getStatus().getCode().equals(API_SUCCESS_CODE)) {
                                 mEmailPasswordButton.setText(getString(R.string.label_email_sent));
+                                Toast.makeText(getContext(), getContext().getString(R.string.password_sent_success_message), Toast.LENGTH_LONG).show();
                             } else {
                                 showErrorCrouton(Html.fromHtml(response.getStatus().getErrorMessages().get(0)),
                                         true);

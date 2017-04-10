@@ -81,6 +81,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
         return mToolbar;
     }
 
+
     /**
      * Starts Paws animation located in assets. Blocks UI
      * For updates to Cart Fragment in case of Update Quantity or apply coupon

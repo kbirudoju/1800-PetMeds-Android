@@ -1,5 +1,6 @@
 package com.petmeds1800.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
@@ -15,10 +16,13 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 
 import javax.inject.Inject;
 
+import static com.petmeds1800.util.Constants.EXTRA_SCREEN_NAME;
+
 /**
  * Created by Digvijay on 8/22/2016.
  */
 public class ForgotPasswordActivity extends AbstractActivity {
+
 
     @Inject
     ForgotPasswordPresenter mForgotPasswordPresenter;
@@ -56,11 +60,16 @@ public class ForgotPasswordActivity extends AbstractActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == android.R.id.home) {
-            if(mPreferencesHelper.getIsUserLoggedIn()){
+            Intent intent = getIntent();
+            if ((mPreferencesHelper.getIsUserLoggedIn()) || (intent != null && intent.hasExtra(EXTRA_SCREEN_NAME))) {
+                setIntent(null);
                 super.onBackPressed();
-            }else{
+            } else {
+
                 startActivity(new LoginIntent(this));
                 this.finishAffinity();
+
+
             }
 
         }

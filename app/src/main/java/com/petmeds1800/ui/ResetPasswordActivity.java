@@ -3,6 +3,7 @@ package com.petmeds1800.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 
 import com.petmeds1800.PetMedsApplication;
@@ -36,6 +37,7 @@ public class ResetPasswordActivity extends AbstractActivity {
             e.printStackTrace();
         }
     }
+
     public void hideProgress() {
         try {
             stopLoadingGif(this);
@@ -43,11 +45,22 @@ public class ResetPasswordActivity extends AbstractActivity {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     protected void onNewIntent(Intent intent) {
-        String action = intent.getAction();
-        Uri data = intent.getData();
-        if (Intent.ACTION_VIEW.equals(action) && data != null) {
-            replaceResetPasswordFragment(ResetPasswordFragment.newInstance(data.getQueryParameter(Constants.RESET_TOKEN_KEY)), ResetPasswordFragment.class.getSimpleName());
+        if (intent != null && Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+            Uri data = intent.getData();
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ResetPasswordFragment.class.getSimpleName());
+            String token = data.getQueryParameter(Constants.RESET_TOKEN_KEY);
+            if (fragment != null && fragment.isAdded()) {
+                ((ResetPasswordFragment) fragment).checkResetPasswordTokenValidity(token);
+            } else {
+                replaceResetPasswordFragment(ResetPasswordFragment.newInstance(token), ResetPasswordFragment.class.getSimpleName());
+            }
         } else {
             replaceResetPasswordFragment(ResetPasswordFragment.newInstance(null), ResetPasswordFragment.class.getSimpleName());
         }

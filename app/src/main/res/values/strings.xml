@@ -731,6 +731,7 @@
     <string name="search_zip_code_txt">Search by Zip Code</string>
     <string name="reset_password_toolbar_title">Reset Password</string>
     <string name="reset_password_token_expired_message">Oops! This password reset link has expired.\nClick here to get a new password reset link.</string>
-    <string name="password_set_success_message">Your password has been successfully set</string>
+    <string name="password_set_success_message">Your password has been successfully set.</string>
+    <string name="password_sent_success_message">Your password has been successfully sent.</string>
 </resources>
 

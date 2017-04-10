@@ -210,7 +210,6 @@ public class HomeActivity extends AbstractActivity
         getToolbar().setLogo(R.drawable.ic_logo_petmeds_toolbar);
         ButterKnife.bind(this);
         mAnalyticsUtil = new AnalyticsUtil();
-
         mPresenter = new RefillNotificationPresenter(this, HomeActivity.this);
         mPushPresenter = new PushNotificationPresenter(this);
         mHomeActivityPresenter = new SecurityLockPresenter(this);

@@ -166,4 +166,5 @@ public class Constants {
     public static final String SECURITY_STATUS_RECEIVED = "securityStatusReceived";
 
     public static final String KEY_ACTION_USER_LOGGED_IN = "user_logged_in";
+    public static final String EXTRA_SCREEN_NAME = "screenName";
 }

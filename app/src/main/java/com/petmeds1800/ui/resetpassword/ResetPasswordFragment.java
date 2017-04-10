@@ -1,5 +1,6 @@
 package com.petmeds1800.ui.resetpassword;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,12 +47,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_OK;
+import static com.petmeds1800.util.Constants.EXTRA_SCREEN_NAME;
 import static com.petmeds1800.util.Constants.RESULT_VALUE;
 import static com.petmeds1800.util.Constants.SUCCESS;
 
 public class ResetPasswordFragment extends AbstractFragment implements ResetPasswordContract.View, MedicationReminderResultReceiver.Receiver, EditText.OnEditorActionListener {
 
     public static final String CLICK = "Click";
+    public static final String EXTRA_SCREEN_VALUE = "resetPasswordScreen";
     @BindView(R.id.password_edit)
     EditText mPasswordEdit;
     @BindView(R.id.passwordInputLayout)
@@ -83,17 +86,19 @@ public class ResetPasswordFragment extends AbstractFragment implements ResetPass
         Bundle bundle = getArguments();
         mConfirmPasswordEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
         mConfirmPasswordEdit.setOnEditorActionListener(this);
-        mPresenter = new ResetPasswordPresenter(this);
+        mPresenter = new ResetPasswordPresenter(this, getContext());
         if (bundle != null) {
-            if (getActivity() != null) {
-                ((ResetPasswordActivity) getActivity()).showProgress();
-            }
-            mPresenter.checkResetPasswordLinkValidity(new CheckResetPasswordTokenRequest(bundle.getString(Constants.RESET_TOKEN_KEY)));
-
+            checkResetPasswordTokenValidity(bundle.getString(Constants.RESET_TOKEN_KEY));
         }
         return view;
     }
 
+    public void checkResetPasswordTokenValidity(String token) {
+        if (getActivity() != null) {
+            ((ResetPasswordActivity) getActivity()).showProgress();
+        }
+        mPresenter.checkResetPasswordLinkValidity(new CheckResetPasswordTokenRequest(token));
+    }
 
     private void performClickableLinkOperation() {
         String tokenInvalidMessage = getString(R.string.reset_password_token_expired_message);
@@ -102,11 +107,12 @@ public class ResetPasswordFragment extends AbstractFragment implements ResetPass
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                startActivity(new ForgotPasswordIntent(getContext()));
-                if (!mPreferencesHelper.getIsUserLoggedIn()) {
-                    if (getActivity() != null)
-                        getActivity().finishAffinity();
+                Intent intent = new ForgotPasswordIntent(getContext());
+                if(!mPreferencesHelper.getIsUserLoggedIn()){
+                    intent.putExtra(EXTRA_SCREEN_NAME, EXTRA_SCREEN_VALUE);
                 }
+                startActivity(intent);
+
             }
 
             @Override
@@ -232,7 +238,7 @@ public class ResetPasswordFragment extends AbstractFragment implements ResetPass
     public void onTokenExpired() {
         performClickableLinkOperation();
         mPasswordInputLayout.setVisibility(View.GONE);
-        mConfirmPasswordEdit.setVisibility(View.GONE);
+        mConfirmPasswordInputLayout.setVisibility(View.GONE);
         mResetLinkFailureMsg.setVisibility(View.VISIBLE);
     }
 
