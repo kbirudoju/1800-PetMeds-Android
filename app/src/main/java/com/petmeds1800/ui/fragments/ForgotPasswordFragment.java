@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -30,8 +32,6 @@ import com.petmeds1800.util.GetSessionCookiesHack;
 import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -213,7 +213,6 @@ public class ForgotPasswordFragment extends AbstractFragment implements ForgotPa
                         if (response != null) {
                             Log.v("response", response.getStatus().getCode());
                             if (response.getStatus().getCode().equals(API_SUCCESS_CODE)) {
-                                mEmailPasswordButton.setText(getString(R.string.label_email_sent));
                                 Toast.makeText(getContext(), getContext().getString(R.string.password_sent_success_message), Toast.LENGTH_LONG).show();
                             } else {
                                 showErrorCrouton(Html.fromHtml(response.getStatus().getErrorMessages().get(0)),

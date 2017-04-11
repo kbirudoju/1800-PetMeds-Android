@@ -96,7 +96,9 @@ public class ResetPasswordPresenter implements ResetPasswordContract.Presenter {
                     public SessionConfNumberResponse call(Throwable throwable) {
                         int errorId = RetrofitErrorHandler.getErrorMessage(throwable);
                         if (errorId == R.string.noInternetConnection) {
-                            mView.showErrorCrouton(mContext.getString(R.string.noInternetConnection), false);
+                            if (mView.isActive()) {
+                                mView.showErrorCrouton(mContext.getString(R.string.noInternetConnection), false);
+                            }
                         } else {
                             return mPreferencesHelper.getSessionConfirmationResponse();
                         }
@@ -121,7 +123,11 @@ public class ResetPasswordPresenter implements ResetPasswordContract.Presenter {
                                        }
                                    } else {
                                        if (mView.isActive()) {
-                                           mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                                           if (errorId == R.string.noInternetConnection) {
+                                               mView.showErrorCrouton(mContext.getString(R.string.noInternetConnection), false);
+                                           } else {
+                                               mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                                           }
                                        }
                                    }
 
@@ -147,6 +153,7 @@ public class ResetPasswordPresenter implements ResetPasswordContract.Presenter {
 
                                }
                            }
+
                 );
 
 
@@ -213,7 +220,9 @@ public class ResetPasswordPresenter implements ResetPasswordContract.Presenter {
 
                         }
                         //error handling would be implemented once we get the details from backend team
-                        mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                        if (mView.isActive()) {
+                            mView.showErrorCrouton(e.getLocalizedMessage(), false);
+                        }
 
                     }
 
