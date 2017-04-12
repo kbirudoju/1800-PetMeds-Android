@@ -97,10 +97,8 @@
     <string name="signup_txt">SIGN UP</string>
 
     <!--Forgot Password-->
-    <string name="enter_email_for_temporary_password">Enter your email address and we will send you a new
-        temporary password.
-    </string>
-    <string name="label_email_my_password">EMAIL ME MY PASSWORD</string>
+    <string name="enter_email_for_temporary_password">Enter your email address and we will send you reset instructions.</string>
+    <string name="label_email_my_password">EMAIL RESET INSTRUCTIONS</string>
     <string name="label_email_sent">Email Sent</string>
 
     <!--SignUp-->
@@ -732,6 +730,6 @@
     <string name="reset_password_toolbar_title">Reset Password</string>
     <string name="reset_password_token_expired_message">Oops! This password reset link has expired.\nClick here to get a new password reset link.</string>
     <string name="password_set_success_message">Your password has been successfully set.</string>
-    <string name="password_sent_success_message">Your password has been successfully sent.</string>
+    <string name="password_sent_success_message">Password reset instructions were successfully sent.</string>
 </resources>
 
