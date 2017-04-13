@@ -175,6 +175,7 @@
     <string name="accountSettingsPasswordInvalidError">Password must be 8 characters long with one number and one
         capital letter
     </string>
+    <string name="accountSettingsPasswordRequirement">Minimum 8 characters (Must include one capital letter,one lowercase letter and one number.)</string>
     <string name="accountSettingsConfirmPasswordInvalidError">Password does not match</string>
     <string name="accountSettingsChangedSuccessfully">Settings changed successfully</string>
     <string name="noSavedCardsAvailableMessage">You haven\'t stored a payment method</string>

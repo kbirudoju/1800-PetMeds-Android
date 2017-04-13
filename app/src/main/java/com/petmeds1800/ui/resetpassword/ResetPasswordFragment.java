@@ -63,6 +63,8 @@ public class ResetPasswordFragment extends AbstractFragment implements ResetPass
     EditText mConfirmPasswordEdit;
     @BindView(R.id.confirmPasswordInputLayout)
     TextInputLayout mConfirmPasswordInputLayout;
+    @BindView(R.id.text_password_description)
+    TextView mPasswordDescriptionMsg;
     @BindView(R.id.progressbar)
     ProgressBar mProgressbar;
     @BindView(R.id.resetLinkFailureMsg)
@@ -108,7 +110,7 @@ public class ResetPasswordFragment extends AbstractFragment implements ResetPass
             @Override
             public void onClick(View textView) {
                 Intent intent = new ForgotPasswordIntent(getContext());
-                if(!mPreferencesHelper.getIsUserLoggedIn()){
+                if (!mPreferencesHelper.getIsUserLoggedIn()) {
                     intent.putExtra(EXTRA_SCREEN_NAME, EXTRA_SCREEN_VALUE);
                 }
                 startActivity(intent);
@@ -201,6 +203,7 @@ public class ResetPasswordFragment extends AbstractFragment implements ResetPass
                     mSaveResetPasswordRequest.setPtk(tokenInfo.getToken());
                     mPasswordInputLayout.setVisibility(View.VISIBLE);
                     mConfirmPasswordInputLayout.setVisibility(View.VISIBLE);
+                    mPasswordDescriptionMsg.setVisibility(View.VISIBLE);
                     mResetLinkFailureMsg.setVisibility(View.GONE);
                 } else {
                     onTokenExpired();
@@ -239,6 +242,7 @@ public class ResetPasswordFragment extends AbstractFragment implements ResetPass
         performClickableLinkOperation();
         mPasswordInputLayout.setVisibility(View.GONE);
         mConfirmPasswordInputLayout.setVisibility(View.GONE);
+        mPasswordDescriptionMsg.setVisibility(View.GONE);
         mResetLinkFailureMsg.setVisibility(View.VISIBLE);
     }
 
