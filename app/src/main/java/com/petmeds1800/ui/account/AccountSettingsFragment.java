@@ -62,6 +62,9 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
     @BindView(R.id.confirmPasswordInputLayout)
     TextInputLayout mConfirmPasswordInputLayout;
 
+    @BindView(R.id.text_password_description)
+    TextView mPasswordDescriptionMsg;
+
     private AccountSettingsContract.Presenter mPresenter;
 
     @Inject
@@ -230,11 +233,13 @@ public class AccountSettingsFragment extends AbstractFragment implements Account
             mPasswordText.setEnabled(true);
             mPasswordInputLayout.setHint(getString(R.string.prompt_new_password));
             mConfirmPasswordInputLayout.setVisibility(View.VISIBLE);
+            mPasswordDescriptionMsg.setVisibility(View.VISIBLE);
         } else {
             mEmailText.setEnabled(false);
             mPasswordText.setEnabled(false);
             mPasswordInputLayout.setHint(getString(R.string.prompt_password));
             mConfirmPasswordInputLayout.setVisibility(View.GONE);
+            mPasswordDescriptionMsg.setVisibility(View.GONE);
         }
     }
 
