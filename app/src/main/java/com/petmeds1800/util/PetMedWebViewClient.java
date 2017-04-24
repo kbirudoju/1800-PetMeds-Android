@@ -49,6 +49,7 @@ public class PetMedWebViewClient extends WebViewClient {
     private boolean shouldloaddata = false;
     private ProgressBar mProgressBar;
     private boolean isSuccess = false;
+    private boolean isOutofStock = false;
 
     @Inject
     PetMedsApiService mPetMedsApiService;
@@ -72,12 +73,26 @@ public class PetMedWebViewClient extends WebViewClient {
     }
 
     private void finalyClose() throws URISyntaxException {
+
+        if (isOutofStock){
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mWebView.loadUrl(mUrl);
+                    if (mProgressBar != null){
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                }
+            });
+            isOutofStock = false;
+            return;
+        }
+
         if (isSuccess) {
             mContext.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Toast.makeText(mContext, "Item Added Successfully", Toast.LENGTH_SHORT).show();
-
                 }
             });
         }
@@ -211,7 +226,7 @@ public class PetMedWebViewClient extends WebViewClient {
                     @Override
                     public void run() {
                         Log.e("shouldOverrideUrl", "Outside Cookies after setcookie: " + CookieManager.getInstance().getCookie(url));
-                        if (url.contains("Add+To+Cart")){
+                        if (url.contains("Add+To+Cart") || url.contains("addToCart.jsp")){
                             syncCallWebViewResponse(view,url);
                         } else if((url.contains("tel:")))
                         {
@@ -293,6 +308,9 @@ public class PetMedWebViewClient extends WebViewClient {
                  if (response.toString().contains("Conflict")){
                     Log.e("URL HANDLING Response","Conflict Still Remains : " + response.toString());
                     onFailureResponse(view,url,("Cannot Add Item"));
+                } if (response.networkResponse().request().url().toString().contains("outofstock.jsp")) {
+                    isOutofStock = true;
+                    mUrl = response.networkResponse().request().url().toString();
                 } else {
                     onSuccessResponse(view,url);
                 }
