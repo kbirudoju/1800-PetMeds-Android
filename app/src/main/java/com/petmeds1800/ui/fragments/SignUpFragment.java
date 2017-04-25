@@ -22,6 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import com.petmeds1800.PetMedsApplication;
 import com.petmeds1800.R;
 import com.petmeds1800.api.PetMedsApiService;
@@ -40,8 +42,6 @@ import com.petmeds1800.util.GeneralPreferencesHelper;
 import com.petmeds1800.util.Log;
 import com.petmeds1800.util.RetrofitErrorHandler;
 import com.petmeds1800.util.Utils;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -423,7 +423,7 @@ public class SignUpFragment extends AbstractFragment
         if (firstNameShippingText.isEmpty()) {
             setErrorOnInput(getString(R.string.error_first_name_required), mFirstNameShippingInput.getId());
             proceedSignUp = false;
-        } else if (!mPresenter.validateFirstName(firstNameShippingText)) {
+        } else if (!mPresenter.validateLastName(firstNameShippingText)) {
             setErrorOnInput(getString(R.string.error_first_name_invalid), mFirstNameShippingInput.getId());
             proceedSignUp = false;
         }
