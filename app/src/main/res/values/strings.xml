@@ -142,9 +142,7 @@
     <string name="label.fingerprint_cancel">CANCEL</string>
     <string name="label.type_password_description">Type your password to continue.</string>
     <string name="label.fingerprint_forgot_password">FORGOT PASSWORD</string>
-    <string name="description.send_email">An email will be sent to the address below with information to reset your
-        password.
-    </string>
+    <string name="description.send_email">An email will be sent to the address below with reset instructions.</string>
     <string name="label.send_email">SEND EMAIL</string>
     <string name="label.enter_password">ENTER PASSWORD</string>
     <string name="title.enter_account_info">ENTER ACCOUNT INFORMATION</string>
